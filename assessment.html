@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; connect-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Quiz et révision — Symfony 8.0</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="assessment.css">
+  <script src="learning-state.js" defer></script>
+  <script src="assessment.js" defer></script>
+<link rel="stylesheet" href="syntax-highlight.css"><script src="prism-syntax.js" defer></script><script src="syntax-highlight.js" defer></script></head>
+<body>
+  <a class="skip" href="#main">Aller au contenu</a>
+  <header class="site-header">
+    <a class="brand" href="index.html">S8 Preparation</a>
+    <nav aria-label="Navigation principale"><a href="index.html">Accueil</a> <a href="catalogue.html">Parcours</a> <a href="assessment.html?mode=review">Réviser</a> <a href="examens.html">Examens blancs</a> <a href="jour-j.html">Jour J</a></nav>
+  </header>
+  <main id="main" class="assessment-main">
+    <h1 id="assessment-title">Quiz et révision</h1>
+    <p id="assessment-intro" lang="en">Choose a diagnostic to find topics to revisit, review your mistakes, or practise with a timed exam.</p>
+    <p><a href="catalogue.html">Cours et pratique par module</a> · <a href="examens.html">Présentation des examens blancs</a> · <a href="assessment.html?mode=diagnostic">Diagnostic</a> · <a href="assessment.html?mode=review">Révision</a></p>
+    <p>Questions originales d’entraînement, pas un examen officiel ni un dump. Les examens blancs proposent chacun 75 questions parmi les 89 disponibles et peuvent se recouper. Aucun seuil officiel, score prédit ou indicateur de préparation.</p>
+    <section id="assessment-controls" aria-labelledby="start-title" hidden>
+      <h2 id="start-title">Session</h2>
+      <p id="training-scope"></p>
+      <select id="assessment-mode" aria-label="Session mode" lang="en" hidden>
+        <option value="diagnostic">Diagnostic</option>
+        <option value="learning">Learning</option>
+        <option value="review">Due review</option>
+        <option value="simulation">Practice exam</option>
+      </select>
+      <button id="start-assessment" type="button" lang="en">Start new session</button>
+      <button id="finish-assessment" type="button" lang="en" hidden>End session and reveal corrections</button>
+    </section>
+    <p id="assessment-error" role="alert"></p>
+    <p id="session-progress" role="status" lang="en"></p>
+    <p id="assessment-timer" lang="en" hidden></p>
+    <section id="assessment-app" tabindex="-1" aria-label="Assessment questions">
+      <p lang="en">Interactive quizzes require JavaScript.</p>
+      <noscript><p lang="en">Read the <a href="catalogue.html">courses</a> or the <a href="jour-j.html#native-review">exam-day revision notes</a> without JavaScript.</p></noscript>
+    </section>
+    <nav id="session-navigation" aria-label="Question navigation"></nav>
+    <section aria-labelledby="overview-title">
+      <h2 id="overview-title">Repères observés, pas maîtrise de l’examen</h2>
+      <p>Une erreur ou une réussite incertaine revient après 10 minutes ; une réussite confiante après au moins 24 heures. Une réussite différée exige une réponse exacte et confiante sur un autre groupe de questions du même cours, sans erreur intermédiaire. Les simulations n’en produisent pas. Ce repère ne prouve pas tous les objectifs du cours.</p>
+      <div id="learning-overview"></div>
+    </section>
+    <details class="transfer-panel">
+      <summary>Sauvegarde et transfert de progression</summary>
+      <p>Transfert manuel — aucune synchronisation automatique. L’import fusionne sans remplacer l’historique.</p>
+      <p id="persistence-status" role="status"></p>
+      <button id="export-progress" type="button">Télécharger ma progression JSON</button>
+      <label for="import-progress">Importer et fusionner un fichier de progression (4 Mio maximum)</label>
+      <input id="import-progress" type="file" accept=".json,application/json">
+      <p id="transfer-status" role="status"></p>
+    </details>
+  </main>
+</body>
+</html>

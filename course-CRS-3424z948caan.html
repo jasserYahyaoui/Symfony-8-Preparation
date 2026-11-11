@@ -1,0 +1,271 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; connect-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Object Oriented Programming — Symfony 8 Preparation</title><link rel="stylesheet" href="styles.css"><link rel="stylesheet" href="reader.css"><script src="mermaid.min.js" defer></script><script src="mermaid-init.js" defer></script><link rel="stylesheet" href="assessment.css"><script src="learning-state.js" defer></script><script src="guide.js" defer></script><script src="reader-catalog.js" defer></script><script src="reader.js" defer></script><script src="site-state.js" defer></script><script src="assessment.js" defer></script><script src="course-views.js" defer></script><link rel="stylesheet" href="syntax-highlight.css"><script src="prism-syntax.js" defer></script><script src="syntax-highlight.js" defer></script></head><body data-course-id="CRS-3424z948caan"><a class="skip" href="#contenu">Aller au contenu</a><header class="site-header"><a class="brand" href="index.html">S8 Preparation</a><nav aria-label="Navigation principale"><a href="index.html">Accueil</a> <a href="catalogue.html">Parcours</a> <a href="assessment.html?mode=review">Réviser</a> <a href="examens.html">Examens blancs</a> <a href="jour-j.html">Jour J</a></nav></header><main id="contenu" tabindex="-1" class="corpus-reader"><nav class="breadcrumb" aria-label="Fil d’Ariane"><a href="index.html">Accueil</a> <span aria-hidden="true">›</span> <a href="catalogue.html">Parcours</a> <span aria-hidden="true">›</span> <a href="lot-01.html">Module 01 — PHP jusqu’à 8.4</a> <span aria-hidden="true">›</span> <span aria-current="page">Object Oriented Programming</span></nav><h1>Object Oriented Programming</h1><p class="muted">Symfony 8.0 · API PHP ≤ 8.4 · Twig ≤ 3.22. Préparation indépendante.</p><p class="revision-status">Première itération · Module 01 — PHP jusqu’à 8.4 : explications développées ; revue pédagogique indépendante en attente.</p><nav class="course-actions" aria-label="Activités du cours"><a id="tab-course" href="#view-course">Cours</a><a id="tab-flashcards" href="#view-flashcards">Flashcards</a><a id="tab-quiz" href="#view-quiz">Quiz</a></nav><div class="course-layout"><details class="lot-course-menu"><summary>Cours du module · 9 cours</summary><nav aria-label="Cours du module"><a class="lot-context" href="lot-01.html">Module 01 — PHP jusqu’à 8.4</a><ol><li><a href="course-CRS-722pscs6e2m0.html">PHP API up to PHP 8.4 version</a></li><li><a href="course-CRS-3424z948caan.html" aria-current="page">Object Oriented Programming</a></li><li><a href="course-CRS-tqcp2kn9r3b5.html">Attributes</a></li><li><a href="course-CRS-e4y7gtn5k4f0.html">Interfaces</a></li><li><a href="course-CRS-e7m4xbcxegyc.html">Anonymous functions and closures</a></li><li><a href="course-CRS-0jtjh77tabt1.html">Abstract classes</a></li><li><a href="course-CRS-yc9fry0vz4gh.html">Exception and error handling</a></li><li><a href="course-CRS-bshgpd44ykba.html">Traits</a></li><li><a href="course-CRS-3sggmeyd01x6.html">Enums</a></li></ol></nav></details><aside class="course-section-menu" aria-label="Sommaire du cours"><details class="course-section-disclosure"><summary id="course-sections">Sections du cours</summary><nav aria-label="Sections du cours"><ul><li><a href="#s-objectif">Objectif</a></li><li><a href="#s-l-essentiel">L&#x27;essentiel</a></li><li><a href="#s-le-schema">Le schéma</a></li><li><a href="#s-l-exemple">L&#x27;exemple</a></li><li><a href="#s-visibilite">Visibilité</a></li><li><a href="#s-promotion-de-constructor">Promotion de constructor</a></li><li><a href="#s-readonly">`readonly`</a></li><li><a href="#s-self-contre-static">`self` contre `static`</a></li><li><a href="#s-pieges-d-examen">Pièges d&#x27;examen</a></li><li><a href="#s-application">Application</a></li><li><a href="#s-fiche-express">Fiche express</a></li><li><a href="#s-sources-officielles">Sources officielles</a></li></ul></nav></details></aside><div class="course-content"><div id="view-course" data-course-panel role="region" aria-labelledby="view-course-title"><h2 id="view-course-title">Cours</h2><p class="course-introduction"><a href="#s-l-essentiel">Pour bien commencer</a> · <a href="#course-sections">Sections du cours</a></p><h2>Objectifs d’apprentissage</h2><ul><li><a href="course-CRS-3424z948caan.html#out-OUT-zqwbp11av4pr">Distinguer self et static dans une method statique</a></li><li><a href="course-CRS-3424z948caan.html#out-OUT-qcb24vqg8pkt">Énoncer le scope réel de private (class déclarante, pas instance)</a></li><li><a href="course-CRS-3424z948caan.html#out-OUT-2tvh0svv8jhg">Appliquer readonly et la promotion de constructor correctement</a></li></ul><aside class="pedagogy-legend" aria-label="Repères pédagogiques"><p><strong>Repères pédagogiques</strong></p><p>Ces repères décrivent le rôle du bloc, pas une fréquence officielle à l’examen.</p><p class="teaching-label essential"><span aria-hidden="true">○</span> <strong>À comprendre</strong></p><p class="teaching-label essential"><span aria-hidden="true">◆</span> <strong>À mémoriser</strong></p><p class="teaching-label example"><span aria-hidden="true">▣</span> <strong>Exemple concret</strong></p><p class="teaching-label pitfall"><span aria-hidden="true">△</span> <strong>Piège à éviter</strong></p><p class="teaching-label nuance"><span aria-hidden="true">?</span> <strong>À vérifier</strong></p></aside><section class="teaching-section" data-section="s-objectif"><h2 id="s-objectif" tabindex="-1">Objectif</h2><p>Maîtriser les mécanismes object que les autres items du syllabus ne couvrent
+pas : visibilité, résolution <code>self</code>/<code>static</code>, immuabilité, promotion.</p>
+<blockquote>
+<p>Attributes, Interfaces, Abstract classes, Traits et Enums ont chacun leur
+propre item. Cette page ne les réexplique pas.</p>
+</blockquote></section><section class="teaching-section" data-section="s-l-essentiel"><h2 id="s-l-essentiel" tabindex="-1">L&#x27;essentiel</h2><p class="teaching-label essential"><span aria-hidden="true">○</span> <strong>À comprendre</strong></p><aside class="section-digest" id="s-l-essentiel-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>private est une règle de class, pas d&#x27;instance.</li><li>public private(set) sépare lecture publique et écriture privée.</li></ol></aside><h3 tabindex="-1">C'est quoi ?</h3>
+<p>Une class décrit un type d'object : son état dans des properties et son comportement dans des methods. Chaque instance possède son état ; les règles de visibilité appartiennent à la class. Une method de Document peut donc accéder aux membres privés d'un autre Document, pas seulement à ceux de <code>$this</code>.</p>
+<p>Quatre règles se complètent sans se remplacer : la visibilité détermine qui accède ; la promotion du constructor déclare et initialise ; <code>readonly</code> interdit la réaffectation après initialisation ; <code>self</code> et <code>static</code> déterminent quelle class est visée dans l'inheritance.</p>
+<h3 tabindex="-1">À quoi ça sert ?</h3>
+<p>Imagine plusieurs dossiers d'un même bureau. Chaque dossier correspond à une instance, le modèle du dossier à la class, et les consignes du bureau à ses methods. Le personnel habilité peut consulter plusieurs dossiers : cela illustre une visibilité privée liée à la class plutôt qu'à un seul dossier. Limite : la visibilité PHP n'est pas une autorisation utilisateur ni une protection des fichiers ; elle contrôle les accès dans le programme.</p>
+<p>Une property <code>public private(set)</code> est comparable à une étiquette lisible par les visiteurs, modifiable uniquement par le bureau. <code>readonly</code> ajoute une autre contrainte : après initialisation, on ne remplace plus sa valeur. Ce n'est pas la même règle.</p>
+<h3 tabindex="-1">Où dans Symfony ?</h3>
+<p>Les services applicatifs sont des objects que le service container construit et transmet aux autres services. Un controller peut recevoir un service par son constructor et le conserver dans une property privée promue. Le container fournit l'object ; PHP applique ensuite le type et la visibilité. L'exemple ci-dessous illustre seulement ce mécanisme PHP, sans démarrer Symfony.</p>
+<h3 tabindex="-1">Comment, étape par étape ?</h3>
+<ol>
+<li>Repérer les properties et identifier l'instance qui porte leur état.</li>
+<li>Lire la visibilité avant de décider si un accès extérieur est permis. En PHP 8.4, distinguer la visibilité de lecture de celle d'écriture.</li>
+<li>Dans le constructor, reconnaître la promotion : le parameter portant une visibilité devient aussi une property initialisée.</li>
+<li>Ne pas confondre réaffecter une property <code>readonly</code> et modifier l'object qu'elle référence. Pour l'inheritance, poursuivre avec les passages dédiés à <code>self</code> et <code>static</code>.</li>
+</ol>
+<h3 tabindex="-1">Exemple concret PHP</h3>
+<p>GreetingService reçoit un préfixe et GreetingController reçoit le service. Les deux properties sont déclarées et initialisées par promotion ; elles restent privées. Appeler le controller exécute sa method <code>__invoke()</code>, qui délègue au service. La sortie est <code>Bonjour Ada</code>.</p>
+<pre class="highlight" tabindex="0"><code class="language-php">&lt;?php
+final class GreetingService
+{
+    public function __construct(private readonly string $prefix) {}
+
+    public function greet(string $name): string
+    {
+        return $this-&gt;prefix . ' ' . $name;
+    }
+}
+
+final class GreetingController
+{
+    public function __construct(private readonly GreetingService $greeting) {}
+
+    public function __invoke(): string
+    {
+        return $this-&gt;greeting-&gt;greet('Ada');
+    }
+}
+
+$controller = new GreetingController(new GreetingService('Bonjour'));
+echo $controller(), "\n";</code></pre><details class="canonical-retained"><summary>Passage canonique conservé</summary><h2 tabindex="-1">L'essentiel</h2>
+<p>Quatre mécanismes object structurent ce cours. La <strong>visibilité</strong> est liée à la
+class, pas à l'instance, et PHP 8.4 sépare lecture et écriture
+(<code>private(set)</code>). La <strong>promotion</strong> déclare et affecte en une ligne. <code>readonly</code>
+interdit la réaffectation, pas la mutation. Et surtout : <code>self</code> est figé à la
+class où le code est écrit, <code>static</code> suit la class appelée.</p></details></section><section class="teaching-section" data-section="s-le-schema"><h2 id="s-le-schema" tabindex="-1">Le schéma</h2><aside class="section-digest" id="s-le-schema-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>self désigne la class déclarante.</li><li>static suit la class appelée : late static binding.</li></ol></aside><figure class="diagram" aria-labelledby="CRS-3424z948caan-3-diagram-0-title CRS-3424z948caan-3-diagram-0-description"><figcaption id="CRS-3424z948caan-3-diagram-0-title">Visibilité, écriture des properties, self et static</figcaption><p id="CRS-3424z948caan-3-diagram-0-description">Visibilité : public ; protected, la class et ses descendants ; private, la class déclarante, toutes instances. En PHP 8.4, public private(set) string $title se lit partout et ne s&#x27;écrit que dans la class. La promotion, __construct(public readonly int $amount), déclare, type et affecte la property. readonly n&#x27;autorise qu&#x27;une seule écriture ; en 8.4 il implique protected(set), donc une fille peut l&#x27;initialiser ; pas de default value ; un object référencé reste mutable ; readonly class existe depuis 8.2. self désigne la class où le code est écrit, new self() donne Parent ; static désigne la class réellement appelée, c&#x27;est le late static binding, new static() donne Child, et $this:: équivaut à static::.</p><div class="mermaid" hidden>---
+title: Qui lit, qui écrit, et quelle class
+---
+flowchart LR
+  accTitle: Visibilité, écriture des properties, self et static
+  accDescr: Visibilité : public ; protected, la class et ses descendants ; private, la class déclarante, toutes instances. En PHP 8.4, public private(set) string $title se lit partout et ne s&#x27;écrit que dans la class. La promotion, __construct(public readonly int $amount), déclare, type et affecte la property. readonly n&#x27;autorise qu&#x27;une seule écriture ; en 8.4 il implique protected(set), donc une fille peut l&#x27;initialiser ; pas de default value ; un object référencé reste mutable ; readonly class existe depuis 8.2. self désigne la class où le code est écrit, new self() donne Parent ; static désigne la class réellement appelée, c&#x27;est le late static binding, new static() donne Child, et $this:: équivaut à static::.
+  P([&quot;une property&quot;]) --&gt; VIS[&quot;visibilité&lt;br/&gt;public&lt;br/&gt;protected : class + descendants&lt;br/&gt;private : class déclarante,&lt;br/&gt;toutes instances&quot;]
+  P --&gt; AS[&quot;PHP 8.4 :&lt;br/&gt;public private(set) string $title&lt;br/&gt;lecture partout,&lt;br/&gt;écriture dans la class&quot;]
+  P --&gt; PR[&quot;promotion&lt;br/&gt;__construct(public readonly int $amount)&lt;br/&gt;property déclarée, typée, affectée&quot;]
+  P --&gt; RO[&quot;readonly : une seule écriture&lt;br/&gt;8.4 : protected(set) implicite,&lt;br/&gt;une fille peut l&#x27;initialiser&lt;br/&gt;pas de default value&lt;br/&gt;object référencé toujours mutable&lt;br/&gt;readonly class (8.2)&quot;]
+  C([&quot;code écrit dans Parent,&lt;br/&gt;appelé sur Child&quot;]) --&gt; SE[&quot;self : la class&lt;br/&gt;où le code est écrit&lt;br/&gt;new self() → Parent&quot;]
+  C --&gt; ST[&quot;static : la class&lt;br/&gt;réellement appelée (LSB)&lt;br/&gt;new static() → Child&lt;br/&gt;$this:: ≡ static::&quot;]</div></figure></section><section class="teaching-section" data-section="s-l-exemple"><h2 id="s-l-exemple" tabindex="-1">L&#x27;exemple</h2><p class="teaching-label example"><span aria-hidden="true">▣</span> <strong>Exemple concret</strong></p><p class="digest-reference"><a href="#s-le-schema-digest">Revoir la règle : self désigne la class déclarante.</a></p><pre class="highlight" tabindex="0"><code class="language-php">class ParentClass
+{
+    public static function createSelf(): self     { return new self(); }
+    public static function createStatic(): static { return new static(); }
+}
+
+final class ChildClass extends ParentClass {}
+
+ChildClass::createSelf();     // ParentClass — self est figé à la déclaration
+ChildClass::createStatic();   // ChildClass  — static suit l'appelant</code></pre></section><section class="teaching-section" data-section="s-visibilite"><span class="outcome-anchor" id="out-OUT-qcb24vqg8pkt" tabindex="-1"></span><h2 id="s-visibilite" tabindex="-1">Visibilité</h2><p class="teaching-label essential"><span aria-hidden="true">○</span> <strong>À comprendre</strong></p><aside class="section-digest" id="s-visibilite-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>private limite l&#x27;accès au code de la class qui déclare la propriété, pas à une seule instance.</li><li>Une method de cette class peut donc lire la propriété privée d&#x27;une autre instance de la même class.</li></ol></aside><h3 tabindex="-1">C'est quoi ?</h3>
+<p>La visibilité décide depuis quel code un membre est accessible. <code>public</code> autorise le code extérieur, <code>protected</code> le réserve à la class et à sa hiérarchie, <code>private</code> à la class déclarante. La frontière est celle du code de la class, pas celle d'un object individuel : une method peut lire une property privée d'une autre instance de sa propre class.</p>
+<p>Depuis PHP 8.4, <code>public private(set)</code> autorise une lecture publique tout en réservant l'écriture à la class déclarante. <code>protected(set)</code> permet aussi l'écriture depuis une class enfant. Le <code>set</code> doit être au moins aussi restrictif que le <code>get</code>.</p>
+<h3 tabindex="-1">À quoi ça sert ?</h3>
+<p>Imagine deux dossiers dans le même cabinet : les employés habilités peuvent consulter les deux, pas seulement celui posé sur leur bureau. Le cabinet représente la class ; les dossiers représentent ses instances ; l'accès réservé représente <code>private</code>. Limite : ce n'est pas une permission utilisateur ou une mesure de sécurité web, mais une règle du langage appliquée au code.</p>
+<p>On peut ainsi exposer un titre tout en obligeant les modifications à passer par une method qui maintient les règles de l'object. Une visibilité d'écriture limitée ne rend pas sa valeur immuable.</p>
+<h3 tabindex="-1">Où dans Symfony ?</h3>
+<p>Dans une class <code>App\Service\Catalogue</code>, la visibilité PHP protège l'état et les methods comme dans n'importe quelle application. Un service « public » dans DependencyInjection est une autre notion : cela ne transforme pas ses properties privées en properties publiques. Pour l'interdiction des réaffectations, lire <a href="course-CRS-3424z948caan.html#s-readonly">readonly</a>.</p>
+<h3 tabindex="-1">Comment, étape par étape ?</h3>
+<ol>
+<li>Repérer où l'accès est écrit : code extérieur, class déclarante ou enfant.</li>
+<li>Examiner séparément lecture et écriture si la property possède <code>private(set)</code> ou <code>protected(set)</code>.</li>
+<li>Pour deux instances, vérifier leur class, sans supposer que <code>private</code> signifie « seulement mon instance ».</li>
+<li>Pour une method privée redéfinie dans un enfant, ne pas parler de surcharge : ce sont deux methods distinctes. <code>#[\Override]</code> permet de détecter une intention de surcharge non satisfaite.</li>
+</ol>
+<h3 tabindex="-1">Exemple concret PHP</h3>
+<p>La comparaison accède légalement au titre privé de l'autre <code>Book</code>. La seconde écriture de <code>label</code> est permise dans <code>rename()</code>, mais l'écriture extérieure est rattrapée comme <code>Error</code>. Sortie : <code>true</code>, <code>Second</code>, puis <code>write denied</code>.</p>
+<pre class="highlight" tabindex="0"><code class="language-php">&lt;?php
+final class Book
+{
+    public private(set) string $label;
+
+    public function __construct(private string $title)
+    {
+        $this-&gt;label = $title;
+    }
+
+    public function sameTitle(self $other): bool
+    {
+        return $this-&gt;title === $other-&gt;title;
+    }
+
+    public function rename(string $label): void
+    {
+        $this-&gt;label = $label;
+    }
+}
+
+$book = new Book('First');
+var_dump($book-&gt;sameTitle(new Book('First')));
+$book-&gt;rename('Second');
+echo $book-&gt;label, "\n";
+try {
+    $book-&gt;label = 'Outside';
+} catch (Error) {
+    echo "write denied\n";
+}</code></pre>
+<p>Référence : <a href="https://www.php.net/manual/en/language.oop5.visibility.php">visibilité PHP</a>.</p><details class="canonical-retained"><summary>Passage canonique conservé</summary><h2 tabindex="-1">Visibilité</h2>
+<p><code>public</code>, <code>protected</code> (class et descendants), <code>private</code> (class déclarante
+seule). <code>private</code> est lié à la <strong>class</strong>, pas à l'instance : une instance lit
+les membres privés d'une autre instance de la même class. Depuis PHP 8.4, la
+lecture et l'écriture peuvent différer :</p>
+<pre class="highlight" tabindex="0"><code class="language-php">class Document
+{
+    public private(set) string $title;   // lisible partout, écrivable par la classe
+}</code></pre>
+<p>La property title est lisible depuis l’extérieur. Seul le code de Document peut lui affecter une valeur.</p></details></section><section class="teaching-section" data-section="s-promotion-de-constructor"><span class="outcome-anchor" id="out-OUT-2tvh0svv8jhg" tabindex="-1"></span><h2 id="s-promotion-de-constructor" tabindex="-1">Promotion de constructor</h2><p class="teaching-label example"><span aria-hidden="true">▣</span> <strong>Exemple concret</strong></p><aside class="section-digest" id="s-promotion-de-constructor-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>La promotion déclare et type la property.</li><li>Le constructor affecte automatiquement l&#x27;argument.</li></ol></aside><h3 tabindex="-1">C'est quoi ?</h3>
+<p>La promotion de constructor, introduite en PHP 8.0, transforme un parameter portant une visibilité en property de la class. <code>public int $amount</code> dans <code>__construct()</code> déclare la property typée et lui affecte l'argument avant l'exécution du corps du constructor. Un parameter sans visibilité reste simplement un parameter.</p>
+<h3 tabindex="-1">À quoi ça sert ?</h3>
+<p>Lors d'une inscription, un formulaire peut recopier automatiquement un champ dans le dossier. Le parameter est le champ reçu, la property le champ conservé dans l'object, la promotion la recopie automatique. Limite : PHP ne valide pas à lui seul les règles métier du montant ; le type <code>int</code> n'interdit pas un nombre négatif.</p>
+<p>La promotion supprime trois répétitions — déclaration, parameter, affectation — sans créer un nouveau mécanisme de construction. Le corps du constructor reste disponible pour vérifier les invariants de l'object.</p>
+<h3 tabindex="-1">Où dans Symfony ?</h3>
+<p>Un constructor de service Symfony peut recevoir une dépendance promue privée. PHP effectue la déclaration et l'affectation ; DependencyInjection peut fournir l'argument. La promotion fonctionne aussi avec <code>new</code> sans framework, comme pour le value object ci-dessous. Voir les <a href="course-CRS-e4y7gtn5k4f0.html#out-OUT-6tzwvmfwj408">interfaces</a> pour typer une dépendance par contrat plutôt que par class concrète.</p>
+<h3 tabindex="-1">Comment, étape par étape ?</h3>
+<ol>
+<li>Choisir les arguments qui doivent rester accessibles après le constructor et leur donner une visibilité.</li>
+<li>Ajouter le type et, si nécessaire, <code>readonly</code> pour empêcher une réaffectation ultérieure.</li>
+<li>Vérifier les règles métier dans le corps : les properties promues y sont déjà initialisées.</li>
+<li>Distinguer une valeur par défaut de parameter promu d'une valeur par défaut sur une déclaration de property. Le premier cas est compatible avec <code>readonly</code> : chaque construction affecte l'argument, même quand sa valeur par défaut est utilisée.</li>
+</ol>
+<h3 tabindex="-1">Exemple concret PHP</h3>
+<p><code>currency = 'EUR'</code> est ici un défaut de parameter, pas une property <code>readonly</code> préinitialisée dans la déclaration de class. L'appel sans devise affiche <code>25 EUR</code>. Le montant négatif suit explicitement le chemin d'erreur ; il ne crée pas un object valide.</p>
+<pre class="highlight" tabindex="0"><code class="language-php">&lt;?php
+final class Money
+{
+    public function __construct(
+        public readonly int $amount,
+        public readonly string $currency = 'EUR',
+    ) {
+        if ($this-&gt;amount &lt; 0) {
+            throw new Exception('Amount must be non-negative');
+        }
+    }
+}
+
+$money = new Money(25);
+echo $money-&gt;amount, ' ', $money-&gt;currency, "\n";
+try {
+    new Money(-1);
+} catch (Exception $error) {
+    echo $error-&gt;getMessage(), "\n";
+}</code></pre>
+<p>Référence : <a href="https://www.php.net/manual/en/language.oop5.decon.php">constructor promotion</a>.</p><details class="canonical-retained"><summary>Passage canonique conservé</summary><h2 tabindex="-1">Promotion de constructor</h2>
+<pre class="highlight" tabindex="0"><code class="language-php">final class Money
+{
+    public function __construct(
+        public readonly int $amount,
+        public readonly string $currency,
+    ) {}
+}</code></pre>
+<p>La promotion déclare la property, la type et l'affecte en une seule écriture.</p></details><p><strong>Repère — <code>readonly</code> :</strong> readonly ne rend pas l'object référencé immuable. En PHP 8.4, son écriture est implicitement protected(set).</p></section><section class="teaching-section" data-section="s-readonly"><h2 id="s-readonly" tabindex="-1">`readonly`</h2><p class="teaching-label pitfall"><span aria-hidden="true">△</span> <strong>Piège à éviter</strong></p><aside class="section-digest" id="s-readonly-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>readonly ne rend pas l&#x27;object référencé immuable.</li><li>En PHP 8.4, son écriture est implicitement protected(set).</li></ol></aside><h3 tabindex="-1">C'est quoi ?</h3>
+<p>Une property <code>readonly</code> typée interdit la modification de sa valeur après initialisation. Elle ne peut pas avoir de valeur par défaut directement sur sa déclaration ; un défaut de parameter promu est un autre cas. En PHP 8.4, sa visibilité d'écriture est implicitement <code>protected(set)</code> : un enfant peut donc initialiser une property jusque-là non initialisée.</p>
+<p>Une <code>readonly class</code>, disponible depuis 8.2, applique cette règle à ses properties. Cela ne rend pas immuables tous les objects qu'elles désignent. Une property contenant un object garde le même object, dont l'état interne peut toujours changer.</p>
+<h3 tabindex="-1">À quoi ça sert ?</h3>
+<p>Pense à une étiquette indécollable sur une boîte : elle fixe quelle boîte est désignée, pas le contenu de la boîte. L'étiquette correspond à la property <code>readonly</code>, la boîte à l'object référencé, son contenu aux properties de cet object. Limite : pour une valeur scalaire, il n'y a pas d'object intérieur à modifier ; le nombre lui-même reste fixé.</p>
+<p>Cette distinction évite de promettre une immutabilité profonde lorsqu'on a seulement empêché le remplacement d'une dépendance ou d'un object de données.</p>
+<h3 tabindex="-1">Où dans Symfony ?</h3>
+<p>Un service applicatif peut conserver une dépendance dans une property promue <code>readonly</code>. Cela empêche de remplacer cette dépendance, pas d'appeler ses methods qui modifient son état. Ce comportement est celui de PHP ; il ne dépend ni de FrameworkBundle ni de l'autowiring. Voir la <a href="course-CRS-3424z948caan.html#out-OUT-2tvh0svv8jhg">promotion</a> pour la valeur par défaut de parameter.</p>
+<h3 tabindex="-1">Comment, étape par étape ?</h3>
+<ol>
+<li>Vérifier si la property a déjà été initialisée : une seconde affectation normale échoue, même avec la même valeur.</li>
+<li>Distinguer <code>$box-&gt;item = ...</code>, qui remplace la valeur protégée, de <code>$box-&gt;item-&gt;count = ...</code>, qui agit sur l'object intérieur.</li>
+<li>Ne pas confondre avec <code>private(set)</code> : celui-ci permet des écritures répétées depuis la class.</li>
+<li>Garder la nuance PHP 8.3 : <code>__clone()</code> peut réinitialiser une property <code>readonly</code> sur le clone. Le raccourci « une seule écriture » décrit la vie ordinaire de l'object, pas cette exception de clonage.</li>
+</ol>
+<h3 tabindex="-1">Exemple concret PHP</h3>
+<p><code>Basket</code> garde toujours le même <code>Counter</code>. Son compteur peut passer à <code>2</code>, mais remplacer le <code>Counter</code> provoque une <code>Error</code>. Sortie : <code>2</code>, puis <code>replacement denied</code>.</p>
+<pre class="highlight" tabindex="0"><code class="language-php">&lt;?php
+final class Counter
+{
+    public int $count = 1;
+}
+
+final class Basket
+{
+    public function __construct(public readonly Counter $counter) {}
+}
+
+$basket = new Basket(new Counter());
+$basket-&gt;counter-&gt;count = 2;
+echo $basket-&gt;counter-&gt;count, "\n";
+try {
+    $basket-&gt;counter = new Counter();
+} catch (Error) {
+    echo "replacement denied\n";
+}</code></pre>
+<p>Référence : <a href="https://www.php.net/manual/en/language.oop5.properties.php">readonly properties</a>.</p><details class="canonical-retained"><summary>Passage canonique conservé</summary><h2 tabindex="-1"><code>readonly</code></h2>
+<p>Une property <code>readonly</code> est initialisable <strong>une seule fois</strong>, et ne peut pas
+avoir de default value. Depuis PHP 8.4, elle est implicitement <code>protected(set)</code> :
+une class fille peut donc l'initialiser. Depuis 8.2, une <code>readonly class</code> rend
+toutes ses properties <code>readonly</code>. <code>readonly</code> interdit la <strong>réaffectation</strong>, pas
+la mutation de l'object référencé.</p></details></section><section class="teaching-section" data-section="s-self-contre-static"><span class="outcome-anchor" id="out-OUT-zqwbp11av4pr" tabindex="-1"></span><h2 id="s-self-contre-static" tabindex="-1">`self` contre `static`</h2><p class="teaching-label essential"><span aria-hidden="true">○</span> <strong>À comprendre</strong></p><p class="digest-reference"><a href="#s-le-schema-digest">Revoir la règle : self désigne la class déclarante.</a></p><h3 tabindex="-1">C'est quoi ?</h3>
+<p><code>self</code> désigne la class dans laquelle la method est définie. <code>static</code> utilise la class effectivement appelée : c'est le late static binding. Une method héritée peut donc exécuter exactement le même code tout en construisant soit la class de déclaration avec <code>new self()</code>, soit la class appelée avec <code>new static()</code>.</p>
+<p><code>parent::</code> sélectionne une implémentation dans la class parente. Dans le contexte d'une instance, <code>$this::</code> permet de viser la class de l'object, comme <code>static::</code>. Le mot <code>static</code> employé ici ne signifie pas que toutes les variables seraient partagées.</p>
+<h3 tabindex="-1">À quoi ça sert ?</h3>
+<p>Un tampon peut porter le nom fixe de l'atelier qui l'a fabriqué, ou lire le nom de l'atelier qui passe commande. Le nom gravé correspond à <code>self</code>, le nom du commanditaire à <code>static</code>, la fabrication à <code>new</code>. Limite : cette image ne remplace pas l'examen du point de déclaration et du type réel de l'appel ; elle n'est pas une règle de visibilité.</p>
+<p>Une factory héritée peut ainsi produire un object de la class enfant sans dupliquer sa method de construction. Inversement, <code>self</code> est utile lorsque l'on veut précisément la class où la factory a été écrite.</p>
+<h3 tabindex="-1">Où dans Symfony ?</h3>
+<p>On rencontre cette distinction dans des classes PHP utilisées par Symfony et dans des factories applicatives. La class <code>Symfony\Component\HttpFoundation\Response</code>, par exemple, reste soumise aux règles PHP lorsqu'on l'étend. Aucune configuration du service container ne change le sens de <code>self</code>. Le code ci-dessous utilise uniquement des classes locales pour isoler cette règle.</p>
+<h3 tabindex="-1">Comment, étape par étape ?</h3>
+<ol>
+<li>Localiser la class où le corps de la method est déclaré, même si l'appel est écrit sur un enfant.</li>
+<li>Résoudre <code>self</code> vers cette class de déclaration.</li>
+<li>Résoudre <code>static</code> vers la class appelée, puis vérifier que le return type annoncé correspond à l'object construit.</li>
+<li>Ne pas remplacer mécaniquement <code>self</code> par <code>static</code> : décider d'abord si la factory doit préserver la class enfant.</li>
+</ol>
+<h3 tabindex="-1">Exemple concret PHP</h3>
+<p>Les deux appels sont écrits sur <code>Invoice</code>, mais seul <code>createStatic()</code> produit une <code>Invoice</code>. La sortie est <code>Document</code>, puis <code>Invoice</code>. Le return type <code>self</code> de la première factory autorise un <code>Document</code> ; le return type <code>static</code> de la seconde suit la class appelée.</p>
+<pre class="highlight" tabindex="0"><code class="language-php">&lt;?php
+class Document
+{
+    public static function createSelf(): self
+    {
+        return new self();
+    }
+
+    public static function createStatic(): static
+    {
+        return new static();
+    }
+}
+
+final class Invoice extends Document {}
+
+echo Invoice::createSelf()::class, "\n";
+echo Invoice::createStatic()::class, "\n";</code></pre>
+<p>Référence : <a href="https://www.php.net/manual/en/language.oop5.late-static-bindings.php">late static bindings</a>.</p><details class="canonical-retained"><summary>Passage canonique conservé</summary><h2 tabindex="-1"><code>self</code> contre <code>static</code></h2>
+<p><code>self</code> se résout <strong>à la class où le code est écrit</strong>. <code>static</code> se résout à la
+class <strong>réellement appelée</strong> : c'est le <em>late static binding</em>. <code>parent::</code>
+cible la class parente ; <code>$this::</code> équivaut à <code>static::</code>.</p></details><aside class="enrichment" aria-label="Autre explication"><p>Imaginez deux tampons : self porte le nom gravé du bureau qui l'a fabriqué ; static lit le badge de la personne qui l'utilise. Une factory héritée peut ainsi garder son code tout en construisant la class appelée.</p></aside></section><section class="teaching-section" data-section="s-pieges-d-examen"><h2 id="s-pieges-d-examen" tabindex="-1">Pièges d&#x27;examen</h2><p class="teaching-label pitfall"><span aria-hidden="true">△</span> <strong>Piège à éviter</strong></p><p class="digest-reference"><a href="#s-le-schema-digest">Revoir la règle : self désigne la class déclarante.</a></p><p><strong><code>self</code> ne suit pas l'inheritance.</strong> Une factory écrite avec <code>new self()</code> renvoie
+toujours la class parente, même appelée depuis l'enfant.</p>
+<p><strong><code>private</code> bloque la surcharge.</strong> Une method <code>private</code> redéfinie dans une
+fille est une method différente, pas une surcharge — d'où <code>#[\Override]</code> en 8.3
+pour vérifier une intention de surcharge.</p>
+<p><strong>Une property <code>readonly</code> typée n'a pas de default value</strong> : elle ne peut
+pas en avoir, ou elle serait déjà initialisée.</p></section><section class="teaching-section" data-section="s-application"><h2 id="s-application" tabindex="-1">Application</h2><aside class="section-digest" id="s-application-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>readonly ne rend pas l&#x27;object référencé immuable.</li><li>En PHP 8.4, son écriture est implicitement protected(set).</li><li>self désigne la class déclarante.</li><li>static suit la class appelée : late static binding.</li></ol></aside>
+
+
+
+<nav aria-label="Flashcards de l’application"><ul><li><a href="#A-3424z948caan-3d55479e94-04">Flashcard : readonly ne rend pas l&#x27;object référencé immuable. En PHP 8.4, son écriture est implicitement protected(set).</a></li><li><a href="#A-3424z948caan-6e0103f6cc-01">Flashcard : self désigne la class déclarante. static suit la class appelée : late static binding.</a></li></ul></nav></section><section class="teaching-section" data-section="s-fiche-express"><h2 id="s-fiche-express" tabindex="-1">Fiche express</h2><p class="teaching-label essential"><span aria-hidden="true">◆</span> <strong>À mémoriser</strong></p><p class="digest-reference"><a href="#s-le-schema-digest">Revoir la règle : self désigne la class déclarante.</a></p><p><strong>Si tu dois retenir seulement 6 choses :</strong></p>
+<ul>
+<li><code>private</code> = <strong>class</strong> déclarante, pas instance.</li>
+<li>PHP 8.4 : <strong><code>private(set)</code></strong> sépare lecture et écriture.</li>
+<li>Promotion : déclare, type et <strong>affecte</strong> en une fois.</li>
+<li><code>readonly</code> : <strong>une</strong> écriture, pas de défaut, object <strong>mutable</strong> ; <code>protected(set)</code> implicite en 8.4.</li>
+<li><strong><code>self</code></strong> = class écrite ; <strong><code>static</code></strong> = class appelée.</li>
+<li><code>$this::</code> ≡ <code>static::</code> ; <code>readonly class</code> (8.2) : tout readonly.</li>
+</ul>
+<p>Moyen mnémotechnique : <strong>« self se souvient, static regarde qui appelle »</strong>.</p></section><section class="teaching-section" data-section="s-sources-officielles"><h2 id="s-sources-officielles" tabindex="-1">Sources officielles</h2><ul>
+<li><a href="https://www.php.net/manual/en/index.php">PHP — Manuel PHP</a></li>
+</ul></section><section class="official-sources"><h2>Sources officielles et compléments</h2><ul><li><a href="https://www.php.net/manual/en/language.oop5.visibility.php">PHP — Visibilité des propriétés et méthodes</a></li></ul></section><nav class="course-sequence" aria-label="Ordre de lecture"><a rel="prev" href="course-CRS-722pscs6e2m0.html" aria-label="Précédent : PHP API up to PHP 8.4 version — Module 01 — PHP jusqu’à 8.4">Précédent : PHP API up to PHP 8.4 version</a> <a href="lot-01.html">Sommaire : Module 01 — PHP jusqu’à 8.4</a> <a rel="next" href="course-CRS-tqcp2kn9r3b5.html" aria-label="Suivant : Attributes — Module 01 — PHP jusqu’à 8.4">Suivant : Attributes</a></nav><p class="course-practice-entry"><a class="button" href="#view-quiz">Fin du cours — s’entraîner avec le Quiz</a></p></div><div id="view-flashcards" data-course-panel role="region" aria-labelledby="view-flashcards-title"><h2 id="view-flashcards-title">Flashcards</h2><p lang="en">Answer before revealing each card.</p><p>Ces cartes ne mesurent pas une maîtrise notée.</p><div data-card-section="s-l-essentiel"><h3><a href="#s-l-essentiel">Revoir la section du cours</a></h3><div class="reader-cards"><details class="reader-card" id="A-3424z948caan-65c42c80d9-02"><summary lang="en">Can one instance read a private property of another instance of the same class?</summary><p lang="en">Yes, when the access occurs in that class&#x27;s scope.</p><p lang="fr">private limite l&#x27;accès au code de la class qui déclare la propriété, pas à une seule instance. Une method de cette class peut donc lire la propriété privée d&#x27;une autre instance de la même class.</p><a href="course-CRS-3424z948caan.html#out-OUT-qcb24vqg8pkt">Revoir le passage précis</a></details></div></div><div data-card-section="s-le-schema"><h3><a href="#s-le-schema">Revoir la section du cours</a></h3><div class="reader-cards"><details class="reader-card" id="A-3424z948caan-6e0103f6cc-01"><summary lang="en">Which class does new static() instantiate in an inherited factory?</summary><p lang="en">The called class; new self() uses the class where the factory was defined.</p><p lang="fr">self désigne la class déclarante. static suit la class appelée : late static binding.</p><a href="course-CRS-3424z948caan.html#out-OUT-zqwbp11av4pr">Revoir le passage précis</a></details></div></div><div data-card-section="s-l-exemple"><h3><a href="#s-l-exemple">Revoir la section du cours</a></h3><div class="reader-cards"><p class="reader-card-reference" id="A-3424z948caan-88b6fbd62c-01">Rappel déjà proposé : <a lang="en" href="#A-3424z948caan-6e0103f6cc-01">Which class does new static() instantiate in an inherited factory?</a> · <a href="course-CRS-3424z948caan.html#out-OUT-zqwbp11av4pr">Passage canonique</a></p></div></div><div data-card-section="s-visibilite"><h3><a href="#s-visibilite">Revoir la section du cours</a></h3><div class="reader-cards"><p class="reader-card-reference" id="A-3424z948caan-4fa8df341c-02">Rappel déjà proposé : <a lang="en" href="#A-3424z948caan-65c42c80d9-02">Can one instance read a private property of another instance of the same class?</a> · <a href="course-CRS-3424z948caan.html#out-OUT-qcb24vqg8pkt">Passage canonique</a></p></div></div><div data-card-section="s-promotion-de-constructor"><h3><a href="#s-promotion-de-constructor">Revoir la section du cours</a></h3><div class="reader-cards"><details class="reader-card" id="A-3424z948caan-615999e47a-03"><summary lang="en">What does constructor property promotion combine?</summary><p lang="en">Property declaration, typing and assignment from the constructor argument.</p><p lang="fr">La promotion déclare et type la property. Le constructor affecte automatiquement l&#x27;argument.</p><a href="course-CRS-3424z948caan.html#out-OUT-2tvh0svv8jhg">Revoir le passage précis</a></details></div></div><div data-card-section="s-readonly"><h3><a href="#s-readonly">Revoir la section du cours</a></h3><div class="reader-cards"><details class="reader-card" id="A-3424z948caan-3d55479e94-04"><summary lang="en">Does a readonly property freeze the object it references?</summary><p lang="en">No. It prevents reassignment of the property, not mutation of the referenced object.</p><p lang="fr">readonly ne rend pas l&#x27;object référencé immuable. En PHP 8.4, son écriture est implicitement protected(set).</p><a href="course-CRS-3424z948caan.html#out-OUT-2tvh0svv8jhg">Revoir le passage précis</a></details></div></div><div data-card-section="s-self-contre-static"><h3><a href="#s-self-contre-static">Revoir la section du cours</a></h3><div class="reader-cards"><p class="reader-card-reference" id="A-3424z948caan-41172499bf-01">Rappel déjà proposé : <a lang="en" href="#A-3424z948caan-6e0103f6cc-01">Which class does new static() instantiate in an inherited factory?</a> · <a href="course-CRS-3424z948caan.html#out-OUT-zqwbp11av4pr">Passage canonique</a></p></div></div><div data-card-section="s-pieges-d-examen"><h3><a href="#s-pieges-d-examen">Revoir la section du cours</a></h3><div class="reader-cards"><p class="reader-card-reference" id="A-3424z948caan-596d5af532-01">Rappel déjà proposé : <a lang="en" href="#A-3424z948caan-6e0103f6cc-01">Which class does new static() instantiate in an inherited factory?</a> · <a href="course-CRS-3424z948caan.html#out-OUT-zqwbp11av4pr">Passage canonique</a></p></div></div><div data-card-section="s-application"><h3><a href="#s-application">Revoir la section du cours</a></h3><div class="reader-cards"><p class="reader-card-reference" id="A-3424z948caan-e7ad522ea3-04">Rappel déjà proposé : <a lang="en" href="#A-3424z948caan-3d55479e94-04">Does a readonly property freeze the object it references?</a> · <a href="course-CRS-3424z948caan.html#out-OUT-2tvh0svv8jhg">Passage canonique</a></p><p class="reader-card-reference" id="A-3424z948caan-e7ad522ea3-01">Rappel déjà proposé : <a lang="en" href="#A-3424z948caan-6e0103f6cc-01">Which class does new static() instantiate in an inherited factory?</a> · <a href="course-CRS-3424z948caan.html#out-OUT-zqwbp11av4pr">Passage canonique</a></p></div></div><div data-card-section="s-fiche-express"><h3><a href="#s-fiche-express">Revoir la section du cours</a></h3><div class="reader-cards"><p class="reader-card-reference" id="A-3424z948caan-b11e58e15e-01">Rappel déjà proposé : <a lang="en" href="#A-3424z948caan-6e0103f6cc-01">Which class does new static() instantiate in an inherited factory?</a> · <a href="course-CRS-3424z948caan.html#out-OUT-zqwbp11av4pr">Passage canonique</a></p></div></div><aside class="checkpoint"><h2>Rappel d’un cours antérieur</h2><p>Avant de poursuivre : PHP API up to PHP 8.4 version.</p><details class="corpus-correction"><summary lang="en">Does private(set) make a property readonly?</summary><p lang="en">No. It restricts the writing scope but permits repeated writes from that scope.</p><p>private(set) limite qui écrit, pas le nombre d&#x27;écritures. readonly interdit la réaffectation après initialisation.</p><a href="course-CRS-722pscs6e2m0.html#out-OUT-ayahqn48ev7g">Relire la correction dans le cours antérieur</a></details></aside></div><div id="view-quiz" data-course-panel role="region" aria-labelledby="view-quiz-title"><h2 id="view-quiz-title">Quiz</h2><p id="course-quiz-status" role="status">Quiz interactif non chargé. Démarrez après chargement de la banque locale.</p><div id="course-quiz-controls" class="assessment-main" hidden><div id="course-quiz-assessment-controls" hidden><select id="course-quiz-assessment-mode" aria-label="Mode du quiz" hidden><option value="learning">Entraînement</option></select><p id="course-quiz-training-scope"></p><button id="course-quiz-start-assessment" type="button" lang="en">Start practice</button><button id="course-quiz-finish-assessment" type="button" lang="en" hidden>End session</button></div><p id="course-quiz-assessment-error" role="alert"></p><p id="course-quiz-assessment-timer" hidden></p><p id="course-quiz-session-progress" role="status"></p><div id="course-quiz-assessment-app" tabindex="-1"></div><nav id="course-quiz-session-navigation" aria-label="Questions du cours"></nav><div id="course-quiz-learning-overview" aria-live="polite"></div></div><div id="course-quiz-native"><p>Sans JavaScript ou si le chargement échoue : aucune tentative notée. Les <a href="#view-flashcards">flashcards du cours</a> restent disponibles.</p><details class="course-quiz-fallback" data-question-id="L-3424z948caan-base-v1"><summary lang="en">Can one instance read a private property of another instance of the same class?</summary><p>Correction de consultation — non notée.</p><p>private limite l&#x27;accès au code de la class qui déclare la propriété, pas à une seule instance. Une method de cette class peut donc lire la propriété privée d&#x27;une autre instance de la même class.</p><ul><li><strong lang="en">Correct: Yes, from code in that same class&#x27;s scope.</strong><p>private limite l&#x27;accès au code de la class qui déclare la propriété, pas à une seule instance. Une method de cette class peut donc lire la propriété privée d&#x27;une autre instance de la même class.</p></li><li><strong lang="en">Distractor: No; private access is restricted to the current instance.</strong><p>private est une règle de class, pas une frontière entre instances.</p></li><li><strong lang="en">Distractor: Yes, but only if the other object is cloned first.</strong><p>Un clone n&#x27;est pas nécessaire ; c&#x27;est le scope de la class qui autorise l&#x27;accès.</p></li></ul><a href="course-CRS-3424z948caan.html#out-OUT-qcb24vqg8pkt">Relire le passage exact</a></details></div></div></div></div><details class="transfer-panel"><summary>Sauvegarde et transfert de progression</summary><p id="reading-status" role="status">Sans JavaScript : lecture libre ; progression non enregistrée.</p><p><a href="assessment.html#overview-title">Lecture, réussites immédiates et différées</a></p><p>Transfert manuel — aucune synchronisation automatique</p><p id="persistence-status" role="status"></p><button type="button" class="secondary" id="export-progress">Exporter ma progression</button><label for="import-progress">Choisir un JSON pour fusionner ma progression (sans remplacement)</label><input type="file" id="import-progress" accept="application/json,.json"><p id="transfer-status" role="status"></p></details></main><footer class="site-footer"><a href="catalogue.html">Catalogue</a> <a href="sources.html">Sources et attribution</a> <a href="#contenu">Haut de page</a></footer></body></html>

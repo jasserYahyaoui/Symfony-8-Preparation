@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; connect-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Verbosity levels — Symfony 8 Preparation</title><link rel="stylesheet" href="styles.css"><link rel="stylesheet" href="reader.css"><script src="mermaid.min.js" defer></script><script src="mermaid-init.js" defer></script><link rel="stylesheet" href="assessment.css"><script src="learning-state.js" defer></script><script src="guide.js" defer></script><script src="reader-catalog.js" defer></script><script src="reader.js" defer></script><script src="site-state.js" defer></script><script src="assessment.js" defer></script><script src="course-views.js" defer></script><link rel="stylesheet" href="syntax-highlight.css"><script src="prism-syntax.js" defer></script><script src="syntax-highlight.js" defer></script></head><body data-course-id="CRS-96c85hjezj1r"><a class="skip" href="#contenu">Aller au contenu</a><header class="site-header"><a class="brand" href="index.html">S8 Preparation</a><nav aria-label="Navigation principale"><a href="index.html">Accueil</a> <a href="catalogue.html">Parcours</a> <a href="assessment.html?mode=review">Réviser</a> <a href="examens.html">Examens blancs</a> <a href="jour-j.html">Jour J</a></nav></header><main id="contenu" tabindex="-1" class="corpus-reader"><nav class="breadcrumb" aria-label="Fil d’Ariane"><a href="index.html">Accueil</a> <span aria-hidden="true">›</span> <a href="catalogue.html">Parcours</a> <span aria-hidden="true">›</span> <a href="lot-12.html">Module 12 — Console</a> <span aria-hidden="true">›</span> <span aria-current="page">Verbosity levels</span></nav><h1>Verbosity levels</h1><p class="muted">Symfony 8.0 · API PHP ≤ 8.4 · Twig ≤ 3.22. Préparation indépendante.</p><p class="revision-status">Première itération · en cours de révision pédagogique. Ce cours reste accessible, sans déclaration de validation pédagogique.</p><nav class="course-actions" aria-label="Activités du cours"><a id="tab-course" href="#view-course">Cours</a><a id="tab-flashcards" href="#view-flashcards">Flashcards</a><a id="tab-quiz" href="#view-quiz">Quiz</a></nav><div class="course-layout"><details class="lot-course-menu"><summary>Cours du module · 9 cours</summary><nav aria-label="Cours du module"><a class="lot-context" href="lot-12.html">Module 12 — Console</a><ol><li><a href="course-CRS-brn6frfqpxxj.html">Console component</a></li><li><a href="course-CRS-rk0fkn1q5byc.html">Built-in commands</a></li><li><a href="course-CRS-cb51hcng9dh5.html">Custom commands</a></li><li><a href="course-CRS-sf3701ncg2va.html">Configuration</a></li><li><a href="course-CRS-q2dxjhx6d35k.html">Options and arguments (using PHP attributes)</a></li><li><a href="course-CRS-0ab7kpexq9w9.html">Input and Output objects</a></li><li><a href="course-CRS-3p9jdkw1nd3g.html">Built-in helpers</a></li><li><a href="course-CRS-y0zc67f3e5zk.html">Console events</a></li><li><a href="course-CRS-96c85hjezj1r.html" aria-current="page">Verbosity levels</a></li></ol></nav></details><aside class="course-section-menu" aria-label="Sommaire du cours"><details class="course-section-disclosure"><summary id="course-sections">Sections du cours</summary><nav aria-label="Sections du cours"><ul><li><a href="#s-objectif">Objectif</a></li><li><a href="#s-l-essentiel">L&#x27;essentiel</a></li><li><a href="#s-le-schema">Le schéma</a></li><li><a href="#s-l-exemple-une-command-qui-echoue">L&#x27;exemple : une command qui échoue</a></li><li><a href="#s-les-six-niveaux">Les six niveaux</a></li><li><a href="#s-pieges-d-examen">Pièges d&#x27;examen</a></li><li><a href="#s-fiche-express">Fiche express</a></li></ul></nav></details></aside><div class="course-content"><div id="view-course" data-course-panel role="region" aria-labelledby="view-course-title"><h2 id="view-course-title">Cours</h2><p class="course-introduction"><a href="#s-objectif">Introduction</a> · <a href="#course-sections">Sections du cours</a></p><h2>Objectifs d’apprentissage</h2><ul><li><a href="course-CRS-96c85hjezj1r.html#out-OUT-8fna7evcc7x4">Nommer les six niveaux de verbosity</a></li><li><a href="course-CRS-96c85hjezj1r.html#out-OUT-wv0q7kcb8q1t">Distinguer --quiet de --silent</a></li></ul><aside class="pedagogy-legend" aria-label="Repères pédagogiques"><p><strong>Repères pédagogiques</strong></p><p>Ces repères décrivent le rôle du bloc, pas une fréquence officielle à l’examen.</p><p class="teaching-label essential"><span aria-hidden="true">○</span> <strong>À comprendre</strong></p><p class="teaching-label essential"><span aria-hidden="true">◆</span> <strong>À mémoriser</strong></p><p class="teaching-label example"><span aria-hidden="true">▣</span> <strong>Exemple concret</strong></p><p class="teaching-label pitfall"><span aria-hidden="true">△</span> <strong>Piège à éviter</strong></p><p class="teaching-label nuance"><span aria-hidden="true">?</span> <strong>À vérifier</strong></p></aside><section class="teaching-section" data-section="s-objectif"><h2 id="s-objectif" tabindex="-1">Objectif</h2><p>Adapter la quantité de sortie sans multiplier les options, et connaître les
+six niveaux de Symfony 8.0.</p></section><section class="teaching-section" data-section="s-l-essentiel"><h2 id="s-l-essentiel" tabindex="-1">L&#x27;essentiel</h2><p class="teaching-label essential"><span aria-hidden="true">○</span> <strong>À comprendre</strong></p><aside class="section-digest" id="s-l-essentiel-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>silent ajoute un niveau sous quiet.</li><li>Les niveaux couvrent du silence au diagnostic détaillé.</li></ol></aside><p>Une seule command sert au quotidien et au diagnostic : chaque message porte
+un <strong>seuil</strong> de verbosity, et le user choisit le niveau par une option. Six
+niveaux en 8.0, de <code>--silent</code>, qui tait même les erreurs, à <code>-vvv</code>, qui
+montre tout.</p></section><section class="teaching-section" data-section="s-le-schema"><h2 id="s-le-schema" tabindex="-1">Le schéma</h2><aside class="section-digest" id="s-le-schema-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Un message verbose reste visible en debug.</li><li>Le niveau demandé inclut les seuils inférieurs.</li></ol></aside><figure class="diagram" aria-labelledby="CRS-96c85hjezj1r-3-diagram-0-title CRS-96c85hjezj1r-3-diagram-0-description"><figcaption id="CRS-96c85hjezj1r-3-diagram-0-title">Les six niveaux de verbosity et leurs options</figcaption><p id="CRS-96c85hjezj1r-3-diagram-0-description">Du plus discret au plus bavard : --silent, SILENT ; -q, QUIET ; sans option, NORMAL ; -v, VERBOSE ; -vv, VERY_VERBOSE ; -vvv, DEBUG. Un message marqué VERBOSE s&#x27;affiche à -v, -vv et -vvv : c&#x27;est un seuil. SHELL_VERBOSITY, de −2 à 3, règle la verbosity globalement ; -q et -v l&#x27;emportent.</p><div class="mermaid" hidden>---
+title: Les niveaux de verbosity, du plus discret au plus bavard
+---
+flowchart TD
+  accTitle: Les six niveaux de verbosity et leurs options
+  accDescr: Du plus discret au plus bavard : --silent, SILENT ; -q, QUIET ; sans option, NORMAL ; -v, VERBOSE ; -vv, VERY_VERBOSE ; -vvv, DEBUG. Un message marqué VERBOSE s&#x27;affiche à -v, -vv et -vvv : c&#x27;est un seuil. SHELL_VERBOSITY, de −2 à 3, règle la verbosity globalement ; -q et -v l&#x27;emportent.
+  S[&quot;--silent · SILENT&quot;] --&gt; Q[&quot;-q · QUIET&quot;] --&gt; N[&quot;(défaut) · NORMAL&quot;] --&gt; V[&quot;-v · VERBOSE&quot;] --&gt; VV[&quot;-vv · VERY_VERBOSE&quot;] --&gt; D[&quot;-vvv · DEBUG&quot;]
+  V -.- T[&quot;un message marqué VERBOSE&lt;br/&gt;s&#x27;affiche à -v, -vv ET -vvv :&lt;br/&gt;c&#x27;est un seuil&quot;]
+  D ~~~ SH[&quot;SHELL_VERBOSITY : -2 … 3&lt;br/&gt;réglage global&lt;br/&gt;-q et -v l&#x27;emportent&quot;]</div></figure></section><section class="teaching-section" data-section="s-l-exemple-une-command-qui-echoue"><h2 id="s-l-exemple-une-command-qui-echoue" tabindex="-1">L&#x27;exemple : une command qui échoue</h2><p class="teaching-label example"><span aria-hidden="true">▣</span> <strong>Exemple concret</strong></p><aside class="section-digest" id="s-l-exemple-une-command-qui-echoue-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>quiet ne signifie pas silence total.</li><li>silent masque également le diagnostic console.</li></ol></aside><pre class="highlight" tabindex="0"><code class="language-php">$output-&gt;writeln('normal');
+$output-&gt;writeln('verbose-only', OutputInterface::VERBOSITY_VERBOSE);
+$output-&gt;writeln('quiet-level', OutputInterface::VERBOSITY_QUIET);
+throw new \RuntimeException('boom');</code></pre>
+<p>Exécuté dans un vrai process :</p>
+<table>
+<thead>
+<tr>
+<th>Option</th>
+<th><code>normal</code></th>
+<th><code>verbose-only</code></th>
+<th><code>quiet-level</code></th>
+<th>erreur sur STDERR</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>aucune</td>
+<td>oui</td>
+<td>non</td>
+<td>oui</td>
+<td>oui</td>
+</tr>
+<tr>
+<td><code>-q</code></td>
+<td>non</td>
+<td>non</td>
+<td><strong>oui</strong></td>
+<td><strong>oui</strong></td>
+</tr>
+<tr>
+<td><code>--silent</code></td>
+<td>non</td>
+<td>non</td>
+<td>non</td>
+<td><strong>non</strong></td>
+</tr>
+<tr>
+<td><code>-v</code>, <code>-vvv</code></td>
+<td>oui</td>
+<td>oui</td>
+<td>oui</td>
+<td>oui</td>
+</tr>
+</tbody>
+</table></section><section class="teaching-section" data-section="s-les-six-niveaux"><span class="outcome-anchor" id="out-OUT-8fna7evcc7x4" tabindex="-1"></span><span class="outcome-anchor" id="out-OUT-wv0q7kcb8q1t" tabindex="-1"></span><h2 id="s-les-six-niveaux" tabindex="-1">Les six niveaux</h2><aside class="section-digest" id="s-les-six-niveaux-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Les répétitions augmentent le détail.</li><li>Éviter une option debug parallèle inutile.</li></ol></aside><table>
+<thead>
+<tr>
+<th>Drapeau</th>
+<th>Constante</th>
+<th>Usage</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--silent</code></td>
+<td><code>VERBOSITY_SILENT</code></td>
+<td>rien du tout, pas même les erreurs</td>
+</tr>
+<tr>
+<td><code>-q</code>, <code>--quiet</code></td>
+<td><code>VERBOSITY_QUIET</code></td>
+<td>aucun output normal</td>
+</tr>
+<tr>
+<td><em>(défaut)</em></td>
+<td><code>VERBOSITY_NORMAL</code></td>
+<td>le message utile</td>
+</tr>
+<tr>
+<td><code>-v</code></td>
+<td><code>VERBOSITY_VERBOSE</code></td>
+<td>information supplémentaire</td>
+</tr>
+<tr>
+<td><code>-vv</code></td>
+<td><code>VERBOSITY_VERY_VERBOSE</code></td>
+<td>détail, messages non essentiels</td>
+</tr>
+<tr>
+<td><code>-vvv</code></td>
+<td><code>VERBOSITY_DEBUG</code></td>
+<td>tout, traces d'exception comprises</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>Le seuil se passe en <strong>second</strong> argument de <code>writeln()</code> (<code>$options</code>), le
+  troisième de <code>write()</code>.</li>
+<li>Quand le message coûte cher à calculer : <code>if ($output-&gt;isVerbose())</code>, et
+  <code>isSilent()</code>, <code>isQuiet()</code>, <code>isVeryVerbose()</code>, <code>isDebug()</code>.</li>
+<li>Pas d'option <code>--debug</code> maison : les niveaux existent déjà.</li>
+</ul></section><section class="teaching-section" data-section="s-pieges-d-examen"><h2 id="s-pieges-d-examen" tabindex="-1">Pièges d&#x27;examen</h2><p class="teaching-label pitfall"><span aria-hidden="true">△</span> <strong>Piège à éviter</strong></p><aside class="section-digest" id="s-pieges-d-examen-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Le filtre d&#x27;output n&#x27;évite pas le calcul préalable.</li><li>Tester le niveau avant le travail coûteux.</li></ol></aside><p><strong><code>--silent</code> masque les erreurs, il ne les perd pas.</strong> Elles restent écrites par
+le logger Symfony ; seule la console se tait.</p>
+<p><strong><code>SHELL_VERBOSITY</code> fixe le niveau globalement, mais <code>-q</code> et <code>-v</code> l'emportent
+sur lui.</strong> La variable vaut <code>-2</code> pour <code>--silent</code>, <code>-1</code> pour <code>--quiet</code>, <code>0</code>, <code>1</code>,
+<code>2</code>, <code>3</code> pour les suivants. Exécuté : <code>SHELL_VERBOSITY=1</code> seul affiche le
+message verbeux ; avec <code>-q</code>, plus rien d'autre que <code>quiet-level</code>.</p>
+<p><strong><code>-q</code> et <code>--silent</code> rendent aussi l'entrée non interactive</strong> : <code>interact()</code>
+n'est pas appelée (voir <em>Console component</em>).</p>
+<p><strong>Le niveau passé à <code>writeln()</code> est un seuil, pas un filter exact.</strong> Un
+message marqué <code>VERBOSITY_VERBOSE</code> s'affiche à <code>-v</code>, <code>-vv</code> <strong>et</strong> <code>-vvv</code>.</p>
+<p><strong><code>writeln()</code> n'a que deux parameters</strong> : le niveau est le second.</p></section><section class="teaching-section" data-section="s-fiche-express"><h2 id="s-fiche-express" tabindex="-1">Fiche express</h2><p class="teaching-label essential"><span aria-hidden="true">◆</span> <strong>À mémoriser</strong></p><aside class="section-digest" id="s-fiche-express-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>La variable fournit un réglage global.</li><li>La ligne de command peut le surcharger.</li></ol></aside><p><strong>Si tu dois retenir seulement 5 choses :</strong></p>
+<ul>
+<li>Six niveaux : <code>--silent</code>, <code>-q</code>, normal, <code>-v</code>, <code>-vv</code>, <code>-vvv</code>.</li>
+<li><strong><code>--silent</code></strong> tait même les erreurs ; <strong><code>-q</code></strong> seulement l'output normal.</li>
+<li>Le niveau de <code>writeln()</code> est un <strong>seuil</strong> (second argument).</li>
+<li><strong><code>isVerbose()</code></strong> et ses variantes pour un message coûteux.</li>
+<li><code>SHELL_VERBOSITY</code> règle le défaut ; <strong><code>-q</code> et <code>-v</code> l'emportent</strong>.</li>
+</ul>
+<p>Moyen mnémotechnique : <strong>« Un seuil, pas un filter »</strong>.</p></section><section class="official-sources"><h2>Sources officielles et compléments</h2><ul><li><a href="https://symfony.com/doc/8.0/console.html">Symfony 8.0 — Console</a></li><li><a href="https://symfony.com/doc/8.0/console/verbosity.html">Symfony 8.0 — console / verbosity</a></li></ul></section><nav class="course-sequence" aria-label="Ordre de lecture"><a rel="prev" href="course-CRS-y0zc67f3e5zk.html" aria-label="Précédent : Console events — Module 12 — Console">Précédent : Console events</a> <a href="lot-12.html">Sommaire : Module 12 — Console</a> <a rel="next" href="course-CRS-tt9yn0a06ngb.html" aria-label="Suivant : Unit tests with PHPUnit — Module 13 — Tests automatisés">Suivant : Unit tests with PHPUnit</a></nav><p class="course-practice-entry"><a class="button" href="#view-quiz">Fin du cours — s’entraîner avec le Quiz</a></p></div><div id="view-flashcards" data-course-panel role="region" aria-labelledby="view-flashcards-title"><h2 id="view-flashcards-title">Flashcards</h2><p lang="en">Answer before revealing each card.</p><p>Ces cartes ne mesurent pas une maîtrise notée.</p><div data-card-section="s-l-essentiel"><h3><a href="#s-l-essentiel">Revoir la section du cours</a></h3><div class="reader-cards"><details class="reader-card" id="B-96c85hjezj1r-01"><summary lang="en">How many verbosity levels does Symfony 8.0 Console expose?</summary><p lang="en">Six: silent, quiet, normal, verbose, very verbose and debug.</p><p lang="fr">silent ajoute un niveau sous quiet. Les niveaux couvrent du silence au diagnostic détaillé.</p><a href="course-CRS-96c85hjezj1r.html#out-OUT-wv0q7kcb8q1t">Revoir le passage précis</a></details></div></div><div data-card-section="s-le-schema"><h3><a href="#s-le-schema">Revoir la section du cours</a></h3><div class="reader-cards"><details class="reader-card" id="B-96c85hjezj1r-02"><summary lang="en">Is a message&#x27;s verbosity an exact level filter or a minimum threshold?</summary><p lang="en">A minimum threshold.</p><p lang="fr">Un message verbose reste visible en debug. Le niveau demandé inclut les seuils inférieurs.</p><a href="course-CRS-96c85hjezj1r.html#out-OUT-8fna7evcc7x4">Revoir le passage précis</a></details></div></div><div data-card-section="s-l-exemple-une-command-qui-echoue"><h3><a href="#s-l-exemple-une-command-qui-echoue">Revoir la section du cours</a></h3><div class="reader-cards"><details class="reader-card" id="B-96c85hjezj1r-03"><summary lang="en">How do -q and --silent differ for errors?</summary><p lang="en">Quiet suppresses normal output while errors can remain; silent suppresses console errors too.</p><p lang="fr">quiet ne signifie pas silence total. silent masque également le diagnostic console.</p><a href="course-CRS-96c85hjezj1r.html#out-OUT-wv0q7kcb8q1t">Revoir le passage précis</a></details></div></div><div data-card-section="s-les-six-niveaux"><h3><a href="#s-les-six-niveaux">Revoir la section du cours</a></h3><div class="reader-cards"><details class="reader-card" id="B-96c85hjezj1r-04"><summary lang="en">Which flags select verbose, very verbose and debug output?</summary><p lang="en">-v, -vv and -vvv.</p><p lang="fr">Les répétitions augmentent le détail. Éviter une option debug parallèle inutile.</p><a href="course-CRS-96c85hjezj1r.html#out-OUT-8fna7evcc7x4">Revoir le passage précis</a></details></div></div><div data-card-section="s-pieges-d-examen"><h3><a href="#s-pieges-d-examen">Revoir la section du cours</a></h3><div class="reader-cards"><details class="reader-card" id="B-96c85hjezj1r-05"><summary lang="en">Why guard expensive message construction with isVerbose() or isDebug()?</summary><p lang="en">To avoid calculating diagnostics that will not be displayed.</p><p lang="fr">Le filtre d&#x27;output n&#x27;évite pas le calcul préalable. Tester le niveau avant le travail coûteux.</p><a href="course-CRS-96c85hjezj1r.html#out-OUT-8fna7evcc7x4">Revoir le passage précis</a></details></div></div><div data-card-section="s-fiche-express"><h3><a href="#s-fiche-express">Revoir la section du cours</a></h3><div class="reader-cards"><details class="reader-card" id="B-96c85hjezj1r-06"><summary lang="en">Can command-line verbosity flags override SHELL_VERBOSITY?</summary><p lang="en">Yes. Explicit flags take precedence.</p><p lang="fr">La variable fournit un réglage global. La ligne de command peut le surcharger.</p><a href="course-CRS-96c85hjezj1r.html#out-OUT-8fna7evcc7x4">Revoir le passage précis</a></details></div></div><aside class="checkpoint"><h2>Rappel d’un cours antérieur</h2><p>Avant de poursuivre : Built-in helpers.</p><details class="corpus-correction"><summary lang="en">Which high-level helper groups common Console presentation and interaction tasks?</summary><p lang="en">SymfonyStyle.</p><p>SymfonyStyle fournit une interface cohérente. Il enveloppe les helpers courants.</p><a href="course-CRS-3p9jdkw1nd3g.html#out-OUT-0jqghb0j4pxh">Relire la correction dans le cours antérieur</a></details></aside></div><div id="view-quiz" data-course-panel role="region" aria-labelledby="view-quiz-title"><h2 id="view-quiz-title">Quiz</h2><p id="course-quiz-status" role="status">Quiz interactif non chargé. Démarrez après chargement de la banque locale.</p><div id="course-quiz-controls" class="assessment-main" hidden><div id="course-quiz-assessment-controls" hidden><select id="course-quiz-assessment-mode" aria-label="Mode du quiz" hidden><option value="learning">Entraînement</option></select><p id="course-quiz-training-scope"></p><button id="course-quiz-start-assessment" type="button" lang="en">Start practice</button><button id="course-quiz-finish-assessment" type="button" lang="en" hidden>End session</button></div><p id="course-quiz-assessment-error" role="alert"></p><p id="course-quiz-assessment-timer" hidden></p><p id="course-quiz-session-progress" role="status"></p><div id="course-quiz-assessment-app" tabindex="-1"></div><nav id="course-quiz-session-navigation" aria-label="Questions du cours"></nav><div id="course-quiz-learning-overview" aria-live="polite"></div></div><div id="course-quiz-native"><p>Sans JavaScript ou si le chargement échoue : aucune tentative notée. Les <a href="#view-flashcards">flashcards du cours</a> restent disponibles.</p><details class="course-quiz-fallback" data-question-id="L-96c85hjezj1r-base-v1"><summary lang="en">How many verbosity levels does Symfony 8.0 Console expose?</summary><p>Correction de consultation — non notée.</p><p>silent ajoute un niveau sous quiet. Les niveaux couvrent du silence au diagnostic détaillé.</p><ul><li><strong lang="en">Distractor: Four, with normal as the lowest level.</strong><p>Les niveaux incluent aussi quiet et silent.</p></li><li><strong lang="en">Correct: Six, including silent below quiet.</strong><p>silent ajoute un niveau sous quiet. Les niveaux couvrent du silence au diagnostic détaillé.</p></li><li><strong lang="en">Distractor: Five, with quiet as the lowest level.</strong><p>Symfony 8.0 ajoute silent sous quiet.</p></li></ul><a href="course-CRS-96c85hjezj1r.html#out-OUT-wv0q7kcb8q1t">Relire le passage exact</a></details></div></div></div></div><details class="transfer-panel"><summary>Sauvegarde et transfert de progression</summary><p id="reading-status" role="status">Sans JavaScript : lecture libre ; progression non enregistrée.</p><p><a href="assessment.html#overview-title">Lecture, réussites immédiates et différées</a></p><p>Transfert manuel — aucune synchronisation automatique</p><p id="persistence-status" role="status"></p><button type="button" class="secondary" id="export-progress">Exporter ma progression</button><label for="import-progress">Choisir un JSON pour fusionner ma progression (sans remplacement)</label><input type="file" id="import-progress" accept="application/json,.json"><p id="transfer-status" role="status"></p></details></main><footer class="site-footer"><a href="catalogue.html">Catalogue</a> <a href="sources.html">Sources et attribution</a> <a href="#contenu">Haut de page</a></footer></body></html>

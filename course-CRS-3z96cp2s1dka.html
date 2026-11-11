@@ -1,0 +1,231 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; connect-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Serializer — Symfony 8 Preparation</title><link rel="stylesheet" href="styles.css"><link rel="stylesheet" href="reader.css"><script src="mermaid.min.js" defer></script><script src="mermaid-init.js" defer></script><link rel="stylesheet" href="assessment.css"><script src="learning-state.js" defer></script><script src="guide.js" defer></script><script src="reader-catalog.js" defer></script><script src="reader.js" defer></script><script src="site-state.js" defer></script><script src="assessment.js" defer></script><script src="course-views.js" defer></script><link rel="stylesheet" href="syntax-highlight.css"><script src="prism-syntax.js" defer></script><script src="syntax-highlight.js" defer></script></head><body data-course-id="CRS-3z96cp2s1dka"><a class="skip" href="#contenu">Aller au contenu</a><header class="site-header"><a class="brand" href="index.html">S8 Preparation</a><nav aria-label="Navigation principale"><a href="index.html">Accueil</a> <a href="catalogue.html">Parcours</a> <a href="assessment.html?mode=review">Réviser</a> <a href="examens.html">Examens blancs</a> <a href="jour-j.html">Jour J</a></nav></header><main id="contenu" tabindex="-1" class="corpus-reader"><nav class="breadcrumb" aria-label="Fil d’Ariane"><a href="index.html">Accueil</a> <span aria-hidden="true">›</span> <a href="catalogue.html">Parcours</a> <span aria-hidden="true">›</span> <a href="lot-26.html">Module 26 — Serializer</a> <span aria-hidden="true">›</span> <span aria-current="page">Serializer</span></nav><h1>Serializer</h1><p class="muted">Symfony 8.0 · API PHP ≤ 8.4 · Twig ≤ 3.22. Préparation indépendante.</p><p class="revision-status">Première itération · en cours de révision pédagogique. Ce cours reste accessible, sans déclaration de validation pédagogique.</p><nav class="course-actions" aria-label="Activités du cours"><a id="tab-course" href="#view-course">Cours</a><a id="tab-flashcards" href="#view-flashcards">Flashcards</a><a id="tab-quiz" href="#view-quiz">Quiz</a></nav><div class="course-layout"><details class="lot-course-menu"><summary>Cours du module · 1 cours</summary><nav aria-label="Cours du module"><a class="lot-context" href="lot-26.html">Module 26 — Serializer</a><ol><li><a href="course-CRS-3z96cp2s1dka.html" aria-current="page">Serializer</a></li></ol></nav></details><aside class="course-section-menu" aria-label="Sommaire du cours"><details class="course-section-disclosure"><summary id="course-sections">Sections du cours</summary><nav aria-label="Sections du cours"><ul><li><a href="#s-objectif">Objectif</a></li><li><a href="#s-l-essentiel">L&#x27;essentiel</a></li><li><a href="#s-le-schema">Le schéma</a></li><li><a href="#s-l-exemple-une-vue-publique">L&#x27;exemple : une vue publique</a></li><li><a href="#s-deux-etapes-deux-responsabilites">Deux étapes, deux responsabilités</a></li><li><a href="#s-ce-qui-est-pris-par-defaut">Ce qui est pris par défaut</a></li><li><a href="#s-choisir-selon-le-contexte">Choisir selon le contexte</a></li><li><a href="#s-quel-normalizer-agit">Quel normalizer agit ?</a></li><li><a href="#s-denormaliser">Dénormaliser</a></li><li><a href="#s-le-contexte">Le contexte</a></li><li><a href="#s-les-references-circulaires">Les références circulaires</a></li><li><a href="#s-pieges-d-examen">Pièges d&#x27;examen</a></li><li><a href="#s-fiche-express">Fiche express</a></li></ul></nav></details></aside><div class="course-content"><div id="view-course" data-course-panel role="region" aria-labelledby="view-course-title"><h2 id="view-course-title">Cours</h2><p class="course-introduction"><a href="#s-objectif">Introduction</a> · <a href="#course-sections">Sections du cours</a></p><h2>Objectifs d’apprentissage</h2><ul><li><a href="course-CRS-3z96cp2s1dka.html#out-OUT-g6j22cqpx1ga">Séparer le role des normalizers de celui des encoders et prévoir la forme normalisée (array, string, scalaire)</a></li><li><a href="course-CRS-3z96cp2s1dka.html#out-OUT-a95xx41fw6hn">Savoir que plusieurs normalizers interviennent mais un seul encoder par opération</a></li><li><a href="course-CRS-3z96cp2s1dka.html#out-OUT-f4j1y7n6y64g">Connaître ce que la normalization d&#x27;objects retient par défaut et comment l&#x27;exclure</a></li><li><a href="course-CRS-3z96cp2s1dka.html#out-OUT-r6x291jsb0qt">Prévoir l&#x27;effet d&#x27;une demande de group sur une property qui n&#x27;en déclare aucun</a></li><li><a href="course-CRS-3z96cp2s1dka.html#out-OUT-4bynfsdjvrc5">Connaître le traitement des références circulaires et son seuil par défaut</a></li><li><a href="course-CRS-3z96cp2s1dka.html#out-OUT-hkvn3vxj4fyb">Prévoir quel normalizer traite une valeur selon leur ordre, et écrire un normalizer dédié</a></li><li><a href="course-CRS-3z96cp2s1dka.html#out-OUT-m8wfdy7569p8">Prévoir la denormalization — contrôle des types selon l&#x27;extractor, erreurs collectées, object à remplir</a></li><li><a href="course-CRS-3z96cp2s1dka.html#out-OUT-cf0sd5w3fzhe">Régler un appel par le contexte — valeurs nulles omises, format des dates</a></li></ul><aside class="pedagogy-legend" aria-label="Repères pédagogiques"><p><strong>Repères pédagogiques</strong></p><p>Ces repères décrivent le rôle du bloc, pas une fréquence officielle à l’examen.</p><p class="teaching-label essential"><span aria-hidden="true">○</span> <strong>À comprendre</strong></p><p class="teaching-label essential"><span aria-hidden="true">◆</span> <strong>À mémoriser</strong></p><p class="teaching-label example"><span aria-hidden="true">▣</span> <strong>Exemple concret</strong></p><p class="teaching-label pitfall"><span aria-hidden="true">△</span> <strong>Piège à éviter</strong></p><p class="teaching-label nuance"><span aria-hidden="true">?</span> <strong>À vérifier</strong></p></aside><section class="teaching-section" data-section="s-objectif"><h2 id="s-objectif" tabindex="-1">Objectif</h2><p>Savoir en quoi se décompose une serialization, et prévoir ce qui figure ou non
+dans le résultat.</p></section><section class="teaching-section" data-section="s-l-essentiel"><h2 id="s-l-essentiel" tabindex="-1">L&#x27;essentiel</h2><p class="teaching-label essential"><span aria-hidden="true">○</span> <strong>À comprendre</strong></p><aside class="section-digest" id="s-l-essentiel-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Le normalizer choisit la représentation.</li><li>L&#x27;encoder produit le format.</li></ol></aside><p>Une serialization se fait en <strong>deux étapes</strong> : un <strong>normalizer</strong> change la
+valeur PHP en représentation normalisée, un <strong>encoder</strong> change celle-ci en
+format. Le normalizer décide de tout ce qui compte à l'examen — quelles
+properties sortent, sous quel nom, avec quelle valeur ; l'encoder ne sait que
+produire et lire un format. Les bridges vers des services tiers sont hors
+programme.</p></section><section class="teaching-section" data-section="s-le-schema"><h2 id="s-le-schema" tabindex="-1">Le schéma</h2><aside class="section-digest" id="s-le-schema-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Le decoder lit la syntaxe.</li><li>Le denormalizer construit la valeur PHP.</li></ol></aside><figure class="diagram" aria-labelledby="CRS-3z96cp2s1dka-3-diagram-0-title CRS-3z96cp2s1dka-3-diagram-0-description"><figcaption id="CRS-3z96cp2s1dka-3-diagram-0-title">Normalizer et encoder à l&#x27;aller, decoder et denormalizer au retour</figcaption><p id="CRS-3z96cp2s1dka-3-diagram-0-description">serialize() passe la valeur par un normalizer vers une représentation normalisée, puis par un encoder vers JSON, XML, CSV ou YAML. deserialize() passe le format par un decoder vers la représentation normalisée, puis par un denormalizer vers la valeur. Les normalizers forment une liste triée : le premier qui accepte la valeur agit ; un seul encoder, celui du format. ObjectNormalizer lit les properties publiques et les methods get, has, is et can. #[Ignore] vaut partout, les groups au cas par cas, #[SerializedName] renomme ; le contexte, troisième argument, vaut pour un appel.</p><div class="mermaid" hidden>---
+title: Serializer, dans les deux sens
+---
+flowchart TD
+  accTitle: Normalizer et encoder à l&#x27;aller, decoder et denormalizer au retour
+  accDescr: serialize() passe la valeur par un normalizer vers une représentation normalisée, puis par un encoder vers JSON, XML, CSV ou YAML. deserialize() passe le format par un decoder vers la représentation normalisée, puis par un denormalizer vers la valeur. Les normalizers forment une liste triée : le premier qui accepte la valeur agit ; un seul encoder, celui du format. ObjectNormalizer lit les properties publiques et les methods get, has, is et can. #[Ignore] vaut partout, les groups au cas par cas, #[SerializedName] renomme ; le contexte, troisième argument, vaut pour un appel.
+  subgraph SE[&quot;serialize()&quot;]
+    direction TB
+    v1[&quot;valeur&quot;] --&gt;|&quot;normalizer&quot;| n1[&quot;représentation&lt;br/&gt;normalisée&quot;]
+    n1 --&gt;|&quot;encoder&quot;| f1[&quot;JSON / XML&lt;br/&gt;/ CSV / YAML&quot;]
+  end
+  subgraph DE[&quot;deserialize()&quot;]
+    direction TB
+    f2[&quot;format&quot;] --&gt;|&quot;decoder&quot;| n2[&quot;représentation&lt;br/&gt;normalisée&quot;]
+    n2 --&gt;|&quot;denormalizer&quot;| v2[&quot;valeur&quot;]
+  end
+  DE ~~~ R[&quot;liste triée : le PREMIER&lt;br/&gt;qui accepte la valeur agit&lt;br/&gt;un seul encoder : celui du format&lt;br/&gt;ObjectNormalizer : properties&lt;br/&gt;publiques + get/has/is/can&lt;br/&gt;#[Ignore] partout&lt;br/&gt;groups au cas par cas&lt;br/&gt;#[SerializedName] renomme&lt;br/&gt;contexte = 3e argument,&lt;br/&gt;pour UN appel&quot;]</div></figure></section><section class="teaching-section" data-section="s-l-exemple-une-vue-publique"><h2 id="s-l-exemple-une-vue-publique" tabindex="-1">L&#x27;exemple : une vue publique</h2><p class="teaching-label example"><span aria-hidden="true">▣</span> <strong>Exemple concret</strong></p><aside class="section-digest" id="s-l-exemple-une-vue-publique-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Les groups filtrent selon l&#x27;usage.</li><li>Les metadata doivent être chargées.</li></ol></aside><pre class="highlight" tabindex="0"><code class="language-php">$json = $serializer-&gt;serialize($person, 'json', ['groups' =&gt; 'public-view']);
+
+$order = $serializer-&gt;deserialize('{"qty":7}', Order::class, 'json', [
+    AbstractNormalizer::OBJECT_TO_POPULATE =&gt; $existingOrder,
+]);</code></pre></section><section class="teaching-section" data-section="s-deux-etapes-deux-responsabilites"><span class="outcome-anchor" id="out-OUT-g6j22cqpx1ga" tabindex="-1"></span><h2 id="s-deux-etapes-deux-responsabilites" tabindex="-1">Deux étapes, deux responsabilités</h2><aside class="section-digest" id="s-deux-etapes-deux-responsabilites-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>La représentation dépend du normalizer.</li><li>Array n&#x27;est pas une obligation universelle.</li></ol></aside><p>La représentation normalisée <strong>n'est pas toujours un array</strong> :</p>
+<table>
+<thead>
+<tr>
+<th>Valeur</th>
+<th>Normalizer</th>
+<th>JSON</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>object ordinaire</td>
+<td><code>ObjectNormalizer</code> → array</td>
+<td><code>{"name":"Ada"}</code></td>
+</tr>
+<tr>
+<td><code>DateTimeImmutable</code></td>
+<td><code>DateTimeNormalizer</code> → <strong>string</strong> RFC 3339</td>
+<td><code>"2026-01-02T03:04:05+00:00"</code></td>
+</tr>
+<tr>
+<td>enum <em>backed</em> <code>'H'</code></td>
+<td><code>BackedEnumNormalizer</code> → <strong>string</strong></td>
+<td><code>"H"</code></td>
+</tr>
+<tr>
+<td>l'int <code>42</code></td>
+<td>aucun</td>
+<td><code>42</code></td>
+</tr>
+</tbody>
+</table>
+<p>Le service par défaut compose une <strong>liste triée de normalizers</strong> et <strong>un seul
+encoder</strong> par opération. Encoders fournis : <strong>JSON, XML, CSV, YAML</strong> —
+<code>['k' =&gt; 'v']</code> donne <code>{"k":"v"}</code>, <code>&lt;response&gt;&lt;k&gt;v&lt;/k&gt;&lt;/response&gt;</code>, <code>k</code> puis <code>v</code>
+sur deux lignes, <code>{ k: v }</code>. Un format sans encoder lève une
+<code>UnsupportedFormatException</code>.</p></section><section class="teaching-section" data-section="s-ce-qui-est-pris-par-defaut"><span class="outcome-anchor" id="out-OUT-f4j1y7n6y64g" tabindex="-1"></span><h2 id="s-ce-qui-est-pris-par-defaut" tabindex="-1">Ce qui est pris par défaut</h2><aside class="section-digest" id="s-ce-qui-est-pris-par-defaut-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>La lecture suit les propriétés accessibles et accessors reconnus.</li><li>La visibilité et les méthodes influencent l&#x27;output.</li></ol></aside><p><code>ObjectNormalizer</code> lit l'object par l'accès aux properties :</p>
+<table>
+<thead>
+<tr>
+<th>Membre</th>
+<th>Dans l'output</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>property publique</td>
+<td>oui</td>
+</tr>
+<tr>
+<td>property privée avec <code>getWithGetter()</code></td>
+<td>oui, sous <code>withGetter</code></td>
+</tr>
+<tr>
+<td><code>isActive()</code>, <code>hasKids()</code>, <code>canFly()</code></td>
+<td>oui : <code>active</code>, <code>kids</code>, <code>fly</code></td>
+</tr>
+<tr>
+<td>property protégée ou privée sans accessor</td>
+<td><strong>non</strong></td>
+</tr>
+<tr>
+<td><code>fetchThing()</code></td>
+<td>non : préfixe inconnu</td>
+</tr>
+</tbody>
+</table>
+<p><code>#[Ignore]</code> exclut une property ou une method <strong>partout</strong>.</p></section><section class="teaching-section" data-section="s-choisir-selon-le-contexte"><span class="outcome-anchor" id="out-OUT-r6x291jsb0qt" tabindex="-1"></span><h2 id="s-choisir-selon-le-contexte" tabindex="-1">Choisir selon le contexte</h2><aside class="section-digest" id="s-choisir-selon-le-contexte-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Les deux systèmes de groups diffèrent.</li><li>Ne pas transposer le défaut du Validator.</li></ol></aside><p>Les <strong>groups</strong> excluent <em>ici</em> et gardent <em>ailleurs</em>. Avec <code>name</code> et <code>fullName</code>
+dans <code>public-view</code>, <code>age</code> dans <code>admin-view</code>, <code>email</code> sans group :</p>
+<table>
+<thead>
+<tr>
+<th>Contexte</th>
+<th>Sortie</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>aucun group</td>
+<td>les quatre</td>
+</tr>
+<tr>
+<td><code>'groups' =&gt; 'public-view'</code></td>
+<td><code>name</code>, <code>fullName</code></td>
+</tr>
+<tr>
+<td><code>'groups' =&gt; '*'</code></td>
+<td>les quatre</td>
+</tr>
+<tr>
+<td><code>'groups' =&gt; ['Default']</code></td>
+<td><strong>rien</strong></td>
+</tr>
+</tbody>
+</table>
+<p>Pas de group <code>Default</code> implicite, contrairement au Validator : <code>*</code> seul reprend
+les properties sans group.</p>
+<p>Groups, <code>#[Ignore]</code> et <code>#[SerializedName]</code> (qui renomme dans le format seul)
+sont des <strong>métadonnées</strong>. Le service <code>serializer</code> du framework les lit ; un
+<code>ObjectNormalizer</code> construit sans fabrique de métadonnées les ignore — groups
+demandés, toutes les properties sortent, y compris celle marquée <code>#[Ignore]</code>.
+De même, sans <code>MetadataAwareNameConverter</code>, <code>fullName</code> n'est pas renommé.</p></section><section class="teaching-section" data-section="s-quel-normalizer-agit"><span class="outcome-anchor" id="out-OUT-hkvn3vxj4fyb" tabindex="-1"></span><h2 id="s-quel-normalizer-agit" tabindex="-1">Quel normalizer agit ?</h2><aside class="section-digest" id="s-quel-normalizer-agit-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>L&#x27;ordre peut changer la représentation.</li><li>Le normalizer générique doit laisser passer les cas spécialisés.</li></ol></aside><p>Le <code>Serializer</code> confie la valeur au <strong>premier</strong> normalizer dont
+<code>supportsNormalization()</code> répond vrai ; <code>getSupportedTypes()</code> évite les appels
+inutiles.</p>
+<table>
+<thead>
+<tr>
+<th>Ordre</th>
+<th><code>price</code> dans le JSON</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>[MoneyNormalizer, ObjectNormalizer]</code></td>
+<td><code>"12.50 EUR"</code></td>
+</tr>
+<tr>
+<td><code>[ObjectNormalizer, MoneyNormalizer]</code></td>
+<td><code>{"cents":1250,"currency":"EUR"}</code></td>
+</tr>
+</tbody>
+</table>
+<p>Le framework enregistre <code>ObjectNormalizer</code> à la priority <strong>−1000</strong> : un
+normalizer de l'application, autoconfiguré, passe avant lui.</p></section><section class="teaching-section" data-section="s-denormaliser"><span class="outcome-anchor" id="out-OUT-m8wfdy7569p8" tabindex="-1"></span><h2 id="s-denormaliser" tabindex="-1">Dénormaliser</h2><aside class="section-digest" id="s-denormaliser-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>L&#x27;identité de l&#x27;object est conservée.</li><li>Les valeurs absentes peuvent rester inchangées.</li></ol></aside><p>Le decoder rend ce que porte le format (<code>"H"</code> reste une string) ; le
+denormalizer en fait <code>Suit::Hearts</code>. Le contrôle des types vient d'un
+<strong>extractor de types</strong>, que le service du framework reçoit :</p>
+<table>
+<thead>
+<tr>
+<th>JSON vers <code>int $qty</code></th>
+<th>Sans extractor</th>
+<th>Avec extractor</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>{"qty":"7"}</code></td>
+<td><code>7</code> : PHP convertit</td>
+<td><code>NotNormalizableValueException</code></td>
+</tr>
+<tr>
+<td><code>{"qty":"x"}</code></td>
+<td><code>NotNormalizableValueException</code></td>
+<td>idem</td>
+</tr>
+</tbody>
+</table>
+<p><code>COLLECT_DENORMALIZATION_ERRORS</code> rassemble les erreurs dans une
+<code>PartialDenormalizationException</code> ; <code>#[MapRequestPayload]</code> l'active et en fait
+des violations. <code>OBJECT_TO_POPULATE</code> remplit <strong>le même</strong> object : <code>{"qty":7}</code>
+change <code>qty</code> et laisse <code>note</code> intact.</p></section><section class="teaching-section" data-section="s-le-contexte"><span class="outcome-anchor" id="out-OUT-cf0sd5w3fzhe" tabindex="-1"></span><h2 id="s-le-contexte" tabindex="-1">Le contexte</h2><aside class="section-digest" id="s-le-contexte-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Le contexte ajuste un appel.</li><li>Il ne change pas la donnée d&#x27;origine.</li><li>MaxDepth déclare la limite dans les metadata.</li><li>Le contexte doit activer son application.</li></ol></aside><p>Le troisième argument règle <strong>un</strong> appel : <code>skip_null_values</code> retire les
+properties nulles, <code>datetime_format</code> à <code>Y-m-d</code> rend <code>"2026-01-02"</code>.</p><aside class="enrichment" aria-label="Autre explication"><p><code>#[MaxDepth(n)]</code> décrit une limite de profondeur dans les metadata, mais son respect demande aussi <code>enable_max_depth: true</code> dans le contexte du normalizer. La profondeur et la référence circulaire répondent à deux questions différentes : combien de niveaux parcourir, ou rencontre-t-on à nouveau le même object dans la branche courante ? Une limite de profondeur ne remplace pas automatiquement le traitement d'une référence circulaire.</p>
+<p><a href="https://symfony.com/doc/8.0/serializer.html">Documentation Symfony 8.0</a>.</p></aside></section><section class="teaching-section" data-section="s-les-references-circulaires"><span class="outcome-anchor" id="out-OUT-4bynfsdjvrc5" tabindex="-1"></span><h2 id="s-les-references-circulaires" tabindex="-1">Les références circulaires</h2><aside class="section-digest" id="s-les-references-circulaires-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Une limite supérieure ne résout pas la boucle.</li><li>Un handler peut rendre un identifier stable.</li></ol></aside><p>Deux objects qui se pointent lèvent une <code>CircularReferenceException</code>.
+<code>circular_reference_limit</code> — combien de fois un object est sérialisé avant
+d'être jugé circulaire — vaut <strong><code>1</code></strong> par défaut.</p>
+<table>
+<thead>
+<tr>
+<th>Contexte</th>
+<th>Résultat</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>par défaut</td>
+<td><code>CircularReferenceException</code></td>
+</tr>
+<tr>
+<td>limite à <code>2</code></td>
+<td>l'exception, plus tard</td>
+</tr>
+<tr>
+<td><code>circular_reference_handler</code> qui rend <code>'ref'</code></td>
+<td><code>{"members":[{"org":"ref","name":"m"}]}</code></td>
+</tr>
+<tr>
+<td>un même object dans deux properties sœurs</td>
+<td>aucune exception</td>
+</tr>
+</tbody>
+</table>
+<p>Le compteur suit <strong>la branche en cours</strong>, pas le document entier.</p></section><section class="teaching-section" data-section="s-pieges-d-examen"><span class="outcome-anchor" id="out-OUT-a95xx41fw6hn" tabindex="-1"></span><h2 id="s-pieges-d-examen" tabindex="-1">Pièges d&#x27;examen</h2><p class="teaching-label pitfall"><span aria-hidden="true">△</span> <strong>Piège à éviter</strong></p><aside class="section-digest" id="s-pieges-d-examen-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Le service framework la configure.</li><li>Un object construit à la main ne reçoit pas cette intégration automatiquement.</li></ol></aside><p><strong>Normalizer puis encoder</strong>, dans les deux sens — mais l'étape du milieu
+n'est un array que pour un object : une date ou une enum deviennent une string.</p>
+<p><strong>Plusieurs normalizers, un seul encoder</strong> par opération ; le <strong>premier</strong>
+normalizer qui accepte la valeur l'emporte.</p>
+<p><strong><code>"7"</code> pour un <code>int</code></strong> n'est refusé qu'avec un extractor de types.</p>
+<p><strong>Une property sans group disparaît</strong> dès qu'un group est demandé — si le
+normalizer dispose de ses métadonnées.</p>
+<p><strong><code>circular_reference_limit</code> vaut <code>1</code> par défaut</strong>, et relever le seuil ne
+supprime pas l'exception d'un vrai cycle.</p>
+<p><strong><code>groups</code> à <code>Default</code> ne rend rien</strong> : seul <code>*</code> reprend les properties sans
+group.</p></section><section class="teaching-section" data-section="s-fiche-express"><h2 id="s-fiche-express" tabindex="-1">Fiche express</h2><p class="teaching-label essential"><span aria-hidden="true">◆</span> <strong>À mémoriser</strong></p><aside class="section-digest" id="s-fiche-express-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Répétition et cycle sont distincts.</li><li>La récursion revient sur un object du chemin courant.</li></ol></aside><p><strong>Si tu dois retenir seulement 8 choses :</strong></p>
+<ul>
+<li><strong>Normalizer</strong> (valeur ⇄ représentation) puis <strong>encoder</strong> (⇄ format).</li>
+<li>Représentation : array pour un object, <strong>string</strong> pour une date ou une enum.</li>
+<li>Plusieurs normalizers, <strong>un</strong> encoder ; le <strong>premier</strong> qui accepte agit.</li>
+<li><code>ObjectNormalizer</code> : public + <code>get</code>/<code>has</code>/<code>is</code>/<code>can</code>.</li>
+<li><code>#[Ignore]</code> partout ; <strong>groups</strong> au cas par cas ; <code>Default</code> ne rend rien,
+  <code>*</code> tout.</li>
+<li>Métadonnées lues par le service du framework, pas par un normalizer nu.</li>
+<li><code>"7"</code> vers <code>int</code> : refusé <strong>seulement</strong> avec l'extractor de types.</li>
+<li>Cycle : exception, limite <strong><code>1</code></strong>, handler pour rendre un identifier.</li>
+</ul>
+<p>Moyen mnémotechnique : <strong>« Normaliser décide, encoder écrit »</strong>.</p></section><section class="official-sources"><h2>Sources officielles et compléments</h2><ul><li><a href="https://symfony.com/doc/8.0/serializer.html">Symfony 8.0 — Serializer</a></li></ul></section><nav class="course-sequence" aria-label="Ordre de lecture"><a rel="prev" href="course-CRS-pm5kj5kh3gt2.html" aria-label="Précédent : Runtime — Module 25 — Runtime">Précédent : Runtime</a> <a href="lot-26.html">Sommaire : Module 26 — Serializer</a></nav><p class="course-practice-entry"><a class="button" href="#view-quiz">Fin du cours — s’entraîner avec le Quiz</a></p></div><div id="view-flashcards" data-course-panel role="region" aria-labelledby="view-flashcards-title"><h2 id="view-flashcards-title">Flashcards</h2><p lang="en">Answer before revealing each card.</p><p>Ces cartes ne mesurent pas une maîtrise notée.</p><div data-card-section="s-l-essentiel"><h3><a href="#s-l-essentiel">Revoir la section du cours</a></h3><div class="reader-cards"><details class="reader-card" id="B-3z96cp2s1dka-01"><summary lang="en">What are the two main stages of serialization?</summary><p lang="en">Normalization to a PHP representation, then encoding to a format.</p><p lang="fr">Le normalizer choisit la représentation. L&#x27;encoder produit le format.</p><a href="course-CRS-3z96cp2s1dka.html#out-OUT-a95xx41fw6hn">Revoir le passage précis</a></details></div></div><div data-card-section="s-le-schema"><h3><a href="#s-le-schema">Revoir la section du cours</a></h3><div class="reader-cards"><details class="reader-card" id="B-3z96cp2s1dka-02"><summary lang="en">What is the reverse path when deserializing data into an object?</summary><p lang="en">Decode the format, then denormalize into the requested type.</p><p lang="fr">Le decoder lit la syntaxe. Le denormalizer construit la valeur PHP.</p><a href="course-CRS-3z96cp2s1dka.html#out-OUT-m8wfdy7569p8">Revoir le passage précis</a></details></div></div><div data-card-section="s-l-exemple-une-vue-publique"><h3><a href="#s-l-exemple-une-vue-publique">Revoir la section du cours</a></h3><div class="reader-cards"><details class="reader-card" id="B-3z96cp2s1dka-03"><summary lang="en">How can a public-view serialization expose only selected fields?</summary><p lang="en">Assign serialization groups and pass the desired group in context.</p><p lang="fr">Les groups filtrent selon l&#x27;usage. Les metadata doivent être chargées.</p><a href="course-CRS-3z96cp2s1dka.html#out-OUT-r6x291jsb0qt">Revoir le passage précis</a></details></div></div><div data-card-section="s-deux-etapes-deux-responsabilites"><h3><a href="#s-deux-etapes-deux-responsabilites">Revoir la section du cours</a></h3><div class="reader-cards"><details class="reader-card" id="B-3z96cp2s1dka-04"><summary lang="en">Must a normalized representation always be an array?</summary><p lang="en">No. Dates and backed enums can normalize to strings, and scalar values can remain scalar.</p><p lang="fr">La représentation dépend du normalizer. Array n&#x27;est pas une obligation universelle.</p><a href="course-CRS-3z96cp2s1dka.html#out-OUT-g6j22cqpx1ga">Revoir le passage précis</a></details></div></div><div data-card-section="s-ce-qui-est-pris-par-defaut"><h3><a href="#s-ce-qui-est-pris-par-defaut">Revoir la section du cours</a></h3><div class="reader-cards"><details class="reader-card" id="B-3z96cp2s1dka-05"><summary lang="en">Will ObjectNormalizer expose a private property with no readable accessor by default?</summary><p lang="en">No.</p><p lang="fr">La lecture suit les propriétés accessibles et accessors reconnus. La visibilité et les méthodes influencent l&#x27;output.</p><a href="course-CRS-3z96cp2s1dka.html#out-OUT-f4j1y7n6y64g">Revoir le passage précis</a></details></div></div><div data-card-section="s-choisir-selon-le-contexte"><h3><a href="#s-choisir-selon-le-contexte">Revoir la section du cours</a></h3><div class="reader-cards"><details class="reader-card" id="B-3z96cp2s1dka-06"><summary lang="en">Does Serializer provide an implicit Default group like Validator?</summary><p lang="en">No. Selecting Default only includes fields explicitly assigned to that serialization group.</p><p lang="fr">Les deux systèmes de groups diffèrent. Ne pas transposer le défaut du Validator.</p><a href="course-CRS-3z96cp2s1dka.html#out-OUT-r6x291jsb0qt">Revoir le passage précis</a></details></div></div><div data-card-section="s-quel-normalizer-agit"><h3><a href="#s-quel-normalizer-agit">Revoir la section du cours</a></h3><div class="reader-cards"><details class="reader-card" id="B-3z96cp2s1dka-07"><summary lang="en">Which normalizer handles a value when several report support?</summary><p lang="en">The first supporting normalizer in the configured order.</p><p lang="fr">L&#x27;ordre peut changer la représentation. Le normalizer générique doit laisser passer les cas spécialisés.</p><a href="course-CRS-3z96cp2s1dka.html#out-OUT-hkvn3vxj4fyb">Revoir le passage précis</a></details></div></div><div data-card-section="s-denormaliser"><h3><a href="#s-denormaliser">Revoir la section du cours</a></h3><div class="reader-cards"><details class="reader-card" id="B-3z96cp2s1dka-08"><summary lang="en">What does OBJECT_TO_POPULATE do during denormalization?</summary><p lang="en">It updates the supplied object instead of creating a replacement.</p><p lang="fr">L&#x27;identité de l&#x27;object est conservée. Les valeurs absentes peuvent rester inchangées.</p><a href="course-CRS-3z96cp2s1dka.html#out-OUT-m8wfdy7569p8">Revoir le passage précis</a></details></div></div><div data-card-section="s-le-contexte"><h3><a href="#s-le-contexte">Revoir la section du cours</a></h3><div class="reader-cards"><details class="reader-card" id="B-3z96cp2s1dka-09"><summary lang="en">What does skip_null_values change?</summary><p lang="en">It omits null-valued properties from normalization output.</p><p lang="fr">Le contexte ajuste un appel. Il ne change pas la donnée d&#x27;origine.</p><a href="course-CRS-3z96cp2s1dka.html#out-OUT-cf0sd5w3fzhe">Revoir le passage précis</a></details><details class="reader-card" id="B-3z96cp2s1dka-E73"><summary lang="en">Is MaxDepth metadata alone enough to enable depth limiting in ObjectNormalizer?</summary><p lang="en">No. The normalization context must also enable max-depth handling, for example with ENABLE_MAX_DEPTH set to true.</p><p lang="fr">MaxDepth déclare la limite dans les metadata. Le contexte doit activer son application.</p><a href="course-CRS-3z96cp2s1dka.html#out-OUT-cf0sd5w3fzhe">Revoir le passage précis</a></details></div></div><div data-card-section="s-les-references-circulaires"><h3><a href="#s-les-references-circulaires">Revoir la section du cours</a></h3><div class="reader-cards"><details class="reader-card" id="B-3z96cp2s1dka-10"><summary lang="en">Does raising circular_reference_limit eliminate a genuine object cycle?</summary><p lang="en">No. It only delays detection; a circular reference handler can provide a replacement representation.</p><p lang="fr">Une limite supérieure ne résout pas la boucle. Un handler peut rendre un identifier stable.</p><a href="course-CRS-3z96cp2s1dka.html#out-OUT-4bynfsdjvrc5">Revoir le passage précis</a></details></div></div><div data-card-section="s-pieges-d-examen"><h3><a href="#s-pieges-d-examen">Revoir la section du cours</a></h3><div class="reader-cards"><details class="reader-card" id="B-3z96cp2s1dka-11"><summary lang="en">Does a standalone ObjectNormalizer automatically honor Groups and Ignore attributes without metadata configuration?</summary><p lang="en">No. It needs the appropriate metadata infrastructure.</p><p lang="fr">Le service framework la configure. Un object construit à la main ne reçoit pas cette intégration automatiquement.</p><a href="course-CRS-3z96cp2s1dka.html#out-OUT-a95xx41fw6hn">Revoir le passage précis</a></details></div></div><div data-card-section="s-fiche-express"><h3><a href="#s-fiche-express">Revoir la section du cours</a></h3><div class="reader-cards"><details class="reader-card" id="B-3z96cp2s1dka-12"><summary lang="en">Is a repeated object in two sibling branches necessarily a circular reference?</summary><p lang="en">No. Circular tracking follows the active traversal branch.</p><p lang="fr">Répétition et cycle sont distincts. La récursion revient sur un object du chemin courant.</p><a href="course-CRS-3z96cp2s1dka.html#out-OUT-m8wfdy7569p8">Revoir le passage précis</a></details></div></div><aside class="checkpoint"><h2>Rappel d’un cours antérieur</h2><p>Avant de poursuivre : PropertyAccess.</p><details class="corpus-correction"><summary lang="en">Which PropertyAccess notation selects an array key and which selects an object property?</summary><p lang="en">Brackets select an array key; dotted property paths navigate objects.</p><p>Les notations choisissent des cibles différentes. Les crochets ne sont pas décoratifs.</p><a href="course-CRS-5vz7w1ny9shd.html#out-OUT-1mrdfqr9nk4q">Relire la correction dans le cours antérieur</a></details></aside></div><div id="view-quiz" data-course-panel role="region" aria-labelledby="view-quiz-title"><h2 id="view-quiz-title">Quiz</h2><p id="course-quiz-status" role="status">Quiz interactif non chargé. Démarrez après chargement de la banque locale.</p><div id="course-quiz-controls" class="assessment-main" hidden><div id="course-quiz-assessment-controls" hidden><select id="course-quiz-assessment-mode" aria-label="Mode du quiz" hidden><option value="learning">Entraînement</option></select><p id="course-quiz-training-scope"></p><button id="course-quiz-start-assessment" type="button" lang="en">Start practice</button><button id="course-quiz-finish-assessment" type="button" lang="en" hidden>End session</button></div><p id="course-quiz-assessment-error" role="alert"></p><p id="course-quiz-assessment-timer" hidden></p><p id="course-quiz-session-progress" role="status"></p><div id="course-quiz-assessment-app" tabindex="-1"></div><nav id="course-quiz-session-navigation" aria-label="Questions du cours"></nav><div id="course-quiz-learning-overview" aria-live="polite"></div></div><div id="course-quiz-native"><p>Sans JavaScript ou si le chargement échoue : aucune tentative notée. Les <a href="#view-flashcards">flashcards du cours</a> restent disponibles.</p><details class="course-quiz-fallback" data-question-id="L-3z96cp2s1dka-base-v1"><summary lang="en">What are the two main stages of serialization?</summary><p>Correction de consultation — non notée.</p><p>Le normalizer choisit la représentation. L&#x27;encoder produit le format.</p><ul><li><strong lang="en">Distractor: Encode to a format, then normalize the resulting string.</strong><p>La représentation PHP précède la production du format.</p></li><li><strong lang="en">Distractor: Validate constraints, then route the normalized object.</strong><p>Ce sont d&#x27;autres responsabilités ; serialization sépare normalization et encoding.</p></li><li><strong lang="en">Correct: Normalize to a PHP representation, then encode to a format.</strong><p>Le normalizer choisit la représentation. L&#x27;encoder produit le format.</p></li></ul><a href="course-CRS-3z96cp2s1dka.html#out-OUT-a95xx41fw6hn">Relire le passage exact</a></details></div></div></div></div><details class="transfer-panel"><summary>Sauvegarde et transfert de progression</summary><p id="reading-status" role="status">Sans JavaScript : lecture libre ; progression non enregistrée.</p><p><a href="assessment.html#overview-title">Lecture, réussites immédiates et différées</a></p><p>Transfert manuel — aucune synchronisation automatique</p><p id="persistence-status" role="status"></p><button type="button" class="secondary" id="export-progress">Exporter ma progression</button><label for="import-progress">Choisir un JSON pour fusionner ma progression (sans remplacement)</label><input type="file" id="import-progress" accept="application/json,.json"><p id="transfer-status" role="status"></p></details></main><footer class="site-footer"><a href="catalogue.html">Catalogue</a> <a href="sources.html">Sources et attribution</a> <a href="#contenu">Haut de page</a></footer></body></html>

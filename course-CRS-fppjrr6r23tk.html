@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; connect-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Error handling — Symfony 8 Preparation</title><link rel="stylesheet" href="styles.css"><link rel="stylesheet" href="reader.css"><script src="mermaid.min.js" defer></script><script src="mermaid-init.js" defer></script><link rel="stylesheet" href="assessment.css"><script src="learning-state.js" defer></script><script src="guide.js" defer></script><script src="reader-catalog.js" defer></script><script src="reader.js" defer></script><script src="site-state.js" defer></script><script src="assessment.js" defer></script><script src="course-views.js" defer></script><link rel="stylesheet" href="syntax-highlight.css"><script src="prism-syntax.js" defer></script><script src="syntax-highlight.js" defer></script></head><body data-course-id="CRS-fppjrr6r23tk"><a class="skip" href="#contenu">Aller au contenu</a><header class="site-header"><a class="brand" href="index.html">S8 Preparation</a><nav aria-label="Navigation principale"><a href="index.html">Accueil</a> <a href="catalogue.html">Parcours</a> <a href="assessment.html?mode=review">Réviser</a> <a href="examens.html">Examens blancs</a> <a href="jour-j.html">Jour J</a></nav></header><main id="contenu" tabindex="-1" class="corpus-reader"><nav class="breadcrumb" aria-label="Fil d’Ariane"><a href="index.html">Accueil</a> <span aria-hidden="true">›</span> <a href="catalogue.html">Parcours</a> <span aria-hidden="true">›</span> <a href="lot-14.html">Module 14 — Configuration et diagnostic</a> <span aria-hidden="true">›</span> <span aria-current="page">Error handling</span></nav><h1>Error handling</h1><p class="muted">Symfony 8.0 · API PHP ≤ 8.4 · Twig ≤ 3.22. Préparation indépendante.</p><p class="revision-status">Première itération · en cours de révision pédagogique. Ce cours reste accessible, sans déclaration de validation pédagogique.</p><nav class="course-actions" aria-label="Activités du cours"><a id="tab-course" href="#view-course">Cours</a><a id="tab-flashcards" href="#view-flashcards">Flashcards</a><a id="tab-quiz" href="#view-quiz">Quiz</a></nav><div class="course-layout"><details class="lot-course-menu"><summary>Cours du module · 3 cours</summary><nav aria-label="Cours du module"><a class="lot-context" href="lot-14.html">Module 14 — Configuration et diagnostic</a><ol><li><a href="course-CRS-b7wpm5anh7c6.html">Configuration (including DotEnv and ExpressionLanguage components)</a></li><li><a href="course-CRS-fppjrr6r23tk.html" aria-current="page">Error handling</a></li><li><a href="course-CRS-wf523wdsg2xp.html">Code debugging</a></li></ol></nav></details><aside class="course-section-menu" aria-label="Sommaire du cours"><details class="course-section-disclosure"><summary id="course-sections">Sections du cours</summary><nav aria-label="Sections du cours"><ul><li><a href="#s-objectif">Objectif</a></li><li><a href="#s-l-essentiel">L&#x27;essentiel</a></li><li><a href="#s-le-schema">Le schéma</a></li><li><a href="#s-l-exemple">L&#x27;exemple</a></li><li><a href="#s-tout-est-une-exception">Tout est une exception</a></li><li><a href="#s-deux-affichages-selon-l-environment">Deux affichages, selon l&#x27;environment</a></li><li><a href="#s-le-status-code">Le status code</a></li><li><a href="#s-quatre-niveaux-d-intervention">Quatre niveaux d&#x27;intervention</a></li><li><a href="#s-surcharger-un-template">Surcharger un template</a></li><li><a href="#s-pieges-d-examen">Pièges d&#x27;examen</a></li><li><a href="#s-fiche-express">Fiche express</a></li></ul></nav></details></aside><div class="course-content"><div id="view-course" data-course-panel role="region" aria-labelledby="view-course-title"><h2 id="view-course-title">Cours</h2><p class="course-introduction"><a href="#s-objectif">Introduction</a> · <a href="#course-sections">Sections du cours</a></p><h2>Objectifs d’apprentissage</h2><ul><li><a href="course-CRS-fppjrr6r23tk.html#out-OUT-nrbst3qj145g">Énoncer d&#x27;où vient le status code d&#x27;une erreur</a></li><li><a href="course-CRS-fppjrr6r23tk.html#out-OUT-4d26jh0mp0z1">Choisir le niveau d&#x27;intervention adapté au besoin</a></li><li><a href="course-CRS-fppjrr6r23tk.html#out-OUT-pw8f8xsdrrcf">Situer le comportement de dev face à celui de prod</a></li></ul><aside class="pedagogy-legend" aria-label="Repères pédagogiques"><p><strong>Repères pédagogiques</strong></p><p>Ces repères décrivent le rôle du bloc, pas une fréquence officielle à l’examen.</p><p class="teaching-label essential"><span aria-hidden="true">○</span> <strong>À comprendre</strong></p><p class="teaching-label essential"><span aria-hidden="true">◆</span> <strong>À mémoriser</strong></p><p class="teaching-label example"><span aria-hidden="true">▣</span> <strong>Exemple concret</strong></p><p class="teaching-label pitfall"><span aria-hidden="true">△</span> <strong>Piège à éviter</strong></p><p class="teaching-label nuance"><span aria-hidden="true">?</span> <strong>À vérifier</strong></p></aside><section class="teaching-section" data-section="s-objectif"><h2 id="s-objectif" tabindex="-1">Objectif</h2><p>Savoir ce que Symfony fait d'une erreur, et à quel niveau intervenir selon ce
+qu'on veut changer.</p></section><section class="teaching-section" data-section="s-l-essentiel"><h2 id="s-l-essentiel" tabindex="-1">L&#x27;essentiel</h2><p class="teaching-label essential"><span aria-hidden="true">○</span> <strong>À comprendre</strong></p><aside class="section-digest" id="s-l-essentiel-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Le message ne détermine pas le status code.</li><li>Le contrat de l&#x27;exception porte cette information.</li></ol></aside><p>Une exception non attrapée remonte vers le traitement d'erreur du kernel. Un avertissement PHP n'est converti en exception que selon la configuration du handler, notamment <code>php_errors.throw</code> ; il peut sinon être journalisé. Le <strong>status code</strong> dépend de la configuration et des contrats de l'exception, pas de son message. Sans indication applicable, il vaut normalement <strong>500</strong>. En debug, on voit la page d'exception ; sans debug, une page d'erreur personnalisable au niveau le plus bas qui suffit.</p></section><section class="teaching-section" data-section="s-le-schema"><h2 id="s-le-schema" tabindex="-1">Le schéma</h2><aside class="section-digest" id="s-le-schema-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Le détail sert au développement.</li><li>Ne pas publier de trace aux utilisateurs.</li></ol></aside><figure class="diagram" aria-labelledby="CRS-fppjrr6r23tk-3-diagram-0-title CRS-fppjrr6r23tk-3-diagram-0-description"><figcaption id="CRS-fppjrr6r23tk-3-diagram-0-title">Comment Symfony transforme une erreur en Response</figcaption><p id="CRS-fppjrr6r23tk-3-diagram-0-description">Une erreur PHP non fatale ne devient une ErrorException que si php_errors.throw est vrai, en debug par défaut ; sinon elle est journalisée et le code continue. Une exception remonte jusqu&#x27;à kernel.exception. Le status code vient d&#x27;abord de framework.exceptions, puis de l&#x27;attribute WithHttpStatus si l&#x27;exception n&#x27;implémente pas HttpExceptionInterface, puis de getStatusCode, puis 400 pour une RequestExceptionInterface, sinon 500. En debug, la page d&#x27;exception s&#x27;affiche ; sans debug, TwigErrorRenderer cherche error suivi du code, puis error.html.twig, puis la page minimale.</p><div class="mermaid" hidden>---
+title: Le trajet d&#x27;une erreur jusqu&#x27;à la page
+---
+flowchart TD
+  accTitle: Comment Symfony transforme une erreur en Response
+  accDescr: Une erreur PHP non fatale ne devient une ErrorException que si php_errors.throw est vrai, en debug par défaut ; sinon elle est journalisée et le code continue. Une exception remonte jusqu&#x27;à kernel.exception. Le status code vient d&#x27;abord de framework.exceptions, puis de l&#x27;attribute WithHttpStatus si l&#x27;exception n&#x27;implémente pas HttpExceptionInterface, puis de getStatusCode, puis 400 pour une RequestExceptionInterface, sinon 500. En debug, la page d&#x27;exception s&#x27;affiche ; sans debug, TwigErrorRenderer cherche error suivi du code, puis error.html.twig, puis la page minimale.
+  WARN[&quot;avertissement PHP&quot;] --&gt; TH{&quot;php_errors.throw ? (debug par défaut)&quot;}
+  TH --&gt;|&quot;oui&quot;| EXC
+  TH --&gt;|&quot;non&quot;| LOG([&quot;journalisé ; le code continue&quot;])
+  EXC[&quot;exception non attrapée&quot;] --&gt; KE[&quot;kernel.exception, ErrorListener&quot;]
+  KE --&gt; ST{&quot;status code&quot;}
+  ST --&gt;|&quot;1. framework.exceptions&quot;| CODE[&quot;code retenu&quot;]
+  ST --&gt;|&quot;2. WithHttpStatus, sans l&#x27;interface&quot;| CODE
+  ST --&gt;|&quot;3. HttpExceptionInterface&quot;| CODE
+  ST --&gt;|&quot;4. RequestExceptionInterface : 400&quot;| CODE
+  ST --&gt;|&quot;5. sinon : 500&quot;| CODE
+  CODE --&gt; DBG{&quot;debug ?&quot;}
+  DBG --&gt;|&quot;oui&quot;| EP([&quot;page d&#x27;exception : message, trace&quot;])
+  DBG --&gt;|&quot;non&quot;| TPL([&quot;errorCODE.html.twig, puis error.html.twig, puis page minimale&quot;])</div></figure></section><section class="teaching-section" data-section="s-l-exemple"><h2 id="s-l-exemple" tabindex="-1">L&#x27;exemple</h2><p class="teaching-label example"><span aria-hidden="true">▣</span> <strong>Exemple concret</strong></p><aside class="section-digest" id="s-l-exemple-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Créer une exception ne la lève pas.</li><li>throw déclenche le traitement d&#x27;erreur.</li></ol></aside><p class="snippet-context">Extrait PHP : contexte de class, method ou signature requis. Syntaxe vérifiée dans ce contexte ; ce fragment ne constitue pas un programme autonome.</p><pre class="highlight" tabindex="0"><code class="language-php">#[Route('/product/{id}')]
+public function show(int $id, ProductRepository $products): Response
+{
+    $product = $products-&gt;find($id)
+        ?? throw $this-&gt;createNotFoundException('Produit absent'); // 404
+    // throw new \RuntimeException('Produit absent');  // 500 : le message n'est pas lu
+
+    return $this-&gt;render('product/show.html.twig', ['product' =&gt; $product]);
+}</code></pre></section><section class="teaching-section" data-section="s-tout-est-une-exception"><h2 id="s-tout-est-une-exception" tabindex="-1">Tout est une exception</h2><aside class="section-digest" id="s-tout-est-une-exception-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Un warning peut être journalisé sans interrompre.</li><li>La configuration décide de la conversion.</li></ol></aside><p>Un 404 comme une erreur fatale passe par la même mécanique. Une erreur PHP non
+fatale — un avertissement — ne devient une <code>ErrorException</code> que si
+<code>framework.php_errors.throw</code> est vraie, et sa default value est
+<code>%kernel.debug%</code> :</p>
+<table>
+<thead>
+<tr>
+<th>Mode</th>
+<th>Key d'array absente</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>debug</td>
+<td>500, <code>ErrorException</code> : <em>Warning: Undefined array key</em></td>
+</tr>
+<tr>
+<td>sans debug</td>
+<td>200 : l'avertissement est journalisé, le code continue</td>
+</tr>
+</tbody>
+</table></section><section class="teaching-section" data-section="s-deux-affichages-selon-l-environment"><span class="outcome-anchor" id="out-OUT-pw8f8xsdrrcf" tabindex="-1"></span><h2 id="s-deux-affichages-selon-l-environment" tabindex="-1">Deux affichages, selon l&#x27;environment</h2><aside class="section-digest" id="s-deux-affichages-selon-l-environment-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>La page debug masque la présentation normale.</li><li>La prévisualisation permet de voir le template d&#x27;erreur.</li></ol></aside><table>
+<thead>
+<tr>
+<th>Environment</th>
+<th>Ce que voit le user</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>dev</code></td>
+<td>la <strong>page d'exception</strong> : message, trace, journaux</td>
+</tr>
+<tr>
+<td><code>prod</code></td>
+<td>une <strong>page d'erreur</strong> minimale</td>
+</tr>
+</tbody>
+</table>
+<p>En <code>dev</code>, on ne voit donc pas sa propre page d'erreur : les routes <code>/_error</code>,
+chargées sous <code>when@dev</code>, la prévisualisent — <code>/_error/404</code>,
+<code>/_error/404.json</code> (route <code>/{code}.{_format}</code>).</p></section><section class="teaching-section" data-section="s-le-status-code"><span class="outcome-anchor" id="out-OUT-nrbst3qj145g" tabindex="-1"></span><h2 id="s-le-status-code" tabindex="-1">Le status code</h2><aside class="section-digest" id="s-le-status-code-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>L&#x27;attribute ne domine pas toujours l&#x27;interface.</li><li>La configuration explicite peut imposer le code.</li></ol></aside><p>L'ordre, lu dans <code>ErrorListener</code> :</p>
+<table>
+<thead>
+<tr>
+<th>Source</th>
+<th>Exemple</th>
+<th>Statut</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>framework.exceptions</code>, pour une class</td>
+<td><code>status_code: 418</code></td>
+<td>418 — s'impose même à l'interface</td>
+</tr>
+<tr>
+<td><code>#[WithHttpStatus]</code> sur la class</td>
+<td><code>#[WithHttpStatus(404)]</code></td>
+<td>404 — ignoré si l'interface est implémentée</td>
+</tr>
+<tr>
+<td><code>HttpExceptionInterface::getStatusCode()</code></td>
+<td><code>NotFoundHttpException</code></td>
+<td>404</td>
+</tr>
+<tr>
+<td><code>RequestExceptionInterface</code></td>
+<td><code>BadRequestException</code></td>
+<td>400</td>
+</tr>
+<tr>
+<td>rien de tout cela</td>
+<td><code>RuntimeException</code></td>
+<td><strong>500</strong></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Le message n'est jamais lu.</strong> <code>createNotFoundException()</code>, dans
+<code>AbstractController</code>, <strong>rend</strong> une <code>NotFoundHttpException</code> — qu'il faut lever
+avec <code>throw</code>.</p></section><section class="teaching-section" data-section="s-quatre-niveaux-d-intervention"><span class="outcome-anchor" id="out-OUT-4d26jh0mp0z1" tabindex="-1"></span><h2 id="s-quatre-niveaux-d-intervention" tabindex="-1">Quatre niveaux d&#x27;intervention</h2><aside class="section-digest" id="s-quatre-niveaux-d-intervention-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Choisir l&#x27;intervention minimale.</li><li>La logique kernel.exception n&#x27;est pas nécessaire pour un simple style.</li></ol></aside><table>
+<thead>
+<tr>
+<th>Besoin</th>
+<th>Intervention</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>changer l'apparence de la page</td>
+<td><strong>surcharger les templates</strong> d'erreur</td>
+</tr>
+<tr>
+<td>changer un output non-HTML (JSON, XML)</td>
+<td>un <strong>normalizer</strong> de <code>FlattenException</code></td>
+</tr>
+<tr>
+<td>changer la logique de génération</td>
+<td><strong>surcharger le controller d'erreur</strong> : <code>framework.error_controller</code></td>
+</tr>
+<tr>
+<td>maîtriser entièrement le traitement</td>
+<td>écouter <strong><code>kernel.exception</code></strong></td>
+</tr>
+</tbody>
+</table>
+<p>Prendre le niveau le plus bas qui suffit.</p></section><section class="teaching-section" data-section="s-surcharger-un-template"><h2 id="s-surcharger-un-template" tabindex="-1">Surcharger un template</h2><aside class="section-digest" id="s-surcharger-un-template-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Le template par status code est prioritaire.</li><li>Le générique sert de repli.</li></ol></aside><ul>
+<li>Dans <code>templates/bundles/TwigBundle/Exception/</code> : <code>error404.html.twig</code> pour ce
+  code, sinon <code>error.html.twig</code>, sinon la page minimale par défaut.</li>
+<li>En debug, les templates sont ignorés : c'est la page d'exception.</li>
+<li><code>TwigErrorRenderer</code> passe <code>status_code</code>, <code>status_text</code> et <code>exception</code>, une
+  <code>FlattenException</code> — dont on ne montre jamais la trace à un user.</li>
+<li>La security n'est pas disponible sur une page 404 : le user y apparaît
+  déconnecté.</li>
+</ul></section><section class="teaching-section" data-section="s-pieges-d-examen"><h2 id="s-pieges-d-examen" tabindex="-1">Pièges d&#x27;examen</h2><p class="teaching-label pitfall"><span aria-hidden="true">△</span> <strong>Piège à éviter</strong></p><aside class="section-digest" id="s-pieges-d-examen-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>La trace peut exposer l&#x27;application.</li><li>Le rendu public doit rester minimal.</li></ol></aside><p><strong>Une exception ordinaire donne 500</strong>, quel que soit son message. Ce qui change
+le statut : l'interface, l'attribute <code>#[WithHttpStatus]</code>, la configuration
+<code>framework.exceptions</code>, ou une <code>RequestExceptionInterface</code> (400).</p>
+<p><strong>Un avertissement PHP n'est une exception qu'en debug</strong>, par défaut.</p>
+<p><strong>La page d'exception détaillée n'existe qu'en <code>dev</code>.</strong></p>
+<p><strong>Sa propre page d'erreur ne s'affiche pas en <code>dev</code></strong> : il faut les routes
+<code>/_error</code>.</p>
+<p><strong><code>error&lt;code&gt;.html.twig</code> d'abord, <code>error.html.twig</code> ensuite.</strong></p>
+<p><strong>Pas d'information de sécurité sur une 404.</strong></p></section><section class="teaching-section" data-section="s-fiche-express"><h2 id="s-fiche-express" tabindex="-1">Fiche express</h2><p class="teaching-label essential"><span aria-hidden="true">◆</span> <strong>À mémoriser</strong></p><aside class="section-digest" id="s-fiche-express-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Ce niveau intervient dans la logique d&#x27;erreur.</li><li>L&#x27;utiliser seulement si les options plus simples ne suffisent pas.</li></ol></aside><p><strong>Si tu dois retenir seulement 7 choses :</strong></p>
+<ul>
+<li>Un avertissement PHP devient une exception seulement selon <strong><code>php_errors.throw</code></strong>, activé par défaut en debug.</li>
+<li><strong>Status code</strong> : une configuration explicite peut primer ; <strong><code>HttpExceptionInterface</code></strong> fournit son code. <strong><code>WithHttpStatus</code></strong> ne remplace pas le code d'une exception qui implémente cette interface. <code>RequestExceptionInterface</code> peut produire <strong>400</strong> ; sinon <strong>500</strong>.</li>
+<li><strong>Le message ne détermine pas le status code.</strong></li>
+<li>Avec <strong>debug</strong> : page d'exception ; sans debug : page d'erreur.</li>
+<li><strong><code>error404.html.twig</code></strong> puis <strong><code>error.html.twig</code></strong>.</li>
+<li><strong><code>/_error/{code}</code></strong> pour prévisualiser, <strong><code>.json</code></strong> pour un autre format.</li>
+<li><strong>Template &lt; normalizer &lt; controller d'erreur &lt; <code>kernel.exception</code>.</strong></li>
+</ul>
+<p>Moyen mnémotechnique : <strong>« Configuration et contrats, pas le message »</strong>.</p>
+<pre class="highlight" tabindex="0"><code class="language-text">warning → exception seulement selon php_errors.throw ; kernel.exception ; status code selon configuration et contrats ;
+WithHttpStatus ne remplace pas HttpExceptionInterface ; debug : détails ; sinon errorCODE puis error.html.twig ; /_error/{code}.{format}</code></pre></section><section class="official-sources"><h2>Sources officielles et compléments</h2><ul><li><a href="https://symfony.com/doc/8.0/components/http_kernel.html">Symfony 8.0 — HttpKernel</a></li><li><a href="https://symfony.com/doc/8.0/controller/error_pages.html">Symfony 8.0 — controller / error pages</a></li><li><a href="https://symfony.com/doc/8.0/reference/configuration/framework.html">Symfony 8.0 — reference / configuration / framework</a></li></ul></section><nav class="course-sequence" aria-label="Ordre de lecture"><a rel="prev" href="course-CRS-b7wpm5anh7c6.html" aria-label="Précédent : Configuration (including DotEnv and ExpressionLanguage components) — Module 14 — Configuration et diagnostic">Précédent : Configuration (including DotEnv and ExpressionLanguage components)</a> <a href="lot-14.html">Sommaire : Module 14 — Configuration et diagnostic</a> <a rel="next" href="course-CRS-wf523wdsg2xp.html" aria-label="Suivant : Code debugging — Module 14 — Configuration et diagnostic">Suivant : Code debugging</a></nav><p class="course-practice-entry"><a class="button" href="#view-quiz">Fin du cours — s’entraîner avec le Quiz</a></p></div><div id="view-flashcards" data-course-panel role="region" aria-labelledby="view-flashcards-title"><h2 id="view-flashcards-title">Flashcards</h2><p lang="en">Answer before revealing each card.</p><p>Ces cartes ne mesurent pas une maîtrise notée.</p><div data-card-section="s-l-essentiel"><h3><a href="#s-l-essentiel">Revoir la section du cours</a></h3><div class="reader-cards"><details class="reader-card" id="B-fppjrr6r23tk-01"><summary lang="en">Does an exception message containing &#x27;404&#x27; make its Response a 404?</summary><p lang="en">No. Status comes from supported exception metadata, interfaces or configuration, otherwise normally 500.</p><p lang="fr">Le message ne détermine pas le status code. Le contrat de l&#x27;exception porte cette information.</p><a href="course-CRS-fppjrr6r23tk.html#out-OUT-nrbst3qj145g">Revoir le passage précis</a></details></div></div><div data-card-section="s-le-schema"><h3><a href="#s-le-schema">Revoir la section du cours</a></h3><div class="reader-cards"><details class="reader-card" id="B-fppjrr6r23tk-02"><summary lang="en">What distinguishes the debug exception page from the production error page?</summary><p lang="en">Debug exposes diagnostics; production uses a minimal safe error presentation.</p><p lang="fr">Le détail sert au développement. Ne pas publier de trace aux utilisateurs.</p><a href="course-CRS-fppjrr6r23tk.html#out-OUT-pw8f8xsdrrcf">Revoir le passage précis</a></details></div></div><div data-card-section="s-l-exemple"><h3><a href="#s-l-exemple">Revoir la section du cours</a></h3><div class="reader-cards"><details class="reader-card" id="B-fppjrr6r23tk-03"><summary lang="en">Must createNotFoundException() be thrown to stop controller execution?</summary><p lang="en">Yes. It returns an exception object; the caller must throw it.</p><p lang="fr">Créer une exception ne la lève pas. throw déclenche le traitement d&#x27;erreur.</p><a href="course-CRS-fppjrr6r23tk.html#out-OUT-nrbst3qj145g">Revoir le passage précis</a></details></div></div><div data-card-section="s-tout-est-une-exception"><h3><a href="#s-tout-est-une-exception">Revoir la section du cours</a></h3><div class="reader-cards"><details class="reader-card" id="B-fppjrr6r23tk-04"><summary lang="en">Do PHP warnings always become ErrorException in Symfony?</summary><p lang="en">No. Conversion depends on error-handler configuration; framework.php_errors.throw defaults with debug.</p><p lang="fr">Un warning peut être journalisé sans interrompre. La configuration décide de la conversion.</p><a href="course-CRS-fppjrr6r23tk.html#out-OUT-nrbst3qj145g">Revoir le passage précis</a></details></div></div><div data-card-section="s-deux-affichages-selon-l-environment"><h3><a href="#s-deux-affichages-selon-l-environment">Revoir la section du cours</a></h3><div class="reader-cards"><details class="reader-card" id="B-fppjrr6r23tk-05"><summary lang="en">How can a developer preview a production-style error page in development?</summary><p lang="en">Use the configured development error-preview routes such as /_error/404.</p><p lang="fr">La page debug masque la présentation normale. La prévisualisation permet de voir le template d&#x27;erreur.</p><a href="course-CRS-fppjrr6r23tk.html#out-OUT-pw8f8xsdrrcf">Revoir le passage précis</a></details></div></div><div data-card-section="s-le-status-code"><h3><a href="#s-le-status-code">Revoir la section du cours</a></h3><div class="reader-cards"><details class="reader-card" id="B-fppjrr6r23tk-06"><summary lang="en">Does WithHttpStatus override an HttpExceptionInterface status in the default handling path?</summary><p lang="en">No. The interface status is respected; explicit framework exception configuration can take precedence.</p><p lang="fr">L&#x27;attribute ne domine pas toujours l&#x27;interface. La configuration explicite peut imposer le code.</p><a href="course-CRS-fppjrr6r23tk.html#out-OUT-nrbst3qj145g">Revoir le passage précis</a></details></div></div><div data-card-section="s-quatre-niveaux-d-intervention"><h3><a href="#s-quatre-niveaux-d-intervention">Revoir la section du cours</a></h3><div class="reader-cards"><details class="reader-card" id="B-fppjrr6r23tk-07"><summary lang="en">Which customization level is appropriate when only an HTML error page&#x27;s appearance must change?</summary><p lang="en">Override the error template rather than the entire exception pipeline.</p><p lang="fr">Choisir l&#x27;intervention minimale. La logique kernel.exception n&#x27;est pas nécessaire pour un simple style.</p><a href="course-CRS-fppjrr6r23tk.html#out-OUT-4d26jh0mp0z1">Revoir le passage précis</a></details></div></div><div data-card-section="s-surcharger-un-template"><h3><a href="#s-surcharger-un-template">Revoir la section du cours</a></h3><div class="reader-cards"><details class="reader-card" id="B-fppjrr6r23tk-08"><summary lang="en">Which error template is preferred for a 404 before the generic fallback?</summary><p lang="en">error404.html.twig, then error.html.twig.</p><p lang="fr">Le template par status code est prioritaire. Le générique sert de repli.</p><a href="course-CRS-fppjrr6r23tk.html#out-OUT-nrbst3qj145g">Revoir le passage précis</a></details></div></div><div data-card-section="s-pieges-d-examen"><h3><a href="#s-pieges-d-examen">Revoir la section du cours</a></h3><div class="reader-cards"><details class="reader-card" id="B-fppjrr6r23tk-09"><summary lang="en">Should detailed exception traces be rendered to production visitors?</summary><p lang="en">No. Keep diagnostics private and show a safe error page.</p><p lang="fr">La trace peut exposer l&#x27;application. Le rendu public doit rester minimal.</p><a href="course-CRS-fppjrr6r23tk.html#out-OUT-pw8f8xsdrrcf">Revoir le passage précis</a></details></div></div><div data-card-section="s-fiche-express"><h3><a href="#s-fiche-express">Revoir la section du cours</a></h3><div class="reader-cards"><details class="reader-card" id="B-fppjrr6r23tk-10"><summary lang="en">Which event offers control over exception handling at the kernel level?</summary><p lang="en">kernel.exception.</p><p lang="fr">Ce niveau intervient dans la logique d&#x27;erreur. L&#x27;utiliser seulement si les options plus simples ne suffisent pas.</p><a href="course-CRS-fppjrr6r23tk.html#out-OUT-4d26jh0mp0z1">Revoir le passage précis</a></details></div></div><aside class="checkpoint"><h2>Rappel d’un cours antérieur</h2><p>Avant de poursuivre : Handling legacy deprecated code.</p><details class="corpus-correction"><summary lang="en">Does a Symfony deprecation automatically fail the current Request?</summary><p lang="en">No. It is a deprecation notice, normally collected by an error handler.</p><p>Une deprecation n&#x27;est pas une suppression immédiate. La visibilité dépend du traitement des erreurs.</p><a href="course-CRS-fak8bf9014br.html#out-OUT-e2qhdj18dvjh">Relire la correction dans le cours antérieur</a></details></aside></div><div id="view-quiz" data-course-panel role="region" aria-labelledby="view-quiz-title"><h2 id="view-quiz-title">Quiz</h2><p id="course-quiz-status" role="status">Quiz interactif non chargé. Démarrez après chargement de la banque locale.</p><div id="course-quiz-controls" class="assessment-main" hidden><div id="course-quiz-assessment-controls" hidden><select id="course-quiz-assessment-mode" aria-label="Mode du quiz" hidden><option value="learning">Entraînement</option></select><p id="course-quiz-training-scope"></p><button id="course-quiz-start-assessment" type="button" lang="en">Start practice</button><button id="course-quiz-finish-assessment" type="button" lang="en" hidden>End session</button></div><p id="course-quiz-assessment-error" role="alert"></p><p id="course-quiz-assessment-timer" hidden></p><p id="course-quiz-session-progress" role="status"></p><div id="course-quiz-assessment-app" tabindex="-1"></div><nav id="course-quiz-session-navigation" aria-label="Questions du cours"></nav><div id="course-quiz-learning-overview" aria-live="polite"></div></div><div id="course-quiz-native"><p>Sans JavaScript ou si le chargement échoue : aucune tentative notée. Les <a href="#view-flashcards">flashcards du cours</a> restent disponibles.</p><details class="course-quiz-fallback" data-question-id="L-fppjrr6r23tk-base-v1"><summary lang="en">Does an exception message containing &#x27;404&#x27; make its Response a 404?</summary><p>Correction de consultation — non notée.</p><p>Le message ne détermine pas le status code. Le contrat de l&#x27;exception porte cette information.</p><ul><li><strong lang="en">Distractor: No; every exception always yields 200 unless caught in a controller.</strong><p>Les interfaces ou la configuration peuvent fixer le statut ; sinon c&#x27;est normalement 500.</p></li><li><strong lang="en">Correct: No; status comes from supported metadata or defaults to 500.</strong><p>Le message ne détermine pas le status code. Le contrat de l&#x27;exception porte cette information.</p></li><li><strong lang="en">Distractor: Yes; the exception message is parsed for numeric status codes.</strong><p>Le message ne définit pas le status code HTTP.</p></li></ul><a href="course-CRS-fppjrr6r23tk.html#out-OUT-nrbst3qj145g">Relire le passage exact</a></details></div></div></div></div><details class="transfer-panel"><summary>Sauvegarde et transfert de progression</summary><p id="reading-status" role="status">Sans JavaScript : lecture libre ; progression non enregistrée.</p><p><a href="assessment.html#overview-title">Lecture, réussites immédiates et différées</a></p><p>Transfert manuel — aucune synchronisation automatique</p><p id="persistence-status" role="status"></p><button type="button" class="secondary" id="export-progress">Exporter ma progression</button><label for="import-progress">Choisir un JSON pour fusionner ma progression (sans remplacement)</label><input type="file" id="import-progress" accept="application/json,.json"><p id="transfer-status" role="status"></p></details></main><footer class="site-footer"><a href="catalogue.html">Catalogue</a> <a href="sources.html">Sources et attribution</a> <a href="#contenu">Haut de page</a></footer></body></html>

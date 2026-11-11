@@ -1,0 +1,291 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; connect-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="HTTP status codes : distinctions, schémas, exemples Symfony 8.0 et flashcards anglaises.">
+  <title>HTTP status codes — Symfony 8 Preparation</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="reader.css"><link rel="stylesheet" href="assessment.css"><script src="learning-state.js" defer></script><script src="guide.js" defer></script><script src="reader-catalog.js" defer></script><script src="reader.js" defer></script><script src="site-state.js" defer></script><script src="assessment.js" defer></script><script src="course-views.js" defer></script><link rel="stylesheet" href="syntax-highlight.css"><script src="prism-syntax.js" defer></script><script src="syntax-highlight.js" defer></script></head>
+<body data-course-id="CRS-984c2bv3wh09">
+  <a class="skip" href="#contenu">Aller au contenu</a>
+  <header class="site-header">
+    <a class="brand" href="index.html"><span class="brand-mark" aria-hidden="true">S8</span> Preparation<span class="brand-dot" aria-hidden="true">.</span></a>
+    <nav aria-label="Navigation principale"><a href="index.html">Accueil</a> <a href="catalogue.html">Parcours</a> <a href="assessment.html?mode=review">Réviser</a> <a href="examens.html">Examens blancs</a> <a href="jour-j.html">Jour J</a></nav>
+  </header>
+  <main id="contenu" tabindex="-1">
+    <div class="page-heading">
+      <nav class="breadcrumb" aria-label="Fil d’Ariane"><a href="index.html">Accueil</a> <span aria-hidden="true">›</span> <a href="catalogue.html">Parcours</a> <span aria-hidden="true">›</span> <a href="lot-02.html">Module 02 — Fondamentaux HTTP</a> <span aria-hidden="true">›</span> <span aria-current="page">Status codes</span></nav>
+      <p class="eyebrow">Module 02 — Fondamentaux HTTP</p>
+      <h1>HTTP status codes</h1><p class="revision-status">Première itération · en cours de révision pédagogique. Ce cours reste accessible, sans déclaration de validation pédagogique.</p>
+      <p class="lead">Comprendre ce qui s'est passé, puis décider ce que le client doit faire : c'est plus utile qu'une liste apprise sans contexte.</p>
+      <p class="muted">L'ordre est pédagogique : modèle simple, distinctions essentielles du syllabus, puis API Symfony. Il ne reflète aucune fréquence ni pondération officielle de l'examen.</p>
+      <aside class="pedagogy-legend" aria-label="Repères pédagogiques"><p><strong>Repères pédagogiques</strong></p><p>Ces repères décrivent le rôle du bloc, pas une fréquence officielle à l’examen.</p><p class="teaching-label essential"><span aria-hidden="true">○</span> <strong>À comprendre</strong></p><p class="teaching-label essential"><span aria-hidden="true">◆</span> <strong>À mémoriser</strong></p><p class="teaching-label example"><span aria-hidden="true">▣</span> <strong>Exemple concret</strong></p><p class="teaching-label pitfall"><span aria-hidden="true">△</span> <strong>Piège à éviter</strong></p><p class="teaching-label nuance"><span aria-hidden="true">?</span> <strong>À vérifier</strong></p></aside>
+      <div class="guide-progress">
+        <p id="guide-status" role="status" aria-live="polite">Sans JavaScript : reprise non enregistrée. Toutes les étapes et corrections restent accessibles.</p>
+        <a id="guide-resume" href="#lecture">Commencer à l'étape 01</a>
+        <p class="muted">Repère local de lecture, distinct des résultats d’entraînement. Toutes les étapes restent accessibles.</p>
+      </div>
+    </div>
+    <nav class="course-actions" aria-label="Activités du cours"><a id="tab-course" href="#view-course">Cours</a><a id="tab-flashcards" href="#view-flashcards">Flashcards</a><a id="tab-quiz" href="#view-quiz">Quiz</a></nav>
+    <div class="course-layout">
+      <details class="lot-course-menu"><summary>Cours du module · 10 cours</summary><nav aria-label="Cours du module"><a class="lot-context" href="lot-02.html">Module 02 — Fondamentaux HTTP</a><ol><li><a href="course-CRS-depbnbc0g82x.html">HTTP Specification (RFC 9110)</a></li><li><a href="cours-http.html" aria-current="page">Status codes</a></li><li><a href="course-CRS-222wq64mqxye.html">HTTP request</a></li><li><a href="course-CRS-hdsq2qdz7qdv.html">HTTP response</a></li><li><a href="course-CRS-erfvgqsx1z2p.html">HTTP methods</a></li><li><a href="course-CRS-7fa2behkxmf9.html">Cookies</a></li><li><a href="course-CRS-e3j0d3a8ndrf.html">Caching</a></li><li><a href="course-CRS-dab7evz3fe29.html">Content negotiation</a></li><li><a href="course-CRS-qa0x33akw264.html">Language detection</a></li><li><a href="course-CRS-ez2qmqfk902e.html">Symfony HttpClient component</a></li></ol></nav></details>
+      <aside class="course-section-menu" aria-label="Sommaire du cours"><details class="course-section-disclosure"><summary id="course-sections">Sections du cours</summary><nav aria-label="Sections du cours"><ul><li><a href="#objectifs">Objectifs</a></li><li><a href="#lecture">01 · Le modèle simple</a></li><li><a href="#client">02 · 401 / 403</a></li><li><a href="#rappel-2">Checkpoint après 02</a></li><li><a href="#redirections">03 · 307 / 308 / 303</a></li><li><a href="#succes">04 · 204 / 304 et succès</a></li><li><a href="#rappel-4">Checkpoint après 04</a></li><li><a href="#formats">05 · 406 / 415</a></li><li><a href="#autres">06 · Autres refus</a></li><li><a href="#serveur">07 · Échecs serveur</a></li><li><a href="#symfony">08 · Avec Symfony</a></li><li><a href="#pieges">09 · Pièges</a></li><li><a href="#fiche">10 · Fiche express</a></li></ul></nav></details></aside>
+      <article class="lesson course-content" aria-label="Cours sur les HTTP status codes"><div id="view-course" data-course-panel role="region" aria-labelledby="view-course-title"><h2 id="view-course-title">Cours</h2><p class="course-introduction"><a href="#lecture">Introduction</a> · <a href="#course-sections">Sections du cours</a></p>
+        <span class="outcome-anchor" id="s-objectif" tabindex="-1"></span><section id="objectifs" tabindex="-1">
+          <h2>À la fin de ce cours</h2>
+          <ul><li>Choisir un status code selon le résultat réel de l'opération.</li><li>Distinguer refus, redirection et réutilisation d'une représentation.</li><li>Associer 401 et 405 aux headers exigés.</li><li>Exprimer ces choix avec <code>Response</code> et <code>RedirectResponse</code>.</li></ul>
+          <p>Prérequis intégrés : <a href="#modele-request-response">Request, Response, méthode, headers et body</a>. Ils sont expliqués à l'étape 01, sans cours préalable à ouvrir.</p>
+          
+        </section>
+        <nav class="step-nav" aria-label="Entrer dans le cours"><a href="lot-02.html">← Module 02 — Fondamentaux HTTP</a><a href="#lecture">Commencer · 01 →</a></nav>
+
+        <span class="outcome-anchor" id="s-le-schema" tabindex="-1"></span><section id="lecture" data-teaching data-step="01 · Le modèle simple" tabindex="-1">
+          <h2>01 · Un modèle simple, cinq familles</h2>
+          <p id="modele-request-response" data-concept tabindex="-1"><span class="signal essential"><span aria-hidden="true">○</span> À comprendre</span> Un client envoie une <strong>Request</strong> à une URL avec une méthode (GET pour lire, POST pour soumettre). Le serveur renvoie une <strong>Response</strong> : status code, headers et, quand c'est permis, body.</p>
+          <p>Au guichet, « demande reçue » ne signifie pas « document prêt ». HTTP distingue aussi l'acceptation d'un travail et son résultat. Le status code décrit le résultat de la Request, pas toute l'histoire métier.</p>
+          <span class="outcome-anchor" id="out-OUT-7hfm105c194h" tabindex="-1"></span><span class="outcome-anchor" id="s-les-cinq-classes" tabindex="-1"></span><p id="familles-http" data-concept tabindex="-1"><strong>1xx</strong> : information intermédiaire ; <strong>2xx</strong> : succès ; <strong>3xx</strong> : action supplémentaire ; <strong>4xx</strong> : erreur liée à la Request ; <strong>5xx</strong> : échec du serveur. La famille oriente la lecture sans attribuer automatiquement la faute à une personne. Tous les 3xx ne conduisent pas à une nouvelle URL : <a href="#validation">304 et la réutilisation</a> seront étudiés à l'étape 04.</p>
+          <span class="outcome-anchor" id="s-l-essentiel" tabindex="-1"></span><p id="demarche-status" data-concept tabindex="-1"><span class="signal essential"><span aria-hidden="true">○</span> À comprendre</span> Avant de choisir : déterminer ce que la Request demande, ce qui s'est réellement passé et ce que le client doit faire ensuite. Vérifier alors les headers obligatoires et si un body est permis.</p>
+          <figure>
+            <img src="echange.svg" alt="Request GET /notes/7 vers le serveur ; Response 200 OK avec le header Content-Type et un body JSON." width="320" height="394">
+            <figcaption>Le status code donne le résultat ; les headers le précisent ; le body transporte ici la représentation de la note.</figcaption>
+          </figure>
+          <p id="code-numerique" data-concept tabindex="-1">Dans HTTP/1.1, le nombre de <code>200 OK</code> fait autorité ; le libellé est informatif. HTTP/2 et HTTP/3 n'utilisent pas cette phrase descriptive.</p>
+          <p class="code-caption"><a href="https://www.rfc-editor.org/rfc/rfc9110.html#section-15">RFC 9110 §15 — Status codes</a>.</p>
+          <div class="recall">
+            
+            <div class="digest"><p><strong>À retenir, dans cet ordre :</strong> la famille donne un repère, pas une décision complète.</p><ol><li>Lire le status code précis dans son contexte.</li><li>Vérifier ensuite les headers et la présence autorisée d'un body.</li></ol></div>
+          </div>
+        </section>
+        <nav class="step-nav" aria-label="Suite de 01"><a href="lot-02.html">← Module 02 — Fondamentaux HTTP</a><a href="#client">Suivant · 02 →</a></nav>
+
+        <section id="client" data-teaching data-step="02 · 401 / 403" tabindex="-1">
+          <h2>02 · 401 ou 403 : quel refus ?</h2>
+          <p>Repère préalable : <a href="#modele-request-response">les éléments d'une Response</a>.</p>
+          <span class="outcome-anchor" id="out-OUT-8yd42b69nxnx" tabindex="-1"></span><dl class="status-list" id="distinction-401-403" data-concept tabindex="-1">
+            <div><dt><span class="signal essential"><span aria-hidden="true">○</span> À comprendre</span> <code>401</code> <span lang="en">Unauthorized</span></dt><dd>Des identifiants d'authentication valides manquent pour cette ressource. La Response <strong>doit</strong> contenir au moins un challenge dans le header <mark>WWW-Authenticate</mark>. Le nom « Unauthorized » ne désigne pas un simple manque de droits.</dd></div>
+            <div><dt><span class="signal trap"><span aria-hidden="true">△</span> Piège à éviter</span> <code>403</code> <span lang="en">Forbidden</span></dt><dd>Le serveur comprend la Request mais refuse de la satisfaire. Des droits insuffisants pour un utilisateur authentifié en sont un exemple ; <strong>403 ne prouve pas que le client est authentifié</strong>. Répéter avec les mêmes identifiants ne résout pas ce refus.</dd></div>
+          </dl>
+          <p id="form-login" data-concept tabindex="-1"><span class="signal nuance"><span aria-hidden="true">?</span> À vérifier</span> Distinction minimale : l'authentication vérifie l'identité ; l'authorization décide ce qui est permis. Dans une application avec form login, l'entrée dans le parcours d'authentication peut produire une redirection vers la connexion, pas toujours 401. On ne déduit donc pas le status code final du seul nom d'une exception ou du firewall.</p>
+          <p class="code-caption"><a href="https://www.rfc-editor.org/rfc/rfc9110.html#section-15.5.2">RFC 9110 §15.5.2 — 401</a> · <a href="https://www.rfc-editor.org/rfc/rfc9110.html#section-15.5.4">§15.5.4 — 403</a> · <a href="https://symfony.com/doc/8.0/security/entry_point.html">Symfony 8.0 — Authentication entry point</a>.</p>
+          <div class="recall">
+            
+            <div class="digest"><p><strong>À retenir :</strong> un refus HTTP ne suffit pas à reconstituer tout le parcours d'authentication.</p><ol><li>401 : absence d'identifiants valides et challenge obligatoire.</li><li>403 : refus, sans preuve d'identité.</li><li>Form login : une redirection peut amorcer l'authentication.</li></ol></div>
+          </div>
+        </section>
+        <nav class="step-nav" aria-label="Suite de 02"><a href="#lecture">← Précédent · 01</a><a href="#rappel-2">Checkpoint après 02 →</a></nav>
+        <span class="outcome-anchor" id="s-application" tabindex="-1"></span><aside class="checkpoint" id="rappel-2" data-step="Checkpoint après 02" tabindex="-1" aria-labelledby="rappel-2-title">
+          <h2 id="rappel-2-title" lang="en">Quick recall · after step 02</h2>
+          
+          <p><a href="#view-flashcards">Retrouver ce rappel dans Flashcards</a></p>
+          <p><a href="#view-flashcards">Retrouver ce rappel dans Flashcards</a></p>
+          <div class="digest"><p><strong>À retenir, dans cet ordre :</strong></p><ol><li>Relire uniquement la règle oubliée via son lien.</li><li>Reformuler la distinction avant de poursuivre.</li></ol></div>
+        </aside>
+        <nav class="step-nav" aria-label="Suite du checkpoint 02"><a href="#client">← Précédent · 02</a><a href="#redirections">Suivant · 03 →</a></nav>
+
+        <section id="redirections" data-teaching data-step="03 · Redirections" tabindex="-1">
+          <h2>03 · Conserver l'opération ou lire ailleurs ?</h2>
+          <p id="location-redirection" data-concept tabindex="-1"><span class="signal essential"><span aria-hidden="true">○</span> À comprendre</span> Pour les redirections suivantes, <mark>Location</mark> indique la destination. Le premier choix porte sur l'intention, le second sur la durée du déplacement.</p>
+          <span class="outcome-anchor" id="out-OUT-6sg999w56sxb" tabindex="-1"></span><dl class="status-list" id="distinction-307-308-303" data-concept tabindex="-1">
+            <div><dt><code>307</code> temporaire · <code>308</code> permanent</dt><dd>Lors du suivi automatique, <mark>méthode et body sont conservés</mark> : un POST avec un body JSON reste un POST avec ce body. Cette garantie ne promet pas que l'opération cible réussira.</dd></div>
+            <div><dt><code>303</code> <span lang="en">See Other</span></dt><dd>Oriente vers une récupération par <mark>GET ou HEAD</mark>, pas vers la répétition de l'opération initiale. Après POST, le parcours usuel est POST → 303 → GET de la confirmation : actualiser cette page ne rejoue pas le POST.</dd></div>
+            <div><dt><span class="signal trap"><span aria-hidden="true">△</span> Piège à éviter</span> <code>301</code> permanent · <code>302</code> temporaire</dt><dd>Pour des raisons historiques, le client <em>peut</em> transformer POST en GET lors du suivi. Ce n'est ni obligatoire, ni une garantie de conservation du body.</dd></div>
+          </dl>
+          <figure>
+            <img src="redirections.svg" alt="307 temporaire ou 308 permanent conservent méthode et body ; 303 vise une récupération par GET ou HEAD." width="320" height="490">
+            <figcaption>Déplacer une opération et lire son résultat ailleurs sont deux intentions différentes.</figcaption>
+          </figure>
+          <p class="code-caption"><a href="https://www.rfc-editor.org/rfc/rfc9110.html#section-15.4">RFC 9110 §15.4 — Redirections</a>.</p>
+          <div class="recall">
+            
+            <div class="digest"><p><strong>À retenir :</strong> choisir selon l'opération à poursuivre, avant de regarder la permanence.</p><ol><li>Conserver méthode et body : 307 ou 308.</li><li>Récupérer ailleurs : 303, par GET ou HEAD.</li><li>301/302 : ne pas supposer que POST sera conservé.</li></ol></div>
+          </div>
+        </section>
+        <nav class="step-nav" aria-label="Suite de 03"><a href="#rappel-2">← Checkpoint après 02</a><a href="#succes">Suivant · 04 →</a></nav>
+
+        <section id="succes" data-teaching data-step="04 · Succès et réutilisation" tabindex="-1">
+          <h2>04 · 204 et 304 : pas de body, pas le même sens</h2>
+          <p id="succes-204" data-concept tabindex="-1"><span class="signal essential"><span aria-hidden="true">○</span> À comprendre</span> <strong><code>204 No Content</code></strong> : l'opération a réussi, <mark>sans body</mark> à renvoyer. Des headers restent possibles, mais pas de JSON, même <code>{}</code>.</p>
+          <p id="validation" data-concept tabindex="-1"><span class="signal trap"><span aria-hidden="true">△</span> Piège à éviter</span> <strong><code>304 Not Modified</code></strong> : pour un GET ou HEAD conditionnel, le client peut réutiliser sa représentation. Par exemple, <code>If-None-Match: "note-v2"</code> correspond à l'ETag actuel : le client garde sa représentation et actualise ses métadonnées avec les headers reçus. <strong>304 n'a pas de body et n'est pas une redirection avec Location</strong>. Ce n'est pas non plus un succès de modification. Comparer à <a href="#succes-204">204</a> et aux <a href="#location-redirection">déplacements avec Location</a>.</p>
+          <span class="outcome-anchor" id="s-les-codes-qui-comptent" tabindex="-1"></span><dl class="status-list" id="succes-200-201-202" data-concept tabindex="-1">
+            <div><dt><code>200</code> <span lang="en">OK</span></dt><dd>La Request a réussi. Le body dépend de la méthode : représentation pour GET, résultat du traitement pour POST. HEAD ne renvoie pas de body, même avec 200.</dd></div>
+            <div><dt><code>201</code> <span lang="en">Created</span></dt><dd>Une ou plusieurs ressources ont été créées. <code>Location</code>, s'il est fourni, identifie la ressource principale ; sinon, c'est l'URI cible. Un body peut décrire le résultat.</dd></div>
+            <div><dt><code>202</code> <span lang="en">Accepted</span></dt><dd>Le traitement est accepté, mais pas terminé et pas garanti. Un état et une URL de suivi aident le client ; ne pas annoncer un fichier déjà créé pour un export seulement mis en attente.</dd></div>
+          </dl>
+          <p id="contrat-export" data-concept tabindex="-1"><span class="signal example"><span aria-hidden="true">▣</span> Exemple concret</span> Pour un export seulement mis en attente, annoncer le travail par 202, avec un état et une URL de suivi dans le body. Si le contrat annonce plutôt la création effective d'une ressource de suivi, 201 peut convenir : ce n'est pas affirmer que le fichier est prêt. Lire ensuite le résultat disponible avec GET appelle 200 et sa représentation JSON, pas <a href="#succes-204">204</a>.</p>
+          <p class="code-caption"><a href="https://www.rfc-editor.org/rfc/rfc9110.html#section-15.3">RFC 9110 §15.3 — Succès</a> · <a href="https://www.rfc-editor.org/rfc/rfc9110.html#section-15.4.5">§15.4.5 — 304</a>. La politique de cache complète reste planifiée.</p>
+          <div class="recall">
+            
+            <div class="digest"><p><strong>À retenir :</strong> séparer résultat métier et représentation transportée.</p><ol><li>204 : succès sans body ; 304 : réutilisation sans body.</li><li>200 : succès selon la méthode ; 201 : création effective.</li><li>202 : acceptation, ni achèvement ni garantie.</li></ol></div>
+          </div>
+        </section>
+        <nav class="step-nav" aria-label="Suite de 04"><a href="#redirections">← Précédent · 03</a><a href="#rappel-4">Checkpoint après 04 →</a></nav>
+        <span class="outcome-anchor" id="s-qcm-d-entrainement" tabindex="-1"></span><aside class="checkpoint" id="rappel-4" data-step="Checkpoint après 04" tabindex="-1" aria-labelledby="rappel-4-title">
+          <h2 id="rappel-4-title" lang="en">Quick recall · after step 04</h2>
+          
+          <p><a href="#view-flashcards">Retrouver ce rappel dans Flashcards</a></p>
+          <p><a href="#view-flashcards">Retrouver ce rappel dans Flashcards</a></p>
+          <div class="digest"><p><strong>À retenir, dans cet ordre :</strong></p><ol><li>Retrouver d'abord les distinctions des étapes précédentes.</li><li>Comparer ensuite les deux absences de body, sans confondre leur sens.</li></ol></div>
+        </aside>
+        <nav class="step-nav" aria-label="Suite du checkpoint 04"><a href="#succes">← Précédent · 04</a><a href="#formats">Suivant · 05 →</a></nav>
+
+        <section id="formats" data-teaching data-step="05 · Formats" tabindex="-1">
+          <h2>05 · 406 ou 415 : sortie ou entrée ?</h2>
+          <span class="outcome-anchor" id="out-OUT-p4n2v9ecgmyv" tabindex="-1"></span><dl class="status-list" id="distinction-406-415" data-concept tabindex="-1">
+            <div><dt><code>406</code> <span lang="en">Not Acceptable</span></dt><dd>Aucune représentation de <strong>sortie</strong> ne respecte la négociation du client et le serveur ne souhaite pas proposer de représentation par défaut. Exemple : <code>Accept: application/xml</code> face à une API proposant seulement JSON.</dd></div>
+            <div><dt><code>415</code> <span lang="en">Unsupported Media Type</span></dt><dd>Le body <strong>envoyé</strong> utilise un format non pris en charge pour cette méthode et cette ressource. Cela peut concerner le type de média, le codage du contenu ou les données elles-mêmes.</dd></div>
+          </dl>
+          <aside class="callout" id="headers-format" data-concept tabindex="-1"><span class="signal essential"><span aria-hidden="true">○</span> À comprendre</span> <strong>Le sens de circulation décide.</strong> <code>Accept</code> porte sur la représentation souhaitée en retour ; <code>Content-Type</code> décrit le body du message qui le porte. Revenir au <a href="#modele-request-response">modèle Request / Response</a> si nécessaire.</aside>
+          <p class="code-caption"><a href="https://www.rfc-editor.org/rfc/rfc9110.html#section-15.5.7">RFC 9110 §15.5.7 — 406</a> · <a href="https://www.rfc-editor.org/rfc/rfc9110.html#section-15.5.16">§15.5.16 — 415</a>.</p>
+          <div class="recall">
+            
+            <div class="digest"><p><strong>À retenir :</strong> les deux status codes concernent des directions différentes.</p><ol><li>415 : examiner le body reçu et son format.</li><li>406 : examiner les préférences de sortie et les représentations disponibles.</li></ol></div>
+          </div>
+        </section>
+        <nav class="step-nav" aria-label="Suite de 05"><a href="#rappel-4">← Checkpoint après 04</a><a href="#autres">Suivant · 06 →</a></nav>
+
+        <section id="autres" data-teaching data-step="06 · Autres refus" tabindex="-1">
+          <h2>06 · Affiner les autres refus</h2>
+          <dl class="status-list">
+            <div id="methode-405" data-concept tabindex="-1"><dt><span class="signal essential"><span aria-hidden="true">○</span> À comprendre</span> <code>405</code> <span lang="en">Method Not Allowed</span></dt><dd>La méthode est connue mais non prise en charge par la ressource cible. Le header <strong><mark>Allow</mark> est obligatoire</strong> : il liste les méthodes actuellement permises, par exemple <code>Allow: GET, HEAD</code>.</dd></div>
+            <div id="erreur-400" data-concept tabindex="-1"><dt><span class="signal nuance"><span aria-hidden="true">?</span> À vérifier</span> <code>400</code> <span lang="en">Bad Request</span></dt><dd>Erreur client perçue empêchant ou faisant refuser le traitement : syntaxe malformée, cadrage invalide, etc. Cette catégorie est large, pas limitée à la syntaxe ou au JSON invalide.</dd></div>
+            <div id="absence-404" data-concept tabindex="-1"><dt><code>404</code> <span lang="en">Not Found</span></dt><dd>Aucune représentation actuelle trouvée, ou refus de révéler son existence. Ce status code ne garantit pas une disparition permanente.</dd></div>
+            <div id="conflit-409" data-concept tabindex="-1"><dt><code>409</code> <span lang="en">Conflict</span></dt><dd>Conflit avec l'état actuel de la ressource : par exemple, réserver une place déjà attribuée. Décrire le conflit aide le client à le résoudre.</dd></div>
+            <div id="instructions-422" data-concept tabindex="-1"><dt><code>422</code> <span lang="en">Unprocessable Content</span></dt><dd>Le type de contenu est compris et la syntaxe correcte, mais les instructions ne peuvent être traitées : par exemple, une date de fin antérieure à la date de début. 422 n'est pas obligatoire pour toute erreur de validation : 400 peut convenir selon le contrat d'API et le contexte. Symfony ne renvoie pas automatiquement 422 pour toute validation en échec ; le mécanisme utilisé et sa configuration comptent.</dd></div>
+          </dl>
+          <p class="code-caption"><a href="https://www.rfc-editor.org/rfc/rfc9110.html#section-15.5">RFC 9110 §15.5 — Erreurs client</a>.</p>
+          <div class="recall">
+            
+            <div class="digest"><p><strong>À retenir :</strong> qualifier la cause plutôt que recycler un status code générique.</p><ol><li>405 : méthode non permise, avec Allow.</li><li>400 : catégorie large ; 422 : instructions non traitables malgré un format compris, pas une obligation pour toute validation.</li><li>404 : non trouvé ou non révélé ; 409 : conflit d'état.</li></ol></div>
+          </div>
+        </section>
+        <nav class="step-nav" aria-label="Suite de 06"><a href="#formats">← Précédent · 05</a><a href="#serveur">Suivant · 07 →</a></nav>
+
+        <section id="serveur" data-teaching data-step="07 · Échecs serveur" tabindex="-1">
+          <h2>07 · Situer l'échec côté serveur</h2>
+          <dl class="status-list" id="distinction-502-503-504" data-concept tabindex="-1">
+            <div><dt><code>500</code> <span lang="en">Internal Server Error</span></dt><dd>Une condition inattendue empêche le serveur de satisfaire la Request. Ce n'est pas le status code par défaut d'une erreur de validation du client.</dd></div>
+            <div><dt><code>502</code> <span lang="en">Bad Gateway</span></dt><dd>Un intermédiaire (gateway ou proxy) reçoit une Response invalide d'un serveur amont.</dd></div>
+            <div><dt><code>503</code> <span lang="en">Service Unavailable</span></dt><dd>Indisponibilité généralement temporaire : surcharge ou maintenance. <code>Retry-After</code> peut indiquer quand réessayer (date HTTP ou délai en secondes) ; il n'est pas obligatoire.</dd></div>
+            <div><dt><code>504</code> <span lang="en">Gateway Timeout</span></dt><dd>Un intermédiaire ne reçoit pas à temps la Response amont nécessaire au traitement. Contrairement à 502, le problème est le délai.</dd></div>
+          </dl>
+          <p class="code-caption"><a href="https://www.rfc-editor.org/rfc/rfc9110.html#section-15.6">RFC 9110 §15.6 — Erreurs serveur</a>.</p>
+          <div class="recall">
+            
+            <div class="digest"><p><strong>À retenir :</strong> localiser l'échec avant de choisir son nom.</p><ol><li>500 : condition inattendue sur le serveur.</li><li>502/504 : Response amont invalide / trop tardive.</li><li>503 : indisponibilité, éventuellement accompagnée de Retry-After.</li></ol></div>
+          </div>
+        </section>
+        <nav class="step-nav" aria-label="Suite de 07"><a href="#autres">← Précédent · 06</a><a href="#symfony">Suivant · 08 →</a></nav>
+
+        <span class="outcome-anchor" id="s-sources-officielles" tabindex="-1"></span><section id="symfony" data-teaching data-step="08 · Symfony" tabindex="-1">
+          <h2>08 · Traduire l'intention avec Symfony 8.0</h2>
+          <p>Prérequis : <a href="#succes-200-201-202">création et acceptation</a>, <a href="#distinction-307-308-303">préservation ou récupération</a>. Cette étape les traduit en PHP sans les réexpliquer.</p>
+          <span class="outcome-anchor" id="s-l-exemple-des-constants-plutot-que-des-nombres" tabindex="-1"></span><p id="construction-response" data-concept tabindex="-1">Le constructeur de <code>Response</code> reçoit le body, le status code et les headers. Les constantes rendent l'intention lisible, mais <code>HTTP_CREATED</code> (201) ne crée rien à lui seul. <code>JsonResponse</code> encode les données en JSON ; son deuxième argument fixe le status code (notamment <code>HTTP_ACCEPTED</code> pour 202 ou <code>HTTP_OK</code> pour 200), le troisième fixe les headers. Ces classes illustrent des actions de controller indépendantes ; le routing et les opérations métier ne sont pas inclus.</p>
+          <p class="code-caption"><span class="signal example"><span aria-hidden="true">▣</span> Exemple concret</span> Après création effective d'une note :</p>
+          <pre data-php tabindex="0" aria-label="Controller PHP retournant 201"><code>use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
+
+final class CreateNoteController
+{
+    public function __invoke(): JsonResponse
+    {
+        // The note has already been created.
+        return new JsonResponse(
+            ['id' =&gt; 7],
+            Response::HTTP_CREATED,
+            ['Location' =&gt; '/notes/7'],
+        );
+    }
+}</code></pre>
+          <div id="redirect-response" data-concept tabindex="-1">
+          <p class="code-caption"><span class="signal example"><span aria-hidden="true">▣</span> Exemple concret</span> RedirectResponse reçoit l'URL cible puis le status code ; il fournit Location. <code>HTTP_TEMPORARY_REDIRECT</code> vaut 307 ; pour le déplacement permanent ci-dessous, <code>HTTP_PERMANENTLY_REDIRECT</code> vaut 308.</p>
+          <pre data-php tabindex="0" aria-label="Controller PHP retournant 308 avec Location"><code>use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Response;
+
+final class MoveIntakeController
+{
+    public function __invoke(): RedirectResponse
+    {
+        return new RedirectResponse(
+            '/intake-v2',
+            Response::HTTP_PERMANENTLY_REDIRECT,
+        );
+    }
+}</code></pre>
+          </div>
+          <p>Pour lire une confirmation ailleurs après POST, employer <code>Response::HTTP_SEE_OTHER</code> (303) avec <code>RedirectResponse</code>. Après une suppression sans document à retourner, <code>new Response('', Response::HTTP_NO_CONTENT)</code> exprime 204.</p>
+          <p id="constante-422" data-concept tabindex="-1"><span class="signal nuance"><span aria-hidden="true">?</span> À vérifier</span> <code>HTTP_UNPROCESSABLE_ENTITY</code> vaut 422, malgré le libellé moderne « Unprocessable Content ». Revoir <a href="#instructions-422">les conditions de 422</a> plutôt que déduire la règle du nom historique.</p>
+          <p class="code-caption"><a href="https://symfony.com/doc/8.0/components/http_foundation.html#response">Documentation officielle HttpFoundation 8.0 — Response</a> · <a href="https://symfony.com/doc/8.0/components/http_foundation.html#redirecting-the-user">RedirectResponse</a>.</p>
+          <div class="recall">
+            
+            <div class="digest"><p><strong>À retenir :</strong> le code PHP exprime une décision HTTP déjà comprise.</p><ol><li>Effectuer l'opération métier avant d'en annoncer le résultat.</li><li>Utiliser RedirectResponse avec une destination pour une redirection.</li><li>Reconnaître les noms exacts des constantes 308 et 422.</li></ol></div>
+          </div>
+        </section>
+        <nav class="step-nav" aria-label="Suite de 08"><a href="#serveur">← Précédent · 07</a><a href="#pieges">Suivant · 09 →</a></nav>
+
+        <section id="pieges" data-teaching data-step="09 · Pièges" tabindex="-1">
+          <h2>09 · Des raccourcis à éviter</h2>
+          <span class="outcome-anchor" id="s-pieges-d-examen" tabindex="-1"></span><p id="code-inconnu" data-concept tabindex="-1"><span class="signal trap"><span aria-hidden="true">△</span> Piège à éviter</span> Un status code inconnu est interprété selon sa <a href="#familles-http">famille</a> : par exemple 499 comme 400. Cela n'autorise pas à inventer des status codes applicatifs ; une Response avec un status code inconnu ne doit pas être mise en cache.</p>
+          <p id="cache-404" data-concept tabindex="-1"><span class="signal nuance"><span aria-hidden="true">?</span> À vérifier</span> À l'inverse, « erreur » ne signifie pas « jamais de cache » : 404 fait partie des status codes pouvant bénéficier d'une fraîcheur heuristique, sous réserve des règles et directives applicables. La politique de cache complète est hors de ce pilote.</p>
+          <p class="code-caption"><a href="https://www.rfc-editor.org/rfc/rfc9110.html#section-15">RFC 9110 §15 — Règles générales</a>.</p>
+          <div class="recall">
+            
+            <div class="digest"><p><strong>À retenir :</strong> éviter les déductions absolues.</p><ol><li>Status code inconnu : suivre sa famille, sans mettre la Response en cache.</li><li>Erreur reconnue : vérifier les règles applicables au lieu d'interdire tout cache.</li><li>Validation : choisir selon le contrat et le contexte, pas systématiquement 422.</li></ol></div>
+          </div>
+        </section>
+        <nav class="step-nav" aria-label="Suite de 09"><a href="#symfony">← Précédent · 08</a><a href="#fiche">Suivant · 10 →</a></nav>
+
+        <span class="outcome-anchor" id="s-fiche-express" tabindex="-1"></span><section class="revision" id="fiche" data-teaching data-step="10 · Fiche express" tabindex="-1">
+          <p class="eyebrow">À REPRENDRE DEMAIN, PUIS QUELQUES JOURS PLUS TARD</p>
+          <h2>Fiche express · la démarche</h2>
+          <p>Cette fiche condense la méthode de décision, pas une prédiction des questions d'examen.</p>
+          <div class="recall">
+            
+            <div class="digest"><p><strong>À retenir, dans cet ordre :</strong></p><ol><li>Qualifier le résultat : succès, refus ou échec ; une acceptation n'est pas un achèvement.</li><li>Choisir la suite : conserver méthode et body, récupérer ailleurs ou réutiliser une représentation.</li><li>Contrôler les headers indispensables : WWW-Authenticate pour 401, Allow pour 405 ; fournir la destination des redirections.</li><li>Vérifier le body : absent avec HEAD, 204 et 304 ; traduire ensuite avec les constantes Response.</li></ol></div>
+          </div>
+        </section>
+        <nav class="step-nav" aria-label="Fin du cours"><a href="#pieges">← Précédent · 09</a><a class="button" href="#view-quiz" lang="en">Next · course quiz →</a></nav>
+        <p class="muted"><a href="lot-02.html">Suite de Module 02 — Fondamentaux HTTP : tous les cours et la pratique du module</a>.</p>
+        <p><a href="sources.html">Vérifier les sources</a></p>
+      <p class="course-practice-entry"><a class="button" href="#view-quiz">Fin du cours — s’entraîner avec le Quiz</a></p></div><div id="view-flashcards" data-course-panel role="region" aria-labelledby="view-flashcards-title"><h2 id="view-flashcards-title">Flashcards</h2><p lang="en">Answer before revealing each card.</p><p>Ces cartes ne mesurent pas une maîtrise notée.</p><p lang="en">For each section, answer the flashcards before expanding them. Then use the French digest to check your reasoning.</p><div data-card-section="lecture"><h3><a href="#lecture">Revoir la section du cours</a></h3><div class="flashcards" lang="en"><p class="eyebrow">RECALL · ANSWER, THEN EXPAND</p>
+              <details><summary>Does the status code family alone determine the exact result?</summary><p>No. The family provides orientation; read the precise status code in context.</p><a href="#familles-http">Review status code families</a></details>
+              <details><summary>Which carries the result: the numeric status code or its descriptive phrase?</summary><p>The numeric status code. The descriptive phrase does not determine the semantics.</p><a href="#code-numerique">Review the numeric code</a></details>
+            </div></div><div data-card-section="client"><h3><a href="#client">Revoir la section du cours</a></h3><div class="flashcards" lang="en"><p class="eyebrow">RECALL · ANSWER, THEN EXPAND</p>
+              <details><summary>Which header must a 401 Response include?</summary><p>WWW-Authenticate, with at least one authentication challenge.</p><a href="#distinction-401-403">Review 401 and its challenge</a></details>
+              <details><summary>Does 403 prove that the client has authenticated?</summary><p>No. It means the server understood the Request but refuses to fulfil it; authentication is not guaranteed.</p><a href="#distinction-401-403">Review the 403 trap</a></details>
+              <details><summary>Must a form-login application return 401 to every unauthenticated client?</summary><p>No. Its authentication entry point may redirect the client to the login page.</p><a href="#form-login">Review form login</a></details>
+            </div></div><div data-card-section="rappel-2"><h3><a href="#rappel-2">Revoir la section du cours</a></h3><p lang="en">Look away from the lesson. Recall steps 01 and 02 before continuing; then open each correction.</p><details data-checkpoint><summary lang="en">Which matters: the numeric status code or its phrase?</summary><p>Le nombre fait autorité. <a href="#code-numerique" lang="en">Review the numeric code</a>.</p></details></div><div data-card-section="rappel-2"><h3><a href="#rappel-2">Revoir la section du cours</a></h3><details data-checkpoint><summary lang="en">Name the required 401 header. Does 403 prove authentication?</summary><p>WWW-Authenticate ; non pour 403. <a href="#distinction-401-403" lang="en">Review the 401 / 403 distinction</a>.</p></details></div><div data-card-section="redirections"><h3><a href="#redirections">Revoir la section du cours</a></h3><div class="flashcards" lang="en"><p class="eyebrow">RECALL · ANSWER, THEN EXPAND</p>
+              <details><summary>Which pair preserves both method and body when automatically followed?</summary><p>307 for a temporary move and 308 for a permanent move. Neither guarantees success at the destination.</p><a href="#distinction-307-308-303">Review preservation</a></details>
+              <details><summary>What kind of follow-up does 303 direct the client to perform?</summary><p>A retrieval using GET or HEAD, rather than a replay of the original operation.</p><a href="#distinction-307-308-303">Review retrieval</a></details>
+              <details><summary>Does 302 guarantee that a POST remains a POST?</summary><p>No. A client may change POST to GET when following 302; use 307 when preservation is required for a temporary move.</p><a href="#distinction-307-308-303">Review the 302 trap</a></details>
+            </div></div><div data-card-section="succes"><h3><a href="#succes">Revoir la section du cours</a></h3><div class="flashcards" lang="en"><p class="eyebrow">RECALL · ANSWER, THEN EXPAND</p>
+              <details><summary>Can either 204 or 304 contain an empty JSON object as a body?</summary><p>No. Both exclude a body. 204 reports success without content; 304 permits reuse after a conditional GET or HEAD, not navigation.</p><a href="#succes-204">Review 204</a> · <a href="#validation">Review 304</a></details>
+              <details><summary>Does 202 promise that an accepted export will succeed?</summary><p>No. Processing is incomplete and may fail later. A monitoring URL can help the client track it.</p><a href="#succes-200-201-202">Review acceptance</a></details>
+              <details><summary>How do 201 and a successful HEAD with 200 differ?</summary><p>201 reports resource creation and may include a body. HEAD with 200 reports success but never includes a body.</p><a href="#succes-200-201-202">Review creation and HEAD</a></details>
+            </div></div><div data-card-section="rappel-4"><h3><a href="#rappel-4">Revoir la section du cours</a></h3><p lang="en">Recall the earlier distinctions before the second half. Answer from memory, then follow only the references you need.</p><details data-checkpoint><summary lang="en">Does 403 prove authentication? Which temporary redirect preserves POST and its body?</summary><p>Non ; 307. <a href="#distinction-401-403" lang="en">Review step 02</a> · <a href="#distinction-307-308-303" lang="en">Review step 03</a>.</p></details></div><div data-card-section="rappel-4"><h3><a href="#rappel-4">Revoir la section du cours</a></h3><details data-checkpoint><summary lang="en">Does 304 navigate to Location? Can 204 carry an empty JSON object?</summary><p>Non dans les deux cas. <a href="#validation" lang="en">Review 304 reuse</a> · <a href="#succes-204" lang="en">Review 204 and its body rule</a>.</p></details></div><div data-card-section="formats"><h3><a href="#formats">Revoir la section du cours</a></h3><div class="flashcards" lang="en"><p class="eyebrow">RECALL · ANSWER, THEN EXPAND</p>
+              <details><summary>A JSON-only endpoint rejects an XML Request body. Which status fits?</summary><p>415: the incoming format is unsupported for this method and resource.</p><a href="#distinction-406-415">Review incoming formats</a></details>
+              <details><summary>No available output matches Accept, and the server declines a default representation. Which status fits?</summary><p>406: the problem is output negotiation, not the format of the incoming body.</p><a href="#distinction-406-415">Review output negotiation</a></details>
+            </div></div><div data-card-section="autres"><h3><a href="#autres">Revoir la section du cours</a></h3><div class="flashcards" lang="en"><p class="eyebrow">RECALL · ANSWER, THEN EXPAND</p>
+              <details><summary>Which header must accompany 405?</summary><p>Allow, listing the methods currently supported by the target resource.</p><a href="#methode-405">Review Allow</a></details>
+              <details><summary>Is 400 restricted to syntax errors?</summary><p>No. It covers perceived client errors more broadly. 422 specifically assumes understood content type and valid syntax but unprocessable instructions.</p><a href="#erreur-400">Review 400</a> · <a href="#instructions-422">Review 422</a></details>
+              <details><summary>How do 404 and 409 differ?</summary><p>404 means no current representation was found or its existence is not disclosed. 409 means the operation conflicts with the resource's current state.</p><a href="#absence-404">Review 404</a> · <a href="#conflit-409">Review 409</a></details>
+            </div></div><div data-card-section="serveur"><h3><a href="#serveur">Revoir la section du cours</a></h3><div class="flashcards" lang="en"><p class="eyebrow">RECALL · ANSWER, THEN EXPAND</p>
+              <details><summary>How do 502 and 504 distinguish upstream failures?</summary><p>502 means an invalid upstream Response; 504 means no timely upstream Response.</p><a href="#distinction-502-503-504">Review upstream failures</a></details>
+              <details><summary>Is Retry-After mandatory with 503?</summary><p>No. It may indicate when to retry, as an HTTP date or a delay in seconds.</p><a href="#distinction-502-503-504">Review Retry-After</a></details>
+            </div></div><div data-card-section="symfony"><h3><a href="#symfony">Revoir la section du cours</a></h3><div class="flashcards" lang="en"><p class="eyebrow">RECALL · ANSWER, THEN EXPAND</p>
+              <details><summary>Which Response constant represents 308, and which class supplies Location?</summary><p>Response::HTTP_PERMANENTLY_REDIRECT represents 308. RedirectResponse supplies the Location header from its target URL.</p><a href="#redirect-response">Review RedirectResponse</a></details>
+              <details><summary>What does Response::HTTP_UNPROCESSABLE_ENTITY represent?</summary><p>422, whose modern HTTP name is Unprocessable Content.</p><a href="#constante-422">Review the 422 constant</a></details>
+              <details><summary>Does returning HTTP_CREATED create a resource?</summary><p>No. The application must create it first; the Response reports the result.</p><a href="#construction-response">Review Response construction</a></details>
+            </div></div><div data-card-section="pieges"><h3><a href="#pieges">Revoir la section du cours</a></h3><div class="flashcards" lang="en"><p class="eyebrow">RECALL · ANSWER, THEN EXPAND</p>
+              <details><summary>How should a client treat an unrecognized 499 status code?</summary><p>As a 400-class error. A Response with an unrecognized status code must not be cached.</p><a href="#code-inconnu">Review unknown status codes</a></details>
+              <details><summary>Does 404 categorically prohibit caching?</summary><p>No. It can be heuristically cacheable, subject to the applicable cache rules and directives.</p><a href="#cache-404">Review the cache nuance</a></details>
+              <details><summary>Must every validation failure return 422, including in Symfony?</summary><p>No. 422 fits understood content with valid syntax but unprocessable instructions; 400 can also be appropriate depending on the API contract and context. Symfony does not automatically return 422 for every validation failure: the mechanism and configuration matter.</p><a href="#instructions-422">Review the validation status choice</a></details>
+            </div></div><div data-card-section="fiche"><h3><a href="#fiche">Revoir la section du cours</a></h3><div class="flashcards" lang="en"><p class="eyebrow">RECALL · ANSWER, THEN EXPAND</p>
+              <details><summary>Before choosing a status code, which three things should you establish?</summary><p>What the Request asks for, what actually happened, and what the client should do next. Then check required headers and whether a body is allowed.</p><a href="#demarche-status">Review the decision process</a></details>
+            </div></div><aside class="checkpoint"><h2>Rappel d’un cours antérieur</h2><p>Avant de poursuivre : Enums.</p><details class="corpus-correction"><summary lang="en">Can an enum declare instance state or be instantiated with new?</summary><p lang="en">No. It may have methods, constants and interfaces, but no instance properties or constructor.</p><p>Les cases sont des singletons comparables par ===. Une enum peut porter du comportement, pas un état d&#x27;instance.</p><a href="course-CRS-3sggmeyd01x6.html#out-OUT-c6mz3z761kqd">Relire la correction dans le cours antérieur</a></details></aside></div><div id="view-quiz" data-course-panel role="region" aria-labelledby="view-quiz-title"><h2 id="view-quiz-title">Quiz</h2><p id="course-quiz-status" role="status">Quiz interactif non chargé. Démarrez après chargement de la banque locale.</p><div id="course-quiz-controls" class="assessment-main" hidden><div id="course-quiz-assessment-controls" hidden><select id="course-quiz-assessment-mode" aria-label="Mode du quiz" hidden><option value="learning">Entraînement</option></select><p id="course-quiz-training-scope"></p><button id="course-quiz-start-assessment" type="button" lang="en">Start practice</button><button id="course-quiz-finish-assessment" type="button" lang="en" hidden>End session</button></div><p id="course-quiz-assessment-error" role="alert"></p><p id="course-quiz-assessment-timer" hidden></p><p id="course-quiz-session-progress" role="status"></p><div id="course-quiz-assessment-app" tabindex="-1"></div><nav id="course-quiz-session-navigation" aria-label="Questions du cours"></nav><div id="course-quiz-learning-overview" aria-live="polite"></div></div><div id="course-quiz-native"><p>Sans JavaScript ou si le chargement échoue : aucune tentative notée. Les <a href="#view-flashcards">flashcards du cours</a> restent disponibles.</p><details class="course-quiz-fallback" data-question-id="L-984c2bv3wh09-base-v1"><summary lang="en">What do the five HTTP status code families indicate?</summary><p>Correction de consultation — non notée.</p><p>Le premier chiffre identifie la class de statut. La famille oriente la lecture sans déterminer à elle seule le résultat précis.</p><ul><li><strong lang="en">Distractor: Information, success, request error, further action, server failure.</strong><p>3xx oriente vers une action supplémentaire ; 4xx désigne une erreur liée à la Request.</p></li><li><strong lang="en">Distractor: Information, further action, success, request error, server failure.</strong><p>2xx est la famille succès ; 3xx ne l&#x27;est pas.</p></li><li><strong lang="en">Correct: Information, success, further action, request error, server failure.</strong><p>Le premier chiffre identifie la class de statut. La famille oriente la lecture sans déterminer à elle seule le résultat précis.</p></li></ul><a href="cours-http.html#out-OUT-7hfm105c194h">Relire le passage exact</a></details></div></div></article>
+    </div>
+  <nav class="course-sequence" aria-label="Ordre de lecture"><a rel="prev" href="course-CRS-depbnbc0g82x.html" aria-label="Précédent : HTTP Specification (RFC 9110) — Module 02 — Fondamentaux HTTP">Précédent : HTTP Specification (RFC 9110)</a> <a href="lot-02.html">Sommaire : Module 02 — Fondamentaux HTTP</a> <a rel="next" href="course-CRS-222wq64mqxye.html" aria-label="Suivant : HTTP request — Module 02 — Fondamentaux HTTP">Suivant : HTTP request</a></nav><details class="transfer-panel"><summary>Sauvegarde et transfert de progression</summary><p id="reading-status" role="status">Sans JavaScript : lecture libre ; progression non enregistrée.</p><p><a href="assessment.html#overview-title">Lecture, réussites immédiates et différées</a></p><p>Transfert manuel — aucune synchronisation automatique</p><p id="persistence-status" role="status"></p><button type="button" class="secondary" id="export-progress">Exporter ma progression</button><label for="import-progress">Choisir un JSON pour fusionner ma progression (sans remplacement)</label><input type="file" id="import-progress" accept="application/json,.json"><p id="transfer-status" role="status"></p></details></main>
+  <footer class="site-footer"><a href="sources.html">Sources et attribution</a><a href="index.html#perimetre">Périmètre officiel</a><a href="#contenu">Haut de page ↑</a></footer>
+</body>
+</html>

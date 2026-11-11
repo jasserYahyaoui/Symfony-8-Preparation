@@ -1,0 +1,229 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; connect-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Traits — Symfony 8 Preparation</title><link rel="stylesheet" href="styles.css"><link rel="stylesheet" href="reader.css"><script src="mermaid.min.js" defer></script><script src="mermaid-init.js" defer></script><link rel="stylesheet" href="assessment.css"><script src="learning-state.js" defer></script><script src="guide.js" defer></script><script src="reader-catalog.js" defer></script><script src="reader.js" defer></script><script src="site-state.js" defer></script><script src="assessment.js" defer></script><script src="course-views.js" defer></script><link rel="stylesheet" href="syntax-highlight.css"><script src="prism-syntax.js" defer></script><script src="syntax-highlight.js" defer></script></head><body data-course-id="CRS-bshgpd44ykba"><a class="skip" href="#contenu">Aller au contenu</a><header class="site-header"><a class="brand" href="index.html">S8 Preparation</a><nav aria-label="Navigation principale"><a href="index.html">Accueil</a> <a href="catalogue.html">Parcours</a> <a href="assessment.html?mode=review">Réviser</a> <a href="examens.html">Examens blancs</a> <a href="jour-j.html">Jour J</a></nav></header><main id="contenu" tabindex="-1" class="corpus-reader"><nav class="breadcrumb" aria-label="Fil d’Ariane"><a href="index.html">Accueil</a> <span aria-hidden="true">›</span> <a href="catalogue.html">Parcours</a> <span aria-hidden="true">›</span> <a href="lot-01.html">Module 01 — PHP jusqu’à 8.4</a> <span aria-hidden="true">›</span> <span aria-current="page">Traits</span></nav><h1>Traits</h1><p class="muted">Symfony 8.0 · API PHP ≤ 8.4 · Twig ≤ 3.22. Préparation indépendante.</p><p class="revision-status">Première itération · Module 01 — PHP jusqu’à 8.4 : explications développées ; revue pédagogique indépendante en attente.</p><nav class="course-actions" aria-label="Activités du cours"><a id="tab-course" href="#view-course">Cours</a><a id="tab-flashcards" href="#view-flashcards">Flashcards</a><a id="tab-quiz" href="#view-quiz">Quiz</a></nav><div class="course-layout"><details class="lot-course-menu"><summary>Cours du module · 9 cours</summary><nav aria-label="Cours du module"><a class="lot-context" href="lot-01.html">Module 01 — PHP jusqu’à 8.4</a><ol><li><a href="course-CRS-722pscs6e2m0.html">PHP API up to PHP 8.4 version</a></li><li><a href="course-CRS-3424z948caan.html">Object Oriented Programming</a></li><li><a href="course-CRS-tqcp2kn9r3b5.html">Attributes</a></li><li><a href="course-CRS-e4y7gtn5k4f0.html">Interfaces</a></li><li><a href="course-CRS-e7m4xbcxegyc.html">Anonymous functions and closures</a></li><li><a href="course-CRS-0jtjh77tabt1.html">Abstract classes</a></li><li><a href="course-CRS-yc9fry0vz4gh.html">Exception and error handling</a></li><li><a href="course-CRS-bshgpd44ykba.html" aria-current="page">Traits</a></li><li><a href="course-CRS-3sggmeyd01x6.html">Enums</a></li></ol></nav></details><aside class="course-section-menu" aria-label="Sommaire du cours"><details class="course-section-disclosure"><summary id="course-sections">Sections du cours</summary><nav aria-label="Sections du cours"><ul><li><a href="#s-objectif">Objectif</a></li><li><a href="#s-l-essentiel">L&#x27;essentiel</a></li><li><a href="#s-le-schema">Le schéma</a></li><li><a href="#s-l-exemple">L&#x27;exemple</a></li><li><a href="#s-ce-qu-un-trait-apporte">Ce qu&#x27;un trait apporte</a></li><li><a href="#s-l-ordre-de-precedence">L&#x27;ordre de précédence</a></li><li><a href="#s-resolution-de-conflit">Résolution de conflit</a></li><li><a href="#s-pieges-d-examen">Pièges d&#x27;examen</a></li><li><a href="#s-application">Application</a></li><li><a href="#s-fiche-express">Fiche express</a></li><li><a href="#s-sources-officielles">Sources officielles</a></li></ul></nav></details></aside><div class="course-content"><div id="view-course" data-course-panel role="region" aria-labelledby="view-course-title"><h2 id="view-course-title">Cours</h2><p class="course-introduction"><a href="#s-ce-qu-un-trait-apporte">Pour bien commencer</a> · <a href="#course-sections">Sections du cours</a></p><h2>Objectifs d’apprentissage</h2><ul><li><a href="course-CRS-bshgpd44ykba.html#out-OUT-xk68jha9m4nk">Énoncer l&#x27;ordre de précédence entre class courante, trait et parent</a></li><li><a href="course-CRS-bshgpd44ykba.html#out-OUT-w9w3hpwesby1">Résoudre un conflit de traits avec insteadof et as</a></li><li><a href="course-CRS-bshgpd44ykba.html#out-OUT-x8c9nce1wqh5">Identifier ce qu&#x27;un trait peut contenir et pourquoi il n&#x27;est pas un type</a></li></ul><aside class="pedagogy-legend" aria-label="Repères pédagogiques"><p><strong>Repères pédagogiques</strong></p><p>Ces repères décrivent le rôle du bloc, pas une fréquence officielle à l’examen.</p><p class="teaching-label essential"><span aria-hidden="true">○</span> <strong>À comprendre</strong></p><p class="teaching-label essential"><span aria-hidden="true">◆</span> <strong>À mémoriser</strong></p><p class="teaching-label example"><span aria-hidden="true">▣</span> <strong>Exemple concret</strong></p><p class="teaching-label pitfall"><span aria-hidden="true">△</span> <strong>Piège à éviter</strong></p><p class="teaching-label nuance"><span aria-hidden="true">?</span> <strong>À vérifier</strong></p></aside><section class="teaching-section" data-section="s-objectif"><h2 id="s-objectif" tabindex="-1">Objectif</h2><p>Composer des traits, résoudre un conflit, et connaître l'ordre de précédence —
+qui est contre-intuitif.</p></section><section class="teaching-section" data-section="s-l-essentiel"><h2 id="s-l-essentiel" tabindex="-1">L&#x27;essentiel</h2><p class="teaching-label essential"><span aria-hidden="true">○</span> <strong>À comprendre</strong></p><aside class="section-digest" id="s-l-essentiel-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>La class décide avant le trait.</li><li>Le trait prend le dessus sur la class parente.</li></ol></aside><p>Un trait copie des membres dans une class, sans créer de type ni
+d'inheritance. Sa précédence est contre-intuitive : la <strong>class</strong> gagne sur le
+trait, qui gagne sur la <strong>class parente</strong>. Deux traits qui fournissent la même
+method provoquent une <strong>erreur fatale</strong> tant que <code>insteadof</code> n'a pas tranché ;
+<code>as</code> ne fait qu'ajouter un nom ou changer une visibilité.</p></section><section class="teaching-section" data-section="s-le-schema"><h2 id="s-le-schema" tabindex="-1">Le schéma</h2><aside class="section-digest" id="s-le-schema-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Un trait partage du code sans créer un type.</li><li>La class host doit implémenter ses methods abstraites.</li></ol></aside><figure class="diagram" aria-labelledby="CRS-bshgpd44ykba-3-diagram-0-title CRS-bshgpd44ykba-3-diagram-0-description"><figcaption id="CRS-bshgpd44ykba-3-diagram-0-title">Contenu, précédence et conflits des traits</figcaption><p id="CRS-bshgpd44ykba-3-diagram-0-description">Un trait contient des properties, des methods, des methods statiques, des methods abstraites et, depuis 8.2, des constants ; il n&#x27;est jamais instancié, new T lève Error « Cannot instantiate trait ». Précédence : la class courante l&#x27;emporte sur le trait, qui l&#x27;emporte sur la class parente. Un conflit se règle dans use Csv, Json : Csv::export insteadof Json écarte, Json::export as exportJson crée un alias et l&#x27;original reste, as protected change la visibilité. Une property statique de trait existe en une copie par class qui l&#x27;utilise. instanceof T rend false, class_uses() le voit, et pour typer on utilise une interface.</p><div class="mermaid" hidden>---
+title: Un trait, ce qu&#x27;il contient et qui gagne
+---
+flowchart LR
+  accTitle: Contenu, précédence et conflits des traits
+  accDescr: Un trait contient des properties, des methods, des methods statiques, des methods abstraites et, depuis 8.2, des constants ; il n&#x27;est jamais instancié, new T lève Error « Cannot instantiate trait ». Précédence : la class courante l&#x27;emporte sur le trait, qui l&#x27;emporte sur la class parente. Un conflit se règle dans use Csv, Json : Csv::export insteadof Json écarte, Json::export as exportJson crée un alias et l&#x27;original reste, as protected change la visibilité. Une property statique de trait existe en une copie par class qui l&#x27;utilise. instanceof T rend false, class_uses() le voit, et pour typer on utilise une interface.
+  T([&quot;trait&quot;]) --&gt; C[&quot;contenu&lt;br/&gt;properties, methods,&lt;br/&gt;methods statiques,&lt;br/&gt;methods abstraites,&lt;br/&gt;constantes (8.2)&quot;]
+  T --&gt; N[&quot;jamais instancié&lt;br/&gt;new T → Error&lt;br/&gt;« Cannot instantiate trait »&quot;]
+  T --&gt; P[&quot;précédence&lt;br/&gt;class courante &gt; trait&lt;br/&gt;&gt; class parente&quot;]
+  T --&gt; CF[&quot;conflit&lt;br/&gt;use Csv, Json {&lt;br/&gt;Csv::export insteadof Json;&lt;br/&gt;Json::export as exportJson; }&lt;br/&gt;insteadof → écarte&lt;br/&gt;as → alias (l&#x27;original reste)&lt;br/&gt;as protected&lt;br/&gt;→ change la visibilité&quot;]
+  T --&gt; S[&quot;static&lt;br/&gt;une property statique&lt;br/&gt;de trait : une copie&lt;br/&gt;par class qui l&#x27;utilise&quot;]
+  T --&gt; TY[&quot;type&lt;br/&gt;instanceof T → false&lt;br/&gt;class_uses() le voit&lt;br/&gt;pour typer : une interface&quot;]</div></figure></section><section class="teaching-section" data-section="s-l-exemple"><h2 id="s-l-exemple" tabindex="-1">L&#x27;exemple</h2><p class="teaching-label example"><span aria-hidden="true">▣</span> <strong>Exemple concret</strong></p><aside class="section-digest" id="s-l-exemple-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Un trait peut imposer une method abstraite à la class hôte.</li><li>La class Article fournit getId() tout en réutilisant touch() et l&#x27;état du trait.</li></ol></aside><pre class="highlight" tabindex="0"><code class="language-php">trait Timestampable
+{
+    private ?\DateTimeImmutable $updatedAt = null;
+
+    public function touch(): void
+    {
+        $this-&gt;updatedAt = new \DateTimeImmutable();
+    }
+
+    abstract public function getId(): int;   // exigence sur la classe hôte
+}
+
+class Article
+{
+    use Timestampable;
+
+    public function getId(): int { return 1; }
+}</code></pre></section><section class="teaching-section" data-section="s-ce-qu-un-trait-apporte"><span class="outcome-anchor" id="out-OUT-x8c9nce1wqh5" tabindex="-1"></span><h2 id="s-ce-qu-un-trait-apporte" tabindex="-1">Ce qu&#x27;un trait apporte</h2><p class="teaching-label essential"><span aria-hidden="true">○</span> <strong>À comprendre</strong></p><p class="digest-reference"><a href="#s-le-schema-digest">Revoir la règle : Un trait partage du code sans créer un type.</a></p><h3 tabindex="-1">C'est quoi ?</h3>
+<p>Un trait est une unité de réutilisation de membres entre classes. <code>use TraitName;</code> dans une class y apporte ses methods et properties, sans créer une nouvelle class parente ni un type utilisable comme contrat. On ne peut pas instancier un trait. Un object dont la class utilise un trait ne devient pas une instance de ce trait.</p>
+<p>Un trait peut fournir des methods d'instance ou statiques, des properties et des constantes. Il peut aussi imposer des methods abstraites que la class hôte doit satisfaire ; depuis PHP 8.0, un trait peut même déclarer une method <code>abstract private</code>, contrairement à une abstract class.</p>
+<h3 tabindex="-1">À quoi ça sert ?</h3>
+<p>Une fiche de recette est recopiée dans plusieurs cahiers indépendants. La fiche correspond au trait, les cahiers aux classes hôtes et les instructions aux methods incorporées. Limite : ce n'est pas un object partagé auquel les classes délèguent leurs appels ; ses membres font partie de chaque class utilisatrice.</p>
+<p>C'est utile pour un petit comportement cohérent réellement commun. Pour promettre un comportement à un client typé, il faut une <a href="course-CRS-e4y7gtn5k4f0.html#out-OUT-6tzwvmfwj408">interface</a>, éventuellement implémentée à l'aide d'un trait.</p>
+<h3 tabindex="-1">Où dans Symfony ?</h3>
+<p>Une class applicative <code>App\Model\Article</code> peut importer son propre trait <code>Timestampable</code> pour réutiliser une method <code>touch()</code> et la property de date correspondante. C'est une composition PHP au sein de la class, pas un service à enregistrer dans DependencyInjection. Le trait <code>IdentifiedCounter</code> ci-dessous est également local à l'application, sans API Symfony ni container nécessaire.</p>
+<h3 tabindex="-1">Comment, étape par étape ?</h3>
+<ol>
+<li>Identifier les membres partagés et les dépendances implicites du trait ; rendre ses exigences explicites avec des methods abstraites si nécessaire.</li>
+<li>Importer le trait dans la class hôte et implémenter ces exigences, comme <code>getId()</code> dans l'exemple canonique Timestampable.</li>
+<li>Utiliser <code>class_uses()</code> pour inspecter les traits directement utilisés ; ne pas employer <code>instanceof TraitName</code> pour vérifier un contrat.</li>
+<li>Pour une property statique, distinguer import et inheritance : deux classes indépendantes qui utilisent le trait ont des stockages distincts. Un enfant qui ne fait qu'hériter peut partager le stockage parental ; depuis PHP 8.3, réutiliser explicitement le trait dans l'enfant crée un stockage distinct.</li>
+</ol>
+<h3 tabindex="-1">Exemple concret PHP</h3>
+<p>Les deux classes importent le même compteur, mais incrémenter <code>Article</code> ne modifie pas <code>Note</code>. La sortie est <code>1 0</code>, <code>true</code>, puis <code>false</code>. L'interface locale fournit le type ; le trait fournit le code et exige <code>getId()</code>.</p>
+<pre class="highlight" tabindex="0"><code class="language-php">&lt;?php
+interface Identified
+{
+    public function getId(): int;
+}
+
+trait IdentifiedCounter
+{
+    public static int $count = 0;
+
+    abstract public function getId(): int;
+
+    public function record(): void
+    {
+        ++self::$count;
+    }
+}
+
+final class Article implements Identified
+{
+    use IdentifiedCounter;
+
+    public function getId(): int { return 1; }
+}
+
+final class Note implements Identified
+{
+    use IdentifiedCounter;
+
+    public function getId(): int { return 2; }
+}
+
+$article = new Article();
+$article-&gt;record();
+echo Article::$count, ' ', Note::$count, "\n";
+var_dump(isset(class_uses(Article::class)[IdentifiedCounter::class]));
+var_dump($article instanceof IdentifiedCounter);</code></pre>
+<p>Référence : <a href="https://www.php.net/manual/en/language.oop5.traits.php">traits PHP</a>.</p><details class="canonical-retained"><summary>Passage canonique conservé</summary><h2 tabindex="-1">Ce qu'un trait apporte</h2>
+<p>Un trait est une <strong>unité de réutilisation horizontale</strong> : du code partagé entre
+classes sans relation d'inheritance. Il porte properties, methods statiques,
+methods abstraites — que la class qui l'importe doit implémenter — et constantes. Il ne
+s'instancie pas. Une property statique de trait est copiée : chaque class qui
+l'utilise a la sienne.</p></details><p><strong>Repère de l’exemple :</strong> Un trait peut imposer une method abstraite à la class hôte. La class Article fournit getId() tout en réutilisant touch() et l'état du trait.</p></section><section class="teaching-section" data-section="s-l-ordre-de-precedence"><span class="outcome-anchor" id="out-OUT-xk68jha9m4nk" tabindex="-1"></span><h2 id="s-l-ordre-de-precedence" tabindex="-1">L&#x27;ordre de précédence</h2><p class="teaching-label essential"><span aria-hidden="true">◆</span> <strong>À mémoriser</strong></p><p class="digest-reference"><a href="#s-l-essentiel-digest">Revoir la règle : La class décide avant le trait.</a></p><h3 tabindex="-1">C'est quoi ?</h3>
+<p>Pour une method, le code écrit directement dans la class a priorité sur la method apportée par un trait. Celle du trait a priorité sur la method héritée d'une class parente : class, puis trait, puis parent. Cette règle concerne le choix d'une implémentation, pas l'ordre d'exécution de trois methods.</p>
+<p>Elle ne dispense pas de respecter les signatures, les visibilités ou les contraintes <code>final</code>. Elle ne doit pas non plus être étendue mécaniquement aux conflits de properties ou de constantes, dont les règles de composition sont distinctes en PHP 8.4.</p>
+<h3 tabindex="-1">À quoi ça sert ?</h3>
+<p>Dans un cahier de cuisine, une note écrite par le propriétaire remplace une fiche standard collée, laquelle précise un ancien modèle hérité. La note correspond à la method de la class, la fiche à celle du trait, l'ancien modèle à celle du parent. Limite : PHP ne fusionne pas les trois recettes ; une seule implémentation est appelée, sauf appel explicite vers une autre.</p>
+<p>La class hôte peut ainsi adapter un comportement de trait sans devoir modifier le trait pour toutes les autres classes utilisatrices.</p>
+<h3 tabindex="-1">Où dans Symfony ?</h3>
+<p>La même règle s'applique à une class applicative utilisant un trait PHP dans un projet Symfony. Un trait de component ne devient pas prioritaire parce qu'il provient du framework. Ce sont la position de la method dans la class, le trait ou le parent et les règles PHP qui décident.</p>
+<h3 tabindex="-1">Comment, étape par étape ?</h3>
+<ol>
+<li>Chercher une method de ce nom écrite directement dans la class appelée.</li>
+<li>Si elle n'existe pas, chercher une implémentation importée d'un trait.</li>
+<li>Sinon, remonter la class parente.</li>
+<li>Si plusieurs traits concurrents proposent cette method, ne pas appliquer un ordre arbitraire entre eux : passer à la <a href="course-CRS-bshgpd44ykba.html#out-OUT-w9w3hpwesby1">résolution de conflit</a>.</li>
+</ol>
+<h3 tabindex="-1">Exemple concret PHP</h3>
+<p><code>LocalReport</code> choisit sa propre method et affiche <code>class</code>. <code>SharedReport</code>, qui n'en définit pas, prend celle du trait et affiche <code>trait</code>. <code>InheritedReport</code>, sans trait ni method locale, affiche <code>parent</code>. Aucun des appels n'exécute automatiquement les autres versions.</p>
+<pre class="highlight" tabindex="0"><code class="language-php">&lt;?php
+class BaseReport
+{
+    public function label(): string { return 'parent'; }
+}
+
+trait SharedLabel
+{
+    public function label(): string { return 'trait'; }
+}
+
+final class LocalReport extends BaseReport
+{
+    use SharedLabel;
+
+    public function label(): string { return 'class'; }
+}
+
+final class SharedReport extends BaseReport
+{
+    use SharedLabel;
+}
+
+final class InheritedReport extends BaseReport {}
+
+echo new LocalReport()-&gt;label(), "\n";
+echo new SharedReport()-&gt;label(), "\n";
+echo new InheritedReport()-&gt;label(), "\n";</code></pre>
+<p>Référence : <a href="https://www.php.net/manual/en/language.oop5.traits.php">précédence des traits</a>.</p><details class="canonical-retained"><summary>Passage canonique conservé</summary><h2 tabindex="-1">L'ordre de précédence</h2>
+<p>Une method définie dans la class <strong>écrase</strong> celle du trait ; le trait écrase
+celle de la class parente. L'intuition « le trait, plus proche, gagne sur la
+class » est fausse.</p></details><aside class="enrichment" aria-label="Autre explication"><p>Le trait est un tampon de méthodes sur la page de la class : l'écriture propre de la class reste prioritaire, puis le tampon, puis le modèle hérité. Deux tampons concurrents exigent un choix explicite.</p></aside></section><section class="teaching-section" data-section="s-resolution-de-conflit"><span class="outcome-anchor" id="out-OUT-w9w3hpwesby1" tabindex="-1"></span><h2 id="s-resolution-de-conflit" tabindex="-1">Résolution de conflit</h2><p class="teaching-label example"><span aria-hidden="true">▣</span> <strong>Exemple concret</strong></p><aside class="section-digest" id="s-resolution-de-conflit-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>insteadof écarte une implémentation.</li><li>as conserve l&#x27;original et ajoute un alias ou modifie la visibilité.</li></ol></aside><h3 tabindex="-1">C'est quoi ?</h3>
+<p>Lorsque deux traits importés proposent la même method sans arbitrage, PHP ne choisit pas le premier : la composition échoue. Dans le bloc <code>use</code>, <code>A::method insteadof B</code> choisit l'implémentation de <code>A</code> sous ce nom et écarte celle de <code>B</code> pour cet appel.</p>
+<p><code>B::method as otherName</code> ajoute un alias ; il ne supprime pas le nom d'origine et ne résout pas seul le conflit. <code>as</code> peut aussi modifier la visibilité : avec un nouveau nom, il règle celle de l'alias ; sans nouveau nom, il règle celle de la method importée elle-même.</p>
+<h3 tabindex="-1">À quoi ça sert ?</h3>
+<p>Deux contacts portent le même nom dans un répertoire. On choisit celui qu'on appelle avec le nom court et on donne un surnom à l'autre pour le joindre séparément. Le nom court correspond à la method commune, le choix à <code>insteadof</code>, le surnom à <code>as</code>. Limite : donner seulement un surnom à l'un ne tranche pas le conflit sur le nom court d'origine.</p>
+<p>Cette séparation permet de conserver deux comportements utiles tout en rendant leur utilisation non ambiguë pour la class hôte.</p>
+<h3 tabindex="-1">Où dans Symfony ?</h3>
+<p>Une class de service applicative qui compose des traits suit ces règles PHP. Ni un alias de service dans DependencyInjection ni l'ordre de chargement des services ne résout une collision de methods de traits. L'exemple utilise deux traits locaux définis en entier, pas des API Symfony imaginaires.</p>
+<h3 tabindex="-1">Comment, étape par étape ?</h3>
+<ol>
+<li>Repérer le nom de method présent dans plusieurs traits.</li>
+<li>Choisir l'implémentation destinée à ce nom avec <code>insteadof</code>.</li>
+<li>Si l'autre implémentation reste utile, lui donner un alias avec <code>as</code>.</li>
+<li>Décider si l'alias est public ou réservé à la class. Un alias protégé ne rend pas automatiquement la method d'origine protégée.</li>
+</ol>
+<h3 tabindex="-1">Exemple concret PHP</h3>
+<p><code>export()</code> utilise le texte, tandis que <code>exportJson()</code> rend l'autre format. <code>internalText()</code> est un alias protégé, appelé depuis <code>preview()</code> ; <code>export()</code> reste public. La sortie est <code>text</code>, <code>{"format":"json"}</code>, puis <code>text</code>.</p>
+<pre class="highlight" tabindex="0"><code class="language-php">&lt;?php
+trait TextFormat
+{
+    public function export(): string { return 'text'; }
+}
+
+trait JsonFormat
+{
+    public function export(): string { return '{"format":"json"}'; }
+}
+
+final class Reporter
+{
+    use TextFormat, JsonFormat {
+        TextFormat::export insteadof JsonFormat;
+        JsonFormat::export as exportJson;
+        TextFormat::export as protected internalText;
+    }
+
+    public function preview(): string
+    {
+        return $this-&gt;internalText();
+    }
+}
+
+$reporter = new Reporter();
+echo $reporter-&gt;export(), "\n";
+echo $reporter-&gt;exportJson(), "\n";
+echo $reporter-&gt;preview(), "\n";</code></pre>
+<p>Si la class définit elle-même la method commune, sa <a href="course-CRS-bshgpd44ykba.html#out-OUT-xk68jha9m4nk">précédence</a> tranche déjà. Référence : <a href="https://www.php.net/manual/en/language.oop5.traits.php">résolution des conflits de traits</a>.</p><details class="canonical-retained"><summary>Passage canonique conservé</summary><h2 tabindex="-1">Résolution de conflit</h2>
+<pre class="highlight" tabindex="0"><code class="language-php">trait Csv
+{
+    public function export(): string { return 'csv'; }
+}
+
+trait Json
+{
+    public function export(): string { return 'json'; }
+}
+
+class Reporter
+{
+    use Csv, Json {
+        Csv::export insteadof Json;   // on choisit
+        Json::export as exportJson;   // on garde l'autre sous un alias
+    }
+}</code></pre>
+<p><code>insteadof</code> <strong>écarte</strong> une implémentation. <code>as</code> crée un <strong>alias</strong> sans rien
+écarter, et peut changer la visibilité : <code>Csv::export as protected internalExport;</code>
+ajoute un alias protégé, <code>Csv::export as protected;</code> rend la method importée elle-même protégée lorsqu’on place cette adaptation dans le même block <code>use Csv, Json { ... }</code> de Reporter.</p></details></section><section class="teaching-section" data-section="s-pieges-d-examen"><h2 id="s-pieges-d-examen" tabindex="-1">Pièges d&#x27;examen</h2><p class="teaching-label pitfall"><span aria-hidden="true">△</span> <strong>Piège à éviter</strong></p><p class="digest-reference"><a href="#s-le-schema-digest">Revoir la règle : Un trait partage du code sans créer un type.</a></p><p><strong>Le conflit n'est pas résolu automatiquement.</strong> Sans <code>insteadof</code>, c'est une
+erreur fatale — pas un choix silencieux du premier trait.</p>
+<p><strong><code>as</code> n'écarte rien.</strong> Il ajoute un nom ; l'original reste. Utiliser <code>as</code> seul
+face à un conflit ne le résout pas.</p>
+<p><strong>Un trait n'est pas un type.</strong> <code>$x instanceof Timestampable</code> compile, mais rend
+<code>false</code> même si la class de <code>$x</code> utilise le trait ; <code>class_uses()</code>,
+lui, le voit. Pour typer, il faut une interface.</p></section><section class="teaching-section" data-section="s-application"><h2 id="s-application" tabindex="-1">Application</h2><aside class="section-digest" id="s-application-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Un trait partage du code sans créer un type.</li><li>La class host doit implémenter ses methods abstraites.</li><li>La class décide avant le trait.</li><li>Le trait prend le dessus sur la class parente.</li></ol></aside>
+
+
+
+<nav aria-label="Flashcards de l’application"><ul><li><a href="#A-bshgpd44ykba-6e0103f6cc-03">Flashcard : Un trait partage du code sans créer un type. La class host doit implémenter ses methods abstraites.</a></li><li><a href="#A-bshgpd44ykba-65c42c80d9-01">Flashcard : La class décide avant le trait. Le trait prend le dessus sur la class parente.</a></li></ul></nav></section><section class="teaching-section" data-section="s-fiche-express"><h2 id="s-fiche-express" tabindex="-1">Fiche express</h2><p class="teaching-label essential"><span aria-hidden="true">◆</span> <strong>À mémoriser</strong></p><p class="digest-reference"><a href="#s-l-essentiel-digest">Revoir la règle : La class décide avant le trait.</a></p><p><strong>Si tu dois retenir seulement 6 choses :</strong></p>
+<ul>
+<li>Précédence : <strong>class &gt; trait &gt; parent</strong>.</li>
+<li>Conflit non arbitré : <strong>erreur fatale</strong>.</li>
+<li><strong><code>insteadof</code></strong> écarte ; <strong><code>as</code></strong> ajoute un nom ou change une visibilité.</li>
+<li>Method abstraite du trait : à <strong>implémenter</strong> par la class host.</li>
+<li>Static de trait : <strong>une copie</strong> par class.</li>
+<li><strong><code>instanceof</code> trait → <code>false</code></strong> ; <code>class_uses()</code> le voit ; typer par interface.</li>
+</ul>
+<p>Moyen mnémotechnique : <strong>« La class décide, le trait propose, le parent attend »</strong>.</p></section><section class="teaching-section" data-section="s-sources-officielles"><h2 id="s-sources-officielles" tabindex="-1">Sources officielles</h2><ul>
+<li><a href="https://www.php.net/manual/en/index.php">PHP — Manuel PHP</a></li>
+</ul></section><section class="official-sources"><h2>Sources officielles et compléments</h2><ul><li><a href="https://www.php.net/manual/en/language.oop5.traits.php">PHP — Traits</a></li></ul></section><nav class="course-sequence" aria-label="Ordre de lecture"><a rel="prev" href="course-CRS-yc9fry0vz4gh.html" aria-label="Précédent : Exception and error handling — Module 01 — PHP jusqu’à 8.4">Précédent : Exception and error handling</a> <a href="lot-01.html">Sommaire : Module 01 — PHP jusqu’à 8.4</a> <a rel="next" href="course-CRS-3sggmeyd01x6.html" aria-label="Suivant : Enums — Module 01 — PHP jusqu’à 8.4">Suivant : Enums</a></nav><p class="course-practice-entry"><a class="button" href="#view-quiz">Fin du cours — s’entraîner avec le Quiz</a></p></div><div id="view-flashcards" data-course-panel role="region" aria-labelledby="view-flashcards-title"><h2 id="view-flashcards-title">Flashcards</h2><p lang="en">Answer before revealing each card.</p><p>Ces cartes ne mesurent pas une maîtrise notée.</p><div data-card-section="s-l-essentiel"><h3><a href="#s-l-essentiel">Revoir la section du cours</a></h3><div class="reader-cards"><details class="reader-card" id="A-bshgpd44ykba-65c42c80d9-01"><summary lang="en">Which method wins: the class, its trait, or its parent?</summary><p lang="en">The class wins over the trait, which wins over the parent.</p><p lang="fr">La class décide avant le trait. Le trait prend le dessus sur la class parente.</p><a href="course-CRS-bshgpd44ykba.html#out-OUT-xk68jha9m4nk">Revoir le passage précis</a></details></div></div><div data-card-section="s-le-schema"><h3><a href="#s-le-schema">Revoir la section du cours</a></h3><div class="reader-cards"><details class="reader-card" id="A-bshgpd44ykba-6e0103f6cc-03"><summary lang="en">Does using a trait create a new type for instanceof checks?</summary><p lang="en">No. A trait reuses members horizontally; use an interface for a type contract.</p><p lang="fr">Un trait partage du code sans créer un type. La class host doit implémenter ses methods abstraites.</p><a href="course-CRS-bshgpd44ykba.html#out-OUT-x8c9nce1wqh5">Revoir le passage précis</a></details></div></div><div data-card-section="s-l-exemple"><h3><a href="#s-l-exemple">Revoir la section du cours</a></h3><div class="reader-cards"><details class="reader-card" id="A-bshgpd44ykba-88b6fbd62c-03"><summary lang="en">What must Article implement to use Timestampable in this example?</summary><p lang="en">The public getId(): int method required by the trait.</p><p lang="fr">Un trait peut imposer une method abstraite à la class hôte. La class Article fournit getId() tout en réutilisant touch() et l&#x27;état du trait.</p><a href="course-CRS-bshgpd44ykba.html#out-OUT-x8c9nce1wqh5">Revoir le passage précis</a></details></div></div><div data-card-section="s-ce-qu-un-trait-apporte"><h3><a href="#s-ce-qu-un-trait-apporte">Revoir la section du cours</a></h3><div class="reader-cards"><p class="reader-card-reference" id="A-bshgpd44ykba-1a62cc0489-03">Rappel déjà proposé : <a lang="en" href="#A-bshgpd44ykba-6e0103f6cc-03">Does using a trait create a new type for instanceof checks?</a> · <a href="course-CRS-bshgpd44ykba.html#out-OUT-x8c9nce1wqh5">Passage canonique</a></p></div></div><div data-card-section="s-l-ordre-de-precedence"><h3><a href="#s-l-ordre-de-precedence">Revoir la section du cours</a></h3><div class="reader-cards"><p class="reader-card-reference" id="A-bshgpd44ykba-7d53d50890-01">Rappel déjà proposé : <a lang="en" href="#A-bshgpd44ykba-65c42c80d9-01">Which method wins: the class, its trait, or its parent?</a> · <a href="course-CRS-bshgpd44ykba.html#out-OUT-xk68jha9m4nk">Passage canonique</a></p></div></div><div data-card-section="s-resolution-de-conflit"><h3><a href="#s-resolution-de-conflit">Revoir la section du cours</a></h3><div class="reader-cards"><details class="reader-card" id="A-bshgpd44ykba-413ab0944e-02"><summary lang="en">Does a trait alias resolve a method conflict by itself?</summary><p lang="en">No. insteadof selects an implementation; as adds an alias or changes visibility.</p><p lang="fr">insteadof écarte une implémentation. as conserve l&#x27;original et ajoute un alias ou modifie la visibilité.</p><a href="course-CRS-bshgpd44ykba.html#out-OUT-w9w3hpwesby1">Revoir le passage précis</a></details></div></div><div data-card-section="s-pieges-d-examen"><h3><a href="#s-pieges-d-examen">Revoir la section du cours</a></h3><div class="reader-cards"><p class="reader-card-reference" id="A-bshgpd44ykba-596d5af532-03">Rappel déjà proposé : <a lang="en" href="#A-bshgpd44ykba-6e0103f6cc-03">Does using a trait create a new type for instanceof checks?</a> · <a href="course-CRS-bshgpd44ykba.html#out-OUT-x8c9nce1wqh5">Passage canonique</a></p></div></div><div data-card-section="s-application"><h3><a href="#s-application">Revoir la section du cours</a></h3><div class="reader-cards"><p class="reader-card-reference" id="A-bshgpd44ykba-e7ad522ea3-03">Rappel déjà proposé : <a lang="en" href="#A-bshgpd44ykba-6e0103f6cc-03">Does using a trait create a new type for instanceof checks?</a> · <a href="course-CRS-bshgpd44ykba.html#out-OUT-x8c9nce1wqh5">Passage canonique</a></p><p class="reader-card-reference" id="A-bshgpd44ykba-e7ad522ea3-01">Rappel déjà proposé : <a lang="en" href="#A-bshgpd44ykba-65c42c80d9-01">Which method wins: the class, its trait, or its parent?</a> · <a href="course-CRS-bshgpd44ykba.html#out-OUT-xk68jha9m4nk">Passage canonique</a></p></div></div><div data-card-section="s-fiche-express"><h3><a href="#s-fiche-express">Revoir la section du cours</a></h3><div class="reader-cards"><p class="reader-card-reference" id="A-bshgpd44ykba-b11e58e15e-01">Rappel déjà proposé : <a lang="en" href="#A-bshgpd44ykba-65c42c80d9-01">Which method wins: the class, its trait, or its parent?</a> · <a href="course-CRS-bshgpd44ykba.html#out-OUT-xk68jha9m4nk">Passage canonique</a></p></div></div><aside class="checkpoint"><h2>Rappel d’un cours antérieur</h2><p>Avant de poursuivre : Abstract classes.</p><details class="corpus-correction"><summary lang="en">Which abstraction can provide shared state and method bodies?</summary><p lang="en">An abstract class; an interface specifies a contract.</p><p>L&#x27;interface décrit le contrat. L&#x27;abstract class peut partager constructor, état et comportement.</p><a href="course-CRS-0jtjh77tabt1.html#out-OUT-zt4gxw6enqcj">Relire la correction dans le cours antérieur</a></details></aside></div><div id="view-quiz" data-course-panel role="region" aria-labelledby="view-quiz-title"><h2 id="view-quiz-title">Quiz</h2><p id="course-quiz-status" role="status">Quiz interactif non chargé. Démarrez après chargement de la banque locale.</p><div id="course-quiz-controls" class="assessment-main" hidden><div id="course-quiz-assessment-controls" hidden><select id="course-quiz-assessment-mode" aria-label="Mode du quiz" hidden><option value="learning">Entraînement</option></select><p id="course-quiz-training-scope"></p><button id="course-quiz-start-assessment" type="button" lang="en">Start practice</button><button id="course-quiz-finish-assessment" type="button" lang="en" hidden>End session</button></div><p id="course-quiz-assessment-error" role="alert"></p><p id="course-quiz-assessment-timer" hidden></p><p id="course-quiz-session-progress" role="status"></p><div id="course-quiz-assessment-app" tabindex="-1"></div><nav id="course-quiz-session-navigation" aria-label="Questions du cours"></nav><div id="course-quiz-learning-overview" aria-live="polite"></div></div><div id="course-quiz-native"><p>Sans JavaScript ou si le chargement échoue : aucune tentative notée. Les <a href="#view-flashcards">flashcards du cours</a> restent disponibles.</p><details class="course-quiz-fallback" data-question-id="L-bshgpd44ykba-base-v1"><summary lang="en">Which method wins: the class, its trait, or its parent?</summary><p>Correction de consultation — non notée.</p><p>La class décide avant le trait. Le trait prend le dessus sur la class parente.</p><ul><li><strong lang="en">Distractor: Parent method, then trait method, then class method.</strong><p>Le trait prime sur l&#x27;inheritance, mais pas sur la class elle-même.</p></li><li><strong lang="en">Correct: Class method, then trait method, then parent method.</strong><p>La class décide avant le trait. Le trait prend le dessus sur la class parente.</p></li><li><strong lang="en">Distractor: Trait method, then class method, then parent method.</strong><p>Une method définie dans la class prime sur celle du trait.</p></li></ul><a href="course-CRS-bshgpd44ykba.html#out-OUT-xk68jha9m4nk">Relire le passage exact</a></details></div></div></div></div><details class="transfer-panel"><summary>Sauvegarde et transfert de progression</summary><p id="reading-status" role="status">Sans JavaScript : lecture libre ; progression non enregistrée.</p><p><a href="assessment.html#overview-title">Lecture, réussites immédiates et différées</a></p><p>Transfert manuel — aucune synchronisation automatique</p><p id="persistence-status" role="status"></p><button type="button" class="secondary" id="export-progress">Exporter ma progression</button><label for="import-progress">Choisir un JSON pour fusionner ma progression (sans remplacement)</label><input type="file" id="import-progress" accept="application/json,.json"><p id="transfer-status" role="status"></p></details></main><footer class="site-footer"><a href="catalogue.html">Catalogue</a> <a href="sources.html">Sources et attribution</a> <a href="#contenu">Haut de page</a></footer></body></html>

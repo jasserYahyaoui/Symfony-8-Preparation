@@ -1,0 +1,188 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; connect-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Authenticators, Passports and Badges — Symfony 8 Preparation</title><link rel="stylesheet" href="styles.css"><link rel="stylesheet" href="reader.css"><script src="mermaid.min.js" defer></script><script src="mermaid-init.js" defer></script><link rel="stylesheet" href="assessment.css"><script src="learning-state.js" defer></script><script src="guide.js" defer></script><script src="reader-catalog.js" defer></script><script src="reader.js" defer></script><script src="site-state.js" defer></script><script src="assessment.js" defer></script><script src="course-views.js" defer></script><link rel="stylesheet" href="syntax-highlight.css"><script src="prism-syntax.js" defer></script><script src="syntax-highlight.js" defer></script></head><body data-course-id="CRS-6gc45etcssfb"><a class="skip" href="#contenu">Aller au contenu</a><header class="site-header"><a class="brand" href="index.html">S8 Preparation</a><nav aria-label="Navigation principale"><a href="index.html">Accueil</a> <a href="catalogue.html">Parcours</a> <a href="assessment.html?mode=review">Réviser</a> <a href="examens.html">Examens blancs</a> <a href="jour-j.html">Jour J</a></nav></header><main id="contenu" tabindex="-1" class="corpus-reader"><nav class="breadcrumb" aria-label="Fil d’Ariane"><a href="index.html">Accueil</a> <span aria-hidden="true">›</span> <a href="catalogue.html">Parcours</a> <span aria-hidden="true">›</span> <a href="lot-10.html">Module 10 — Sécurité</a> <span aria-hidden="true">›</span> <span aria-current="page">Authenticators, Passports and Badges</span></nav><h1>Authenticators, Passports and Badges</h1><p class="muted">Symfony 8.0 · API PHP ≤ 8.4 · Twig ≤ 3.22. Préparation indépendante.</p><p class="revision-status">Première itération · en cours de révision pédagogique. Ce cours reste accessible, sans déclaration de validation pédagogique.</p><nav class="course-actions" aria-label="Activités du cours"><a id="tab-course" href="#view-course">Cours</a><a id="tab-flashcards" href="#view-flashcards">Flashcards</a><a id="tab-quiz" href="#view-quiz">Quiz</a></nav><div class="course-layout"><details class="lot-course-menu"><summary>Cours du module · 12 cours</summary><nav aria-label="Cours du module"><a class="lot-context" href="lot-10.html">Module 10 — Sécurité</a><ol><li><a href="course-CRS-awb7sd999c5j.html">Security Core, CSRF and PasswordHasher components</a></li><li><a href="course-CRS-rdzx4ka72saj.html">Authentication</a></li><li><a href="course-CRS-8hwpzyk1hrq9.html">Authorization</a></li><li><a href="course-CRS-yvhg325ax38y.html">Configuration</a></li><li><a href="course-CRS-enbbsykx22xe.html">Providers</a></li><li><a href="course-CRS-x5frtpg07mmd.html">Firewalls</a></li><li><a href="course-CRS-n9ngfssrq1bt.html">Users</a></li><li><a href="course-CRS-g4sth72ww979.html">Password hashers</a></li><li><a href="course-CRS-2s6e4qgkcqza.html">Roles</a></li><li><a href="course-CRS-2ec5yksjfm9s.html">Access Control Rules</a></li><li><a href="course-CRS-6gc45etcssfb.html" aria-current="page">Authenticators, Passports and Badges</a></li><li><a href="course-CRS-y3g0v9nmne3t.html">Voters and voting strategies</a></li></ol></nav></details><aside class="course-section-menu" aria-label="Sommaire du cours"><details class="course-section-disclosure"><summary id="course-sections">Sections du cours</summary><nav aria-label="Sections du cours"><ul><li><a href="#s-objectif">Objectif</a></li><li><a href="#s-l-essentiel">L&#x27;essentiel</a></li><li><a href="#s-le-schema">Le schéma</a></li><li><a href="#s-l-exemple">L&#x27;exemple</a></li><li><a href="#s-les-cinq-methods-de-l-authenticator">Les cinq methods de l&#x27;authenticator</a></li><li><a href="#s-supports-trois-retours-possibles">`supports()` : trois retours possibles</a></li><li><a href="#s-passport-ou-selfvalidatingpassport">Passport ou SelfValidatingPassport</a></li><li><a href="#s-les-badges">Les badges</a></li><li><a href="#s-diagnostiquer-un-badge">Diagnostiquer un badge</a></li><li><a href="#s-pieges-d-examen">Pièges d&#x27;examen</a></li><li><a href="#s-fiche-express">Fiche express</a></li></ul></nav></details></aside><div class="course-content"><div id="view-course" data-course-panel role="region" aria-labelledby="view-course-title"><h2 id="view-course-title">Cours</h2><p class="course-introduction"><a href="#s-objectif">Introduction</a> · <a href="#course-sections">Sections du cours</a></p><h2>Objectifs d’apprentissage</h2><ul><li><a href="course-CRS-6gc45etcssfb.html#out-OUT-hqgj8aj8agf2">Nommer les cinq methods d&#x27;AuthenticatorInterface et leur role</a></li><li><a href="course-CRS-6gc45etcssfb.html#out-OUT-pg8zhgwny9pq">Expliquer les trois états de retour de supports()</a></li><li><a href="course-CRS-6gc45etcssfb.html#out-OUT-a4y23xrqfy6h">Choisir entre Passport et SelfValidatingPassport selon la présence de credentials</a></li><li><a href="course-CRS-6gc45etcssfb.html#out-OUT-g6cf8ka3a9ym">Identifier le badge obligatoire et l&#x27;effet réel des badges optionnels</a></li><li><a href="course-CRS-6gc45etcssfb.html#out-OUT-jrwcwkmfp4x1">Diagnostiquer un flux d&#x27;authentication où un badge n&#x27;a pas l&#x27;effet attendu</a></li></ul><aside class="pedagogy-legend" aria-label="Repères pédagogiques"><p><strong>Repères pédagogiques</strong></p><p>Ces repères décrivent le rôle du bloc, pas une fréquence officielle à l’examen.</p><p class="teaching-label essential"><span aria-hidden="true">○</span> <strong>À comprendre</strong></p><p class="teaching-label essential"><span aria-hidden="true">◆</span> <strong>À mémoriser</strong></p><p class="teaching-label example"><span aria-hidden="true">▣</span> <strong>Exemple concret</strong></p><p class="teaching-label pitfall"><span aria-hidden="true">△</span> <strong>Piège à éviter</strong></p><p class="teaching-label nuance"><span aria-hidden="true">?</span> <strong>À vérifier</strong></p></aside><section class="teaching-section" data-section="s-objectif"><h2 id="s-objectif" tabindex="-1">Objectif</h2><p>Décrire le flux d'authentication de Symfony 8.0 en nommant correctement
+chaque object, savoir lequel construire selon qu'il y a ou non des identifiers
+à vérifier, et diagnostiquer un badge qui n'a pas l'effet attendu.</p></section><section class="teaching-section" data-section="s-l-essentiel"><h2 id="s-l-essentiel" tabindex="-1">L&#x27;essentiel</h2><p class="teaching-label essential"><span aria-hidden="true">○</span> <strong>À comprendre</strong></p><aside class="section-digest" id="s-l-essentiel-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Le passport rassemble les informations.</li><li>Les listeners vérifient ensuite les badges.</li></ol></aside><p>Trois objects se partagent l'authentication : l'<strong>authenticator</strong> décide s'il
+prend la Request et constitue un dossier, le <strong>passport</strong> ; chaque <strong>badge</strong>
+du dossier porte une information ou déclenche une vérification. L'authenticator
+ne valide rien lui-même : des listeners vérifient chaque badge.</p></section><section class="teaching-section" data-section="s-le-schema"><h2 id="s-le-schema" tabindex="-1">Le schéma</h2><aside class="section-digest" id="s-le-schema-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Le token représente le succès.</li><li>Un badge non résolu empêche ce succès.</li></ol></aside><figure class="diagram" aria-labelledby="CRS-6gc45etcssfb-3-diagram-0-title CRS-6gc45etcssfb-3-diagram-0-description"><figcaption id="CRS-6gc45etcssfb-3-diagram-0-title">Le flux d&#x27;un authenticator dans Symfony 8.0</figcaption><p id="CRS-6gc45etcssfb-3-diagram-0-description">supports() décide si l&#x27;authenticator prend la Request. authenticate() construit le Passport. CheckPassportEvent fait résoudre les badges, user, password, CSRF et user checker avant authentication. Une AuthenticationException, ou un badge non résolu, mène à onAuthenticationFailure() puis LoginFailureEvent. Sinon createToken() crée le token, AuthenticationSuccessEvent passe le user checker après authentication, onAuthenticationSuccess() rend la Response, puis LoginSuccessEvent déclenche remember-me et la migration du password.</p><div class="mermaid" hidden>---
+title: executeAuthenticator(), succès et échec
+---
+flowchart TD
+  accTitle: Le flux d&#x27;un authenticator dans Symfony 8.0
+  accDescr: supports() décide si l&#x27;authenticator prend la Request. authenticate() construit le Passport. CheckPassportEvent fait résoudre les badges, user, password, CSRF et user checker avant authentication. Une AuthenticationException, ou un badge non résolu, mène à onAuthenticationFailure() puis LoginFailureEvent. Sinon createToken() crée le token, AuthenticationSuccessEvent passe le user checker après authentication, onAuthenticationSuccess() rend la Response, puis LoginSuccessEvent déclenche remember-me et la migration du password.
+  SUP{&quot;supports()&quot;} --&gt;|&quot;false&quot;| SKIP([&quot;ignoré&quot;])
+  SUP --&gt;|&quot;true ou null&quot;| AUTH[&quot;authenticate() : le Passport&quot;]
+  AUTH --&gt; CHECK[&quot;CheckPassportEvent : user, password, CSRF, user checker&quot;]
+  CHECK --&gt; RES{&quot;tous les badges résolus ?&quot;}
+  CHECK --&gt;|&quot;exception&quot;| FAIL[&quot;onAuthenticationFailure()&quot;]
+  RES --&gt;|&quot;non&quot;| FAIL
+  RES --&gt;|&quot;oui&quot;| TOK[&quot;createToken()&quot;]
+  TOK --&gt; ASE[&quot;AuthenticationSuccessEvent : user checker, après&quot;]
+  ASE --&gt;|&quot;exception&quot;| FAIL
+  ASE --&gt; OK[&quot;onAuthenticationSuccess()&quot;]
+  OK --&gt; LSE[&quot;LoginSuccessEvent : remember-me, migration du password&quot;]
+  FAIL --&gt; LFE[&quot;LoginFailureEvent&quot;]</div></figure>
+<p>Remember-me et rehachage arrivent <strong>après</strong> <code>onAuthenticationSuccess()</code>. Une
+exception levée dans <code>authenticate()</code> mène au même échec que les vérifications.</p></section><section class="teaching-section" data-section="s-l-exemple"><h2 id="s-l-exemple" tabindex="-1">L&#x27;exemple</h2><p class="teaching-label example"><span aria-hidden="true">▣</span> <strong>Exemple concret</strong></p><aside class="section-digest" id="s-l-exemple-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>UserBadge identifie le user.</li><li>PasswordCredentials porte la preuve à vérifier.</li></ol></aside><p>Le service applicatif <code>ApiKeyVerifier</code> doit vérifier réellement la clé et lever <code>BadCredentialsException</code> si elle est invalide ; il ne doit jamais accepter un identifier simplement fourni par le client. Le contrat ci-dessous remplace le placeholder non exécutable de l'original, sans inventer une implémentation de stockage.</p>
+<pre class="highlight" tabindex="0"><code class="language-php">interface ApiKeyVerifier
+{
+    /** @throws BadCredentialsException */
+    public function validateAndIdentify(string $apiKey): string;
+}
+
+class ApiKeyAuthenticator extends AbstractAuthenticator
+{
+    public function __construct(private ApiKeyVerifier $apiKeys)
+    {
+    }
+
+    public function supports(Request $request): ?bool
+    {
+        return $request-&gt;headers-&gt;has('auth-token');
+    }
+
+    public function authenticate(Request $request): Passport
+    {
+        $userIdentifier = $this-&gt;apiKeys-&gt;validateAndIdentify(
+            (string) $request-&gt;headers-&gt;get('auth-token')
+        );
+
+        return new SelfValidatingPassport(new UserBadge($userIdentifier));
+    }
+
+    public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): ?Response
+    {
+        return null; // la Request continue vers le controller
+    }
+
+    public function onAuthenticationFailure(Request $request, AuthenticationException $exception): ?Response
+    {
+        return new JsonResponse(['message' =&gt; strtr($exception-&gt;getMessageKey(), $exception-&gt;getMessageData())], 401);
+    }
+}</code></pre>
+<p><code>SelfValidatingPassport</code> convient ici parce que le service a déjà vérifié la preuve. Les imports Symfony et le service applicatif concret restent à fournir dans l'application ; ce fragment illustre le contrat de l'authenticator.</p></section><section class="teaching-section" data-section="s-les-cinq-methods-de-l-authenticator"><span class="outcome-anchor" id="out-OUT-hqgj8aj8agf2" tabindex="-1"></span><h2 id="s-les-cinq-methods-de-l-authenticator" tabindex="-1">Les cinq methods de l&#x27;authenticator</h2><aside class="section-digest" id="s-les-cinq-methods-de-l-authenticator-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>null laisse poursuivre le traitement.</li><li>Une Response fixe la suite immédiatement.</li></ol></aside><table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Ce qu'elle fait</th>
+<th>Retour</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>supports()</code></td>
+<td>prendre ou non la Request</td>
+<td><code>true</code>, <code>false</code> ou <code>null</code></td>
+</tr>
+<tr>
+<td><code>authenticate()</code></td>
+<td>constituer le dossier</td>
+<td>un <code>Passport</code>, jamais un user ni un bool</td>
+</tr>
+<tr>
+<td><code>createToken()</code></td>
+<td>transformer le passport validé en token</td>
+<td>un <code>TokenInterface</code></td>
+</tr>
+<tr>
+<td><code>onAuthenticationSuccess()</code></td>
+<td>la suite après succès</td>
+<td>une <code>Response</code>, ou <code>null</code> pour continuer</td>
+</tr>
+<tr>
+<td><code>onAuthenticationFailure()</code></td>
+<td>la suite après échec</td>
+<td>une <code>Response</code>, ou <code>null</code> pour continuer</td>
+</tr>
+</tbody>
+</table>
+<p><code>AbstractAuthenticator</code> fournit <code>createToken()</code> (un <code>PostAuthenticationToken</code>) ;
+l'ancien <code>createAuthenticatedToken()</code> n'existe plus.</p></section><section class="teaching-section" data-section="s-supports-trois-retours-possibles"><span class="outcome-anchor" id="out-OUT-pg8zhgwny9pq" tabindex="-1"></span><h2 id="s-supports-trois-retours-possibles" tabindex="-1">`supports()` : trois retours possibles</h2><aside class="section-digest" id="s-supports-trois-retours-possibles-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>null peut autoriser un traitement lazy.</li><li>Ce n&#x27;est pas un accord immédiat.</li></ol></aside><ul>
+<li><code>true</code> — <code>authenticate()</code> est appelé ; <code>false</code> — l'authenticator est ignoré ;</li>
+<li><code>null</code> — <code>authenticate()</code> « can be called <strong>lazily</strong> when accessing the token
+  storage » : seulement si quelqu'un lit le token.</li>
+<li>Ce <code>null</code> n'agit que sur un firewall <code>lazy</code> <strong>avec état</strong> : avec
+  <code>stateless: true</code>, <code>lazy</code> est ignoré sans avertissement.</li>
+</ul></section><section class="teaching-section" data-section="s-passport-ou-selfvalidatingpassport"><span class="outcome-anchor" id="out-OUT-a4y23xrqfy6h" tabindex="-1"></span><h2 id="s-passport-ou-selfvalidatingpassport" tabindex="-1">Passport ou SelfValidatingPassport</h2><aside class="section-digest" id="s-passport-ou-selfvalidatingpassport-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>SelfValidatingPassport évite une vérification de credentials supplémentaire.</li><li>Il ne rend pas une entrée arbitraire fiable.</li></ol></aside><p><code>Passport</code> <strong>exige</strong> des credentials :
+<code>__construct(UserBadge $userBadge, CredentialsInterface $credentials, array $badges = [])</code>.</p>
+<ul>
+<li>Une preuve à contrôler (password, callable) → <code>Passport</code> et des credentials.</li>
+<li>Rien à vérifier (token d'API déjà digne de confiance) →
+  <code>SelfValidatingPassport</code>, qui ne prend que <code>UserBadge</code> et les badges.</li>
+</ul></section><section class="teaching-section" data-section="s-les-badges"><span class="outcome-anchor" id="out-OUT-g6cf8ka3a9ym" tabindex="-1"></span><h2 id="s-les-badges" tabindex="-1">Les badges</h2><aside class="section-digest" id="s-les-badges-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Un résultat truthy ne suffit pas.</li><li>Le contrôle attend true strict.</li></ol></aside><table>
+<thead>
+<tr>
+<th>Badge</th>
+<th>Role</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>UserBadge</code></td>
+<td>l'identifier du user — <strong>obligatoire</strong></td>
+</tr>
+<tr>
+<td><code>PasswordCredentials</code></td>
+<td>password en clair, vérifié par le hasher</td>
+</tr>
+<tr>
+<td><code>CustomCredentials</code></td>
+<td>vérification par un callable, qui doit rendre exactement <code>true</code></td>
+</tr>
+<tr>
+<td><code>PasswordUpgradeBadge</code></td>
+<td>autorise le réencodage du password</td>
+</tr>
+<tr>
+<td><code>RememberMeBadge</code></td>
+<td>demande le cookie « se souvenir de moi »</td>
+</tr>
+<tr>
+<td><code>CsrfTokenBadge</code></td>
+<td>fait vérifier un token CSRF</td>
+</tr>
+<tr>
+<td><code>PreAuthenticatedUserBadge</code></td>
+<td>user authentifié en amont : <code>checkPreAuth()</code> n'est pas appelé</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><code>UserBadge</code> accepte un <em>user loader</em> ; s'il rend <code>null</code>, l'échec est
+  <strong>masqué</strong> par défaut en « Invalid credentials. », pour ne pas révéler
+  quels users existent ; seule <code>security.expose_security_errors: all</code> montre « Username could
+  not be found. ».</li>
+<li>Un identifier vide ou de plus de 4096 octets est refusé dès la construction
+  (<code>BadCredentialsException</code>).</li>
+<li><code>CustomCredentials</code> compare avec <code>true</code> au sens strict : <code>1</code> échoue.</li>
+</ul></section><section class="teaching-section" data-section="s-diagnostiquer-un-badge"><span class="outcome-anchor" id="out-OUT-jrwcwkmfp4x1" tabindex="-1"></span><h2 id="s-diagnostiquer-un-badge" tabindex="-1">Diagnostiquer un badge</h2><aside class="section-digest" id="s-diagnostiquer-un-badge-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Le badge indique une capacité.</li><li>La configuration et l&#x27;activation restent nécessaires.</li></ol></aside><ul>
+<li>Un badge <strong>non résolu</strong> fait échouer l'authentication : « Security badge …
+  is not resolved, did you forget to register the correct listeners? ».</li>
+<li><code>RememberMeBadge</code> est <strong>désactivé</strong> à sa création : il faut le badge, la key
+  <code>remember_me</code> sur le firewall, et l'activation — <code>_remember_me</code> dans la
+  Request, <code>always_remember_me</code>, ou <code>enable()</code>.</li>
+<li>Ordre du diagnostic : <code>authenticate()</code> est-il appelé (<code>supports()</code>, <code>lazy</code>) ?
+  L'échec vient-il des vérifications (<code>CheckPassportEvent</code>) ? L'effet
+  manque-t-il après le succès (<code>LoginSuccessEvent</code>) ?</li>
+</ul></section><section class="teaching-section" data-section="s-pieges-d-examen"><h2 id="s-pieges-d-examen" tabindex="-1">Pièges d&#x27;examen</h2><p class="teaching-label pitfall"><span aria-hidden="true">△</span> <strong>Piège à éviter</strong></p><aside class="section-digest" id="s-pieges-d-examen-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Chaque badge requis doit être résolu.</li><li>Vérifier les listeners enregistrés.</li></ol></aside><p><strong><code>supports()</code> = <code>null</code> n'est pas « redemande-moi »</strong> : c'est l'authentication
+lazy, et seulement sur un firewall <code>lazy</code> avec état.</p>
+<p><strong><code>RememberMeBadge</code> n'active rien à lui seul</strong> : sans <code>remember_me</code> ni
+activation, aucun cookie.</p>
+<p><strong>Un badge non résolu est une panne</strong>, pas une permission silencieuse.</p>
+<p><strong><code>getUser()</code> sur un passport sans <code>UserBadge</code> lève une <code>LogicException</code></strong> :
+erreur de programmation, pas échec de connexion.</p>
+<p><strong><code>createToken()</code>, pas <code>createAuthenticatedToken()</code>.</strong></p></section><section class="teaching-section" data-section="s-fiche-express"><h2 id="s-fiche-express" tabindex="-1">Fiche express</h2><p class="teaching-label essential"><span aria-hidden="true">◆</span> <strong>À mémoriser</strong></p><aside class="section-digest" id="s-fiche-express-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Employer la method actuelle.</li><li>L&#x27;ancienne method createAuthenticatedToken n&#x27;est plus le contrat.</li></ol></aside><p><strong>Si tu dois retenir seulement 8 choses :</strong></p>
+<ul>
+<li><strong>Authenticator</strong> (process) → <strong>passport</strong> (dossier) → <strong>badges</strong> (pièces).</li>
+<li>Cinq methods ; <strong><code>createToken()</code></strong> fourni par <code>AbstractAuthenticator</code>.</li>
+<li><strong><code>supports()</code> = <code>null</code></strong> : lazy, seulement sur un firewall <code>lazy</code> avec état.</li>
+<li>Une preuve à vérifier : <strong><code>Passport</code></strong> ; aucune : <strong><code>SelfValidatingPassport</code></strong>.</li>
+<li><strong><code>UserBadge</code></strong> obligatoire ; user introuvable <strong>masqué</strong> en « Invalid
+  credentials. ».</li>
+<li><strong><code>CustomCredentials</code></strong> : <code>true</code> strict.</li>
+<li>Badge <strong>non résolu</strong> = échec.</li>
+<li><strong><code>RememberMeBadge</code></strong> : badge + <code>remember_me</code> + activation.</li>
+</ul>
+<p>Moyen mnémotechnique : <strong>« l'authenticator remplit, les listeners vérifient »</strong>.</p>
+<pre class="highlight" tabindex="0"><code class="language-text">supports (true/false/null=lazy) → authenticate → Passport(UserBadge, credentials, badges) | SelfValidatingPassport
+→ CheckPassportEvent → createToken → onAuthenticationSuccess → LoginSuccessEvent (remember-me) ; échec → onAuthenticationFailure</code></pre></section><section class="official-sources"><h2>Sources officielles et compléments</h2><ul><li><a href="https://symfony.com/doc/8.0/security.html">Symfony 8.0 — Security</a></li><li><a href="https://symfony.com/doc/8.0/security/custom_authenticator.html">Symfony 8.0 — security / custom authenticator</a></li></ul></section><nav class="course-sequence" aria-label="Ordre de lecture"><a rel="prev" href="course-CRS-2ec5yksjfm9s.html" aria-label="Précédent : Access Control Rules — Module 10 — Sécurité">Précédent : Access Control Rules</a> <a href="lot-10.html">Sommaire : Module 10 — Sécurité</a> <a rel="next" href="course-CRS-y3g0v9nmne3t.html" aria-label="Suivant : Voters and voting strategies — Module 10 — Sécurité">Suivant : Voters and voting strategies</a></nav><p class="course-practice-entry"><a class="button" href="#view-quiz">Fin du cours — s’entraîner avec le Quiz</a></p></div><div id="view-flashcards" data-course-panel role="region" aria-labelledby="view-flashcards-title"><h2 id="view-flashcards-title">Flashcards</h2><p lang="en">Answer before revealing each card.</p><p>Ces cartes ne mesurent pas une maîtrise notée.</p><div data-card-section="s-l-essentiel"><h3><a href="#s-l-essentiel">Revoir la section du cours</a></h3><div class="reader-cards"><details class="reader-card" id="B-6gc45etcssfb-01"><summary lang="en">What does authenticate() return in the authenticator system?</summary><p lang="en">A Passport, not a user object or boolean.</p><p lang="fr">Le passport rassemble les informations. Les listeners vérifient ensuite les badges.</p><a href="course-CRS-6gc45etcssfb.html#out-OUT-hqgj8aj8agf2">Revoir le passage précis</a></details></div></div><div data-card-section="s-le-schema"><h3><a href="#s-le-schema">Revoir la section du cours</a></h3><div class="reader-cards"><details class="reader-card" id="B-6gc45etcssfb-02"><summary lang="en">When is a security token created from the passport?</summary><p lang="en">After authentication evidence and required badges have been resolved.</p><p lang="fr">Le token représente le succès. Un badge non résolu empêche ce succès.</p><a href="course-CRS-6gc45etcssfb.html#out-OUT-jrwcwkmfp4x1">Revoir le passage précis</a></details></div></div><div data-card-section="s-l-exemple"><h3><a href="#s-l-exemple">Revoir la section du cours</a></h3><div class="reader-cards"><details class="reader-card" id="B-6gc45etcssfb-03"><summary lang="en">How is a submitted password normally represented in a passport?</summary><p lang="en">With PasswordCredentials alongside a UserBadge.</p><p lang="fr">UserBadge identifie le user. PasswordCredentials porte la preuve à vérifier.</p><a href="course-CRS-6gc45etcssfb.html#out-OUT-a4y23xrqfy6h">Revoir le passage précis</a></details></div></div><div data-card-section="s-les-cinq-methods-de-l-authenticator"><h3><a href="#s-les-cinq-methods-de-l-authenticator">Revoir la section du cours</a></h3><div class="reader-cards"><details class="reader-card" id="B-6gc45etcssfb-04"><summary lang="en">What may onAuthenticationSuccess() return to let request handling continue?</summary><p lang="en">null; a Response instead short-circuits with that Response.</p><p lang="fr">null laisse poursuivre le traitement. Une Response fixe la suite immédiatement.</p><a href="course-CRS-6gc45etcssfb.html#out-OUT-hqgj8aj8agf2">Revoir le passage précis</a></details></div></div><div data-card-section="s-supports-trois-retours-possibles"><h3><a href="#s-supports-trois-retours-possibles">Revoir la section du cours</a></h3><div class="reader-cards"><details class="reader-card" id="B-6gc45etcssfb-05"><summary lang="en">What does supports() returning null permit?</summary><p lang="en">Deferred authentication when supported by a lazy stateful firewall.</p><p lang="fr">null peut autoriser un traitement lazy. Ce n&#x27;est pas un accord immédiat.</p><a href="course-CRS-6gc45etcssfb.html#out-OUT-pg8zhgwny9pq">Revoir le passage précis</a></details></div></div><div data-card-section="s-passport-ou-selfvalidatingpassport"><h3><a href="#s-passport-ou-selfvalidatingpassport">Revoir la section du cours</a></h3><div class="reader-cards"><details class="reader-card" id="B-6gc45etcssfb-06"><summary lang="en">When is SelfValidatingPassport appropriate?</summary><p lang="en">When the authenticator already has trustworthy evidence and no credentials check is needed.</p><p lang="fr">SelfValidatingPassport évite une vérification de credentials supplémentaire. Il ne rend pas une entrée arbitraire fiable.</p><a href="course-CRS-6gc45etcssfb.html#out-OUT-a4y23xrqfy6h">Revoir le passage précis</a></details></div></div><div data-card-section="s-les-badges"><h3><a href="#s-les-badges">Revoir la section du cours</a></h3><div class="reader-cards"><details class="reader-card" id="B-6gc45etcssfb-07"><summary lang="en">What exact return value must a CustomCredentials checker produce for success?</summary><p lang="en">The boolean true.</p><p lang="fr">Un résultat truthy ne suffit pas. Le contrôle attend true strict.</p><a href="course-CRS-6gc45etcssfb.html#out-OUT-g6cf8ka3a9ym">Revoir le passage précis</a></details></div></div><div data-card-section="s-diagnostiquer-un-badge"><h3><a href="#s-diagnostiquer-un-badge">Revoir la section du cours</a></h3><div class="reader-cards"><details class="reader-card" id="B-6gc45etcssfb-08"><summary lang="en">Does adding RememberMeBadge alone issue a remember-me cookie?</summary><p lang="en">No. The firewall feature and activation of remember-me are also required.</p><p lang="fr">Le badge indique une capacité. La configuration et l&#x27;activation restent nécessaires.</p><a href="course-CRS-6gc45etcssfb.html#out-OUT-jrwcwkmfp4x1">Revoir le passage précis</a></details></div></div><div data-card-section="s-pieges-d-examen"><h3><a href="#s-pieges-d-examen">Revoir la section du cours</a></h3><div class="reader-cards"><details class="reader-card" id="B-6gc45etcssfb-09"><summary lang="en">What happens when a passport contains an unresolved badge?</summary><p lang="en">Authentication fails rather than silently accepting it.</p><p lang="fr">Chaque badge requis doit être résolu. Vérifier les listeners enregistrés.</p><a href="course-CRS-6gc45etcssfb.html#out-OUT-jrwcwkmfp4x1">Revoir le passage précis</a></details></div></div><div data-card-section="s-fiche-express"><h3><a href="#s-fiche-express">Revoir la section du cours</a></h3><div class="reader-cards"><details class="reader-card" id="B-6gc45etcssfb-10"><summary lang="en">Which token-creation method is used by Symfony 8.0 authenticators?</summary><p lang="en">createToken(); AbstractAuthenticator supplies a default implementation.</p><p lang="fr">Employer la method actuelle. L&#x27;ancienne method createAuthenticatedToken n&#x27;est plus le contrat.</p><a href="course-CRS-6gc45etcssfb.html#out-OUT-hqgj8aj8agf2">Revoir le passage précis</a></details></div></div><aside class="checkpoint"><h2>Rappel d’un cours antérieur</h2><p>Avant de poursuivre : Roles.</p><details class="corpus-correction"><summary lang="en">Which prefix does the built-in RoleVoter recognize?</summary><p lang="en">ROLE_, case-sensitively.</p><p>Le voter natif reconnaît ce préfixe. Une autre convention demanderait un voter adapté.</p><a href="course-CRS-2s6e4qgkcqza.html#out-OUT-nb8grypjavr8">Relire la correction dans le cours antérieur</a></details></aside></div><div id="view-quiz" data-course-panel role="region" aria-labelledby="view-quiz-title"><h2 id="view-quiz-title">Quiz</h2><p id="course-quiz-status" role="status">Quiz interactif non chargé. Démarrez après chargement de la banque locale.</p><div id="course-quiz-controls" class="assessment-main" hidden><div id="course-quiz-assessment-controls" hidden><select id="course-quiz-assessment-mode" aria-label="Mode du quiz" hidden><option value="learning">Entraînement</option></select><p id="course-quiz-training-scope"></p><button id="course-quiz-start-assessment" type="button" lang="en">Start practice</button><button id="course-quiz-finish-assessment" type="button" lang="en" hidden>End session</button></div><p id="course-quiz-assessment-error" role="alert"></p><p id="course-quiz-assessment-timer" hidden></p><p id="course-quiz-session-progress" role="status"></p><div id="course-quiz-assessment-app" tabindex="-1"></div><nav id="course-quiz-session-navigation" aria-label="Questions du cours"></nav><div id="course-quiz-learning-overview" aria-live="polite"></div></div><div id="course-quiz-native"><p>Sans JavaScript ou si le chargement échoue : aucune tentative notée. Les <a href="#view-flashcards">flashcards du cours</a> restent disponibles.</p><details class="course-quiz-fallback" data-question-id="L-6gc45etcssfb-base-v1"><summary lang="en">What does authenticate() return in the authenticator system?</summary><p>Correction de consultation — non notée.</p><p>Le passport rassemble les informations. Les listeners vérifient ensuite les badges.</p><ul><li><strong lang="en">Correct: A Passport.</strong><p>Le passport rassemble les informations. Les listeners vérifient ensuite les badges.</p></li><li><strong lang="en">Distractor: A UserInterface object directly.</strong><p>Le Passport rassemble les informations utilisées pour l&#x27;authentification.</p></li><li><strong lang="en">Distractor: A boolean indicating whether all badges are resolved.</strong><p>Les listeners traitent les badges du Passport ; authenticate() ne retourne pas ce bool.</p></li></ul><a href="course-CRS-6gc45etcssfb.html#out-OUT-hqgj8aj8agf2">Relire le passage exact</a></details></div></div></div></div><details class="transfer-panel"><summary>Sauvegarde et transfert de progression</summary><p id="reading-status" role="status">Sans JavaScript : lecture libre ; progression non enregistrée.</p><p><a href="assessment.html#overview-title">Lecture, réussites immédiates et différées</a></p><p>Transfert manuel — aucune synchronisation automatique</p><p id="persistence-status" role="status"></p><button type="button" class="secondary" id="export-progress">Exporter ma progression</button><label for="import-progress">Choisir un JSON pour fusionner ma progression (sans remplacement)</label><input type="file" id="import-progress" accept="application/json,.json"><p id="transfer-status" role="status"></p></details></main><footer class="site-footer"><a href="catalogue.html">Catalogue</a> <a href="sources.html">Sources et attribution</a> <a href="#contenu">Haut de page</a></footer></body></html>

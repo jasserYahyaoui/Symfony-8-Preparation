@@ -1,0 +1,239 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; connect-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Interfaces — Symfony 8 Preparation</title><link rel="stylesheet" href="styles.css"><link rel="stylesheet" href="reader.css"><script src="mermaid.min.js" defer></script><script src="mermaid-init.js" defer></script><link rel="stylesheet" href="assessment.css"><script src="learning-state.js" defer></script><script src="guide.js" defer></script><script src="reader-catalog.js" defer></script><script src="reader.js" defer></script><script src="site-state.js" defer></script><script src="assessment.js" defer></script><script src="course-views.js" defer></script><link rel="stylesheet" href="syntax-highlight.css"><script src="prism-syntax.js" defer></script><script src="syntax-highlight.js" defer></script></head><body data-course-id="CRS-e4y7gtn5k4f0"><a class="skip" href="#contenu">Aller au contenu</a><header class="site-header"><a class="brand" href="index.html">S8 Preparation</a><nav aria-label="Navigation principale"><a href="index.html">Accueil</a> <a href="catalogue.html">Parcours</a> <a href="assessment.html?mode=review">Réviser</a> <a href="examens.html">Examens blancs</a> <a href="jour-j.html">Jour J</a></nav></header><main id="contenu" tabindex="-1" class="corpus-reader"><nav class="breadcrumb" aria-label="Fil d’Ariane"><a href="index.html">Accueil</a> <span aria-hidden="true">›</span> <a href="catalogue.html">Parcours</a> <span aria-hidden="true">›</span> <a href="lot-01.html">Module 01 — PHP jusqu’à 8.4</a> <span aria-hidden="true">›</span> <span aria-current="page">Interfaces</span></nav><h1>Interfaces</h1><p class="muted">Symfony 8.0 · API PHP ≤ 8.4 · Twig ≤ 3.22. Préparation indépendante.</p><p class="revision-status">Première itération · Module 01 — PHP jusqu’à 8.4 : explications développées ; revue pédagogique indépendante en attente.</p><nav class="course-actions" aria-label="Activités du cours"><a id="tab-course" href="#view-course">Cours</a><a id="tab-flashcards" href="#view-flashcards">Flashcards</a><a id="tab-quiz" href="#view-quiz">Quiz</a></nav><div class="course-layout"><details class="lot-course-menu"><summary>Cours du module · 9 cours</summary><nav aria-label="Cours du module"><a class="lot-context" href="lot-01.html">Module 01 — PHP jusqu’à 8.4</a><ol><li><a href="course-CRS-722pscs6e2m0.html">PHP API up to PHP 8.4 version</a></li><li><a href="course-CRS-3424z948caan.html">Object Oriented Programming</a></li><li><a href="course-CRS-tqcp2kn9r3b5.html">Attributes</a></li><li><a href="course-CRS-e4y7gtn5k4f0.html" aria-current="page">Interfaces</a></li><li><a href="course-CRS-e7m4xbcxegyc.html">Anonymous functions and closures</a></li><li><a href="course-CRS-0jtjh77tabt1.html">Abstract classes</a></li><li><a href="course-CRS-yc9fry0vz4gh.html">Exception and error handling</a></li><li><a href="course-CRS-bshgpd44ykba.html">Traits</a></li><li><a href="course-CRS-3sggmeyd01x6.html">Enums</a></li></ol></nav></details><aside class="course-section-menu" aria-label="Sommaire du cours"><details class="course-section-disclosure"><summary id="course-sections">Sections du cours</summary><nav aria-label="Sections du cours"><ul><li><a href="#s-objectif">Objectif</a></li><li><a href="#s-l-essentiel">L&#x27;essentiel</a></li><li><a href="#s-le-schema">Le schéma</a></li><li><a href="#s-l-exemple">L&#x27;exemple</a></li><li><a href="#s-ce-qu-une-interface-contient">Ce qu&#x27;une interface contient</a></li><li><a href="#s-les-constants-sont-surchargeables-depuis-php-8-1">Les constants sont surchargeables — depuis PHP 8.1</a></li><li><a href="#s-les-properties-d-interface-depuis-php-8-4">Les properties d&#x27;interface — depuis PHP 8.4</a></li><li><a href="#s-pieges-d-examen">Pièges d&#x27;examen</a></li><li><a href="#s-application">Application</a></li><li><a href="#s-fiche-express">Fiche express</a></li><li><a href="#s-sources-officielles">Sources officielles</a></li></ul></nav></details></aside><div class="course-content"><div id="view-course" data-course-panel role="region" aria-labelledby="view-course-title"><h2 id="view-course-title">Cours</h2><p class="course-introduction"><a href="#s-l-essentiel">Pour bien commencer</a> · <a href="#course-sections">Sections du cours</a></p><h2>Objectifs d’apprentissage</h2><ul><li><a href="course-CRS-e4y7gtn5k4f0.html#out-OUT-6tzwvmfwj408">Identifier ce qu&#x27;une interface peut déclarer et ce qu&#x27;elle ne peut pas</a></li><li><a href="course-CRS-e4y7gtn5k4f0.html#out-OUT-5vqwe44nsee5">Énoncer les règles d&#x27;implémentation et d&#x27;extension multiples</a></li><li><a href="course-CRS-e4y7gtn5k4f0.html#out-OUT-7vt306wrfkb7">Décider si une constant d&#x27;interface peut être surchargée par la class qui l&#x27;implémente</a></li><li><a href="course-CRS-e4y7gtn5k4f0.html#out-OUT-ynfsf3qdn2mj">Choisir le membre de class qui satisfait une property d&#x27;interface déclarée get et set</a></li></ul><aside class="pedagogy-legend" aria-label="Repères pédagogiques"><p><strong>Repères pédagogiques</strong></p><p>Ces repères décrivent le rôle du bloc, pas une fréquence officielle à l’examen.</p><p class="teaching-label essential"><span aria-hidden="true">○</span> <strong>À comprendre</strong></p><p class="teaching-label essential"><span aria-hidden="true">◆</span> <strong>À mémoriser</strong></p><p class="teaching-label example"><span aria-hidden="true">▣</span> <strong>Exemple concret</strong></p><p class="teaching-label pitfall"><span aria-hidden="true">△</span> <strong>Piège à éviter</strong></p><p class="teaching-label nuance"><span aria-hidden="true">?</span> <strong>À vérifier</strong></p></aside><section class="teaching-section" data-section="s-objectif"><h2 id="s-objectif" tabindex="-1">Objectif</h2><p>Reconnaître ce qu'une interface peut et ne peut pas déclarer.</p></section><section class="teaching-section" data-section="s-l-essentiel"><h2 id="s-l-essentiel" tabindex="-1">L&#x27;essentiel</h2><p class="teaching-label essential"><span aria-hidden="true">○</span> <strong>À comprendre</strong></p><aside class="section-digest" id="s-l-essentiel-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Depuis PHP 8.1, une constant d&#x27;interface peut être redéfinie.</li><li>final interdit cette redéfinition.</li></ol></aside><h3 tabindex="-1">C'est quoi ?</h3>
+<p>Une interface définit un contrat que plusieurs classes peuvent respecter. Ses methods sont publiques et abstraites : elle annonce leur signature sans fournir leur body. Une class utilise <code>implements</code> puis fournit une implémentation compatible. On peut typer un parameter avec cette interface sans imposer une class concrète.</p>
+<p>En PHP 8.4, une interface peut aussi déclarer des properties avec un contrat <code>get</code>, <code>set</code> ou les deux. Elle peut porter des constants ; depuis PHP 8.1 une constant non <code>final</code> peut être redéfinie. Ces possibilités ne lui donnent pas l'état partagé ni les bodies de methods d'une abstract class.</p>
+<h3 tabindex="-1">À quoi ça sert ?</h3>
+<p>Une prise normalisée impose une forme de connexion, sans imposer la construction de chaque appareil. La prise correspond à l'interface, chaque appareil à une class qui l'implémente, et l'utilisateur de la prise au code appelant. Limite : PHP vérifie la compatibilité des signatures et des accès, pas la qualité du comportement. Deux implémentations compatibles peuvent produire des résultats différents.</p>
+<p>Le bénéfice est de remplacer une implémentation sans réécrire tous ses utilisateurs. Le contrat doit donc exprimer ce dont l'utilisateur a besoin, pas les détails internes d'un fournisseur particulier.</p>
+<h3 tabindex="-1">Où dans Symfony ?</h3>
+<p>Un service applicatif peut demander une interface dans son constructor. Le service container doit alors connaître l'implémentation à injecter, par exemple grâce à un alias explicite. PHP sait vérifier le type reçu ; il ne choisit pas lui-même l'implémentation. L'exemple utilise une construction manuelle pour isoler cette différence sans dépendance Symfony.</p>
+<h3 tabindex="-1">Comment, étape par étape ?</h3>
+<ol>
+<li>Déclarer la capacité attendue dans une interface, ici produire une salutation à partir d'un nom.</li>
+<li>Implémenter sa method publiquement avec une signature compatible.</li>
+<li>Faire dépendre l'utilisateur de l'interface plutôt que de la class concrète.</li>
+<li>Choisir et fournir une implémentation lors de l'assemblage. Dans Symfony, cette responsabilité revient à la configuration du service container.</li>
+<li>Pour une property d'interface en PHP 8.4, vérifier séparément les accès <code>get</code> et <code>set</code> : <code>readonly</code> ne satisfait pas un contrat qui exige <code>set</code>.</li>
+</ol>
+<h3 tabindex="-1">Exemple concret PHP</h3>
+<p>Welcome ne connaît que Greeter. FrenchGreeter fournit le body de <code>greet()</code> ; remplacer cette implémentation ne change pas le type demandé par Welcome. La sortie est <code>Bonjour Ada</code>.</p>
+<pre class="highlight" tabindex="0"><code class="language-php">&lt;?php
+interface Greeter
+{
+    public function greet(string $name): string;
+}
+
+final class FrenchGreeter implements Greeter
+{
+    public function greet(string $name): string
+    {
+        return 'Bonjour ' . $name;
+    }
+}
+
+final class Welcome
+{
+    public function __construct(private Greeter $greeter) {}
+
+    public function message(): string
+    {
+        return $this-&gt;greeter-&gt;greet('Ada');
+    }
+}
+
+echo new Welcome(new FrenchGreeter())-&gt;message(), "\n";</code></pre><details class="canonical-retained"><summary>Passage canonique conservé</summary><h2 tabindex="-1">L'essentiel</h2>
+<p>Une interface déclare des methods implicitement <strong>publiques et abstraites</strong>, des
+constantes et, depuis PHP 8.4, des <strong>properties</strong> en <code>get</code>, <code>set</code> ou les deux.
+Deux réflexes anciens sont faux sur PHP 8.4 : une constant d'interface <strong>se
+surcharge</strong> depuis 8.1, sauf <code>final</code> ; et une property <code>readonly</code> ne satisfait
+<strong>pas</strong> une property d'interface <code>set</code>.</p></details></section><section class="teaching-section" data-section="s-le-schema"><h2 id="s-le-schema" tabindex="-1">Le schéma</h2><aside class="section-digest" id="s-le-schema-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>La property d&#x27;interface décrit un contrat d&#x27;accès.</li><li>readonly et private(set) ne promettent pas une écriture publique.</li></ol></aside><figure class="diagram" aria-labelledby="CRS-e4y7gtn5k4f0-3-diagram-0-title CRS-e4y7gtn5k4f0-3-diagram-0-description"><figcaption id="CRS-e4y7gtn5k4f0-3-diagram-0-title">Le contenu d&#x27;une interface PHP 8.4</figcaption><p id="CRS-e4y7gtn5k4f0-3-diagram-0-description">Les methods d&#x27;une interface sont implicitement public et abstract, sans corps, jamais private ni protected. Ses constants sont publiques obligatoirement, surchargeables depuis 8.1, sauf si elles sont final. En 8.4 elle peut déclarer des properties, public string $name { get; } ou { get; set; }, un contrat d&#x27;accès public sans état : { get } est rempli par une property publique, readonly, ou un hook get virtuel ; { get; set } par une property publique ordinaire, pas readonly et pas public private(set). Une class implémente plusieurs interfaces, implements A, B, et une interface en étend plusieurs, extends A, B.</p><div class="mermaid" hidden>---
+title: Ce qu&#x27;une interface peut contenir
+---
+flowchart LR
+  accTitle: Le contenu d&#x27;une interface PHP 8.4
+  accDescr: Les methods d&#x27;une interface sont implicitement public et abstract, sans corps, jamais private ni protected. Ses constants sont publiques obligatoirement, surchargeables depuis 8.1, sauf si elles sont final. En 8.4 elle peut déclarer des properties, public string $name { get; } ou { get; set; }, un contrat d&#x27;accès public sans état : { get } est rempli par une property publique, readonly, ou un hook get virtuel ; { get; set } par une property publique ordinaire, pas readonly et pas public private(set). Une class implémente plusieurs interfaces, implements A, B, et une interface en étend plusieurs, extends A, B.
+  I([&quot;interface&quot;]) --&gt; M[&quot;methods&lt;br/&gt;implicitement&lt;br/&gt;public + abstract&lt;br/&gt;pas de corps&lt;br/&gt;pas de private/protected&quot;]
+  I --&gt; K[&quot;constantes&lt;br/&gt;publiques obligatoirement&lt;br/&gt;surchargeables depuis 8.1&lt;br/&gt;final → non surchargeable&quot;]
+  I --&gt; P[&quot;properties (8.4)&lt;br/&gt;public string $name { get; }&lt;br/&gt;ou { get; set; }&lt;br/&gt;contrat d&#x27;accès public,&lt;br/&gt;pas d&#x27;état&quot;]
+  P --&gt; G[&quot;{ get } rempli par&lt;br/&gt;une property publique,&lt;br/&gt;readonly,&lt;br/&gt;ou un hook get virtuel&quot;]
+  P --&gt; GS[&quot;{ get; set } rempli par&lt;br/&gt;une property publique&lt;br/&gt;ordinaire&lt;br/&gt;PAS readonly&lt;br/&gt;PAS public private(set)&quot;]
+  I --&gt; H[&quot;inheritance&lt;br/&gt;class implements A, B&lt;br/&gt;interface extends A, B&quot;]</div></figure></section><section class="teaching-section" data-section="s-l-exemple"><h2 id="s-l-exemple" tabindex="-1">L&#x27;exemple</h2><p class="teaching-label example"><span aria-hidden="true">▣</span> <strong>Exemple concret</strong></p><p class="digest-reference"><a href="#s-l-essentiel-digest">Revoir la règle : Depuis PHP 8.1, une constant d&#x27;interface peut être redéfinie.</a></p><pre class="highlight" tabindex="0"><code class="language-php">interface Cacheable
+{
+    const int DEFAULT_TTL = 3600;
+    final const int VERSION = 2;
+
+    public function getCacheKey(): string;
+}
+
+class Article implements Cacheable
+{
+    const int DEFAULT_TTL = 60;    // autorisé depuis 8.1
+    // const int VERSION = 3;      // erreur fatale : la constante est final
+
+    public function getCacheKey(): string { return 'article'; }
+}</code></pre></section><section class="teaching-section" data-section="s-ce-qu-une-interface-contient"><span class="outcome-anchor" id="out-OUT-6tzwvmfwj408" tabindex="-1"></span><span class="outcome-anchor" id="out-OUT-5vqwe44nsee5" tabindex="-1"></span><h2 id="s-ce-qu-une-interface-contient" tabindex="-1">Ce qu&#x27;une interface contient</h2><p class="teaching-label essential"><span aria-hidden="true">○</span> <strong>À comprendre</strong></p><aside class="section-digest" id="s-ce-qu-une-interface-contient-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Une method d&#x27;interface reste publique dans l&#x27;implémentation.</li><li>Une class peut implémenter plusieurs interfaces.</li></ol></aside><h3 tabindex="-1">C'est quoi ?</h3>
+<p>Une interface est un contrat de type : elle décrit ce qu'un object doit exposer, sans fournir le corps des methods. Ses methods sont implicitement publiques et abstraites ; une implémentation ne peut pas les rendre privées ou protégées. Elle peut aussi déclarer des constantes publiques et, en PHP 8.4, des <a href="course-CRS-e4y7gtn5k4f0.html#out-OUT-ynfsf3qdn2mj">contrats d'accès à des properties</a>, sans stocker d'état.</p>
+<p>Une class peut <code>implements A, B</code>. Une interface peut <code>extends A, B</code>, ce qui rassemble les obligations des deux contrats. Ce n'est pas de l'inheritance multiple de code : aucun corps de method n'est copié depuis les interfaces.</p>
+<h3 tabindex="-1">À quoi ça sert ?</h3>
+<p>Une prise standard permet de brancher plusieurs appareils sans connaître leur fabrication. La forme de la prise correspond aux signatures de l'interface, l'appareil à la class concrète, le branchement au parameter typé par l'interface. Limite : PHP vérifie la compatibilité des signatures, pas que l'appareil accomplit correctement sa tâche métier.</p>
+<p>Une signature compatible ne doit pas exiger davantage de l'appelant ni lui promettre moins. Un parameter peut accepter un type plus large, et un return type devenir plus précis : ce sont la contravariance et la covariance. Garder les noms des parameters évite aussi de casser des appels à named arguments.</p>
+<h3 tabindex="-1">Où dans Symfony ?</h3>
+<p><code>Symfony\Component\HttpKernel\HttpKernelInterface</code> décrit un contrat ; <code>HttpKernel</code> en fournit une implémentation. Une application peut de même typer une dépendance avec sa propre interface. Ce type PHP ne choisit pas à lui seul quel service injecter : cette décision appartient à la configuration de DependencyInjection. L'exemple suivant définit un contrat local, pas une version abrégée d'une interface Symfony.</p>
+<h3 tabindex="-1">Comment, étape par étape ?</h3>
+<ol>
+<li>Déclarer les opérations publiques nécessaires au client, avec leurs parameters et return types, puis terminer les signatures par <code>;</code>.</li>
+<li>Si plusieurs interfaces sont étendues ou implémentées, vérifier toutes leurs obligations, notamment celles portant le même nom.</li>
+<li>Fournir des methods publiques compatibles dans la class concrète.</li>
+<li>À la lecture d'une variation de types, se placer du côté du client : accepter plus d'entrées est permis ; rendre un résultat plus précis l'est aussi. L'inverse casserait la promesse.</li>
+</ol>
+<h3 tabindex="-1">Exemple concret PHP</h3>
+<p>Le contrat promet de prendre un <code>Dog</code> et de rendre un <code>Vehicle</code>. L'implémentation accepte tout <code>Animal</code> et rend une <code>Car</code>, donc elle satisfait cette promesse. Les autres classes ne servent qu'à rendre les relations de types explicites. La sortie est <code>Car</code>.</p>
+<pre class="highlight" tabindex="0"><code class="language-php">&lt;?php
+class Animal {}
+final class Dog extends Animal {}
+class Vehicle {}
+final class Car extends Vehicle {}
+
+interface Transport
+{
+    public function carry(Dog $animal): Vehicle;
+}
+
+final class Shuttle implements Transport
+{
+    public function carry(Animal $animal): Car
+    {
+        return new Car();
+    }
+}
+
+function travel(Transport $transport): Vehicle
+{
+    return $transport-&gt;carry(new Dog());
+}
+
+echo travel(new Shuttle())::class, "\n";</code></pre>
+<p>Références : <a href="https://www.php.net/manual/en/language.oop5.interfaces.php">interfaces</a> et <a href="https://www.php.net/manual/en/language.oop5.variance.php">variance</a>.</p><details class="canonical-retained"><summary>Passage canonique conservé</summary><h2 tabindex="-1">Ce qu'une interface contient</h2>
+<ul>
+<li>Des methods <strong>implicitement <code>public</code> et abstraites</strong>, sans corps ; une method
+  <code>private</code> ou <code>protected</code> ne compile pas, et la class qui l'implémente doit la
+  garder publique.</li>
+<li>Des constants, forcément publiques.</li>
+<li>Une class implémente <strong>plusieurs</strong> interfaces ; une interface <strong>étend
+  plusieurs</strong> interfaces (<code>extends A, B</code>).</li>
+</ul>
+<p>Elle ne contient aucune property <strong>porteuse d'état</strong>.</p></details><aside class="enrichment" aria-label="Autre explication"><p>Un contrat qui accepte Dog et promet Vehicle reste respecté si l'implémentation accepte tout Animal et renvoie Car : parameter plus large, return type plus précis. Inverser ces directions impose davantage au client ou lui promet moins.</p></aside></section><section class="teaching-section" data-section="s-les-constants-sont-surchargeables-depuis-php-8-1"><span class="outcome-anchor" id="out-OUT-7vt306wrfkb7" tabindex="-1"></span><h2 id="s-les-constants-sont-surchargeables-depuis-php-8-1" tabindex="-1">Les constants sont surchargeables — depuis PHP 8.1</h2><p class="teaching-label essential"><span aria-hidden="true">◆</span> <strong>À mémoriser</strong></p><p class="digest-reference"><a href="#s-l-essentiel-digest">Revoir la règle : Depuis PHP 8.1, une constant d&#x27;interface peut être redéfinie.</a></p><h3 tabindex="-1">C'est quoi ?</h3>
+<p>Une constante d'interface est une valeur publique attachée au contrat, pas une property d'instance. Depuis PHP 8.1, une class qui implémente l'interface peut redéfinir cette constante, sauf si l'interface l'a déclarée <code>final</code>. La règle ancienne « toute constante d'interface est impossible à redéfinir » ne s'applique donc pas à PHP 8.4.</p>
+<p>Le type d'une class constant peut être déclaré depuis PHP 8.3, par exemple <code>const int LIMIT = 10</code>. Le type, la valeur et le caractère <code>final</code> répondent à trois questions différentes : quelle catégorie de valeur, quelle valeur par défaut et quelle possibilité de redéfinition.</p>
+<h3 tabindex="-1">À quoi ça sert ?</h3>
+<p>Un règlement peut proposer un horaire local adaptable et imposer un numéro de protocole identique partout. L'horaire correspond à une constante redéfinissable ; le numéro imposé à une constante <code>final</code>. Limite : PHP ne juge pas la pertinence du nouveau choix ; sans <code>final</code>, il vérifie les contraintes du langage, pas la politique de l'organisation.</p>
+<p>Redéfinir ne modifie pas rétroactivement la valeur du contrat : <code>Contract::LIMIT</code> et <code>Implementation::LIMIT</code> restent deux accès dont la class explicitement nommée compte.</p>
+<h3 tabindex="-1">Où dans Symfony ?</h3>
+<p>Ces règles valent pour les interfaces PHP utilisées dans les components comme pour celles d'une application Symfony. Elles ne constituent pas une configuration du service container. Le contrat local <code>BatchPolicy</code> de l'exemple n'appartient à aucun component ; il isole la règle sans inventer une constante Symfony.</p>
+<h3 tabindex="-1">Comment, étape par étape ?</h3>
+<ol>
+<li>Lire la déclaration de l'interface et vérifier si la constante porte <code>final</code>.</li>
+<li>Vérifier le runtime : la redéfinition est disponible depuis 8.1 et les types de constantes depuis 8.3.</li>
+<li>Si la constante est redéfinissable, fournir une déclaration compatible dans la class.</li>
+<li>Dans un accès <code>X::CONSTANT</code>, identifier <code>X</code> au lieu de supposer que la valeur de l'interface a elle-même changé. Pour les accès indirects, revoir <a href="course-CRS-3424z948caan.html#out-OUT-zqwbp11av4pr">self et static</a>.</li>
+</ol>
+<h3 tabindex="-1">Exemple concret PHP</h3>
+<p>La sortie est <code>100 20 1</code>. L'interface conserve sa limite de <code>100</code>, la class choisit <code>20</code> et hérite de la version finale <code>1</code>. Redéclarer <code>VERSION</code> dans <code>SmallBatch</code> serait une erreur fatale ; ce code n'essaie pas de poursuivre après une déclaration invalide.</p>
+<pre class="highlight" tabindex="0"><code class="language-php">&lt;?php
+interface BatchPolicy
+{
+    public const int LIMIT = 100;
+    final public const int VERSION = 1;
+}
+
+final class SmallBatch implements BatchPolicy
+{
+    public const int LIMIT = 20;
+}
+
+echo BatchPolicy::LIMIT, ' ', SmallBatch::LIMIT, ' ', SmallBatch::VERSION, "\n";</code></pre>
+<p>Référence : <a href="https://www.php.net/manual/en/language.oop5.interfaces.php">constantes d'interface</a>.</p><details class="canonical-retained"><summary>Passage canonique conservé</summary><h2 tabindex="-1">Les constants sont surchargeables — depuis PHP 8.1</h2>
+<p>Avant PHP 8.1, une constant d'interface ne pouvait pas être redéfinie par la
+class qui l'implémente. Les constants d'interface sont surchargeables depuis 8.1,
+et Symfony 8.0 exige PHP 8.4. C'est <code>final</code> sur la constant de l'interface qui interdit la surcharge,
+pas l'interface elle-même.</p></details></section><section class="teaching-section" data-section="s-les-properties-d-interface-depuis-php-8-4"><span class="outcome-anchor" id="out-OUT-ynfsf3qdn2mj" tabindex="-1"></span><h2 id="s-les-properties-d-interface-depuis-php-8-4" tabindex="-1">Les properties d&#x27;interface — depuis PHP 8.4</h2><p class="teaching-label essential"><span aria-hidden="true">○</span> <strong>À comprendre</strong></p><p class="digest-reference"><a href="#s-le-schema-digest">Revoir la règle : La property d&#x27;interface décrit un contrat d&#x27;accès.</a></p><h3 tabindex="-1">C'est quoi ?</h3>
+<p>En PHP 8.4, une interface peut exiger qu'une property soit publiquement lisible avec <code>{ get; }</code>, publiquement écrivable avec <code>{ set; }</code>, ou les deux. Elle décrit des possibilités d'accès, sans stocker la valeur et sans fournir le corps d'un hook.</p>
+<p>La class peut satisfaire l'exigence avec une property publique ordinaire ou des hooks appropriés, y compris une property virtuelle. Pour un <code>get</code> seul, une property publique <code>readonly</code> convient. Pour un <code>set</code> public, ni <code>readonly</code> ni <code>public private(set)</code> ne conviennent : ils ne permettent pas les écritures publiques promises.</p>
+<h3 tabindex="-1">À quoi ça sert ?</h3>
+<p>Une vitrine promet que le client peut lire un prix ; un tableau modifiable promet aussi qu'il peut écrire. La vitrine correspond à <code>{ get; }</code>, le tableau à <code>{ get; set; }</code>, l'objet exposé à la class concrète. Limite : l'interface ne dit pas si le prix est gardé en mémoire ou calculé à chaque lecture.</p>
+<p>Le client peut ainsi utiliser <code>$item-&gt;name</code> sans connaître la façon dont la class produit ce nom. La promesse d'accès reste plus précise que « cette class possède quelque part une donnée privée nommée name ».</p>
+<h3 tabindex="-1">Où dans Symfony ?</h3>
+<p>Une class de modèle applicative peut employer ce mécanisme dans un projet Symfony 8.0, puisque PHP 8.4 est disponible. Cela ne signifie pas que les interfaces historiques des components déclarent toutes des properties. L'exemple <code>Named</code> est un contrat local ; son fonctionnement ne dépend d'aucun service.</p>
+<h3 tabindex="-1">Comment, étape par étape ?</h3>
+<ol>
+<li>Identifier les accès dont le client a besoin : lire, écrire, ou les deux.</li>
+<li>Déclarer le type et les hooks sans corps dans l'interface.</li>
+<li>Dans chaque implémentation, vérifier chaque moitié du contrat séparément. Une property lisible publiquement n'est pas nécessairement écrivable publiquement.</li>
+<li>Choisir stockage ou calcul sans réduire les accès promis. Pour le mécanisme des hooks, consulter les <a href="course-CRS-722pscs6e2m0.html#out-OUT-ayahqn48ev7g">ajouts PHP 8.4</a>.</li>
+</ol>
+<h3 tabindex="-1">Exemple concret PHP</h3>
+<p><code>FixedName</code> satisfait le contrat avec une property promue <code>readonly</code>. <code>FullName</code> le satisfait avec un calcul sans stockage <code>name</code>. Le même code lit les deux et affiche <code>Ada</code>, puis <code>Ada Lovelace</code>.</p>
+<pre class="highlight" tabindex="0"><code class="language-php">&lt;?php
+interface Named
+{
+    public string $name { get; }
+}
+
+final class FixedName implements Named
+{
+    public function __construct(public readonly string $name) {}
+}
+
+final class FullName implements Named
+{
+    public function __construct(private string $first, private string $last) {}
+
+    public string $name {
+        get =&gt; $this-&gt;first.' '.$this-&gt;last;
+    }
+}
+
+function showName(Named $item): void
+{
+    echo $item-&gt;name, "\n";
+}
+
+showName(new FixedName('Ada'));
+showName(new FullName('Ada', 'Lovelace'));</code></pre>
+<p>Ajouter <code>set;</code> au contrat ferait échouer ces implémentations : ni l'une ni l'autre ne fournit une écriture publique de <code>name</code>. Référence : <a href="https://www.php.net/manual/en/language.oop5.interfaces.php">interface properties</a>.</p><details class="canonical-retained"><summary>Passage canonique conservé</summary><h2 tabindex="-1">Les properties d'interface — depuis PHP 8.4</h2>
+<p>Une interface peut déclarer une property, en disant si elle est <strong>lisible,
+écrivable, ou les deux</strong> :</p>
+<pre class="highlight" tabindex="0"><code class="language-php">interface Named
+{
+    public string $name { get; }        // lisible
+    public string $slug { get; set; }   // lisible et écrivable
+}</code></pre>
+<p>La déclaration ne porte que sur l'accès public. Une property publique ordinaire
+la satisfait, ou une property virtuelle qui implémente le hook correspondant.</p>
+<p><strong>Une property <code>readonly</code> ne peut pas satisfaire une property d'interface <code>set</code></strong> : elle est
+implicitement <code>protected(set)</code> depuis PHP 8.4, et l'interface promet une
+écriture <strong>publique</strong>. Pour la même raison, <code>public private(set)</code> ne la satisfait pas non plus. PHP le dit :
+« Set access level of C::$name must be omitted (as in class I) ». <code>readonly</code>
+convient en revanche pour un <code>get</code> seul.</p></details></section><section class="teaching-section" data-section="s-pieges-d-examen"><h2 id="s-pieges-d-examen" tabindex="-1">Pièges d&#x27;examen</h2><p class="teaching-label pitfall"><span aria-hidden="true">△</span> <strong>Piège à éviter</strong></p><p class="digest-reference"><a href="#s-le-schema-digest">Revoir la règle : La property d&#x27;interface décrit un contrat d&#x27;accès.</a></p><p><strong>La règle d'avant 8.1 est le réflexe à corriger.</strong> « Une constant d'interface
+ne se surcharge pas » a été vrai pendant des années ; sur PHP 8.4 c'est faux,
+sauf <code>final</code>.</p>
+<p><strong>Déclarer une property n'est pas porter un état.</strong> L'interface impose un
+contrat d'accès ; c'est la class qui décide s'il y a une valeur stockée
+derrière.</p>
+<p><strong><code>readonly</code> ne satisfait pas un <code>set</code>.</strong> Le réflexe « readonly est une
+property publique, donc ça passe » échoue précisément sur la moitié écriture.</p></section><section class="teaching-section" data-section="s-application"><h2 id="s-application" tabindex="-1">Application</h2><aside class="section-digest" id="s-application-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Depuis PHP 8.1, une constant d&#x27;interface peut être redéfinie.</li><li>final interdit cette redéfinition.</li><li>La property d&#x27;interface décrit un contrat d&#x27;accès.</li><li>readonly et private(set) ne promettent pas une écriture publique.</li></ol></aside>
+
+
+
+<nav aria-label="Flashcards de l’application"><ul><li><a href="#A-e4y7gtn5k4f0-65c42c80d9-02">Flashcard : Depuis PHP 8.1, une constant d&#x27;interface peut être redéfinie. final interdit cette redéfinition.</a></li><li><a href="#A-e4y7gtn5k4f0-6e0103f6cc-03">Flashcard : La property d&#x27;interface décrit un contrat d&#x27;accès. readonly et private(set) ne promettent pas une écriture publique.</a></li></ul></nav></section><section class="teaching-section" data-section="s-fiche-express"><h2 id="s-fiche-express" tabindex="-1">Fiche express</h2><p class="teaching-label essential"><span aria-hidden="true">◆</span> <strong>À mémoriser</strong></p><p class="digest-reference"><a href="#s-le-schema-digest">Revoir la règle : La property d&#x27;interface décrit un contrat d&#x27;accès.</a></p><p><strong>Si tu dois retenir seulement 6 choses :</strong></p>
+<ul>
+<li>Methods <strong>publiques et abstraites</strong>, sans corps ; implémentation publique.</li>
+<li>Constantes <strong>publiques</strong>, surchargeables <strong>depuis 8.1</strong>, sauf <strong><code>final</code></strong>.</li>
+<li><code>implements A, B</code> ; une interface <strong><code>extends A, B</code></strong>.</li>
+<li>PHP 8.4 : properties <strong><code>{ get; }</code></strong>, <strong><code>{ get; set; }</code></strong> — un contrat, pas un état.</li>
+<li><code>readonly</code> satisfait <strong><code>get</code></strong>, jamais <strong><code>set</code></strong>.</li>
+<li><code>public private(set)</code> ne satisfait pas <code>set</code> non plus.</li>
+</ul>
+<p>Moyen mnémotechnique : <strong>« L'interface promet, la class tient »</strong>.</p></section><section class="teaching-section" data-section="s-sources-officielles"><h2 id="s-sources-officielles" tabindex="-1">Sources officielles</h2><ul>
+<li><a href="https://www.php.net/manual/en/index.php">PHP — Manuel PHP</a></li>
+</ul></section><section class="official-sources"><h2>Sources officielles et compléments</h2><ul><li><a href="https://www.php.net/manual/en/language.oop5.interfaces.php">PHP — Interfaces et contrats</a></li></ul></section><nav class="course-sequence" aria-label="Ordre de lecture"><a rel="prev" href="course-CRS-tqcp2kn9r3b5.html" aria-label="Précédent : Attributes — Module 01 — PHP jusqu’à 8.4">Précédent : Attributes</a> <a href="lot-01.html">Sommaire : Module 01 — PHP jusqu’à 8.4</a> <a rel="next" href="course-CRS-e7m4xbcxegyc.html" aria-label="Suivant : Anonymous functions and closures — Module 01 — PHP jusqu’à 8.4">Suivant : Anonymous functions and closures</a></nav><p class="course-practice-entry"><a class="button" href="#view-quiz">Fin du cours — s’entraîner avec le Quiz</a></p></div><div id="view-flashcards" data-course-panel role="region" aria-labelledby="view-flashcards-title"><h2 id="view-flashcards-title">Flashcards</h2><p lang="en">Answer before revealing each card.</p><p>Ces cartes ne mesurent pas une maîtrise notée.</p><div data-card-section="s-l-essentiel"><h3><a href="#s-l-essentiel">Revoir la section du cours</a></h3><div class="reader-cards"><details class="reader-card" id="A-e4y7gtn5k4f0-65c42c80d9-02"><summary lang="en">Can a class override an interface constant in PHP 8.4?</summary><p lang="en">Yes, unless that constant is final.</p><p lang="fr">Depuis PHP 8.1, une constant d&#x27;interface peut être redéfinie. final interdit cette redéfinition.</p><a href="course-CRS-e4y7gtn5k4f0.html#out-OUT-7vt306wrfkb7">Revoir le passage précis</a></details></div></div><div data-card-section="s-le-schema"><h3><a href="#s-le-schema">Revoir la section du cours</a></h3><div class="reader-cards"><details class="reader-card" id="A-e4y7gtn5k4f0-6e0103f6cc-03"><summary lang="en">Can readonly satisfy an interface property requiring public set access?</summary><p lang="en">No. It can satisfy get-only access, but not public set access.</p><p lang="fr">La property d&#x27;interface décrit un contrat d&#x27;accès. readonly et private(set) ne promettent pas une écriture publique.</p><a href="course-CRS-e4y7gtn5k4f0.html#out-OUT-ynfsf3qdn2mj">Revoir le passage précis</a></details></div></div><div data-card-section="s-l-exemple"><h3><a href="#s-l-exemple">Revoir la section du cours</a></h3><div class="reader-cards"><p class="reader-card-reference" id="A-e4y7gtn5k4f0-88b6fbd62c-02">Rappel déjà proposé : <a lang="en" href="#A-e4y7gtn5k4f0-65c42c80d9-02">Can a class override an interface constant in PHP 8.4?</a> · <a href="course-CRS-e4y7gtn5k4f0.html#out-OUT-7vt306wrfkb7">Passage canonique</a></p></div></div><div data-card-section="s-ce-qu-une-interface-contient"><h3><a href="#s-ce-qu-une-interface-contient">Revoir la section du cours</a></h3><div class="reader-cards"><details class="reader-card" id="A-e4y7gtn5k4f0-6e8b5e4a88-01"><summary lang="en">May an interface method be protected?</summary><p lang="en">No. Interface methods are public and abstract.</p><p lang="fr">Une method d&#x27;interface reste publique dans l&#x27;implémentation. Une class peut implémenter plusieurs interfaces.</p><a href="course-CRS-e4y7gtn5k4f0.html#out-OUT-6tzwvmfwj408">Revoir le passage précis</a></details><details class="reader-card" id="INT-002"><summary lang="en">Can a class implement several interfaces, and can an interface extend several?</summary><p lang="en">Yes to both; an interface can use extends A, B.</p><p lang="fr">Une class peut implémenter plusieurs interfaces ; une interface peut en étendre plusieurs.</p><a href="course-CRS-e4y7gtn5k4f0.html#out-OUT-5vqwe44nsee5">Revoir le passage précis</a></details></div></div><div data-card-section="s-les-constants-sont-surchargeables-depuis-php-8-1"><h3><a href="#s-les-constants-sont-surchargeables-depuis-php-8-1">Revoir la section du cours</a></h3><div class="reader-cards"><p class="reader-card-reference" id="A-e4y7gtn5k4f0-816b710f80-02">Rappel déjà proposé : <a lang="en" href="#A-e4y7gtn5k4f0-65c42c80d9-02">Can a class override an interface constant in PHP 8.4?</a> · <a href="course-CRS-e4y7gtn5k4f0.html#out-OUT-7vt306wrfkb7">Passage canonique</a></p></div></div><div data-card-section="s-les-properties-d-interface-depuis-php-8-4"><h3><a href="#s-les-properties-d-interface-depuis-php-8-4">Revoir la section du cours</a></h3><div class="reader-cards"><p class="reader-card-reference" id="A-e4y7gtn5k4f0-a60823b890-03">Rappel déjà proposé : <a lang="en" href="#A-e4y7gtn5k4f0-6e0103f6cc-03">Can readonly satisfy an interface property requiring public set access?</a> · <a href="course-CRS-e4y7gtn5k4f0.html#out-OUT-ynfsf3qdn2mj">Passage canonique</a></p></div></div><div data-card-section="s-pieges-d-examen"><h3><a href="#s-pieges-d-examen">Revoir la section du cours</a></h3><div class="reader-cards"><p class="reader-card-reference" id="A-e4y7gtn5k4f0-596d5af532-03">Rappel déjà proposé : <a lang="en" href="#A-e4y7gtn5k4f0-6e0103f6cc-03">Can readonly satisfy an interface property requiring public set access?</a> · <a href="course-CRS-e4y7gtn5k4f0.html#out-OUT-ynfsf3qdn2mj">Passage canonique</a></p></div></div><div data-card-section="s-application"><h3><a href="#s-application">Revoir la section du cours</a></h3><div class="reader-cards"><p class="reader-card-reference" id="A-e4y7gtn5k4f0-e7ad522ea3-02">Rappel déjà proposé : <a lang="en" href="#A-e4y7gtn5k4f0-65c42c80d9-02">Can a class override an interface constant in PHP 8.4?</a> · <a href="course-CRS-e4y7gtn5k4f0.html#out-OUT-7vt306wrfkb7">Passage canonique</a></p><p class="reader-card-reference" id="A-e4y7gtn5k4f0-e7ad522ea3-03">Rappel déjà proposé : <a lang="en" href="#A-e4y7gtn5k4f0-6e0103f6cc-03">Can readonly satisfy an interface property requiring public set access?</a> · <a href="course-CRS-e4y7gtn5k4f0.html#out-OUT-ynfsf3qdn2mj">Passage canonique</a></p></div></div><div data-card-section="s-fiche-express"><h3><a href="#s-fiche-express">Revoir la section du cours</a></h3><div class="reader-cards"><p class="reader-card-reference" id="A-e4y7gtn5k4f0-b11e58e15e-03">Rappel déjà proposé : <a lang="en" href="#A-e4y7gtn5k4f0-6e0103f6cc-03">Can readonly satisfy an interface property requiring public set access?</a> · <a href="course-CRS-e4y7gtn5k4f0.html#out-OUT-ynfsf3qdn2mj">Passage canonique</a></p></div></div><aside class="checkpoint"><h2>Rappel d’un cours antérieur</h2><p>Avant de poursuivre : Object Oriented Programming.</p><details class="corpus-correction"><summary lang="en">Can one instance read a private property of another instance of the same class?</summary><p lang="en">Yes, when the access occurs in that class&#x27;s scope.</p><p>private limite l&#x27;accès au code de la class qui déclare la propriété, pas à une seule instance. Une method de cette class peut donc lire la propriété privée d&#x27;une autre instance de la même class.</p><a href="course-CRS-3424z948caan.html#out-OUT-qcb24vqg8pkt">Relire la correction dans le cours antérieur</a></details></aside></div><div id="view-quiz" data-course-panel role="region" aria-labelledby="view-quiz-title"><h2 id="view-quiz-title">Quiz</h2><p id="course-quiz-status" role="status">Quiz interactif non chargé. Démarrez après chargement de la banque locale.</p><div id="course-quiz-controls" class="assessment-main" hidden><div id="course-quiz-assessment-controls" hidden><select id="course-quiz-assessment-mode" aria-label="Mode du quiz" hidden><option value="learning">Entraînement</option></select><p id="course-quiz-training-scope"></p><button id="course-quiz-start-assessment" type="button" lang="en">Start practice</button><button id="course-quiz-finish-assessment" type="button" lang="en" hidden>End session</button></div><p id="course-quiz-assessment-error" role="alert"></p><p id="course-quiz-assessment-timer" hidden></p><p id="course-quiz-session-progress" role="status"></p><div id="course-quiz-assessment-app" tabindex="-1"></div><nav id="course-quiz-session-navigation" aria-label="Questions du cours"></nav><div id="course-quiz-learning-overview" aria-live="polite"></div></div><div id="course-quiz-native"><p>Sans JavaScript ou si le chargement échoue : aucune tentative notée. Les <a href="#view-flashcards">flashcards du cours</a> restent disponibles.</p><details class="course-quiz-fallback" data-question-id="L-e4y7gtn5k4f0-base-v1"><summary lang="en">Can a class override an interface constant in PHP 8.4?</summary><p>Correction de consultation — non notée.</p><p>Depuis PHP 8.1, une constant d&#x27;interface peut être redéfinie. final interdit cette redéfinition.</p><ul><li><strong lang="en">Correct: Yes, unless the interface constant is final.</strong><p>Depuis PHP 8.1, une constant d&#x27;interface peut être redéfinie. final interdit cette redéfinition.</p></li><li><strong lang="en">Distractor: No; all interface constants are implicitly final.</strong><p>Depuis PHP 8.1 elles peuvent être redéfinies sauf final.</p></li><li><strong lang="en">Distractor: Yes, even if the interface constant is final.</strong><p>final interdit précisément cette redéfinition.</p></li></ul><a href="course-CRS-e4y7gtn5k4f0.html#out-OUT-7vt306wrfkb7">Relire le passage exact</a></details></div></div></div></div><details class="transfer-panel"><summary>Sauvegarde et transfert de progression</summary><p id="reading-status" role="status">Sans JavaScript : lecture libre ; progression non enregistrée.</p><p><a href="assessment.html#overview-title">Lecture, réussites immédiates et différées</a></p><p>Transfert manuel — aucune synchronisation automatique</p><p id="persistence-status" role="status"></p><button type="button" class="secondary" id="export-progress">Exporter ma progression</button><label for="import-progress">Choisir un JSON pour fusionner ma progression (sans remplacement)</label><input type="file" id="import-progress" accept="application/json,.json"><p id="transfer-status" role="status"></p></details></main><footer class="site-footer"><a href="catalogue.html">Catalogue</a> <a href="sources.html">Sources et attribution</a> <a href="#contenu">Haut de page</a></footer></body></html>

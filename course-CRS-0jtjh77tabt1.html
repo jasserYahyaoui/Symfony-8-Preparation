@@ -1,0 +1,257 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; connect-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Abstract classes — Symfony 8 Preparation</title><link rel="stylesheet" href="styles.css"><link rel="stylesheet" href="reader.css"><script src="mermaid.min.js" defer></script><script src="mermaid-init.js" defer></script><link rel="stylesheet" href="assessment.css"><script src="learning-state.js" defer></script><script src="guide.js" defer></script><script src="reader-catalog.js" defer></script><script src="reader.js" defer></script><script src="site-state.js" defer></script><script src="assessment.js" defer></script><script src="course-views.js" defer></script><link rel="stylesheet" href="syntax-highlight.css"><script src="prism-syntax.js" defer></script><script src="syntax-highlight.js" defer></script></head><body data-course-id="CRS-0jtjh77tabt1"><a class="skip" href="#contenu">Aller au contenu</a><header class="site-header"><a class="brand" href="index.html">S8 Preparation</a><nav aria-label="Navigation principale"><a href="index.html">Accueil</a> <a href="catalogue.html">Parcours</a> <a href="assessment.html?mode=review">Réviser</a> <a href="examens.html">Examens blancs</a> <a href="jour-j.html">Jour J</a></nav></header><main id="contenu" tabindex="-1" class="corpus-reader"><nav class="breadcrumb" aria-label="Fil d’Ariane"><a href="index.html">Accueil</a> <span aria-hidden="true">›</span> <a href="catalogue.html">Parcours</a> <span aria-hidden="true">›</span> <a href="lot-01.html">Module 01 — PHP jusqu’à 8.4</a> <span aria-hidden="true">›</span> <span aria-current="page">Abstract classes</span></nav><h1>Abstract classes</h1><p class="muted">Symfony 8.0 · API PHP ≤ 8.4 · Twig ≤ 3.22. Préparation indépendante.</p><p class="revision-status">Première itération · Module 01 — PHP jusqu’à 8.4 : explications développées ; revue pédagogique indépendante en attente.</p><nav class="course-actions" aria-label="Activités du cours"><a id="tab-course" href="#view-course">Cours</a><a id="tab-flashcards" href="#view-flashcards">Flashcards</a><a id="tab-quiz" href="#view-quiz">Quiz</a></nav><div class="course-layout"><details class="lot-course-menu"><summary>Cours du module · 9 cours</summary><nav aria-label="Cours du module"><a class="lot-context" href="lot-01.html">Module 01 — PHP jusqu’à 8.4</a><ol><li><a href="course-CRS-722pscs6e2m0.html">PHP API up to PHP 8.4 version</a></li><li><a href="course-CRS-3424z948caan.html">Object Oriented Programming</a></li><li><a href="course-CRS-tqcp2kn9r3b5.html">Attributes</a></li><li><a href="course-CRS-e4y7gtn5k4f0.html">Interfaces</a></li><li><a href="course-CRS-e7m4xbcxegyc.html">Anonymous functions and closures</a></li><li><a href="course-CRS-0jtjh77tabt1.html" aria-current="page">Abstract classes</a></li><li><a href="course-CRS-yc9fry0vz4gh.html">Exception and error handling</a></li><li><a href="course-CRS-bshgpd44ykba.html">Traits</a></li><li><a href="course-CRS-3sggmeyd01x6.html">Enums</a></li></ol></nav></details><aside class="course-section-menu" aria-label="Sommaire du cours"><details class="course-section-disclosure"><summary id="course-sections">Sections du cours</summary><nav aria-label="Sections du cours"><ul><li><a href="#s-objectif">Objectif</a></li><li><a href="#s-l-essentiel">L&#x27;essentiel</a></li><li><a href="#s-le-schema">Le schéma</a></li><li><a href="#s-l-exemple">L&#x27;exemple</a></li><li><a href="#s-regles">Règles</a></li><li><a href="#s-les-properties-abstraites-depuis-php-8-4">Les properties abstraites — depuis PHP 8.4</a></li><li><a href="#s-interface-ou-abstract-class">Interface ou abstract class ?</a></li><li><a href="#s-pieges-d-examen">Pièges d&#x27;examen</a></li><li><a href="#s-application">Application</a></li><li><a href="#s-fiche-express">Fiche express</a></li><li><a href="#s-sources-officielles">Sources officielles</a></li></ul></nav></details></aside><div class="course-content"><div id="view-course" data-course-panel role="region" aria-labelledby="view-course-title"><h2 id="view-course-title">Cours</h2><p class="course-introduction"><a href="#s-regles">Pour bien commencer</a> · <a href="#course-sections">Sections du cours</a></p><h2>Objectifs d’apprentissage</h2><ul><li><a href="course-CRS-0jtjh77tabt1.html#out-OUT-fs6z2g5dv4qq">Écrire une abstract class valide et identifier les déclarations interdites</a></li><li><a href="course-CRS-0jtjh77tabt1.html#out-OUT-zt4gxw6enqcj">Choisir entre interface et abstract class selon le besoin</a></li></ul><aside class="pedagogy-legend" aria-label="Repères pédagogiques"><p><strong>Repères pédagogiques</strong></p><p>Ces repères décrivent le rôle du bloc, pas une fréquence officielle à l’examen.</p><p class="teaching-label essential"><span aria-hidden="true">○</span> <strong>À comprendre</strong></p><p class="teaching-label essential"><span aria-hidden="true">◆</span> <strong>À mémoriser</strong></p><p class="teaching-label example"><span aria-hidden="true">▣</span> <strong>Exemple concret</strong></p><p class="teaching-label pitfall"><span aria-hidden="true">△</span> <strong>Piège à éviter</strong></p><p class="teaching-label nuance"><span aria-hidden="true">?</span> <strong>À vérifier</strong></p></aside><section class="teaching-section" data-section="s-objectif"><h2 id="s-objectif" tabindex="-1">Objectif</h2><p>Écrire une abstract class correcte et savoir quand la préférer à une
+interface.</p></section><section class="teaching-section" data-section="s-l-essentiel"><h2 id="s-l-essentiel" tabindex="-1">L&#x27;essentiel</h2><p class="teaching-label essential"><span aria-hidden="true">○</span> <strong>À comprendre</strong></p><aside class="section-digest" id="s-l-essentiel-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>L&#x27;interface décrit le contrat.</li><li>L&#x27;abstract class peut partager constructor, état et comportement.</li></ol></aside><p>Une abstract class ne s'instancie pas ; elle fournit du <strong>comportement
+partagé</strong> — constructor, état, methods concrètes — et impose à ses filles des
+methods abstraites, jamais <code>private</code>. Depuis PHP 8.4, elle peut aussi exiger
+une <strong>property</strong>, par un hook sans corps. Face à une interface, la règle tient
+en une ligne : l'interface décrit un contrat, l'abstract class partage du code.</p></section><section class="teaching-section" data-section="s-le-schema"><h2 id="s-le-schema" tabindex="-1">Le schéma</h2><aside class="section-digest" id="s-le-schema-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Une property abstraite exige un hook sans body.</li><li>La fille peut élargir la visibilité, pas la restreindre.</li></ol></aside><figure class="diagram" aria-labelledby="CRS-0jtjh77tabt1-3-diagram-0-title CRS-0jtjh77tabt1-3-diagram-0-description"><figcaption id="CRS-0jtjh77tabt1-3-diagram-0-title">Ce qu&#x27;une abstract class permet et ce qu&#x27;elle impose à ses filles</figcaption><p id="CRS-0jtjh77tabt1-3-diagram-0-description">Une abstract class n&#x27;est pas instanciable ; une class n&#x27;en étend qu&#x27;une ; elle peut avoir un constructor, un état et des methods concrètes. Une method abstraite n&#x27;a pas de corps, est public ou protected, jamais private dans une class, et peut être static ; la fille concrète implémente tout, avec une visibilité égale ou plus large et une signature compatible. En 8.4, une property abstraite, abstract public string $label { get; }, déclare au moins un hook sans corps ; sans hook ou en private, c&#x27;est une erreur ; la fille peut élargir, pas restreindre. abstract et final sont incompatibles.</p><div class="mermaid" hidden>---
+title: Une abstract class et ce qu&#x27;elle impose
+---
+flowchart LR
+  accTitle: Ce qu&#x27;une abstract class permet et ce qu&#x27;elle impose à ses filles
+  accDescr: Une abstract class n&#x27;est pas instanciable ; une class n&#x27;en étend qu&#x27;une ; elle peut avoir un constructor, un état et des methods concrètes. Une method abstraite n&#x27;a pas de corps, est public ou protected, jamais private dans une class, et peut être static ; la fille concrète implémente tout, avec une visibilité égale ou plus large et une signature compatible. En 8.4, une property abstraite, abstract public string $label { get; }, déclare au moins un hook sans corps ; sans hook ou en private, c&#x27;est une erreur ; la fille peut élargir, pas restreindre. abstract et final sont incompatibles.
+  AC([&quot;abstract class&quot;]) --&gt; N[&quot;non instanciable&lt;br/&gt;une seule par class&lt;br/&gt;(extends)&lt;br/&gt;constructor, état,&lt;br/&gt;methods concrètes&quot;]
+  AC --&gt; AM[&quot;method abstraite&lt;br/&gt;sans corps&lt;br/&gt;public ou protected&lt;br/&gt;jamais private&lt;br/&gt;dans une class&lt;br/&gt;static admis&quot;]
+  AM --&gt; FC[&quot;fille concrète&lt;br/&gt;implémente tout&lt;br/&gt;visibilité égale&lt;br/&gt;ou plus large&lt;br/&gt;signature compatible&quot;]
+  AC --&gt; AP[&quot;property abstraite (8.4)&lt;br/&gt;abstract public string&lt;br/&gt;$label { get; }&lt;br/&gt;au moins un hook&lt;br/&gt;sans corps&quot;]
+  AP --&gt; APE[&quot;pas de hook → erreur&lt;br/&gt;private → erreur&lt;br/&gt;la fille peut élargir,&lt;br/&gt;pas restreindre&quot;]
+  AC --&gt; X([&quot;abstract + final :&lt;br/&gt;incompatibles&quot;])</div></figure></section><section class="teaching-section" data-section="s-l-exemple"><h2 id="s-l-exemple" tabindex="-1">L&#x27;exemple</h2><p class="teaching-label example"><span aria-hidden="true">▣</span> <strong>Exemple concret</strong></p><p class="digest-reference"><a href="#s-l-essentiel-digest">Revoir la règle : L&#x27;interface décrit le contrat.</a></p><pre class="highlight" tabindex="0"><code class="language-php">abstract class LabelRenderer
+{
+    public function __construct(protected string $prefix) {}
+    abstract protected function label(): string;
+    public function render(): string { return $this-&gt;prefix.$this-&gt;label(); }
+}
+final class GreetingRenderer extends LabelRenderer
+{
+    protected function label(): string { return 'Hello'; }
+}</code></pre>
+<p>La class abstraite fournit état et comportement ; la fille complète la method imposée. GreetingRenderer hérite du constructor et de render() ; sa method label() fournit le texte ajouté au préfixe.</p></section><section class="teaching-section" data-section="s-regles"><span class="outcome-anchor" id="out-OUT-fs6z2g5dv4qq" tabindex="-1"></span><h2 id="s-regles" tabindex="-1">Règles</h2><p class="teaching-label essential"><span aria-hidden="true">○</span> <strong>À comprendre</strong></p><aside class="section-digest" id="s-regles-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Une abstract class ne s&#x27;instancie pas.</li><li>Une fille concrète doit satisfaire les methods abstraites.</li></ol></aside><h3 tabindex="-1">C'est quoi ?</h3>
+<p>Une abstract class est une class qui ne peut pas être instanciée directement. Elle peut fournir un constructor, de l'état et des methods concrètes, tout en laissant certaines methods sans corps avec <code>abstract</code>. Toute class qui conserve une method ou property abstraite doit elle-même être déclarée abstraite.</p>
+<p>Une method abstraite de class peut être <code>public</code> ou <code>protected</code>, et éventuellement <code>static</code>, mais pas <code>private</code> : l'enfant doit pouvoir remplir l'obligation. L'enfant concret doit tout implémenter avec une signature compatible et une visibilité au moins aussi ouverte. Une method <code>protected</code> peut ainsi devenir <code>public</code>, pas l'inverse.</p>
+<h3 tabindex="-1">À quoi ça sert ?</h3>
+<p>Une recette de franchise décrit les étapes communes et laisse à chaque boutique le choix d'une garniture. La recette correspond à la class abstraite, l'étape déjà écrite à la method concrète, le choix manquant à la method abstraite, et la boutique à l'enfant concret. Limite : une class abstraite peut être entièrement implémentée et rester volontairement non instanciable ; elle n'est pas toujours un programme « incomplet ».</p>
+<p>L'intérêt est de partager une procédure qui appelle une variation bien identifiée, plutôt que de recopier la procédure dans chaque class enfant.</p>
+<h3 tabindex="-1">Où dans Symfony ?</h3>
+<p><code>Symfony\Bundle\FrameworkBundle\Controller\AbstractController</code> est une class de base qui fournit des helpers aux controllers. On peut l'étendre pour réutiliser ces helpers ; être controller ne l'exige pas. Le mécanisme <code>abstract</code> reste du PHP. Le modèle de rapport ci-dessous est local et n'utilise ni base de données ni pseudo-interface externe.</p>
+<h3 tabindex="-1">Comment, étape par étape ?</h3>
+<ol>
+<li>Placer le comportement réellement partagé dans des methods concrètes.</li>
+<li>Déclarer les points à compléter sans corps, avec les types et la visibilité nécessaires.</li>
+<li>Dans l'enfant, fournir toutes les obligations ou le déclarer abstrait à son tour.</li>
+<li>Instancier uniquement la class concrète. Ne pas combiner <code>abstract</code> avec <code>final</code> sur la même class ou method : empêcher l'extension contredirait l'obligation de compléter.</li>
+</ol>
+<h3 tabindex="-1">Exemple concret PHP</h3>
+<p>La method <code>render()</code> est fournie une seule fois ; elle appelle le titre choisi par l'enfant. Celui-ci élargit légalement <code>protected</code> en <code>public</code>. La sortie est <code>[Daily]</code>. L'appel direct <code>new Report()</code> serait interdit, contrairement à <code>new DailyReport()</code>.</p>
+<pre class="highlight" tabindex="0"><code class="language-php">&lt;?php
+abstract class Report
+{
+    abstract protected function title(): string;
+
+    public function render(): string
+    {
+        return '['.$this-&gt;title().']';
+    }
+}
+
+final class DailyReport extends Report
+{
+    public function title(): string
+    {
+        return 'Daily';
+    }
+}
+
+echo new DailyReport()-&gt;render(), "\n";</code></pre>
+<p>Le cas <code>abstract private</code> admis dans un <a href="course-CRS-bshgpd44ykba.html#out-OUT-x8c9nce1wqh5">trait</a> depuis PHP 8.0 est distinct de cette règle de class. Référence : <a href="https://www.php.net/manual/en/language.oop5.abstract.php">class abstraction</a>.</p><details class="canonical-retained"><summary>Passage canonique conservé</summary><h2 tabindex="-1">Règles</h2>
+<ul>
+<li>Une abstract class <strong>ne peut pas être instanciée</strong> : « Cannot instantiate
+  abstract class ».</li>
+<li>Une method abstraite n'a <strong>pas de corps</strong> et peut être <code>public</code> ou
+  <code>protected</code>, jamais <code>private</code> dans une class ; un trait, lui, admet
+  <code>abstract private</code> depuis PHP 8.0. Elle peut être <code>static</code>.</li>
+<li>Une class qui contient au moins une method — ou une property — abstraite
+  <strong>doit</strong> être déclarée <code>abstract</code>.</li>
+<li>La class fille implémente toutes les methods abstraites, sauf à être
+  elle-même abstraite, avec une visibilité <strong>égale ou plus permissive</strong> et une
+  signature compatible : une method <code>protected</code> peut devenir <code>public</code>.</li>
+</ul></details><p><strong>Repère — Les properties abstraites — depuis PHP 8.4 :</strong> Une property abstraite exige un hook sans body. La fille peut élargir la visibilité, pas la restreindre.</p></section><section class="teaching-section" data-section="s-les-properties-abstraites-depuis-php-8-4"><h2 id="s-les-properties-abstraites-depuis-php-8-4" tabindex="-1">Les properties abstraites — depuis PHP 8.4</h2><p class="teaching-label essential"><span aria-hidden="true">○</span> <strong>À comprendre</strong></p><p class="digest-reference"><a href="#s-le-schema-digest">Revoir la règle : Une property abstraite exige un hook sans body.</a></p><h3 tabindex="-1">C'est quoi ?</h3>
+<p>En PHP 8.4, une abstract class peut exiger une property avec un hook sans corps, par exemple <code>abstract public string $label { get; }</code>. Il faut au moins un hook déclaré sans implémentation ; l'autre peut avoir un corps fourni par la class abstraite. <code>abstract public string $label;</code> sans hook est invalide.</p>
+<p>La property peut être publique ou protégée, jamais privée. L'enfant concret peut répondre avec une property ordinaire ou avec des hooks compatibles. Pour une lecture seule exigée, une property publique <code>readonly</code> convient aussi. L'obligation porte sur l'accès, pas sur une technique de stockage imposée.</p>
+<h3 tabindex="-1">À quoi ça sert ?</h3>
+<p>Un présentoir doit obligatoirement afficher une étiquette, mais chaque boutique choisit si elle l'imprime ou la compose à la main. Le présentoir correspond à la class abstraite, l'étiquette au <code>get</code> requis, le procédé de fabrication à l'implémentation de l'enfant. Limite : une property abstraite protégée est destinée au code de la hiérarchie, pas au public du magasin.</p>
+<p>C'est utile lorsqu'un comportement partagé a besoin de lire une donnée fournie par tous ses enfants, sans imposer un champ de stockage identique.</p>
+<h3 tabindex="-1">Où dans Symfony ?</h3>
+<p>Une base applicative de rapports peut employer ces properties avec PHP 8.4 dans Symfony 8.0. Ce n'est pas une API de FrameworkBundle et cela ne suppose pas que <code>AbstractController</code> les utilise. Les <a href="course-CRS-e4y7gtn5k4f0.html#out-OUT-ynfsf3qdn2mj">properties d'interface</a> imposent seulement des accès publics ; une abstract class peut aussi imposer des accès protégés.</p>
+<h3 tabindex="-1">Comment, étape par étape ?</h3>
+<ol>
+<li>Écrire le type, la visibilité et le ou les accès requis avec leurs hooks.</li>
+<li>Laisser au moins un de ces hooks sans corps pour que l'obligation soit réellement abstraite.</li>
+<li>Dans l'enfant, fournir l'accès avec une visibilité égale ou plus ouverte : un <code>get</code> public ne devient pas protégé.</li>
+<li>Pour <code>set</code>, regarder la visibilité annoncée. Un <code>set</code> public exige une écriture publique ; un <code>set</code> protégé peut rester protégé ou devenir public. La phrase « tout set abstrait exige public » serait donc trop large.</li>
+</ol>
+<h3 tabindex="-1">Exemple concret PHP</h3>
+<p><code>PlainReport</code> stocke son label ; <code>ComputedReport</code> le calcule depuis <code>day</code>. Les deux remplissent le même <code>get</code> public et héritent de <code>heading()</code>. La sortie est <code>[Daily]</code>, puis <code>[Day 3]</code>.</p>
+<pre class="highlight" tabindex="0"><code class="language-php">&lt;?php
+abstract class Report
+{
+    abstract public string $label { get; }
+
+    public function heading(): string
+    {
+        return '['.$this-&gt;label.']';
+    }
+}
+
+final class PlainReport extends Report
+{
+    public string $label = 'Daily';
+}
+
+final class ComputedReport extends Report
+{
+    public function __construct(private int $day) {}
+
+    public string $label {
+        get =&gt; 'Day '.$this-&gt;day;
+    }
+}
+
+echo new PlainReport()-&gt;heading(), "\n";
+echo new ComputedReport(3)-&gt;heading(), "\n";</code></pre>
+<p>Référence : <a href="https://www.php.net/manual/en/language.oop5.abstract.php">abstract properties</a>.</p><details class="canonical-retained"><summary>Passage canonique conservé</summary><h2 tabindex="-1">Les properties abstraites — depuis PHP 8.4</h2>
+<pre class="highlight" tabindex="0"><code class="language-php">abstract class Shape
+{
+    abstract public string $label { get; }   // exigence : lisible en public
+}
+
+final class Circle extends Shape
+{
+    public string $label = 'cercle';         // une property ordinaire suffit
+}</code></pre>
+<p>Une property ordinaire, <code>readonly</code> ou hookée satisfait <code>{ get; }</code>. Les règles :</p>
+<ul>
+<li><strong>Pas de hook, pas d'<code>abstract</code></strong> : PHP refuse avec « Only hooked properties may be declared abstract ».</li>
+<li><strong>Au moins un hook sans corps</strong> ; l'autre peut porter un body par défaut.</li>
+<li><strong><code>public</code> ou <code>protected</code>, jamais <code>private</code>.</strong></li>
+<li><strong>Elle compte comme une method abstraite</strong> : une fille concrète qui ne la
+  fournit pas est refusée.</li>
+<li><strong>La fille peut élargir, pas restreindre</strong> : <code>protected</code> devient <code>public</code>,
+  mais un <code>get</code> public ne devient pas <code>protected</code>. Un <code>set</code> exige une écriture
+  publique, qu'une property <code>readonly</code> ne fournit pas.</li>
+</ul></details></section><section class="teaching-section" data-section="s-interface-ou-abstract-class"><span class="outcome-anchor" id="out-OUT-zt4gxw6enqcj" tabindex="-1"></span><h2 id="s-interface-ou-abstract-class" tabindex="-1">Interface ou abstract class ?</h2><p class="teaching-label essential"><span aria-hidden="true">○</span> <strong>À comprendre</strong></p><p class="digest-reference"><a href="#s-l-essentiel-digest">Revoir la règle : L&#x27;interface décrit le contrat.</a></p><h3 tabindex="-1">C'est quoi ?</h3>
+<p>Une interface définit une promesse publique sans corps de method ni état d'instance. Une abstract class peut fournir du code, un constructor et des properties d'état, en plus de ses obligations abstraites. Une class peut implémenter plusieurs interfaces, mais n'étendre qu'une seule class, abstraite ou non.</p>
+<p>Une interface peut déclarer une signature de constructor, mais cela réduit la liberté de construction des implémentations et reste généralement déconseillé. Pour les properties PHP 8.4, une interface déclare des accès publics sans corps ; une abstract class autorise aussi <code>protected</code> et peut fournir le corps de l'un des hooks tout en laissant l'autre abstrait.</p>
+<h3 tabindex="-1">À quoi ça sert ?</h3>
+<p>Un contrat de livraison promet un résultat ; un manuel d'atelier fournit une façon commune de travailler. Le contrat correspond à l'interface, le manuel à l'abstract class, chaque atelier à une class concrète. Limite : posséder un manuel n'oblige pas à exposer tout son fonctionnement au client ; les methods partagées peuvent rester protégées.</p>
+<p>On choisit donc l'interface pour permettre des implémentations interchangeables. On ajoute une abstract class lorsqu'un groupe d'implémentations a réellement du code et de l'état à partager. Les deux peuvent se compléter ; ce n'est pas un choix exclusif.</p>
+<h3 tabindex="-1">Où dans Symfony ?</h3>
+<p>Un controller peut être une class PHP ordinaire ; étendre <code>Symfony\Bundle\FrameworkBundle\Controller\AbstractController</code> permet de réutiliser ses helpers. Cela illustre le partage de code, pas une obligation universelle. Dans l'application, une interface locale peut représenter un service sans forcer toutes ses implémentations à partager une class parente. Voir <a href="https://symfony.com/doc/8.0/controller.html">controller Symfony 8.0</a>.</p>
+<h3 tabindex="-1">Comment, étape par étape ?</h3>
+<ol>
+<li>Identifier ce que le client doit pouvoir appeler et le placer dans un contrat public.</li>
+<li>Chercher un comportement effectivement commun, pas seulement des noms de methods semblables.</li>
+<li>Si ce comportement justifie une base commune, l'écrire dans une abstract class qui implémente le contrat.</li>
+<li>Si la class a déjà une autre parente ou si les comportements varient indépendamment, préférer la composition ; ne pas tenter un second <code>extends</code>.</li>
+</ol>
+<h3 tabindex="-1">Exemple concret PHP</h3>
+<p><code>Formatter</code> est la promesse utilisée par <code>printMessage()</code>. <code>PrefixedFormatter</code> fournit le stockage du préfixe et l'assemblage commun. <code>UpperFormatter</code> ne choisit que la transformation. La sortie est <code>INFO: READY</code> ; le client ne dépend pas de la class de base.</p>
+<pre class="highlight" tabindex="0"><code class="language-php">&lt;?php
+interface Formatter
+{
+    public function format(string $message): string;
+}
+
+abstract class PrefixedFormatter implements Formatter
+{
+    public function __construct(private string $prefix) {}
+
+    abstract protected function transform(string $message): string;
+
+    public function format(string $message): string
+    {
+        return $this-&gt;prefix.$this-&gt;transform($message);
+    }
+}
+
+final class UpperFormatter extends PrefixedFormatter
+{
+    protected function transform(string $message): string
+    {
+        return strtoupper($message);
+    }
+}
+
+function printMessage(Formatter $formatter): void
+{
+    echo $formatter-&gt;format('ready'), "\n";
+}
+
+printMessage(new UpperFormatter('INFO: '));</code></pre>
+<p>Référence : <a href="https://www.php.net/manual/en/language.oop5.abstract.php">abstraction PHP</a>. Les règles de signature sont développées dans les <a href="course-CRS-e4y7gtn5k4f0.html#out-OUT-6tzwvmfwj408">interfaces</a>.</p><details class="canonical-retained"><summary>Passage canonique conservé</summary><h2 tabindex="-1">Interface ou abstract class ?</h2>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Interface</th>
+<th>Abstract class</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Corps de method</td>
+<td>Non</td>
+<td>Oui</td>
+</tr>
+<tr>
+<td>Properties d'état</td>
+<td>Non</td>
+<td>Oui</td>
+</tr>
+<tr>
+<td>Constructor</td>
+<td>Signature seulement, déconseillée</td>
+<td>Oui</td>
+</tr>
+<tr>
+<td>Visibilité d'une method abstraite</td>
+<td>Publique uniquement</td>
+<td><code>public</code> ou <code>protected</code></td>
+</tr>
+<tr>
+<td>Property exigée (PHP 8.4)</td>
+<td><code>public</code>, hooks sans corps</td>
+<td><code>public</code> ou <code>protected</code> ; un hook peut avoir un body</td>
+</tr>
+<tr>
+<td>Nombre par class</td>
+<td>Plusieurs</td>
+<td><strong>Une seule</strong></td>
+</tr>
+</tbody>
+</table>
+<p>Une interface décrit <strong>ce qu'un object sait faire</strong> ; une abstract class
+fournit <strong>du comportement partagé</strong>. Un besoin de constructor ou d'état commun
+tranche pour l'abstract class.</p></details><aside class="enrichment" aria-label="Autre explication"><p>Le manuel d'une franchise fournit une procédure commune mais laisse une étape locale à compléter. Une abstract class fournit ce comportement partagé ; seule une class concrète ayant rempli les obligations peut être instanciée.</p></aside></section><section class="teaching-section" data-section="s-pieges-d-examen"><h2 id="s-pieges-d-examen" tabindex="-1">Pièges d&#x27;examen</h2><p class="teaching-label pitfall"><span aria-hidden="true">△</span> <strong>Piège à éviter</strong></p><p class="digest-reference"><a href="#s-le-schema-digest">Revoir la règle : Une property abstraite exige un hook sans body.</a></p><p><strong><code>abstract private</code> est une erreur fatale.</strong> Une method abstraite privée
+serait invisible depuis la class fille, donc impossible à implémenter.</p>
+<p><strong>Une seule class parente.</strong> Besoin de deux jeux de comportements partagés :
+c'est un trait ou une composition, pas un second <code>extends</code>.</p>
+<p><strong><code>abstract</code> et <code>final</code> sont incompatibles</strong> : l'un exige une extension,
+l'autre l'interdit.</p>
+<p><strong>Une property abstraite sans hook est une erreur fatale.</strong>
+<code>abstract public string $label;</code> ne compile pas : il faut <code>{ get; }</code>,
+<code>{ set; }</code> ou les deux, dont au moins un sans corps.</p></section><section class="teaching-section" data-section="s-application"><h2 id="s-application" tabindex="-1">Application</h2><aside class="section-digest" id="s-application-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>L&#x27;interface décrit le contrat.</li><li>L&#x27;abstract class peut partager constructor, état et comportement.</li><li>Une property abstraite exige un hook sans body.</li><li>La fille peut élargir la visibilité, pas la restreindre.</li></ol></aside>
+
+
+
+<nav aria-label="Flashcards de l’application"><ul><li><a href="#A-0jtjh77tabt1-65c42c80d9-03">Flashcard : L&#x27;interface décrit le contrat. L&#x27;abstract class peut partager constructor, état et comportement.</a></li><li><a href="#A-0jtjh77tabt1-6e0103f6cc-02">Flashcard : Une property abstraite exige un hook sans body. La fille peut élargir la visibilité, pas la restreindre.</a></li></ul></nav></section><section class="teaching-section" data-section="s-fiche-express"><h2 id="s-fiche-express" tabindex="-1">Fiche express</h2><p class="teaching-label essential"><span aria-hidden="true">◆</span> <strong>À mémoriser</strong></p><p class="digest-reference"><a href="#s-l-essentiel-digest">Revoir la règle : L&#x27;interface décrit le contrat.</a></p><p><strong>Si tu dois retenir seulement 6 choses :</strong></p>
+<ul>
+<li><strong>Non instanciable</strong> ; une seule abstract class par <code>extends</code>.</li>
+<li>Method abstraite : <strong>sans corps</strong>, <code>public</code> ou <code>protected</code>, <strong>jamais <code>private</code></strong>.</li>
+<li>Fille concrète : tout implémenter, visibilité <strong>égale ou plus large</strong>.</li>
+<li>8.4 : property abstraite = <strong>hook sans corps</strong> ; jamais <code>private</code>.</li>
+<li><code>abstract</code> + <code>final</code> : <strong>incompatibles</strong>.</li>
+<li>Interface = <strong>contrat</strong> ; abstract class = <strong>comportement partagé</strong>.</li>
+</ul>
+<p>Moyen mnémotechnique : <strong>« L'interface promet, l'abstract class aide »</strong>.</p></section><section class="teaching-section" data-section="s-sources-officielles"><h2 id="s-sources-officielles" tabindex="-1">Sources officielles</h2><ul>
+<li><a href="https://www.php.net/manual/en/index.php">PHP — Manuel PHP</a></li>
+</ul></section><section class="official-sources"><h2>Sources officielles et compléments</h2><ul><li><a href="https://www.php.net/manual/en/language.oop5.abstract.php">PHP — Classes abstraites</a></li></ul></section><nav class="course-sequence" aria-label="Ordre de lecture"><a rel="prev" href="course-CRS-e7m4xbcxegyc.html" aria-label="Précédent : Anonymous functions and closures — Module 01 — PHP jusqu’à 8.4">Précédent : Anonymous functions and closures</a> <a href="lot-01.html">Sommaire : Module 01 — PHP jusqu’à 8.4</a> <a rel="next" href="course-CRS-yc9fry0vz4gh.html" aria-label="Suivant : Exception and error handling — Module 01 — PHP jusqu’à 8.4">Suivant : Exception and error handling</a></nav><p class="course-practice-entry"><a class="button" href="#view-quiz">Fin du cours — s’entraîner avec le Quiz</a></p></div><div id="view-flashcards" data-course-panel role="region" aria-labelledby="view-flashcards-title"><h2 id="view-flashcards-title">Flashcards</h2><p lang="en">Answer before revealing each card.</p><p>Ces cartes ne mesurent pas une maîtrise notée.</p><div data-card-section="s-l-essentiel"><h3><a href="#s-l-essentiel">Revoir la section du cours</a></h3><div class="reader-cards"><details class="reader-card" id="A-0jtjh77tabt1-65c42c80d9-03"><summary lang="en">Which abstraction can provide shared state and method bodies?</summary><p lang="en">An abstract class; an interface specifies a contract.</p><p lang="fr">L&#x27;interface décrit le contrat. L&#x27;abstract class peut partager constructor, état et comportement.</p><a href="course-CRS-0jtjh77tabt1.html#out-OUT-zt4gxw6enqcj">Revoir le passage précis</a></details></div></div><div data-card-section="s-le-schema"><h3><a href="#s-le-schema">Revoir la section du cours</a></h3><div class="reader-cards"><details class="reader-card" id="A-0jtjh77tabt1-6e0103f6cc-02"><summary lang="en">What must an abstract property declare in PHP 8.4?</summary><p lang="en">At least one hook without a body, such as get or set.</p><p lang="fr">Une property abstraite exige un hook sans body. La fille peut élargir la visibilité, pas la restreindre.</p><a href="course-CRS-0jtjh77tabt1.html#out-OUT-fs6z2g5dv4qq">Revoir le passage précis</a></details></div></div><div data-card-section="s-l-exemple"><h3><a href="#s-l-exemple">Revoir la section du cours</a></h3><div class="reader-cards"><p class="reader-card-reference" id="A-0jtjh77tabt1-88b6fbd62c-03">Rappel déjà proposé : <a lang="en" href="#A-0jtjh77tabt1-65c42c80d9-03">Which abstraction can provide shared state and method bodies?</a> · <a href="course-CRS-0jtjh77tabt1.html#out-OUT-zt4gxw6enqcj">Passage canonique</a></p></div></div><div data-card-section="s-regles"><h3><a href="#s-regles">Revoir la section du cours</a></h3><div class="reader-cards"><details class="reader-card" id="A-0jtjh77tabt1-3a0814f304-01"><summary lang="en">Must a concrete child implement every inherited abstract method?</summary><p lang="en">Yes, with a compatible signature and visibility that is not more restrictive.</p><p lang="fr">Une abstract class ne s&#x27;instancie pas. Une fille concrète doit satisfaire les methods abstraites.</p><a href="course-CRS-0jtjh77tabt1.html#out-OUT-fs6z2g5dv4qq">Revoir le passage précis</a></details></div></div><div data-card-section="s-les-properties-abstraites-depuis-php-8-4"><h3><a href="#s-les-properties-abstraites-depuis-php-8-4">Revoir la section du cours</a></h3><div class="reader-cards"><p class="reader-card-reference" id="A-0jtjh77tabt1-ffd5b8fa96-02">Rappel déjà proposé : <a lang="en" href="#A-0jtjh77tabt1-6e0103f6cc-02">What must an abstract property declare in PHP 8.4?</a> · <a href="course-CRS-0jtjh77tabt1.html#out-OUT-fs6z2g5dv4qq">Passage canonique</a></p></div></div><div data-card-section="s-interface-ou-abstract-class"><h3><a href="#s-interface-ou-abstract-class">Revoir la section du cours</a></h3><div class="reader-cards"><p class="reader-card-reference" id="A-0jtjh77tabt1-0d81e86cd5-03">Rappel déjà proposé : <a lang="en" href="#A-0jtjh77tabt1-65c42c80d9-03">Which abstraction can provide shared state and method bodies?</a> · <a href="course-CRS-0jtjh77tabt1.html#out-OUT-zt4gxw6enqcj">Passage canonique</a></p></div></div><div data-card-section="s-pieges-d-examen"><h3><a href="#s-pieges-d-examen">Revoir la section du cours</a></h3><div class="reader-cards"><p class="reader-card-reference" id="A-0jtjh77tabt1-596d5af532-02">Rappel déjà proposé : <a lang="en" href="#A-0jtjh77tabt1-6e0103f6cc-02">What must an abstract property declare in PHP 8.4?</a> · <a href="course-CRS-0jtjh77tabt1.html#out-OUT-fs6z2g5dv4qq">Passage canonique</a></p></div></div><div data-card-section="s-application"><h3><a href="#s-application">Revoir la section du cours</a></h3><div class="reader-cards"><p class="reader-card-reference" id="A-0jtjh77tabt1-e7ad522ea3-03">Rappel déjà proposé : <a lang="en" href="#A-0jtjh77tabt1-65c42c80d9-03">Which abstraction can provide shared state and method bodies?</a> · <a href="course-CRS-0jtjh77tabt1.html#out-OUT-zt4gxw6enqcj">Passage canonique</a></p><p class="reader-card-reference" id="A-0jtjh77tabt1-e7ad522ea3-02">Rappel déjà proposé : <a lang="en" href="#A-0jtjh77tabt1-6e0103f6cc-02">What must an abstract property declare in PHP 8.4?</a> · <a href="course-CRS-0jtjh77tabt1.html#out-OUT-fs6z2g5dv4qq">Passage canonique</a></p></div></div><div data-card-section="s-fiche-express"><h3><a href="#s-fiche-express">Revoir la section du cours</a></h3><div class="reader-cards"><p class="reader-card-reference" id="A-0jtjh77tabt1-b11e58e15e-03">Rappel déjà proposé : <a lang="en" href="#A-0jtjh77tabt1-65c42c80d9-03">Which abstraction can provide shared state and method bodies?</a> · <a href="course-CRS-0jtjh77tabt1.html#out-OUT-zt4gxw6enqcj">Passage canonique</a></p></div></div><aside class="checkpoint"><h2>Rappel d’un cours antérieur</h2><p>Avant de poursuivre : Interfaces.</p><details class="corpus-correction"><summary lang="en">Can a class override an interface constant in PHP 8.4?</summary><p lang="en">Yes, unless that constant is final.</p><p>Depuis PHP 8.1, une constant d&#x27;interface peut être redéfinie. final interdit cette redéfinition.</p><a href="course-CRS-e4y7gtn5k4f0.html#out-OUT-7vt306wrfkb7">Relire la correction dans le cours antérieur</a></details></aside></div><div id="view-quiz" data-course-panel role="region" aria-labelledby="view-quiz-title"><h2 id="view-quiz-title">Quiz</h2><p id="course-quiz-status" role="status">Quiz interactif non chargé. Démarrez après chargement de la banque locale.</p><div id="course-quiz-controls" class="assessment-main" hidden><div id="course-quiz-assessment-controls" hidden><select id="course-quiz-assessment-mode" aria-label="Mode du quiz" hidden><option value="learning">Entraînement</option></select><p id="course-quiz-training-scope"></p><button id="course-quiz-start-assessment" type="button" lang="en">Start practice</button><button id="course-quiz-finish-assessment" type="button" lang="en" hidden>End session</button></div><p id="course-quiz-assessment-error" role="alert"></p><p id="course-quiz-assessment-timer" hidden></p><p id="course-quiz-session-progress" role="status"></p><div id="course-quiz-assessment-app" tabindex="-1"></div><nav id="course-quiz-session-navigation" aria-label="Questions du cours"></nav><div id="course-quiz-learning-overview" aria-live="polite"></div></div><div id="course-quiz-native"><p>Sans JavaScript ou si le chargement échoue : aucune tentative notée. Les <a href="#view-flashcards">flashcards du cours</a> restent disponibles.</p><details class="course-quiz-fallback" data-question-id="L-0jtjh77tabt1-base-v1"><summary lang="en">Which abstraction can provide shared state and method bodies?</summary><p>Correction de consultation — non notée.</p><p>L&#x27;interface décrit le contrat. L&#x27;abstract class peut partager constructor, état et comportement.</p><ul><li><strong lang="en">Distractor: Neither can provide a constructor or shared method bodies.</strong><p>Une abstract class peut fournir un constructor et des methods concrètes.</p></li><li><strong lang="en">Correct: An abstract class can share state and method bodies.</strong><p>L&#x27;interface décrit le contrat. L&#x27;abstract class peut partager constructor, état et comportement.</p></li><li><strong lang="en">Distractor: An interface can share instance state and method bodies.</strong><p>Une interface définit un contrat, sans implémentation de ces method bodies.</p></li></ul><a href="course-CRS-0jtjh77tabt1.html#out-OUT-zt4gxw6enqcj">Relire le passage exact</a></details></div></div></div></div><details class="transfer-panel"><summary>Sauvegarde et transfert de progression</summary><p id="reading-status" role="status">Sans JavaScript : lecture libre ; progression non enregistrée.</p><p><a href="assessment.html#overview-title">Lecture, réussites immédiates et différées</a></p><p>Transfert manuel — aucune synchronisation automatique</p><p id="persistence-status" role="status"></p><button type="button" class="secondary" id="export-progress">Exporter ma progression</button><label for="import-progress">Choisir un JSON pour fusionner ma progression (sans remplacement)</label><input type="file" id="import-progress" accept="application/json,.json"><p id="transfer-status" role="status"></p></details></main><footer class="site-footer"><a href="catalogue.html">Catalogue</a> <a href="sources.html">Sources et attribution</a> <a href="#contenu">Haut de page</a></footer></body></html>

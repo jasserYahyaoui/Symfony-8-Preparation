@@ -1,0 +1,302 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; connect-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'"><meta name="viewport" content="width=device-width, initial-scale=1"><title>PHP API up to PHP 8.4 version — Symfony 8 Preparation</title><link rel="stylesheet" href="styles.css"><link rel="stylesheet" href="reader.css"><script src="mermaid.min.js" defer></script><script src="mermaid-init.js" defer></script><link rel="stylesheet" href="assessment.css"><script src="learning-state.js" defer></script><script src="guide.js" defer></script><script src="reader-catalog.js" defer></script><script src="reader.js" defer></script><script src="site-state.js" defer></script><script src="assessment.js" defer></script><script src="course-views.js" defer></script><link rel="stylesheet" href="syntax-highlight.css"><script src="prism-syntax.js" defer></script><script src="syntax-highlight.js" defer></script></head><body data-course-id="CRS-722pscs6e2m0"><a class="skip" href="#contenu">Aller au contenu</a><header class="site-header"><a class="brand" href="index.html">S8 Preparation</a><nav aria-label="Navigation principale"><a href="index.html">Accueil</a> <a href="catalogue.html">Parcours</a> <a href="assessment.html?mode=review">Réviser</a> <a href="examens.html">Examens blancs</a> <a href="jour-j.html">Jour J</a></nav></header><main id="contenu" tabindex="-1" class="corpus-reader"><nav class="breadcrumb" aria-label="Fil d’Ariane"><a href="index.html">Accueil</a> <span aria-hidden="true">›</span> <a href="catalogue.html">Parcours</a> <span aria-hidden="true">›</span> <a href="lot-01.html">Module 01 — PHP jusqu’à 8.4</a> <span aria-hidden="true">›</span> <span aria-current="page">PHP API up to PHP 8.4 version</span></nav><h1>PHP API up to PHP 8.4 version</h1><p class="muted">Symfony 8.0 · API PHP ≤ 8.4 · Twig ≤ 3.22. Préparation indépendante.</p><p class="revision-status">Première itération · Module 01 — PHP jusqu’à 8.4 : explications développées ; revue pédagogique indépendante en attente.</p><nav class="course-actions" aria-label="Activités du cours"><a id="tab-course" href="#view-course">Cours</a><a id="tab-flashcards" href="#view-flashcards">Flashcards</a><a id="tab-quiz" href="#view-quiz">Quiz</a></nav><div class="course-layout"><details class="lot-course-menu"><summary>Cours du module · 9 cours</summary><nav aria-label="Cours du module"><a class="lot-context" href="lot-01.html">Module 01 — PHP jusqu’à 8.4</a><ol><li><a href="course-CRS-722pscs6e2m0.html" aria-current="page">PHP API up to PHP 8.4 version</a></li><li><a href="course-CRS-3424z948caan.html">Object Oriented Programming</a></li><li><a href="course-CRS-tqcp2kn9r3b5.html">Attributes</a></li><li><a href="course-CRS-e4y7gtn5k4f0.html">Interfaces</a></li><li><a href="course-CRS-e7m4xbcxegyc.html">Anonymous functions and closures</a></li><li><a href="course-CRS-0jtjh77tabt1.html">Abstract classes</a></li><li><a href="course-CRS-yc9fry0vz4gh.html">Exception and error handling</a></li><li><a href="course-CRS-bshgpd44ykba.html">Traits</a></li><li><a href="course-CRS-3sggmeyd01x6.html">Enums</a></li></ol></nav></details><aside class="course-section-menu" aria-label="Sommaire du cours"><details class="course-section-disclosure"><summary id="course-sections">Sections du cours</summary><nav aria-label="Sections du cours"><ul><li><a href="#s-objectif">Objectif</a></li><li><a href="#s-l-essentiel">L&#x27;essentiel</a></li><li><a href="#s-le-schema">Le schéma</a></li><li><a href="#s-l-exemple-un-property-hook">L&#x27;exemple : un property hook</a></li><li><a href="#s-ce-que-8-4-ajoute-au-coeur-du-langage">Ce que 8.4 ajoute au cœur du langage</a></li><li><a href="#s-rappel-des-versions-anterieures">Rappel des versions antérieures</a></li><li><a href="#s-arrays-comparaisons-et-json-ce-que-renvoie-php">Arrays, comparaisons et JSON : ce que renvoie PHP</a></li><li><a href="#s-functions-ajoutees-par-version">Functions ajoutées, par version</a></li><li><a href="#s-pieges-d-examen">Pièges d&#x27;examen</a></li><li><a href="#s-application">Application</a></li><li><a href="#s-fiche-express">Fiche express</a></li><li><a href="#s-sources-officielles">Sources officielles</a></li></ul></nav></details></aside><div class="course-content"><div id="view-course" data-course-panel role="region" aria-labelledby="view-course-title"><h2 id="view-course-title">Cours</h2><p class="course-introduction"><a href="#s-ce-que-8-4-ajoute-au-coeur-du-langage">Pour bien commencer</a> · <a href="#course-sections">Sections du cours</a></p><h2>Objectifs d’apprentissage</h2><ul><li><a href="course-CRS-722pscs6e2m0.html#out-OUT-svjaxs75amyd">Attribuer une fonctionnalité du langage à sa version d&#x27;introduction</a></li><li><a href="course-CRS-722pscs6e2m0.html#out-OUT-ayahqn48ev7g">Énumérer les cinq ajouts de langage de PHP 8.4</a></li><li><a href="course-CRS-722pscs6e2m0.html#out-OUT-fr1x4bcak73j">Distinguer readonly de la visibilité asymétrique private(set)</a></li><li><a href="course-CRS-722pscs6e2m0.html#out-OUT-e7z5wvfwcsxk">Prévoir le résultat des functions d&#x27;array et des comparaisons PHP 8</a></li><li><a href="course-CRS-722pscs6e2m0.html#out-OUT-a1r0b9k9vxsn">Attribuer les functions de la bibliothèque standard à leur version</a></li></ul><aside class="pedagogy-legend" aria-label="Repères pédagogiques"><p><strong>Repères pédagogiques</strong></p><p>Ces repères décrivent le rôle du bloc, pas une fréquence officielle à l’examen.</p><p class="teaching-label essential"><span aria-hidden="true">○</span> <strong>À comprendre</strong></p><p class="teaching-label essential"><span aria-hidden="true">◆</span> <strong>À mémoriser</strong></p><p class="teaching-label example"><span aria-hidden="true">▣</span> <strong>Exemple concret</strong></p><p class="teaching-label pitfall"><span aria-hidden="true">△</span> <strong>Piège à éviter</strong></p><p class="teaching-label nuance"><span aria-hidden="true">?</span> <strong>À vérifier</strong></p></aside><section class="teaching-section" data-section="s-objectif"><h2 id="s-objectif" tabindex="-1">Objectif</h2><p>Situer une fonctionnalité du langage dans la bonne version de PHP, et
+reconnaître ce que 8.4 apporte — Symfony 8.0 exigeant PHP 8.4 au minimum.</p></section><section class="teaching-section" data-section="s-l-essentiel"><h2 id="s-l-essentiel" tabindex="-1">L&#x27;essentiel</h2><p class="teaching-label essential"><span aria-hidden="true">○</span> <strong>À comprendre</strong></p><aside class="section-digest" id="s-l-essentiel-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>private(set) limite qui écrit, pas le nombre d&#x27;écritures.</li><li>readonly interdit la réaffectation après initialisation.</li></ol></aside><p>Symfony 8.0 exige PHP 8.4 : une question peut porter sur une syntaxe 8.4. Il
+faut savoir <strong>dater</strong> une fonctionnalité — 8.0 à 8.4 — et connaître les
+résultats que PHP renvoie réellement sur les arrays, les comparaisons et le
+JSON. Deux distinctions sont utiles : <code>readonly</code> contre <code>private(set)</code>, et
+<code>array_merge()</code> contre <code>+</code>.</p></section><section class="teaching-section" data-section="s-le-schema"><h2 id="s-le-schema" tabindex="-1">Le schéma</h2><aside class="section-digest" id="s-le-schema-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Dater les enums en 8.1.</li><li>Dater Override et json_validate() en 8.3.</li></ol></aside><figure class="diagram" aria-labelledby="CRS-722pscs6e2m0-3-diagram-0-title CRS-722pscs6e2m0-3-diagram-0-description"><figcaption id="CRS-722pscs6e2m0-3-diagram-0-title">Les nouveautés de PHP 8.0 à PHP 8.4, version par version</figcaption><p id="CRS-722pscs6e2m0-3-diagram-0-description">PHP 8.0 apporte les named arguments, la promotion, match, les union types, l&#x27;operator nullsafe, static en return type et str_contains. PHP 8.1 apporte les enums, readonly, never, la syntaxe foo(...), les constants final et array_is_list. PHP 8.2 apporte les readonly class et les DNF types, et déprécie les properties dynamiques. PHP 8.3 apporte les constants de class typées, l&#x27;attribute Override et json_validate. PHP 8.4 apporte les property hooks, private(set), les lazy objects, l&#x27;attribute Deprecated, new Foo()-&gt;m() sans parenthèses, array_find, array_find_key, array_any, array_all, mb_trim et mb_ucfirst.</p><div class="mermaid" hidden>---
+title: Ce que chaque version de PHP apporte
+---
+flowchart TD
+  accTitle: Les nouveautés de PHP 8.0 à PHP 8.4, version par version
+  accDescr: PHP 8.0 apporte les named arguments, la promotion, match, les union types, l&#x27;operator nullsafe, static en return type et str_contains. PHP 8.1 apporte les enums, readonly, never, la syntaxe foo(...), les constants final et array_is_list. PHP 8.2 apporte les readonly class et les DNF types, et déprécie les properties dynamiques. PHP 8.3 apporte les constants de class typées, l&#x27;attribute Override et json_validate. PHP 8.4 apporte les property hooks, private(set), les lazy objects, l&#x27;attribute Deprecated, new Foo()-&gt;m() sans parenthèses, array_find, array_find_key, array_any, array_all, mb_trim et mb_ucfirst.
+  V80[&quot;PHP 8.0&lt;br/&gt;named arguments · promotion · match&lt;br/&gt;union types · ?-&gt; · static en return type&lt;br/&gt;str_contains()&quot;]
+  V81[&quot;PHP 8.1&lt;br/&gt;enums · readonly · never&lt;br/&gt;foo(...) · final const · array_is_list()&quot;]
+  V82[&quot;PHP 8.2&lt;br/&gt;readonly class · DNF types&lt;br/&gt;properties dynamiques dépréciées&quot;]
+  V83[&quot;PHP 8.3&lt;br/&gt;constantes de class typées&lt;br/&gt;#[\Override] · json_validate()&quot;]
+  V84[&quot;PHP 8.4&lt;br/&gt;property hooks · private(set) · lazy objects&lt;br/&gt;#[\Deprecated] · new Foo()-&gt;m()&lt;br/&gt;array_find() · array_find_key()&lt;br/&gt;array_any() · array_all()&lt;br/&gt;mb_trim() · mb_ucfirst()&quot;]
+  V80 --&gt; V81 --&gt; V82 --&gt; V83 --&gt; V84</div></figure></section><section class="teaching-section" data-section="s-l-exemple-un-property-hook"><h2 id="s-l-exemple-un-property-hook" tabindex="-1">L&#x27;exemple : un property hook</h2><p class="teaching-label example"><span aria-hidden="true">▣</span> <strong>Exemple concret</strong></p><aside class="section-digest" id="s-l-exemple-un-property-hook-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Le get hook calcule fullName à partir de first et last.</li><li>Le set hook répartit la valeur affectée ; il ne s&#x27;agit pas d&#x27;une method appelée explicitement.</li></ol></aside><pre class="highlight" tabindex="0"><code class="language-php">class Person
+{
+    public string $first = '';
+    public string $last = '';
+
+    public string $fullName {
+        get =&gt; $this-&gt;first.' '.$this-&gt;last;
+        set { [$this-&gt;first, $this-&gt;last] = explode(' ', $value, 2); }
+    }
+}</code></pre></section><section class="teaching-section" data-section="s-ce-que-8-4-ajoute-au-coeur-du-langage"><span class="outcome-anchor" id="out-OUT-ayahqn48ev7g" tabindex="-1"></span><h2 id="s-ce-que-8-4-ajoute-au-coeur-du-langage" tabindex="-1">Ce que 8.4 ajoute au cœur du langage</h2><p class="teaching-label essential"><span aria-hidden="true">○</span> <strong>À comprendre</strong></p><aside class="section-digest" id="s-ce-que-8-4-ajoute-au-coeur-du-langage-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Le hook get s&#x27;exécute à chaque lecture.</li><li>Une property virtuelle ne stocke pas automatiquement le résultat.</li><li>private(set) limite qui écrit, pas le nombre d&#x27;écritures.</li><li>readonly interdit la réaffectation après initialisation.</li></ol></aside><h3 tabindex="-1">C'est quoi ?</h3>
+<p>PHP 8.4 ajoute cinq mécanismes à distinguer ici. Un <strong>property hook</strong> exécute du code à la lecture (<code>get</code>) ou à l'écriture (<code>set</code>). Une property virtuelle calcule sa valeur sans emplacement de stockage propre ; une property adossée conserve une valeur. Le hook <code>get</code> n'est pas un cache : il est exécuté à chaque lecture.</p>
+<p>La <strong>visibilité asymétrique</strong> sépare qui lit de qui écrit. <code>public private(set)</code> laisse tout le monde lire, mais réserve les écritures à la class déclarante. <code>protected(set)</code> les ouvre aussi à sa hiérarchie. Les écritures autorisées peuvent se répéter : ce n'est pas <code>readonly</code>.</p>
+<p>Un <strong>lazy object</strong> retarde son initialisation jusqu'à une opération qui la nécessite, typiquement l'accès à une property. <code>#[\Deprecated]</code> signale l'usage d'une function, method ou class constant dépréciée. Enfin, <code>new ClassName()-&gt;method()</code> évite les parenthèses autour de l'expression <code>new</code> lorsque les parenthèses du constructor sont présentes.</p>
+<h3 tabindex="-1">À quoi ça sert ?</h3>
+<p>Imagine un panneau de magasin : le public lit le prix, le personnel le modifie et le total affiché est recalculé. Le panneau correspond à la property publique, la réserve du personnel à <code>private(set)</code>, le calcul à <code>get</code>. Limite : un panneau peut garder une ancienne inscription ; un hook ne mémorise pas son résultat sans code prévu pour cela.</p>
+<p>Les lazy objects évitent un travail d'initialisation si l'object n'est finalement pas utilisé. <code>Deprecated</code>, au contraire, ne retarde rien : il avertit qu'un appel existant doit être remplacé. Ce sont deux objectifs différents, pas deux formes de cache.</p>
+<h3 tabindex="-1">Où dans Symfony ?</h3>
+<p>Ce sont des fonctionnalités du langage, utilisables dans une class <code>App\Model\Product</code> sans service Symfony. Le component DependencyInjection peut exploiter les lazy objects pour des services lazy, mais déclarer une property hook ne configure pas ce component. Le mécanisme des <a href="course-CRS-tqcp2kn9r3b5.html#out-OUT-s8tzdy31hq6k">attributes</a> explique la métadonnée ; <code>Deprecated</code> est un cas natif traité par PHP, pas un lecteur applicatif à écrire.</p>
+<h3 tabindex="-1">Comment, étape par étape ?</h3>
+<ol>
+<li>Décider si une property doit stocker une valeur ou la calculer. Dans un <code>set</code> long, écrire explicitement le stockage voulu ; dans <code>set =&gt; expression</code>, le résultat devient la valeur stockée de cette property.</li>
+<li>Choisir séparément la visibilité de lecture et celle d'écriture. L'écriture ne peut pas être plus ouverte que la lecture.</li>
+<li>Pour différer une construction, créer un ghost avec <code>ReflectionClass::newLazyGhost()</code> et fournir son initializer. Créer le ghost ne lance pas ce callback.</li>
+<li>Marquer une ancienne function avec <code>#[\Deprecated]</code> seulement si elle est effectivement dépréciée ; son appel émet <code>E_USER_DEPRECATED</code>. Ne pas confondre ce signal avec une exception.</li>
+</ol>
+<h3 tabindex="-1">Exemple concret PHP</h3>
+<p>Cet exemple PHP 8.4 autonome affiche <code>0</code>, puis <code>LIVRE</code>, puis <code>1</code>. La première lecture de <code>label</code> initialise le ghost. Le second changement de titre, effectué dans la class, reste permis. La lecture suivante recalcule <code>CAHIER</code> : aucune valeur calculée n'a été mise en cache.</p>
+<pre class="highlight" tabindex="0"><code class="language-php">&lt;?php
+class Product
+{
+    public private(set) string $title;
+
+    public function __construct(string $title)
+    {
+        $this-&gt;title = $title;
+    }
+
+    public string $label {
+        get =&gt; strtoupper($this-&gt;title);
+    }
+
+    public function rename(string $title): void
+    {
+        $this-&gt;title = $title;
+    }
+}
+
+$initializations = 0;
+$product = new ReflectionClass(Product::class)-&gt;newLazyGhost(
+    static function (Product $product) use (&amp;$initializations): void {
+        ++$initializations;
+        $product-&gt;__construct('livre');
+    },
+);
+echo $initializations, "\n";
+echo $product-&gt;label, "\n";
+echo $initializations, "\n";
+$product-&gt;rename('cahier');
+echo $product-&gt;label, "\n";</code></pre>
+<p>La syntaxe du premier <code>new</code> illustre aussi le chaînage sans parenthèses englobantes. Référence : <a href="https://www.php.net/manual/en/migration84.new-features.php">nouveautés PHP 8.4</a>.</p><details class="canonical-retained"><summary>Passage canonique conservé</summary><h2 tabindex="-1">Ce que 8.4 ajoute au cœur du langage</h2>
+<p><strong>Property hooks.</strong> Un accessor défini sur la property elle-même. Ci-dessus,
+aucun hook ne lit ni n'écrit <code>$this-&gt;fullName</code> : la property est <strong>virtuelle</strong>.
+Avec la forme courte <code>set =&gt; expr</code>, la valeur de l'expression est écrite dans
+la property : avec <code>set =&gt; $this-&gt;first = …</code>, <code>fullName</code> devient une property adossée, qui stocke le prénom. Le hook <code>get</code> s'exécute à chaque lecture.</p>
+<p><strong>Visibilité asymétrique.</strong> <code>public private(set) string $title</code> : lisible
+partout, écrivable par la class ; <code>protected(set)</code> ouvre l'écriture à la
+hiérarchie.</p>
+<p><strong>Et aussi</strong> : les objects lazy, initialisés au premier accès ; l'attribute
+natif <code>#[\Deprecated]</code> ; <code>new Foo()-&gt;method()</code> sans parenthèses englobantes,
+une erreur de syntaxe en 8.3.</p></details><p><strong>Repère de l’exemple :</strong> Le get hook calcule fullName à partir de first et last. Le set hook répartit la valeur affectée ; il ne s'agit pas d'une method appelée explicitement.</p></section><section class="teaching-section" data-section="s-rappel-des-versions-anterieures"><span class="outcome-anchor" id="out-OUT-svjaxs75amyd" tabindex="-1"></span><h2 id="s-rappel-des-versions-anterieures" tabindex="-1">Rappel des versions antérieures</h2><p class="teaching-label essential"><span aria-hidden="true">◆</span> <strong>À mémoriser</strong></p><p class="digest-reference"><a href="#s-le-schema-digest">Revoir la règle : Dater les enums en 8.1.</a></p><h3 tabindex="-1">C'est quoi ?</h3>
+<p>La version d'introduction indique à partir de quel PHP une syntaxe est disponible. Symfony 8.0 demande PHP 8.4 au minimum ; le périmètre de ce cours s'arrête aux API 8.4. Une fonctionnalité plus ancienne reste utilisable : « disponible en 8.4 » ne signifie pas « introduite en 8.4 ».</p>
+<p>PHP 8.0 apporte les named arguments, qui associent une valeur au nom du parameter, et la promotion de constructor, qui déclare puis initialise une property. <code>match</code> choisit une expression avec comparaison stricte, un union type accepte l'un des types annoncés, <code>?-&gt;</code> arrête un accès si son object vaut <code>null</code>, et le return type <code>static</code> promet la class appelée.</p>
+<p>PHP 8.1 apporte les enums, les properties <code>readonly</code>, le type <code>never</code> pour une function qui ne revient pas normalement, les first-class callables <code>foo(...)</code> et les class constants <code>final</code>. PHP 8.2 étend <code>readonly</code> à la class, permet les types DNF comme <code>(A&amp;B)|C</code> et déprécie la création de properties dynamiques dans les cas ordinaires. PHP 8.3 ajoute les class constants typées, <code>#[\Override]</code> et <code>json_validate()</code>.</p>
+<h3 tabindex="-1">À quoi ça sert ?</h3>
+<p>Comme une prise dont on vérifie la génération avant de brancher un appareil, le runtime PHP doit comprendre la syntaxe du programme. La génération correspond à la version minimale ; la prise correspond au parser et aux API disponibles. Limite : connaître la date ne prouve pas qu'un programme est correct, seulement qu'il peut utiliser cette fonctionnalité.</p>
+<p>Distinguer <code>readonly</code> de <code>private(set)</code> répond à deux questions différentes : « peut-on remplacer cette valeur après initialisation ? » et « qui a le droit de l'écrire ? ». Le premier protège une affectation ; le second protège un périmètre d'écriture.</p>
+<h3 tabindex="-1">Où dans Symfony ?</h3>
+<p>Dans une class de service applicative, une dépendance promue peut être <code>readonly</code> tandis qu'un état modifiable utilise une visibilité limitée. Ces règles sont imposées par PHP, pas par le service container. Voir les <a href="course-CRS-3424z948caan.html#s-readonly">détails de readonly</a>, notamment la mutation interne d'un object, et le <a href="course-CRS-3424z948caan.html#out-OUT-zqwbp11av4pr">late static binding</a>.</p>
+<h3 tabindex="-1">Comment, étape par étape ?</h3>
+<ol>
+<li>Identifier la syntaxe précise : une property <code>readonly</code> date de 8.1, une <code>readonly class</code> de 8.2.</li>
+<li>Repérer le contrôle effectué : <code>Override</code> vérifie à la compilation qu'une method remplace une method héritée ou implémente une obligation d'interface ; <code>Deprecated</code>, introduit en 8.4, signale un usage déprécié.</li>
+<li>Dans un extrait mêlant plusieurs versions, retenir la plus récente nécessaire. Ne pas attribuer toutes les lignes à la version de la dernière nouveauté.</li>
+<li>Pour une property, examiner séparément l'initialisation et les écritures suivantes. En 8.4, <code>readonly</code> est implicitement <code>protected(set)</code>, mais une seconde affectation normale reste interdite.</li>
+</ol>
+<h3 tabindex="-1">Exemple concret PHP</h3>
+<p><code>Price</code> utilise promotion et named arguments de 8.0, <code>readonly</code> de 8.1, puis <code>private(set)</code> de 8.4. Le montant reste fixé ; la devise peut être corrigée plusieurs fois par la class. Sortie : <code>12 EUR</code>.</p>
+<pre class="highlight" tabindex="0"><code class="language-php">&lt;?php
+final class Price
+{
+    public function __construct(
+        public readonly int $amount,
+        public private(set) string $currency,
+    ) {}
+
+    public function changeCurrency(string $currency): void
+    {
+        $this-&gt;currency = $currency;
+    }
+}
+
+$price = new Price(currency: 'USD', amount: 12);
+$price-&gt;changeCurrency('GBP');
+$price-&gt;changeCurrency('EUR');
+echo $price-&gt;amount, ' ', $price-&gt;currency, "\n";</code></pre>
+<p>Référence : <a href="https://www.php.net/manual/en/migration80.new-features.php">migration PHP 8.0</a>, <a href="https://www.php.net/manual/en/migration81.new-features.php">8.1</a>, <a href="https://www.php.net/manual/en/migration82.new-features.php">8.2</a> et <a href="https://www.php.net/manual/en/migration83.new-features.php">8.3</a>.</p><details class="canonical-retained"><summary>Passage canonique conservé</summary><h2 tabindex="-1">Rappel des versions antérieures</h2>
+<table>
+<thead>
+<tr>
+<th>Version</th>
+<th>Apports les plus examinables</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>8.0</td>
+<td>Named arguments, promotion de constructor, <code>match</code>, types union, <code>?-&gt;</code>, <code>static</code> en return type</td>
+</tr>
+<tr>
+<td>8.1</td>
+<td>Enums, <code>readonly</code>, <code>never</code>, callable de première class <code>foo(...)</code>, constantes de class <code>final</code></td>
+</tr>
+<tr>
+<td>8.2</td>
+<td><code>readonly</code> sur la class entière, types DNF, properties dynamiques dépréciées</td>
+</tr>
+<tr>
+<td>8.3</td>
+<td>Constantes de class typées, <code>#[\Override]</code>, <code>json_validate()</code></td>
+</tr>
+</tbody>
+</table></details><aside class="enrichment" aria-label="Autre explication"><p>Comme un mécanicien reconnaît le millésime d'une pièce, dater la syntaxe permet de choisir la bonne règle : match évoque 8.0, enum 8.1, readonly class 8.2, Override 8.3 et private(set) 8.4.</p></aside></section><section class="teaching-section" data-section="s-arrays-comparaisons-et-json-ce-que-renvoie-php"><span class="outcome-anchor" id="out-OUT-e7z5wvfwcsxk" tabindex="-1"></span><h2 id="s-arrays-comparaisons-et-json-ce-que-renvoie-php" tabindex="-1">Arrays, comparaisons et JSON : ce que renvoie PHP</h2><p class="teaching-label pitfall"><span aria-hidden="true">△</span> <strong>Piège à éviter</strong></p><aside class="section-digest" id="s-arrays-comparaisons-et-json-ce-que-renvoie-php-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>L&#x27;opérateur + conserve la valeur de gauche.</li><li>array_merge() remplace une string key par la valeur de droite.</li></ol></aside><h3 tabindex="-1">C'est quoi ?</h3>
+<p>Un array PHP associe des keys à des valeurs : il n'est pas toujours une liste numérotée sans trous. <code>array_merge()</code> rassemble les valeurs à keys numériques en les renumérotant ; pour une même string key, la dernière valeur gagne. L'opérateur <code>+</code> conserve les associations de gauche et n'ajoute que les keys absentes, même numériques.</p>
+<p><code>array_filter()</code> sans callback retire les valeurs considérées fausses, dont <code>0</code>, <code>null</code> et <code>'0'</code>, mais garde les keys. <code>array_map()</code> transforme les valeurs ; avec un seul array, il garde ses keys, avec plusieurs il renumérote le résultat.</p>
+<p>La comparaison souple <code>==</code> peut convertir les valeurs ; <code>===</code> exige aussi le même type. En PHP 8, un nombre comparé à une string non numérique est comparé comme string : <code>0 == 'a'</code> et <code>0 == ''</code> sont faux. Deux strings numériques comme <code>'1'</code> et <code>'01'</code> restent égales avec <code>==</code>. <code>in_array()</code> utilise cette comparaison souple par défaut, stricte avec son troisième argument à <code>true</code>.</p>
+<h3 tabindex="-1">À quoi ça sert ?</h3>
+<p>Pense à deux carnets d'adresses portant parfois le même nom. <code>+</code> conserve le contact du premier carnet ; <code>array_merge()</code> remplace ce contact par celui du second lorsque la key est une string. Le nom correspond à la key, la fiche à la valeur. Limite : les keys numériques suivent d'autres règles avec <code>array_merge()</code> ; l'image du carnet ne suffit donc pas pour une liste.</p>
+<p>Le JSON est un format de texte, pas un array PHP. Le décoder transforme ses objects en <code>stdClass</code> par défaut, ou en arrays avec le second argument <code>true</code>. Il faut distinguer le JSON valide <code>null</code> d'une erreur de décodage, qui peut aussi produire <code>null</code> sans option d'exception.</p>
+<h3 tabindex="-1">Où dans Symfony ?</h3>
+<p>Ces opérations s'appliquent aux arrays que manipule une class applicative ou un controller. Elles restent des functions PHP : ni HttpFoundation ni DependencyInjection ne change le sens de <code>+</code> ou de <code>===</code>. Pour comprendre une erreur JSON levée avec <code>JSON_THROW_ON_ERROR</code>, voir la <a href="course-CRS-yc9fry0vz4gh.html#out-OUT-xwdtmfm9hzsc">hiérarchie des exceptions</a>.</p>
+<h3 tabindex="-1">Comment, étape par étape ?</h3>
+<ol>
+<li>Écrire les keys réelles, y compris le <code>0</code> implicite de <code>['a']</code>, avant de fusionner.</li>
+<li>Séparer string keys et integer keys ; appliquer la règle de l'opérateur, puis seulement lire le résultat.</li>
+<li>Après un filtre, vérifier les keys restantes au lieu de supposer une renumérotation.</li>
+<li>Pour un décodage JSON, choisir object ou array et rendre les erreurs explicites avec <code>JSON_THROW_ON_ERROR</code>. Pour une recherche sensible au type, demander <code>in_array(..., true)</code>.</li>
+</ol>
+<h3 tabindex="-1">Exemple concret PHP</h3>
+<p>La fusion produit <code>['mode' =&gt; 'new', 0 =&gt; 'a', 1 =&gt; 'b']</code>, l'union <code>['mode' =&gt; 'old', 0 =&gt; 'a']</code>. Le filtre conserve les keys <code>0</code>, <code>2</code>, <code>5</code>. Les quatre booléens affichés sont <code>false</code>, <code>true</code>, <code>true</code>, <code>false</code> : seul le dernier appel d'<code>in_array()</code> exige le même type.</p>
+<pre class="highlight" tabindex="0"><code class="language-php">&lt;?php
+$left = ['mode' =&gt; 'old', 0 =&gt; 'a'];
+$right = ['mode' =&gt; 'new', 0 =&gt; 'b'];
+var_export(array_merge($left, $right));
+echo "\n";
+var_export($left + $right);
+echo "\n";
+var_export(array_filter([1, 0, 2, null, '0', 'a']));
+echo "\n";
+var_dump(0 == 'a', '1' == '01');
+var_dump(in_array('1', [1]), in_array('1', [1], true));
+$data = json_decode('{"count":2}', true, flags: JSON_THROW_ON_ERROR);
+echo $data['count'], "\n";
+try {
+    json_decode('{', flags: JSON_THROW_ON_ERROR);
+} catch (JsonException) {
+    echo "invalid JSON\n";
+}</code></pre>
+<p>Les deux dernières lignes de sortie sont <code>2</code> et <code>invalid JSON</code>. Références : <a href="https://www.php.net/manual/en/function.array-merge.php">array_merge</a>, <a href="https://www.php.net/manual/en/language.operators.comparison.php">comparaisons</a>, <a href="https://www.php.net/manual/en/function.json-decode.php">json_decode</a>.</p><details class="canonical-retained"><summary>Passage canonique conservé</summary><h2 tabindex="-1">Arrays, comparaisons et JSON : ce que renvoie PHP</h2>
+<table>
+<thead>
+<tr>
+<th>Expression</th>
+<th>Résultat</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>array_merge(['a'], ['b'])</code></td>
+<td><code>['a', 'b']</code> — keys numériques renumérotées</td>
+</tr>
+<tr>
+<td><code>['a'] + ['b']</code></td>
+<td><code>['a']</code> — la key <code>0</code> existe déjà à gauche</td>
+</tr>
+<tr>
+<td><code>array_merge(['k' =&gt; 1], ['k' =&gt; 2])</code></td>
+<td><code>['k' =&gt; 2]</code> — la dernière string key gagne</td>
+</tr>
+<tr>
+<td><code>['k' =&gt; 1] + ['k' =&gt; 2]</code></td>
+<td><code>['k' =&gt; 1]</code> — <code>+</code> garde la gauche</td>
+</tr>
+<tr>
+<td><code>array_filter([1, 0, 2, null, '0', 'a'])</code></td>
+<td><code>[0 =&gt; 1, 2 =&gt; 2, 5 =&gt; 'a']</code> — keys conservées</td>
+</tr>
+<tr>
+<td><code>array_map($f, ['k' =&gt; 1])</code></td>
+<td>key <code>k</code> conservée ; réindexée dès deux arrays</td>
+</tr>
+</tbody>
+</table>
+<p><strong>PHP 8 compare un nombre et une string non numérique comme deux strings</strong> :
+<code>0 == 'a'</code> et <code>0 == ''</code> valent <code>false</code>. Deux strings numériques restent
+comparées comme des nombres : <code>'1' == '01'</code> vaut <code>true</code>. <code>in_array()</code> compare
+avec <code>==</code> sauf si son troisième argument vaut <code>true</code>. <strong><code>json_decode()</code></strong> rend
+un <code>stdClass</code> pour un object JSON, un array avec <code>true</code> en second argument, et
+<code>null</code> sur un JSON invalide — sauf avec <code>JSON_THROW_ON_ERROR</code>.</p></details></section><section class="teaching-section" data-section="s-functions-ajoutees-par-version"><span class="outcome-anchor" id="out-OUT-a1r0b9k9vxsn" tabindex="-1"></span><h2 id="s-functions-ajoutees-par-version" tabindex="-1">Functions ajoutées, par version</h2><p class="teaching-label essential"><span aria-hidden="true">◆</span> <strong>À mémoriser</strong></p><aside class="section-digest" id="s-functions-ajoutees-par-version-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>array_find() rend une valeur, pas une key.</li><li>Le callback reçoit valeur puis key.</li></ol></aside><h3 tabindex="-1">C'est quoi ?</h3>
+<p>La bibliothèque PHP fournit des opérations nommées en plus de la syntaxe du langage. En 8.0, <code>str_contains()</code>, <code>str_starts_with()</code> et <code>str_ends_with()</code> testent respectivement la présence, le début et la fin d'une string. En 8.1, <code>array_is_list()</code> vérifie que les keys sont exactement <code>0</code> à <code>count - 1</code>, dans cet ordre ; l'array vide est une liste.</p>
+<p>PHP 8.3 apporte <code>json_validate()</code>, qui vérifie la validité d'un texte JSON sans fournir sa valeur décodée. PHP 8.4 ajoute <code>array_find()</code> et <code>array_find_key()</code>, qui arrêtent la recherche au premier élément accepté, puis <code>array_any()</code> et <code>array_all()</code>, qui répondent par un booléen. Le callback reçoit la valeur puis la key. <code>mb_trim()</code> et <code>mb_ucfirst()</code> datent également de 8.4 et nécessitent mbstring ; ce rappel de version n'ajoute pas un cours sur cette extension.</p>
+<h3 tabindex="-1">À quoi ça sert ?</h3>
+<p>Au vestiaire, on peut demander « quel manteau convient ? », « quel numéro de crochet ? », « en reste-t-il un ? » ou « sont-ils tous secs ? ». Le manteau correspond à la valeur, le crochet à la key, la condition au callback : ce sont respectivement <code>find</code>, <code>find_key</code>, <code>any</code>, <code>all</code>. Limite : <code>null</code> peut être une vraie valeur du vestiaire-array ; le résultat de <code>array_find()</code> ne distingue alors pas cette valeur de l'absence de correspondance.</p>
+<h3 tabindex="-1">Où dans Symfony ?</h3>
+<p>Un service applicatif peut sélectionner une valeur de configuration dans un array avec ces functions, sans API Symfony supplémentaire. Les <a href="course-CRS-e7m4xbcxegyc.html#out-OUT-kspe7vnxkqe2">closures</a> expliquent le callback <code>fn</code> utilisé ci-dessous. Le choix du callback est du PHP ; le service container ne l'interprète pas.</p>
+<h3 tabindex="-1">Comment, étape par étape ?</h3>
+<ol>
+<li>Choisir le résultat attendu avant la function : une valeur, une key ou une vérité.</li>
+<li>Définir un callback dont le premier parameter reçoit la valeur et le second la key ; ne pas inverser ces rôles.</li>
+<li>Prévoir l'absence de résultat : <code>find</code> et <code>find_key</code> rendent <code>null</code>, <code>any</code> rend <code>false</code>. Sur un array vide, <code>all</code> rend <code>true</code>, car aucun élément ne contredit la condition.</li>
+<li>Si l'on a besoin du contenu JSON, le décoder directement avec gestion d'erreur plutôt que valider puis décoder systématiquement deux fois le même texte.</li>
+</ol>
+<h3 tabindex="-1">Exemple concret PHP</h3>
+<p>La première valeur supérieure à 10 est <code>12</code>, à la key <code>west</code>. <code>any</code> vaut <code>true</code>, <code>all</code> vaut <code>false</code>, puis <code>all</code> sur l'array vide vaut <code>true</code>. Les keys textuelles expliquent pourquoi <code>array_is_list($stock)</code> vaut <code>false</code>.</p>
+<pre class="highlight" tabindex="0"><code class="language-php">&lt;?php
+$stock = ['east' =&gt; 3, 'west' =&gt; 12, 'north' =&gt; 20];
+$enough = static fn (int $quantity, string $key): bool =&gt; $quantity &gt; 10;
+var_dump(array_find($stock, $enough));
+var_dump(array_find_key($stock, $enough));
+var_dump(array_any($stock, $enough));
+var_dump(array_all($stock, $enough));
+var_dump(array_all([], $enough));
+var_dump(array_is_list($stock));</code></pre>
+<p>Références : <a href="https://www.php.net/manual/en/function.array-find.php">array_find</a>, <a href="https://www.php.net/manual/en/function.array-all.php">array_all</a>, <a href="https://www.php.net/manual/en/function.json-validate.php">json_validate</a>.</p><details class="canonical-retained"><summary>Passage canonique conservé</summary><h2 tabindex="-1">Functions ajoutées, par version</h2>
+<table>
+<thead>
+<tr>
+<th>Version</th>
+<th>Functions</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>8.0</td>
+<td><code>str_contains()</code>, <code>str_starts_with()</code>, <code>str_ends_with()</code></td>
+</tr>
+<tr>
+<td>8.1</td>
+<td><code>array_is_list()</code></td>
+</tr>
+<tr>
+<td>8.3</td>
+<td><code>json_validate()</code></td>
+</tr>
+<tr>
+<td>8.4</td>
+<td><code>array_find()</code>, <code>array_find_key()</code>, <code>array_any()</code>, <code>array_all()</code>, <code>mb_trim()</code>, <code>mb_ucfirst()</code></td>
+</tr>
+</tbody>
+</table>
+<p><code>array_find()</code> rend la première <strong>valeur</strong> acceptée, ou <code>null</code> ;
+<code>array_find_key()</code> rend sa key. Le callback reçoit la valeur puis la key.</p></details></section><section class="teaching-section" data-section="s-pieges-d-examen"><span class="outcome-anchor" id="out-OUT-fr1x4bcak73j" tabindex="-1"></span><h2 id="s-pieges-d-examen" tabindex="-1">Pièges d&#x27;examen</h2><p class="teaching-label pitfall"><span aria-hidden="true">△</span> <strong>Piège à éviter</strong></p><p class="digest-reference"><a href="#s-l-essentiel-digest">Revoir la règle : private(set) limite qui écrit, pas le nombre d&#x27;écritures.</a></p><p><strong><code>readonly</code> n'est pas <code>private(set)</code>.</strong> Une property <code>readonly</code> ne peut être
+écrite <strong>qu'une fois</strong> ; depuis PHP 8.4, elle est implicitement
+<code>protected(set)</code>, donc une class enfant peut l'initialiser.
+<code>private(set)</code> autorise autant d'écritures que voulu, mais seulement depuis la
+class.</p>
+<p><strong>Les property hooks ne sont pas des properties calculées mises en cache.</strong> Le
+hook <code>get</code> s'exécute à chaque lecture.</p>
+<p><strong><code>#[\Override]</code> est 8.3, pas 8.4.</strong> Il vérifie qu'une method surcharge bien
+quelque chose ; sinon, erreur de compilation.</p><p>readonly interdit une réaffectation après initialisation ; private(set) limite la portée d’écriture, sans limiter le nombre d’écritures depuis cette portée.</p></section><section class="teaching-section" data-section="s-application"><h2 id="s-application" tabindex="-1">Application</h2><aside class="section-digest" id="s-application-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>array_find() rend une valeur, pas une key.</li><li>Le callback reçoit valeur puis key.</li><li>Le hook get s&#x27;exécute à chaque lecture.</li><li>Une property virtuelle ne stocke pas automatiquement le résultat.</li></ol></aside>
+
+
+
+<nav aria-label="Flashcards de l’application"><ul><li><a href="#A-722pscs6e2m0-85d2b966d9-04">Flashcard : array_find() rend une valeur, pas une key. Le callback reçoit valeur puis key.</a></li><li><a href="#A-722pscs6e2m0-24e43c7f36-01">Flashcard : Le hook get s&#x27;exécute à chaque lecture. Une property virtuelle ne stocke pas automatiquement le résultat.</a></li></ul></nav></section><section class="teaching-section" data-section="s-fiche-express"><h2 id="s-fiche-express" tabindex="-1">Fiche express</h2><p class="teaching-label essential"><span aria-hidden="true">◆</span> <strong>À mémoriser</strong></p><p class="digest-reference"><a href="#s-l-essentiel-digest">Revoir la règle : private(set) limite qui écrit, pas le nombre d&#x27;écritures.</a></p><p><strong>Si tu dois retenir seulement 7 choses :</strong></p>
+<ul>
+<li>Symfony 8.0 → <strong>PHP 8.4</strong> : sa syntaxe est au programme.</li>
+<li>8.4 : <strong>hooks</strong>, <strong><code>private(set)</code></strong>, lazy objects, <strong><code>#[\Deprecated]</code></strong>, <code>new X()-&gt;m()</code>.</li>
+<li><code>#[\Override]</code> et <code>json_validate()</code> : <strong>8.3</strong> ; enums et <code>readonly</code> : <strong>8.1</strong>.</li>
+<li><code>readonly</code> : <strong>une</strong> écriture ; <code>private(set)</code> : écritures illimitées, dans la class.</li>
+<li><code>array_merge()</code> : la <strong>droite</strong> gagne ; <code>+</code> : la <strong>gauche</strong>.</li>
+<li><code>array_filter()</code> garde les keys ; <code>0 == 'a'</code> vaut <strong><code>false</code></strong>.</li>
+<li><code>array_find()</code> rend une valeur ; <code>array_find_key()</code> une key.</li>
+</ul>
+<p>Moyen mnémotechnique : <strong>« merge écoute la droite, plus garde la gauche »</strong>.</p></section><section class="teaching-section" data-section="s-sources-officielles"><h2 id="s-sources-officielles" tabindex="-1">Sources officielles</h2><ul>
+<li><a href="https://www.php.net/manual/en/index.php">PHP — Manuel PHP</a></li>
+</ul></section><section class="official-sources"><h2>Sources officielles et compléments</h2><ul><li><a href="https://www.php.net/manual/en/language.oop5.property-hooks.php">PHP — Property hooks</a></li><li><a href="https://www.php.net/manual/en/language.oop5.visibility.php">PHP — Visibilité des propriétés et méthodes</a></li><li><a href="https://www.php.net/manual/en/migration84.new-features.php">PHP — Nouveautés de PHP 8.4</a></li></ul></section><nav class="course-sequence" aria-label="Ordre de lecture"><a href="lot-01.html">Sommaire : Module 01 — PHP jusqu’à 8.4</a> <a rel="next" href="course-CRS-3424z948caan.html" aria-label="Suivant : Object Oriented Programming — Module 01 — PHP jusqu’à 8.4">Suivant : Object Oriented Programming</a></nav><p class="course-practice-entry"><a class="button" href="#view-quiz">Fin du cours — s’entraîner avec le Quiz</a></p></div><div id="view-flashcards" data-course-panel role="region" aria-labelledby="view-flashcards-title"><h2 id="view-flashcards-title">Flashcards</h2><p lang="en">Answer before revealing each card.</p><p>Ces cartes ne mesurent pas une maîtrise notée.</p><div data-card-section="s-l-essentiel"><h3><a href="#s-l-essentiel">Revoir la section du cours</a></h3><div class="reader-cards"><details class="reader-card" id="A-722pscs6e2m0-65c42c80d9-05"><summary lang="en">Does private(set) make a property readonly?</summary><p lang="en">No. It restricts the writing scope but permits repeated writes from that scope.</p><p lang="fr">private(set) limite qui écrit, pas le nombre d&#x27;écritures. readonly interdit la réaffectation après initialisation.</p><a href="course-CRS-722pscs6e2m0.html#out-OUT-ayahqn48ev7g">Revoir le passage précis</a></details></div></div><div data-card-section="s-le-schema"><h3><a href="#s-le-schema">Revoir la section du cours</a></h3><div class="reader-cards"><details class="reader-card" id="A-722pscs6e2m0-6e0103f6cc-02"><summary lang="en">Which PHP versions introduced enums and the Override attribute?</summary><p lang="en">Enums arrived in 8.1; Override arrived in 8.3.</p><p lang="fr">Dater les enums en 8.1. Dater Override et json_validate() en 8.3.</p><a href="course-CRS-722pscs6e2m0.html#out-OUT-svjaxs75amyd">Revoir le passage précis</a></details></div></div><div data-card-section="s-l-exemple-un-property-hook"><h3><a href="#s-l-exemple-un-property-hook">Revoir la section du cours</a></h3><div class="reader-cards"><details class="reader-card" id="A-722pscs6e2m0-7361fd3e96-03"><summary lang="en">What do the get and set hooks of fullName do in the example?</summary><p lang="en">The get hook combines first and last; the set hook splits the assigned value into those two properties.</p><p lang="fr">Le get hook calcule fullName à partir de first et last. Le set hook répartit la valeur affectée ; il ne s&#x27;agit pas d&#x27;une method appelée explicitement.</p><a href="course-CRS-722pscs6e2m0.html#out-OUT-ayahqn48ev7g">Revoir le passage précis</a></details></div></div><div data-card-section="s-ce-que-8-4-ajoute-au-coeur-du-langage"><h3><a href="#s-ce-que-8-4-ajoute-au-coeur-du-langage">Revoir la section du cours</a></h3><div class="reader-cards"><details class="reader-card" id="A-722pscs6e2m0-24e43c7f36-01"><summary lang="en">When does a PHP property get hook run?</summary><p lang="en">On each read, not only on the first read.</p><p lang="fr">Le hook get s&#x27;exécute à chaque lecture. Une property virtuelle ne stocke pas automatiquement le résultat.</p><a href="course-CRS-722pscs6e2m0.html#out-OUT-ayahqn48ev7g">Revoir le passage précis</a></details><p class="reader-card-reference" id="A-722pscs6e2m0-24e43c7f36-05">Rappel déjà proposé : <a lang="en" href="#A-722pscs6e2m0-65c42c80d9-05">Does private(set) make a property readonly?</a> · <a href="course-CRS-722pscs6e2m0.html#out-OUT-ayahqn48ev7g">Passage canonique</a></p></div></div><div data-card-section="s-rappel-des-versions-anterieures"><h3><a href="#s-rappel-des-versions-anterieures">Revoir la section du cours</a></h3><div class="reader-cards"><p class="reader-card-reference" id="A-722pscs6e2m0-ff13db231f-02">Rappel déjà proposé : <a lang="en" href="#A-722pscs6e2m0-6e0103f6cc-02">Which PHP versions introduced enums and the Override attribute?</a> · <a href="course-CRS-722pscs6e2m0.html#out-OUT-svjaxs75amyd">Passage canonique</a></p></div></div><div data-card-section="s-arrays-comparaisons-et-json-ce-que-renvoie-php"><h3><a href="#s-arrays-comparaisons-et-json-ce-que-renvoie-php">Revoir la section du cours</a></h3><div class="reader-cards"><details class="reader-card" id="A-722pscs6e2m0-e7be72e8bd-03"><summary lang="en">How do array union and array_merge handle the same string key?</summary><p lang="en">Union keeps the left value; array_merge keeps the right value.</p><p lang="fr">L&#x27;opérateur + conserve la valeur de gauche. array_merge() remplace une string key par la valeur de droite.</p><a href="course-CRS-722pscs6e2m0.html#out-OUT-e7z5wvfwcsxk">Revoir le passage précis</a></details></div></div><div data-card-section="s-functions-ajoutees-par-version"><h3><a href="#s-functions-ajoutees-par-version">Revoir la section du cours</a></h3><div class="reader-cards"><details class="reader-card" id="A-722pscs6e2m0-85d2b966d9-04"><summary lang="en">Does array_find return a key or a value?</summary><p lang="en">It returns the first matching value, or null; array_find_key returns the key.</p><p lang="fr">array_find() rend une valeur, pas une key. Le callback reçoit valeur puis key.</p><a href="course-CRS-722pscs6e2m0.html#out-OUT-a1r0b9k9vxsn">Revoir le passage précis</a></details></div></div><div data-card-section="s-pieges-d-examen"><h3><a href="#s-pieges-d-examen">Revoir la section du cours</a></h3><div class="reader-cards"><p class="reader-card-reference" id="A-722pscs6e2m0-596d5af532-05">Rappel déjà proposé : <a lang="en" href="#A-722pscs6e2m0-65c42c80d9-05">Does private(set) make a property readonly?</a> · <a href="course-CRS-722pscs6e2m0.html#out-OUT-ayahqn48ev7g">Passage canonique</a></p><details class="reader-card" id="INT-001"><summary lang="en">Does private(set) impose readonly semantics?</summary><p lang="en">No. It limits the writing scope, while readonly prevents reassignment after initialization.</p><p lang="fr">La visibilité d’écriture et la réaffectation sont deux contraintes différentes.</p><a href="course-CRS-722pscs6e2m0.html#out-OUT-fr1x4bcak73j">Revoir le passage précis</a></details></div></div><div data-card-section="s-application"><h3><a href="#s-application">Revoir la section du cours</a></h3><div class="reader-cards"><p class="reader-card-reference" id="A-722pscs6e2m0-e7ad522ea3-04">Rappel déjà proposé : <a lang="en" href="#A-722pscs6e2m0-85d2b966d9-04">Does array_find return a key or a value?</a> · <a href="course-CRS-722pscs6e2m0.html#out-OUT-a1r0b9k9vxsn">Passage canonique</a></p><p class="reader-card-reference" id="A-722pscs6e2m0-e7ad522ea3-01">Rappel déjà proposé : <a lang="en" href="#A-722pscs6e2m0-24e43c7f36-01">When does a PHP property get hook run?</a> · <a href="course-CRS-722pscs6e2m0.html#out-OUT-ayahqn48ev7g">Passage canonique</a></p></div></div><div data-card-section="s-fiche-express"><h3><a href="#s-fiche-express">Revoir la section du cours</a></h3><div class="reader-cards"><p class="reader-card-reference" id="A-722pscs6e2m0-b11e58e15e-05">Rappel déjà proposé : <a lang="en" href="#A-722pscs6e2m0-65c42c80d9-05">Does private(set) make a property readonly?</a> · <a href="course-CRS-722pscs6e2m0.html#out-OUT-ayahqn48ev7g">Passage canonique</a></p></div></div></div><div id="view-quiz" data-course-panel role="region" aria-labelledby="view-quiz-title"><h2 id="view-quiz-title">Quiz</h2><p id="course-quiz-status" role="status">Quiz interactif non chargé. Démarrez après chargement de la banque locale.</p><div id="course-quiz-controls" class="assessment-main" hidden><div id="course-quiz-assessment-controls" hidden><select id="course-quiz-assessment-mode" aria-label="Mode du quiz" hidden><option value="learning">Entraînement</option></select><p id="course-quiz-training-scope"></p><button id="course-quiz-start-assessment" type="button" lang="en">Start practice</button><button id="course-quiz-finish-assessment" type="button" lang="en" hidden>End session</button></div><p id="course-quiz-assessment-error" role="alert"></p><p id="course-quiz-assessment-timer" hidden></p><p id="course-quiz-session-progress" role="status"></p><div id="course-quiz-assessment-app" tabindex="-1"></div><nav id="course-quiz-session-navigation" aria-label="Questions du cours"></nav><div id="course-quiz-learning-overview" aria-live="polite"></div></div><div id="course-quiz-native"><p>Sans JavaScript ou si le chargement échoue : aucune tentative notée. Les <a href="#view-flashcards">flashcards du cours</a> restent disponibles.</p><details class="course-quiz-fallback" data-question-id="L-722pscs6e2m0-base-v1"><summary lang="en">Does private(set) make a property readonly?</summary><p>Correction de consultation — non notée.</p><p>private(set) limite qui écrit, pas le nombre d&#x27;écritures. readonly interdit la réaffectation après initialisation.</p><ul><li><strong lang="en">Distractor: Yes; reads are also restricted to the declaring class.</strong><p>private(set) limite l&#x27;écriture ; la visibilité de lecture reste distincte.</p></li><li><strong lang="en">Correct: No; repeated writes are allowed within the permitted scope.</strong><p>private(set) limite qui écrit, pas le nombre d&#x27;écritures. readonly interdit la réaffectation après initialisation.</p></li><li><strong lang="en">Distractor: Yes; only the first assignment is permitted.</strong><p>Cette restriction est celle de readonly, pas de private(set).</p></li></ul><a href="course-CRS-722pscs6e2m0.html#out-OUT-fr1x4bcak73j">Relire le passage exact</a></details></div></div></div></div><details class="transfer-panel"><summary>Sauvegarde et transfert de progression</summary><p id="reading-status" role="status">Sans JavaScript : lecture libre ; progression non enregistrée.</p><p><a href="assessment.html#overview-title">Lecture, réussites immédiates et différées</a></p><p>Transfert manuel — aucune synchronisation automatique</p><p id="persistence-status" role="status"></p><button type="button" class="secondary" id="export-progress">Exporter ma progression</button><label for="import-progress">Choisir un JSON pour fusionner ma progression (sans remplacement)</label><input type="file" id="import-progress" accept="application/json,.json"><p id="transfer-status" role="status"></p></details></main><footer class="site-footer"><a href="catalogue.html">Catalogue</a> <a href="sources.html">Sources et attribution</a> <a href="#contenu">Haut de page</a></footer></body></html>

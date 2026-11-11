@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; connect-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Messages and handlers — Symfony 8 Preparation</title><link rel="stylesheet" href="styles.css"><link rel="stylesheet" href="reader.css"><script src="mermaid.min.js" defer></script><script src="mermaid-init.js" defer></script><link rel="stylesheet" href="assessment.css"><script src="learning-state.js" defer></script><script src="guide.js" defer></script><script src="reader-catalog.js" defer></script><script src="reader.js" defer></script><script src="site-state.js" defer></script><script src="assessment.js" defer></script><script src="course-views.js" defer></script><link rel="stylesheet" href="syntax-highlight.css"><script src="prism-syntax.js" defer></script><script src="syntax-highlight.js" defer></script></head><body data-course-id="CRS-ckdp50w2dmy4"><a class="skip" href="#contenu">Aller au contenu</a><header class="site-header"><a class="brand" href="index.html">S8 Preparation</a><nav aria-label="Navigation principale"><a href="index.html">Accueil</a> <a href="catalogue.html">Parcours</a> <a href="assessment.html?mode=review">Réviser</a> <a href="examens.html">Examens blancs</a> <a href="jour-j.html">Jour J</a></nav></header><main id="contenu" tabindex="-1" class="corpus-reader"><nav class="breadcrumb" aria-label="Fil d’Ariane"><a href="index.html">Accueil</a> <span aria-hidden="true">›</span> <a href="catalogue.html">Parcours</a> <span aria-hidden="true">›</span> <a href="lot-11.html">Module 11 — Messenger</a> <span aria-hidden="true">›</span> <span aria-current="page">Messages and handlers</span></nav><h1>Messages and handlers</h1><p class="muted">Symfony 8.0 · API PHP ≤ 8.4 · Twig ≤ 3.22. Préparation indépendante.</p><p class="revision-status">Première itération · en cours de révision pédagogique. Ce cours reste accessible, sans déclaration de validation pédagogique.</p><nav class="course-actions" aria-label="Activités du cours"><a id="tab-course" href="#view-course">Cours</a><a id="tab-flashcards" href="#view-flashcards">Flashcards</a><a id="tab-quiz" href="#view-quiz">Quiz</a></nav><div class="course-layout"><details class="lot-course-menu"><summary>Cours du module · 7 cours</summary><nav aria-label="Cours du module"><a class="lot-context" href="lot-11.html">Module 11 — Messenger</a><ol><li><a href="course-CRS-5gezsra1sp01.html">Messenger component</a></li><li><a href="course-CRS-se1jr6cxh2n7.html">Transports</a></li><li><a href="course-CRS-ckdp50w2dmy4.html" aria-current="page">Messages and handlers</a></li><li><a href="course-CRS-e5astysks0ty.html">Workers</a></li><li><a href="course-CRS-hgkzgm1dh3my.html">Retries and failures</a></li><li><a href="course-CRS-h9bfar3cxyet.html">Middleware</a></li><li><a href="course-CRS-3pbkhqmw83b2.html">Events</a></li></ol></nav></details><aside class="course-section-menu" aria-label="Sommaire du cours"><details class="course-section-disclosure"><summary id="course-sections">Sections du cours</summary><nav aria-label="Sections du cours"><ul><li><a href="#s-objectif">Objectif</a></li><li><a href="#s-l-essentiel">L&#x27;essentiel</a></li><li><a href="#s-le-schema">Le schéma</a></li><li><a href="#s-l-exemple">L&#x27;exemple</a></li><li><a href="#s-le-message">Le message</a></li><li><a href="#s-le-handler">Le handler</a></li><li><a href="#s-plusieurs-handlers">Plusieurs handlers</a></li><li><a href="#s-pieges-d-examen">Pièges d&#x27;examen</a></li><li><a href="#s-fiche-express">Fiche express</a></li></ul></nav></details></aside><div class="course-content"><div id="view-course" data-course-panel role="region" aria-labelledby="view-course-title"><h2 id="view-course-title">Cours</h2><p class="course-introduction"><a href="#s-objectif">Introduction</a> · <a href="#course-sections">Sections du cours</a></p><h2>Objectifs d’apprentissage</h2><ul><li><a href="course-CRS-ckdp50w2dmy4.html#out-OUT-65c68dmyhjc9">Écrire un message et son handler sans interface</a></li><li><a href="course-CRS-ckdp50w2dmy4.html#out-OUT-yr8h53ttvp6e">Énoncer ce qui apparie handler et message</a></li><li><a href="course-CRS-ckdp50w2dmy4.html#out-OUT-r1kvyze41rx5">Énoncer l&#x27;effet de plusieurs handlers</a></li><li><a href="course-CRS-ckdp50w2dmy4.html#out-OUT-2evbydc34ggd">Justifier de transporter un identifier plutôt qu&#x27;une entité</a></li></ul><aside class="pedagogy-legend" aria-label="Repères pédagogiques"><p><strong>Repères pédagogiques</strong></p><p>Ces repères décrivent le rôle du bloc, pas une fréquence officielle à l’examen.</p><p class="teaching-label essential"><span aria-hidden="true">○</span> <strong>À comprendre</strong></p><p class="teaching-label essential"><span aria-hidden="true">◆</span> <strong>À mémoriser</strong></p><p class="teaching-label example"><span aria-hidden="true">▣</span> <strong>Exemple concret</strong></p><p class="teaching-label pitfall"><span aria-hidden="true">△</span> <strong>Piège à éviter</strong></p><p class="teaching-label nuance"><span aria-hidden="true">?</span> <strong>À vérifier</strong></p></aside><section class="teaching-section" data-section="s-objectif"><h2 id="s-objectif" tabindex="-1">Objectif</h2><p>Écrire un message et son handler, savoir ce qui les apparie, ce qui se passe
+quand il y a plusieurs handlers, et faire évoluer un message sans casser ceux
+qui attendent en file.</p></section><section class="teaching-section" data-section="s-l-essentiel"><h2 id="s-l-essentiel" tabindex="-1">L&#x27;essentiel</h2><p class="teaching-label essential"><span aria-hidden="true">○</span> <strong>À comprendre</strong></p><aside class="section-digest" id="s-l-essentiel-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Le message porte les données nécessaires.</li><li>Aucune interface Messenger n&#x27;est imposée.</li></ol></aside><p>Un message est une class ordinaire qui porte des <strong>identifiers</strong>. Un handler
+porte <code>#[AsMessageHandler]</code>, et c'est le <strong>type de son argument</strong> qui le relie
+au message. Plusieurs handlers pour un même message sont tous appelés. Et un
+message en file a été sérialisé par l'ancien code : il doit survivre au
+deployment.</p></section><section class="teaching-section" data-section="s-le-schema"><h2 id="s-le-schema" tabindex="-1">Le schéma</h2><aside class="section-digest" id="s-le-schema-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>L&#x27;attribute enregistre le handler.</li><li>Le type détermine les messages acceptés.</li></ol></aside><figure class="diagram" aria-labelledby="CRS-ckdp50w2dmy4-3-diagram-0-title CRS-ckdp50w2dmy4-3-diagram-0-description"><figcaption id="CRS-ckdp50w2dmy4-3-diagram-0-title">Comment HandlersLocator choisit et ordonne les handlers d&#x27;un message</figcaption><p id="CRS-ckdp50w2dmy4-3-diagram-0-description">HandlersLocator parcourt les types du message dans cet ordre : sa class, ses classes parentes, ses interfaces, les namespaces en étoile, puis l&#x27;étoile seule. Pour chaque type, il prend les handlers enregistrés, du plus prioritaire au moins prioritaire. Si l&#x27;Envelope porte un ReceivedStamp et qu&#x27;un handler a un fromTransport, ce handler n&#x27;est gardé que si le message vient de ce transport. Un handler déjà retenu pour un type précédent n&#x27;est pas appelé deux fois. Chaque handler retenu est appelé et ajoute un HandledStamp.</p><div class="mermaid" hidden>---
+title: Quels handlers reçoivent un message, et dans quel ordre
+---
+flowchart TD
+  accTitle: Comment HandlersLocator choisit et ordonne les handlers d&#x27;un message
+  accDescr: HandlersLocator parcourt les types du message dans cet ordre : sa class, ses classes parentes, ses interfaces, les namespaces en étoile, puis l&#x27;étoile seule. Pour chaque type, il prend les handlers enregistrés, du plus prioritaire au moins prioritaire. Si l&#x27;Envelope porte un ReceivedStamp et qu&#x27;un handler a un fromTransport, ce handler n&#x27;est gardé que si le message vient de ce transport. Un handler déjà retenu pour un type précédent n&#x27;est pas appelé deux fois. Chaque handler retenu est appelé et ajoute un HandledStamp.
+  MSG[&quot;Envelope du message&quot;] --&gt; TYPES[&quot;types, dans l&#x27;ordre : class, parents, interfaces, namespaces en étoile, étoile seule&quot;]
+  TYPES --&gt; PER[&quot;pour chaque type : ses handlers, par priority décroissante&quot;]
+  PER --&gt; REC{&quot;ReceivedStamp et fromTransport sur le handler ?&quot;}
+  REC --&gt;|&quot;non&quot;| KEEP[&quot;gardé&quot;]
+  REC --&gt;|&quot;oui&quot;| SAME{&quot;même transport ?&quot;}
+  SAME --&gt;|&quot;oui&quot;| KEEP
+  SAME --&gt;|&quot;non&quot;| SKIP([&quot;écarté&quot;])
+  KEEP --&gt; SEEN{&quot;déjà retenu pour un type précédent ?&quot;}
+  SEEN --&gt;|&quot;oui&quot;| SKIP
+  SEEN --&gt;|&quot;non&quot;| CALL([&quot;appelé : un HandledStamp&quot;])</div></figure>
+<p>Deux conséquences : <strong><code>priority</code> ne trie qu'à l'intérieur d'un même type</strong>, et
+<strong><code>fromTransport</code> ne concerne que les messages reçus</strong>.</p></section><section class="teaching-section" data-section="s-l-exemple"><h2 id="s-l-exemple" tabindex="-1">L&#x27;exemple</h2><p class="teaching-label example"><span aria-hidden="true">▣</span> <strong>Exemple concret</strong></p><aside class="section-digest" id="s-l-exemple-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>La priority n&#x27;exclut pas les autres handlers.</li><li>Plusieurs traitements sont légitimes.</li></ol></aside><pre class="highlight" tabindex="0"><code class="language-php">final class OrderPlaced
+{
+    public function __construct(public readonly int $orderId) {}
+}
+
+#[AsMessageHandler]
+final class CreateInvoice
+{
+    public function __invoke(OrderPlaced $message): void { /* recharge l'achat, facture */ }
+}
+
+#[AsMessageHandler(priority: 10)]
+final class NotifyCustomer
+{
+    public function __invoke(OrderPlaced $message): void { /* recharge l'achat, notifie */ }
+}</code></pre>
+<p><code>dispatch(new OrderPlaced(42))</code> appelle les deux, <code>NotifyCustomer</code> d'abord.</p></section><section class="teaching-section" data-section="s-le-message"><span class="outcome-anchor" id="out-OUT-65c68dmyhjc9" tabindex="-1"></span><span class="outcome-anchor" id="out-OUT-2evbydc34ggd" tabindex="-1"></span><h2 id="s-le-message" tabindex="-1">Le message</h2><aside class="section-digest" id="s-le-message-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Un message en file vient d&#x27;une ancienne version.</li><li>Le défaut du constructor ne migre pas automatiquement l&#x27;object.</li></ol></aside><p>Une class ordinaire, sans interface ni class parente, qui doit être
+<strong>sérialisable</strong> : un transport asynchrone l'écrit puis la relit. On y met un
+<strong>identifier</strong>, pas un object chargé — la copie sérialisée serait périmée à la
+lecture ; le handler recharge l'état courant.</p>
+<p>Le serializer par défaut s'appuie sur <code>unserialize()</code>, qui <strong>n'appelle pas le
+constructor</strong>. Un message de la version 1 lu par la version 2, PHP 8.4 :</p>
+<table>
+<thead>
+<tr>
+<th>Changement de la class</th>
+<th>Lecture de l'ancien message</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>property <strong>promue</strong> ajoutée au constructor, avec défaut</td>
+<td><strong><code>Error</code></strong> : « must not be accessed before initialization »</td>
+</tr>
+<tr>
+<td>property <strong>déclarée</strong> ajoutée, avec défaut</td>
+<td>lue avec sa default value</td>
+</tr>
+<tr>
+<td>property retirée</td>
+<td>décodé, avec la deprecation « Creation of dynamic property »</td>
+</tr>
+</tbody>
+</table>
+<p>Pour un changement de sens : une <strong>nouvelle class</strong>, l'ancienne gardée le temps
+que les files se vident.</p></section><section class="teaching-section" data-section="s-le-handler"><span class="outcome-anchor" id="out-OUT-yr8h53ttvp6e" tabindex="-1"></span><h2 id="s-le-handler" tabindex="-1">Le handler</h2><aside class="section-digest" id="s-le-handler-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>La restriction concerne la réception.</li><li>Distinguer dispatch local et message reçu.</li></ol></aside><ul>
+<li><code>#[AsMessageHandler]</code> est lu par l'autoconfiguration ; le <strong>type de
+  l'argument</strong> désigne le message. Aucune table à écrire.</li>
+<li>L'attribute se pose aussi sur des <strong>methods</strong>, plusieurs par class ; le type
+  peut être une <strong>union</strong> (<code>Ping|Pong</code>) ou une <strong>interface</strong>.</li>
+<li>Sans type, le build échoue : « must have a type-hint corresponding to the
+  message class it handles ».</li>
+<li>Les options de l'attribute en 8.0 : <code>bus</code>, <code>fromTransport</code>, <code>handles</code>,
+  <code>method</code>, <code>priority</code>, <code>sign</code>.</li>
+</ul>
+<p><code>fromTransport: 'async'</code> écarte un message <strong>reçu</strong> d'un autre transport, mais
+pas un message traité en synchrone :</p>
+<table>
+<thead>
+<tr>
+<th>Le message arrive…</th>
+<th>Handler <code>fromTransport: 'async'</code></th>
+<th>Handler sans option</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>lu par un worker sur <code>other</code></td>
+<td><strong>écarté</strong></td>
+<td>appelé</td>
+</tr>
+<tr>
+<td>lu par un worker sur <code>async</code></td>
+<td>appelé</td>
+<td>appelé</td>
+</tr>
+<tr>
+<td>dispatché sans routage, en synchrone</td>
+<td><strong>appelé</strong></td>
+<td>appelé</td>
+</tr>
+</tbody>
+</table>
+<p>Sans <code>ReceivedStamp</code>, tout handler est gardé : <code>fromTransport</code> ne rend pas un
+handler « asynchrone seulement ».</p></section><section class="teaching-section" data-section="s-plusieurs-handlers"><span class="outcome-anchor" id="out-OUT-r1kvyze41rx5" tabindex="-1"></span><h2 id="s-plusieurs-handlers" tabindex="-1">Plusieurs handlers</h2><aside class="section-digest" id="s-plusieurs-handlers-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Le type est examiné avant certains tris.</li><li>Ne pas déduire un ordre global du seul nombre.</li></ol></aside><ul>
+<li>Tous sont appelés ; <code>priority</code> <strong>ordonne</strong>, sans exclure. Sans priority :
+  l'ordre d'enregistrement.</li>
+<li>Mais seulement <strong>dans un même type</strong> : les types du message sont parcourus
+  dans l'ordre class, parents, interfaces, avant les priorities. Un handler
+  typé <code>Invoice</code> passe avant un handler typé <code>Billable</code> à <code>priority: 100</code>.</li>
+<li>Un <code>HandledStamp</code> <strong>par handler</strong> : <code>last()</code> rend le dernier, <code>all()</code> tous.
+  Une return value n'a de sens qu'avec un handler unique, en synchrone.</li>
+</ul></section><section class="teaching-section" data-section="s-pieges-d-examen"><h2 id="s-pieges-d-examen" tabindex="-1">Pièges d&#x27;examen</h2><p class="teaching-label pitfall"><span aria-hidden="true">△</span> <strong>Piège à éviter</strong></p><aside class="section-digest" id="s-pieges-d-examen-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Le message doit rester durable et sérialisable.</li><li>Le handler peut retrouver l&#x27;état utile à l&#x27;exécution.</li></ol></aside><p><strong>Aucune interface à implémenter</strong>, ni pour le message ni pour le handler.</p>
+<p><strong>Le message est apparié par le type de l'argument</strong> — union et interface
+comprises ; sans type, le container refuse de se construire.</p>
+<p><strong>Plusieurs handlers sont légitimes</strong> et tous s'exécutent ; <code>priority</code> les
+ordonne.</p>
+<p><strong>Une property promue ajoutée casse les messages déjà en file</strong>, même avec un
+défaut.</p>
+<p><strong>Ne pas transporter d'object chargé</strong> : un identifier, et un rechargement dans
+le handler.</p></section><section class="teaching-section" data-section="s-fiche-express"><h2 id="s-fiche-express" tabindex="-1">Fiche express</h2><p class="teaching-label essential"><span aria-hidden="true">◆</span> <strong>À mémoriser</strong></p><aside class="section-digest" id="s-fiche-express-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Chaque handler possède son résultat.</li><li>last() ne rend que le dernier stamp.</li></ol></aside><p><strong>Si tu dois retenir seulement 7 choses :</strong></p>
+<ul>
+<li>Un message est une <strong>class ordinaire</strong> sérialisable, avec des
+  <strong>identifiers</strong>.</li>
+<li><strong><code>#[AsMessageHandler]</code></strong> + le <strong>type de l'argument</strong> relient handler et
+  message.</li>
+<li>Union et interface acceptées ; <strong>sans type</strong>, le build échoue.</li>
+<li><strong>Plusieurs handlers</strong> : tous appelés, un <code>HandledStamp</code> chacun.</li>
+<li><strong><code>priority</code></strong> ordonne, et seulement <strong>dans un même type</strong>.</li>
+<li><strong><code>fromTransport</code></strong> ne concerne que les messages <strong>reçus</strong>.</li>
+<li>Property <strong>promue</strong> ajoutée → les anciens messages cassent.</li>
+</ul>
+<p>Moyen mnémotechnique :
+<strong>« le type relie, la priority range, la file se souvient »</strong>.</p>
+<pre class="highlight" tabindex="0"><code class="language-text">message = class + identifiers ; handler = #[AsMessageHandler] + type (union, interface) ; types : class &gt; parents &gt; interfaces &gt; * ;
+priority dans un type ; fromTransport si ReceivedStamp ; unserialize sans constructor : déclarée oui, promue non</code></pre></section><section class="official-sources"><h2>Sources officielles et compléments</h2><ul><li><a href="https://symfony.com/doc/8.0/messenger.html">Symfony 8.0 — Messenger</a></li></ul></section><nav class="course-sequence" aria-label="Ordre de lecture"><a rel="prev" href="course-CRS-se1jr6cxh2n7.html" aria-label="Précédent : Transports — Module 11 — Messenger">Précédent : Transports</a> <a href="lot-11.html">Sommaire : Module 11 — Messenger</a> <a rel="next" href="course-CRS-e5astysks0ty.html" aria-label="Suivant : Workers — Module 11 — Messenger">Suivant : Workers</a></nav><p class="course-practice-entry"><a class="button" href="#view-quiz">Fin du cours — s’entraîner avec le Quiz</a></p></div><div id="view-flashcards" data-course-panel role="region" aria-labelledby="view-flashcards-title"><h2 id="view-flashcards-title">Flashcards</h2><p lang="en">Answer before revealing each card.</p><p>Ces cartes ne mesurent pas une maîtrise notée.</p><div data-card-section="s-l-essentiel"><h3><a href="#s-l-essentiel">Revoir la section du cours</a></h3><div class="reader-cards"><details class="reader-card" id="B-ckdp50w2dmy4-01"><summary lang="en">Must a Messenger message implement a special interface?</summary><p lang="en">No. It can be an ordinary serializable PHP object.</p><p lang="fr">Le message porte les données nécessaires. Aucune interface Messenger n&#x27;est imposée.</p><a href="course-CRS-ckdp50w2dmy4.html#out-OUT-65c68dmyhjc9">Revoir le passage précis</a></details></div></div><div data-card-section="s-le-schema"><h3><a href="#s-le-schema">Revoir la section du cours</a></h3><div class="reader-cards"><details class="reader-card" id="B-ckdp50w2dmy4-02"><summary lang="en">What connects an autoconfigured message handler to its message type?</summary><p lang="en">AsMessageHandler and the handler argument&#x27;s type hint.</p><p lang="fr">L&#x27;attribute enregistre le handler. Le type détermine les messages acceptés.</p><a href="course-CRS-ckdp50w2dmy4.html#out-OUT-yr8h53ttvp6e">Revoir le passage précis</a></details></div></div><div data-card-section="s-l-exemple"><h3><a href="#s-l-exemple">Revoir la section du cours</a></h3><div class="reader-cards"><details class="reader-card" id="B-ckdp50w2dmy4-03"><summary lang="en">If two handlers support OrderPlaced, does Messenger choose only the highest-priority one?</summary><p lang="en">No. Both can run; priority orders them.</p><p lang="fr">La priority n&#x27;exclut pas les autres handlers. Plusieurs traitements sont légitimes.</p><a href="course-CRS-ckdp50w2dmy4.html#out-OUT-r1kvyze41rx5">Revoir le passage précis</a></details></div></div><div data-card-section="s-le-message"><h3><a href="#s-le-message">Revoir la section du cours</a></h3><div class="reader-cards"><details class="reader-card" id="B-ckdp50w2dmy4-04"><summary lang="en">Why can adding a defaulted promoted property break older serialized messages?</summary><p lang="en">PHP unserialization does not call the constructor, so the promoted property may remain uninitialized.</p><p lang="fr">Un message en file vient d&#x27;une ancienne version. Le défaut du constructor ne migre pas automatiquement l&#x27;object.</p><a href="course-CRS-ckdp50w2dmy4.html#out-OUT-65c68dmyhjc9">Revoir le passage précis</a></details></div></div><div data-card-section="s-le-handler"><h3><a href="#s-le-handler">Revoir la section du cours</a></h3><div class="reader-cards"><details class="reader-card" id="B-ckdp50w2dmy4-05"><summary lang="en">Does fromTransport restrict a handler in the same way for a directly dispatched synchronous message?</summary><p lang="en">No. It filters received messages by their transport, not ordinary direct synchronous dispatch.</p><p lang="fr">La restriction concerne la réception. Distinguer dispatch local et message reçu.</p><a href="course-CRS-ckdp50w2dmy4.html#out-OUT-yr8h53ttvp6e">Revoir le passage précis</a></details></div></div><div data-card-section="s-plusieurs-handlers"><h3><a href="#s-plusieurs-handlers">Revoir la section du cours</a></h3><div class="reader-cards"><details class="reader-card" id="B-ckdp50w2dmy4-06"><summary lang="en">Does handler priority globally override class-versus-interface matching order?</summary><p lang="en">No. Priority orders handlers within matching types; message type traversal also matters.</p><p lang="fr">Le type est examiné avant certains tris. Ne pas déduire un ordre global du seul nombre.</p><a href="course-CRS-ckdp50w2dmy4.html#out-OUT-r1kvyze41rx5">Revoir le passage précis</a></details></div></div><div data-card-section="s-pieges-d-examen"><h3><a href="#s-pieges-d-examen">Revoir la section du cours</a></h3><div class="reader-cards"><details class="reader-card" id="B-ckdp50w2dmy4-07"><summary lang="en">Why prefer stable identifiers over large loaded objects in queued messages?</summary><p lang="en">Queued object snapshots can become stale and are harder to serialize compatibly.</p><p lang="fr">Le message doit rester durable et sérialisable. Le handler peut retrouver l&#x27;état utile à l&#x27;exécution.</p><a href="course-CRS-ckdp50w2dmy4.html#out-OUT-65c68dmyhjc9">Revoir le passage précis</a></details></div></div><div data-card-section="s-fiche-express"><h3><a href="#s-fiche-express">Revoir la section du cours</a></h3><div class="reader-cards"><details class="reader-card" id="B-ckdp50w2dmy4-08"><summary lang="en">How are results from several synchronous handlers represented?</summary><p lang="en">One HandledStamp per handler; all() returns all matching stamps.</p><p lang="fr">Chaque handler possède son résultat. last() ne rend que le dernier stamp.</p><a href="course-CRS-ckdp50w2dmy4.html#out-OUT-r1kvyze41rx5">Revoir le passage précis</a></details></div></div><aside class="checkpoint"><h2>Rappel d’un cours antérieur</h2><p>Avant de poursuivre : Messenger component.</p><details class="corpus-correction"><summary lang="en">Does dispatch() returning mean an asynchronously routed message was handled?</summary><p lang="en">No. It may only have been sent to its transport.</p><p>Envoyer et traiter sont deux étapes. Le worker peut exécuter plus tard.</p><a href="course-CRS-5gezsra1sp01.html#out-OUT-w4ahdf9xdh5w">Relire la correction dans le cours antérieur</a></details></aside></div><div id="view-quiz" data-course-panel role="region" aria-labelledby="view-quiz-title"><h2 id="view-quiz-title">Quiz</h2><p id="course-quiz-status" role="status">Quiz interactif non chargé. Démarrez après chargement de la banque locale.</p><div id="course-quiz-controls" class="assessment-main" hidden><div id="course-quiz-assessment-controls" hidden><select id="course-quiz-assessment-mode" aria-label="Mode du quiz" hidden><option value="learning">Entraînement</option></select><p id="course-quiz-training-scope"></p><button id="course-quiz-start-assessment" type="button" lang="en">Start practice</button><button id="course-quiz-finish-assessment" type="button" lang="en" hidden>End session</button></div><p id="course-quiz-assessment-error" role="alert"></p><p id="course-quiz-assessment-timer" hidden></p><p id="course-quiz-session-progress" role="status"></p><div id="course-quiz-assessment-app" tabindex="-1"></div><nav id="course-quiz-session-navigation" aria-label="Questions du cours"></nav><div id="course-quiz-learning-overview" aria-live="polite"></div></div><div id="course-quiz-native"><p>Sans JavaScript ou si le chargement échoue : aucune tentative notée. Les <a href="#view-flashcards">flashcards du cours</a> restent disponibles.</p><details class="course-quiz-fallback" data-question-id="L-ckdp50w2dmy4-base-v1"><summary lang="en">Must a Messenger message implement a special interface?</summary><p>Correction de consultation — non notée.</p><p>Le message porte les données nécessaires. Aucune interface Messenger n&#x27;est imposée.</p><ul><li><strong lang="en">Distractor: No; messages must be arrays rather than objects.</strong><p>Les messages peuvent être des objects PHP ordinaires.</p></li><li><strong lang="en">Correct: No; an ordinary serializable PHP object is sufficient.</strong><p>Le message porte les données nécessaires. Aucune interface Messenger n&#x27;est imposée.</p></li><li><strong lang="en">Distractor: Yes; every message must implement MessageInterface.</strong><p>Messenger n&#x27;impose pas cette interface aux messages.</p></li></ul><a href="course-CRS-ckdp50w2dmy4.html#out-OUT-65c68dmyhjc9">Relire le passage exact</a></details></div></div></div></div><details class="transfer-panel"><summary>Sauvegarde et transfert de progression</summary><p id="reading-status" role="status">Sans JavaScript : lecture libre ; progression non enregistrée.</p><p><a href="assessment.html#overview-title">Lecture, réussites immédiates et différées</a></p><p>Transfert manuel — aucune synchronisation automatique</p><p id="persistence-status" role="status"></p><button type="button" class="secondary" id="export-progress">Exporter ma progression</button><label for="import-progress">Choisir un JSON pour fusionner ma progression (sans remplacement)</label><input type="file" id="import-progress" accept="application/json,.json"><p id="transfer-status" role="status"></p></details></main><footer class="site-footer"><a href="catalogue.html">Catalogue</a> <a href="sources.html">Sources et attribution</a> <a href="#contenu">Haut de page</a></footer></body></html>

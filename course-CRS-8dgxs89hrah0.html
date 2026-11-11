@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; connect-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Router debugging — Symfony 8 Preparation</title><link rel="stylesheet" href="styles.css"><link rel="stylesheet" href="reader.css"><script src="mermaid.min.js" defer></script><script src="mermaid-init.js" defer></script><link rel="stylesheet" href="assessment.css"><script src="learning-state.js" defer></script><script src="guide.js" defer></script><script src="reader-catalog.js" defer></script><script src="reader.js" defer></script><script src="site-state.js" defer></script><script src="assessment.js" defer></script><script src="course-views.js" defer></script><link rel="stylesheet" href="syntax-highlight.css"><script src="prism-syntax.js" defer></script><script src="syntax-highlight.js" defer></script></head><body data-course-id="CRS-8dgxs89hrah0"><a class="skip" href="#contenu">Aller au contenu</a><header class="site-header"><a class="brand" href="index.html">S8 Preparation</a><nav aria-label="Navigation principale"><a href="index.html">Accueil</a> <a href="catalogue.html">Parcours</a> <a href="assessment.html?mode=review">Réviser</a> <a href="examens.html">Examens blancs</a> <a href="jour-j.html">Jour J</a></nav></header><main id="contenu" tabindex="-1" class="corpus-reader"><nav class="breadcrumb" aria-label="Fil d’Ariane"><a href="index.html">Accueil</a> <span aria-hidden="true">›</span> <a href="catalogue.html">Parcours</a> <span aria-hidden="true">›</span> <a href="lot-05.html">Module 05 — Routage</a> <span aria-hidden="true">›</span> <span aria-current="page">Router debugging</span></nav><h1>Router debugging</h1><p class="muted">Symfony 8.0 · API PHP ≤ 8.4 · Twig ≤ 3.22. Préparation indépendante.</p><p class="revision-status">Première itération · en cours de révision pédagogique. Ce cours reste accessible, sans déclaration de validation pédagogique.</p><nav class="course-actions" aria-label="Activités du cours"><a id="tab-course" href="#view-course">Cours</a><a id="tab-flashcards" href="#view-flashcards">Flashcards</a><a id="tab-quiz" href="#view-quiz">Quiz</a></nav><div class="course-layout"><details class="lot-course-menu"><summary>Cours du module · 12 cours</summary><nav aria-label="Cours du module"><a class="lot-context" href="lot-05.html">Module 05 — Routage</a><ol><li><a href="course-CRS-2nwv1v57j7ef.html">Routing component and FrameworkBundle</a></li><li><a href="course-CRS-kqq96z5y9r2f.html">Configuration (YAML and PHP attributes)</a></li><li><a href="course-CRS-wg3j0t5pm7w1.html">Restrict URL parameters</a></li><li><a href="course-CRS-vkgr06y3x72g.html">Set default values to URL parameters</a></li><li><a href="course-CRS-sx61as7r7p0d.html">URLs generation</a></li><li><a href="course-CRS-tgbv3wp66rcc.html">Trigger redirects</a></li><li><a href="course-CRS-nhebf7arqvn4.html">Special internal routing attributes</a></li><li><a href="course-CRS-2b1wzm3rwdrn.html">Domain name matching</a></li><li><a href="course-CRS-f92d09x14ggx.html">Conditional request matching</a></li><li><a href="course-CRS-h3q0qxnq8eq0.html">HTTP methods matching</a></li><li><a href="course-CRS-evzcj63fgdb7.html">User&#x27;s locale guessing</a></li><li><a href="course-CRS-8dgxs89hrah0.html" aria-current="page">Router debugging</a></li></ol></nav></details><aside class="course-section-menu" aria-label="Sommaire du cours"><details class="course-section-disclosure"><summary id="course-sections">Sections du cours</summary><nav aria-label="Sections du cours"><ul><li><a href="#s-objectif">Objectif</a></li><li><a href="#s-l-essentiel">L&#x27;essentiel</a></li><li><a href="#s-le-schema">Le schéma</a></li><li><a href="#s-l-exemple">L&#x27;exemple</a></li><li><a href="#s-debug-router-la-liste-dans-l-ordre-d-evaluation">`debug:router` : la liste, dans l&#x27;ordre d&#x27;évaluation</a></li><li><a href="#s-les-options-de-debug-router">Les options de `debug:router`</a></li><li><a href="#s-router-match-quelle-route-repondrait">`router:match` : quelle route répondrait</a></li><li><a href="#s-pieges-d-examen">Pièges d&#x27;examen</a></li><li><a href="#s-application">Application</a></li><li><a href="#s-fiche-express">Fiche express</a></li><li><a href="#s-sources-officielles">Sources officielles</a></li></ul></nav></details></aside><div class="course-content"><div id="view-course" data-course-panel role="region" aria-labelledby="view-course-title"><h2 id="view-course-title">Cours</h2><p class="course-introduction"><a href="#s-objectif">Introduction</a> · <a href="#course-sections">Sections du cours</a></p><h2>Objectifs d’apprentissage</h2><ul><li><a href="course-CRS-8dgxs89hrah0.html#out-OUT-ef2j62bxp9fd">Lister les routes dans leur ordre d&#x27;évaluation</a></li><li><a href="course-CRS-8dgxs89hrah0.html#out-OUT-qnzwvqtmb7v5">Citer les options utiles de debug:router</a></li><li><a href="course-CRS-8dgxs89hrah0.html#out-OUT-w0yjsy54z7s9">Utiliser router:match pour diagnostiquer une URL</a></li></ul><aside class="pedagogy-legend" aria-label="Repères pédagogiques"><p><strong>Repères pédagogiques</strong></p><p>Ces repères décrivent le rôle du bloc, pas une fréquence officielle à l’examen.</p><p class="teaching-label essential"><span aria-hidden="true">○</span> <strong>À comprendre</strong></p><p class="teaching-label essential"><span aria-hidden="true">◆</span> <strong>À mémoriser</strong></p><p class="teaching-label example"><span aria-hidden="true">▣</span> <strong>Exemple concret</strong></p><p class="teaching-label pitfall"><span aria-hidden="true">△</span> <strong>Piège à éviter</strong></p><p class="teaching-label nuance"><span aria-hidden="true">?</span> <strong>À vérifier</strong></p></aside><section class="teaching-section" data-section="s-objectif"><h2 id="s-objectif" tabindex="-1">Objectif</h2><p>Savoir diagnostiquer un problème de routage avec les deux commands prévues
+pour cela : lire la liste des routes dans l'ordre où Symfony les essaie, en
+filtrer ou en détailler une, et demander directement quelle route répondrait à
+un path donné, avec sa method, son host et son schéma.</p></section><section class="teaching-section" data-section="s-l-essentiel"><h2 id="s-l-essentiel" tabindex="-1">L&#x27;essentiel</h2><p class="teaching-label essential"><span aria-hidden="true">○</span> <strong>À comprendre</strong></p><aside class="section-digest" id="s-l-essentiel-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Le défaut teste GET sur localhost.</li><li>Aucune correspondance produit un exit code 1.</li></ol></aside><p>Deux commands de FrameworkBundle diagnostiquent le routage : <strong><code>debug:router</code></strong>
+liste les routes <strong>dans l'ordre où Symfony les essaie</strong>, et <strong><code>router:match</code></strong>
+rejoue un appel pour dire laquelle répond. La <strong>première</strong> route qui
+correspond gagne ; une route peut correspondre par son path et être écartée
+par sa method, son host ou son schéma.</p></section><section class="teaching-section" data-section="s-le-schema"><h2 id="s-le-schema" tabindex="-1">Le schéma</h2><aside class="section-digest" id="s-le-schema-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>La liste révèle les routes qui masquent les suivantes.</li><li>Ce n&#x27;est pas un tri alphabétique.</li></ol></aside><figure class="diagram" aria-labelledby="CRS-8dgxs89hrah0-3-diagram-0-title CRS-8dgxs89hrah0-3-diagram-0-description"><figcaption id="CRS-8dgxs89hrah0-3-diagram-0-title">Le path d&#x27;un appel jusqu&#x27;au controller, et les deux commands de debug</figcaption><p id="CRS-8dgxs89hrah0-3-diagram-0-description">Pour l&#x27;appel PUT https://api.example.com/api/posts/1, le contexte retient le path info /api/posts/1, la method PUT, le host et le scheme. Les routes sont essayées une par une, dans l&#x27;ordre d&#x27;évaluation que liste debug:router. Une route ne correspond pas, correspond presque, à cause du contexte, ou correspond, et alors la recherche s&#x27;arrête. router:match montre le controller de la route trouvée.</p><div class="mermaid" hidden>---
+title: Ce que montrent debug:router et router:match
+---
+flowchart TD
+  accTitle: Le path d&#x27;un appel jusqu&#x27;au controller, et les deux commands de debug
+  accDescr: Pour l&#x27;appel PUT https://api.example.com/api/posts/1, le contexte retient le path info /api/posts/1, la method PUT, le host et le scheme. Les routes sont essayées une par une, dans l&#x27;ordre d&#x27;évaluation que liste debug:router. Une route ne correspond pas, correspond presque, à cause du contexte, ou correspond, et alors la recherche s&#x27;arrête. router:match montre le controller de la route trouvée.
+  A([&quot;PUT https://api.example.com&lt;br/&gt;/api/posts/1&quot;]) --&gt; C[&quot;contexte : path info /api/posts/1&lt;br/&gt;method PUT · host · scheme&quot;]
+  C --&gt; R[&quot;routes essayées une par une,&lt;br/&gt;dans l&#x27;ordre d&#x27;évaluation&quot;]
+  R -.-|&quot;debug:router&quot;| DR([&quot;liste cet ordre&quot;])
+  R --&gt; E{&quot;la route&quot;}
+  E --&gt;|&quot;ne correspond pas ·&lt;br/&gt;correspond presque (contexte)&quot;| R
+  E --&gt;|&quot;CORRESPOND&quot;| S([&quot;stop&quot;])
+  S --&gt; CT[&quot;controller de la route trouvée&quot;]
+  CT -.-|&quot;router:match&quot;| RM([&quot;le montre&quot;])</div></figure></section><section class="teaching-section" data-section="s-l-exemple"><h2 id="s-l-exemple" tabindex="-1">L&#x27;exemple</h2><p class="teaching-label example"><span aria-hidden="true">▣</span> <strong>Exemple concret</strong></p><p class="digest-reference"><a href="#s-l-essentiel-digest">Revoir la règle : Le défaut teste GET sur localhost.</a></p><table>
+<thead>
+<tr>
+<th>Nom</th>
+<th>Path</th>
+<th>Restrictions</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>blog_list</code></td>
+<td><code>/blog</code></td>
+<td>aucune</td>
+</tr>
+<tr>
+<td><code>blog_show</code></td>
+<td><code>/blog/{slug}</code></td>
+<td>method GET</td>
+</tr>
+<tr>
+<td><code>blog_new</code></td>
+<td><code>/blog/new</code></td>
+<td>methods GET et POST</td>
+</tr>
+<tr>
+<td><code>api_post_edit</code></td>
+<td><code>/api/posts/{id}</code></td>
+<td>method PUT, host <code>api.example.com</code>, schéma <code>https</code></td>
+</tr>
+</tbody>
+</table>
+<p><code>/blog/{slug}</code> est déclaré <strong>avant</strong> <code>/blog/new</code> : en GET, <code>/blog/new</code> est servi
+par <code>blog_show</code>, avec <code>$slug = 'new'</code>.</p></section><section class="teaching-section" data-section="s-debug-router-la-liste-dans-l-ordre-d-evaluation"><span class="outcome-anchor" id="out-OUT-ef2j62bxp9fd" tabindex="-1"></span><h2 id="s-debug-router-la-liste-dans-l-ordre-d-evaluation" tabindex="-1">`debug:router` : la liste, dans l&#x27;ordre d&#x27;évaluation</h2><p class="digest-reference"><a href="#s-le-schema-digest">Revoir la règle : La liste révèle les routes qui masquent les suivantes.</a></p><p>La command « lists all your application routes in the same order in which
+Symfony evaluates them » — ni alphabétique ni par file. Sur l'exemple,
+<code>blog_show</code> est listée au-dessus de <code>blog_new</code> : le bug se lit dans la liste.</p>
+<ul>
+<li>L'ordre est celui de la <strong>déclaration</strong>, puis la <strong><code>priority</code></strong> : « Routes
+  with higher priority are sorted before routes with lower priority », défaut</li>
+<li>Une route déclarée en dernier avec <code>priority: 2</code> est listée et évaluée en
+  premier.</li>
+<li><code>ANY</code> veut dire « aucune restriction » ; les colonnes <code>Scheme</code> et <code>Host</code>
+  n'apparaissent que si une route en restreint un.</li>
+</ul></section><section class="teaching-section" data-section="s-les-options-de-debug-router"><span class="outcome-anchor" id="out-OUT-qnzwvqtmb7v5" tabindex="-1"></span><h2 id="s-les-options-de-debug-router" tabindex="-1">Les options de `debug:router`</h2><aside class="section-digest" id="s-les-options-de-debug-router-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Le filtre conserve les routes compatibles.</li><li>--method=ANY sélectionne seulement les routes sans restriction.</li></ol></aside><table>
+<thead>
+<tr>
+<th>Écriture</th>
+<th>Effet</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>debug:router &lt;nom&gt;</code></td>
+<td>le <strong>détail</strong> d'une route : path, regex, host, schéma, methods, requirements, defaults, options</td>
+</tr>
+<tr>
+<td><code>--show-controllers</code></td>
+<td>une colonne <code>Controller</code></td>
+</tr>
+<tr>
+<td><code>--show-aliases</code></td>
+<td>une colonne <code>Aliases</code></td>
+</tr>
+<tr>
+<td><code>--method=GET</code></td>
+<td>les routes GET… <strong>et celles sans restriction</strong></td>
+</tr>
+<tr>
+<td><code>--method=ANY</code></td>
+<td><strong>seulement</strong> les routes sans restriction de method</td>
+</tr>
+<tr>
+<td><code>--format=json</code></td>
+<td><code>txt</code> (défaut), <code>xml</code>, <code>json</code>, <code>md</code> ; sinon « Unsupported format "…" »</td>
+</tr>
+<tr>
+<td><code>--raw</code></td>
+<td>sortie brute</td>
+</tr>
+</tbody>
+</table>
+<p>L'argument peut être un nom <strong>partiel</strong>, casse ignorée : un seul résultat
+affiche son détail ; plusieurs, un choix (ou la liste en non interactif) ;
+aucun, « The route "…" does not exist. » et l'exit code 1.</p></section><section class="teaching-section" data-section="s-router-match-quelle-route-repondrait"><span class="outcome-anchor" id="out-OUT-w0yjsy54z7s9" tabindex="-1"></span><h2 id="s-router-match-quelle-route-repondrait" tabindex="-1">`router:match` : quelle route répondrait</h2><p class="digest-reference"><a href="#s-l-essentiel-digest">Revoir la règle : Le défaut teste GET sur localhost.</a></p><ul>
+<li>L'argument est un <strong>path</strong> (<code>path_info</code>), pas une URL : method, host et
+  schéma passent par <code>--method</code>, <code>--host</code>, <code>--scheme</code>.</li>
+<li>Sans option : un <strong>GET</strong> sur <strong><code>localhost</code></strong>.</li>
+<li><code>RouterMatchCommand</code> s'appuie sur <code>TraceableUrlMatcher</code> et ses trois niveaux
+  de trace :</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Situation</th>
+<th>Affichage</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>correspond presque</td>
+<td>« Route "…" almost matches but … », avec la raison</td>
+</tr>
+<tr>
+<td>correspond</td>
+<td>« [OK] Route "…" matches », puis le détail ; exit code 0</td>
+</tr>
+<tr>
+<td>aucune route</td>
+<td>« [ERROR] None of the routes match the path "…" » ; exit code <strong>1</strong></td>
+</tr>
+<tr>
+<td><code>-v</code></td>
+<td>en plus, chaque route qui ne correspond pas, avec la raison</td>
+</tr>
+</tbody>
+</table>
+<p><code>router:match /blog/new</code> répond <code>blog_show</code> : déclarer <code>blog_new</code> avant, ou
+lui donner une <code>priority</code> plus haute.</p><aside class="enrichment" aria-label="Autre explication"><p>router:match est un simulateur d'itinéraire : il explique aussi les routes presque compatibles. Lui donner le bon path mais oublier host ou method revient à simuler le trajet depuis le mauvais contexte.</p></aside></section><section class="teaching-section" data-section="s-pieges-d-examen"><h2 id="s-pieges-d-examen" tabindex="-1">Pièges d&#x27;examen</h2><p class="teaching-label pitfall"><span aria-hidden="true">△</span> <strong>Piège à éviter</strong></p><p class="digest-reference"><a href="#s-l-essentiel-digest">Revoir la règle : Le défaut teste GET sur localhost.</a></p><p><strong>L'ordre de <code>debug:router</code> n'est pas alphabétique.</strong> C'est l'ordre dans lequel
+Symfony évalue les routes, et donc l'explication de « pourquoi est-ce l'autre
+route qui répond ? ». Un énoncé qui parle de tri par nom ou par path se trompe.</p>
+<p><strong>Une route paramétrée déclarée plus haut intercepte un path fixe.</strong> Avec
+<code>/blog/{slug}</code> avant <code>/blog/new</code>, le path <code>/blog/new</code> en GET est servi par la
+route de l'article : la première correspondance gagne, même si une route plus
+précise existe plus bas.</p>
+<p><strong>La <code>priority</code> change l'ordre affiché.</strong> Une route déclarée en dernier mais avec
+<code>priority: 2</code> est listée et évaluée avant les routes de priority 0 ;
+<code>debug:router</code> montre cet ordre réel, pas l'ordre des files.</p>
+<p><strong><code>--method=POST</code> n'affiche pas que les routes POST.</strong> Les routes sans
+restriction de method acceptent tout verbe et restent dans la liste filtrée ;
+<code>--method=ANY</code>, à l'inverse, n'affiche que celles-là.</p>
+<p><strong><code>router:match</code> prend un path, pas une URL.</strong> Host, schéma et method passent
+par <code>--host</code>, <code>--scheme</code> et <code>--method</code>.</p>
+<p><strong>Sans options, <code>router:match</code> teste un GET sur <code>localhost</code>.</strong> Une route
+restreinte à un host ou à une autre method y apparaît au mieux en « almost
+matches », et la command finit en erreur.</p>
+<p><strong>Aucune correspondance, c'est l'exit code 1.</strong> Ni 0 avec une table vide, ni un
+code calqué sur HTTP : un script peut s'appuyer dessus.</p>
+<p><strong>Un nom partiel suffit à <code>debug:router</code>, et la casse est ignorée.</strong> Avec
+plusieurs résultats, la command demande de choisir, ou liste les routes en mode
+non interactif.</p></section><section class="teaching-section" data-section="s-application"><h2 id="s-application" tabindex="-1">Application</h2><aside class="section-digest" id="s-application-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Le défaut teste GET sur localhost.</li><li>Aucune correspondance produit un exit code 1.</li><li>Le filtre conserve les routes compatibles.</li><li>--method=ANY sélectionne seulement les routes sans restriction.</li></ol></aside>
+
+
+
+<nav aria-label="Flashcards de l’application"><ul><li><a href="#A-8dgxs89hrah0-65c42c80d9-03">Flashcard : Le défaut teste GET sur localhost. Aucune correspondance produit un exit code 1.</a></li><li><a href="#A-8dgxs89hrah0-bd2c3cd00e-02">Flashcard : Le filtre conserve les routes compatibles. --method=ANY sélectionne seulement les routes sans restriction.</a></li></ul></nav></section><section class="teaching-section" data-section="s-fiche-express"><h2 id="s-fiche-express" tabindex="-1">Fiche express</h2><p class="teaching-label essential"><span aria-hidden="true">◆</span> <strong>À mémoriser</strong></p><p class="digest-reference"><a href="#s-l-essentiel-digest">Revoir la règle : Le défaut teste GET sur localhost.</a></p><p><strong>Si tu dois retenir seulement 6 choses :</strong></p>
+<ul>
+<li><strong><code>debug:router</code></strong> : les routes dans l'<strong>ordre d'évaluation</strong>.</li>
+<li>Ordre : déclaration, puis <strong><code>priority</code></strong> (défaut 0) ; <strong>la première qui
+  correspond gagne</strong>.</li>
+<li><strong><code>--method=X</code></strong> garde aussi les routes ANY ; <strong><code>--method=ANY</code></strong> ne garde
+  qu'elles.</li>
+<li>Nom <strong>partiel</strong>, casse ignorée.</li>
+<li><strong><code>router:match</code></strong> : un <strong>path</strong> ; défaut <strong>GET</strong> sur <strong>localhost</strong>.</li>
+<li>« almost matches » + raison ; aucune route : <strong>exit code 1</strong>.</li>
+</ul>
+<p>Moyen mnémotechnique : <strong>« debug LISTE, match TESTE »</strong>.</p>
+<pre class="highlight" tabindex="0"><code class="language-text">ROUTES ESSAYÉES DANS L'ORDRE (déclaration, puis priority) → LA PREMIÈRE QUI CORRESPOND GAGNE
+  debug:router  → montre cet ordre (filtres : --method, détail : &lt;nom partiel&gt;)
+  router:match  → rejoue un path dans un contexte (--method --host --scheme)
+                  → almost matches + raison · OK + détail · sinon exit 1</code></pre></section><section class="teaching-section" data-section="s-sources-officielles"><h2 id="s-sources-officielles" tabindex="-1">Sources officielles</h2><ul>
+<li><a href="https://symfony.com/doc/8.0/routing.html">Symfony 8.0 — Routing</a></li>
+<li><a href="https://symfony.com/doc/8.0/reference/configuration/framework.html">Symfony 8.0 — reference / configuration / framework</a></li>
+</ul></section><nav class="course-sequence" aria-label="Ordre de lecture"><a rel="prev" href="course-CRS-evzcj63fgdb7.html" aria-label="Précédent : User&#x27;s locale guessing — Module 05 — Routage">Précédent : User&#x27;s locale guessing</a> <a href="lot-05.html">Sommaire : Module 05 — Routage</a> <a rel="next" href="course-CRS-2bj91rj9kvj0.html" aria-label="Suivant : TwigBundle — Module 06 — Templates avec Twig">Suivant : TwigBundle</a></nav><p class="course-practice-entry"><a class="button" href="#view-quiz">Fin du cours — s’entraîner avec le Quiz</a></p></div><div id="view-flashcards" data-course-panel role="region" aria-labelledby="view-flashcards-title"><h2 id="view-flashcards-title">Flashcards</h2><p lang="en">Answer before revealing each card.</p><p>Ces cartes ne mesurent pas une maîtrise notée.</p><div data-card-section="s-l-essentiel"><h3><a href="#s-l-essentiel">Revoir la section du cours</a></h3><div class="reader-cards"><details class="reader-card" id="A-8dgxs89hrah0-65c42c80d9-03"><summary lang="en">Does router:match take a full URL as its positional argument?</summary><p lang="en">No. It takes a path; supply host, scheme and method through options.</p><p lang="fr">Le défaut teste GET sur localhost. Aucune correspondance produit un exit code 1.</p><a href="course-CRS-8dgxs89hrah0.html#out-OUT-w0yjsy54z7s9">Revoir le passage précis</a></details></div></div><div data-card-section="s-le-schema"><h3><a href="#s-le-schema">Revoir la section du cours</a></h3><div class="reader-cards"><details class="reader-card" id="A-8dgxs89hrah0-6e0103f6cc-01"><summary lang="en">In which order does debug:router list routes?</summary><p lang="en">The actual evaluation order, including priorities.</p><p lang="fr">La liste révèle les routes qui masquent les suivantes. Ce n&#x27;est pas un tri alphabétique.</p><a href="course-CRS-8dgxs89hrah0.html#out-OUT-ef2j62bxp9fd">Revoir le passage précis</a></details></div></div><div data-card-section="s-l-exemple"><h3><a href="#s-l-exemple">Revoir la section du cours</a></h3><div class="reader-cards"><p class="reader-card-reference" id="A-8dgxs89hrah0-88b6fbd62c-03">Rappel déjà proposé : <a lang="en" href="#A-8dgxs89hrah0-65c42c80d9-03">Does router:match take a full URL as its positional argument?</a> · <a href="course-CRS-8dgxs89hrah0.html#out-OUT-w0yjsy54z7s9">Passage canonique</a></p></div></div><div data-card-section="s-debug-router-la-liste-dans-l-ordre-d-evaluation"><h3><a href="#s-debug-router-la-liste-dans-l-ordre-d-evaluation">Revoir la section du cours</a></h3><div class="reader-cards"><p class="reader-card-reference" id="A-8dgxs89hrah0-ecbde10e9a-01">Rappel déjà proposé : <a lang="en" href="#A-8dgxs89hrah0-6e0103f6cc-01">In which order does debug:router list routes?</a> · <a href="course-CRS-8dgxs89hrah0.html#out-OUT-ef2j62bxp9fd">Passage canonique</a></p></div></div><div data-card-section="s-les-options-de-debug-router"><h3><a href="#s-les-options-de-debug-router">Revoir la section du cours</a></h3><div class="reader-cards"><details class="reader-card" id="A-8dgxs89hrah0-bd2c3cd00e-02"><summary lang="en">Does debug:router --method=POST exclude unrestricted routes?</summary><p lang="en">No. Unrestricted routes accept POST too.</p><p lang="fr">Le filtre conserve les routes compatibles. --method=ANY sélectionne seulement les routes sans restriction.</p><a href="course-CRS-8dgxs89hrah0.html#out-OUT-qnzwvqtmb7v5">Revoir le passage précis</a></details></div></div><div data-card-section="s-router-match-quelle-route-repondrait"><h3><a href="#s-router-match-quelle-route-repondrait">Revoir la section du cours</a></h3><div class="reader-cards"><p class="reader-card-reference" id="A-8dgxs89hrah0-d11ed164f7-03">Rappel déjà proposé : <a lang="en" href="#A-8dgxs89hrah0-65c42c80d9-03">Does router:match take a full URL as its positional argument?</a> · <a href="course-CRS-8dgxs89hrah0.html#out-OUT-w0yjsy54z7s9">Passage canonique</a></p></div></div><div data-card-section="s-pieges-d-examen"><h3><a href="#s-pieges-d-examen">Revoir la section du cours</a></h3><div class="reader-cards"><p class="reader-card-reference" id="A-8dgxs89hrah0-596d5af532-03">Rappel déjà proposé : <a lang="en" href="#A-8dgxs89hrah0-65c42c80d9-03">Does router:match take a full URL as its positional argument?</a> · <a href="course-CRS-8dgxs89hrah0.html#out-OUT-w0yjsy54z7s9">Passage canonique</a></p></div></div><div data-card-section="s-application"><h3><a href="#s-application">Revoir la section du cours</a></h3><div class="reader-cards"><p class="reader-card-reference" id="A-8dgxs89hrah0-e7ad522ea3-03">Rappel déjà proposé : <a lang="en" href="#A-8dgxs89hrah0-65c42c80d9-03">Does router:match take a full URL as its positional argument?</a> · <a href="course-CRS-8dgxs89hrah0.html#out-OUT-w0yjsy54z7s9">Passage canonique</a></p><p class="reader-card-reference" id="A-8dgxs89hrah0-e7ad522ea3-02">Rappel déjà proposé : <a lang="en" href="#A-8dgxs89hrah0-bd2c3cd00e-02">Does debug:router --method=POST exclude unrestricted routes?</a> · <a href="course-CRS-8dgxs89hrah0.html#out-OUT-qnzwvqtmb7v5">Passage canonique</a></p></div></div><div data-card-section="s-fiche-express"><h3><a href="#s-fiche-express">Revoir la section du cours</a></h3><div class="reader-cards"><p class="reader-card-reference" id="A-8dgxs89hrah0-b11e58e15e-03">Rappel déjà proposé : <a lang="en" href="#A-8dgxs89hrah0-65c42c80d9-03">Does router:match take a full URL as its positional argument?</a> · <a href="course-CRS-8dgxs89hrah0.html#out-OUT-w0yjsy54z7s9">Passage canonique</a></p></div></div><aside class="checkpoint"><h2>Rappel d’un cours antérieur</h2><p>Avant de poursuivre : HTTP methods matching.</p><details class="corpus-correction"><summary lang="en">Is a hidden _method field enough to enable method overriding?</summary><p lang="en">No. Parameter-based override must be enabled.</p><p>Le form HTML transmet GET ou POST. _method exige http_method_override pour être interprété.</p><a href="course-CRS-h3q0qxnq8eq0.html#out-OUT-1cfa6y0xkxt0">Relire la correction dans le cours antérieur</a></details></aside></div><div id="view-quiz" data-course-panel role="region" aria-labelledby="view-quiz-title"><h2 id="view-quiz-title">Quiz</h2><p id="course-quiz-status" role="status">Quiz interactif non chargé. Démarrez après chargement de la banque locale.</p><div id="course-quiz-controls" class="assessment-main" hidden><div id="course-quiz-assessment-controls" hidden><select id="course-quiz-assessment-mode" aria-label="Mode du quiz" hidden><option value="learning">Entraînement</option></select><p id="course-quiz-training-scope"></p><button id="course-quiz-start-assessment" type="button" lang="en">Start practice</button><button id="course-quiz-finish-assessment" type="button" lang="en" hidden>End session</button></div><p id="course-quiz-assessment-error" role="alert"></p><p id="course-quiz-assessment-timer" hidden></p><p id="course-quiz-session-progress" role="status"></p><div id="course-quiz-assessment-app" tabindex="-1"></div><nav id="course-quiz-session-navigation" aria-label="Questions du cours"></nav><div id="course-quiz-learning-overview" aria-live="polite"></div></div><div id="course-quiz-native"><p>Sans JavaScript ou si le chargement échoue : aucune tentative notée. Les <a href="#view-flashcards">flashcards du cours</a> restent disponibles.</p><details class="course-quiz-fallback" data-question-id="L-8dgxs89hrah0-base-v1"><summary lang="en">Does router:match take a full URL as its positional argument?</summary><p>Correction de consultation — non notée.</p><p>Le défaut teste GET sur localhost. Aucune correspondance produit un exit code 1.</p><ul><li><strong lang="en">Distractor: Yes; the positional argument must include scheme and host.</strong><p>router:match prend un path ; les autres éléments sont des options.</p></li><li><strong lang="en">Distractor: No; it accepts only a route name, not a path.</strong><p>La command teste le matching d&#x27;un path, pas la génération d&#x27;une route.</p></li><li><strong lang="en">Correct: No; pass a path and use host, scheme and method options.</strong><p>Le défaut teste GET sur localhost. Aucune correspondance produit un exit code 1.</p></li></ul><a href="course-CRS-8dgxs89hrah0.html#out-OUT-w0yjsy54z7s9">Relire le passage exact</a></details></div></div></div></div><details class="transfer-panel"><summary>Sauvegarde et transfert de progression</summary><p id="reading-status" role="status">Sans JavaScript : lecture libre ; progression non enregistrée.</p><p><a href="assessment.html#overview-title">Lecture, réussites immédiates et différées</a></p><p>Transfert manuel — aucune synchronisation automatique</p><p id="persistence-status" role="status"></p><button type="button" class="secondary" id="export-progress">Exporter ma progression</button><label for="import-progress">Choisir un JSON pour fusionner ma progression (sans remplacement)</label><input type="file" id="import-progress" accept="application/json,.json"><p id="transfer-status" role="status"></p></details></main><footer class="site-footer"><a href="catalogue.html">Catalogue</a> <a href="sources.html">Sources et attribution</a> <a href="#contenu">Haut de page</a></footer></body></html>

@@ -1,0 +1,59 @@
+PROVENANCE — Symfony 8 Preparation, corpus foundation
+
+This project combines the HTTP pilot with an explicitly authorized corpus
+import from Sf-8.0 and Symfony-8-Certification-Path. Full original bodies and
+original source evidence are retained in a private, non-publishable snapshot.
+Only section-level admitted material and reviewed English adapters are eligible
+for publication. See README.md for integration status and the build gates.
+
+Source revisions supplied for this synthesis:
+Sf-8.0: 3415a8840420b1a9e5f7f407d9884f09064e3887
+  169 learning-path concepts; admitted sections only
+Symfony-8-Certification-Path: 5fdb6f547b12d9ea41ec878822c7fb062b8e0e3f
+  163 courses, 26 summaries, 27 decks (2044 French cards)
+
+No license file was found in Symfony-8-Certification-Path during the dedicated
+filename search. Its Composer metadata declares MIT, but no content license
+grant is inferred. The owner explicitly authorizes this merger and the full
+bodies. This authorization is not represented as a public content license.
+French source flashcard decks and raw provenance are not learner payloads.
+
+Mermaid 11.17.2 is locally vendored, with its complete MIT notice in
+MERMAID-LICENSE.txt. Its runtime SHA-256 is
+581ed7d74bd9048d0e3a91363927d72ef22942d7722546b27f7cc29e35390eb8.
+Build-only dependencies: Markdown 3.11.3 (BSD-3-Clause),
+pymdown-extensions 13.1 (MIT), PyYAML 6.0.3 (MIT).
+Their package notices remain with the build installation, not the public site.
+
+The following notice from Sf-8.0/LICENSE is retained for attribution to that
+MIT-licensed pedagogical source. It is not a license grant for the second
+project or for linked official documentation.
+
+MIT License
+
+Copyright (c) 2017 Thomas Berends (original "Symfony Certification Preparation List")
+Copyright (c) 2026 Symfony 8 Expert Certification Prep contributors
+
+This project is a derivative work that began from the "Symfony Certification
+Preparation List" by Thomas Berends
+(https://github.com/ThomasBerends/symfony-certification-preparation-list)
+and was substantially rewritten and expanded into a full learning platform for
+the Symfony 8 Certification.
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.

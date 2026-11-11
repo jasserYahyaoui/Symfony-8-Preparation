@@ -1,0 +1,113 @@
+.assessment-header,
+.assessment-main {
+  width: 100%;
+  max-width: 50rem;
+  min-width: 0;
+  margin: 0;
+  padding: 1.25rem var(--page-gutter);
+}
+.assessment-main section,
+.assessment-main details {
+  margin-block: 1.2rem;
+}
+.assessment-main fieldset,
+.transfer-panel,
+.review-stop {
+  padding: 1rem;
+  border: 1px solid #718096;
+  border-radius: .4rem;
+}
+.assessment-main legend {
+  font-weight: 700;
+  padding-inline: .4rem;
+  max-width: 100%;
+}
+.assessment-main label,
+.assessment-main select,
+.assessment-main input[type="file"] {
+  display: block;
+  margin-block: .7rem;
+  max-width: 100%;
+}
+.assessment-main .answer-choice {
+  display: flex;
+  gap: .6rem;
+  align-items: flex-start;
+  padding: .8rem;
+  border: 1px solid #718096;
+  border-radius: .25rem;
+  cursor: pointer;
+  overflow-wrap: anywhere;
+}
+.assessment-main .answer-choice input {
+  flex: 0 0 auto;
+  margin-block-start: .25rem;
+}
+.assessment-main button,
+.assessment-main select,
+.assessment-main summary {
+  min-height: 2.75rem;
+  padding: .6rem .8rem;
+  font: inherit;
+}
+.assessment-main button {
+  margin: .4rem .5rem .4rem 0;
+  cursor: pointer;
+  background: transparent;
+  color: var(--accent);
+}
+.assessment-main #start-assessment:not(:disabled),
+.assessment-main form button[type="submit"]:not(:disabled),
+#jour-j-app > button:only-of-type {
+  background: var(--accent);
+  color: white;
+}
+.assessment-main button:hover {
+  background: var(--accent-light);
+  color: var(--ink);
+}
+.assessment-main button:disabled {
+  cursor: not-allowed;
+  opacity: .65;
+}
+.assessment-main pre {
+  padding: 1rem;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  border: 1px solid #718096;
+  background: #101827;
+  color: #f7fafc;
+}
+.assessment-main :focus-visible,
+.assessment-header :focus-visible {
+  outline: 3px solid #d97706;
+  outline-offset: 3px;
+}
+.assessment-main [role="alert"]:not(:empty) {
+  border: 2px solid #b91c1c;
+  padding: .8rem;
+}
+.assessment-main [hidden] {
+  display: none !important;
+}
+.assessment-main a {
+  text-decoration: underline;
+  text-underline-offset: .15em;
+}
+.assessment-main p,
+.assessment-main li {
+  overflow-wrap: anywhere;
+}
+#session-navigation {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .5rem;
+}
+@media (max-width: 600px) {
+  .assessment-main,
+  .assessment-header { padding-block: .8rem; }
+  .assessment-main fieldset { min-width: 0; padding: .6rem; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .assessment-main * { scroll-behavior: auto; }
+}

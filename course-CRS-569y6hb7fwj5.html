@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; connect-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Built-in validation constraints — Symfony 8 Preparation</title><link rel="stylesheet" href="styles.css"><link rel="stylesheet" href="reader.css"><script src="mermaid.min.js" defer></script><script src="mermaid-init.js" defer></script><link rel="stylesheet" href="assessment.css"><script src="learning-state.js" defer></script><script src="guide.js" defer></script><script src="reader-catalog.js" defer></script><script src="reader.js" defer></script><script src="site-state.js" defer></script><script src="assessment.js" defer></script><script src="course-views.js" defer></script><link rel="stylesheet" href="syntax-highlight.css"><script src="prism-syntax.js" defer></script><script src="syntax-highlight.js" defer></script></head><body data-course-id="CRS-569y6hb7fwj5"><a class="skip" href="#contenu">Aller au contenu</a><header class="site-header"><a class="brand" href="index.html">S8 Preparation</a><nav aria-label="Navigation principale"><a href="index.html">Accueil</a> <a href="catalogue.html">Parcours</a> <a href="assessment.html?mode=review">Réviser</a> <a href="examens.html">Examens blancs</a> <a href="jour-j.html">Jour J</a></nav></header><main id="contenu" tabindex="-1" class="corpus-reader"><nav class="breadcrumb" aria-label="Fil d’Ariane"><a href="index.html">Accueil</a> <span aria-hidden="true">›</span> <a href="catalogue.html">Parcours</a> <span aria-hidden="true">›</span> <a href="lot-08.html">Module 08 — Validation des données</a> <span aria-hidden="true">›</span> <span aria-current="page">Built-in validation constraints</span></nav><h1>Built-in validation constraints</h1><p class="muted">Symfony 8.0 · API PHP ≤ 8.4 · Twig ≤ 3.22. Préparation indépendante.</p><p class="revision-status">Première itération · en cours de révision pédagogique. Ce cours reste accessible, sans déclaration de validation pédagogique.</p><nav class="course-actions" aria-label="Activités du cours"><a id="tab-course" href="#view-course">Cours</a><a id="tab-flashcards" href="#view-flashcards">Flashcards</a><a id="tab-quiz" href="#view-quiz">Quiz</a></nav><div class="course-layout"><details class="lot-course-menu"><summary>Cours du module · 8 cours</summary><nav aria-label="Cours du module"><a class="lot-context" href="lot-08.html">Module 08 — Validation des données</a><ol><li><a href="course-CRS-way4aktj2d5m.html">Validator component</a></li><li><a href="course-CRS-ax2v94pgbk0g.html">PHP object validation</a></li><li><a href="course-CRS-569y6hb7fwj5.html" aria-current="page">Built-in validation constraints</a></li><li><a href="course-CRS-wzmrks85zyh1.html">Validation scopes</a></li><li><a href="course-CRS-vskyr5zdwr2t.html">Validation groups</a></li><li><a href="course-CRS-bthv5xmh5wea.html">Group sequence</a></li><li><a href="course-CRS-96w05v20b8w1.html">Custom callback validators</a></li><li><a href="course-CRS-d235sja3h7y2.html">Violations builder</a></li></ol></nav></details><aside class="course-section-menu" aria-label="Sommaire du cours"><details class="course-section-disclosure"><summary id="course-sections">Sections du cours</summary><nav aria-label="Sections du cours"><ul><li><a href="#s-objectif">Objectif</a></li><li><a href="#s-l-essentiel">L&#x27;essentiel</a></li><li><a href="#s-le-schema">Le schéma</a></li><li><a href="#s-le-fil-rouge-un-form-de-contact">Le fil rouge : un form de contact</a></li><li><a href="#s-les-familles">Les familles</a></li><li><a href="#s-les-distinctions-qui-decident">Les distinctions qui décident</a></li><li><a href="#s-null-et-la-string-vide">null et la string vide</a></li><li><a href="#s-configurer-une-constraint-en-8-0">Configurer une constraint en 8.0</a></li><li><a href="#s-les-constraints-de-structure">Les constraints de structure</a></li><li><a href="#s-pieges-d-examen">Pièges d&#x27;examen</a></li><li><a href="#s-fiche-express">Fiche express</a></li></ul></nav></details></aside><div class="course-content"><div id="view-course" data-course-panel role="region" aria-labelledby="view-course-title"><h2 id="view-course-title">Cours</h2><p class="course-introduction"><a href="#s-objectif">Introduction</a> · <a href="#course-sections">Sections du cours</a></p><h2>Objectifs d’apprentissage</h2><ul><li><a href="course-CRS-569y6hb7fwj5.html#out-OUT-zxecwdwyhgng">Situer une constraint dans sa famille</a></li><li><a href="course-CRS-569y6hb7fwj5.html#out-OUT-wkzdab0t8y8n">Distinguer NotBlank de NotNull sur une valeur vide ou nulle</a></li><li><a href="course-CRS-569y6hb7fwj5.html#out-OUT-ca39zvmah4sj">Choisir entre All et Collection</a></li><li><a href="course-CRS-569y6hb7fwj5.html#out-OUT-8hwwtw34wdgt">Reconnaître le role de Sequentially et d&#x27;AtLeastOneOf</a></li><li><a href="course-CRS-569y6hb7fwj5.html#out-OUT-kyt7yfamw0aq">Prédire le sort de null et de la string vide selon la constraint</a></li><li><a href="course-CRS-569y6hb7fwj5.html#out-OUT-bkrt4hz3td66">Configurer une constraint 8.0 par named arguments et connaître le défaut de requireTld</a></li></ul><aside class="pedagogy-legend" aria-label="Repères pédagogiques"><p><strong>Repères pédagogiques</strong></p><p>Ces repères décrivent le rôle du bloc, pas une fréquence officielle à l’examen.</p><p class="teaching-label essential"><span aria-hidden="true">○</span> <strong>À comprendre</strong></p><p class="teaching-label essential"><span aria-hidden="true">◆</span> <strong>À mémoriser</strong></p><p class="teaching-label example"><span aria-hidden="true">▣</span> <strong>Exemple concret</strong></p><p class="teaching-label pitfall"><span aria-hidden="true">△</span> <strong>Piège à éviter</strong></p><p class="teaching-label nuance"><span aria-hidden="true">?</span> <strong>À vérifier</strong></p></aside><section class="teaching-section" data-section="s-objectif"><h2 id="s-objectif" tabindex="-1">Objectif</h2><p>Reconnaître les familles de constraints fournies et trancher entre celles qui se
+ressemblent. Le catalogue complet ne se mémorise pas : <code>debug:validator</code> et la
+référence le donnent.</p></section><section class="teaching-section" data-section="s-l-essentiel"><h2 id="s-l-essentiel" tabindex="-1">L&#x27;essentiel</h2><p class="teaching-label essential"><span aria-hidden="true">○</span> <strong>À comprendre</strong></p><aside class="section-digest" id="s-l-essentiel-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Le format ne rend pas une valeur obligatoire.</li><li>Associer présence et format.</li></ol></aside><p>Le catalogue ne s'apprend pas : il se range en familles. Ce qui se joue à
+l'examen, ce sont les distinctions — <code>NotBlank</code> contre <code>NotNull</code>, <code>null</code> contre
+la string vide, <code>All</code> contre <code>Collection</code> — et la configuration 8.0 en
+<strong>named arguments</strong>.</p></section><section class="teaching-section" data-section="s-le-schema"><h2 id="s-le-schema" tabindex="-1">Le schéma</h2><aside class="section-digest" id="s-le-schema-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>All répète une règle par élément.</li><li>Collection décrit les keys séparément.</li></ol></aside><figure class="diagram" aria-labelledby="CRS-569y6hb7fwj5-3-diagram-0-title CRS-569y6hb7fwj5-3-diagram-0-description"><figcaption id="CRS-569y6hb7fwj5-3-diagram-0-title">null, string vide et constraints d&#x27;organisation</figcaption><p id="CRS-569y6hb7fwj5-3-diagram-0-description">Pour null, seules NotNull et NotBlank, ainsi qu&#x27;IsNull et Blank, jugent ; toutes les autres laissent passer. Pour la string vide, NotBlank refuse ; Email, Regex, Url et Type(&#x27;string&#x27;) acceptent ; Length avec min, Choice et Positive peuvent refuser. Pour organiser : All, sur chaque élément, Collection, sur chaque key, Sequentially, jusqu&#x27;à la première erreur, AtLeastOneOf, When et Compound. Sinon, la constraint juge la valeur elle-même.</p><div class="mermaid" hidden>---
+title: Quelle constraint juge quoi
+---
+flowchart TD
+  accTitle: null, string vide et constraints d&#x27;organisation
+  accDescr: Pour null, seules NotNull et NotBlank, ainsi qu&#x27;IsNull et Blank, jugent ; toutes les autres laissent passer. Pour la string vide, NotBlank refuse ; Email, Regex, Url et Type(&#x27;string&#x27;) acceptent ; Length avec min, Choice et Positive peuvent refuser. Pour organiser : All, sur chaque élément, Collection, sur chaque key, Sequentially, jusqu&#x27;à la première erreur, AtLeastOneOf, When et Compound. Sinon, la constraint juge la valeur elle-même.
+  Q1{&quot;null ?&quot;} --&gt;|&quot;oui&quot;| A1[&quot;seules NotNull / NotBlank&lt;br/&gt;(et IsNull, Blank) jugent&lt;br/&gt;toutes les autres&lt;br/&gt;laissent passer&quot;]
+  Q1 --&gt;|&quot;non&quot;| Q2{&quot;&#x27;&#x27; ?&quot;}
+  Q2 --&gt;|&quot;oui&quot;| A2[&quot;NotBlank refuse&lt;br/&gt;Email, Regex, Url,&lt;br/&gt;Type(&#x27;string&#x27;) acceptent&lt;br/&gt;Length(min), Choice,&lt;br/&gt;Positive peuvent refuser&quot;]
+  Q2 --&gt;|&quot;non&quot;| Q3{&quot;organiser ?&quot;}
+  Q3 --&gt;|&quot;oui&quot;| A3[&quot;All (chaque élément)&lt;br/&gt;Collection (chaque key)&lt;br/&gt;Sequentially (1re erreur)&lt;br/&gt;AtLeastOneOf · When&lt;br/&gt;Compound&quot;]
+  Q3 --&gt;|&quot;sinon&quot;| A4[&quot;la constraint juge&lt;br/&gt;la valeur elle-même&quot;]</div></figure></section><section class="teaching-section" data-section="s-le-fil-rouge-un-form-de-contact"><h2 id="s-le-fil-rouge-un-form-de-contact" tabindex="-1">Le fil rouge : un form de contact</h2><aside class="section-digest" id="s-le-fil-rouge-un-form-de-contact-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>NotBlank impose la présence.</li><li>Email vérifie le format.</li></ol></aside><pre class="highlight" tabindex="0"><code class="language-php">class Contact
+{
+    #[Assert\NotBlank]
+    #[Assert\Email]
+    public ?string $email = null;
+
+    #[Assert\NotNull]
+    public ?string $comment = null;      // '' accepté, null refusé
+
+    #[Assert\Positive]
+    public ?int $age = null;             // null accepté : facultatif
+
+    #[Assert\All([new Assert\Length(max: 20)])]
+    public array $tags = [];
+}</code></pre></section><section class="teaching-section" data-section="s-les-familles"><span class="outcome-anchor" id="out-OUT-zxecwdwyhgng" tabindex="-1"></span><h2 id="s-les-familles" tabindex="-1">Les familles</h2><aside class="section-digest" id="s-les-familles-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Length mesure une string.</li><li>Count mesure une collection.</li></ol></aside><table>
+<thead>
+<tr>
+<th>Famille</th>
+<th>Exemples</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Basiques</td>
+<td><code>NotBlank</code>, <code>NotNull</code>, <code>IsNull</code>, <code>Blank</code>, <code>IsTrue</code>, <code>Type</code></td>
+</tr>
+<tr>
+<td>Strings</td>
+<td><code>Email</code>, <code>Length</code>, <code>Regex</code>, <code>Url</code>, <code>Uuid</code>, <code>Ip</code>, <code>Json</code>, <code>PasswordStrength</code></td>
+</tr>
+<tr>
+<td>Comparaison</td>
+<td><code>EqualTo</code>, <code>IdenticalTo</code>, <code>GreaterThan</code>, <code>Range</code>, <code>DivisibleBy</code>, <code>Unique</code></td>
+</tr>
+<tr>
+<td>Nombres</td>
+<td><code>Positive</code>, <code>PositiveOrZero</code>, <code>Negative</code>, <code>NegativeOrZero</code></td>
+</tr>
+<tr>
+<td>Date</td>
+<td><code>Date</code>, <code>DateTime</code>, <code>Time</code>, <code>Timezone</code>, <code>Week</code></td>
+</tr>
+<tr>
+<td>Choix</td>
+<td><code>Choice</code>, <code>Country</code>, <code>Language</code>, <code>Locale</code></td>
+</tr>
+<tr>
+<td>File</td>
+<td><code>File</code>, <code>Image</code>, <code>Video</code></td>
+</tr>
+<tr>
+<td>Financières</td>
+<td><code>Iban</code>, <code>Bic</code>, <code>CardScheme</code>, <code>Currency</code>, <code>Isbn</code>, <code>Luhn</code></td>
+</tr>
+<tr>
+<td>Autres</td>
+<td><code>Valid</code>, <code>All</code>, <code>Collection</code>, <code>Count</code>, <code>Callback</code>, <code>Sequentially</code>, <code>AtLeastOneOf</code>, <code>When</code>, <code>Compound</code></td>
+</tr>
+</tbody>
+</table></section><section class="teaching-section" data-section="s-les-distinctions-qui-decident"><span class="outcome-anchor" id="out-OUT-wkzdab0t8y8n" tabindex="-1"></span><h2 id="s-les-distinctions-qui-decident" tabindex="-1">Les distinctions qui décident</h2><aside class="section-digest" id="s-les-distinctions-qui-decident-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Zéro n&#x27;est pas vide pour NotBlank.</li><li>Le trim doit être demandé explicitement.</li></ol></aside><table>
+<thead>
+<tr>
+<th>Valeur</th>
+<th><code>NotBlank</code></th>
+<th><code>NotNull</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>null</code></td>
+<td>refusée</td>
+<td>refusée</td>
+</tr>
+<tr>
+<td><code>''</code>, <code>false</code>, <code>[]</code></td>
+<td>refusées</td>
+<td>acceptées</td>
+</tr>
+<tr>
+<td><code>'0'</code>, <code>0</code>, <code>0.0</code>, <code>' '</code></td>
+<td><strong>acceptées</strong></td>
+<td>acceptées</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>L'int <code>0</code> passe donc <code>NotBlank</code> ; <code>normalizer: 'trim'</code> fait refuser <code>' '</code> ;
+  <code>allowNull</code> fait accepter <code>null</code>.</li>
+<li><code>EqualTo</code> compare par <code>==</code>, <code>IdenticalTo</code> par <code>===</code> : <code>'1'</code> passe le
+  premier, pas le second.</li>
+<li><code>Length</code> compte des <strong>caractères</strong> (<code>'été'</code> en fait 3) ; <code>Count</code>, des
+  éléments.</li>
+</ul></section><section class="teaching-section" data-section="s-null-et-la-string-vide"><span class="outcome-anchor" id="out-OUT-kyt7yfamw0aq" tabindex="-1"></span><h2 id="s-null-et-la-string-vide" tabindex="-1">null et la string vide</h2><aside class="section-digest" id="s-null-et-la-string-vide-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>null est souvent laissé aux constraints de présence.</li><li>La string vide dépend de chaque règle.</li></ol></aside><p>Une constraint de valeur <strong>ignore <code>null</code></strong> : <code>Length</code>, <code>Email</code>, <code>Regex</code>,
+<code>Choice</code>, <code>Positive</code>, <code>Count</code>, <code>Url</code>, <code>Type</code> ne signalent rien. Sur <code>''</code>,
+<code>Email</code>, <code>Regex</code>, <code>Url</code> et <code>Type('string')</code> acceptent ; <code>Length(min: 3)</code>,
+<code>Choice</code> et <code>Positive</code> refusent. Un field obligatoire porte donc <code>NotBlank</code>
+<strong>en plus</strong> de son format.</p></section><section class="teaching-section" data-section="s-configurer-une-constraint-en-8-0"><span class="outcome-anchor" id="out-OUT-bkrt4hz3td66" tabindex="-1"></span><h2 id="s-configurer-une-constraint-en-8-0" tabindex="-1">Configurer une constraint en 8.0</h2><aside class="section-digest" id="s-configurer-une-constraint-en-8-0-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Les options se passent en named arguments.</li><li>choices: nomme explicitement la liste.</li></ol></aside><ul>
+<li>Options en <strong>named arguments</strong> : <code>new Assert\Choice(['draft', 'published'])</code>
+  lève « Passing an array of options to configure the "…\Choice" constraint
+  is no longer supported. » — il faut <code>choices:</code>.</li>
+<li><code>Url</code> exige un TLD par défaut : <code>http://localhost</code> échoue sans
+  <code>requireTld: false</code>.</li>
+<li><code>new Assert\Length()</code> sans <code>min</code> ni <code>max</code> : <code>MissingOptionsException</code>.</li>
+</ul></section><section class="teaching-section" data-section="s-les-constraints-de-structure"><span class="outcome-anchor" id="out-OUT-ca39zvmah4sj" tabindex="-1"></span><span class="outcome-anchor" id="out-OUT-8hwwtw34wdgt" tabindex="-1"></span><h2 id="s-les-constraints-de-structure" tabindex="-1">Les constraints de structure</h2><aside class="section-digest" id="s-les-constraints-de-structure-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Sequentially évite les contrôles suivants après échec.</li><li>AtLeastOneOf exprime des alternatives.</li><li>Optional distingue absence de key et valeur présente.</li><li>Les constraints internes vérifient la valeur fournie.</li></ol></aside><table>
+<thead>
+<tr>
+<th>Besoin</th>
+<th>Constraint</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>la même règle pour chaque élément</td>
+<td><code>All</code></td>
+</tr>
+<tr>
+<td>une règle par key d'un array (<code>This field is missing.</code>, <code>This field was not expected.</code>)</td>
+<td><code>Collection</code></td>
+</tr>
+<tr>
+<td>ne pas lancer la vérification suivante si la précédente échoue</td>
+<td><code>Sequentially</code></td>
+</tr>
+<tr>
+<td>accepter l'une ou l'autre forme ; si toutes échouent, <strong>une</strong> violation qui les résume</td>
+<td><code>AtLeastOneOf</code></td>
+</tr>
+<tr>
+<td>une règle seulement si une expression est vraie</td>
+<td><code>When</code></td>
+</tr>
+<tr>
+<td>un jeu de constraints réutilisable sous un nom</td>
+<td><code>Compound</code></td>
+</tr>
+</tbody>
+</table><aside class="enrichment" aria-label="Autre explication"><p>Dans une <code>Collection</code>, <code>Optional</code> autorise l'absence de la key mais valide sa valeur lorsqu'elle est présente. <code>Required</code> signale une key absente avec les réglages ordinaires de la collection ; les options globales de présence de la collection restent à considérer. Une key présente avec <code>null</code> n'est pas une key absente : la constraint interne décide si <code>null</code> est autorisé.</p>
+<p><a href="https://symfony.com/doc/8.0/validation.html">Documentation Symfony 8.0</a>.</p></aside></section><section class="teaching-section" data-section="s-pieges-d-examen"><h2 id="s-pieges-d-examen" tabindex="-1">Pièges d&#x27;examen</h2><p class="teaching-label pitfall"><span aria-hidden="true">△</span> <strong>Piège à éviter</strong></p><aside class="section-digest" id="s-pieges-d-examen-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>IdenticalTo compare aussi le type.</li><li>EqualTo utilise la comparaison souple.</li></ol></aside><p><strong><code>NotBlank</code> accepte <code>0</code>, <code>'0'</code> et <code>' '</code>.</strong> Il refuse le vide au sens de PHP,
+sauf ces valeurs. Pour une string dont le vide est légitime, c'est <code>NotNull</code>.</p>
+<p><strong><code>All</code> n'est pas <code>Collection</code>.</strong> <code>All</code> traite les éléments uniformément ;
+<code>Collection</code> décrit un array key par key.</p>
+<p><strong>Sans <code>Sequentially</code>, toutes les constraints s'exécutent</strong> et cumulent leurs
+violations sur la même property.</p>
+<p><strong><code>DivisibleBy</code> est rangée en comparaison.</strong></p>
+<p><strong><code>Email</code> seule accepte <code>null</code> et <code>''</code>.</strong> L'obligation vient de <code>NotBlank</code>.</p>
+<p><strong><code>Choice(['a', 'b'])</code> lève une exception en 8.0</strong> : <code>choices:</code> est nommé.</p></section><section class="teaching-section" data-section="s-fiche-express"><h2 id="s-fiche-express" tabindex="-1">Fiche express</h2><p class="teaching-label essential"><span aria-hidden="true">◆</span> <strong>À mémoriser</strong></p><aside class="section-digest" id="s-fiche-express-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Url exige un TLD par défaut.</li><li>requireTld permet d&#x27;adapter cette exigence.</li></ol></aside><p><strong>Si tu dois retenir seulement 7 choses :</strong></p>
+<ul>
+<li><strong><code>NotBlank</code></strong> refuse <code>null</code>, <code>''</code>, <code>false</code>, <code>[]</code> ; accepte <code>0</code>, <code>'0'</code>, <code>' '</code>.</li>
+<li><strong><code>NotNull</code></strong> ne refuse que <code>null</code>.</li>
+<li>Les autres constraints <strong>ignorent <code>null</code></strong> ; <code>''</code> dépend de la constraint.</li>
+<li><code>EqualTo</code> = <strong><code>==</code></strong>, <code>IdenticalTo</code> = <strong><code>===</code></strong>.</li>
+<li>8.0 : <strong>named arguments</strong> (<code>choices:</code>) ; <code>Url</code> exige un TLD.</li>
+<li><strong><code>All</code></strong> : chaque élément ; <strong><code>Collection</code></strong> : chaque key.</li>
+<li><strong><code>Sequentially</code></strong> s'arrête ; <strong><code>AtLeastOneOf</code></strong> : une suffit.</li>
+</ul>
+<p>Moyen mnémotechnique : <strong>« Présent ? Bien formé ? Organisé ? »</strong></p></section><section class="official-sources"><h2>Sources officielles et compléments</h2><ul><li><a href="https://symfony.com/doc/8.0/validation.html">Symfony 8.0 — Validator</a></li></ul></section><nav class="course-sequence" aria-label="Ordre de lecture"><a rel="prev" href="course-CRS-ax2v94pgbk0g.html" aria-label="Précédent : PHP object validation — Module 08 — Validation des données">Précédent : PHP object validation</a> <a href="lot-08.html">Sommaire : Module 08 — Validation des données</a> <a rel="next" href="course-CRS-wzmrks85zyh1.html" aria-label="Suivant : Validation scopes — Module 08 — Validation des données">Suivant : Validation scopes</a></nav><p class="course-practice-entry"><a class="button" href="#view-quiz">Fin du cours — s’entraîner avec le Quiz</a></p></div><div id="view-flashcards" data-course-panel role="region" aria-labelledby="view-flashcards-title"><h2 id="view-flashcards-title">Flashcards</h2><p lang="en">Answer before revealing each card.</p><p>Ces cartes ne mesurent pas une maîtrise notée.</p><div data-card-section="s-l-essentiel"><h3><a href="#s-l-essentiel">Revoir la section du cours</a></h3><div class="reader-cards"><details class="reader-card" id="B-569y6hb7fwj5-01"><summary lang="en">Is Email alone sufficient to require an email address?</summary><p lang="en">No. Email accepts null and an empty string; add a presence constraint such as NotBlank.</p><p lang="fr">Le format ne rend pas une valeur obligatoire. Associer présence et format.</p><a href="course-CRS-569y6hb7fwj5.html#out-OUT-kyt7yfamw0aq">Revoir le passage précis</a></details></div></div><div data-card-section="s-le-schema"><h3><a href="#s-le-schema">Revoir la section du cours</a></h3><div class="reader-cards"><details class="reader-card" id="B-569y6hb7fwj5-02"><summary lang="en">Which structural constraint applies the same rule to every collection element?</summary><p lang="en">All; Collection instead defines constraints per key.</p><p lang="fr">All répète une règle par élément. Collection décrit les keys séparément.</p><a href="course-CRS-569y6hb7fwj5.html#out-OUT-ca39zvmah4sj">Revoir le passage précis</a></details></div></div><div data-card-section="s-le-fil-rouge-un-form-de-contact"><h3><a href="#s-le-fil-rouge-un-form-de-contact">Revoir la section du cours</a></h3><div class="reader-cards"><details class="reader-card" id="B-569y6hb7fwj5-03"><summary lang="en">Why combine NotBlank and Email on a contact email?</summary><p lang="en">NotBlank requires a value, while Email checks the format of a supplied address.</p><p lang="fr">NotBlank impose la présence. Email vérifie le format.</p><a href="course-CRS-569y6hb7fwj5.html#out-OUT-wkzdab0t8y8n">Revoir le passage précis</a></details></div></div><div data-card-section="s-les-familles"><h3><a href="#s-les-familles">Revoir la section du cours</a></h3><div class="reader-cards"><details class="reader-card" id="B-569y6hb7fwj5-04"><summary lang="en">Which constraints count characters and collection elements respectively?</summary><p lang="en">Length counts characters; Count counts collection elements.</p><p lang="fr">Length mesure une string. Count mesure une collection.</p><a href="course-CRS-569y6hb7fwj5.html#out-OUT-zxecwdwyhgng">Revoir le passage précis</a></details></div></div><div data-card-section="s-les-distinctions-qui-decident"><h3><a href="#s-les-distinctions-qui-decident">Revoir la section du cours</a></h3><div class="reader-cards"><details class="reader-card" id="B-569y6hb7fwj5-05"><summary lang="en">Does NotBlank reject integer zero or a space-only string by default?</summary><p lang="en">No. Both are accepted; use a trim normalizer when whitespace must count as blank.</p><p lang="fr">Zéro n&#x27;est pas vide pour NotBlank. Le trim doit être demandé explicitement.</p><a href="course-CRS-569y6hb7fwj5.html#out-OUT-wkzdab0t8y8n">Revoir le passage précis</a></details></div></div><div data-card-section="s-null-et-la-string-vide"><h3><a href="#s-null-et-la-string-vide">Revoir la section du cours</a></h3><div class="reader-cards"><details class="reader-card" id="B-569y6hb7fwj5-06"><summary lang="en">Do all value constraints treat null and the empty string identically?</summary><p lang="en">No. Many accept null, while empty-string handling depends on the constraint.</p><p lang="fr">null est souvent laissé aux constraints de présence. La string vide dépend de chaque règle.</p><a href="course-CRS-569y6hb7fwj5.html#out-OUT-kyt7yfamw0aq">Revoir le passage précis</a></details></div></div><div data-card-section="s-configurer-une-constraint-en-8-0"><h3><a href="#s-configurer-une-constraint-en-8-0">Revoir la section du cours</a></h3><div class="reader-cards"><details class="reader-card" id="B-569y6hb7fwj5-07"><summary lang="en">How should Choice choices be configured in Symfony 8.0?</summary><p lang="en">Use the named argument choices:, not the removed generic options-array constructor form.</p><p lang="fr">Les options se passent en named arguments. choices: nomme explicitement la liste.</p><a href="course-CRS-569y6hb7fwj5.html#out-OUT-bkrt4hz3td66">Revoir le passage précis</a></details></div></div><div data-card-section="s-les-constraints-de-structure"><h3><a href="#s-les-constraints-de-structure">Revoir la section du cours</a></h3><div class="reader-cards"><details class="reader-card" id="B-569y6hb7fwj5-08"><summary lang="en">How do Sequentially and AtLeastOneOf differ?</summary><p lang="en">Sequentially stops after a failing constraint; AtLeastOneOf accepts when at least one alternative succeeds.</p><p lang="fr">Sequentially évite les contrôles suivants après échec. AtLeastOneOf exprime des alternatives.</p><a href="course-CRS-569y6hb7fwj5.html#out-OUT-ca39zvmah4sj">Revoir le passage précis</a></details><details class="reader-card" id="B-569y6hb7fwj5-E15"><summary lang="en">Does Optional skip validation when its collection key is present with an invalid value?</summary><p lang="en">No. Optional skips an absent key; a present value is validated by its inner constraints.</p><p lang="fr">Optional distingue absence de key et valeur présente. Les constraints internes vérifient la valeur fournie.</p><a href="course-CRS-569y6hb7fwj5.html#out-OUT-ca39zvmah4sj">Revoir le passage précis</a></details></div></div><div data-card-section="s-pieges-d-examen"><h3><a href="#s-pieges-d-examen">Revoir la section du cours</a></h3><div class="reader-cards"><details class="reader-card" id="B-569y6hb7fwj5-09"><summary lang="en">Which comparison rejects &#x27;1&#x27; when the expected value is integer 1?</summary><p lang="en">IdenticalTo uses ===; EqualTo uses == and permits type coercion.</p><p lang="fr">IdenticalTo compare aussi le type. EqualTo utilise la comparaison souple.</p><a href="course-CRS-569y6hb7fwj5.html#out-OUT-zxecwdwyhgng">Revoir le passage précis</a></details></div></div><div data-card-section="s-fiche-express"><h3><a href="#s-fiche-express">Revoir la section du cours</a></h3><div class="reader-cards"><details class="reader-card" id="B-569y6hb7fwj5-10"><summary lang="en">Why can a localhost URL fail Url validation in Symfony 8.0?</summary><p lang="en">Url requires a top-level domain by default; requireTld: false permits hosts without one.</p><p lang="fr">Url exige un TLD par défaut. requireTld permet d&#x27;adapter cette exigence.</p><a href="course-CRS-569y6hb7fwj5.html#out-OUT-bkrt4hz3td66">Revoir le passage précis</a></details></div></div><aside class="checkpoint"><h2>Rappel d’un cours antérieur</h2><p>Avant de poursuivre : Validator component.</p><details class="corpus-correction"><summary lang="en">What does ValidatorInterface::validate() return for invalid input?</summary><p lang="en">A ConstraintViolationListInterface containing violations, not false.</p><p>Le résultat est une liste de violations. Une donnée invalide ne produit pas un bool.</p><a href="course-CRS-way4aktj2d5m.html#out-OUT-0enczxzp4pwq">Relire la correction dans le cours antérieur</a></details></aside></div><div id="view-quiz" data-course-panel role="region" aria-labelledby="view-quiz-title"><h2 id="view-quiz-title">Quiz</h2><p id="course-quiz-status" role="status">Quiz interactif non chargé. Démarrez après chargement de la banque locale.</p><div id="course-quiz-controls" class="assessment-main" hidden><div id="course-quiz-assessment-controls" hidden><select id="course-quiz-assessment-mode" aria-label="Mode du quiz" hidden><option value="learning">Entraînement</option></select><p id="course-quiz-training-scope"></p><button id="course-quiz-start-assessment" type="button" lang="en">Start practice</button><button id="course-quiz-finish-assessment" type="button" lang="en" hidden>End session</button></div><p id="course-quiz-assessment-error" role="alert"></p><p id="course-quiz-assessment-timer" hidden></p><p id="course-quiz-session-progress" role="status"></p><div id="course-quiz-assessment-app" tabindex="-1"></div><nav id="course-quiz-session-navigation" aria-label="Questions du cours"></nav><div id="course-quiz-learning-overview" aria-live="polite"></div></div><div id="course-quiz-native"><p>Sans JavaScript ou si le chargement échoue : aucune tentative notée. Les <a href="#view-flashcards">flashcards du cours</a> restent disponibles.</p><details class="course-quiz-fallback" data-question-id="L-569y6hb7fwj5-base-v1"><summary lang="en">Is Email alone sufficient to require an email address?</summary><p>Correction de consultation — non notée.</p><p>Le format ne rend pas une valeur obligatoire. Associer présence et format.</p><ul><li><strong lang="en">Distractor: Yes; Email alone rejects both null and the empty string.</strong><p>Email contrôle le format et accepte ces valeurs vides.</p></li><li><strong lang="en">Distractor: No; add a length constraint only, because presence is implicit.</strong><p>La présence n&#x27;est pas implicite ; une constraint dédiée comme NotBlank est nécessaire.</p></li><li><strong lang="en">Correct: No; add a presence constraint such as NotBlank.</strong><p>Le format ne rend pas une valeur obligatoire. Associer présence et format.</p></li></ul><a href="course-CRS-569y6hb7fwj5.html#out-OUT-kyt7yfamw0aq">Relire le passage exact</a></details></div></div></div></div><details class="transfer-panel"><summary>Sauvegarde et transfert de progression</summary><p id="reading-status" role="status">Sans JavaScript : lecture libre ; progression non enregistrée.</p><p><a href="assessment.html#overview-title">Lecture, réussites immédiates et différées</a></p><p>Transfert manuel — aucune synchronisation automatique</p><p id="persistence-status" role="status"></p><button type="button" class="secondary" id="export-progress">Exporter ma progression</button><label for="import-progress">Choisir un JSON pour fusionner ma progression (sans remplacement)</label><input type="file" id="import-progress" accept="application/json,.json"><p id="transfer-status" role="status"></p></details></main><footer class="site-footer"><a href="catalogue.html">Catalogue</a> <a href="sources.html">Sources et attribution</a> <a href="#contenu">Haut de page</a></footer></body></html>

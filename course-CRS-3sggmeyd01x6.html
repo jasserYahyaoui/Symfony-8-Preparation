@@ -1,0 +1,193 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; connect-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Enums — Symfony 8 Preparation</title><link rel="stylesheet" href="styles.css"><link rel="stylesheet" href="reader.css"><script src="mermaid.min.js" defer></script><script src="mermaid-init.js" defer></script><link rel="stylesheet" href="assessment.css"><script src="learning-state.js" defer></script><script src="guide.js" defer></script><script src="reader-catalog.js" defer></script><script src="reader.js" defer></script><script src="site-state.js" defer></script><script src="assessment.js" defer></script><script src="course-views.js" defer></script><link rel="stylesheet" href="syntax-highlight.css"><script src="prism-syntax.js" defer></script><script src="syntax-highlight.js" defer></script></head><body data-course-id="CRS-3sggmeyd01x6"><a class="skip" href="#contenu">Aller au contenu</a><header class="site-header"><a class="brand" href="index.html">S8 Preparation</a><nav aria-label="Navigation principale"><a href="index.html">Accueil</a> <a href="catalogue.html">Parcours</a> <a href="assessment.html?mode=review">Réviser</a> <a href="examens.html">Examens blancs</a> <a href="jour-j.html">Jour J</a></nav></header><main id="contenu" tabindex="-1" class="corpus-reader"><nav class="breadcrumb" aria-label="Fil d’Ariane"><a href="index.html">Accueil</a> <span aria-hidden="true">›</span> <a href="catalogue.html">Parcours</a> <span aria-hidden="true">›</span> <a href="lot-01.html">Module 01 — PHP jusqu’à 8.4</a> <span aria-hidden="true">›</span> <span aria-current="page">Enums</span></nav><h1>Enums</h1><p class="muted">Symfony 8.0 · API PHP ≤ 8.4 · Twig ≤ 3.22. Préparation indépendante.</p><p class="revision-status">Première itération · Module 01 — PHP jusqu’à 8.4 : explications développées ; revue pédagogique indépendante en attente.</p><nav class="course-actions" aria-label="Activités du cours"><a id="tab-course" href="#view-course">Cours</a><a id="tab-flashcards" href="#view-flashcards">Flashcards</a><a id="tab-quiz" href="#view-quiz">Quiz</a></nav><div class="course-layout"><details class="lot-course-menu"><summary>Cours du module · 9 cours</summary><nav aria-label="Cours du module"><a class="lot-context" href="lot-01.html">Module 01 — PHP jusqu’à 8.4</a><ol><li><a href="course-CRS-722pscs6e2m0.html">PHP API up to PHP 8.4 version</a></li><li><a href="course-CRS-3424z948caan.html">Object Oriented Programming</a></li><li><a href="course-CRS-tqcp2kn9r3b5.html">Attributes</a></li><li><a href="course-CRS-e4y7gtn5k4f0.html">Interfaces</a></li><li><a href="course-CRS-e7m4xbcxegyc.html">Anonymous functions and closures</a></li><li><a href="course-CRS-0jtjh77tabt1.html">Abstract classes</a></li><li><a href="course-CRS-yc9fry0vz4gh.html">Exception and error handling</a></li><li><a href="course-CRS-bshgpd44ykba.html">Traits</a></li><li><a href="course-CRS-3sggmeyd01x6.html" aria-current="page">Enums</a></li></ol></nav></details><aside class="course-section-menu" aria-label="Sommaire du cours"><details class="course-section-disclosure"><summary id="course-sections">Sections du cours</summary><nav aria-label="Sections du cours"><ul><li><a href="#s-objectif">Objectif</a></li><li><a href="#s-l-essentiel">L&#x27;essentiel</a></li><li><a href="#s-le-schema">Le schéma</a></li><li><a href="#s-l-exemple">L&#x27;exemple</a></li><li><a href="#s-pure-ou-adossee">Pure ou adossée</a></li><li><a href="#s-l-api">L&#x27;API</a></li><li><a href="#s-ce-qu-une-enum-peut-faire">Ce qu&#x27;une enum peut faire</a></li><li><a href="#s-pieges-d-examen">Pièges d&#x27;examen</a></li><li><a href="#s-application">Application</a></li><li><a href="#s-fiche-express">Fiche express</a></li><li><a href="#s-sources-officielles">Sources officielles</a></li></ul></nav></details></aside><div class="course-content"><div id="view-course" data-course-panel role="region" aria-labelledby="view-course-title"><h2 id="view-course-title">Cours</h2><p class="course-introduction"><a href="#s-pure-ou-adossee">Pour bien commencer</a> · <a href="#course-sections">Sections du cours</a></p><h2>Objectifs d’apprentissage</h2><ul><li><a href="course-CRS-3sggmeyd01x6.html#out-OUT-xccz85tdts39">Distinguer enum pure et enum adossée</a></li><li><a href="course-CRS-3sggmeyd01x6.html#out-OUT-6az3084jk5xb">Choisir entre from() et tryFrom() selon la fiabilité de l&#x27;entrée</a></li><li><a href="course-CRS-3sggmeyd01x6.html#out-OUT-c6mz3z761kqd">Identifier ce qu&#x27;une enum peut et ne peut pas déclarer</a></li></ul><aside class="pedagogy-legend" aria-label="Repères pédagogiques"><p><strong>Repères pédagogiques</strong></p><p>Ces repères décrivent le rôle du bloc, pas une fréquence officielle à l’examen.</p><p class="teaching-label essential"><span aria-hidden="true">○</span> <strong>À comprendre</strong></p><p class="teaching-label essential"><span aria-hidden="true">◆</span> <strong>À mémoriser</strong></p><p class="teaching-label example"><span aria-hidden="true">▣</span> <strong>Exemple concret</strong></p><p class="teaching-label pitfall"><span aria-hidden="true">△</span> <strong>Piège à éviter</strong></p><p class="teaching-label nuance"><span aria-hidden="true">?</span> <strong>À vérifier</strong></p></aside><section class="teaching-section" data-section="s-objectif"><h2 id="s-objectif" tabindex="-1">Objectif</h2><p>Distinguer enum pure et enum adossée, choisir entre <code>from()</code> et <code>tryFrom()</code>, et
+savoir ce qu'une enum ne peut pas faire.</p></section><section class="teaching-section" data-section="s-l-essentiel"><h2 id="s-l-essentiel" tabindex="-1">L&#x27;essentiel</h2><p class="teaching-label essential"><span aria-hidden="true">○</span> <strong>À comprendre</strong></p><aside class="section-digest" id="s-l-essentiel-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Les cases sont des singletons comparables par ===.</li><li>Une enum peut porter du comportement, pas un état d&#x27;instance.</li></ol></aside><p>Une enum <strong>pure</strong> n'a que des cas ; une enum <strong>adossée</strong> donne à chaque cas une
+valeur <code>int</code> ou <code>string</code>. Toutes ont <code>cases()</code> et <code>-&gt;name</code> ; les adossées
+ajoutent <code>-&gt;value</code>, <code>from()</code> — qui <strong>lève</strong> — et <code>tryFrom()</code> — qui rend
+<strong><code>null</code></strong>. Une enum porte methods, constantes et interfaces, mais <strong>aucun
+état</strong> : ni property d'instance, ni constructor, ni <code>new</code>, ni inheritance.</p></section><section class="teaching-section" data-section="s-le-schema"><h2 id="s-le-schema" tabindex="-1">Le schéma</h2><p class="digest-reference"><a href="#s-l-essentiel-digest">Revoir la règle : Les cases sont des singletons comparables par ===.</a></p><figure class="diagram" aria-labelledby="CRS-3sggmeyd01x6-3-diagram-0-title CRS-3sggmeyd01x6-3-diagram-0-description"><figcaption id="CRS-3sggmeyd01x6-3-diagram-0-title">Les deux sortes d&#x27;enum et ce qu&#x27;elles permettent</figcaption><p id="CRS-3sggmeyd01x6-3-diagram-0-description">Une enum pure, enum Status { case Draft; }, implémente UnitEnum. Une enum adossée, enum Suit: string { case Hearts = &#x27;H&#x27;; }, implémente UnitEnum et BackedEnum, avec int ou string seulement. Toutes ont Suit::cases(), qui rend les cas et non les valeurs, et $case-&gt;name en readonly. Les adossées ont $case-&gt;value en readonly, from(&#x27;H&#x27;) qui rend le cas ou lève ValueError, et tryFrom(&#x27;X&#x27;) qui rend null. Sont autorisés les methods, les methods statiques, les constants, par exemple l&#x27;alias const Default = self::Spades, les interfaces et les attributes ; sont interdits les properties d&#x27;instance, le constructor, extends, new et la redéfinition de from() ou tryFrom(). Les cas sont des singletons : Suit::from(&#x27;H&#x27;) === Suit::Hearts.</p><div class="mermaid" hidden>---
+title: Enum pure ou adossée
+---
+flowchart LR
+  accTitle: Les deux sortes d&#x27;enum et ce qu&#x27;elles permettent
+  accDescr: Une enum pure, enum Status { case Draft; }, implémente UnitEnum. Une enum adossée, enum Suit: string { case Hearts = &#x27;H&#x27;; }, implémente UnitEnum et BackedEnum, avec int ou string seulement. Toutes ont Suit::cases(), qui rend les cas et non les valeurs, et $case-&gt;name en readonly. Les adossées ont $case-&gt;value en readonly, from(&#x27;H&#x27;) qui rend le cas ou lève ValueError, et tryFrom(&#x27;X&#x27;) qui rend null. Sont autorisés les methods, les methods statiques, les constants, par exemple l&#x27;alias const Default = self::Spades, les interfaces et les attributes ; sont interdits les properties d&#x27;instance, le constructor, extends, new et la redéfinition de from() ou tryFrom(). Les cas sont des singletons : Suit::from(&#x27;H&#x27;) === Suit::Hearts.
+  E([&quot;enum&quot;]) --&gt; PU[&quot;pure&lt;br/&gt;enum Status&lt;br/&gt;{ case Draft; }&lt;br/&gt;→ UnitEnum&quot;]
+  E --&gt; BA[&quot;adossée&lt;br/&gt;enum Suit: string&lt;br/&gt;{ case Hearts = &#x27;H&#x27;; }&lt;br/&gt;→ UnitEnum + BackedEnum&lt;br/&gt;int ou string seulement&quot;]
+  PU --&gt; ALL[&quot;toutes&lt;br/&gt;Suit::cases() → les cas&lt;br/&gt;(pas les valeurs)&lt;br/&gt;$case-&gt;name (readonly)&quot;]
+  BA --&gt; ALL
+  BA --&gt; BV[&quot;adossées&lt;br/&gt;$case-&gt;value (readonly)&lt;br/&gt;from(&#x27;H&#x27;) → cas,&lt;br/&gt;sinon \ValueError&lt;br/&gt;tryFrom(&#x27;X&#x27;) → null&quot;]
+  E --&gt; OK[&quot;autorisé&lt;br/&gt;methods,&lt;br/&gt;methods statiques,&lt;br/&gt;constantes (alias :&lt;br/&gt;const Default = self::Spades),&lt;br/&gt;interfaces, attributes&quot;]
+  E --&gt; NO[&quot;interdit&lt;br/&gt;properties d&#x27;instance,&lt;br/&gt;constructor, extends, new,&lt;br/&gt;redéfinir from()/tryFrom()&quot;]
+  E --&gt; SG([&quot;cas = singletons&lt;br/&gt;Suit::from(&#x27;H&#x27;)&lt;br/&gt;=== Suit::Hearts&quot;])</div></figure></section><section class="teaching-section" data-section="s-l-exemple"><h2 id="s-l-exemple" tabindex="-1">L&#x27;exemple</h2><p class="teaching-label example"><span aria-hidden="true">▣</span> <strong>Exemple concret</strong></p><aside class="section-digest" id="s-l-exemple-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Une backed enum utilise int ou string.</li><li>Chaque case possède une valeur unique.</li></ol></aside><pre class="highlight" tabindex="0"><code class="language-php">interface Colorful
+{
+    public function color(): string;
+}
+
+enum Suit: string implements Colorful
+{
+    case Hearts = 'H';
+    case Spades = 'S';
+
+    const Default = self::Spades;          // alias
+
+    public function color(): string
+    {
+        return match ($this) {
+            self::Hearts =&gt; 'Red',
+            self::Spades =&gt; 'Black',
+        };
+    }
+}
+
+$input = 'H';
+$suit = Suit::tryFrom($input) ?? Suit::Default;</code></pre></section><section class="teaching-section" data-section="s-pure-ou-adossee"><span class="outcome-anchor" id="out-OUT-xccz85tdts39" tabindex="-1"></span><h2 id="s-pure-ou-adossee" tabindex="-1">Pure ou adossée</h2><p class="teaching-label essential"><span aria-hidden="true">○</span> <strong>À comprendre</strong></p><p class="digest-reference"><a href="#s-l-exemple-digest">Revoir la règle : Une backed enum utilise int ou string.</a></p><h3 tabindex="-1">C'est quoi ?</h3>
+<p>Une enum, disponible depuis PHP 8.1, définit un ensemble fermé de cas nommés. Une enum pure ne donne pas de valeur scalaire à ses cas. Une backed enum leur associe à tous une valeur unique de type <code>int</code> ou <code>string</code>, avec un seul de ces deux types pour l'ensemble de l'enum.</p>
+<p>Les cas sont des objects singleton du type enum, pas de simples strings déguisées. Toutes les enums implémentent automatiquement <code>UnitEnum</code>. Une backed enum implémente aussi <code>BackedEnum</code>, qui fournit le contrat de conversion entre valeur scalaire et cas.</p>
+<h3 tabindex="-1">À quoi ça sert ?</h3>
+<p>Un tableau de suivi propose quelques positions autorisées ; on ne peut pas en inventer une en griffonnant un mot. Chaque position correspond à un cas d'enum. Un code imprimé à côté correspond à la valeur d'une backed enum, tandis que le nom interne du cas reste son nom PHP. Limite : le code scalaire n'est pas le cas lui-même ; <code>'draft'</code> n'est pas un object <code>Status::Draft</code>.</p>
+<p>Une enum pure suffit si seul le choix interne importe. Une backed enum est utile lorsqu'il faut traduire ce choix en code scalaire stable et le relire plus tard.</p>
+<h3 tabindex="-1">Où dans Symfony ?</h3>
+<p>Une class de données applicative peut typer son état avec une enum. Dans HttpKernel, <code>Symfony\Component\HttpKernel\Controller\ArgumentResolver\BackedEnumValueResolver</code> peut résoudre un argument de controller typé par une backed enum depuis un parameter de route. Ce lecteur Symfony utilise une fonctionnalité du langage ; il ne crée pas les cas de l'enum à la volée.</p>
+<h3 tabindex="-1">Comment, étape par étape ?</h3>
+<ol>
+<li>Énumérer les choix valides et décider si un code scalaire est nécessaire.</li>
+<li>Déclarer une enum pure ou choisir un backing type unique <code>int</code> ou <code>string</code>.</li>
+<li>Pour une backed enum, affecter explicitement à chaque cas une valeur constante unique ; aucune numérotation implicite n'est fournie.</li>
+<li>Typer les valeurs internes avec l'enum et réserver les conversions aux frontières. La conversion inverse est détaillée dans <a href="course-CRS-3sggmeyd01x6.html#out-OUT-6az3084jk5xb">l'API</a>.</li>
+</ol>
+<h3 tabindex="-1">Exemple concret PHP</h3>
+<p><code>Direction</code> est pure ; <code>Status</code> est adossée à une string. Le nom <code>Draft</code> et la valeur <code>draft</code> ne sont pas interchangeables. La sortie montre <code>Left</code>, puis <code>Draft draft</code>, puis les deux contrats automatiques vrais.</p>
+<pre class="highlight" tabindex="0"><code class="language-php">&lt;?php
+enum Direction
+{
+    case Left;
+    case Right;
+}
+
+enum Status: string
+{
+    case Draft = 'draft';
+    case Published = 'published';
+}
+
+echo Direction::Left-&gt;name, "\n";
+echo Status::Draft-&gt;name, ' ', Status::Draft-&gt;value, "\n";
+var_dump(Direction::Left instanceof UnitEnum);
+var_dump(Status::Draft instanceof BackedEnum);</code></pre>
+<p>Une enum pure n'a pas de property <code>value</code> : la lire produit un warning et <code>null</code>, pas un code scalaire implicite. Référence : <a href="https://www.php.net/manual/en/language.enumerations.backed.php">backed enums</a>.</p><details class="canonical-retained"><summary>Passage canonique conservé</summary><h2 tabindex="-1">Pure ou adossée</h2>
+<p>Une enum pure déclare des cas sans valeur. Une enum adossée (<em>backed</em>) donne à
+chaque cas une valeur de type <code>int</code> ou <code>string</code> — aucun autre type —, unique et
+constante. Une enum adossée implémente automatiquement <code>BackedEnum</code> ; toute
+enum implémente <code>UnitEnum</code>.</p></details><aside class="enrichment" aria-label="Autre explication"><p>Une case d'enum ressemble à un statut unique sur un tableau de suivi. Une backed enum lui ajoute un code de lecture : le nom identifie la case dans le programme, la value fournit son code scalaire.</p></aside></section><section class="teaching-section" data-section="s-l-api"><span class="outcome-anchor" id="out-OUT-6az3084jk5xb" tabindex="-1"></span><h2 id="s-l-api" tabindex="-1">L&#x27;API</h2><p class="teaching-label pitfall"><span aria-hidden="true">△</span> <strong>Piège à éviter</strong></p><aside class="section-digest" id="s-l-api-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>from() échoue par ValueError.</li><li>tryFrom() permet de traiter explicitement l&#x27;absence de case.</li></ol></aside><h3 tabindex="-1">C'est quoi ?</h3>
+<p><code>cases()</code> renvoie les objects correspondant aux cas déclarés, dans leur ordre de déclaration. Chaque cas expose son <code>name</code> en lecture seule. Seules les backed enums ajoutent <code>value</code>, également en lecture seule, et les methods de conversion <code>from()</code> et <code>tryFrom()</code>.</p>
+<p>Pour une valeur scalaire du type approprié sans cas correspondant, <code>from()</code> lance une <code>ValueError</code>, tandis que <code>tryFrom()</code> rend <code>null</code>. Ce dernier n'est pas une protection contre tous les types d'entrée : un argument de type invalide peut toujours provoquer une <code>TypeError</code>. Ces methods sont fournies par PHP et ne peuvent pas être redéfinies sur une backed enum.</p>
+<h3 tabindex="-1">À quoi ça sert ?</h3>
+<p>Un guichet traduit un code de billet en catégorie. Le code est la valeur scalaire, la catégorie le cas d'enum. <code>from()</code> exige que le code existe ; <code>tryFrom()</code> permet de constater son absence et de décider quoi faire. Limite : l'absence de catégorie et une entrée d'un type totalement inadéquat sont deux problèmes distincts.</p>
+<p>Le choix dépend donc de la règle métier : une valeur supposée correcte qui ne l'est pas doit-elle interrompre le traitement, ou une valeur inconnue est-elle un cas attendu à présenter au client ?</p>
+<h3 tabindex="-1">Où dans Symfony ?</h3>
+<p>Dans une application Symfony, une enum peut servir à représenter les choix d'un modèle ou un argument de controller. Même si HttpKernel résout certains arguments automatiquement, un appel explicite à <code>Status::from()</code> conserve exactement le comportement PHP décrit ici. Le traitement d'une <code>ValueError</code> suit la <a href="course-CRS-yc9fry0vz4gh.html#out-OUT-xwdtmfm9hzsc">hiérarchie Error</a>, pas celle d'<code>Exception</code>.</p>
+<h3 tabindex="-1">Comment, étape par étape ?</h3>
+<ol>
+<li>Lire <code>cases()</code> comme une liste d'objects ; extraire <code>value</code> si l'on veut leurs codes scalaires.</li>
+<li>Choisir <code>from()</code> si l'absence est une erreur et prévoir où elle sera traitée.</li>
+<li>Choisir <code>tryFrom()</code> si l'absence est attendue et tester explicitement <code>null</code> ; ne pas transformer silencieusement une entrée invalide en réussite.</li>
+<li>Vérifier également le type de l'entrée, particulièrement avec <code>strict_types=1</code>.</li>
+</ol>
+<h3 tabindex="-1">Exemple concret PHP</h3>
+<p>Les valeurs extraites sont <code>draft</code> et <code>published</code>. <code>from('draft')</code> rend le cas dont le nom est <code>Draft</code>. Les deux appels avec <code>missing</code> illustrent ensuite la différence : <code>unknown status</code>, puis <code>conversion failed</code>.</p>
+<pre class="highlight" tabindex="0"><code class="language-php">&lt;?php
+declare(strict_types=1);
+
+enum Status: string
+{
+    case Draft = 'draft';
+    case Published = 'published';
+}
+
+var_export(array_column(Status::cases(), 'value'));
+echo "\n";
+echo Status::from('draft')-&gt;name, "\n";
+$status = Status::tryFrom('missing');
+if ($status === null) {
+    echo "unknown status\n";
+}
+try {
+    Status::from('missing');
+} catch (ValueError) {
+    echo "conversion failed\n";
+}</code></pre>
+<p>Référence : <a href="https://www.php.net/manual/en/language.enumerations.backed.php">conversions des backed enums</a>.</p><details class="canonical-retained"><summary>Passage canonique conservé</summary><h2 tabindex="-1">L'API</h2>
+<p>Toutes les enums exposent <code>cases()</code>, qui rend les cas eux-mêmes, et <code>-&gt;name</code>,
+en lecture seule. Les enums <strong>adossées uniquement</strong> ajoutent <code>-&gt;value</code>, en
+lecture seule, <code>from()</code>, qui lève une <code>\ValueError</code> si aucun cas ne correspond,
+et <code>tryFrom()</code>, qui rend alors <code>null</code>. Pour les valeurs :
+<code>array_column(Suit::cases(), 'value')</code>, avec par exemple <code>enum Suit: string { case Hearts = 'H'; case Clubs = 'C'; }</code> : le résultat est <code>['H', 'C']</code>.</p></details></section><section class="teaching-section" data-section="s-ce-qu-une-enum-peut-faire"><span class="outcome-anchor" id="out-OUT-c6mz3z761kqd" tabindex="-1"></span><h2 id="s-ce-qu-une-enum-peut-faire" tabindex="-1">Ce qu&#x27;une enum peut faire</h2><p class="teaching-label example"><span aria-hidden="true">▣</span> <strong>Exemple concret</strong></p><p class="digest-reference"><a href="#s-l-essentiel-digest">Revoir la règle : Les cases sont des singletons comparables par ===.</a></p><h3 tabindex="-1">C'est quoi ?</h3>
+<p>Une enum peut exposer des methods, des methods statiques, des constantes, des attributes et implémenter des interfaces. Elle peut donc porter du comportement lié à ses cas. Une constante qui désigne un cas constitue un alias, pas un cas supplémentaire.</p>
+<p>Ses cas sont des singletons comparables avec <code>===</code>. On ne crée pas d'autre instance avec <code>new</code>, on ne définit pas de constructor et on ne fait pas d'<code>extends</code>. Une enum ne peut pas déclarer de properties, ni d'instance ni statiques. Ses properties natives <code>name</code> et, pour une backed enum, <code>value</code> sont en lecture seule ; tenter de les modifier directement ou par référence provoque une <code>Error</code>.</p>
+<h3 tabindex="-1">À quoi ça sert ?</h3>
+<p>Un jeu de tampons officiels contient un exemplaire de chaque mention ; un surnom peut désigner le même tampon sans en fabriquer un autre. Le tampon correspond au cas singleton, le surnom à la constante alias, la mention imprimée à une method de l'enum. Limite : chaque document peut changer, mais le tampon-enum ne porte pas l'état propre de ce document.</p>
+<p>Placer une règle dépendant exclusivement du cas dans une method de l'enum évite de répéter ce choix dans tous ses utilisateurs. Les données variables d'un dossier restent dans un autre object.</p>
+<h3 tabindex="-1">Où dans Symfony ?</h3>
+<p>Une class applicative utilisée par un controller peut appeler une method de son enum pour obtenir un libellé. Symfony ne transforme pas pour autant cette enum en service mutable. Les <a href="course-CRS-e4y7gtn5k4f0.html#out-OUT-6tzwvmfwj408">interfaces</a> expliquent le contrat local <code>Labeled</code> utilisé ci-dessous.</p>
+<h3 tabindex="-1">Comment, étape par étape ?</h3>
+<ol>
+<li>Garder les données propres à chaque dossier dans sa class, pas dans l'enum.</li>
+<li>Ajouter une method quand son résultat dépend du cas lui-même, par exemple via un <code>match</code> exhaustif.</li>
+<li>Si plusieurs types doivent offrir la même opération, faire implémenter une interface à l'enum.</li>
+<li>Pour un choix par défaut, créer une constante pointant sur un cas existant ; vérifier avec <code>===</code> qu'il s'agit du même object, et avec <code>cases()</code> qu'aucun cas n'a été ajouté.</li>
+</ol>
+<h3 tabindex="-1">Exemple concret PHP</h3>
+<p><code>Default</code> désigne exactement <code>Draft</code>. La method rend <code>Brouillon</code> ; l'identité est vraie ; <code>cases()</code> contient toujours deux cas. Aucun constructor ou état mutable n'est nécessaire pour fournir ce comportement.</p>
+<pre class="highlight" tabindex="0"><code class="language-php">&lt;?php
+interface Labeled
+{
+    public function label(): string;
+}
+
+enum Status: string implements Labeled
+{
+    case Draft = 'draft';
+    case Published = 'published';
+
+    public const Default = self::Draft;
+
+    public function label(): string
+    {
+        return match ($this) {
+            self::Draft =&gt; 'Brouillon',
+            self::Published =&gt; 'Publié',
+        };
+    }
+}
+
+echo Status::Default-&gt;label(), "\n";
+var_dump(Status::Default === Status::Draft);
+echo count(Status::cases()), "\n";</code></pre>
+<p>Références : <a href="https://www.php.net/manual/en/language.enumerations.methods.php">enum methods</a> et <a href="https://www.php.net/manual/en/language.enumerations.constants.php">enum constants</a>.</p><details class="canonical-retained"><summary>Passage canonique conservé</summary><h2 tabindex="-1">Ce qu'une enum peut faire</h2>
+<p>Methods, methods statiques, constantes, implémentation d'interfaces et
+attributes. Une constant peut désigner un cas : c'est un alias. Ses cas sont
+des singletons, comparables par <code>===</code>.</p>
+<p>Elle ne peut pas porter d'<strong>état</strong> : pas de property d'instance, pas de
+constructor, pas d'<code>extends</code>, pas de <code>new</code> — « Cannot instantiate enum ».
+<code>-&gt;value</code> et <code>-&gt;name</code> sont en lecture seule : toute modification, directe ou
+indirecte, lève une <code>Error</code>.</p></details></section><section class="teaching-section" data-section="s-pieges-d-examen"><h2 id="s-pieges-d-examen" tabindex="-1">Pièges d&#x27;examen</h2><p class="teaching-label pitfall"><span aria-hidden="true">△</span> <strong>Piège à éviter</strong></p><p class="digest-reference"><a href="#s-l-api-digest">Revoir la règle : from() échoue par ValueError.</a></p><p><strong><code>from()</code> lève, <code>tryFrom()</code> renvoie <code>null</code>.</strong> Si aucune case ne correspond à la valeur fournie, <code>from()</code> lève une <code>\ValueError</code>. Sans <code>catch</code> adapté, elle interrompt le script ; <code>tryFrom()</code> permet de traiter explicitement l’absence de correspondance avec <code>null</code>.</p>
+<p><strong>Redéfinir <code>from()</code> ou <code>tryFrom()</code> sur une enum adossée est une erreur
+fatale.</strong> Ces methods sont fournies par l'engine.</p>
+<p><strong><code>cases()</code> sur une enum adossée renvoie les cas, pas les valeurs.</strong> Pour les
+valeurs : <code>array_column(Suit::cases(), 'value')</code>, avec par exemple <code>enum Suit: string { case Hearts = 'H'; case Clubs = 'C'; }</code> : le résultat est <code>['H', 'C']</code>.</p>
+<p><strong>Une enum pure n'a pas de <code>-&gt;value</code>.</strong> Y accéder ne lève rien : PHP émet un
+avertissement « Undefined property » et rend <code>null</code>.</p></section><section class="teaching-section" data-section="s-application"><h2 id="s-application" tabindex="-1">Application</h2><aside class="section-digest" id="s-application-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>from() échoue par ValueError.</li><li>tryFrom() permet de traiter explicitement l&#x27;absence de case.</li><li>Une backed enum utilise int ou string.</li><li>Chaque case possède une valeur unique.</li></ol></aside>
+
+
+
+<nav aria-label="Flashcards de l’application"><ul><li><a href="#A-3sggmeyd01x6-658f121e23-02">Flashcard : from() échoue par ValueError. tryFrom() permet de traiter explicitement l&#x27;absence de case.</a></li><li><a href="#A-3sggmeyd01x6-88b6fbd62c-01">Flashcard : Une backed enum utilise int ou string. Chaque case possède une valeur unique.</a></li></ul></nav></section><section class="teaching-section" data-section="s-fiche-express"><h2 id="s-fiche-express" tabindex="-1">Fiche express</h2><p class="teaching-label essential"><span aria-hidden="true">◆</span> <strong>À mémoriser</strong></p><p class="digest-reference"><a href="#s-l-api-digest">Revoir la règle : from() échoue par ValueError.</a></p><p><strong>Si tu dois retenir seulement 6 choses :</strong></p>
+<ul>
+<li>Pure : des cas ; adossée : <strong><code>int</code> ou <code>string</code></strong>, unique et constante.</li>
+<li><code>cases()</code> → les <strong>cas</strong> ; <code>name</code> et <code>value</code> en <strong>lecture seule</strong>.</li>
+<li><strong><code>from()</code> lève</strong> <code>\ValueError</code> ; <strong><code>tryFrom()</code> rend <code>null</code></strong>.</li>
+<li>Methods, constantes (alias), interfaces : <strong>oui</strong>.</li>
+<li>État, constructor, <code>extends</code>, <strong><code>new</code></strong> : <strong>non</strong>.</li>
+<li><code>UnitEnum</code> pour toutes, <strong><code>BackedEnum</code></strong> en plus pour les adossées.</li>
+</ul>
+<p>Moyen mnémotechnique : <strong>« from fâche, tryFrom tolère »</strong>.</p></section><section class="teaching-section" data-section="s-sources-officielles"><h2 id="s-sources-officielles" tabindex="-1">Sources officielles</h2><ul>
+<li><a href="https://www.php.net/manual/en/index.php">PHP — Manuel PHP</a></li>
+</ul></section><section class="official-sources"><h2>Sources officielles et compléments</h2><ul><li><a href="https://www.php.net/manual/en/language.enumerations.php">PHP — Énumérations</a></li></ul></section><nav class="course-sequence" aria-label="Ordre de lecture"><a rel="prev" href="course-CRS-bshgpd44ykba.html" aria-label="Précédent : Traits — Module 01 — PHP jusqu’à 8.4">Précédent : Traits</a> <a href="lot-01.html">Sommaire : Module 01 — PHP jusqu’à 8.4</a> <a rel="next" href="course-CRS-depbnbc0g82x.html" aria-label="Suivant : HTTP Specification (RFC 9110) — Module 02 — Fondamentaux HTTP">Suivant : HTTP Specification (RFC 9110)</a></nav><p class="course-practice-entry"><a class="button" href="#view-quiz">Fin du cours — s’entraîner avec le Quiz</a></p></div><div id="view-flashcards" data-course-panel role="region" aria-labelledby="view-flashcards-title"><h2 id="view-flashcards-title">Flashcards</h2><p lang="en">Answer before revealing each card.</p><p>Ces cartes ne mesurent pas une maîtrise notée.</p><div data-card-section="s-l-essentiel"><h3><a href="#s-l-essentiel">Revoir la section du cours</a></h3><div class="reader-cards"><details class="reader-card" id="A-3sggmeyd01x6-65c42c80d9-03"><summary lang="en">Can an enum declare instance state or be instantiated with new?</summary><p lang="en">No. It may have methods, constants and interfaces, but no instance properties or constructor.</p><p lang="fr">Les cases sont des singletons comparables par ===. Une enum peut porter du comportement, pas un état d&#x27;instance.</p><a href="course-CRS-3sggmeyd01x6.html#out-OUT-c6mz3z761kqd">Revoir le passage précis</a></details></div></div><div data-card-section="s-le-schema"><h3><a href="#s-le-schema">Revoir la section du cours</a></h3><div class="reader-cards"><p class="reader-card-reference" id="A-3sggmeyd01x6-6e0103f6cc-03">Rappel déjà proposé : <a lang="en" href="#A-3sggmeyd01x6-65c42c80d9-03">Can an enum declare instance state or be instantiated with new?</a> · <a href="course-CRS-3sggmeyd01x6.html#out-OUT-c6mz3z761kqd">Passage canonique</a></p></div></div><div data-card-section="s-l-exemple"><h3><a href="#s-l-exemple">Revoir la section du cours</a></h3><div class="reader-cards"><details class="reader-card" id="A-3sggmeyd01x6-88b6fbd62c-01"><summary lang="en">Which scalar types may back an enum?</summary><p lang="en">int or string, with a unique value for every case.</p><p lang="fr">Une backed enum utilise int ou string. Chaque case possède une valeur unique.</p><a href="course-CRS-3sggmeyd01x6.html#out-OUT-xccz85tdts39">Revoir le passage précis</a></details></div></div><div data-card-section="s-pure-ou-adossee"><h3><a href="#s-pure-ou-adossee">Revoir la section du cours</a></h3><div class="reader-cards"><p class="reader-card-reference" id="A-3sggmeyd01x6-25ab294274-01">Rappel déjà proposé : <a lang="en" href="#A-3sggmeyd01x6-88b6fbd62c-01">Which scalar types may back an enum?</a> · <a href="course-CRS-3sggmeyd01x6.html#out-OUT-xccz85tdts39">Passage canonique</a></p></div></div><div data-card-section="s-l-api"><h3><a href="#s-l-api">Revoir la section du cours</a></h3><div class="reader-cards"><details class="reader-card" id="A-3sggmeyd01x6-658f121e23-02"><summary lang="en">What happens when no enum case matches from() and tryFrom()?</summary><p lang="en">from() throws ValueError; tryFrom() returns null.</p><p lang="fr">from() échoue par ValueError. tryFrom() permet de traiter explicitement l&#x27;absence de case.</p><a href="course-CRS-3sggmeyd01x6.html#out-OUT-6az3084jk5xb">Revoir le passage précis</a></details></div></div><div data-card-section="s-ce-qu-une-enum-peut-faire"><h3><a href="#s-ce-qu-une-enum-peut-faire">Revoir la section du cours</a></h3><div class="reader-cards"><p class="reader-card-reference" id="A-3sggmeyd01x6-0a7ce4b3a4-03">Rappel déjà proposé : <a lang="en" href="#A-3sggmeyd01x6-65c42c80d9-03">Can an enum declare instance state or be instantiated with new?</a> · <a href="course-CRS-3sggmeyd01x6.html#out-OUT-c6mz3z761kqd">Passage canonique</a></p></div></div><div data-card-section="s-pieges-d-examen"><h3><a href="#s-pieges-d-examen">Revoir la section du cours</a></h3><div class="reader-cards"><p class="reader-card-reference" id="A-3sggmeyd01x6-596d5af532-02">Rappel déjà proposé : <a lang="en" href="#A-3sggmeyd01x6-658f121e23-02">What happens when no enum case matches from() and tryFrom()?</a> · <a href="course-CRS-3sggmeyd01x6.html#out-OUT-6az3084jk5xb">Passage canonique</a></p></div></div><div data-card-section="s-application"><h3><a href="#s-application">Revoir la section du cours</a></h3><div class="reader-cards"><p class="reader-card-reference" id="A-3sggmeyd01x6-e7ad522ea3-02">Rappel déjà proposé : <a lang="en" href="#A-3sggmeyd01x6-658f121e23-02">What happens when no enum case matches from() and tryFrom()?</a> · <a href="course-CRS-3sggmeyd01x6.html#out-OUT-6az3084jk5xb">Passage canonique</a></p><p class="reader-card-reference" id="A-3sggmeyd01x6-e7ad522ea3-01">Rappel déjà proposé : <a lang="en" href="#A-3sggmeyd01x6-88b6fbd62c-01">Which scalar types may back an enum?</a> · <a href="course-CRS-3sggmeyd01x6.html#out-OUT-xccz85tdts39">Passage canonique</a></p></div></div><div data-card-section="s-fiche-express"><h3><a href="#s-fiche-express">Revoir la section du cours</a></h3><div class="reader-cards"><p class="reader-card-reference" id="A-3sggmeyd01x6-b11e58e15e-02">Rappel déjà proposé : <a lang="en" href="#A-3sggmeyd01x6-658f121e23-02">What happens when no enum case matches from() and tryFrom()?</a> · <a href="course-CRS-3sggmeyd01x6.html#out-OUT-6az3084jk5xb">Passage canonique</a></p></div></div><aside class="checkpoint"><h2>Rappel d’un cours antérieur</h2><p>Avant de poursuivre : Exception and error handling.</p><details class="corpus-correction"><summary lang="en">Which catch handles both Error and Exception?</summary><p lang="en">catch (Throwable); the first compatible catch wins.</p><p>Throwable couvre les deux branches. Placer les catch spécifiques avant le catch général.</p><a href="course-CRS-yc9fry0vz4gh.html#out-OUT-c799q9ew2xxg">Relire la correction dans le cours antérieur</a></details></aside></div><div id="view-quiz" data-course-panel role="region" aria-labelledby="view-quiz-title"><h2 id="view-quiz-title">Quiz</h2><p id="course-quiz-status" role="status">Quiz interactif non chargé. Démarrez après chargement de la banque locale.</p><div id="course-quiz-controls" class="assessment-main" hidden><div id="course-quiz-assessment-controls" hidden><select id="course-quiz-assessment-mode" aria-label="Mode du quiz" hidden><option value="learning">Entraînement</option></select><p id="course-quiz-training-scope"></p><button id="course-quiz-start-assessment" type="button" lang="en">Start practice</button><button id="course-quiz-finish-assessment" type="button" lang="en" hidden>End session</button></div><p id="course-quiz-assessment-error" role="alert"></p><p id="course-quiz-assessment-timer" hidden></p><p id="course-quiz-session-progress" role="status"></p><div id="course-quiz-assessment-app" tabindex="-1"></div><nav id="course-quiz-session-navigation" aria-label="Questions du cours"></nav><div id="course-quiz-learning-overview" aria-live="polite"></div></div><div id="course-quiz-native"><p>Sans JavaScript ou si le chargement échoue : aucune tentative notée. Les <a href="#view-flashcards">flashcards du cours</a> restent disponibles.</p><details class="course-quiz-fallback" data-question-id="L-3sggmeyd01x6-base-v1"><summary lang="en">Can an enum declare instance state or be instantiated with new?</summary><p>Correction de consultation — non notée.</p><p>Les cases sont des singletons comparables par ===. Une enum peut porter du comportement, pas un état d&#x27;instance.</p><ul><li><strong lang="en">Distractor: Yes; each new instance receives its own case value.</strong><p>Les cases sont des singletons ; new n&#x27;instancie pas une enum.</p></li><li><strong lang="en">Distractor: Yes; instance properties are allowed if they are readonly.</strong><p>readonly ne lève pas l&#x27;interdiction des instance properties dans une enum.</p></li><li><strong lang="en">Correct: No; enums have cases and behavior, not instance state.</strong><p>Les cases sont des singletons comparables par ===. Une enum peut porter du comportement, pas un état d&#x27;instance.</p></li></ul><a href="course-CRS-3sggmeyd01x6.html#out-OUT-c6mz3z761kqd">Relire le passage exact</a></details></div></div></div></div><details class="transfer-panel"><summary>Sauvegarde et transfert de progression</summary><p id="reading-status" role="status">Sans JavaScript : lecture libre ; progression non enregistrée.</p><p><a href="assessment.html#overview-title">Lecture, réussites immédiates et différées</a></p><p>Transfert manuel — aucune synchronisation automatique</p><p id="persistence-status" role="status"></p><button type="button" class="secondary" id="export-progress">Exporter ma progression</button><label for="import-progress">Choisir un JSON pour fusionner ma progression (sans remplacement)</label><input type="file" id="import-progress" accept="application/json,.json"><p id="transfer-status" role="status"></p></details></main><footer class="site-footer"><a href="catalogue.html">Catalogue</a> <a href="sources.html">Sources et attribution</a> <a href="#contenu">Haut de page</a></footer></body></html>
