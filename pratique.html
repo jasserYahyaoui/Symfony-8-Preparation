@@ -1,0 +1,192 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; connect-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Deux exercices corrigés et six questions originales en anglais sur les HTTP status codes, avec explications françaises.">
+  <title>Pratiquer les HTTP status codes — Symfony 8 Preparation</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="quiz.js" defer></script>
+<script src="learning-state.js" defer></script><script src="guide.js" defer></script><script src="reader-catalog.js" defer></script><script src="reader.js" defer></script><script src="site-state.js" defer></script><link rel="stylesheet" href="syntax-highlight.css"><script src="prism-syntax.js" defer></script><script src="syntax-highlight.js" defer></script></head>
+<body>
+  <a class="skip" href="#contenu">Aller au contenu</a>
+  <header class="site-header">
+    <a class="brand" href="index.html"><span class="brand-mark" aria-hidden="true">S8</span> Preparation<span class="brand-dot" aria-hidden="true">.</span></a>
+    <nav aria-label="Navigation principale"><a href="index.html">Accueil</a> <a href="catalogue.html">Parcours</a> <a href="assessment.html?mode=review">Réviser</a> <a href="examens.html">Examens blancs</a> <a href="jour-j.html">Jour J</a></nav>
+  </header>
+  <main id="contenu" class="narrow" tabindex="-1">
+    <div class="page-heading">
+      <p class="eyebrow">Module 02 — Fondamentaux HTTP · COURS 1 : STATUS CODES · PRATIQUE FINALE</p>
+      <h1 lang="en">Choose.<br><em>Then explain.</em></h1>
+      <p class="lead" lang="en">Before revealing a correction, explain your reasoning: what did the server receive, what did it actually accomplish, and what should the client do next?</p>
+      <nav aria-label="Practice sections" lang="en"><a href="#exercices">Two exercises</a><a href="#quiz">Six questions</a><a href="cours-http.html#fiche">Revision digest</a></nav>
+      <p lang="en">Prerequisites: <a href="cours-http.html#contrat-export">the export contract</a>, <a href="cours-http.html#distinction-307-308-303">redirect choices</a> and <a href="cours-http.html#construction-response">Response construction</a>. Corrections link to the highlighted teaching passage.</p>
+    </div>
+    <section class="section" id="exercices">
+      <h2 lang="en">Solve two situations</h2>
+      <p lang="en">Take notes on paper or in your editor. No account, external tool or PHP execution is required. Each snippet is a separate controller action; routing is omitted.</p>
+      <article class="exercise">
+        <div class="exercise-prompt" lang="en">
+        <h3>01 · The export that is not ready yet</h3>
+        <p>A POST to <code>/exports</code> accepts a job, but processing has not started. The first action already claims creation. Later, the second action attempts to send JSON using a status code that forbids a body.</p>
+        <p class="code-caption">First action: accept the export job (intentionally wrong status code).</p>
+        <pre data-php tabindex="0" aria-label="Export acceptance action to correct"><code>use Symfony\Component\HttpFoundation\JsonResponse;
+
+final class AcceptExportController
+{
+    public function __invoke(): JsonResponse
+    {
+        return new JsonResponse(['state' =&gt; 'queued'], 201);
+    }
+}</code></pre>
+        <p class="code-caption">Separate action: read the completed result (intentionally wrong status code).</p>
+        <pre data-php tabindex="0" aria-label="Completed export action to correct"><code>use Symfony\Component\HttpFoundation\JsonResponse;
+
+final class ReadExportController
+{
+    public function __invoke(): JsonResponse
+    {
+        return new JsonResponse(
+            ['download' =&gt; '/exports/7/file'],
+            204,
+        );
+    }
+}</code></pre>
+        <p>Choose the two appropriate status codes and a way to monitor progress. Explain why <code>202</code> does not promise success.</p>
+        </div>
+        <details class="exercise-correction" lang="fr"><summary lang="en">Reveal the export correction</summary>
+          <p><strong>À l'acceptation : 202.</strong> Le fichier n'est pas prêt ; le body expose l'état et le suivi. <a href="cours-http.html#contrat-export" lang="en">Review the export contract</a> · <a href="cours-http.html#succes-200-201-202" lang="en">Review acceptance without a success guarantee</a>.</p>
+          <pre data-php tabindex="0" aria-label="Correction PHP du status code d'acceptation"><code>use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
+
+final class AcceptExportController
+{
+    public function __invoke(): JsonResponse
+    {
+        return new JsonResponse(
+            ['state' =&gt; 'queued', 'monitor' =&gt; '/exports/7'],
+            Response::HTTP_ACCEPTED,
+        );
+    }
+}</code></pre>
+          <p><strong>À la lecture du résultat disponible : 200.</strong> Le JSON est permis, contrairement à <a href="cours-http.html#succes-204">204</a>. Pour un contrat annonçant une ressource de suivi créée, revoir la <a href="cours-http.html#contrat-export">nuance de 201</a>.</p>
+          <pre data-php tabindex="0" aria-label="Correction PHP de la consultation du résultat"><code>use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
+
+final class ReadExportController
+{
+    public function __invoke(): JsonResponse
+    {
+        return new JsonResponse(
+            ['download' =&gt; '/exports/7/file'],
+            Response::HTTP_OK,
+        );
+    }
+}</code></pre>
+          <p><a href="cours-http.html#construction-response" lang="en">Review JsonResponse arguments and constants</a>.</p>
+        </details>
+      </article>
+      <article class="exercise">
+        <div class="exercise-prompt" lang="en">
+        <h3>02 · The destination that must preserve POST</h3>
+        <p>An API temporarily moves <code>/intake</code> to <code>/intake-v2</code>. The client must resend its POST method and JSON body unchanged. A colleague suggests 302. Then the proxy waits too long for the upstream server and returns 502.</p>
+        <p>Correct both choices. Which header accompanies the move? Why is 303 inappropriate here?</p>
+        </div>
+        <details class="exercise-correction" lang="fr"><summary lang="en">Reveal the relocation correction</summary>
+          <p><strong>Choisir 307 avec <code>Location: /intake-v2</code>.</strong> Il faut préserver l'opération temporairement : <a href="cours-http.html#distinction-307-308-303" lang="en">Review why 302, 303 and 308 do not fit</a> · <a href="cours-http.html#location-redirection" lang="en">Review Location</a>.</p>
+          <pre data-php tabindex="0" aria-label="Correction PHP du déplacement temporaire"><code>use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Response;
+
+final class MoveIntakeController
+{
+    public function __invoke(): RedirectResponse
+    {
+        return new RedirectResponse(
+            '/intake-v2',
+            Response::HTTP_TEMPORARY_REDIRECT,
+        );
+    }
+}</code></pre>
+          <p><strong>Le délai dépassé appelle 504.</strong> Le défaut est le temps d'attente, pas une Response invalide : <a href="cours-http.html#distinction-502-503-504" lang="en">Review upstream failures</a>.</p>
+          <p><a href="cours-http.html#redirect-response" lang="en">Review the RedirectResponse arguments and 307 constant</a>.</p>
+        </details>
+      </article>
+    </section>
+    <section class="section" id="quiz" aria-labelledby="quiz-title">
+      <p class="eyebrow" lang="en">ACTIVE RECALL · ORIGINAL QUESTIONS</p>
+      <h2 id="quiz-title" lang="en">Six questions. No timer.</h2>
+      <p lang="en">Choose one answer per question. Questions and options are in English; explanations are in French. This learning quiz is neither a mock exam nor a certification-readiness measure.</p>
+      <p id="quiz-help" lang="en">Select an option, then open its explanation to assess your reasoning. Without JavaScript, all explanations remain available, but no automatic score is calculated.</p>
+      <p id="quiz-status" class="quiz-score" lang="en" role="status" aria-live="polite" aria-atomic="true" hidden></p>
+      <div id="practice-quiz" aria-describedby="quiz-help">
+        <fieldset data-question="export" data-correct="b">
+          <legend lang="en"><span class="question-label">QUESTION 1 / 6</span>An export request was accepted, but processing may later fail. Which status best describes this stage?</legend>
+          <label class="option" lang="en"><input type="radio" name="export" value="a"><span>A. 200 — the export has completed.</span></label>
+          <label class="option" lang="en"><input type="radio" name="export" value="b"><span>B. 202 — processing is not complete.</span></label>
+          <label class="option" lang="en"><input type="radio" name="export" value="c"><span>C. 204 — the export file is empty.</span></label>
+          <label class="option" lang="en"><input type="radio" name="export" value="d"><span>D. 201 — the export file now exists.</span></label>
+          <button type="button" data-check lang="en" hidden>Check question 1</button>
+          <p class="feedback" lang="en"><span data-feedback role="status" aria-live="polite"></span> <a href="cours-http.html#succes-200-201-202">Review acceptance versus completion</a></p>
+          <details data-explanation><summary lang="en">Reveal the explanation for question 1</summary><p><strong>Bonne réponse : B.</strong> Le travail accepté n'est pas terminé : 202, sans garantie de succès ultérieur.</p><a href="cours-http.html#succes-200-201-202" lang="en">Review acceptance versus completion</a></details>
+        </fieldset>
+        <fieldset data-question="move" data-correct="d">
+          <legend lang="en"><span class="question-label">QUESTION 2 / 6</span>An endpoint moves permanently. An automatically redirected POST must keep its method and body. Which status fits?</legend>
+          <label class="option" lang="en"><input type="radio" name="move" value="a"><span>A. 301 Moved Permanently</span></label>
+          <label class="option" lang="en"><input type="radio" name="move" value="b"><span>B. 303 See Other</span></label>
+          <label class="option" lang="en"><input type="radio" name="move" value="c"><span>C. 307 Temporary Redirect</span></label>
+          <label class="option" lang="en"><input type="radio" name="move" value="d"><span>D. 308 Permanent Redirect</span></label>
+          <button type="button" data-check lang="en" hidden>Check question 2</button>
+          <p class="feedback" lang="en"><span data-feedback role="status" aria-live="polite"></span> <a href="cours-http.html#distinction-307-308-303">Review preservation and permanence</a></p>
+          <details data-explanation><summary lang="en">Reveal the explanation for question 2</summary><p><strong>Bonne réponse : D.</strong> 308 réunit les deux contraintes : permanence et conservation de la méthode et du body.</p><a href="cours-http.html#distinction-307-308-303" lang="en">Review preservation and permanence</a></details>
+        </fieldset>
+        <fieldset data-question="challenge" data-correct="a">
+          <legend lang="en"><span class="question-label">QUESTION 3 / 6</span>A protected resource receives no valid authentication credentials and returns 401. Which Response header is required?</legend>
+          <label class="option" lang="en"><input type="radio" name="challenge" value="a"><span>A. WWW-Authenticate</span></label>
+          <label class="option" lang="en"><input type="radio" name="challenge" value="b"><span>B. Allow</span></label>
+          <label class="option" lang="en"><input type="radio" name="challenge" value="c"><span>C. Location</span></label>
+          <label class="option" lang="en"><input type="radio" name="challenge" value="d"><span>D. Retry-After</span></label>
+          <button type="button" data-check lang="en" hidden>Check question 3</button>
+          <p class="feedback" lang="en"><span data-feedback role="status" aria-live="polite"></span> <a href="cours-http.html#distinction-401-403">Review the required 401 challenge</a></p>
+          <details data-explanation><summary lang="en">Reveal the explanation for question 3</summary><p><strong>Bonne réponse : A.</strong> Le challenge de 401 est obligatoire dans WWW-Authenticate.</p><a href="cours-http.html#distinction-401-403" lang="en">Review the required 401 challenge</a></details>
+        </fieldset>
+        <fieldset data-question="formats" data-correct="c">
+          <legend lang="en"><span class="question-label">QUESTION 4 / 6</span>A JSON-only endpoint rejects an XML Request body. Separately, no available output matches Accept: application/xml, and the server declines a default representation. Which pair fits, in that order?</legend>
+          <label class="option" lang="en"><input type="radio" name="formats" value="a"><span>A. 406, then 415</span></label>
+          <label class="option" lang="en"><input type="radio" name="formats" value="b"><span>B. 422, then 409</span></label>
+          <label class="option" lang="en"><input type="radio" name="formats" value="c"><span>C. 415, then 406</span></label>
+          <label class="option" lang="en"><input type="radio" name="formats" value="d"><span>D. 400, then 405</span></label>
+          <button type="button" data-check lang="en" hidden>Check question 4</button>
+          <p class="feedback" lang="en"><span data-feedback role="status" aria-live="polite"></span> <a href="cours-http.html#distinction-406-415">Review input versus output</a></p>
+          <details data-explanation><summary lang="en">Reveal the explanation for question 4</summary><p><strong>Bonne réponse : C.</strong> D'abord l'entrée refusée (415), puis la sortie non acceptable (406).</p><a href="cours-http.html#distinction-406-415" lang="en">Review input versus output</a></details>
+        </fieldset>
+        <fieldset data-question="conditional" data-correct="b">
+          <legend lang="en"><span class="question-label">QUESTION 5 / 6</span>A conditional GET matches the current ETag and receives 304. What should the Response contain?</legend>
+          <label class="option" lang="en"><input type="radio" name="conditional" value="a"><span>A. The complete representation again.</span></label>
+          <label class="option" lang="en"><input type="radio" name="conditional" value="b"><span>B. Metadata, but no Response body.</span></label>
+          <label class="option" lang="en"><input type="radio" name="conditional" value="c"><span>C. An empty JSON object as content.</span></label>
+          <label class="option" lang="en"><input type="radio" name="conditional" value="d"><span>D. A new URL and a redirect document.</span></label>
+          <button type="button" data-check lang="en" hidden>Check question 5</button>
+          <p class="feedback" lang="en"><span data-feedback role="status" aria-live="polite"></span> <a href="cours-http.html#validation">Review 304 reuse</a></p>
+          <details data-explanation><summary lang="en">Reveal the explanation for question 5</summary><p><strong>Bonne réponse : B.</strong> Les métadonnées accompagnent la réutilisation ; aucun body, même JSON vide.</p><a href="cours-http.html#validation" lang="en">Review 304 reuse</a></details>
+        </fieldset>
+        <fieldset data-question="gateway" data-correct="a">
+          <legend lang="en"><span class="question-label">QUESTION 6 / 6</span>A gateway gets an invalid upstream Response. Later, the origin is temporarily unavailable for maintenance. Which pair fits these two failures?</legend>
+          <label class="option" lang="en"><input type="radio" name="gateway" value="a"><span>A. 502, then 503</span></label>
+          <label class="option" lang="en"><input type="radio" name="gateway" value="b"><span>B. 504, then 502</span></label>
+          <label class="option" lang="en"><input type="radio" name="gateway" value="c"><span>C. 503, then 504</span></label>
+          <label class="option" lang="en"><input type="radio" name="gateway" value="d"><span>D. 500, then 409</span></label>
+          <button type="button" data-check lang="en" hidden>Check question 6</button>
+          <p class="feedback" lang="en"><span data-feedback role="status" aria-live="polite"></span> <a href="cours-http.html#distinction-502-503-504">Review invalid upstream Response versus maintenance</a></p>
+          <details data-explanation><summary lang="en">Reveal the explanation for question 6</summary><p><strong>Bonne réponse : A.</strong> Response amont invalide : 502 ; maintenance temporaire : 503.</p><a href="cours-http.html#distinction-502-503-504" lang="en">Review invalid upstream Response versus maintenance</a></details>
+        </fieldset>
+        <button type="button" id="reset-quiz" class="secondary" lang="en" hidden>Restart all six questions</button>
+      </div>
+      <p class="muted">Aucune réponse n'est enregistrée ni envoyée. Recharger la page recommence la session. Les corrigés font partie du document : ils sont repliés pour apprendre, pas gardés secrets.</p>
+      <div class="actions" lang="en"><a class="button" href="cours-http.html#fiche">Return to the revision digest</a><a href="sources.html">Read the references</a></div>
+      <p class="muted">Exercices complémentaires historiques du cours HTTP status codes. <a href="lot-02.html">Tous les cours : Module 02 — Fondamentaux HTTP</a> · <a href="cours-http.html#view-quiz">Quiz dans le cours HTTP status codes</a>.</p>
+    </section>
+  <details class="transfer-panel"><summary>Sauvegarde et transfert de progression</summary><p id="reading-status" role="status">Sans JavaScript : lecture libre ; progression non enregistrée.</p><p><a href="assessment.html#overview-title">Lecture, réussites immédiates et différées</a></p><p>Transfert manuel — aucune synchronisation automatique</p><p id="persistence-status" role="status"></p><button type="button" class="secondary" id="export-progress">Exporter ma progression</button><label for="import-progress">Choisir un JSON pour fusionner ma progression (sans remplacement)</label><input type="file" id="import-progress" accept="application/json,.json"><p id="transfer-status" role="status"></p></details></main>
+  <footer class="site-footer"><p>Un score de pratique uniquement. Aucune estimation de réussite à l'examen.</p><a href="index.html#parcours">Parcours</a><a href="#contenu">Haut de page ↑</a></footer>
+</body>
+</html>

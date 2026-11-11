@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; connect-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Références officielles, périmètre et provenance de la préparation Symfony 8.0.">
+  <title>Sources et limites — Symfony 8 Preparation</title>
+  <link rel="stylesheet" href="styles.css">
+<script src="learning-state.js" defer></script><script src="guide.js" defer></script><script src="reader-catalog.js" defer></script><script src="reader.js" defer></script><script src="site-state.js" defer></script><link rel="stylesheet" href="syntax-highlight.css"><script src="prism-syntax.js" defer></script><script src="syntax-highlight.js" defer></script></head>
+<body>
+  <a class="skip" href="#contenu">Aller au contenu</a>
+  <header class="site-header">
+    <a class="brand" href="index.html"><span class="brand-mark" aria-hidden="true">S8</span> Preparation<span class="brand-dot" aria-hidden="true">.</span></a>
+    <nav aria-label="Navigation principale"><a href="index.html">Accueil</a> <a href="catalogue.html">Parcours</a> <a href="assessment.html?mode=review">Réviser</a> <a href="examens.html">Examens blancs</a> <a href="jour-j.html">Jour J</a></nav>
+  </header>
+  <main id="contenu" class="narrow" tabindex="-1">
+    <div class="page-heading">
+      <p class="eyebrow">TRAÇABILITÉ · CORPUS</p>
+      <h1>Apprendre avec<br><em>des repères vérifiables.</em></h1>
+      <p class="lead">Le programme fixe les limites. La RFC définit la sémantique HTTP. La documentation versionnée précise l'usage dans Symfony.</p>
+    </div>
+    <section class="section" id="officielles">
+      <h2>Sources officielles</h2>
+      <ul class="source-list">
+        <li><a href="https://certification.symfony.com/exams/symfony.html">Symfony Certification — programme de l'examen</a>. Section Symfony 8 consultée le 11 novembre 2026 : 75 questions, 90 minutes, anglais, 14 thèmes ; Symfony 8.0, PHP jusqu'à 8.4, Twig jusqu'à 3.22.</li>
+        <li><a href="https://www.rfc-editor.org/rfc/rfc9110.html#section-15">RFC 9110 §15 — Status Codes</a>. Cadre général et familles de status codes.</li>
+        <li><a href="https://www.rfc-editor.org/rfc/rfc9110.html#section-15.3">RFC 9110 §15.3 — Successful 2xx</a>. Distinguer 200, 201, 202 et 204.</li>
+        <li><a href="https://www.rfc-editor.org/rfc/rfc9110.html#section-15.4">RFC 9110 §15.4 — Redirection 3xx</a>. Méthodes après redirection et 304.</li>
+        <li><a href="https://www.rfc-editor.org/rfc/rfc9110.html#section-15.5">RFC 9110 §15.5 — Client Error 4xx</a>. Challenges, méthodes, formats et refus.</li>
+        <li><a href="https://www.rfc-editor.org/rfc/rfc9110.html#section-15.6">RFC 9110 §15.6 — Server Error 5xx</a>. Échec inattendu, gateway, indisponibilité et délai.</li>
+        <li><a href="https://symfony.com/doc/8.0/components/http_foundation.html#response">HttpFoundation — Response, documentation 8.0</a>. Construction des objets de Response.</li>
+        <li><a href="https://symfony.com/doc/8.0/components/http_foundation.html#redirecting-the-user">HttpFoundation — RedirectResponse, documentation 8.0</a>. Destination de redirection et header Location.</li>
+        <li><a href="https://symfony.com/doc/8.0/security/entry_point.html">Symfony 8.0 — Authentication entry point</a>. Seulement pour nuancer 401/403 et la redirection vers form login ; pas de tutoriel de sécurité.</li>
+        <li><a href="https://www.php.net/manual/en/language.oop5.basic.php">Manuel PHP — Classes et objets</a>. Contexte syntaxique des actions de controller. Pour l'examen, ne retenir que l'API disponible jusqu'à PHP 8.4 ; le manuel peut aussi documenter des versions plus récentes.</li>
+      </ul>
+      <p>Les liens techniques ouvrent des documentations officielles lisibles, jamais des fichiers source GitHub. Pour Twig, le plafond est 3.22 même si la documentation 3.x évolue.</p>
+      <p>Les liens externes s'ouvrent seulement à votre demande. Le site ne charge ni police distante, ni CDN, ni service d'IA, ni données externes. Le programme peut évoluer : vérifier la page officielle avant de s'inscrire.</p>
+    </section>
+    <section class="section" id="provenance"><h2>Les apports des deux sources</h2><h3>Symfony-8-Certification-Path</h3><p>Les objectifs officiels, les explications canoniques, les constantes exactes et les pièges structurent les 163 cours. Les cartes françaises ne sont pas publiées comme pratique d’examen : les adaptations proposent des questions et réponses anglaises avec explication française.</p><h3>Sf-8.0</h3><p>Les analogies, microchapitres, cas concrets et rappels espacés enrichissent le passage correspondant, sans créer une seconde version du cours. Chaque section a une décision explicite ; les cinq concepts additionnels restent exclus.</p><h3>Provenance et autorisation</h3><p>Les originaux intégraux, révisions et hashes restent dans le snapshot privé du build. Les anciennes mentions EXAM_READY ne constituent pas une nouvelle vérification. Le propriétaire autorise explicitement la fusion et les textes ; les métadonnées Composer ne sont pas interprétées comme une licence de contenu. La notice MIT de Sf-8.0 est conservée dans <a href="NOTICE.txt">NOTICE.txt</a> ; celle de Mermaid dans <a href="MERMAID-LICENSE.txt">MERMAID-LICENSE.txt</a>. La coloration syntaxique locale utilise PrismJS sous licence MIT : <a href="PRISM-LICENSE.txt">PRISM-LICENSE.txt</a>.</p></section>
+    <section class="section" id="limites">
+      <h2>Limites de la préparation</h2>
+      <ul>
+        <li>163 cours reliés à 637 objectifs : une traçabilité structurelle, pas une preuve de maîtrise.</li>
+        <li>Les résultats d’entraînement ne sont ni une probabilité de réussite ni un pourcentage de préparation. 177 des 637 objectifs disposent d’une question notée ; les autres ont des flashcards non notées.</li>
+        <li>Aucune synchronisation, télémétrie, authentication ou API. Les repères de lecture et les sessions de pratique restent locaux, sans compte utilisateur. Un stockage refusé ou corrompu est signalé sans bloquer la lecture.</li>
+        <li>Des contrôles automatisés de structure et de comportement, pas une certification d'accessibilité ni une validation réelle dans tous les navigateurs.</li>
+        <li>Aucune affirmation de publication ou de déploiement. La vérification visuelle et la publication restent séparées.</li>
+      </ul>
+      <p>Projet indépendant, non officiel et non affilié à Symfony. Symfony est une marque de son titulaire ; aucun logo officiel n'est utilisé.</p>
+      <div class="actions"><a class="button" href="catalogue.html">Ouvrir le parcours</a><a href="index.html#perimetre">Relire le périmètre</a></div>
+    </section>
+  <details class="transfer-panel"><summary>Sauvegarde et transfert de progression</summary><p id="reading-status" role="status">Sans JavaScript : lecture libre ; progression non enregistrée.</p><p><a href="assessment.html#overview-title">Lecture, réussites immédiates et différées</a></p><p>Transfert manuel — aucune synchronisation automatique</p><p id="persistence-status" role="status"></p><button type="button" class="secondary" id="export-progress">Exporter ma progression</button><label for="import-progress">Choisir un JSON pour fusionner ma progression (sans remplacement)</label><input type="file" id="import-progress" accept="application/json,.json"><p id="transfer-status" role="status"></p></details></main>
+  <footer class="site-footer"><p>Comprendre avant de mémoriser. Un sujet à la fois.</p><a href="NOTICE.txt">Notice de licence</a><a href="#contenu">Haut de page ↑</a></footer>
+</body>
+</html>

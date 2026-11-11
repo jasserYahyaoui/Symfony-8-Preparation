@@ -1,0 +1,75 @@
+body pre:not(.mermaid) {
+  color: #d4d4d4;
+  background: #1e1e1e;
+  border: 1px solid #555555;
+  border-radius: .65rem;
+  margin-block: 1.25rem;
+  padding: 1.25rem;
+  max-width: 100%;
+  font-family: Consolas, "Cascadia Code", "Liberation Mono", monospace;
+  font-size: 1rem;
+  line-height: 1.65;
+  tab-size: 4;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  word-break: normal;
+}
+
+body pre:not(.mermaid) code {
+  color: inherit;
+  background: transparent;
+  font: inherit;
+  padding: 0;
+  white-space: inherit;
+  overflow-wrap: inherit;
+}
+
+body pre.syntax-code:focus-visible {
+  outline: 3px solid #914200;
+  outline-offset: 4px;
+}
+
+body pre.syntax-code[hidden] { display: none !important; }
+
+body pre.syntax-code::before {
+  content: attr(data-code-language);
+  display: block;
+  margin-bottom: .85rem;
+  padding-bottom: .5rem;
+  border-bottom: 1px solid #555555;
+  color: #9cdcfe;
+  font: 600 .78rem/1.5 system-ui, sans-serif;
+  letter-spacing: .06em;
+}
+
+body pre.syntax-code .syntax-token { background: transparent; }
+body pre.syntax-code .syntax-keyword,
+body pre.syntax-code .syntax-boolean { color: #569cd6; }
+body pre.syntax-code .syntax-class-name,
+body pre.syntax-code .syntax-builtin { color: #4ec9b0; }
+body pre.syntax-code .syntax-function { color: #dcdcaa; }
+body pre.syntax-code .syntax-variable,
+body pre.syntax-code .syntax-property,
+body pre.syntax-code .syntax-key,
+body pre.syntax-code .syntax-attr-name { color: #9cdcfe; }
+body pre.syntax-code .syntax-string,
+body pre.syntax-code .syntax-attr-value { color: #ce9178; }
+body pre.syntax-code .syntax-comment,
+body pre.syntax-code .syntax-prolog { color: #7ca668; }
+body pre.syntax-code .syntax-number,
+body pre.syntax-code .syntax-constant { color: #b5cea8; }
+body pre.syntax-code .syntax-operator,
+body pre.syntax-code .syntax-punctuation { color: #d4d4d4; }
+body pre.syntax-code .syntax-tag,
+body pre.syntax-code .syntax-selector,
+body pre.syntax-code .syntax-important { color: #c586c0; }
+
+@media (max-width: 600px) {
+  body pre:not(.mermaid) { padding: .9rem; }
+}
+
+@media print {
+  body pre:not(.mermaid) { background: white; color: black; border-color: #555555; }
+  body pre.syntax-code .syntax-token { color: black; }
+  body pre.syntax-code::before { color: black; }
+}
