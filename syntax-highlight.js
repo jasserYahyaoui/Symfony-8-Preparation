@@ -20,6 +20,7 @@
         || [...element.classList].find(name => name.startsWith('language-'))?.slice(9);
       if (declared) return aliases[declared] || declared;
     }
+    if (pre.getAttribute('data-php') !== null) return 'php';
     return /^\s*<\?(?:php\b|=)/i.test(code.textContent) ? 'php' : 'text';
   }
 
