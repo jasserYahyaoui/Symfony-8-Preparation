@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; connect-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Twig syntax up to 3.22 version — Symfony 8 Preparation</title><link rel="stylesheet" href="styles.css"><link rel="stylesheet" href="reader.css"><script src="mermaid.min.js" defer></script><script src="mermaid-init.js" defer></script><link rel="stylesheet" href="assessment.css"><script src="learning-state.js" defer></script><script src="guide.js" defer></script><script src="reader-catalog.js" defer></script><script src="reader.js" defer></script><script src="site-state.js" defer></script><script src="assessment.js" defer></script><script src="course-views.js" defer></script><link rel="stylesheet" href="syntax-highlight.css"><script src="prism-syntax.js" defer></script><script src="syntax-highlight.js" defer></script></head><body data-course-id="CRS-x2f8reencvcs"><a class="skip" href="#contenu">Aller au contenu</a><header class="site-header"><a class="brand" href="index.html">S8 Preparation</a><nav aria-label="Navigation principale"><a href="index.html">Accueil</a> <a href="catalogue.html">Parcours</a> <a href="assessment.html?mode=review">Réviser</a> <a href="examens.html">Examens blancs</a> <a href="jour-j.html">Jour J</a></nav></header><main id="contenu" tabindex="-1" class="corpus-reader"><nav class="breadcrumb" aria-label="Fil d’Ariane"><a href="index.html">Accueil</a> <span aria-hidden="true">›</span> <a href="catalogue.html">Parcours</a> <span aria-hidden="true">›</span> <a href="lot-06.html">Module 06 — Templates avec Twig</a> <span aria-hidden="true">›</span> <span aria-current="page">Twig syntax up to 3.22 version</span></nav><h1>Twig syntax up to 3.22 version</h1><p class="muted">Symfony 8.0 · API PHP ≤ 8.4 · Twig ≤ 3.22. Préparation indépendante.</p><p class="revision-status">Première itération · en cours de révision pédagogique. Ce cours reste accessible, sans déclaration de validation pédagogique.</p><nav class="course-actions" aria-label="Activités du cours"><a id="tab-course" href="#view-course">Cours</a><a id="tab-flashcards" href="#view-flashcards">Flashcards</a><a id="tab-quiz" href="#view-quiz">Quiz</a></nav><div class="course-layout"><details class="lot-course-menu"><summary>Cours du module · 14 cours</summary><nav aria-label="Cours du module"><a class="lot-context" href="lot-06.html">Module 06 — Templates avec Twig</a><ol><li><a href="course-CRS-2bj91rj9kvj0.html">TwigBundle</a></li><li><a href="course-CRS-x2f8reencvcs.html" aria-current="page">Twig syntax up to 3.22 version</a></li><li><a href="course-CRS-w82wtddwhexg.html">Auto escaping</a></li><li><a href="course-CRS-k3v3wrt0hmtx.html">Template inheritance</a></li><li><a href="course-CRS-r56yzzb4pye2.html">Global variables</a></li><li><a href="course-CRS-306ppg4454wj.html">Filters and functions</a></li><li><a href="course-CRS-w83y6pfa5edn.html">Template includes</a></li><li><a href="course-CRS-zbnzvqkhjknh.html">Loops and conditions</a></li><li><a href="course-CRS-dpbpbgwjey5c.html">URLs generation</a></li><li><a href="course-CRS-yw6c5hq2mbax.html">Controller rendering</a></li><li><a href="course-CRS-q18xc1k4yvb9.html">Translations and pluralization</a></li><li><a href="course-CRS-dfyab4kpcapw.html">String interpolation</a></li><li><a href="course-CRS-ym86ptkhfgap.html">Assets management</a></li><li><a href="course-CRS-vx5kvfhs0p0s.html">Debugging variables</a></li></ol></nav></details><aside class="course-section-menu" aria-label="Sommaire du cours"><details class="course-section-disclosure"><summary id="course-sections">Sections du cours</summary><nav aria-label="Sections du cours"><ul><li><a href="#s-objectif">Objectif</a></li><li><a href="#s-l-essentiel">L&#x27;essentiel</a></li><li><a href="#s-le-schema">Le schéma</a></li><li><a href="#s-l-exemple">L&#x27;exemple</a></li><li><a href="#s-les-trois-delimiteurs">Les trois délimiteurs</a></li><li><a href="#s-foo-bar-l-ordre-de-resolution">`foo.bar` : l&#x27;ordre de résolution</a></li><li><a href="#s-les-operators">Les operators</a></li><li><a href="#s-affectation-et-espaces">Affectation et espaces</a></li><li><a href="#s-pieges-d-examen">Pièges d&#x27;examen</a></li><li><a href="#s-application">Application</a></li><li><a href="#s-fiche-express">Fiche express</a></li><li><a href="#s-sources-officielles">Sources officielles</a></li></ul></nav></details></aside><div class="course-content"><div id="view-course" data-course-panel role="region" aria-labelledby="view-course-title"><h2 id="view-course-title">Cours</h2><p class="course-introduction"><a href="#s-objectif">Introduction</a> · <a href="#course-sections">Sections du cours</a></p><h2>Objectifs d’apprentissage</h2><ul><li><a href="course-CRS-x2f8reencvcs.html#out-OUT-491pkbwc6e8x">Associer chaque délimiteur à son role</a></li><li><a href="course-CRS-x2f8reencvcs.html#out-OUT-4wpk7x3epxym">Énoncer les étapes de résolution de foo.bar dans l&#x27;ordre</a></li><li><a href="course-CRS-x2f8reencvcs.html#out-OUT-ap22qz4fkjra">Expliquer l&#x27;effet de strict_variables sur la dernière étape</a></li><li><a href="course-CRS-x2f8reencvcs.html#out-OUT-93svekvx55t0">Choisir l&#x27;operator correct pour concaténer, comparer et tester</a></li><li><a href="course-CRS-x2f8reencvcs.html#out-OUT-xpcwsqhycgnr">Distinguer ?: de ??</a></li><li><a href="course-CRS-x2f8reencvcs.html#out-OUT-je4qjh1s6yw0">Contrôler les espaces avec {{- et -}}</a></li></ul><aside class="pedagogy-legend" aria-label="Repères pédagogiques"><p><strong>Repères pédagogiques</strong></p><p>Ces repères décrivent le rôle du bloc, pas une fréquence officielle à l’examen.</p><p class="teaching-label essential"><span aria-hidden="true">○</span> <strong>À comprendre</strong></p><p class="teaching-label essential"><span aria-hidden="true">◆</span> <strong>À mémoriser</strong></p><p class="teaching-label example"><span aria-hidden="true">▣</span> <strong>Exemple concret</strong></p><p class="teaching-label pitfall"><span aria-hidden="true">△</span> <strong>Piège à éviter</strong></p><p class="teaching-label nuance"><span aria-hidden="true">?</span> <strong>À vérifier</strong></p></aside><section class="teaching-section" data-section="s-objectif"><h2 id="s-objectif" tabindex="-1">Objectif</h2><p>Maîtriser la syntaxe de base de Twig 3.22 : les trois délimiteurs, la façon dont
+<code>foo.bar</code> est résolu, et le jeu d'operators. C'est le socle des treize autres
+items du module.</p>
+<p>La version compte : le syllabus dit « Twig syntax <strong>up to 3.22</strong> version ». Ce
+qu'une version ultérieure a ajouté est hors périmètre.</p></section><section class="teaching-section" data-section="s-l-essentiel"><h2 id="s-l-essentiel" tabindex="-1">L&#x27;essentiel</h2><p class="teaching-label essential"><span aria-hidden="true">○</span> <strong>À comprendre</strong></p><aside class="section-digest" id="s-l-essentiel-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>L&#x27;accès array est prioritaire.</li><li>Methods et getters arrivent après les accès directs.</li></ol></aside><p>Trois choses à savoir : quel <strong>délimiteur</strong> fait quoi, dans quel <strong>ordre</strong> Twig
+cherche <code>foo.bar</code>, et quels <strong>operators</strong> il comprend — proches de ceux de PHP,
+mais pas identiques.</p></section><section class="teaching-section" data-section="s-le-schema"><h2 id="s-le-schema" tabindex="-1">Le schéma</h2><p class="digest-reference"><a href="#s-l-essentiel-digest">Revoir la règle : L&#x27;accès array est prioritaire.</a></p><p>L'ordre que suit <code>CoreExtension::getAttribute()</code> pour <code>{{ foo.bar }}</code> :</p>
+<figure class="diagram" aria-labelledby="CRS-x2f8reencvcs-3-diagram-0-title CRS-x2f8reencvcs-3-diagram-0-description"><figcaption id="CRS-x2f8reencvcs-3-diagram-0-title">L&#x27;ordre de résolution de foo.bar dans Twig 3.22</figcaption><p id="CRS-x2f8reencvcs-3-diagram-0-description">Twig essaie d&#x27;abord foo comme array, ArrayObject ou ArrayAccess avec la key bar. Puis une property publique bar. Puis une constant de class nommée bar, à la casse près. Puis les methods bar, getBar, isBar et hasBar, cherchées sans tenir compte de la casse, un hasser étant écarté quand un isser du même nom existe. Puis __call. Si rien ne correspond, null, ou une RuntimeError quand strict_variables est active.</p><div class="mermaid" hidden>---
+title: Comment Twig résout foo.bar
+---
+flowchart TD
+  accTitle: L&#x27;ordre de résolution de foo.bar dans Twig 3.22
+  accDescr: Twig essaie d&#x27;abord foo comme array, ArrayObject ou ArrayAccess avec la key bar. Puis une property publique bar. Puis une constant de class nommée bar, à la casse près. Puis les methods bar, getBar, isBar et hasBar, cherchées sans tenir compte de la casse, un hasser étant écarté quand un isser du même nom existe. Puis __call. Si rien ne correspond, null, ou une RuntimeError quand strict_variables est active.
+  A{&quot;array ou ArrayAccess, key bar ?&quot;} --&gt;|&quot;oui&quot;| R1([&quot;foo[&#x27;bar&#x27;]&quot;])
+  A --&gt;|&quot;non&quot;| P{&quot;property publique bar ?&quot;}
+  P --&gt;|&quot;oui&quot;| R2([&quot;foo-&gt;bar&quot;])
+  P --&gt;|&quot;non&quot;| C{&quot;constante bar, casse exacte ?&quot;}
+  C --&gt;|&quot;oui&quot;| R3([&quot;Foo::bar&quot;])
+  C --&gt;|&quot;non&quot;| M{&quot;bar(), getBar(), isBar(), hasBar() ?&quot;}
+  M --&gt;|&quot;oui&quot;| R4([&quot;la method, casse ignorée&quot;])
+  M --&gt;|&quot;non&quot;| CALL{&quot;__call() ?&quot;}
+  CALL --&gt;|&quot;oui&quot;| R5([&quot;__call(&#x27;bar&#x27;)&quot;])
+  CALL --&gt;|&quot;non&quot;| END([&quot;null, ou RuntimeError si strict_variables&quot;])</div></figure></section><section class="teaching-section" data-section="s-l-exemple"><h2 id="s-l-exemple" tabindex="-1">L&#x27;exemple</h2><p class="teaching-label example"><span aria-hidden="true">▣</span> <strong>Exemple concret</strong></p><aside class="section-digest" id="s-l-exemple-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Les doubles accolades affichent.</li><li>Les tags et commentaires ont des délimiteurs distincts.</li></ol></aside><pre class="highlight" tabindex="0"><code class="language-twig">{% set total = order.amount * 1.2 %}
+&lt;h1&gt;Commande {{ order.reference ~ ' — ' ~ order.status }}&lt;/h1&gt;
+{% if order.paid and order.items has some item =&gt; item.qty &gt; 1 %}
+    &lt;p&gt;{{ order.customer.nickname ?? 'client' }}, total {{ total }} €&lt;/p&gt;
+{% endif %}</code></pre></section><section class="teaching-section" data-section="s-les-trois-delimiteurs"><span class="outcome-anchor" id="out-OUT-491pkbwc6e8x" tabindex="-1"></span><h2 id="s-les-trois-delimiteurs" tabindex="-1">Les trois délimiteurs</h2><p class="digest-reference"><a href="#s-l-exemple-digest">Revoir la règle : Les doubles accolades affichent.</a></p><table>
+<thead>
+<tr>
+<th>Délimiteur</th>
+<th>Role</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>{{ … }}</code></td>
+<td><strong>affiche</strong> le résultat d'une expression</td>
+</tr>
+<tr>
+<td><code>{% … %}</code></td>
+<td><strong>exécute</strong> une instruction : <code>if</code>, <code>for</code>, <code>extends</code>, <code>set</code></td>
+</tr>
+<tr>
+<td><code>{# … #}</code></td>
+<td><strong>commentaire</strong>, jamais rendu</td>
+</tr>
+</tbody>
+</table><aside class="enrichment" aria-label="Autre explication"><p>Dans un script de théâtre, les expressions affichées sont les répliques ; les tags organisent l'action ; les commentaires sont les notes privées. Certains tags rendent du contenu, mais ce ne sont pas des expressions affichées par doubles accolades.</p></aside></section><section class="teaching-section" data-section="s-foo-bar-l-ordre-de-resolution"><span class="outcome-anchor" id="out-OUT-4wpk7x3epxym" tabindex="-1"></span><span class="outcome-anchor" id="out-OUT-ap22qz4fkjra" tabindex="-1"></span><span class="outcome-anchor" id="out-OUT-xpcwsqhycgnr" tabindex="-1"></span><h2 id="s-foo-bar-l-ordre-de-resolution" tabindex="-1">`foo.bar` : l&#x27;ordre de résolution</h2><p class="digest-reference"><a href="#s-l-essentiel-digest">Revoir la règle : L&#x27;accès array est prioritaire.</a></p><p>Pour <code>{{ foo.bar }}</code>, Twig essaie dans cet ordre :</p>
+<ol>
+<li><code>$foo['bar']</code> — array, <code>ArrayObject</code> ou <code>ArrayAccess</code> ;</li>
+<li><code>$foo-&gt;bar</code> — property publique ;</li>
+<li><code>Foo::bar</code> — <strong>constante de class</strong>, dont le nom correspond à la casse près ;</li>
+<li><code>bar()</code>, <code>getBar()</code>, <code>isBar()</code>, <code>hasBar()</code> — methods, casse ignorée ; un
+   <em>hasser</em> est écarté quand un <em>isser</em> du même nom existe ;</li>
+<li><code>__call('bar')</code>, si la class le déclare ;</li>
+<li>sinon <code>null</code> — ou une <code>RuntimeError</code> avec <code>strict_variables</code>.</li>
+</ol>
+<p>Conséquences : l'array passe <strong>avant</strong> l'object (un <code>ArrayAccess</code> gagne sur la
+property) ; <code>const STATUS</code> ne masque pas <code>getStatus()</code>, mais <code>const status</code> le
+masque. La documentation Symfony énumère sept étapes sans la constant ;
+l'engine 3.22 l'implémente — un énoncé d'examen peut n'en citer que sept.</p>
+<ul>
+<li><code>{{ foo.bar() }}</code> force l'appel d'une method.</li>
+<li>Nom dynamique ou avec un tiret : <code>{{ user.(name) }}</code>, <code>{{ user.('first-name') }}</code>
+  (3.15).</li>
+<li><code>attribute()</code> est <strong>dépréciée depuis 3.15</strong>, mais en 3.22 elle fonctionne
+  <strong>sans notice</strong> de deprecation.</li>
+</ul><p>L’operator ?: remplace une valeur fausse, tandis que ?? remplace une valeur absente ou null. Une variable absente déclenche strict_variables avec ?:, mais pas avec ??.</p></section><section class="teaching-section" data-section="s-les-operators"><span class="outcome-anchor" id="out-OUT-93svekvx55t0" tabindex="-1"></span><h2 id="s-les-operators" tabindex="-1">Les operators</h2><aside class="section-digest" id="s-les-operators-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>~ concatène les strings.</li><li>+ effectue une addition et peut échouer sur des strings non numériques.</li></ol></aside><table>
+<thead>
+<tr>
+<th>Famille</th>
+<th>Operators</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Arithmétique</td>
+<td><code>+ - * / % // **</code></td>
+</tr>
+<tr>
+<td>Comparaison</td>
+<td><code>== != &lt; &gt; &lt;= &gt;= &lt;=&gt;</code></td>
+</tr>
+<tr>
+<td>Logique</td>
+<td><code>and or not xor</code> — pas <code>&amp;&amp; \|\| !</code> ; bit à bit : <code>b-and b-or b-xor</code></td>
+</tr>
+<tr>
+<td>Strings</td>
+<td><code>~</code> <strong>concatène</strong> ; <code>starts with</code>, <code>ends with</code>, <code>matches</code></td>
+</tr>
+<tr>
+<td>Appartenance</td>
+<td><code>in</code>, <code>not in</code> (aussi dans une string) ; <code>..</code> construit une plage</td>
+</tr>
+<tr>
+<td>Itérables</td>
+<td><code>has some</code>, <code>has every</code>, avec une function fléchée</td>
+</tr>
+<tr>
+<td>Test</td>
+<td><code>is</code> : <code>defined</code>, <code>empty</code>, <code>null</code>, <code>iterable</code>, <code>same as</code></td>
+</tr>
+<tr>
+<td>Confort</td>
+<td><code>?:</code> (Elvis), <code>??</code> (coalescence)</td>
+</tr>
+<tr>
+<td>Functions</td>
+<td><code>=&gt;</code> function fléchée ; <code>...</code> étend une séquence (3.7) ou des arguments (3.15)</td>
+</tr>
+</tbody>
+</table>
+<p>Ce qui tombe à l'examen :</p>
+<ul>
+<li><code>{{ 'a' + 'b' }}</code> casse le rendu : <code>+</code> additionne, PHP 8.4 refuse deux strings
+  non numériques, et Twig remonte la <code>TypeError</code> dans une <code>RuntimeError</code> ;</li>
+<li><code>//</code> est la division entière et arrondit vers le bas : <code>-7 // 2</code> vaut <code>-4</code> ;</li>
+<li><code>**</code> s'associe à droite : <code>2 ** 3 ** 2</code> vaut <code>512</code> ;</li>
+<li><code>?:</code> remplace une valeur <strong>fausse</strong> (<code>0</code>, <code>''</code>), <code>??</code> une valeur <strong>absente</strong>
+  ou <code>null</code> ; sur une variable absente, <code>?:</code> déclenche <code>strict_variables</code>, <code>??</code>
+  non ;</li>
+<li>sur un itérable vide, <code>has every</code> vaut <code>true</code>, <code>has some</code> vaut <code>false</code> ;</li>
+<li><code>true &amp;&amp; false</code> ne compile pas.</li>
+</ul></section><section class="teaching-section" data-section="s-affectation-et-espaces"><span class="outcome-anchor" id="out-OUT-je4qjh1s6yw0" tabindex="-1"></span><h2 id="s-affectation-et-espaces" tabindex="-1">Affectation et espaces</h2><aside class="section-digest" id="s-affectation-et-espaces-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Le contrôle - retire tous les blancs du côté concerné.</li><li>Le contrôle ~ conserve les sauts de ligne.</li></ol></aside><p><code>{% set total = 0 %}</code> déclare une variable ; <code>{% set body %}…{% endset %}</code>
+capture un block.</p>
+<p>Twig retire d'office le premier saut de ligne qui suit un tag. Ensuite :</p>
+<ul>
+<li><code>-</code> (<code>{{-</code>, <code>-}}</code>, <code>{%-</code>, <code>-%}</code>) supprime <strong>tout</strong> le blanc de ce côté ;</li>
+<li><code>~</code> le supprime <strong>sauf</strong> les sauts de ligne.</li>
+</ul>
+<p>Le filter <code>spaceless</code> est <strong>déprécié depuis 3.12</strong>, et lui émet une notice.</p></section><section class="teaching-section" data-section="s-pieges-d-examen"><h2 id="s-pieges-d-examen" tabindex="-1">Pièges d&#x27;examen</h2><p class="teaching-label pitfall"><span aria-hidden="true">△</span> <strong>Piège à éviter</strong></p><p class="digest-reference"><a href="#s-les-operators-digest">Revoir la règle : ~ concatène les strings.</a></p><ul>
+<li><code>{{ }}</code> affiche, <code>{% %}</code> exécute — un tag n'est pas l'affichage direct d'une expression ; certains tags produisent du contenu.</li>
+<li>L'ordre de résolution commence par l'<strong>array</strong>, pas par la property.</li>
+<li>Une <strong>constante de class</strong> est lue avant le <em>getter</em> si son nom est
+  identique, casse comprise : <code>const STATUS</code> ne masque pas <code>getStatus()</code>.</li>
+<li><code>and</code> / <code>or</code> / <code>not</code>, jamais <code>&amp;&amp;</code> / <code>||</code> / <code>!</code>.</li>
+<li><code>~</code> concatène ; <code>+</code> additionne.</li>
+<li>Sans <code>strict_variables</code>, une variable inconnue vaut <code>null</code> silencieusement.</li>
+<li><code>attribute()</code> (3.15) et <code>spaceless</code> (3.12) sont dépréciés en 3.22.</li>
+</ul></section><section class="teaching-section" data-section="s-application"><h2 id="s-application" tabindex="-1">Application</h2><aside class="section-digest" id="s-application-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Les doubles accolades affichent.</li><li>Les tags et commentaires ont des délimiteurs distincts.</li><li>L&#x27;accès array est prioritaire.</li><li>Methods et getters arrivent après les accès directs.</li></ol></aside>
+
+
+
+<nav aria-label="Flashcards de l’application"><ul><li><a href="#A-x2f8reencvcs-88b6fbd62c-01">Flashcard : Les doubles accolades affichent. Les tags et commentaires ont des délimiteurs distincts.</a></li><li><a href="#A-x2f8reencvcs-65c42c80d9-02">Flashcard : L&#x27;accès array est prioritaire. Methods et getters arrivent après les accès directs.</a></li></ul></nav></section><section class="teaching-section" data-section="s-fiche-express"><h2 id="s-fiche-express" tabindex="-1">Fiche express</h2><p class="teaching-label essential"><span aria-hidden="true">◆</span> <strong>À mémoriser</strong></p><p class="digest-reference"><a href="#s-l-essentiel-digest">Revoir la règle : L&#x27;accès array est prioritaire.</a></p><p><strong>Si tu dois retenir seulement 8 choses :</strong></p>
+<ul>
+<li><strong><code>{{ }}</code></strong> affiche, <strong><code>{% %}</code></strong> exécute, <strong><code>{# #}</code></strong> commente.</li>
+<li><code>foo.bar</code> : <strong>array</strong>, property, <strong>constante à la casse exacte</strong>, methods
+  sans casse, <strong><code>__call</code></strong>.</li>
+<li>Rien trouvé : <strong><code>null</code></strong>, ou <strong><code>RuntimeError</code></strong> avec <code>strict_variables</code>.</li>
+<li><strong><code>~</code></strong> concatène ; <strong><code>+</code></strong> additionne et casse sur des strings.</li>
+<li><strong><code>//</code></strong> arrondit vers le bas ; <strong><code>**</code></strong> s'associe à droite.</li>
+<li><strong><code>?:</code></strong> teste la vérité, <strong><code>??</code></strong> l'existence.</li>
+<li><strong><code>has every</code></strong> sur vide : vrai ; <strong><code>has some</code></strong> : faux.</li>
+<li><strong><code>attribute()</code></strong> dépréciée sans notice ; <strong><code>spaceless</code></strong> dépréciée avec.</li>
+</ul>
+<p>Moyen mnémotechnique : <strong>« array d'abord, constante exacte, method sans
+casse »</strong>.</p>
+<pre class="highlight" tabindex="0"><code class="language-text">{{ }} affiche, {% %} exécute ; foo.bar = [key] &gt; prop &gt; CONST exacte &gt; méthode/get/is/has (sans casse) &gt; __call &gt; null|erreur ;
+~ concatène, // plancher, ** à droite, ?: vérité, ?? existence, and/or/not ; - et ~ pour les blancs</code></pre></section><section class="teaching-section" data-section="s-sources-officielles"><h2 id="s-sources-officielles" tabindex="-1">Sources officielles</h2><ul>
+<li><a href="https://symfony.com/doc/8.0/templates.html">Symfony 8.0 — templates</a></li>
+</ul></section><nav class="course-sequence" aria-label="Ordre de lecture"><a rel="prev" href="course-CRS-2bj91rj9kvj0.html" aria-label="Précédent : TwigBundle — Module 06 — Templates avec Twig">Précédent : TwigBundle</a> <a href="lot-06.html">Sommaire : Module 06 — Templates avec Twig</a> <a rel="next" href="course-CRS-w82wtddwhexg.html" aria-label="Suivant : Auto escaping — Module 06 — Templates avec Twig">Suivant : Auto escaping</a></nav><p class="course-practice-entry"><a class="button" href="#view-quiz">Fin du cours — s’entraîner avec le Quiz</a></p></div><div id="view-flashcards" data-course-panel role="region" aria-labelledby="view-flashcards-title"><h2 id="view-flashcards-title">Flashcards</h2><p lang="en">Answer before revealing each card.</p><p>Ces cartes ne mesurent pas une maîtrise notée.</p><div data-card-section="s-l-essentiel"><h3><a href="#s-l-essentiel">Revoir la section du cours</a></h3><div class="reader-cards"><details class="reader-card" id="A-x2f8reencvcs-65c42c80d9-02"><summary lang="en">Does Twig try array access before a public property for foo.bar?</summary><p lang="en">Yes. Array or ArrayAccess lookup precedes public-property access.</p><p lang="fr">L&#x27;accès array est prioritaire. Methods et getters arrivent après les accès directs.</p><a href="course-CRS-x2f8reencvcs.html#out-OUT-4wpk7x3epxym">Revoir le passage précis</a></details></div></div><div data-card-section="s-le-schema"><h3><a href="#s-le-schema">Revoir la section du cours</a></h3><div class="reader-cards"><p class="reader-card-reference" id="A-x2f8reencvcs-6e0103f6cc-02">Rappel déjà proposé : <a lang="en" href="#A-x2f8reencvcs-65c42c80d9-02">Does Twig try array access before a public property for foo.bar?</a> · <a href="course-CRS-x2f8reencvcs.html#out-OUT-4wpk7x3epxym">Passage canonique</a></p></div></div><div data-card-section="s-l-exemple"><h3><a href="#s-l-exemple">Revoir la section du cours</a></h3><div class="reader-cards"><details class="reader-card" id="A-x2f8reencvcs-88b6fbd62c-01"><summary lang="en">Which Twig delimiters print an expression?</summary><p lang="en">Double braces; percent-brace tags execute statements and hash-brace delimiters mark comments.</p><p lang="fr">Les doubles accolades affichent. Les tags et commentaires ont des délimiteurs distincts.</p><a href="course-CRS-x2f8reencvcs.html#out-OUT-491pkbwc6e8x">Revoir le passage précis</a></details></div></div><div data-card-section="s-les-trois-delimiteurs"><h3><a href="#s-les-trois-delimiteurs">Revoir la section du cours</a></h3><div class="reader-cards"><p class="reader-card-reference" id="A-x2f8reencvcs-2f3c7de982-01">Rappel déjà proposé : <a lang="en" href="#A-x2f8reencvcs-88b6fbd62c-01">Which Twig delimiters print an expression?</a> · <a href="course-CRS-x2f8reencvcs.html#out-OUT-491pkbwc6e8x">Passage canonique</a></p></div></div><div data-card-section="s-foo-bar-l-ordre-de-resolution"><h3><a href="#s-foo-bar-l-ordre-de-resolution">Revoir la section du cours</a></h3><div class="reader-cards"><p class="reader-card-reference" id="A-x2f8reencvcs-dd17172789-02">Rappel déjà proposé : <a lang="en" href="#A-x2f8reencvcs-65c42c80d9-02">Does Twig try array access before a public property for foo.bar?</a> · <a href="course-CRS-x2f8reencvcs.html#out-OUT-4wpk7x3epxym">Passage canonique</a></p><details class="reader-card" id="INT-039"><summary lang="en">What happens when Twig cannot resolve foo.bar?</summary><p lang="en">It yields null normally, but throws RuntimeError with strict_variables.</p><p lang="fr">Cette règle intervient après l’échec des étapes de résolution, pas avant la recherche dans un array ou un object.</p><a href="course-CRS-x2f8reencvcs.html#out-OUT-ap22qz4fkjra">Revoir le passage précis</a></details><details class="reader-card" id="INT-040"><summary lang="en">How do Twig&#x27;s ?: and ?? differ for 0 and null?</summary><p lang="en">?: replaces falsey values including 0; ?? replaces only undefined or null values and preserves 0.</p><p lang="fr">La coalescence teste l’existence et null, pas la vérité de la valeur.</p><a href="course-CRS-x2f8reencvcs.html#out-OUT-xpcwsqhycgnr">Revoir le passage précis</a></details></div></div><div data-card-section="s-les-operators"><h3><a href="#s-les-operators">Revoir la section du cours</a></h3><div class="reader-cards"><details class="reader-card" id="A-x2f8reencvcs-8189914dc1-03"><summary lang="en">Which Twig operator concatenates strings?</summary><p lang="en">The tilde operator, not plus.</p><p lang="fr">~ concatène les strings. + effectue une addition et peut échouer sur des strings non numériques.</p><a href="course-CRS-x2f8reencvcs.html#out-OUT-93svekvx55t0">Revoir le passage précis</a></details></div></div><div data-card-section="s-affectation-et-espaces"><h3><a href="#s-affectation-et-espaces">Revoir la section du cours</a></h3><div class="reader-cards"><details class="reader-card" id="A-x2f8reencvcs-7ae589f55a-04"><summary lang="en">How do Twig&#x27;s dash and tilde whitespace controls differ?</summary><p lang="en">Dash removes whitespace including newlines; tilde preserves newlines.</p><p lang="fr">Le contrôle - retire tous les blancs du côté concerné. Le contrôle ~ conserve les sauts de ligne.</p><a href="course-CRS-x2f8reencvcs.html#out-OUT-je4qjh1s6yw0">Revoir le passage précis</a></details></div></div><div data-card-section="s-pieges-d-examen"><h3><a href="#s-pieges-d-examen">Revoir la section du cours</a></h3><div class="reader-cards"><p class="reader-card-reference" id="A-x2f8reencvcs-596d5af532-03">Rappel déjà proposé : <a lang="en" href="#A-x2f8reencvcs-8189914dc1-03">Which Twig operator concatenates strings?</a> · <a href="course-CRS-x2f8reencvcs.html#out-OUT-93svekvx55t0">Passage canonique</a></p></div></div><div data-card-section="s-application"><h3><a href="#s-application">Revoir la section du cours</a></h3><div class="reader-cards"><p class="reader-card-reference" id="A-x2f8reencvcs-e7ad522ea3-01">Rappel déjà proposé : <a lang="en" href="#A-x2f8reencvcs-88b6fbd62c-01">Which Twig delimiters print an expression?</a> · <a href="course-CRS-x2f8reencvcs.html#out-OUT-491pkbwc6e8x">Passage canonique</a></p><p class="reader-card-reference" id="A-x2f8reencvcs-e7ad522ea3-02">Rappel déjà proposé : <a lang="en" href="#A-x2f8reencvcs-65c42c80d9-02">Does Twig try array access before a public property for foo.bar?</a> · <a href="course-CRS-x2f8reencvcs.html#out-OUT-4wpk7x3epxym">Passage canonique</a></p></div></div><div data-card-section="s-fiche-express"><h3><a href="#s-fiche-express">Revoir la section du cours</a></h3><div class="reader-cards"><p class="reader-card-reference" id="A-x2f8reencvcs-b11e58e15e-02">Rappel déjà proposé : <a lang="en" href="#A-x2f8reencvcs-65c42c80d9-02">Does Twig try array access before a public property for foo.bar?</a> · <a href="course-CRS-x2f8reencvcs.html#out-OUT-4wpk7x3epxym">Passage canonique</a></p></div></div><aside class="checkpoint"><h2>Rappel d’un cours antérieur</h2><p>Avant de poursuivre : Router debugging.</p><details class="corpus-correction"><summary lang="en">Does router:match take a full URL as its positional argument?</summary><p lang="en">No. It takes a path; supply host, scheme and method through options.</p><p>Le défaut teste GET sur localhost. Aucune correspondance produit un exit code 1.</p><a href="course-CRS-8dgxs89hrah0.html#out-OUT-w0yjsy54z7s9">Relire la correction dans le cours antérieur</a></details></aside></div><div id="view-quiz" data-course-panel role="region" aria-labelledby="view-quiz-title"><h2 id="view-quiz-title">Quiz</h2><p id="course-quiz-status" role="status">Quiz interactif non chargé. Démarrez après chargement de la banque locale.</p><div id="course-quiz-controls" class="assessment-main" hidden><div id="course-quiz-assessment-controls" hidden><select id="course-quiz-assessment-mode" aria-label="Mode du quiz" hidden><option value="learning">Entraînement</option></select><p id="course-quiz-training-scope"></p><button id="course-quiz-start-assessment" type="button" lang="en">Start practice</button><button id="course-quiz-finish-assessment" type="button" lang="en" hidden>End session</button></div><p id="course-quiz-assessment-error" role="alert"></p><p id="course-quiz-assessment-timer" hidden></p><p id="course-quiz-session-progress" role="status"></p><div id="course-quiz-assessment-app" tabindex="-1"></div><nav id="course-quiz-session-navigation" aria-label="Questions du cours"></nav><div id="course-quiz-learning-overview" aria-live="polite"></div></div><div id="course-quiz-native"><p>Sans JavaScript ou si le chargement échoue : aucune tentative notée. Les <a href="#view-flashcards">flashcards du cours</a> restent disponibles.</p><details class="course-quiz-fallback" data-question-id="L-x2f8reencvcs-base-v1"><summary lang="en">Does Twig try array access before a public property for foo.bar?</summary><p>Correction de consultation — non notée.</p><p>L&#x27;accès array est prioritaire. Methods et getters arrivent après les accès directs.</p><ul><li><strong lang="en">Distractor: No; a getter always precedes both kinds of direct access.</strong><p>Les methods et getters arrivent après ces accès directs.</p></li><li><strong lang="en">Correct: Yes; array lookup precedes public-property access.</strong><p>L&#x27;accès array est prioritaire. Methods et getters arrivent après les accès directs.</p></li><li><strong lang="en">Distractor: No; a public property always precedes array access.</strong><p>L&#x27;accès array ou ArrayAccess est essayé avant la property publique.</p></li></ul><a href="course-CRS-x2f8reencvcs.html#out-OUT-4wpk7x3epxym">Relire le passage exact</a></details></div></div></div></div><details class="transfer-panel"><summary>Sauvegarde et transfert de progression</summary><p id="reading-status" role="status">Sans JavaScript : lecture libre ; progression non enregistrée.</p><p><a href="assessment.html#overview-title">Lecture, réussites immédiates et différées</a></p><p>Transfert manuel — aucune synchronisation automatique</p><p id="persistence-status" role="status"></p><button type="button" class="secondary" id="export-progress">Exporter ma progression</button><label for="import-progress">Choisir un JSON pour fusionner ma progression (sans remplacement)</label><input type="file" id="import-progress" accept="application/json,.json"><p id="transfer-status" role="status"></p></details></main><footer class="site-footer"><a href="catalogue.html">Catalogue</a> <a href="sources.html">Sources et attribution</a> <a href="#contenu">Haut de page</a></footer></body></html>

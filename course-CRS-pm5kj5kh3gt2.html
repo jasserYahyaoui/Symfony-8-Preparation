@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; connect-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Runtime — Symfony 8 Preparation</title><link rel="stylesheet" href="styles.css"><link rel="stylesheet" href="reader.css"><script src="mermaid.min.js" defer></script><script src="mermaid-init.js" defer></script><link rel="stylesheet" href="assessment.css"><script src="learning-state.js" defer></script><script src="guide.js" defer></script><script src="reader-catalog.js" defer></script><script src="reader.js" defer></script><script src="site-state.js" defer></script><script src="assessment.js" defer></script><script src="course-views.js" defer></script><link rel="stylesheet" href="syntax-highlight.css"><script src="prism-syntax.js" defer></script><script src="syntax-highlight.js" defer></script></head><body data-course-id="CRS-pm5kj5kh3gt2"><a class="skip" href="#contenu">Aller au contenu</a><header class="site-header"><a class="brand" href="index.html">S8 Preparation</a><nav aria-label="Navigation principale"><a href="index.html">Accueil</a> <a href="catalogue.html">Parcours</a> <a href="assessment.html?mode=review">Réviser</a> <a href="examens.html">Examens blancs</a> <a href="jour-j.html">Jour J</a></nav></header><main id="contenu" tabindex="-1" class="corpus-reader"><nav class="breadcrumb" aria-label="Fil d’Ariane"><a href="index.html">Accueil</a> <span aria-hidden="true">›</span> <a href="catalogue.html">Parcours</a> <span aria-hidden="true">›</span> <a href="lot-25.html">Module 25 — Runtime</a> <span aria-hidden="true">›</span> <span aria-current="page">Runtime</span></nav><h1>Runtime</h1><p class="muted">Symfony 8.0 · API PHP ≤ 8.4 · Twig ≤ 3.22. Préparation indépendante.</p><p class="revision-status">Première itération · en cours de révision pédagogique. Ce cours reste accessible, sans déclaration de validation pédagogique.</p><nav class="course-actions" aria-label="Activités du cours"><a id="tab-course" href="#view-course">Cours</a><a id="tab-flashcards" href="#view-flashcards">Flashcards</a><a id="tab-quiz" href="#view-quiz">Quiz</a></nav><div class="course-layout"><details class="lot-course-menu"><summary>Cours du module · 1 cours</summary><nav aria-label="Cours du module"><a class="lot-context" href="lot-25.html">Module 25 — Runtime</a><ol><li><a href="course-CRS-pm5kj5kh3gt2.html" aria-current="page">Runtime</a></li></ol></nav></details><aside class="course-section-menu" aria-label="Sommaire du cours"><details class="course-section-disclosure"><summary id="course-sections">Sections du cours</summary><nav aria-label="Sections du cours"><ul><li><a href="#s-objectif">Objectif</a></li><li><a href="#s-l-essentiel">L&#x27;essentiel</a></li><li><a href="#s-le-schema">Le schéma</a></li><li><a href="#s-l-exemple-le-front-controller">L&#x27;exemple : le front controller</a></li><li><a href="#s-le-file-d-entree-ne-lance-rien">Le file d&#x27;entrée ne lance rien</a></li><li><a href="#s-les-cinq-etapes">Les cinq étapes</a></li><li><a href="#s-les-arguments-sont-resolus-par-type-et-par-nom">Les arguments sont résolus par type *et* par nom</a></li><li><a href="#s-choisir-le-runtime">Choisir le runtime</a></li><li><a href="#s-pieges-d-examen">Pièges d&#x27;examen</a></li><li><a href="#s-fiche-express">Fiche express</a></li></ul></nav></details></aside><div class="course-content"><div id="view-course" data-course-panel role="region" aria-labelledby="view-course-title"><h2 id="view-course-title">Cours</h2><p class="course-introduction"><a href="#s-objectif">Introduction</a> · <a href="#course-sections">Sections du cours</a></p><h2>Objectifs d’apprentissage</h2><ul><li><a href="course-CRS-pm5kj5kh3gt2.html#out-OUT-87xc26yncsb7">Expliquer pourquoi le file d&#x27;entrée retourne une function plutôt que d&#x27;exécuter l&#x27;application</a></li><li><a href="course-CRS-pm5kj5kh3gt2.html#out-OUT-07vqtcfmbfnc">Connaître la séquence d&#x27;amorçage et savoir que le script d&#x27;entrée y est réexécuté</a></li><li><a href="course-CRS-pm5kj5kh3gt2.html#out-OUT-nt4s3vj5727z">En déduire l&#x27;interdiction de tout effet de bord dans ce script</a></li><li><a href="course-CRS-pm5kj5kh3gt2.html#out-OUT-awqwz26y52yr">Savoir que la résolution des arguments dépend du type et du nom de la variable</a></li><li><a href="course-CRS-pm5kj5kh3gt2.html#out-OUT-3n7fcpgc1j29">Sélectionner un runtime par variable d&#x27;environment ou par la configuration de Composer</a></li></ul><aside class="pedagogy-legend" aria-label="Repères pédagogiques"><p><strong>Repères pédagogiques</strong></p><p>Ces repères décrivent le rôle du bloc, pas une fréquence officielle à l’examen.</p><p class="teaching-label essential"><span aria-hidden="true">○</span> <strong>À comprendre</strong></p><p class="teaching-label essential"><span aria-hidden="true">◆</span> <strong>À mémoriser</strong></p><p class="teaching-label example"><span aria-hidden="true">▣</span> <strong>Exemple concret</strong></p><p class="teaching-label pitfall"><span aria-hidden="true">△</span> <strong>Piège à éviter</strong></p><p class="teaching-label nuance"><span aria-hidden="true">?</span> <strong>À vérifier</strong></p></aside><section class="teaching-section" data-section="s-objectif"><h2 id="s-objectif" tabindex="-1">Objectif</h2><p>Comprendre ce qui s'exécute entre le chargement de l'autoload et la remise
+d'une Request au kernel, et pourquoi le file d'entrée <strong>retourne</strong> au lieu
+d'exécuter.</p></section><section class="teaching-section" data-section="s-l-essentiel"><h2 id="s-l-essentiel" tabindex="-1">L&#x27;essentiel</h2><p class="teaching-label essential"><span aria-hidden="true">○</span> <strong>À comprendre</strong></p><aside class="section-digest" id="s-l-essentiel-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Le script décrit la création.</li><li>Le runtime exécute l&#x27;application retournée.</li></ol></aside><p>Le component Runtime sort l'amorçage du file d'entrée : <code>public/index.php</code>
+<strong>retourne une function</strong>, et c'est le runtime qui l'appelle, résout ses
+arguments et exécute ce qu'elle rend — un kernel HTTP ou une application de
+console. Deux conséquences à l'examen : le script d'entrée <strong>s'exécute deux
+fois</strong>, et les arguments de la function sont reconnus par leur <strong>type et leur
+nom</strong>.</p></section><section class="teaching-section" data-section="s-le-schema"><h2 id="s-le-schema" tabindex="-1">Le schéma</h2><aside class="section-digest" id="s-le-schema-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>L&#x27;amorçage réinclut le script.</li><li>Un effet de bord pourrait être dupliqué.</li></ol></aside><figure class="diagram" aria-labelledby="CRS-pm5kj5kh3gt2-3-diagram-0-title CRS-pm5kj5kh3gt2-3-diagram-0-description"><figcaption id="CRS-pm5kj5kh3gt2-3-diagram-0-title">Comment autoload_runtime.php exécute index.php et lance l&#x27;application</figcaption><p id="CRS-pm5kj5kh3gt2-3-diagram-0-description">À sa première exécution, index.php fait require_once autoload_runtime.php. Ce file fait require $_SERVER[&#x27;SCRIPT_FILENAME&#x27;] : c&#x27;est la deuxième exécution d&#x27;index.php, qui rend la closure. Puis new $_SERVER[&#x27;APP_RUNTIME&#x27;], SymfonyRuntime par défaut ; getResolver($app)-&gt;resolve() résout les arguments, par type et par nom ; $app(...$args) rend le kernel ou l&#x27;Application ; enfin exit(getRunner($app)-&gt;run()) : la première exécution s&#x27;arrête là.</p><div class="mermaid" hidden>---
+title: Les deux exécutions d&#x27;index.php
+---
+flowchart TD
+  accTitle: Comment autoload_runtime.php exécute index.php et lance l&#x27;application
+  accDescr: À sa première exécution, index.php fait require_once autoload_runtime.php. Ce file fait require $_SERVER[&#x27;SCRIPT_FILENAME&#x27;] : c&#x27;est la deuxième exécution d&#x27;index.php, qui rend la closure. Puis new $_SERVER[&#x27;APP_RUNTIME&#x27;], SymfonyRuntime par défaut ; getResolver($app)-&gt;resolve() résout les arguments, par type et par nom ; $app(...$args) rend le kernel ou l&#x27;Application ; enfin exit(getRunner($app)-&gt;run()) : la première exécution s&#x27;arrête là.
+  I1[&quot;index.php (1re exécution)&lt;br/&gt;require_once&lt;br/&gt;autoload_runtime.php&quot;] --&gt; R1[&quot;autoload_runtime.php&lt;br/&gt;require $_SERVER[&#x27;SCRIPT_FILENAME&#x27;]&quot;]
+  R1 --&gt;|&quot;index.php,&lt;br/&gt;2e exécution&quot;| CL([&quot;rend la closure&quot;])
+  CL --&gt; R2[&quot;new $_SERVER[&#x27;APP_RUNTIME&#x27;]&lt;br/&gt;→ SymfonyRuntime par défaut&quot;]
+  R2 --&gt; R3[&quot;getResolver($app)-&gt;resolve()&lt;br/&gt;→ arguments, par type ET nom&quot;]
+  R3 --&gt; R4[&quot;$app(...$args)&lt;br/&gt;→ kernel ou Application&quot;]
+  R4 --&gt; R5([&quot;exit(getRunner($app)-&gt;run())&lt;br/&gt;→ la 1re exécution&lt;br/&gt;s&#x27;arrête ici&quot;])</div></figure></section><section class="teaching-section" data-section="s-l-exemple-le-front-controller"><h2 id="s-l-exemple-le-front-controller" tabindex="-1">L&#x27;exemple : le front controller</h2><p class="teaching-label example"><span aria-hidden="true">▣</span> <strong>Exemple concret</strong></p><aside class="section-digest" id="s-l-exemple-le-front-controller-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Le callable crée l&#x27;object.</li><li>Le runner gère son exécution.</li></ol></aside><pre class="highlight" tabindex="0"><code class="language-php">// public/index.php
+require_once dirname(__DIR__).'/vendor/autoload_runtime.php';
+
+return function (array $context): Kernel {
+    return new Kernel($context['APP_ENV'], (bool) $context['APP_DEBUG']);
+};</code></pre></section><section class="teaching-section" data-section="s-le-file-d-entree-ne-lance-rien"><span class="outcome-anchor" id="out-OUT-87xc26yncsb7" tabindex="-1"></span><h2 id="s-le-file-d-entree-ne-lance-rien" tabindex="-1">Le file d&#x27;entrée ne lance rien</h2><aside class="section-digest" id="s-le-file-d-entree-ne-lance-rien-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Le bootstrap est généré par le plugin.</li><li>Désactiver les plugins peut empêcher sa création.</li></ol></aside><p>Le script ne construit ni n'envoie la Response : il rend une function.
+<code>vendor/autoload_runtime.php</code> est écrit par le <strong>plugin Composer</strong> du
+component ; avec <code>--no-plugins</code>, il n'existe pas.</p>
+<table>
+<thead>
+<tr>
+<th>Le script rend</th>
+<th>Résultat</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>42</code> au lieu d'une function</td>
+<td><code>TypeError</code> : <em>callable object expected</em></td>
+</tr>
+<tr>
+<td>une function qui rend une string</td>
+<td><code>TypeError</code> : <em>object expected</em></td>
+</tr>
+<tr>
+<td>une function qui rend une <code>Response</code></td>
+<td>la Response est envoyée</td>
+</tr>
+</tbody>
+</table>
+<p>C'est <strong>la nature de l'object rendu</strong> qui choisit HTTP ou console : un même
+mécanisme sert <code>public/index.php</code> et <code>bin/console</code>.</p></section><section class="teaching-section" data-section="s-les-cinq-etapes"><span class="outcome-anchor" id="out-OUT-07vqtcfmbfnc" tabindex="-1"></span><span class="outcome-anchor" id="out-OUT-nt4s3vj5727z" tabindex="-1"></span><h2 id="s-les-cinq-etapes" tabindex="-1">Les cinq étapes</h2><aside class="section-digest" id="s-les-cinq-etapes-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Rendre une application remplace l&#x27;amorçage manuel.</li><li>La responsabilité est déplacée vers le runtime.</li></ol></aside><p>La documentation 8.0 les énumère : runtime instancié, script d'entrée
+<strong>inclus à nouveau</strong>, arguments de la function résolus, function appelée,
+application exécutée. Le code 8.0 inverse les deux premières ; un runtime qui
+journalise son constructor donne <em>script returns closure</em>, puis
+<em>runtime constructed</em>. Le code l'emporte.</p>
+<table>
+<thead>
+<tr>
+<th>Ligne du script</th>
+<th>Exécutions</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>au-dessus</strong> du <code>require_once</code></td>
+<td><strong>deux</strong></td>
+</tr>
+<tr>
+<td>au-dessous</td>
+<td>une seule</td>
+</tr>
+</tbody>
+</table>
+<p>La première exécution s'achève par l'<code>exit</code> d'<code>autoload_runtime.php</code> ; la
+seconde trouve le file déjà chargé et continue. D'où la règle : <strong>aucun effet
+de bord</strong> dans ce script. Charger <code>vendor/autoload.php</code> <strong>avant</strong> désactive
+tout : le script va au bout, l'application ne tourne pas, exit code <code>0</code>,
+aucun message.</p></section><section class="teaching-section" data-section="s-les-arguments-sont-resolus-par-type-et-par-nom"><span class="outcome-anchor" id="out-OUT-awqwz26y52yr" tabindex="-1"></span><h2 id="s-les-arguments-sont-resolus-par-type-et-par-nom" tabindex="-1">Les arguments sont résolus par type *et* par nom</h2><aside class="section-digest" id="s-les-arguments-sont-resolus-par-type-et-par-nom-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Le nom participe au contrat.</li><li>Renommer librement l&#x27;argument peut casser la résolution.</li></ol></aside><table>
+<thead>
+<tr>
+<th>Argument</th>
+<th>Reçoit</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>array $context</code></td>
+<td><code>$_SERVER</code> + <code>$_ENV</code> selon la documentation ; le code n'ajoute <code>$_ENV</code> que sans <code>PATH</code> dans <code>$_SERVER</code></td>
+</tr>
+<tr>
+<td><code>array $argv</code></td>
+<td>les arguments de la ligne de command</td>
+</tr>
+<tr>
+<td><code>array $request</code></td>
+<td><code>query</code>, <code>body</code>, <code>files</code>, <code>session</code></td>
+</tr>
+</tbody>
+</table>
+<p><code>array $ctx</code> lève une <code>InvalidArgumentException</code> qui énumère ces trois noms.
+<code>SymfonyRuntime</code> accepte en plus une <code>Request</code> créée depuis les superglobales
+et les objects d'entrée et de sortie de console.</p></section><section class="teaching-section" data-section="s-choisir-le-runtime"><span class="outcome-anchor" id="out-OUT-3n7fcpgc1j29" tabindex="-1"></span><h2 id="s-choisir-le-runtime" tabindex="-1">Choisir le runtime</h2><aside class="section-digest" id="s-choisir-le-runtime-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>La classe d&#x27;amorçage est configurable.</li><li>Les options du runtime sont un réglage distinct.</li></ol></aside><p><code>SymfonyRuntime</code> est le défaut ; <code>GenericRuntime</code> s'appuie sur les
+superglobales. <code>SymfonyRuntime</code> charge les files <code>.env</code> : sans <code>.env</code>, il lève
+une <code>PathException</code> ; avec <code>disable_dotenv</code>, il démarre en <code>dev</code>, debug à <code>1</code>.</p>
+<table>
+<thead>
+<tr>
+<th>Pour choisir</th>
+<th>Pour les options</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>APP_RUNTIME</code></td>
+<td><code>APP_RUNTIME_OPTIONS</code>, en JSON</td>
+</tr>
+<tr>
+<td><code>extra.runtime.class</code> dans <code>composer.json</code></td>
+<td><code>extra.runtime</code></td>
+</tr>
+</tbody>
+</table></section><section class="teaching-section" data-section="s-pieges-d-examen"><h2 id="s-pieges-d-examen" tabindex="-1">Pièges d&#x27;examen</h2><p class="teaching-label pitfall"><span aria-hidden="true">△</span> <strong>Piège à éviter</strong></p><aside class="section-digest" id="s-pieges-d-examen-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Respecter l&#x27;entry point généré.</li><li>L&#x27;ordre des includes fait partie du mécanisme.</li></ol></aside><p><strong>Le file d'entrée retourne une function ; il n'exécute pas
+l'application.</strong></p>
+<p><strong>Le script d'entrée est réexécuté</strong> par le runtime : ce qui précède le
+<code>require_once</code> tourne deux fois.</p>
+<p><strong><code>autoload.php</code> chargé avant <code>autoload_runtime.php</code></strong> : rien ne s'exécute, sans
+erreur.</p>
+<p><strong>Le type <em>et</em> le nom de l'argument sont significatifs.</strong></p>
+<p><strong><code>--no-plugins</code> empêche la création de <code>autoload_runtime.php</code>.</strong></p></section><section class="teaching-section" data-section="s-fiche-express"><h2 id="s-fiche-express" tabindex="-1">Fiche express</h2><p class="teaching-label essential"><span aria-hidden="true">◆</span> <strong>À mémoriser</strong></p><aside class="section-digest" id="s-fiche-express-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Un kernel HTTP et une application console ont des runners adaptés.</li><li>Le callable reste la frontière commune.</li></ol></aside><p><strong>Si tu dois retenir seulement 6 choses :</strong></p>
+<ul>
+<li><code>index.php</code> <strong>rend une closure</strong> ; le runtime l'appelle et exécute le
+  résultat.</li>
+<li>Le script tourne <strong>deux fois</strong> au-dessus du <code>require_once</code> : aucun effet de
+  bord.</li>
+<li><code>autoload.php</code> chargé avant : <strong>rien ne tourne</strong>, sans erreur.</li>
+<li><code>$context</code>, <code>$argv</code>, <code>$request</code> : <strong>type et nom</strong>.</li>
+<li><code>--no-plugins</code> : pas d'<code>autoload_runtime.php</code>.</li>
+<li><code>APP_RUNTIME</code> ou <code>extra.runtime.class</code> ; options en <code>APP_RUNTIME_OPTIONS</code>.</li>
+</ul>
+<p>Moyen mnémotechnique : <strong>« Rendre, pas lancer »</strong>.</p></section><section class="official-sources"><h2>Sources officielles et compléments</h2><ul><li><a href="https://symfony.com/doc/8.0/components/runtime.html">Symfony 8.0 — components / runtime</a></li></ul></section><nav class="course-sequence" aria-label="Ordre de lecture"><a rel="prev" href="course-CRS-5vz7w1ny9shd.html" aria-label="Précédent : PropertyAccess — Module 24 — PropertyAccess">Précédent : PropertyAccess</a> <a href="lot-25.html">Sommaire : Module 25 — Runtime</a> <a rel="next" href="course-CRS-3z96cp2s1dka.html" aria-label="Suivant : Serializer — Module 26 — Serializer">Suivant : Serializer</a></nav><p class="course-practice-entry"><a class="button" href="#view-quiz">Fin du cours — s’entraîner avec le Quiz</a></p></div><div id="view-flashcards" data-course-panel role="region" aria-labelledby="view-flashcards-title"><h2 id="view-flashcards-title">Flashcards</h2><p lang="en">Answer before revealing each card.</p><p>Ces cartes ne mesurent pas une maîtrise notée.</p><div data-card-section="s-l-essentiel"><h3><a href="#s-l-essentiel">Revoir la section du cours</a></h3><div class="reader-cards"><details class="reader-card" id="B-pm5kj5kh3gt2-01"><summary lang="en">What should a Symfony Runtime front controller return?</summary><p lang="en">A callable that creates the application object.</p><p lang="fr">Le script décrit la création. Le runtime exécute l&#x27;application retournée.</p><a href="course-CRS-pm5kj5kh3gt2.html#out-OUT-87xc26yncsb7">Revoir le passage précis</a></details></div></div><div data-card-section="s-le-schema"><h3><a href="#s-le-schema">Revoir la section du cours</a></h3><div class="reader-cards"><details class="reader-card" id="B-pm5kj5kh3gt2-02"><summary lang="en">Why must code before autoload_runtime.php avoid side effects?</summary><p lang="en">The entry script is included again during bootstrap, so that code can run twice.</p><p lang="fr">L&#x27;amorçage réinclut le script. Un effet de bord pourrait être dupliqué.</p><a href="course-CRS-pm5kj5kh3gt2.html#out-OUT-nt4s3vj5727z">Revoir le passage précis</a></details></div></div><div data-card-section="s-l-exemple-le-front-controller"><h3><a href="#s-l-exemple-le-front-controller">Revoir la section du cours</a></h3><div class="reader-cards"><details class="reader-card" id="B-pm5kj5kh3gt2-03"><summary lang="en">Who runs a Kernel returned by the front controller&#x27;s callable?</summary><p lang="en">The runner selected by the runtime.</p><p lang="fr">Le callable crée l&#x27;object. Le runner gère son exécution.</p><a href="course-CRS-pm5kj5kh3gt2.html#out-OUT-3n7fcpgc1j29">Revoir le passage précis</a></details></div></div><div data-card-section="s-le-file-d-entree-ne-lance-rien"><h3><a href="#s-le-file-d-entree-ne-lance-rien">Revoir la section du cours</a></h3><div class="reader-cards"><details class="reader-card" id="B-pm5kj5kh3gt2-04"><summary lang="en">Which Composer feature generates vendor/autoload_runtime.php?</summary><p lang="en">The Runtime Composer plugin.</p><p lang="fr">Le bootstrap est généré par le plugin. Désactiver les plugins peut empêcher sa création.</p><a href="course-CRS-pm5kj5kh3gt2.html#out-OUT-87xc26yncsb7">Revoir le passage précis</a></details></div></div><div data-card-section="s-les-cinq-etapes"><h3><a href="#s-les-cinq-etapes">Revoir la section du cours</a></h3><div class="reader-cards"><details class="reader-card" id="B-pm5kj5kh3gt2-05"><summary lang="en">Does the entry script directly send the Response in the Runtime model?</summary><p lang="en">No. It returns the callable and the runtime/runner manages execution and output.</p><p lang="fr">Rendre une application remplace l&#x27;amorçage manuel. La responsabilité est déplacée vers le runtime.</p><a href="course-CRS-pm5kj5kh3gt2.html#out-OUT-07vqtcfmbfnc">Revoir le passage précis</a></details></div></div><div data-card-section="s-les-arguments-sont-resolus-par-type-et-par-nom"><h3><a href="#s-les-arguments-sont-resolus-par-type-et-par-nom">Revoir la section du cours</a></h3><div class="reader-cards"><details class="reader-card" id="B-pm5kj5kh3gt2-06"><summary lang="en">Does resolving an array argument depend only on its type?</summary><p lang="en">No. Recognized names such as context, argv and request also matter.</p><p lang="fr">Le nom participe au contrat. Renommer librement l&#x27;argument peut casser la résolution.</p><a href="course-CRS-pm5kj5kh3gt2.html#out-OUT-awqwz26y52yr">Revoir le passage précis</a></details></div></div><div data-card-section="s-choisir-le-runtime"><h3><a href="#s-choisir-le-runtime">Revoir la section du cours</a></h3><div class="reader-cards"><details class="reader-card" id="B-pm5kj5kh3gt2-07"><summary lang="en">How can the runtime class be selected?</summary><p lang="en">Through APP_RUNTIME or Composer extra.runtime.class.</p><p lang="fr">La classe d&#x27;amorçage est configurable. Les options du runtime sont un réglage distinct.</p><a href="course-CRS-pm5kj5kh3gt2.html#out-OUT-3n7fcpgc1j29">Revoir le passage précis</a></details></div></div><div data-card-section="s-pieges-d-examen"><h3><a href="#s-pieges-d-examen">Revoir la section du cours</a></h3><div class="reader-cards"><details class="reader-card" id="B-pm5kj5kh3gt2-08"><summary lang="en">Why can loading autoload.php before autoload_runtime.php break the expected bootstrap?</summary><p lang="en">The runtime bootstrap guards may skip the intended runner path.</p><p lang="fr">Respecter l&#x27;entry point généré. L&#x27;ordre des includes fait partie du mécanisme.</p><a href="course-CRS-pm5kj5kh3gt2.html#out-OUT-3n7fcpgc1j29">Revoir le passage précis</a></details></div></div><div data-card-section="s-fiche-express"><h3><a href="#s-fiche-express">Revoir la section du cours</a></h3><div class="reader-cards"><details class="reader-card" id="B-pm5kj5kh3gt2-09"><summary lang="en">Does the returned application&#x27;s object type affect runner selection?</summary><p lang="en">Yes. The runtime selects an appropriate runner for the object.</p><p lang="fr">Un kernel HTTP et une application console ont des runners adaptés. Le callable reste la frontière commune.</p><a href="course-CRS-pm5kj5kh3gt2.html#out-OUT-87xc26yncsb7">Revoir le passage précis</a></details></div></div><aside class="checkpoint"><h2>Rappel d’un cours antérieur</h2><p>Avant de poursuivre : Process.</p><details class="corpus-correction"><summary lang="en">Why is an argument array the recommended Process command form?</summary><p lang="en">It keeps argument boundaries explicit and avoids shell interpretation of argument values.</p><p>Les arguments restent littéraux. Le shell n&#x27;est pas nécessaire pour un exécutable simple.</p><a href="course-CRS-am0qe9xa8vzk.html#out-OUT-vr32ta087n2a">Relire la correction dans le cours antérieur</a></details></aside></div><div id="view-quiz" data-course-panel role="region" aria-labelledby="view-quiz-title"><h2 id="view-quiz-title">Quiz</h2><p id="course-quiz-status" role="status">Quiz interactif non chargé. Démarrez après chargement de la banque locale.</p><div id="course-quiz-controls" class="assessment-main" hidden><div id="course-quiz-assessment-controls" hidden><select id="course-quiz-assessment-mode" aria-label="Mode du quiz" hidden><option value="learning">Entraînement</option></select><p id="course-quiz-training-scope"></p><button id="course-quiz-start-assessment" type="button" lang="en">Start practice</button><button id="course-quiz-finish-assessment" type="button" lang="en" hidden>End session</button></div><p id="course-quiz-assessment-error" role="alert"></p><p id="course-quiz-assessment-timer" hidden></p><p id="course-quiz-session-progress" role="status"></p><div id="course-quiz-assessment-app" tabindex="-1"></div><nav id="course-quiz-session-navigation" aria-label="Questions du cours"></nav><div id="course-quiz-learning-overview" aria-live="polite"></div></div><div id="course-quiz-native"><p>Sans JavaScript ou si le chargement échoue : aucune tentative notée. Les <a href="#view-flashcards">flashcards du cours</a> restent disponibles.</p><details class="course-quiz-fallback" data-question-id="L-pm5kj5kh3gt2-base-v1"><summary lang="en">What should a Symfony Runtime front controller return?</summary><p>Correction de consultation — non notée.</p><p>Le script décrit la création. Le runtime exécute l&#x27;application retournée.</p><ul><li><strong lang="en">Distractor: Nothing; the script must call exit() before returning.</strong><p>Le script retourne un callable ; le runtime exécute l&#x27;application obtenue.</p></li><li><strong lang="en">Correct: A callable that creates the application object.</strong><p>Le script décrit la création. Le runtime exécute l&#x27;application retournée.</p></li><li><strong lang="en">Distractor: The already-rendered HTTP response body as a string.</strong><p>Le runtime attend la création de l&#x27;application, pas seulement son body.</p></li></ul><a href="course-CRS-pm5kj5kh3gt2.html#out-OUT-87xc26yncsb7">Relire le passage exact</a></details></div></div></div></div><details class="transfer-panel"><summary>Sauvegarde et transfert de progression</summary><p id="reading-status" role="status">Sans JavaScript : lecture libre ; progression non enregistrée.</p><p><a href="assessment.html#overview-title">Lecture, réussites immédiates et différées</a></p><p>Transfert manuel — aucune synchronisation automatique</p><p id="persistence-status" role="status"></p><button type="button" class="secondary" id="export-progress">Exporter ma progression</button><label for="import-progress">Choisir un JSON pour fusionner ma progression (sans remplacement)</label><input type="file" id="import-progress" accept="application/json,.json"><p id="transfer-status" role="status"></p></details></main><footer class="site-footer"><a href="catalogue.html">Catalogue</a> <a href="sources.html">Sources et attribution</a> <a href="#contenu">Haut de page</a></footer></body></html>

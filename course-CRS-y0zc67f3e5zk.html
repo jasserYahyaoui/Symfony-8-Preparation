@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; connect-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Console events — Symfony 8 Preparation</title><link rel="stylesheet" href="styles.css"><link rel="stylesheet" href="reader.css"><script src="mermaid.min.js" defer></script><script src="mermaid-init.js" defer></script><link rel="stylesheet" href="assessment.css"><script src="learning-state.js" defer></script><script src="guide.js" defer></script><script src="reader-catalog.js" defer></script><script src="reader.js" defer></script><script src="site-state.js" defer></script><script src="assessment.js" defer></script><script src="course-views.js" defer></script><link rel="stylesheet" href="syntax-highlight.css"><script src="prism-syntax.js" defer></script><script src="syntax-highlight.js" defer></script></head><body data-course-id="CRS-y0zc67f3e5zk"><a class="skip" href="#contenu">Aller au contenu</a><header class="site-header"><a class="brand" href="index.html">S8 Preparation</a><nav aria-label="Navigation principale"><a href="index.html">Accueil</a> <a href="catalogue.html">Parcours</a> <a href="assessment.html?mode=review">Réviser</a> <a href="examens.html">Examens blancs</a> <a href="jour-j.html">Jour J</a></nav></header><main id="contenu" tabindex="-1" class="corpus-reader"><nav class="breadcrumb" aria-label="Fil d’Ariane"><a href="index.html">Accueil</a> <span aria-hidden="true">›</span> <a href="catalogue.html">Parcours</a> <span aria-hidden="true">›</span> <a href="lot-12.html">Module 12 — Console</a> <span aria-hidden="true">›</span> <span aria-current="page">Console events</span></nav><h1>Console events</h1><p class="muted">Symfony 8.0 · API PHP ≤ 8.4 · Twig ≤ 3.22. Préparation indépendante.</p><p class="revision-status">Première itération · en cours de révision pédagogique. Ce cours reste accessible, sans déclaration de validation pédagogique.</p><nav class="course-actions" aria-label="Activités du cours"><a id="tab-course" href="#view-course">Cours</a><a id="tab-flashcards" href="#view-flashcards">Flashcards</a><a id="tab-quiz" href="#view-quiz">Quiz</a></nav><div class="course-layout"><details class="lot-course-menu"><summary>Cours du module · 9 cours</summary><nav aria-label="Cours du module"><a class="lot-context" href="lot-12.html">Module 12 — Console</a><ol><li><a href="course-CRS-brn6frfqpxxj.html">Console component</a></li><li><a href="course-CRS-rk0fkn1q5byc.html">Built-in commands</a></li><li><a href="course-CRS-cb51hcng9dh5.html">Custom commands</a></li><li><a href="course-CRS-sf3701ncg2va.html">Configuration</a></li><li><a href="course-CRS-q2dxjhx6d35k.html">Options and arguments (using PHP attributes)</a></li><li><a href="course-CRS-0ab7kpexq9w9.html">Input and Output objects</a></li><li><a href="course-CRS-3p9jdkw1nd3g.html">Built-in helpers</a></li><li><a href="course-CRS-y0zc67f3e5zk.html" aria-current="page">Console events</a></li><li><a href="course-CRS-96c85hjezj1r.html">Verbosity levels</a></li></ol></nav></details><aside class="course-section-menu" aria-label="Sommaire du cours"><details class="course-section-disclosure"><summary id="course-sections">Sections du cours</summary><nav aria-label="Sections du cours"><ul><li><a href="#s-objectif">Objectif</a></li><li><a href="#s-l-essentiel">L&#x27;essentiel</a></li><li><a href="#s-le-schema">Le schéma</a></li><li><a href="#s-l-exemple-journaliser-chaque-command">L&#x27;exemple : journaliser chaque command</a></li><li><a href="#s-quatre-constantes-cinq-events">Quatre constantes, cinq events</a></li><li><a href="#s-l-ordre-reel">L&#x27;ordre réel</a></li><li><a href="#s-error-rattraper">`ERROR` — rattraper</a></li><li><a href="#s-signal-pendant">`SIGNAL` — pendant</a></li><li><a href="#s-l-alarme">L&#x27;alarme</a></li><li><a href="#s-pieges-d-examen">Pièges d&#x27;examen</a></li><li><a href="#s-fiche-express">Fiche express</a></li></ul></nav></details></aside><div class="course-content"><div id="view-course" data-course-panel role="region" aria-labelledby="view-course-title"><h2 id="view-course-title">Cours</h2><p class="course-introduction"><a href="#s-objectif">Introduction</a> · <a href="#course-sections">Sections du cours</a></p><h2>Objectifs d’apprentissage</h2><ul><li><a href="course-CRS-y0zc67f3e5zk.html#out-OUT-2e5yd7119yha">Nommer les quatre events de ConsoleEvents, et ConsoleAlarmEvent qui n&#x27;a pas de constante</a></li><li><a href="course-CRS-y0zc67f3e5zk.html#out-OUT-8v3ady0sf894">Établir leur ordre, erreur comprise</a></li><li><a href="course-CRS-y0zc67f3e5zk.html#out-OUT-rzgybvr9fa5g">Décrire l&#x27;effet de disableCommand() et de setExitCode() sur ERROR</a></li><li><a href="course-CRS-y0zc67f3e5zk.html#out-OUT-13gsk5cxzqt3">Prévoir l&#x27;exit code d&#x27;une command interrompue par un signal</a></li><li><a href="course-CRS-y0zc67f3e5zk.html#out-OUT-kh6qdz451gb2">Garder une command en vie à chaque alarme de setAlarmInterval()</a></li></ul><aside class="pedagogy-legend" aria-label="Repères pédagogiques"><p><strong>Repères pédagogiques</strong></p><p>Ces repères décrivent le rôle du bloc, pas une fréquence officielle à l’examen.</p><p class="teaching-label essential"><span aria-hidden="true">○</span> <strong>À comprendre</strong></p><p class="teaching-label essential"><span aria-hidden="true">◆</span> <strong>À mémoriser</strong></p><p class="teaching-label example"><span aria-hidden="true">▣</span> <strong>Exemple concret</strong></p><p class="teaching-label pitfall"><span aria-hidden="true">△</span> <strong>Piège à éviter</strong></p><p class="teaching-label nuance"><span aria-hidden="true">?</span> <strong>À vérifier</strong></p></aside><section class="teaching-section" data-section="s-objectif"><h2 id="s-objectif" tabindex="-1">Objectif</h2><p>Intervenir autour de l'exécution d'une command sans la modifier : journaliser,
+mesurer, empêcher, rattraper une erreur.</p></section><section class="teaching-section" data-section="s-l-essentiel"><h2 id="s-l-essentiel" tabindex="-1">L&#x27;essentiel</h2><p class="teaching-label essential"><span aria-hidden="true">○</span> <strong>À comprendre</strong></p><aside class="section-digest" id="s-l-essentiel-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Le component autonome ne l&#x27;ajoute pas implicitement.</li><li>FrameworkBundle fournit cette intégration.</li></ol></aside><p>La Console dispatche des events autour de chaque command — <strong>avant</strong>
+(<code>COMMAND</code>), <strong>en cas d'erreur</strong> (<code>ERROR</code>), <strong>après</strong> (<code>TERMINATE</code>), <strong>à un
+signal</strong> (<code>SIGNAL</code>) — mais seulement si l'<code>Application</code> a un dispatcher.
+<code>TERMINATE</code> est toujours atteint, et l'exit code final est celui qu'il porte.</p></section><section class="teaching-section" data-section="s-le-schema"><h2 id="s-le-schema" tabindex="-1">Le schéma</h2><aside class="section-digest" id="s-le-schema-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>L&#x27;erreur possède son event.</li><li>La fin du cycle peut ajuster l&#x27;exit code.</li></ol></aside><figure class="diagram" aria-labelledby="CRS-y0zc67f3e5zk-3-diagram-0-title CRS-y0zc67f3e5zk-3-diagram-0-description"><figcaption id="CRS-y0zc67f3e5zk-3-diagram-0-title">L&#x27;ordre des events autour d&#x27;une command console</figcaption><p id="CRS-y0zc67f3e5zk-3-diagram-0-description">Sans dispatcher, la command s&#x27;exécute seule, sans aucun event. Avec un dispatcher, console.command est dispatché. Si un listener appelle disableCommand(), la command n&#x27;est pas exécutée et le code vaut 113. Sinon elle s&#x27;exécute. Une exception mène à console.error, où poser le code 0 abandonne l&#x27;erreur. Dans tous les cas console.terminate est dispatché, puis l&#x27;erreur restante est relancée, ou l&#x27;exit code de l&#x27;event est rendu.</p><div class="mermaid" hidden>---
+title: Application::doRunCommand()
+---
+flowchart TD
+  accTitle: L&#x27;ordre des events autour d&#x27;une command console
+  accDescr: Sans dispatcher, la command s&#x27;exécute seule, sans aucun event. Avec un dispatcher, console.command est dispatché. Si un listener appelle disableCommand(), la command n&#x27;est pas exécutée et le code vaut 113. Sinon elle s&#x27;exécute. Une exception mène à console.error, où poser le code 0 abandonne l&#x27;erreur. Dans tous les cas console.terminate est dispatché, puis l&#x27;erreur restante est relancée, ou l&#x27;exit code de l&#x27;event est rendu.
+  D{&quot;dispatcher ?&quot;} --&gt;|&quot;non&quot;| ALONE([&quot;exécution seule, aucun event&quot;])
+  D --&gt;|&quot;oui&quot;| CMD[&quot;console.command&quot;]
+  CMD --&gt; DIS{&quot;disableCommand() ?&quot;}
+  DIS --&gt;|&quot;oui&quot;| C113[&quot;code 113, pas d&#x27;exécution&quot;]
+  DIS --&gt;|&quot;non&quot;| RUN[&quot;exécution&quot;]
+  RUN --&gt;|&quot;exception&quot;| ERR[&quot;console.error : le code 0 abandonne l&#x27;erreur&quot;]
+  RUN --&gt; TERM[&quot;console.terminate&quot;]
+  C113 --&gt; TERM
+  ERR --&gt; TERM
+  TERM --&gt; OUT{&quot;erreur restante ?&quot;}
+  OUT --&gt;|&quot;oui&quot;| THROW([&quot;relancée&quot;])
+  OUT --&gt;|&quot;non&quot;| CODE([&quot;rend le code de l&#x27;event&quot;])</div></figure></section><section class="teaching-section" data-section="s-l-exemple-journaliser-chaque-command"><h2 id="s-l-exemple-journaliser-chaque-command" tabindex="-1">L&#x27;exemple : journaliser chaque command</h2><p class="teaching-label example"><span aria-hidden="true">▣</span> <strong>Exemple concret</strong></p><aside class="section-digest" id="s-l-exemple-journaliser-chaque-command-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>La mesure se termine après le traitement.</li><li>Le listener peut aussi lire l&#x27;exit code.</li></ol></aside><pre class="highlight" tabindex="0"><code class="language-php">class CommandLogger implements EventSubscriberInterface
+{
+    public static function getSubscribedEvents(): array
+    {
+        return [ConsoleEvents::TERMINATE =&gt; 'onTerminate'];
+    }
+
+    public function onTerminate(ConsoleTerminateEvent $event): void
+    {
+        $this-&gt;logger-&gt;info($event-&gt;getCommand()?-&gt;getName().' → '.$event-&gt;getExitCode());
+    }
+}</code></pre></section><section class="teaching-section" data-section="s-quatre-constantes-cinq-events"><span class="outcome-anchor" id="out-OUT-2e5yd7119yha" tabindex="-1"></span><h2 id="s-quatre-constantes-cinq-events" tabindex="-1">Quatre constantes, cinq events</h2><aside class="section-digest" id="s-quatre-constantes-cinq-events-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Les constantes usuelles ne couvrent pas tous les events.</li><li>L&#x27;alarme possède sa class.</li></ol></aside><table>
+<thead>
+<tr>
+<th>Constante</th>
+<th>Valeur</th>
+<th>Quand</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>COMMAND</code></td>
+<td><code>console.command</code></td>
+<td>avant l'exécution</td>
+</tr>
+<tr>
+<td><code>SIGNAL</code></td>
+<td><code>console.signal</code></td>
+<td>à la réception d'un signal POSIX</td>
+</tr>
+<tr>
+<td><code>ERROR</code></td>
+<td><code>console.error</code></td>
+<td>une exception ou une erreur est remontée</td>
+</tr>
+<tr>
+<td><code>TERMINATE</code></td>
+<td><code>console.terminate</code></td>
+<td>après l'exécution, quoi qu'il arrive</td>
+</tr>
+</tbody>
+</table>
+<p><code>ConsoleEvents</code> déclare aussi une cinquième constante, <code>ALIASES</code>, qui associe
+chaque class d'event à son nom. Un cinquième event, <code>ConsoleAlarmEvent</code>, n'a pas de constante.
+FrameworkBundle donne un dispatcher à l'<code>Application</code> ; construite à la main,
+elle ne dispatche rien sans <code>setDispatcher()</code>.</p></section><section class="teaching-section" data-section="s-l-ordre-reel"><span class="outcome-anchor" id="out-OUT-8v3ady0sf894" tabindex="-1"></span><h2 id="s-l-ordre-reel" tabindex="-1">L&#x27;ordre réel</h2><aside class="section-digest" id="s-l-ordre-reel-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Désactivé n&#x27;est ni succès ni échec ordinaire.</li><li>L&#x27;exécution de la command est sautée.</li></ol></aside><table>
+<thead>
+<tr>
+<th>Cas</th>
+<th>Events</th>
+<th>Code</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>succès</td>
+<td><code>COMMAND</code>, exécution, <code>TERMINATE:0</code></td>
+<td>0</td>
+</tr>
+<tr>
+<td><code>disableCommand()</code> sur <code>COMMAND</code></td>
+<td><code>COMMAND</code>, <strong><code>TERMINATE:113</code></strong> — pas d'exécution</td>
+<td>113</td>
+</tr>
+<tr>
+<td>exception</td>
+<td><code>COMMAND</code>, exécution, <code>ERROR</code>, <code>TERMINATE:1</code></td>
+<td>1</td>
+</tr>
+<tr>
+<td>exception, <code>setExitCode(0)</code> sur <code>ERROR</code></td>
+<td>… <code>ERROR</code>, <code>TERMINATE:0</code></td>
+<td>0</td>
+</tr>
+<tr>
+<td>succès, <code>setExitCode(1)</code> sur <code>TERMINATE</code></td>
+<td>… <code>TERMINATE:0</code></td>
+<td><strong>1</strong></td>
+</tr>
+<tr>
+<td>exception, <strong>sans</strong> dispatcher</td>
+<td>exécution seule</td>
+<td>1</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><code>ConsoleCommandEvent::RETURN_CODE_DISABLED</code> vaut <strong>113</strong> : « refusée », pas
+  « échouée ».</li>
+<li><code>TERMINATE</code> est le seul endroit fiable pour libérer une ressource ou mesurer
+  une durée.</li>
+</ul></section><section class="teaching-section" data-section="s-error-rattraper"><span class="outcome-anchor" id="out-OUT-rzgybvr9fa5g" tabindex="-1"></span><h2 id="s-error-rattraper" tabindex="-1">`ERROR` — rattraper</h2><aside class="section-digest" id="s-error-rattraper-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Le listener peut transformer le résultat.</li><li>Ce choix ne doit pas masquer un échec involontairement.</li></ol></aside><p><code>ConsoleErrorEvent</code> : <code>getError()</code>, <code>setError()</code>, <code>setExitCode()</code>.
+<code>setExitCode(0)</code> fait abandonner l'erreur : l'exception n'est pas propagée.
+<code>ERROR</code> couvre tout <code>Throwable</code> : une <code>TypeError</code> déclenche <code>ERROR</code> puis
+<code>TERMINATE</code>, et n'est relancée qu'ensuite.</p></section><section class="teaching-section" data-section="s-signal-pendant"><span class="outcome-anchor" id="out-OUT-13gsk5cxzqt3" tabindex="-1"></span><h2 id="s-signal-pendant" tabindex="-1">`SIGNAL` — pendant</h2><aside class="section-digest" id="s-signal-pendant-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Le signal peut être intercepté.</li><li>L&#x27;absence de sortie doit être demandée explicitement.</li></ol></aside><p>Avec un dispatcher, l'<code>Application</code> intercepte <code>SIGINT</code>, <code>SIGQUIT</code>,
+<code>SIGTERM</code>, <code>SIGUSR1</code>, <code>SIGUSR2</code> et <code>SIGALRM</code>. Ordre : <code>SIGNAL</code>, puis
+<code>handleSignal()</code> d'une <code>SignalableCommandInterface</code>, puis <code>TERMINATE</code> et
+<code>exit()</code>.</p>
+<table>
+<thead>
+<tr>
+<th>Situation</th>
+<th>Résultat</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>aucun listener ne change le code</td>
+<td>sortie en code <strong>0</strong>, <code>getInterruptingSignal()</code> = 2</td>
+</tr>
+<tr>
+<td><code>abortExit()</code> sur <code>SIGNAL</code>, ou <code>handleSignal()</code> rend <code>false</code></td>
+<td>la command continue</td>
+</tr>
+<tr>
+<td><code>setExitCode(3)</code> sur <code>SIGNAL</code></td>
+<td>sortie en code 3</td>
+</tr>
+<tr>
+<td>ni dispatcher ni command signalable</td>
+<td>PHP meurt du signal</td>
+</tr>
+</tbody>
+</table></section><section class="teaching-section" data-section="s-l-alarme"><span class="outcome-anchor" id="out-OUT-kh6qdz451gb2" tabindex="-1"></span><h2 id="s-l-alarme" tabindex="-1">L&#x27;alarme</h2><aside class="section-digest" id="s-l-alarme-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Les alarmes reposent sur les signaux POSIX.</li><li>Le comportement dépend de la plateforme disponible.</li></ol></aside><p><code>Application::setAlarmInterval(10)</code> programme un <code>SIGALRM</code> toutes les 10 s,
+qui dispatche <code>SIGNAL</code> puis <code>ConsoleAlarmEvent</code> sous son nom de class. Sans
+<code>abortExit()</code> dans un listener, la <strong>première alarme termine la command</strong>.
+Il faut l'extension <code>pcntl</code>.</p></section><section class="teaching-section" data-section="s-pieges-d-examen"><h2 id="s-pieges-d-examen" tabindex="-1">Pièges d&#x27;examen</h2><p class="teaching-label pitfall"><span aria-hidden="true">△</span> <strong>Piège à éviter</strong></p><aside class="section-digest" id="s-pieges-d-examen-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Le test direct contourne le cycle Application.</li><li>Adapter le test à la frontière vérifiée.</li></ol></aside><p><strong>Quatre constantes, cinq events.</strong> <code>ConsoleAlarmEvent</code> n'a pas de constante ;
+il n'existe pas d'event « après <code>configure()</code> ».</p>
+<p><strong>Un signal intercepté sort en code 0</strong> si personne ne le change.</p>
+<p><strong><code>TERMINATE</code> est dispatché même après une erreur</strong> — c'est sa raison d'être.</p>
+<p><strong><code>disableCommand()</code> produit le code 113</strong>, pas 0 ni 1 — et <code>TERMINATE</code> est
+quand même dispatché.</p>
+<p><strong><code>setExitCode(0)</code> sur <code>ERROR</code> avale l'exception</strong> au lieu de la laisser remonter.</p>
+<p><strong>Pas de dispatcher, pas d'events</strong> : une <code>Application</code> autonome est muette.</p></section><section class="teaching-section" data-section="s-fiche-express"><h2 id="s-fiche-express" tabindex="-1">Fiche express</h2><p class="teaching-label essential"><span aria-hidden="true">◆</span> <strong>À mémoriser</strong></p><aside class="section-digest" id="s-fiche-express-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>La command ne fixe pas toujours seule le code final.</li><li>Les listeners peuvent le modifier.</li></ol></aside><p><strong>Si tu dois retenir seulement 7 choses :</strong></p>
+<ul>
+<li><strong>Quatre constantes</strong> (<code>COMMAND</code>, <code>SIGNAL</code>, <code>ERROR</code>, <code>TERMINATE</code>), <strong>cinq
+  events</strong> avec <code>ConsoleAlarmEvent</code>.</li>
+<li><strong>Pas de dispatcher, pas d'events.</strong></li>
+<li><code>TERMINATE</code> est <strong>toujours</strong> dispatché ; son code est le code final.</li>
+<li><code>disableCommand()</code> → <strong>113</strong>.</li>
+<li><code>setExitCode(0)</code> sur <code>ERROR</code> <strong>avale</strong> l'exception.</li>
+<li>Un signal intercepté sort en <strong>0</strong>, sauf <code>abortExit()</code> ou un autre code.</li>
+<li><code>setAlarmInterval()</code> : la première alarme <strong>termine</strong>, sans <code>abortExit()</code>.</li>
+</ul>
+<p>Moyen mnémotechnique : <strong>« Avant, erreur, après — et toujours après »</strong>.</p></section><section class="official-sources"><h2>Sources officielles et compléments</h2><ul><li><a href="https://symfony.com/doc/8.0/components/console/events.html">Symfony 8.0 — components / console / events</a></li><li><a href="https://symfony.com/doc/8.0/console.html">Symfony 8.0 — Console</a></li></ul></section><nav class="course-sequence" aria-label="Ordre de lecture"><a rel="prev" href="course-CRS-3p9jdkw1nd3g.html" aria-label="Précédent : Built-in helpers — Module 12 — Console">Précédent : Built-in helpers</a> <a href="lot-12.html">Sommaire : Module 12 — Console</a> <a rel="next" href="course-CRS-96c85hjezj1r.html" aria-label="Suivant : Verbosity levels — Module 12 — Console">Suivant : Verbosity levels</a></nav><p class="course-practice-entry"><a class="button" href="#view-quiz">Fin du cours — s’entraîner avec le Quiz</a></p></div><div id="view-flashcards" data-course-panel role="region" aria-labelledby="view-flashcards-title"><h2 id="view-flashcards-title">Flashcards</h2><p lang="en">Answer before revealing each card.</p><p>Ces cartes ne mesurent pas une maîtrise notée.</p><div data-card-section="s-l-essentiel"><h3><a href="#s-l-essentiel">Revoir la section du cours</a></h3><div class="reader-cards"><details class="reader-card" id="B-y0zc67f3e5zk-01"><summary lang="en">What must a standalone Console Application have to dispatch Console events?</summary><p lang="en">An event dispatcher configured on it.</p><p lang="fr">Le component autonome ne l&#x27;ajoute pas implicitement. FrameworkBundle fournit cette intégration.</p><a href="course-CRS-y0zc67f3e5zk.html#out-OUT-2e5yd7119yha">Revoir le passage précis</a></details></div></div><div data-card-section="s-le-schema"><h3><a href="#s-le-schema">Revoir la section du cours</a></h3><div class="reader-cards"><details class="reader-card" id="B-y0zc67f3e5zk-02"><summary lang="en">What is the ordinary event order when command execution throws?</summary><p lang="en">COMMAND, ERROR, then TERMINATE in the application&#x27;s managed execution flow.</p><p lang="fr">L&#x27;erreur possède son event. La fin du cycle peut ajuster l&#x27;exit code.</p><a href="course-CRS-y0zc67f3e5zk.html#out-OUT-13gsk5cxzqt3">Revoir le passage précis</a></details></div></div><div data-card-section="s-l-exemple-journaliser-chaque-command"><h3><a href="#s-l-exemple-journaliser-chaque-command">Revoir la section du cours</a></h3><div class="reader-cards"><details class="reader-card" id="B-y0zc67f3e5zk-03"><summary lang="en">Which event is suited to measuring the completion of a managed command run?</summary><p lang="en">ConsoleEvents::TERMINATE.</p><p lang="fr">La mesure se termine après le traitement. Le listener peut aussi lire l&#x27;exit code.</p><a href="course-CRS-y0zc67f3e5zk.html#out-OUT-13gsk5cxzqt3">Revoir le passage précis</a></details></div></div><div data-card-section="s-quatre-constantes-cinq-events"><h3><a href="#s-quatre-constantes-cinq-events">Revoir la section du cours</a></h3><div class="reader-cards"><details class="reader-card" id="B-y0zc67f3e5zk-04"><summary lang="en">Does ConsoleAlarmEvent have a matching named constant like COMMAND?</summary><p lang="en">No. It is addressed by its event class.</p><p lang="fr">Les constantes usuelles ne couvrent pas tous les events. L&#x27;alarme possède sa class.</p><a href="course-CRS-y0zc67f3e5zk.html#out-OUT-2e5yd7119yha">Revoir le passage précis</a></details></div></div><div data-card-section="s-l-ordre-reel"><h3><a href="#s-l-ordre-reel">Revoir la section du cours</a></h3><div class="reader-cards"><details class="reader-card" id="B-y0zc67f3e5zk-05"><summary lang="en">What exit code represents a command disabled by ConsoleCommandEvent?</summary><p lang="en">113, the RETURN_CODE_DISABLED value.</p><p lang="fr">Désactivé n&#x27;est ni succès ni échec ordinaire. L&#x27;exécution de la command est sautée.</p><a href="course-CRS-y0zc67f3e5zk.html#out-OUT-8v3ady0sf894">Revoir le passage précis</a></details></div></div><div data-card-section="s-error-rattraper"><h3><a href="#s-error-rattraper">Revoir la section du cours</a></h3><div class="reader-cards"><details class="reader-card" id="B-y0zc67f3e5zk-06"><summary lang="en">What can setting exit code 0 on ConsoleErrorEvent do?</summary><p lang="en">Suppress propagation of the error in the managed application flow.</p><p lang="fr">Le listener peut transformer le résultat. Ce choix ne doit pas masquer un échec involontairement.</p><a href="course-CRS-y0zc67f3e5zk.html#out-OUT-rzgybvr9fa5g">Revoir le passage précis</a></details></div></div><div data-card-section="s-signal-pendant"><h3><a href="#s-signal-pendant">Revoir la section du cours</a></h3><div class="reader-cards"><details class="reader-card" id="B-y0zc67f3e5zk-07"><summary lang="en">How can a ConsoleSignalEvent listener request that execution continue?</summary><p lang="en">Call abortExit().</p><p lang="fr">Le signal peut être intercepté. L&#x27;absence de sortie doit être demandée explicitement.</p><a href="course-CRS-y0zc67f3e5zk.html#out-OUT-13gsk5cxzqt3">Revoir le passage précis</a></details></div></div><div data-card-section="s-l-alarme"><h3><a href="#s-l-alarme">Revoir la section du cours</a></h3><div class="reader-cards"><details class="reader-card" id="B-y0zc67f3e5zk-08"><summary lang="en">What PHP extension is required for periodic Console alarms?</summary><p lang="en">pcntl.</p><p lang="fr">Les alarmes reposent sur les signaux POSIX. Le comportement dépend de la plateforme disponible.</p><a href="course-CRS-y0zc67f3e5zk.html#out-OUT-kh6qdz451gb2">Revoir le passage précis</a></details></div></div><div data-card-section="s-pieges-d-examen"><h3><a href="#s-pieges-d-examen">Revoir la section du cours</a></h3><div class="reader-cards"><details class="reader-card" id="B-y0zc67f3e5zk-09"><summary lang="en">Does CommandTester exercise the Application&#x27;s Console event sequence?</summary><p lang="en">No. Use ApplicationTester with an event-enabled Application.</p><p lang="fr">Le test direct contourne le cycle Application. Adapter le test à la frontière vérifiée.</p><a href="course-CRS-y0zc67f3e5zk.html#out-OUT-2e5yd7119yha">Revoir le passage précis</a></details></div></div><div data-card-section="s-fiche-express"><h3><a href="#s-fiche-express">Revoir la section du cours</a></h3><div class="reader-cards"><details class="reader-card" id="B-y0zc67f3e5zk-10"><summary lang="en">Can a TERMINATE listener change the final exit code?</summary><p lang="en">Yes. The event&#x27;s final code determines the application&#x27;s result.</p><p lang="fr">La command ne fixe pas toujours seule le code final. Les listeners peuvent le modifier.</p><a href="course-CRS-y0zc67f3e5zk.html#out-OUT-13gsk5cxzqt3">Revoir le passage précis</a></details></div></div><aside class="checkpoint"><h2>Rappel d’un cours antérieur</h2><p>Avant de poursuivre : Input and Output objects.</p><details class="corpus-correction"><summary lang="en">Why should a command write through OutputInterface instead of echo?</summary><p lang="en">So formatting, verbosity and test capture apply consistently.</p><p>L&#x27;output centralise le comportement console. echo contourne ces mécanismes.</p><a href="course-CRS-0ab7kpexq9w9.html#out-OUT-b3v4c3hz8gha">Relire la correction dans le cours antérieur</a></details></aside></div><div id="view-quiz" data-course-panel role="region" aria-labelledby="view-quiz-title"><h2 id="view-quiz-title">Quiz</h2><p id="course-quiz-status" role="status">Quiz interactif non chargé. Démarrez après chargement de la banque locale.</p><div id="course-quiz-controls" class="assessment-main" hidden><div id="course-quiz-assessment-controls" hidden><select id="course-quiz-assessment-mode" aria-label="Mode du quiz" hidden><option value="learning">Entraînement</option></select><p id="course-quiz-training-scope"></p><button id="course-quiz-start-assessment" type="button" lang="en">Start practice</button><button id="course-quiz-finish-assessment" type="button" lang="en" hidden>End session</button></div><p id="course-quiz-assessment-error" role="alert"></p><p id="course-quiz-assessment-timer" hidden></p><p id="course-quiz-session-progress" role="status"></p><div id="course-quiz-assessment-app" tabindex="-1"></div><nav id="course-quiz-session-navigation" aria-label="Questions du cours"></nav><div id="course-quiz-learning-overview" aria-live="polite"></div></div><div id="course-quiz-native"><p>Sans JavaScript ou si le chargement échoue : aucune tentative notée. Les <a href="#view-flashcards">flashcards du cours</a> restent disponibles.</p><details class="course-quiz-fallback" data-question-id="L-y0zc67f3e5zk-base-v1"><summary lang="en">What must a standalone Console Application have to dispatch Console events?</summary><p>Correction de consultation — non notée.</p><p>Le component autonome ne l&#x27;ajoute pas implicitement. FrameworkBundle fournit cette intégration.</p><ul><li><strong lang="en">Distractor: Nothing; every standalone Application creates one automatically.</strong><p>L&#x27;intégration de FrameworkBundle n&#x27;est pas implicite dans le component autonome.</p></li><li><strong lang="en">Correct: An event dispatcher configured on the Application.</strong><p>Le component autonome ne l&#x27;ajoute pas implicitement. FrameworkBundle fournit cette intégration.</p></li><li><strong lang="en">Distractor: Only an AsCommand attribute on the command class.</strong><p>La metadata de command n&#x27;ajoute pas le dispatcher à l&#x27;Application autonome.</p></li></ul><a href="course-CRS-y0zc67f3e5zk.html#out-OUT-2e5yd7119yha">Relire le passage exact</a></details></div></div></div></div><details class="transfer-panel"><summary>Sauvegarde et transfert de progression</summary><p id="reading-status" role="status">Sans JavaScript : lecture libre ; progression non enregistrée.</p><p><a href="assessment.html#overview-title">Lecture, réussites immédiates et différées</a></p><p>Transfert manuel — aucune synchronisation automatique</p><p id="persistence-status" role="status"></p><button type="button" class="secondary" id="export-progress">Exporter ma progression</button><label for="import-progress">Choisir un JSON pour fusionner ma progression (sans remplacement)</label><input type="file" id="import-progress" accept="application/json,.json"><p id="transfer-status" role="status"></p></details></main><footer class="site-footer"><a href="catalogue.html">Catalogue</a> <a href="sources.html">Sources et attribution</a> <a href="#contenu">Haut de page</a></footer></body></html>

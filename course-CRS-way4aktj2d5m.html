@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; connect-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Validator component — Symfony 8 Preparation</title><link rel="stylesheet" href="styles.css"><link rel="stylesheet" href="reader.css"><script src="mermaid.min.js" defer></script><script src="mermaid-init.js" defer></script><link rel="stylesheet" href="assessment.css"><script src="learning-state.js" defer></script><script src="guide.js" defer></script><script src="reader-catalog.js" defer></script><script src="reader.js" defer></script><script src="site-state.js" defer></script><script src="assessment.js" defer></script><script src="course-views.js" defer></script><link rel="stylesheet" href="syntax-highlight.css"><script src="prism-syntax.js" defer></script><script src="syntax-highlight.js" defer></script></head><body data-course-id="CRS-way4aktj2d5m"><a class="skip" href="#contenu">Aller au contenu</a><header class="site-header"><a class="brand" href="index.html">S8 Preparation</a><nav aria-label="Navigation principale"><a href="index.html">Accueil</a> <a href="catalogue.html">Parcours</a> <a href="assessment.html?mode=review">Réviser</a> <a href="examens.html">Examens blancs</a> <a href="jour-j.html">Jour J</a></nav></header><main id="contenu" tabindex="-1" class="corpus-reader"><nav class="breadcrumb" aria-label="Fil d’Ariane"><a href="index.html">Accueil</a> <span aria-hidden="true">›</span> <a href="catalogue.html">Parcours</a> <span aria-hidden="true">›</span> <a href="lot-08.html">Module 08 — Validation des données</a> <span aria-hidden="true">›</span> <span aria-current="page">Validator component</span></nav><h1>Validator component</h1><p class="muted">Symfony 8.0 · API PHP ≤ 8.4 · Twig ≤ 3.22. Préparation indépendante.</p><p class="revision-status">Première itération · en cours de révision pédagogique. Ce cours reste accessible, sans déclaration de validation pédagogique.</p><nav class="course-actions" aria-label="Activités du cours"><a id="tab-course" href="#view-course">Cours</a><a id="tab-flashcards" href="#view-flashcards">Flashcards</a><a id="tab-quiz" href="#view-quiz">Quiz</a></nav><div class="course-layout"><details class="lot-course-menu"><summary>Cours du module · 8 cours</summary><nav aria-label="Cours du module"><a class="lot-context" href="lot-08.html">Module 08 — Validation des données</a><ol><li><a href="course-CRS-way4aktj2d5m.html" aria-current="page">Validator component</a></li><li><a href="course-CRS-ax2v94pgbk0g.html">PHP object validation</a></li><li><a href="course-CRS-569y6hb7fwj5.html">Built-in validation constraints</a></li><li><a href="course-CRS-wzmrks85zyh1.html">Validation scopes</a></li><li><a href="course-CRS-vskyr5zdwr2t.html">Validation groups</a></li><li><a href="course-CRS-bthv5xmh5wea.html">Group sequence</a></li><li><a href="course-CRS-96w05v20b8w1.html">Custom callback validators</a></li><li><a href="course-CRS-d235sja3h7y2.html">Violations builder</a></li></ol></nav></details><aside class="course-section-menu" aria-label="Sommaire du cours"><details class="course-section-disclosure"><summary id="course-sections">Sections du cours</summary><nav aria-label="Sections du cours"><ul><li><a href="#s-objectif">Objectif</a></li><li><a href="#s-l-essentiel">L&#x27;essentiel</a></li><li><a href="#s-le-schema">Le schéma</a></li><li><a href="#s-le-fil-rouge-un-user-et-son-adresse">Le fil rouge : un `User` et son adresse</a></li><li><a href="#s-les-trois-manieres-de-valider">Les trois manières de valider</a></li><li><a href="#s-ce-qu-il-retourne-une-liste-jamais-un-bool">Ce qu&#x27;il retourne : une liste, jamais un bool</a></li><li><a href="#s-donnee-invalide-ou-configuration-invalide">Donnée invalide ou configuration invalide</a></li><li><a href="#s-deux-raccourcis-de-validation">Deux raccourcis de `Validation`</a></li><li><a href="#s-pieges-d-examen">Pièges d&#x27;examen</a></li><li><a href="#s-fiche-express">Fiche express</a></li></ul></nav></details></aside><div class="course-content"><div id="view-course" data-course-panel role="region" aria-labelledby="view-course-title"><h2 id="view-course-title">Cours</h2><p class="course-introduction"><a href="#s-objectif">Introduction</a> · <a href="#course-sections">Sections du cours</a></p><h2>Objectifs d’apprentissage</h2><ul><li><a href="course-CRS-way4aktj2d5m.html#out-OUT-wsh6jsvs5s6f">Nommer les trois methods d&#x27;entrée du validator</a></li><li><a href="course-CRS-way4aktj2d5m.html#out-OUT-0enczxzp4pwq">Énoncer ce que retourne validate() et comment le tester</a></li><li><a href="course-CRS-way4aktj2d5m.html#out-OUT-kgffdypsnscc">Choisir validatePropertyValue() pour une valeur candidate</a></li></ul><aside class="pedagogy-legend" aria-label="Repères pédagogiques"><p><strong>Repères pédagogiques</strong></p><p>Ces repères décrivent le rôle du bloc, pas une fréquence officielle à l’examen.</p><p class="teaching-label essential"><span aria-hidden="true">○</span> <strong>À comprendre</strong></p><p class="teaching-label essential"><span aria-hidden="true">◆</span> <strong>À mémoriser</strong></p><p class="teaching-label example"><span aria-hidden="true">▣</span> <strong>Exemple concret</strong></p><p class="teaching-label pitfall"><span aria-hidden="true">△</span> <strong>Piège à éviter</strong></p><p class="teaching-label nuance"><span aria-hidden="true">?</span> <strong>À vérifier</strong></p></aside><section class="teaching-section" data-section="s-objectif"><h2 id="s-objectif" tabindex="-1">Objectif</h2><p>Savoir ce que le component valide, comment on l'appelle, et ce qu'il retourne.
+Les constraints elles-mêmes appartiennent aux items <em>Built-in validation
+constraints</em> et <em>Custom callback validators</em>.</p></section><section class="teaching-section" data-section="s-l-essentiel"><h2 id="s-l-essentiel" tabindex="-1">L&#x27;essentiel</h2><p class="teaching-label essential"><span aria-hidden="true">○</span> <strong>À comprendre</strong></p><aside class="section-digest" id="s-l-essentiel-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Le résultat est une liste de violations.</li><li>Une donnée invalide ne produit pas un bool.</li></ol></aside><p>Le Validator confronte une valeur à des <strong>constraints</strong> et rend toujours une
+<strong>liste de violations</strong> — vide si tout va bien, jamais un bool. Une donnée
+invalide ne lève rien ; une constraint mal configurée, si. Hors framework,
+<code>createValidator()</code> <strong>ne lit pas</strong> les attributes.</p></section><section class="teaching-section" data-section="s-le-schema"><h2 id="s-le-schema" tabindex="-1">Le schéma</h2><aside class="section-digest" id="s-le-schema-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Les constraints sélectionnées sont évaluées.</li><li>Une liste vide signifie zéro violation.</li></ol></aside><figure class="diagram" aria-labelledby="CRS-way4aktj2d5m-3-diagram-0-title CRS-way4aktj2d5m-3-diagram-0-description"><figcaption id="CRS-way4aktj2d5m-3-diagram-0-title">Entrée, lecture des constraints, vérification et résultat du Validator</figcaption><p id="CRS-way4aktj2d5m-3-diagram-0-description">Le validator reçoit un object, dont il lit les constraints sur la class, ou une valeur avec des constraints en argument. Dans le framework, il lit les attributes, le YAML et le XML ; hors framework, rien sans enableAttributeMapping(). Il vérifie les constraints des groups demandés, Default par défaut ; une donnée invalide produit une violation. Il rend une ConstraintViolationList : vide, c&#x27;est valide ; il faut tester count(), pas le bool.</p><div class="mermaid" hidden>---
+title: Ce que le validator vérifie, et ce qu&#x27;il rend
+---
+flowchart TD
+  accTitle: Entrée, lecture des constraints, vérification et résultat du Validator
+  accDescr: Le validator reçoit un object, dont il lit les constraints sur la class, ou une valeur avec des constraints en argument. Dans le framework, il lit les attributes, le YAML et le XML ; hors framework, rien sans enableAttributeMapping(). Il vérifie les constraints des groups demandés, Default par défaut ; une donnée invalide produit une violation. Il rend une ConstraintViolationList : vide, c&#x27;est valide ; il faut tester count(), pas le bool.
+  E{&quot;entrée&quot;} --&gt;|&quot;un object&quot;| O[&quot;constraints lues&lt;br/&gt;sur sa class&quot;]
+  E --&gt;|&quot;une valeur&quot;| V[&quot;+ des constraints&lt;br/&gt;en argument&quot;]
+  O --&gt; L[&quot;lecture&lt;br/&gt;framework : attributes, YAML, XML&lt;br/&gt;hors framework : rien sans&lt;br/&gt;enableAttributeMapping()&quot;]
+  L --&gt; C
+  V --&gt; C[&quot;vérifier les constraints&lt;br/&gt;des groups demandés&lt;br/&gt;(Default par défaut)&lt;br/&gt;donnée invalide → violation&quot;]
+  C --&gt; R([&quot;ConstraintViolationList&lt;br/&gt;vide = valide&lt;br/&gt;tester count(), pas le bool&quot;])</div></figure></section><section class="teaching-section" data-section="s-le-fil-rouge-un-user-et-son-adresse"><h2 id="s-le-fil-rouge-un-user-et-son-adresse" tabindex="-1">Le fil rouge : un `User` et son adresse</h2><aside class="section-digest" id="s-le-fil-rouge-un-user-et-son-adresse-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Le property path localise la donnée.</li><li>La descente conserve le chemin de l&#x27;object imbriqué.</li></ol></aside><pre class="highlight" tabindex="0"><code class="language-php">class User
+{
+    #[Assert\NotBlank]
+    #[Assert\Email]
+    public string $email = 'x';
+
+    #[Assert\Length(min: 3)]
+    public string $name = 'ab';
+
+    #[Assert\Valid]
+    public Address $address;          // Address::$city porte #[Assert\NotBlank], vide
+}</code></pre>
+<p>Trois violations : <code>email</code>, <code>address.city</code>, <code>name</code>.</p></section><section class="teaching-section" data-section="s-les-trois-manieres-de-valider"><span class="outcome-anchor" id="out-OUT-wsh6jsvs5s6f" tabindex="-1"></span><span class="outcome-anchor" id="out-OUT-kgffdypsnscc" tabindex="-1"></span><h2 id="s-les-trois-manieres-de-valider" tabindex="-1">Les trois manières de valider</h2><aside class="section-digest" id="s-les-trois-manieres-de-valider-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>La valeur candidate peut être testée avant affectation.</li><li>Les metadata de la property fournissent les constraints.</li></ol></aside><table>
+<thead>
+<tr>
+<th>Besoin</th>
+<th>Method</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>tout l'object, constraints de class comprises</td>
+<td><code>validate($object)</code></td>
+</tr>
+<tr>
+<td>une property d'un object existant</td>
+<td><code>validateProperty($object, 'email')</code></td>
+</tr>
+<tr>
+<td>une valeur <strong>avant</strong> de l'affecter</td>
+<td><code>validatePropertyValue(User::class, 'email', $candidat)</code></td>
+</tr>
+<tr>
+<td>une valeur isolée, sans class</td>
+<td><code>validate($valeur, new Assert\Email())</code></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>Chaque method accepte les groups en dernier argument ; un group qu'aucune
+  constraint ne porte rend une liste <strong>vide</strong>, sans erreur.</li>
+<li><code>validateProperty()</code> sur une property inexistante rend une liste vide.</li>
+<li>Hors framework : <code>Validation::createValidator()</code> donne <strong>0</strong> violation sur
+  le <code>User</code> ; <code>createValidatorBuilder()-&gt;enableAttributeMapping()-&gt;getValidator()</code>
+  en donne 3. Dans une application, on injecte <code>ValidatorInterface</code>.</li>
+</ul></section><section class="teaching-section" data-section="s-ce-qu-il-retourne-une-liste-jamais-un-bool"><span class="outcome-anchor" id="out-OUT-0enczxzp4pwq" tabindex="-1"></span><h2 id="s-ce-qu-il-retourne-une-liste-jamais-un-bool" tabindex="-1">Ce qu&#x27;il retourne : une liste, jamais un bool</h2><aside class="section-digest" id="s-ce-qu-il-retourne-une-liste-jamais-un-bool-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Une liste vide reste un object.</li><li>count() distingue succès et violations.</li></ol></aside><pre class="highlight" tabindex="0"><code class="language-php">if (0 !== count($violations)) {
+    foreach ($violations as $violation) {
+        $violation-&gt;getMessage();
+        $violation-&gt;getPropertyPath();   // 'email', 'address.city'
+        $violation-&gt;getInvalidValue();   // 'x'
+        $violation-&gt;getCode();           // Assert\Email::INVALID_FORMAT_ERROR
+        $violation-&gt;getConstraint();     // l'objet Email
+    }
+}</code></pre>
+<ul>
+<li>Une liste vide convertie en booléen vaut <code>true</code> : tester <code>count()</code>.</li>
+<li><code>findByCodes(Assert\Email::INVALID_FORMAT_ERROR)</code> filtre par code ;
+  <code>(string) $violations</code> donne une ligne par violation.</li>
+<li><code>php bin/console debug:validator</code> affiche les constraints d'une class.</li>
+</ul></section><section class="teaching-section" data-section="s-donnee-invalide-ou-configuration-invalide"><h2 id="s-donnee-invalide-ou-configuration-invalide" tabindex="-1">Donnée invalide ou configuration invalide</h2><aside class="section-digest" id="s-donnee-invalide-ou-configuration-invalide-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Séparer donnée invalide et configuration invalide.</li><li>Une constraint incohérente peut lever une exception.</li></ol></aside><table>
+<thead>
+<tr>
+<th>Situation</th>
+<th>Résultat</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>donnée invalide, même mal typée (un array soumis à <code>Email</code>)</td>
+<td>violation : « This value should be of type string. »</td>
+</tr>
+<tr>
+<td>constraint mal configurée (<code>new Assert\Length()</code>)</td>
+<td><code>MissingOptionsException</code> à sa construction</td>
+</tr>
+<tr>
+<td>scalaire ou <code>null</code> sans constraint</td>
+<td><code>RuntimeException</code> : « Cannot validate values of type "string" automatically… »</td>
+</tr>
+<tr>
+<td>object ou array sans constraint</td>
+<td>liste vide</td>
+</tr>
+</tbody>
+</table></section><section class="teaching-section" data-section="s-deux-raccourcis-de-validation"><h2 id="s-deux-raccourcis-de-validation" tabindex="-1">Deux raccourcis de `Validation`</h2><aside class="section-digest" id="s-deux-raccourcis-de-validation-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>createIsValidCallable() produit un bool.</li><li>createCallable() conserve la valeur valide et lève sinon.</li></ol></aside><table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Valeur invalide</th>
+<th>Valeur valide</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Validation::createIsValidCallable(...)</code></td>
+<td>la function rend <code>false</code></td>
+<td><code>true</code></td>
+</tr>
+<tr>
+<td><code>Validation::createCallable(...)</code></td>
+<td>elle <strong>lève</strong> <code>ValidationFailedException</code></td>
+<td>elle rend la valeur</td>
+</tr>
+</tbody>
+</table>
+<p>Utiles là où l'on attend une function : <code>setAllowedValues()</code> d'OptionsResolver,
+une saisie en console.</p></section><section class="teaching-section" data-section="s-pieges-d-examen"><h2 id="s-pieges-d-examen" tabindex="-1">Pièges d&#x27;examen</h2><p class="teaching-label pitfall"><span aria-hidden="true">△</span> <strong>Piège à éviter</strong></p><aside class="section-digest" id="s-pieges-d-examen-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Le standalone demande un mapping explicite.</li><li>Le service du framework se configure séparément.</li></ol></aside><p><strong><code>validate()</code> ne lève rien pour une donnée invalide</strong>, même mal typée ; une
+constraint mal configurée ou un scalaire sans constraint, si.</p>
+<p><strong>Une liste vide est un object.</strong> Seul <code>count()</code> dit si la validation a réussi.</p>
+<p><strong><code>createValidator()</code> ignore les attributes</strong> : il faut
+<code>enableAttributeMapping()</code>.</p>
+<p><strong><code>validatePropertyValue()</code> n'a pas besoin de l'object peuplé</strong> : elle teste une
+valeur candidate contre les constraints de la property.</p>
+<p><strong>Un group mal orthographié fait paraître l'object valide</strong> : aucune constraint
+n'y appartient, la liste rendue est vide, sans erreur.</p></section><section class="teaching-section" data-section="s-fiche-express"><h2 id="s-fiche-express" tabindex="-1">Fiche express</h2><p class="teaching-label essential"><span aria-hidden="true">◆</span> <strong>À mémoriser</strong></p><aside class="section-digest" id="s-fiche-express-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Un group inconnu ne sélectionne rien.</li><li>Une liste vide ne prouve pas que toutes les règles ont été exécutées.</li></ol></aside><p><strong>Si tu dois retenir seulement 7 choses :</strong></p>
+<ul>
+<li><strong><code>validate()</code></strong>, <strong><code>validateProperty()</code></strong>, <strong><code>validatePropertyValue()</code></strong>
+  (accepte un nom de class).</li>
+<li>Retour : une <strong>liste</strong>, vide = valide ; tester <strong><code>count()</code></strong>.</li>
+<li>Violation : message, path, valeur, <strong>code</strong>, constraint.</li>
+<li>Hors framework : <strong><code>enableAttributeMapping()</code></strong>, sinon 0 violation.</li>
+<li>Donnée invalide → <strong>violation</strong> ; constraint mal configurée → <strong>exception</strong>.</li>
+<li>Scalaire sans constraint → <strong><code>RuntimeException</code></strong>.</li>
+<li><strong><code>createIsValidCallable()</code></strong> rend un bool ; <strong><code>createCallable()</code></strong> lève.</li>
+</ul>
+<p>Moyen mnémotechnique :
+<strong>« Règles sur la class, liste en retour, <code>count()</code> pour conclure »</strong>.</p></section><section class="official-sources"><h2>Sources officielles et compléments</h2><ul><li><a href="https://symfony.com/doc/8.0/components/validator/resources.html">Symfony 8.0 — components / validator / resources</a></li><li><a href="https://symfony.com/doc/8.0/validation.html">Symfony 8.0 — Validator</a></li></ul></section><nav class="course-sequence" aria-label="Ordre de lecture"><a rel="prev" href="course-CRS-pchb259hnbh3.html" aria-label="Précédent : Form options (OptionsResolver component) — Module 07 — Formulaires">Précédent : Form options (OptionsResolver component)</a> <a href="lot-08.html">Sommaire : Module 08 — Validation des données</a> <a rel="next" href="course-CRS-ax2v94pgbk0g.html" aria-label="Suivant : PHP object validation — Module 08 — Validation des données">Suivant : PHP object validation</a></nav><p class="course-practice-entry"><a class="button" href="#view-quiz">Fin du cours — s’entraîner avec le Quiz</a></p></div><div id="view-flashcards" data-course-panel role="region" aria-labelledby="view-flashcards-title"><h2 id="view-flashcards-title">Flashcards</h2><p lang="en">Answer before revealing each card.</p><p>Ces cartes ne mesurent pas une maîtrise notée.</p><div data-card-section="s-l-essentiel"><h3><a href="#s-l-essentiel">Revoir la section du cours</a></h3><div class="reader-cards"><details class="reader-card" id="B-way4aktj2d5m-01"><summary lang="en">What does ValidatorInterface::validate() return for invalid input?</summary><p lang="en">A ConstraintViolationListInterface containing violations, not false.</p><p lang="fr">Le résultat est une liste de violations. Une donnée invalide ne produit pas un bool.</p><a href="course-CRS-way4aktj2d5m.html#out-OUT-0enczxzp4pwq">Revoir le passage précis</a></details></div></div><div data-card-section="s-le-schema"><h3><a href="#s-le-schema">Revoir la section du cours</a></h3><div class="reader-cards"><details class="reader-card" id="B-way4aktj2d5m-02"><summary lang="en">Where does validation place failures after applying constraints?</summary><p lang="en">In the returned violation list; an empty list means no selected constraint failed.</p><p lang="fr">Les constraints sélectionnées sont évaluées. Une liste vide signifie zéro violation.</p><a href="course-CRS-way4aktj2d5m.html#out-OUT-0enczxzp4pwq">Revoir le passage précis</a></details></div></div><div data-card-section="s-le-fil-rouge-un-user-et-son-adresse"><h3><a href="#s-le-fil-rouge-un-user-et-son-adresse">Revoir la section du cours</a></h3><div class="reader-cards"><details class="reader-card" id="B-way4aktj2d5m-03"><summary lang="en">What does address.city identify in a nested validation failure?</summary><p lang="en">The city property of the nested address, not the root object&#x27;s city.</p><p lang="fr">Le property path localise la donnée. La descente conserve le chemin de l&#x27;object imbriqué.</p><a href="course-CRS-way4aktj2d5m.html#out-OUT-wsh6jsvs5s6f">Revoir le passage précis</a></details></div></div><div data-card-section="s-les-trois-manieres-de-valider"><h3><a href="#s-les-trois-manieres-de-valider">Revoir la section du cours</a></h3><div class="reader-cards"><details class="reader-card" id="B-way4aktj2d5m-04"><summary lang="en">How can a proposed email be validated before assigning it to a User?</summary><p lang="en">Call validatePropertyValue(User::class, &#x27;email&#x27;, $candidate).</p><p lang="fr">La valeur candidate peut être testée avant affectation. Les metadata de la property fournissent les constraints.</p><a href="course-CRS-way4aktj2d5m.html#out-OUT-wsh6jsvs5s6f">Revoir le passage précis</a></details></div></div><div data-card-section="s-ce-qu-il-retourne-une-liste-jamais-un-bool"><h3><a href="#s-ce-qu-il-retourne-une-liste-jamais-un-bool">Revoir la section du cours</a></h3><div class="reader-cards"><details class="reader-card" id="B-way4aktj2d5m-05"><summary lang="en">Why is if ($violations) not a valid success test?</summary><p lang="en">The list is an object and is truthy even when empty; test count($violations) instead.</p><p lang="fr">Une liste vide reste un object. count() distingue succès et violations.</p><a href="course-CRS-way4aktj2d5m.html#out-OUT-0enczxzp4pwq">Revoir le passage précis</a></details></div></div><div data-card-section="s-donnee-invalide-ou-configuration-invalide"><h3><a href="#s-donnee-invalide-ou-configuration-invalide">Revoir la section du cours</a></h3><div class="reader-cards"><details class="reader-card" id="B-way4aktj2d5m-06"><summary lang="en">How does an invalid Email value differ from constructing Length without bounds?</summary><p lang="en">Invalid data yields a violation; a Length constraint without min or max throws MissingOptionsException.</p><p lang="fr">Séparer donnée invalide et configuration invalide. Une constraint incohérente peut lever une exception.</p><a href="course-CRS-way4aktj2d5m.html#out-OUT-wsh6jsvs5s6f">Revoir le passage précis</a></details></div></div><div data-card-section="s-deux-raccourcis-de-validation"><h3><a href="#s-deux-raccourcis-de-validation">Revoir la section du cours</a></h3><div class="reader-cards"><details class="reader-card" id="B-way4aktj2d5m-07"><summary lang="en">Which Validation helper returns a boolean rather than throwing for invalid input?</summary><p lang="en">createIsValidCallable(); createCallable() throws ValidationFailedException instead.</p><p lang="fr">createIsValidCallable() produit un bool. createCallable() conserve la valeur valide et lève sinon.</p><a href="course-CRS-way4aktj2d5m.html#out-OUT-0enczxzp4pwq">Revoir le passage précis</a></details></div></div><div data-card-section="s-pieges-d-examen"><h3><a href="#s-pieges-d-examen">Revoir la section du cours</a></h3><div class="reader-cards"><details class="reader-card" id="B-way4aktj2d5m-08"><summary lang="en">Why can an attribute-decorated object pass a standalone validator unexpectedly?</summary><p lang="en">createValidator() does not enable attribute mapping; use createValidatorBuilder()-&gt;enableAttributeMapping()-&gt;getValidator().</p><p lang="fr">Le standalone demande un mapping explicite. Le service du framework se configure séparément.</p><a href="course-CRS-way4aktj2d5m.html#out-OUT-wsh6jsvs5s6f">Revoir le passage précis</a></details></div></div><div data-card-section="s-fiche-express"><h3><a href="#s-fiche-express">Revoir la section du cours</a></h3><div class="reader-cards"><details class="reader-card" id="B-way4aktj2d5m-09"><summary lang="en">What happens when validation requests a group used by no constraint?</summary><p lang="en">It returns an empty violation list without reporting the unknown group.</p><p lang="fr">Un group inconnu ne sélectionne rien. Une liste vide ne prouve pas que toutes les règles ont été exécutées.</p><a href="course-CRS-way4aktj2d5m.html#out-OUT-0enczxzp4pwq">Revoir le passage précis</a></details></div></div><aside class="checkpoint"><h2>Rappel d’un cours antérieur</h2><p>Avant de poursuivre : Form type extensions.</p><details class="corpus-correction"><summary lang="en">Does a TextType extension reach EmailType and IntegerType equally?</summary><p lang="en">No. It reaches EmailType descendants, not sibling IntegerType.</p><p>La propagation suit l&#x27;inheritance des form types. FormType n&#x27;est pas la racine des boutons.</p><a href="course-CRS-k4ejsd624d1p.html#out-OUT-9d91memjprhk">Relire la correction dans le cours antérieur</a></details></aside></div><div id="view-quiz" data-course-panel role="region" aria-labelledby="view-quiz-title"><h2 id="view-quiz-title">Quiz</h2><p id="course-quiz-status" role="status">Quiz interactif non chargé. Démarrez après chargement de la banque locale.</p><div id="course-quiz-controls" class="assessment-main" hidden><div id="course-quiz-assessment-controls" hidden><select id="course-quiz-assessment-mode" aria-label="Mode du quiz" hidden><option value="learning">Entraînement</option></select><p id="course-quiz-training-scope"></p><button id="course-quiz-start-assessment" type="button" lang="en">Start practice</button><button id="course-quiz-finish-assessment" type="button" lang="en" hidden>End session</button></div><p id="course-quiz-assessment-error" role="alert"></p><p id="course-quiz-assessment-timer" hidden></p><p id="course-quiz-session-progress" role="status"></p><div id="course-quiz-assessment-app" tabindex="-1"></div><nav id="course-quiz-session-navigation" aria-label="Questions du cours"></nav><div id="course-quiz-learning-overview" aria-live="polite"></div></div><div id="course-quiz-native"><p>Sans JavaScript ou si le chargement échoue : aucune tentative notée. Les <a href="#view-flashcards">flashcards du cours</a> restent disponibles.</p><details class="course-quiz-fallback" data-question-id="L-way4aktj2d5m-base-v1"><summary lang="en">What does ValidatorInterface::validate() return for invalid input?</summary><p>Correction de consultation — non notée.</p><p>Le résultat est une liste de violations. Une donnée invalide ne produit pas un bool.</p><ul><li><strong lang="en">Correct: A ConstraintViolationListInterface containing violations.</strong><p>Le résultat est une liste de violations. Une donnée invalide ne produit pas un bool.</p></li><li><strong lang="en">Distractor: The boolean false when at least one constraint fails.</strong><p>Le résultat reste une liste ; son contenu exprime l&#x27;échec.</p></li><li><strong lang="en">Distractor: A single ConstraintViolation for the first failure only.</strong><p>La liste peut contenir plusieurs violations, pas seulement la première.</p></li></ul><a href="course-CRS-way4aktj2d5m.html#out-OUT-0enczxzp4pwq">Relire le passage exact</a></details></div></div></div></div><details class="transfer-panel"><summary>Sauvegarde et transfert de progression</summary><p id="reading-status" role="status">Sans JavaScript : lecture libre ; progression non enregistrée.</p><p><a href="assessment.html#overview-title">Lecture, réussites immédiates et différées</a></p><p>Transfert manuel — aucune synchronisation automatique</p><p id="persistence-status" role="status"></p><button type="button" class="secondary" id="export-progress">Exporter ma progression</button><label for="import-progress">Choisir un JSON pour fusionner ma progression (sans remplacement)</label><input type="file" id="import-progress" accept="application/json,.json"><p id="transfer-status" role="status"></p></details></main><footer class="site-footer"><a href="catalogue.html">Catalogue</a> <a href="sources.html">Sources et attribution</a> <a href="#contenu">Haut de page</a></footer></body></html>
