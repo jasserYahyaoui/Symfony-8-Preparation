@@ -56,15 +56,19 @@
     });
   }
 
-  function selectLearning(bank, { courseId = null, moduleId = null } = {}, random = Math.random) {
+  function eligibleLearning(bank, { courseId = null, moduleId = null } = {}) {
     requireThat(!courseId || !moduleId, 'Choose a course or module, not both');
     if (courseId !== null) requireThat(bank.courses.some(course => course.id === courseId), 'Unknown course');
     const members = bank.courses.filter(course => course.lot === moduleId);
     if (moduleId !== null) requireThat(members.length, 'Unknown module');
     const ids = new Set(members.map(course => course.id));
-    const eligible = bank.items.filter(question => question.pool === 'learning' &&
+    return bank.items.filter(question => question.pool === 'learning' &&
       (courseId === null || question.course_id === courseId) &&
       (moduleId === null || ids.has(question.course_id)));
+  }
+
+  function selectLearning(bank, context = {}, random = Math.random) {
+    const eligible = eligibleLearning(bank, context);
     requireThat(eligible.length, 'No eligible learning questions for this context');
     return interleave(shuffled(eligible, random), bank.topics, 14);
   }
@@ -139,8 +143,7 @@
     });
   }
 
-  function selectReview(bank, state, now = Date.now(), limit = 14) {
-    requireThat(Number.isInteger(limit) && limit >= 1 && limit <= 14, 'Review bound is 1–14');
+  function reviewCandidates(bank, state, now) {
     const progress = courseProgress(bank, state, now)
       .filter(course => course.due_at !== null && course.due_at <= now)
       .sort((a, b) => Number(b.fragile) - Number(a.fragile) || a.due_at - b.due_at || a.course_id.localeCompare(b.course_id, 'en'));
@@ -150,7 +153,22 @@
       return eligible.find(question => question.id !== previous?.id && question.variant_group !== previous?.variant_group) || eligible[0];
     }).filter(Boolean);
     const topicOrder = [...new Set(progress.map(course => course.topic)), ...bank.topics.filter(topic => !progress.some(course => course.topic === topic))];
-    return interleave(candidates, topicOrder, limit);
+    return interleave(candidates, topicOrder, candidates.length);
+  }
+
+  function selectReview(bank, state, now = Date.now(), limit = 14) {
+    requireThat(Number.isInteger(limit) && limit >= 1 && limit <= 14, 'Review bound is 1–14');
+    return reviewCandidates(bank, state, now).slice(0, limit);
+  }
+
+  function questionCounts(bank, state, mode, context = {}, now = Date.now()) {
+    requireThat(State.MODES.includes(mode), 'Unknown assessment mode');
+    const eligible = mode === 'review' ? reviewCandidates(bank, state, now).length
+      : mode === 'simulation' ? bank.items.filter(q => q.pool === 'validation').length
+        : eligibleLearning(bank, mode === 'learning' ? context : {}).length;
+    const selected = mode === 'simulation' ? 75
+      : mode === 'diagnostic' ? bank.topics.length : Math.min(eligible, 14);
+    return { eligible, selected };
   }
 
   function responseControl(question) {
@@ -497,6 +515,10 @@
       renderPresentation();
       rootNode.replaceChildren();
       navigation.replaceChildren();
+      const counts = questionCounts(bank, store.snapshot(), requested, { courseId, moduleId });
+      const availability = `${counts.eligible} eligible now`;
+      progress.setAttribute('lang', 'en');
+      progress.setAttribute('class', 'quiz-progress');
       const foreign = store.snapshot().sessions.filter(session => session.ended_at === null && !belongsToContext(session));
       for (const session of foreign) {
         const destination = sessionDestination(bank, session);
@@ -508,8 +530,9 @@
       }
       if (!activeId) {
         rootNode.append(element(document, 'p', 'Start this session when ready. The exam timer starts only when you start an exam.', { lang: 'en' }));
-        finishButton.hidden = true; startButton.disabled = false;
-        progress.textContent = ''; timer.hidden = true;
+        finishButton.hidden = true; startButton.disabled = counts.selected === 0;
+        progress.textContent = `${availability} · ${counts.selected} question${counts.selected === 1 ? '' : 's'} per session.`;
+        timer.hidden = true;
         renderProgress();
         return;
       }
@@ -517,7 +540,8 @@
       startButton.disabled = !session.can_correct;
       finishButton.hidden = session.can_correct;
       if (session.can_correct) {
-        stopTimer(); progress.textContent = '';
+        stopTimer();
+        progress.textContent = `Session ended · ${session.questions.length} question${session.questions.length === 1 ? '' : 's'} · ${session.answers.length} recorded · ${availability}.`;
         timer.hidden = session.mode !== 'simulation';
         timer.textContent = 'Session ended.';
         renderSummary(); return;
@@ -525,7 +549,7 @@
       position = Math.min(position, session.questions.length - 1);
       const question = session.questions[position];
       const saved = session.answers.find(item => item.question_id === question.id);
-      progress.textContent = `Question ${position + 1} / ${session.questions.length} · ${session.answers.length} recorded.`;
+      progress.textContent = `Question ${position + 1} / ${session.questions.length} · ${session.answers.length} recorded. ${availability}.`;
       rootNode.append(element(document, 'h2', question.topic, { lang: 'en' }));
       const form = element(document, 'form');
       const fieldset = element(document, 'fieldset');
@@ -612,12 +636,12 @@
     }));
     window.addEventListener('pagehide', stopTimer);
     window.addEventListener('pageshow', () => {
-      renderPresentation();
       if (activeId) {
         stopTimer(); updateTimer();
         const session = engine.view(activeId);
         if (!session.can_correct && session.mode === 'simulation') interval = window.setInterval(safe(updateTimer), 1000);
       }
+      render();
     });
     resume();
     if (options.local) {
@@ -649,7 +673,7 @@
   const mountModule = (document, window, options) => mountContext(document, window, options);
 
   const api = { DELAY_MS, ERROR_DELAY_MS, SIMULATION_MS, score, shuffled, interleave, selectDiagnostic,
-    selectLearning, selectSimulation, selectReview, courseProgress, responseControl, sessionContext, sessionDestination,
+    selectLearning, selectSimulation, selectReview, questionCounts, courseProgress, responseControl, sessionContext, sessionDestination,
     publicQuestion, summarize, createEngine, renderCorrection, mount, mountCourse, mountModule };
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
   else {

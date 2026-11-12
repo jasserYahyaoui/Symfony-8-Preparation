@@ -80,7 +80,7 @@
 }
 .assessment-main :focus-visible,
 .assessment-header :focus-visible {
-  outline: 3px solid #d97706;
+  outline: 3px solid var(--accent);
   outline-offset: 3px;
 }
 .assessment-main [role="alert"]:not(:empty) {
@@ -97,6 +97,19 @@
 .assessment-main p,
 .assessment-main li {
   overflow-wrap: anywhere;
+}
+.quiz-progress:not(:empty) {
+  position: sticky;
+  top: var(--reader-offset, .5rem);
+  z-index: 2;
+  margin-block: .5rem;
+  padding: .5rem .75rem;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  font-size: .9rem;
+}
+@media print {
+  .quiz-progress:not(:empty) { position: static; }
 }
 #session-navigation {
   display: flex;

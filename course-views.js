@@ -4,10 +4,18 @@
   function mountMenus(document, window) {
     const menus = [...document.querySelectorAll('.lot-course-menu, .course-section-disclosure')];
     if (!menus.length) return;
-    const desktop = window.matchMedia('(min-width: 900px)');
-    const update = () => menus.forEach(menu => { menu.open = desktop.matches; });
-    update();
-    desktop.addEventListener('change', update);
+    for (const menu of menus) {
+      const desktop = window.matchMedia(menu.classList.contains('lot-course-menu')
+        ? '(min-width: 900px)' : '(min-width: 1280px)');
+      const update = () => { menu.open = desktop.matches; };
+      update();
+      desktop.addEventListener('change', update);
+      menu.addEventListener('click', event => {
+        const link = event.target.closest('a[href]');
+        if (link && !desktop.matches && !event.ctrlKey && !event.metaKey &&
+            !event.shiftKey && !event.altKey && !(event.button > 0)) menu.open = false;
+      });
+    }
   }
 
   function mount(document, window) {
@@ -18,6 +26,19 @@
     const panels = tabs.map(tab => document.getElementById(tab.getAttribute('href').slice(1)));
     if (panels.length !== 3 || panels.some(panel => !panel)) throw new Error('Vues du cours incomplètes');
     const toc = document.querySelector('.course-section-menu');
+    const disclosure = toc?.querySelector('.course-section-disclosure');
+    const wide = window.matchMedia('(min-width: 1280px)');
+    const layout = document.querySelector('.course-layout');
+    function updateOffset() {
+      if (!layout || !toc) return;
+      const offset = wide.matches ? 16 : toc.getBoundingClientRect().height + 24;
+      layout.style.setProperty('--reader-offset', `${offset}px`);
+    }
+    if (window.ResizeObserver && toc) {
+      new window.ResizeObserver(updateOffset).observe(toc);
+      wide.addEventListener('change', updateOffset);
+      updateOffset();
+    }
     let passageHash = '#view-course';
     let highlighted = null;
 
@@ -28,7 +49,6 @@
         tabs[index].setAttribute('aria-selected', String(active));
         tabs[index].setAttribute('tabindex', active ? '0' : '-1');
       });
-      if (toc) toc.hidden = panel !== panels[0];
     }
 
     function revealHash() {
@@ -38,6 +58,10 @@
       const target = document.getElementById(id);
       const panel = target?.closest('[data-course-panel]') || panels[0];
       select(panel);
+      if (target?.closest('[data-course-panel]') && disclosure && !wide.matches) {
+        disclosure.open = false;
+        updateOffset();
+      }
       if (panel === panels[0]) passageHash = target ? window.location.hash : '#view-course';
       if (highlighted) highlighted.classList.remove('course-target');
       if (!target) return;
@@ -45,10 +69,16 @@
         if (ancestor.tagName === 'DETAILS') ancestor.open = true;
       }
       if (target.tagName === 'DETAILS') target.open = true;
-      let passage = target;
+      // These stable groups each contain one original recall, not a new card.
+      let passage = target.getAttribute('data-card-section')
+        ? target.querySelector('details[data-checkpoint]') || target
+        : target.id === 'cards-previous'
+          ? target.querySelector('.corpus-correction') || target
+          : target;
       while (passage.classList.contains('outcome-anchor') && passage.nextElementSibling) {
         passage = passage.nextElementSibling;
       }
+      if (passage.tagName === 'DETAILS') passage.open = true;
       highlighted = passage;
       passage.classList.add('course-target');
       passage.setAttribute('tabindex', '-1');
@@ -67,8 +97,8 @@
         event.preventDefault();
         const hash = index === 0 ? passageHash : tab.getAttribute('href');
         if (window.location.hash !== hash) window.history.pushState(null, '', hash);
-        select(panels[index]);
-        tab.focus();
+        revealHash();
+        tab.focus({ preventScroll: true });
       });
       tab.addEventListener('keydown', event => {
         const next = {

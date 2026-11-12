@@ -95,20 +95,25 @@
     if (!status) return null;
     const resume = document.getElementById('guide-resume');
     const steps = [...document.querySelectorAll('[data-step]')];
-    if (!resume || steps.map((node) => node.id).join('|') !== STEP_IDS.join('|')) {
+    const recallOrder = STEP_IDS.filter(id => !id.startsWith('rappel-'))
+      .concat(['rappel-2', 'rappel-4']);
+    const actualOrder = steps.map(node => node.id).join('|');
+    if (!resume || ![STEP_IDS.join('|'), recallOrder.join('|')].includes(actualOrder)) {
       throw new Error('Guide structure does not match the ordered pilot steps');
     }
     const progress = store ? sharedProgress(store) : createProgress(getStorage);
     function render() {
       const state = progress.snapshot();
-      const label = steps[state.position - 1].dataset.step;
+      // Persisted step IDs keep their old meaning; display order follows the page.
+      const position = steps.findIndex(node => node.id === state.step) + 1;
+      const label = steps[position - 1].dataset.step;
       const messages = {
         ready: 'Reprise locale disponible dès la prochaine étape visitée.',
         saved: 'Repère enregistré sur cet appareil.',
         unavailable: 'Progression non enregistrée : stockage indisponible ou refusé. Continuez avec les liens.',
         corrupt: 'Progression non enregistrée : repère stocké corrompu ou invalide ignoré. Navigation libre.'
       };
-      status.textContent = `Repère ${state.position} / ${state.total} (checkpoints inclus) · ${label}. ${messages[state.persistence]}`;
+      status.textContent = `Repère ${position} / ${state.total} (checkpoints inclus) · ${label}. ${messages[state.persistence]}`;
       resume.setAttribute('href', `#${state.step}`);
       resume.textContent = `Reprendre · ${label}`;
     }

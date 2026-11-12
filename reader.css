@@ -16,6 +16,11 @@
 .section-digest { border-left: 2px solid #b7cfc2; padding: .25rem 0 .25rem 1rem; margin-block: 1rem; }
 .reader-card { margin-block: .75rem; border: 1px solid #ccd9d1; border-radius: .5rem; padding: 1rem; }
 .reader-card summary { cursor: pointer; font-weight: 700; }
+.pitfall-explanation { margin-block: .75rem; border: 1px solid #b5916d; border-radius: .4rem; padding: .5rem .85rem; background: #fffaf0; }
+.pitfall-explanation > summary { min-height: 44px; padding-block: .4rem; cursor: pointer; font-weight: 650; }
+.pitfall-list { margin-block: 1rem; padding-inline-start: 1.25rem; list-style-type: disc; }
+.pitfall-list > .pitfall-item { padding-inline-start: .2rem; }
+.pitfall-list > .pitfall-item > .pitfall-explanation { margin-block: 0; }
 .corpus-reader pre { max-width: 100%; padding: 1rem; background: #f0f3f1; color: var(--ink); font-size: 1rem; }
 .corpus-reader code { overflow-wrap: anywhere; }
 .corpus-reader pre code { overflow-wrap: anywhere; }
@@ -89,6 +94,13 @@ svg[id^="s8-diagram-"] { font-family: sans-serif; font-size: 16px; }
 .course-actions { display: flex; flex-wrap: wrap; }
 .course-actions [aria-selected="true"] { background: var(--accent-light); border-bottom: 3px solid var(--accent); }
 .course-actions a { padding: .35rem .7rem; }
+.course-section-menu { position: sticky; top: .5rem; z-index: 3; background: var(--paper); border: 1px solid var(--line); max-height: 55vh; max-height: 55dvh; overflow-y: auto; overscroll-behavior: contain; }
+.course-section-menu .course-actions { position: sticky; top: 0; z-index: 1; background: var(--paper); margin: 0; gap: .25rem; padding: .25rem; }
+.course-section-menu .local-quiz-count { font-size: .8rem; margin: 0; padding: .25rem .75rem; }
+.course-layout { --reader-offset: 12rem; }
+body[data-module-id] .course-layout { --reader-offset: 7rem; }
+body[data-module-id] .lot-course-menu { position: sticky; top: .5rem; z-index: 3; background: var(--paper); max-height: 55vh; max-height: 55dvh; overflow-y: auto; }
+.course-content [id], .course-content .course-target { scroll-margin-top: calc(var(--reader-offset) + 5rem); }
 .course-content { font-size: 1rem; line-height: 1.7; }
 .course-content p { margin-block: 1rem 1.4rem; }
 .course-target { outline: 3px solid #a85810; outline-offset: 5px; background: #fff3d4; scroll-margin-top: 2rem; }
@@ -107,17 +119,23 @@ svg[id^="s8-diagram-"] { font-family: sans-serif; font-size: 16px; }
 .course-actions a:focus-visible, .lot-course-menu :is(a, summary):focus-visible,
 .course-section-menu :is(a, summary):focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
 @media (min-width: 900px) {
+  body[data-module-id] .course-layout { --reader-offset: 1rem; }
   .course-layout { grid-template-columns: minmax(12rem, 16rem) minmax(0, 47rem); gap: 1rem 1.5rem; }
   .course-layout > .lot-course-menu { grid-column: 1; grid-row: 1 / span 2; }
+  .course-layout > .lot-course-menu, body[data-module-id] .lot-course-menu { position: sticky; top: 1rem; max-height: calc(100vh - 2rem); max-height: calc(100dvh - 2rem); overflow-y: auto; overscroll-behavior: contain; }
   .course-layout > .course-section-menu { grid-column: 2; grid-row: 1; }
   .course-layout > .course-content { grid-column: 2; grid-row: 2; }
-  .course-layout:has(> .course-section-menu[hidden]) > .course-content { grid-row: 1; }
   .course-layout:not(:has(> .course-section-menu)) > .course-content { grid-row: 1; }
 }
 @media (min-width: 1280px) {
   .course-layout { grid-template-columns: minmax(12rem, 16rem) minmax(0, 47rem) minmax(10rem, 12rem); }
-  .course-layout > .course-section-menu { grid-column: 3; grid-row: 1; }
+  .course-layout { --reader-offset: 1rem; }
+  .course-layout > .course-section-menu { grid-column: 3; grid-row: 1; top: 1rem; max-height: calc(100vh - 2rem); max-height: calc(100dvh - 2rem); }
   .course-layout > .course-content { grid-column: 2; grid-row: 1; }
+}
+@media print {
+  .course-layout { display: block; }
+  .course-section-menu, .course-layout > .lot-course-menu, body[data-module-id] .lot-course-menu { position: static; max-height: none; overflow: visible; }
 }
 .revision-notes { max-width: 47rem; min-width: 0; }
 .module-index { display: block; }
