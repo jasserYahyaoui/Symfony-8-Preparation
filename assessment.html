@@ -7,6 +7,8 @@
   <title>Quiz et révision — Symfony 8.0</title>
   <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="assessment.css">
+  <script src="fixed-exams-data.js" defer></script>
+  <script src="fixed-exams.js" defer></script>
   <script src="learning-state.js" defer></script>
   <script src="assessment.js" defer></script>
 <link rel="stylesheet" href="syntax-highlight.css"><script src="prism-syntax.js" defer></script><script src="syntax-highlight.js" defer></script></head>
@@ -20,7 +22,7 @@
     <h1 id="assessment-title">Quiz et révision</h1>
     <p id="assessment-intro" lang="en">Choose a diagnostic to find topics to revisit, review your mistakes, or practise with a timed exam.</p>
     <p><a href="catalogue.html">Cours et pratique par module</a> · <a href="examens.html">Présentation des examens blancs</a> · <a href="assessment.html?mode=diagnostic">Diagnostic</a> · <a href="assessment.html?mode=review">Révision</a></p>
-    <p>Questions originales d’entraînement, pas un examen officiel ni un dump. Les examens blancs proposent chacun 75 questions parmi les 232 disponibles et peuvent se recouper. Répartition locale pratique : parts de cours et d’objectifs pédagogiques à égalité, sans poids officiels. Aucun seuil officiel, score prédit ou indicateur de préparation.</p>
+    <p>Questions originales d’entraînement, pas un examen officiel ni un dump. Trois examens fixes de 75 questions parmi les 232 disponibles : 220 questions distinctes et 5 questions communes aux examens 1 et 3. Répartition pédagogique du site, non officielle. <a href="examens.html">Comptes par domaine, méthode et sources officielles</a>. Aucun seuil officiel, score prédit ou indicateur de préparation.</p>
     <section id="assessment-controls" aria-labelledby="start-title" hidden>
       <h2 id="start-title">Session</h2>
       <p id="training-scope"></p>
@@ -41,6 +43,10 @@
       <noscript><p lang="en">Read the <a href="catalogue.html">courses</a> or the <a href="jour-j.html#native-review">exam-day revision notes</a> without JavaScript.</p></noscript>
     </section>
     <nav id="session-navigation" aria-label="Question navigation"></nav>
+    <section aria-labelledby="history-title">
+      <h2 id="history-title">Historique des sessions</h2>
+      <ul id="session-history"></ul>
+    </section>
     <section aria-labelledby="overview-title">
       <h2 id="overview-title">Repères observés, pas maîtrise de l’examen</h2>
       <p>Une erreur ou une réussite incertaine revient après 10 minutes ; une réussite confiante après au moins 24 heures. Une réussite différée exige une réponse exacte et confiante sur un autre groupe de questions du même cours, sans erreur intermédiaire. Les simulations n’en produisent pas. Ce repère ne prouve pas tous les objectifs du cours.</p>
