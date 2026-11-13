@@ -31,8 +31,7 @@
 .corpus-reader .align-center { text-align: center; }
 .corpus-reader .align-left { text-align: left; }
 .outcome-anchor { display: block; scroll-margin-top: 2rem; }
-:target { scroll-margin-top: 2rem; outline: 3px solid #a85810; outline-offset: 5px; }
-.outcome-anchor:target + *, .teaching-section:has(> .outcome-anchor:target) { background: #fff3d4; }
+:target { scroll-margin-top: 2rem; outline: none; }
 :focus-visible { outline: 3px solid #165c50; outline-offset: 4px; }
 .admonition, .enrichment { padding: 1rem; margin-block: 1rem; border-left: .25rem solid #4964a5; background: #eef2fa; }
 .admonition-title { font-weight: 700; }
@@ -106,7 +105,23 @@ body[data-module-id] .lot-course-menu { position: static; background: var(--pape
 .course-content [id], .course-content .course-target { scroll-margin-top: calc(var(--reader-offset) + 5rem); }
 .course-content { font-size: 1rem; line-height: 1.7; }
 .course-content p { margin-block: 1rem 1.4rem; }
-.course-target { outline: 3px solid #a85810; outline-offset: 5px; background: #fff3d4; scroll-margin-top: 2rem; }
+.course-target { scroll-margin-top: 2rem; }
+.course-content :is(:target, .course-target):not(a, button, input, select, textarea, summary) { outline: none; }
+:is(h1, h2, h3, h4, h5, h6, summary):is(:target, .course-target),
+:is(section, aside, div, details):is(:target, .course-target) > :is(h1, h2, h3, h4, h5, h6, summary):first-child,
+.teaching-section:has(> .outcome-anchor:target) > h2:first-of-type {
+  padding-inline-start: .7rem;
+  border-radius: .25rem;
+  background: linear-gradient(90deg, var(--accent-light), transparent);
+  box-shadow: inset 3px 0 0 var(--accent);
+}
+@media (forced-colors: active) {
+  .course-content :is(:target, .course-target):not(.outcome-anchor),
+  .teaching-section:has(> .outcome-anchor:target) > h2:first-of-type {
+    outline: 2px solid Highlight;
+    outline-offset: 4px;
+  }
+}
 [data-course-panel] { min-width: 0; }
 .course-content pre, .course-content table { max-width: 100%; }
 .course-content .assessment-main { padding: 0; }
@@ -123,18 +138,18 @@ body[data-module-id] .lot-course-menu { position: static; background: var(--pape
 .course-section-menu :is(a, summary):focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
 @media (min-width: 900px) {
   body:has(.course-layout) { --page-content-width: 68.5rem; }
+  .course-layout > .lot-course-menu, body[data-module-id] .lot-course-menu { position: sticky; top: 1rem; max-height: calc(100dvh - 2rem); overflow-y: auto; overscroll-behavior: contain; scrollbar-width: thin; }
   .course-layout { grid-template-columns: minmax(18rem, 20rem) minmax(0, 47rem); gap: 1rem 1.5rem; }
   .course-layout > .lot-course-menu { grid-column: 1; grid-row: 1 / span 2; }
   .course-layout > .course-section-menu { grid-column: 2; grid-row: 1; }
   .course-layout > .course-content { grid-column: 2; grid-row: 2; }
   .course-layout:not(:has(> .course-section-menu)) > .course-content { grid-row: 1; }
 }
-/* A third column is useful only when both the article and an expanded menu fit.
-   Long section lists use the document scroll, never a second right-hand scroller. */
+/* Keep the right menu anchored only when it fits beside the article. */
 @media (min-width: 1600px) {
   body:has(.course-layout > .course-section-menu) { --page-content-width: 90rem; }
   .course-layout:has(> .course-section-menu) { grid-template-columns: minmax(18rem, 20rem) minmax(0, 47rem) minmax(18rem, 20rem); }
-  .course-layout > .course-section-menu { grid-column: 3; grid-row: 1; }
+  .course-layout > .course-section-menu { grid-column: 3; grid-row: 1; position: sticky; top: 1rem; max-height: calc(100dvh - 2rem); overflow-y: auto; overscroll-behavior: contain; scrollbar-width: thin; }
   .course-layout > .course-content { grid-column: 2; grid-row: 1; }
 }
 /* Leave most of a short viewport for answers rather than sticky progress text. */
@@ -143,7 +158,7 @@ body[data-module-id] .lot-course-menu { position: static; background: var(--pape
 }
 @media print {
   .course-layout { display: block; }
-  .course-section-menu, .course-layout > .lot-course-menu, body[data-module-id] .lot-course-menu { position: static; max-height: none; overflow: visible; }
+  .course-layout > .course-section-menu, .course-layout > .lot-course-menu, body[data-module-id] .lot-course-menu { position: static; max-height: none; overflow: visible; }
 }
 .revision-notes { max-width: 47rem; min-width: 0; }
 .module-index { display: block; }
