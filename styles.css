@@ -9,6 +9,7 @@
   --line: #cbd6cf;
   --warm: #e3edb2;
   --page-gutter: clamp(.75rem, 2vw, 2.5rem);
+  --page-content-width: 72rem;
   font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   color: var(--ink);
   background: var(--paper);
@@ -17,6 +18,7 @@
 }
 * { box-sizing: border-box; }
 body { margin: 0; overflow-wrap: anywhere; }
+body:has(> .assessment-main) { --page-content-width: 47rem; }
 .home-intro { padding-block: 3rem 2rem; max-width: 72ch; }
 .home-intro h1 { font-size: clamp(2.2rem, 5vw, 3.8rem); }
 .activity-links a { text-decoration: underline; font-size: 1rem; }
@@ -38,7 +40,7 @@ p { margin: .8em 0 1.1em; }
 em { font-style: normal; color: var(--accent); }
 .skip { position: absolute; top: -100px; left: 1rem; z-index: 10; padding: .8rem 1rem; background: var(--ink); color: white; }
 .skip:focus { top: .5rem; }
-.site-header { width: 100%; padding: 1.5rem var(--page-gutter); display: flex; justify-content: space-between; align-items: center; gap: 1.5rem; border-bottom: 1px solid var(--line); }
+.site-header { width: 100%; max-width: calc(var(--page-content-width) + 2 * var(--page-gutter)); margin-inline: auto; padding: 1.5rem var(--page-gutter); display: flex; justify-content: space-between; align-items: center; gap: 1.5rem; border-bottom: 1px solid var(--line); }
 .brand { display: inline-flex; gap: .5rem; align-items: center; text-decoration: none; font-weight: 750; font-size: 1.2rem; color: var(--ink); min-width: 0; }
 .brand-mark { display: inline-grid; place-items: center; background: var(--ink); color: var(--warm); width: 2.4rem; height: 2.4rem; border-radius: .7rem; font-size: 1rem; }
 .brand-dot { color: var(--accent); margin-left: -.5rem; }
@@ -46,7 +48,7 @@ nav { display: flex; gap: .4rem 1.1rem; flex-wrap: wrap; }
 nav a { font-size: 1rem; padding: .45rem .1rem; color: var(--muted); text-decoration: none; min-height: 44px; }
 nav a[aria-current="page"] { color: var(--ink); font-weight: 750; border-bottom: 2px solid var(--accent); }
 nav a:hover { color: var(--accent); text-decoration: underline; }
-main { width: 100%; min-width: 0; margin: 0; padding: 0 var(--page-gutter); }
+main { width: 100%; max-width: calc(var(--page-content-width) + 2 * var(--page-gutter)); min-width: 0; margin: 0 auto; padding: 0 var(--page-gutter); }
 .hero { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); gap: 5rem; align-items: center; padding: 4.8rem 0 5rem; }
 .eyebrow { font-size: .72rem; font-weight: 750; letter-spacing: .14em; color: var(--accent); margin: 0 0 1rem; }
 .status-dot { display: inline-block; width: .5rem; height: .5rem; border-radius: 50%; background: var(--accent); margin-right: .4rem; }
@@ -150,7 +152,7 @@ input[type="radio"] { flex-shrink: 0; width: 1.1rem; height: 1.1rem; margin-top:
 .feedback { font-weight: 650; font-size: .9rem; }
 .quiz-score { padding: 1rem 1.3rem; border: 1px solid var(--accent); background: var(--accent-light); border-radius: .5rem; }
 .source-list li { margin-bottom: .8rem; overflow-wrap: anywhere; }
-.site-footer { width: 100%; margin-top: 2rem; padding: 1.6rem var(--page-gutter) 2rem; border-top: 1px solid var(--line); display: flex; align-items: center; flex-wrap: wrap; gap: .5rem 1.5rem; font-size: .78rem; color: var(--muted); }
+.site-footer { width: 100%; max-width: calc(var(--page-content-width) + 2 * var(--page-gutter)); margin-inline: auto; margin-top: 2rem; padding: 1.6rem var(--page-gutter) 2rem; border-top: 1px solid var(--line); display: flex; align-items: center; flex-wrap: wrap; gap: .5rem 1.5rem; font-size: .78rem; color: var(--muted); }
 .site-footer p { margin: 0; flex: 1 1 300px; }
 @media (max-width: 850px) {
   .site-header { flex-direction: column; align-items: start; gap: .7rem; }

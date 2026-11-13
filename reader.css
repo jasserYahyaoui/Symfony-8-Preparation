@@ -1,4 +1,4 @@
-.corpus-reader { width: 100%; max-width: none; margin: 0; padding: 2rem var(--page-gutter); font-size: 1rem; line-height: 1.7; min-width: 0; }
+.corpus-reader { padding: 2rem var(--page-gutter); font-size: 1rem; line-height: 1.7; min-width: 0; }
 .corpus-reader > p { max-width: 47rem; }
 .corpus-reader p { margin-block: 1rem 1.4rem; }
 .corpus-reader h1 { font-size: clamp(2rem, 4vw, 3.2rem); overflow-wrap: anywhere; }
@@ -89,6 +89,7 @@ svg[id^="s8-diagram-"] { font-family: sans-serif; font-size: 16px; }
 }
 
 /* A single native disclosure per menu keeps links available without scripts. */
+body:has(.course-layout) { --page-content-width: 47rem; }
 .course-layout { display: grid; grid-template-columns: minmax(0, 1fr); gap: 1rem; align-items: start; width: 100%; }
 .course-layout > * { min-width: 0; }
 .course-content { width: 100%; max-width: 47rem; min-width: 0; justify-self: start; }
@@ -101,8 +102,7 @@ svg[id^="s8-diagram-"] { font-family: sans-serif; font-size: 16px; }
 .course-section-menu .course-actions { display: flex; margin: 0; gap: .25rem; padding: .25rem; }
 .course-section-menu .local-quiz-count { font-size: .8rem; margin: 0; padding: .25rem .75rem; }
 .course-layout { --reader-offset: 1rem; }
-body[data-module-id] .course-layout { --reader-offset: 7rem; }
-body[data-module-id] .lot-course-menu { position: sticky; top: .5rem; z-index: 3; background: var(--paper); max-height: 55vh; max-height: 55dvh; overflow-y: auto; }
+body[data-module-id] .lot-course-menu { position: static; background: var(--paper); max-height: none; overflow: visible; }
 .course-content [id], .course-content .course-target { scroll-margin-top: calc(var(--reader-offset) + 5rem); }
 .course-content { font-size: 1rem; line-height: 1.7; }
 .course-content p { margin-block: 1rem 1.4rem; }
@@ -122,10 +122,9 @@ body[data-module-id] .lot-course-menu { position: sticky; top: .5rem; z-index: 3
 .course-actions a:focus-visible, .lot-course-menu :is(a, summary):focus-visible,
 .course-section-menu :is(a, summary):focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
 @media (min-width: 900px) {
-  body[data-module-id] .course-layout { --reader-offset: 1rem; }
-  .course-layout { grid-template-columns: minmax(12rem, 16rem) minmax(0, 47rem); gap: 1rem 1.5rem; }
+  body:has(.course-layout) { --page-content-width: 68.5rem; }
+  .course-layout { grid-template-columns: minmax(18rem, 20rem) minmax(0, 47rem); gap: 1rem 1.5rem; }
   .course-layout > .lot-course-menu { grid-column: 1; grid-row: 1 / span 2; }
-  .course-layout > .lot-course-menu, body[data-module-id] .lot-course-menu { position: sticky; top: 1rem; max-height: calc(100vh - 2rem); max-height: calc(100dvh - 2rem); overflow-y: auto; overscroll-behavior: contain; }
   .course-layout > .course-section-menu { grid-column: 2; grid-row: 1; }
   .course-layout > .course-content { grid-column: 2; grid-row: 2; }
   .course-layout:not(:has(> .course-section-menu)) > .course-content { grid-row: 1; }
@@ -133,7 +132,8 @@ body[data-module-id] .lot-course-menu { position: sticky; top: .5rem; z-index: 3
 /* A third column is useful only when both the article and an expanded menu fit.
    Long section lists use the document scroll, never a second right-hand scroller. */
 @media (min-width: 1600px) {
-  .course-layout:has(> .course-section-menu) { grid-template-columns: minmax(12rem, 16rem) minmax(0, 47rem) minmax(18rem, 20rem); }
+  body:has(.course-layout > .course-section-menu) { --page-content-width: 90rem; }
+  .course-layout:has(> .course-section-menu) { grid-template-columns: minmax(18rem, 20rem) minmax(0, 47rem) minmax(18rem, 20rem); }
   .course-layout > .course-section-menu { grid-column: 3; grid-row: 1; }
   .course-layout > .course-content { grid-column: 2; grid-row: 1; }
 }
