@@ -95,7 +95,7 @@ svg[id^="s8-diagram-"] { font-family: sans-serif; font-size: 16px; }
 .course-actions [aria-selected="true"] { background: var(--accent-light); border-bottom: 3px solid var(--accent); }
 .course-actions a { padding: .35rem .7rem; }
 .course-section-menu { position: sticky; top: .5rem; z-index: 3; background: var(--paper); border: 1px solid var(--line); max-height: 55vh; max-height: 55dvh; overflow-y: auto; overscroll-behavior: contain; }
-.course-section-menu .course-actions { position: sticky; top: 0; z-index: 1; background: var(--paper); margin: 0; gap: .25rem; padding: .25rem; }
+.course-section-menu .course-actions { display: flex; position: sticky; top: 0; z-index: 1; background: var(--paper); margin: 0; gap: .25rem; padding: .25rem; }
 .course-section-menu .local-quiz-count { font-size: .8rem; margin: 0; padding: .25rem .75rem; }
 .course-layout { --reader-offset: 12rem; }
 body[data-module-id] .course-layout { --reader-offset: 7rem; }
@@ -132,6 +132,14 @@ body[data-module-id] .lot-course-menu { position: sticky; top: .5rem; z-index: 3
   .course-layout { --reader-offset: 1rem; }
   .course-layout > .course-section-menu { grid-column: 3; grid-row: 1; top: 1rem; max-height: calc(100vh - 2rem); max-height: calc(100dvh - 2rem); }
   .course-layout > .course-content { grid-column: 2; grid-row: 1; }
+}
+/* Keep the tabs persistent, but leave most of a short viewport for answers.
+   The progress text remains in the reading flow instead of stacking above them. */
+@media (max-height: 500px) {
+  .course-content .quiz-progress:not(:empty) { position: static; }
+}
+@media (max-height: 500px) and (max-width: 1279px) {
+  .course-layout > .course-section-menu { max-height: 35vh; max-height: 35dvh; }
 }
 @media print {
   .course-layout { display: block; }

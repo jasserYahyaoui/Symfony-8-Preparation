@@ -29,10 +29,52 @@
     const disclosure = toc?.querySelector('.course-section-disclosure');
     const wide = window.matchMedia('(min-width: 1280px)');
     const layout = document.querySelector('.course-layout');
+    const content = document.querySelector('.course-content');
+    function keepFocusVisible() {
+      const target = document.activeElement;
+      if (!content?.contains(target) ||
+          !target.matches('input, button, select, textarea, a[href], summary') ||
+          target.matches(':disabled')) return;
+      const rect = target.getBoundingClientRect();
+      if (!rect.width || !rect.height) return;
+      let top = 0;
+      for (const overlay of [toc, ...content.querySelectorAll('.quiz-progress')]) {
+        if (!overlay) continue;
+        const style = window.getComputedStyle(overlay);
+        if (style.position !== 'sticky') continue;
+        const box = overlay.getBoundingClientRect();
+        // The wide-screen menu is beside the content, not an obstruction.
+        if (box.left < rect.right && box.right > rect.left &&
+            box.top <= Math.max(rect.top, parseFloat(style.top) || 0) + 1 &&
+            box.bottom > 0) top = Math.max(top, box.bottom);
+      }
+      if (rect.top < top + 8) window.scrollBy({ top: rect.top - top - 8, behavior: 'instant' });
+      else if (rect.bottom > window.innerHeight) {
+        // Reflow can move an unchanged focus below the viewport. For a control
+        // taller than the available space, keep its top clear rather than oscillate.
+        const delta = Math.min(rect.bottom - window.innerHeight + 8, rect.top - top - 8);
+        if (delta > 0) window.scrollBy({ top: delta, behavior: 'instant' });
+      }
+    }
+    // Native focus scrolling does not account for overlapping sticky siblings.
+    // Measure after it runs; never replace the native radio/tab keyboard behavior.
+    let focusScheduled = false;
+    const scheduleFocus = () => {
+      if (focusScheduled) return;
+      focusScheduled = true;
+      window.requestAnimationFrame(() => {
+        focusScheduled = false;
+        keepFocusVisible();
+      });
+    };
+    content?.addEventListener('focusin', scheduleFocus);
+    window.addEventListener('resize', updateOffset);
     function updateOffset() {
-      if (!layout || !toc) return;
-      const offset = wide.matches ? 16 : toc.getBoundingClientRect().height + 24;
-      layout.style.setProperty('--reader-offset', `${offset}px`);
+      if (layout && toc) {
+        const offset = wide.matches ? 16 : toc.getBoundingClientRect().height + 24;
+        layout.style.setProperty('--reader-offset', `${offset}px`);
+      }
+      scheduleFocus();
     }
     if (window.ResizeObserver && toc) {
       new window.ResizeObserver(updateOffset).observe(toc);
