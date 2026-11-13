@@ -6,7 +6,8 @@
   const SIMULATION_MS = 90 * 60 * 1000;
   const clone = value => JSON.parse(JSON.stringify(value));
   const requireThat = (condition, message) => { if (!condition) throw new RangeError(message); };
-  const idFactory = () => `s-${root.crypto.randomUUID()}`;
+  // Keep the full UUID entropy while leaving room for the longest question ID.
+  const idFactory = () => `s-${root.crypto.randomUUID().replaceAll('-', '')}`;
 
   function score(question, answer) {
     if (!answer) return { correct: false, status: 'unanswered', fragile: true };
@@ -73,26 +74,54 @@
     return interleave(shuffled(eligible, random), bank.topics, 14);
   }
 
+  function simulationAllocation(bank) {
+    // LOCAL PRACTICE heuristic, not official examination weights:
+    // 50% course share + 50% actual curriculum outcome share, largest remainder.
+    const totalOutcomes = bank.courses.reduce((sum, course) => sum + course.outcomes.length, 0);
+    requireThat(bank.courses.length > 0 && totalOutcomes > 0 &&
+      new Set(bank.topics).size === bank.topics.length, 'Invalid curriculum allocation');
+    const rows = bank.topics.map((topic, index) => {
+      const courses = bank.courses.filter(course => course.topic === topic);
+      const outcomes = courses.reduce((sum, course) => sum + course.outcomes.length, 0);
+      requireThat(courses.length && outcomes, `Missing curriculum for ${topic}`);
+      const weight = 0.5 * (courses.length / bank.courses.length + outcomes / totalOutcomes);
+      const raw = 75 * weight;
+      return { topic, index, courses: courses.length, outcomes, weight, raw,
+        seats: Math.max(1, Math.floor(raw)),
+        capacity: bank.items.filter(q => q.pool === 'validation' && q.topic === topic).length };
+    });
+    const remaining = 75 - rows.reduce((sum, row) => sum + row.seats, 0);
+    requireThat(remaining >= 0 && remaining <= rows.length, 'Infeasible minimum domain allocation');
+    const ranked = [...rows].sort((a, b) => (b.raw - b.seats) - (a.raw - a.seats) || a.index - b.index);
+    for (const row of ranked.slice(0, remaining)) row.seats++;
+    for (const row of rows) requireThat(row.capacity >= row.seats,
+      `Validation capacity for ${row.topic}: ${row.capacity} available, ${row.seats} required`);
+    return rows;
+  }
+
   function selectSimulation(bank, random = Math.random) {
     const eligible = bank.items.filter(question => question.pool === 'validation');
-    requireThat(new Set(eligible.map(question => question.id)).size >= 75, '75 unique validation questions required');
-    // Include every domain and all available response formats, without claiming
-    // these local balancing choices are official examination weights.
+    requireThat(eligible.length >= 75 &&
+      new Set(eligible.map(question => question.id)).size === eligible.length,
+    '75 unique validation questions required; duplicate IDs forbidden');
+    requireThat(eligible.every(q => bank.topics.includes(q.topic)), 'Unknown validation domain');
+    const allocation = simulationAllocation(bank);
     const candidates = shuffled(eligible, random);
-    const mandatory = new Map();
-    for (const topic of bank.topics) {
-      const question = candidates.find(item => item.topic === topic);
-      requireThat(question, `No validation item for ${topic}`);
-      mandatory.set(question.id, question);
-    }
+    const selected = allocation.flatMap(row =>
+      candidates.filter(q => q.topic === row.topic).slice(0, row.seats));
+    // Preserve all available historical response formats by intra-domain swaps.
+    // Never distort the curriculum allocation or silently drop a format.
     for (const format of ['single', 'multiple', 'true_false', 'predict']) {
-      const question = candidates.find(item => item.format === format);
-      if (question) mandatory.set(question.id, question);
+      if (selected.some(q => q.format === format) || !candidates.some(q => q.format === format)) continue;
+      let replaced = false;
+      for (const candidate of candidates.filter(q => q.format === format)) {
+        const index = selected.findIndex(q => q.topic === candidate.topic &&
+          selected.filter(other => other.format === q.format).length > 1);
+        if (index !== -1) { selected[index] = candidate; replaced = true; break; }
+      }
+      requireThat(replaced, `Response format cannot fit domain allocation: ${format}`);
     }
-    for (const question of interleave(candidates, bank.topics, candidates.length)) {
-      if (mandatory.size < 75) mandatory.set(question.id, question);
-    }
-    return shuffled([...mandatory.values()], random);
+    return shuffled(selected, random);
   }
 
   function courseProgress(bank, state, now = Date.now()) {
@@ -223,6 +252,7 @@
     // Active sessions never render facts, target links, correctness or rationale.
     return {
       id: question.id, topic: question.topic, format: question.format, response_control: responseControl(question),
+      ...(question.scenario ? { scenario: question.scenario } : {}),
       prompt_en: question.prompt_en, ...(question.code ? {
         code: question.code,
         code_language: question.code_language || question.execution?.language || 'text',
@@ -366,6 +396,14 @@
     host.append(list, element(document, 'h4', 'À revoir dans le cours', { lang: 'fr' }),
       element(document, 'a', outcome ? `${course.title} — ${outcome.text || outcome.heading}`
         : question.prompt_en, { href: question.target_href }));
+    let passage = 0;
+    for (const href of question.remediation_hrefs || []) {
+      if (href !== question.target_href) {
+        host.append(element(document, 'p', ''),
+          element(document, 'a', `Relire la correction précise — passage ${++passage}`,
+            { href }));
+      }
+    }
   }
 
   async function mount(document, window, options = {}) {
@@ -482,6 +520,7 @@
       for (const correction of summary.corrections) {
         const details = element(document, 'details');
         details.append(element(document, 'summary', correction.question.prompt_en, { lang: 'en' }));
+        if (correction.question.scenario) details.append(element(document, 'p', correction.question.scenario, { lang: 'en' }));
         if (correction.question.code) details.append(element(document, 'pre', correction.question.code, {
           lang: 'en', 'data-language': publicQuestion(correction.question).code_language,
         }));
@@ -554,6 +593,7 @@
       const form = element(document, 'form');
       const fieldset = element(document, 'fieldset');
       fieldset.append(element(document, 'legend', question.prompt_en, { lang: 'en' }));
+      if (question.scenario) fieldset.append(element(document, 'p', question.scenario, { lang: 'en' }));
       fieldset.append(element(document, 'p', question.response_control.instruction, { lang: 'en' }));
       if (question.code) fieldset.append(element(document, 'pre', question.code, {
         lang: 'en', 'data-language': question.code_language,
@@ -673,7 +713,7 @@
   const mountModule = (document, window, options) => mountContext(document, window, options);
 
   const api = { DELAY_MS, ERROR_DELAY_MS, SIMULATION_MS, score, shuffled, interleave, selectDiagnostic,
-    selectLearning, selectSimulation, selectReview, questionCounts, courseProgress, responseControl, sessionContext, sessionDestination,
+    selectLearning, selectSimulation, simulationAllocation, selectReview, questionCounts, courseProgress, responseControl, sessionContext, sessionDestination,
     publicQuestion, summarize, createEngine, renderCorrection, mount, mountCourse, mountModule };
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
   else {

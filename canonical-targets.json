@@ -1503,7 +1503,7 @@
         },
         {
           "id": "OUT-mfs1nh45d7sr",
-          "text": "Énoncer l'indisponibilité des informations de sécurité sur une page 404",
+          "text": "Distinguer une 404 de routage pouvant précéder le firewall d'une 404 levée après son passage, sans déduire une déconnexion du seul statut",
           "heading": "Deux pièges",
           "href": "course-CRS-p57qsnnfpd2a.html#out-OUT-mfs1nh45d7sr"
         }
@@ -5225,7 +5225,7 @@
         },
         {
           "id": "OUT-ybad6g99v4cm",
-          "text": "Savoir que l'envoi est asynchrone par défaut dès que Messenger est présent",
+          "text": "Distinguer l'intégration de Mailer à Messenger du routage de SendEmailMessage vers un transport asynchrone, nécessaire pour différer l'envoi.",
           "heading": "Envoyer",
           "href": "course-CRS-h304h6ht87kc.html#out-OUT-ybad6g99v4cm"
         },
@@ -5345,7 +5345,7 @@
         },
         {
           "id": "OUT-6h3qaavna2z8",
-          "text": "Interroger la lisibilité ou l'inscriptibilité d'un path sans l'exécuter",
+          "text": "Interroger la lisibilité ou l'inscriptibilité d'un path et expliquer quels getters peuvent être exécutés pendant cette vérification.",
           "heading": "Demander avant d'appeler",
           "href": "course-CRS-5vz7w1ny9shd.html#out-OUT-6h3qaavna2z8"
         },
