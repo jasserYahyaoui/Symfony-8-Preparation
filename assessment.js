@@ -1,6 +1,7 @@
 (function (root) {
   'use strict';
   const State = typeof module !== 'undefined' && module.exports ? require('./learning-state.js') : root.LearningState;
+  const Fixed = typeof module !== 'undefined' && module.exports ? require('./fixed-exams.js') : root.FixedExams;
   const DELAY_MS = 24 * 60 * 60 * 1000;
   const ERROR_DELAY_MS = 10 * 60 * 1000;
   const SIMULATION_MS = 90 * 60 * 1000;
@@ -234,7 +235,12 @@
     return { mode: 'learning', courseId: null, moduleId: modules.length === 1 ? modules[0] : null };
   }
 
-  function sessionDestination(bank, session) {
+  function sessionDestination(bank, session, exams = null) {
+    if (session.exam_id !== undefined) {
+      const exam = (exams || Fixed.defaultCatalog(bank)).validateSession(session);
+      return { href: `assessment.html?mode=simulation&exam=${exam.id}&version=${exam.version}`,
+        label: `Examen blanc ${exam.number} — Symfony 8.0` };
+    }
     const context = sessionContext(bank, session);
     if (context.courseId) {
       const course = bank.courses.find(item => item.id === context.courseId);
@@ -278,7 +284,7 @@
   }
 
   // Session facade composes a storage repository, a clock and a selection strategy.
-  function createEngine({ bank, store, now = Date.now, random = Math.random, makeId = idFactory }) {
+  function createEngine({ bank, store, exams = null, now = Date.now, random = Math.random, makeId = idFactory }) {
     function find(sessionId) {
       const session = store.snapshot().sessions.find(item => item.id === sessionId);
       requireThat(session, 'Unknown session');
@@ -303,16 +309,20 @@
       return session.ended_at === null && session.deadline !== null && now() >= session.deadline
         ? finish(sessionId) : session;
     }
-    function start(mode, { courseId = null, moduleId = null } = {}) {
+    function start(mode, { courseId = null, moduleId = null, examId = null, examVersion = null } = {}) {
       requireThat(State.MODES.includes(mode), 'Unknown assessment mode');
       requireThat(mode === 'learning' || (courseId === null && moduleId === null),
         'Context filters are only available in learning mode');
+      const fixed = examId !== null || examVersion !== null;
+      requireThat(!fixed || (mode === 'simulation' && exams), 'Fixed exams require a simulation catalogue');
+      const exam = fixed ? exams.get(examId, examVersion) : null;
       // Only resuming the proper context may expire a session and expose corrections.
       requireThat(!store.snapshot().sessions.some(session => session.ended_at === null),
         'Resume or finish the existing session first');
       const selectors = {
         diagnostic: () => selectDiagnostic(bank, random),
-        simulation: () => selectSimulation(bank, random),
+        simulation: () => exam ? exam.question_ids.map(id => bank.items.find(question => question.id === id))
+          : selectSimulation(bank, random),
         review: () => selectReview(bank, store.snapshot(), now()),
         learning: () => selectLearning(bank, { courseId, moduleId }, random),
       };
@@ -322,7 +332,9 @@
       const at = now();
       questions.forEach(responseControl);
       const prefix = courseId ? `course:${courseId}:` : moduleId ? `module:${moduleId}:` : '';
-      const session = { id: prefix + makeId(), mode, question_ids: questions.map(question => question.id),
+      const session = { id: prefix + makeId(), mode,
+        ...(exam ? { exam_id: exam.id, exam_version: exam.version } : {}),
+        question_ids: questions.map(question => question.id),
         started_at: at, deadline: mode === 'simulation' ? at + SIMULATION_MS : null,
         ended_at: null, end_reason: null, answers: [] };
       requireThat(!store.snapshot().sessions.some(item => item.id === session.id), 'Duplicate session ID');
@@ -350,9 +362,16 @@
     }
     function view(sessionId) {
       const session = tick(sessionId);
+      const exam = session.exam_id === undefined ? null : exams?.validateSession(session);
+      requireThat(session.exam_id === undefined || exam, 'Fixed exam catalogue unavailable');
       return { ...session,
         remaining_ms: session.deadline === null ? null : Math.max(0, session.deadline - now()),
-        questions: session.question_ids.map(key => publicQuestion(bank.items.find(item => item.id === key))),
+        questions: session.question_ids.map(key => {
+          const question = publicQuestion(bank.items.find(item => item.id === key));
+          if (exam) question.choices = exam.choice_ids[key].map(id =>
+            question.choices.find(choice => choice.id === id));
+          return question;
+        }),
         can_correct: session.ended_at !== null
       };
     }
@@ -416,14 +435,14 @@
       if (!response.ok) throw new Error(`Bank unavailable (${response.status})`);
       bank = await response.json();
     }
-    const store = options.store || State.createStore({ bank, getStorage: () => window.localStorage });
-    const warnings = options.store ? [] : store.migrateLegacy();
-    if (warnings.length) errorNode.textContent = warnings.join(' ');
-    const engine = createEngine({ bank, store });
     const parameters = new URLSearchParams(window.location.search);
     const modeSelect = document.getElementById('assessment-mode');
     const requested = options.local ? 'learning' : (parameters.get('mode') || 'review');
     requireThat(State.MODES.includes(requested), 'Session indisponible : choisissez Diagnostic, Révision ou un examen blanc.');
+    const hasExam = parameters.has('exam') || parameters.has('version');
+    requireThat(!hasExam || (!options.local && requested === 'simulation' &&
+      parameters.getAll('exam').length === 1 && parameters.getAll('version').length === 1 &&
+      /^[1-9]\d*$/.test(parameters.get('version'))), 'Identité d’examen invalide.');
     requireThat(options.local || (!parameters.has('module') && !parameters.has('lot')),
       'Pour vous entraîner sur un module, ouvrez son Quiz depuis le parcours.');
     modeSelect.value = requested;
@@ -439,6 +458,12 @@
       requireThat(bank.items.some(item => item.pool === 'learning' && item.course_id === courseId),
         'Aucune question d’entraînement disponible pour ce cours.');
     }
+    const exams = options.exams || Fixed.defaultCatalog(bank);
+    const selectedExam = hasExam ? exams.get(parameters.get('exam'), Number(parameters.get('version'))) : null;
+    const store = options.store || State.createStore({ bank, exams, getStorage: () => window.localStorage });
+    const warnings = options.store ? [] : store.migrateLegacy();
+    if (warnings.length) errorNode.textContent = warnings.join(' ');
+    const engine = createEngine({ bank, store, exams });
     const moduleCourses = new Set(bank.courses.filter(item => item.lot === moduleId).map(item => item.id));
     const inContext = item => moduleId !== null ? moduleCourses.has(item.course_id) : item.course_id === courseId;
     const scoped = options.local || courseId !== null;
@@ -451,7 +476,7 @@
           learning: 'Entraînement — révisez plusieurs cours avec une explication après chaque réponse.' }[requested];
     function renderPresentation() {
       if (options.local) return;
-      const title = course ? `Entraînement — ${course.title}` : {
+      const title = selectedExam ? `Examen blanc ${selectedExam.number} — Symfony 8.0` : course ? `Entraînement — ${course.title}` : {
         simulation: 'Examen blanc Symfony 8.0', diagnostic: 'Diagnostic',
         review: 'Révision', learning: 'Entraînement',
       }[requested];
@@ -478,7 +503,8 @@
     const belongsToContext = session => {
       const context = sessionContext(bank, session);
       return context.mode === requested && context.courseId === (courseId ?? null) &&
-        context.moduleId === moduleId;
+        context.moduleId === moduleId && (session.exam_id ?? null) === (selectedExam?.id ?? null) &&
+        (session.exam_version ?? null) === (selectedExam?.version ?? null);
     };
     let updating = false;
 
@@ -506,6 +532,8 @@
       const summary = engine.results(activeId);
       const counts = summary.counts;
       rootNode.append(element(document, 'h2', 'Session ended — corrections available', { lang: 'en' }));
+      if (selectedExam) rootNode.append(element(document, 'p',
+        `Examen blanc ${selectedExam.number} — version ${selectedExam.version}`));
       rootNode.append(element(document, 'p',
         `${counts.correct} correct · ${counts.incorrect} incorrect · ${counts.unknown} unknown · ${counts.unanswered} unanswered / ${counts.total}.`,
         { lang: 'en' }));
@@ -554,13 +582,25 @@
       renderPresentation();
       rootNode.replaceChildren();
       navigation.replaceChildren();
+      const history = document.getElementById('session-history');
+      if (history) {
+        history.replaceChildren();
+        for (const session of store.snapshot().sessions.slice().sort((a, b) => b.started_at - a.started_at)) {
+          const destination = sessionDestination(bank, session, exams);
+          const href = session.mode === 'simulation'
+            ? `${destination.href}&session=${encodeURIComponent(session.id)}` : destination.href;
+          const row = element(document, 'li');
+          row.append(element(document, 'a', `${destination.label} — ${session.ended_at === null ? 'en cours' : 'terminée'} — ${new Date(session.started_at).toLocaleString('fr-FR')}`, { href }));
+          history.append(row);
+        }
+      }
       const counts = questionCounts(bank, store.snapshot(), requested, { courseId, moduleId });
       const availability = `${counts.eligible} eligible now`;
       progress.setAttribute('lang', 'en');
       progress.setAttribute('class', 'quiz-progress');
       const foreign = store.snapshot().sessions.filter(session => session.ended_at === null && !belongsToContext(session));
       for (const session of foreign) {
-        const destination = sessionDestination(bank, session);
+        const destination = sessionDestination(bank, session, exams);
         const notice = element(document, 'div', null, { role: 'status' });
         notice.append(element(document, 'p',
           'Une autre session est en cours. Reprenez-la et terminez-la avant de démarrer ici ; aucune réponse ne sera écrasée.'),
@@ -569,14 +609,17 @@
       }
       if (!activeId) {
         rootNode.append(element(document, 'p', 'Start this session when ready. The exam timer starts only when you start an exam.', { lang: 'en' }));
-        finishButton.hidden = true; startButton.disabled = counts.selected === 0;
+        finishButton.hidden = true;
+        startButton.disabled = counts.selected === 0 || (requested === 'simulation' && !selectedExam);
+        if (requested === 'simulation' && !selectedExam) rootNode.append(element(document, 'a',
+          'Choisir un examen blanc numéroté', { href: 'examens.html' }));
         progress.textContent = `${availability} · ${counts.selected} question${counts.selected === 1 ? '' : 's'} per session.`;
         timer.hidden = true;
         renderProgress();
         return;
       }
       const session = engine.view(activeId);
-      startButton.disabled = !session.can_correct;
+      startButton.disabled = !session.can_correct || (requested === 'simulation' && !selectedExam);
       finishButton.hidden = session.can_correct;
       if (session.can_correct) {
         stopTimer();
@@ -649,7 +692,11 @@
       sessions.filter(session => session.ended_at === null).forEach(session => engine.tick(session.id));
       const pending = store.snapshot().sessions.filter(session => belongsToContext(session) && session.ended_at === null);
       const hasForeign = store.snapshot().sessions.some(session => session.ended_at === null && !belongsToContext(session));
-      const latest = pending.sort((a, b) => b.started_at - a.started_at)[0] ||
+      const requestedSession = parameters.get('session');
+      const historical = requestedSession ? store.snapshot().sessions.find(session =>
+        session.id === requestedSession && belongsToContext(session)) : null;
+      requireThat(!requestedSession || historical, 'Session historique inconnue pour cet examen.');
+      const latest = pending.sort((a, b) => b.started_at - a.started_at)[0] || historical ||
         (!hasForeign && store.snapshot().sessions.filter(belongsToContext).sort((a, b) => b.started_at - a.started_at)[0]);
       activeId = latest?.id || null;
       position = latest ? Math.max(0, latest.question_ids.findIndex(key => !latest.answers.some(answer => answer.question_id === key))) : 0;
@@ -662,9 +709,13 @@
     if (!options.local) State.mountTransfer(document, store, resume);
     startButton.addEventListener('click', safe(() => {
       const mode = requested;
+      requireThat(!store.snapshot().sessions.some(session => session.ended_at === null),
+        'Resume or finish the existing session first');
+      requireThat(mode !== 'simulation' || selectedExam, 'Choisissez un examen blanc numéroté depuis le catalogue.');
       const session = engine.start(mode, {
         courseId: mode === 'learning' ? (courseId ?? null) : null,
         moduleId: mode === 'learning' ? moduleId : null,
+        examId: selectedExam?.id ?? null, examVersion: selectedExam?.version ?? null,
       });
       activeId = session.id; position = 0; render(); focus();
       stopTimer();

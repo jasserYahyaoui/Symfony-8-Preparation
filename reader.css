@@ -36,7 +36,10 @@
 :focus-visible { outline: 3px solid #165c50; outline-offset: 4px; }
 .admonition, .enrichment { padding: 1rem; margin-block: 1rem; border-left: .25rem solid #4964a5; background: #eef2fa; }
 .admonition-title { font-weight: 700; }
-.teaching-label { display: inline-block; width: fit-content; max-width: 100%; padding: .2rem .65rem; margin-block: .35rem .75rem; border: 1px solid currentColor; border-radius: 999px; font-size: .78rem; line-height: 1.5; font-weight: 650; }
+.teaching-label { display: inline-flex; align-items: center; gap: .4rem; width: fit-content; max-width: 100%; padding: .2rem .65rem; margin-block: .35rem .75rem; border: 1px solid currentColor; border-radius: 999px; font-size: .78rem; line-height: 1.5; font-weight: 650; }
+.teaching-label strong { min-width: 0; overflow-wrap: anywhere; }
+.pedagogy-icon { display: inline-block; width: 1.35em; height: 1.35em; flex: 0 0 1.35em; vertical-align: -.25em; }
+.signal .pedagogy-icon { margin-inline-end: .25em; }
 .teaching-label.essential { border-color: #165c50; background: #e7f2eb; }
 .teaching-label.pitfall { color: #7b3512; border-color: #7b3512; background: #fff3d4; }
 .teaching-label.nuance { border-color: #594479; background: #f0eafa; }
@@ -94,10 +97,10 @@ svg[id^="s8-diagram-"] { font-family: sans-serif; font-size: 16px; }
 .course-actions { display: flex; flex-wrap: wrap; }
 .course-actions [aria-selected="true"] { background: var(--accent-light); border-bottom: 3px solid var(--accent); }
 .course-actions a { padding: .35rem .7rem; }
-.course-section-menu { position: sticky; top: .5rem; z-index: 3; background: var(--paper); border: 1px solid var(--line); max-height: 55vh; max-height: 55dvh; overflow-y: auto; overscroll-behavior: contain; }
-.course-section-menu .course-actions { display: flex; position: sticky; top: 0; z-index: 1; background: var(--paper); margin: 0; gap: .25rem; padding: .25rem; }
+.course-section-menu { position: static; width: 100%; max-width: 47rem; background: var(--paper); border: 1px solid var(--line); max-height: none; overflow: visible; }
+.course-section-menu .course-actions { display: flex; margin: 0; gap: .25rem; padding: .25rem; }
 .course-section-menu .local-quiz-count { font-size: .8rem; margin: 0; padding: .25rem .75rem; }
-.course-layout { --reader-offset: 12rem; }
+.course-layout { --reader-offset: 1rem; }
 body[data-module-id] .course-layout { --reader-offset: 7rem; }
 body[data-module-id] .lot-course-menu { position: sticky; top: .5rem; z-index: 3; background: var(--paper); max-height: 55vh; max-height: 55dvh; overflow-y: auto; }
 .course-content [id], .course-content .course-target { scroll-margin-top: calc(var(--reader-offset) + 5rem); }
@@ -127,19 +130,16 @@ body[data-module-id] .lot-course-menu { position: sticky; top: .5rem; z-index: 3
   .course-layout > .course-content { grid-column: 2; grid-row: 2; }
   .course-layout:not(:has(> .course-section-menu)) > .course-content { grid-row: 1; }
 }
-@media (min-width: 1280px) {
-  .course-layout { grid-template-columns: minmax(12rem, 16rem) minmax(0, 47rem) minmax(10rem, 12rem); }
-  .course-layout { --reader-offset: 1rem; }
-  .course-layout > .course-section-menu { grid-column: 3; grid-row: 1; top: 1rem; max-height: calc(100vh - 2rem); max-height: calc(100dvh - 2rem); }
+/* A third column is useful only when both the article and an expanded menu fit.
+   Long section lists use the document scroll, never a second right-hand scroller. */
+@media (min-width: 1600px) {
+  .course-layout:has(> .course-section-menu) { grid-template-columns: minmax(12rem, 16rem) minmax(0, 47rem) minmax(18rem, 20rem); }
+  .course-layout > .course-section-menu { grid-column: 3; grid-row: 1; }
   .course-layout > .course-content { grid-column: 2; grid-row: 1; }
 }
-/* Keep the tabs persistent, but leave most of a short viewport for answers.
-   The progress text remains in the reading flow instead of stacking above them. */
+/* Leave most of a short viewport for answers rather than sticky progress text. */
 @media (max-height: 500px) {
   .course-content .quiz-progress:not(:empty) { position: static; }
-}
-@media (max-height: 500px) and (max-width: 1279px) {
-  .course-layout > .course-section-menu { max-height: 35vh; max-height: 35dvh; }
 }
 @media print {
   .course-layout { display: block; }

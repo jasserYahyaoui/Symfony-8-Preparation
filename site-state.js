@@ -1,10 +1,12 @@
 (function (root) {
   'use strict';
+  const Fixed = typeof module !== 'undefined' && module.exports ? require('./fixed-exams.js') : root.FixedExams;
   async function mount(document, window) {
     const response = await window.fetch('assessment-bank.json');
     if (!response.ok) throw new Error('Catalogue de progression indisponible');
     const bank = await response.json();
-    const store = window.LearningState.createStore({ bank, getStorage: () => window.localStorage });
+    const exams = Fixed.defaultCatalog(bank);
+    const store = window.LearningState.createStore({ bank, exams, getStorage: () => window.localStorage });
     const warnings = store.migrateLegacy();
     const reader = window.S8Reader.mountReader(document, window, window.S8_READING_CATALOG, store);
     const guide = window.S8Guide.mountGuide(document, window, () => window.localStorage, store);

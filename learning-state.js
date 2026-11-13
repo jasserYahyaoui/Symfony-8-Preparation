@@ -36,7 +36,7 @@
 
   // A small repository facade: storage and the canonical catalogue are injected,
   // so persistence failures never prevent an in-memory/manual-backup workflow.
-  function createValidator(bank) {
+  function createValidator(bank, exams = null) {
     const questions = new Map(bank.items.map(question => [question.id, question]));
     const topics = new Set(bank.topics);
     const cards = new Set(bank.jour_j.map(card => card.id));
@@ -54,7 +54,13 @@
       return question;
     }
     function session(value) {
-      shape(value, ['id', 'mode', 'question_ids', 'started_at', 'deadline', 'ended_at', 'end_reason', 'answers']);
+      const fixed = Object.hasOwn(value, 'exam_id') || Object.hasOwn(value, 'exam_version');
+      shape(value, ['id', 'mode', 'question_ids', 'started_at', 'deadline', 'ended_at', 'end_reason', 'answers',
+        ...(fixed ? ['exam_id', 'exam_version'] : [])]);
+      if (fixed) {
+        check(exams, 'Fixed exam catalogue unavailable');
+        exams.validateSession(value);
+      }
       check(id(value.id) && MODES.includes(value.mode) && stamp(value.started_at), 'Invalid session');
       list(value.question_ids, 75);
       check(value.question_ids.length > 0, 'Empty session');
@@ -183,6 +189,7 @@
   function mergeStates(left, right, validate) {
     function mergeSession(a, b) {
       check(a.mode === b.mode && a.started_at === b.started_at && a.deadline === b.deadline &&
+        a.exam_id === b.exam_id && a.exam_version === b.exam_version &&
         canonical(a.question_ids) === canonical(b.question_ids), 'Conflicting session identity');
       const ended = [a, b].filter(item => item.ended_at !== null)
         .sort((x, y) => x.ended_at - y.ended_at || canonical(x).localeCompare(canonical(y), 'en'))[0];
@@ -210,8 +217,8 @@
     });
   }
 
-  function createStore({ bank, getStorage = () => root.localStorage, now = Date.now, onStatus = () => {} }) {
-    const { validate, hrefs } = createValidator(bank);
+  function createStore({ bank, exams = null, getStorage = () => root.localStorage, now = Date.now, onStatus = () => {} }) {
+    const { validate, hrefs } = createValidator(bank, exams);
     let state = emptyState();
     let storage = null;
     let persistence = 'memory';

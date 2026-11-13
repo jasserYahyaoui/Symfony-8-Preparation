@@ -1,5 +1,6 @@
 (function (root) {
   'use strict';
+  const Fixed = typeof module !== 'undefined' && module.exports ? require('./fixed-exams.js') : root.FixedExams;
   const State = typeof module !== 'undefined' && module.exports ? require('./learning-state.js') : root.LearningState;
   const Assessment = typeof module !== 'undefined' && module.exports ? require('./assessment.js') : root.Assessment;
   const CHECKLIST = Object.freeze([
@@ -110,12 +111,13 @@
     const response = await window.fetch('assessment-bank.json');
     if (!response.ok) throw new Error(`Bank unavailable (${response.status})`);
     const bank = await response.json();
-    const store = State.createStore({ bank, getStorage: () => window.localStorage });
+    const exams = Fixed.defaultCatalog(bank);
+    const store = State.createStore({ bank, exams, getStorage: () => window.localStorage });
     const warnings = store.migrateLegacy();
     const error = document.getElementById('jour-j-error');
     if (warnings.length) error.textContent = warnings.join(' ');
     const journey = createJourney({ bank, store });
-    const engine = Assessment.createEngine({ bank, store });
+    const engine = Assessment.createEngine({ bank, store, exams });
     const status = document.getElementById('jour-j-status');
     function safe(action) {
       return () => {

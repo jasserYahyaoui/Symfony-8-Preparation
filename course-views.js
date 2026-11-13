@@ -6,8 +6,14 @@
     if (!menus.length) return;
     for (const menu of menus) {
       const desktop = window.matchMedia(menu.classList.contains('lot-course-menu')
-        ? '(min-width: 900px)' : '(min-width: 1280px)');
-      const update = () => { menu.open = desktop.matches; };
+        ? '(min-width: 900px)' : '(min-width: 1600px)');
+      const update = () => {
+        // A breakpoint must not leave keyboard focus inside a closed disclosure.
+        if (!desktop.matches && menu.open && menu.contains(document.activeElement)) {
+          menu.querySelector('summary').focus();
+        }
+        menu.open = desktop.matches;
+      };
       update();
       desktop.addEventListener('change', update);
       menu.addEventListener('click', event => {
@@ -27,7 +33,7 @@
     if (panels.length !== 3 || panels.some(panel => !panel)) throw new Error('Vues du cours incomplètes');
     const toc = document.querySelector('.course-section-menu');
     const disclosure = toc?.querySelector('.course-section-disclosure');
-    const wide = window.matchMedia('(min-width: 1280px)');
+    const wide = window.matchMedia('(min-width: 1600px)');
     const layout = document.querySelector('.course-layout');
     const content = document.querySelector('.course-content');
     function keepFocusVisible() {
@@ -71,7 +77,8 @@
     window.addEventListener('resize', updateOffset);
     function updateOffset() {
       if (layout && toc) {
-        const offset = wide.matches ? 16 : toc.getBoundingClientRect().height + 24;
+        const overlapsContent = !wide.matches && window.getComputedStyle(toc).position === 'sticky';
+        const offset = overlapsContent ? toc.getBoundingClientRect().height + 24 : 16;
         layout.style.setProperty('--reader-offset', `${offset}px`);
       }
       scheduleFocus();
@@ -140,7 +147,7 @@
         const hash = index === 0 ? passageHash : tab.getAttribute('href');
         if (window.location.hash !== hash) window.history.pushState(null, '', hash);
         revealHash();
-        tab.focus({ preventScroll: true });
+        tab.focus();
       });
       tab.addEventListener('keydown', event => {
         const next = {
