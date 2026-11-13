@@ -28718,13 +28718,13 @@
         "OUT-18068akbjm47"
       ],
       "format": "single",
-      "prompt_en": "Which provider-key description is valid, including the optional Doctrine integration boundary? Select one answer.",
+      "prompt_en": "Which provider keys are covered by this Security Core-only course? Select one answer.",
       "choices": [
         {
           "id": "b",
           "text_en": "entity is always a built-in Security Core provider with no external integration.",
           "correct": false,
-          "explanation_fr": "L'intégration de stockage entity n'appartient pas au Core autonome."
+          "explanation_fr": "L'intégration de stockage externe n'est pas assessable ici ; `memory`, `chain` et `id` restent les keys du cours."
         },
         {
           "id": "c",
@@ -28736,7 +28736,7 @@
           "id": "a",
           "text_en": "memory defines users, chain tries providers, id selects a provider service; entity is available with Doctrine integration.",
           "correct": true,
-          "explanation_fr": "Ces clés désignent des sources distinctes ; entity nécessite l'intégration Doctrine et n'est pas un provider du Core autonome."
+          "explanation_fr": "Ces keys désignent des sources distinctes dans Security Core ; `id` branche un provider applicatif."
         }
       ],
       "explanation_fr": "Ces clés désignent des sources distinctes ; entity nécessite l'intégration Doctrine et n'est pas un provider du Core autonome.",
@@ -34624,13 +34624,13 @@
         "OUT-18068akbjm47"
       ],
       "format": "single",
-      "prompt_en": "A team sees memory, chain and id provider keys and needs an LDAP-backed provider. Which conclusion respects the available integrations? Select one answer.",
+      "prompt_en": "A team sees memory, chain and id provider keys. Which conclusion stays within this Security Core-only course? Select one answer.",
       "choices": [
         {
           "id": "a",
           "text_en": "ldap is another recognized provider integration; entity belongs to Doctrine integration, not standalone Security Core.",
           "correct": true,
-          "explanation_fr": "La liste ne se limite pas aux trois clés du tableau canonique abrégé. Le P1 précise ldap et la dépendance de entity sans enseigner une configuration de stockage externe."
+          "explanation_fr": "Le cours se limite aux keys memory, chain et id ; les intégrations de stockage externe sont hors scope."
         },
         {
           "id": "b",
@@ -34642,7 +34642,7 @@
           "id": "c",
           "text_en": "Every provider must be entity, including a custom UserProviderInterface service.",
           "correct": false,
-          "explanation_fr": "La clé id permet un provider applicatif ; entity n'est pas universel."
+          "explanation_fr": "La clé id permet un provider applicatif ; aucune intégration externe n'est déduite."
         }
       ],
       "explanation_fr": "La liste ne se limite pas aux trois clés du tableau canonique abrégé. Le P1 précise ldap et la dépendance de entity sans enseigner une configuration de stockage externe.",
