@@ -1,6 +1,6 @@
 (function (root) { 'use strict'; const manifest = {
   "schema_version": 1,
-  "bank_sha256": "009fffa57754b0462972a714b28589e8c18382b42258b5631795a7e26e8b15f1",
+  "bank_sha256": "0cc15843a910469e6b9a191c967e8b58630823398008cb2637d4f2bbb7bca716",
   "option_order": "bank-order-pinned-by-sha256",
   "allocation": "P3-local-half-courses-half-outcomes-largest-remainder-minimum-one",
   "exams": [
