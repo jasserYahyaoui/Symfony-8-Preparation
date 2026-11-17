@@ -1,13 +1,42 @@
 <!doctype html>
-<html data-release-id="p10-3fcc3159a44e15b848e6d652329a1ccea12be2674a3ececca2e63a41b793806b" data-assessment-bank-url="assessment-bank.d0ceaf89ad85b8a34e1fe034972edd9ad7719b180c7ed1a82de30456e03d262a.json" data-assessment-bank-sha256="d0ceaf89ad85b8a34e1fe034972edd9ad7719b180c7ed1a82de30456e03d262a" lang="fr"><head><meta charset="utf-8"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; connect-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Dependency Injection component — Symfony 8 Preparation</title><link rel="stylesheet" href="styles.cf4b8a205d3b348a551c10beabfab74044facb706e5237287d7ad2569ed9595d.css" integrity="sha256-z0uKIF07NIpVHBC+q/q3QET6y3BuUjcofXrSVp7ZWV0="><link rel="stylesheet" href="reader.486396390f262de29f79b99323b4d62c6fa46b61311f7595fbfe2eafcb15155d.css" integrity="sha256-SGOWOQ8mLeKfebmTI7TWLG+ka2ExH3WV+/4ur8sVFV0="><script src="mermaid.min.581ed7d74bd9048d0e3a91363927d72ef22942d7722546b27f7cc29e35390eb8.js" defer integrity="sha256-WB7X10vZBI0OOpE2OSfXLvIpQtdyJUayf3zCnjU5Drg="></script><script src="mermaid-init.353d880951a41ec68d08c83ada6de3bba460bee890902c3e2875e65cf6859a3d.js" defer integrity="sha256-NT2ICVGkHsaNCMg62m3ju6RgvuiQkCw+KHXmXPaFmj0="></script><link rel="stylesheet" href="assessment.d1166d7e46acc95c46f6cce351225db486d9c059be3974a273f313e51b278c68.css" integrity="sha256-0RZtfkasyVxG9szjUSJdtIbZwFm+OXSic/MT5RsnjGg="><script src="fixed-exams-data.d0fe28d6fd2edc4a926918faf77989294a713a25f5c5efaeaf90cf8c6c27c4c1.js" defer integrity="sha256-0P4o1v0u3EqSaRj693mJKUpxOiX1xe+ur5DPjGwnxME="></script><script src="fixed-exams.3827ae14894c7c2694ecd95e6210ffae6f7c703bbdf6c8d798b4ad0da8f7dd24.js" defer integrity="sha256-OCeuFIlMfCaU7NleYhD/rm98cDu99sjXmLStDaj33SQ="></script><script src="learning-state.0e30a82d8ea6191d66ddd7ab5fa150a34a8eca9fea93f371cf7e15ec3d4d18b8.js" defer integrity="sha256-DjCoLY6mGR1m3derX6FQo0qOyp/qk/Nxz34V7D1NGLg="></script><script src="guide.cfe16626524d42f3eb2a12ef9f3222c933a369d00624205b555112f641ab455e.js" defer integrity="sha256-z+FmJlJNQvPrKhLvnzIiyTOjadAGJCBbVVES9kGrRV4="></script><script src="reader-catalog.f591c86c355ae16cf9683c1bba8e989645e6dfba856cc53649c53e9285a5b6d5.js" defer integrity="sha256-9ZHIbDVa4Wz5aDwbuo6YlkXm37qFbMU2ScU+koWlttU="></script><script src="reader.5bbec76b339b11003a06b7d65f29b5e972f653d8087d34312b19ae50e8343d2f.js" defer integrity="sha256-W77HazObEQA6BrfWXym16XL2U9gIfTQxKxmuUOg0PS8="></script><script src="site-state.e8838686e4044896230e4197683cf058fb7a2669cc819468dacfd8506dfddaef.js" defer integrity="sha256-6IOGhuQESJYjDkGXaDzwWPt6JmnMgZRo2s/YUG392u8="></script><script src="assessment.29141841a4dd2d3b824da30d93bb67d004b78a24ef8a2b61422751bab5e89e89.js" defer integrity="sha256-KRQYQaTdLTuCTaMNk7tn0AS3iiTviithQidRurXonok="></script><script src="course-views.b901e8b9f3932e5757c3f8cac59d0f3d0dd38d231f846e1f77e00148b3a4a7dd.js" defer integrity="sha256-uQHoufOTLldXw/jKxZ0PPQ3TjSMfhG4fd+ABSLOkp90="></script><link rel="stylesheet" href="syntax-highlight.607c4de7cf172fede1ec5bf44559f16b11d7367f124e15bf5297dcfc085e0a35.css" integrity="sha256-YHxN588XL+3h7Fv0RVnxaxHXNn8SThW/Upfc/AheCjU="><script src="prism-syntax.48937753ee5db33e5b0c80c72e05ac42ebee5ea14c24e21bed1bb5782fe8802a.js" defer integrity="sha256-SJN3U+5dsz5bDIDHLgWsQuvuXqFMJOIb7Ru1eC/ogCo="></script><script src="syntax-highlight.413bfb08668940246e3350fc8db272c818d0f9450545dc675e02d61429334f47.js" defer integrity="sha256-QTv7CGaJQCRuM1D8jbJyyBjQ+UUFRdxnXgLWFCkzT0c="></script></head><body data-course-id="CRS-htvm3b1gas0d"><a class="skip" href="#contenu">Aller au contenu</a><header class="site-header"><a class="brand" href="index.html">S8 Preparation</a><nav aria-label="Navigation principale"><a href="index.html">Accueil</a> <a href="catalogue.html">Parcours</a> <a href="assessment.html?mode=review">Réviser</a> <a href="examens.html">Examens blancs</a> <a href="jour-j.html">Jour J</a></nav></header><main id="contenu" tabindex="-1" class="corpus-reader"><nav class="breadcrumb" aria-label="Fil d’Ariane"><a href="index.html">Accueil</a> <span aria-hidden="true">›</span> <a href="catalogue.html">Parcours</a> <span aria-hidden="true">›</span> <a href="lot-09.html">Module 09 — Injection de dépendances</a> <span aria-hidden="true">›</span> <span aria-current="page">Dependency Injection component</span></nav><h1>Dependency Injection component</h1><p class="muted">Symfony 8.0 · API PHP ≤ 8.4 · Twig ≤ 3.22. Préparation indépendante.</p><p class="revision-status">Audit pédagogique indépendant effectué : lecture substantielle des sections, exemples et explications du QCM par une IA, liée aux octets sources vérifiés. Cet audit couvre le périmètre Symfony 8.0, PHP jusqu’à 8.4 et Twig jusqu’à 3.22 ; il ne constitue ni une approbation officielle Symfony, ni une certification humaine, ni une garantie de réussite, et ne promet pas une exécution runtime exhaustive.</p><div class="course-layout"><details class="lot-course-menu"><summary>Cours du module · 12 cours</summary><nav aria-label="Cours du module"><a class="lot-context" href="lot-09.html">Module 09 — Injection de dépendances</a><ol><li><a href="course-CRS-htvm3b1gas0d.html" aria-current="page">Dependency Injection component</a></li><li><a href="course-CRS-p1694d5f7r8c.html">Service container</a></li><li><a href="course-CRS-jtkmpfp3nwzk.html">Built-in services</a></li><li><a href="course-CRS-8zmj5ntgdhjv.html">Configuration parameters</a></li><li><a href="course-CRS-g8fteyd38nrt.html">Services registration (YAML and PHP attributes)</a></li><li><a href="course-CRS-fkebqqqke5y5.html">Service decoration</a></li><li><a href="course-CRS-b4g5s2asb9ye.html">Tags</a></li><li><a href="course-CRS-exs5dvtqa1as.html">Semantic configuration</a></li><li><a href="course-CRS-1bkg7pkf78c7.html">Factories</a></li><li><a href="course-CRS-d25bvr0097py.html">Compiler passes</a></li><li><a href="course-CRS-w6yfxm6ad4zy.html">Services autowiring</a></li><li><a href="course-CRS-0a0d5bp6769e.html">Service locators</a></li></ol><a href="lot-09.html#view-quiz">Quiz du module</a></nav></details><aside class="course-section-menu" aria-label="Sommaire du cours"><nav class="course-actions" aria-label="Activités du cours"><a id="tab-course" href="#view-course">Cours</a><a id="tab-flashcards" href="#view-flashcards">Flashcards</a><a id="tab-quiz" href="#view-quiz">Quiz</a></nav><details class="course-section-disclosure"><summary id="course-sections">Sections du cours</summary><nav aria-label="Sections du cours"><ul><li><a href="#reader-objectives">Objectifs d’apprentissage</a></li><li><a href="#s-objectif">Objectif</a></li><li><a href="#s-l-essentiel">L&#x27;essentiel</a></li><li><a href="#s-le-schema">Le schéma</a></li><li><a href="#s-le-fil-rouge-un-newslettermanager-et-son-mailer">Le fil rouge : un `NewsletterManager` et son `Mailer`</a></li><li><a href="#s-injecter-ou-recuperer-la-distinction-de-fond">Injecter ou récupérer : la distinction de fond</a></li><li><a href="#s-les-quatre-formes-d-injection">Les quatre formes d&#x27;injection</a></li><li><a href="#s-le-component-seul-ligne-par-ligne">Le component seul, ligne par ligne</a></li><li><a href="#s-pieges-d-examen">Pièges d&#x27;examen</a></li><li><a href="#s-fiche-express">Fiche express</a></li><li><a href="#reader-sources">Sources officielles et compléments</a></li><li><a href="#course-recalls">Rappels et liens avec les autres cours</a></li></ul></nav><nav aria-label="Flashcards par section"><a href="#view-flashcards">Flashcards par section</a><ul><li><a href="#cards-s-l-essentiel-1">L&#x27;essentiel</a></li><li><a href="#cards-s-le-schema-2">Le schéma</a></li><li><a href="#cards-s-le-fil-rouge-un-newslettermanager-et-son-mailer-3">Le fil rouge : un `NewsletterManager` et son `Mailer`</a></li><li><a href="#cards-s-injecter-ou-recuperer-la-distinction-de-fond-4">Injecter ou récupérer : la distinction de fond</a></li><li><a href="#cards-s-les-quatre-formes-d-injection-5">Les quatre formes d&#x27;injection</a></li><li><a href="#cards-s-le-component-seul-ligne-par-ligne-6">Le component seul, ligne par ligne</a></li><li><a href="#cards-s-pieges-d-examen-7">Pièges d&#x27;examen</a></li><li><a href="#cards-s-fiche-express-8">Fiche express</a></li><li><a href="#cards-previous">Module 08 — Validation des données · Cours « Custom callback validators » · Rappel : <span lang="en">Does returning false from a validation callback create a violation?</span></a></li></ul></nav><nav aria-label="Retour au module"><a href="lot-09.html">Tous les cours du module</a></nav></details><p class="local-quiz-count">4 questions disponibles · 4 par session Quiz</p></aside><div class="course-content"><div id="view-course" data-course-panel role="region" aria-labelledby="view-course-title"><h2 id="view-course-title">Cours</h2><p class="course-introduction"><a href="#s-objectif">Introduction</a> · <a href="#course-sections">Sections du cours</a></p><h2 id="reader-objectives" tabindex="-1">Objectifs d’apprentissage</h2><ul><li><a href="course-CRS-htvm3b1gas0d.html#out-OUT-svr2vz7ebkv7">Distinguer injection et récupération de services</a></li><li><a href="course-CRS-htvm3b1gas0d.html#out-OUT-6ah70qtk60fe">Choisir constructor ou setter selon l&#x27;obligation de la dependency</a></li><li><a href="course-CRS-htvm3b1gas0d.html#out-OUT-dvs57dgffn57">Situer le component comme autonome et nommer compile()</a></li></ul><aside class="pedagogy-legend" aria-label="Repères pédagogiques"><p><strong>Repères pédagogiques</strong></p><p>Ces repères décrivent le rôle du bloc, pas une fréquence officielle à l’examen.</p><p class="teaching-label essential"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="brain" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5C12 1 6 1 6 5C2 5 1 10 4 12C1 15 3 19 6 19C6 23 12 23 12 19V5M12 5C12 1 18 1 18 5C22 5 23 10 20 12C23 15 21 19 18 19C18 23 12 23 12 19M6 5C6 8 8 9 9 9M4 12H7L9 14M6 19V16M18 5C18 8 16 9 15 9M20 12H17L15 14M18 19V16"></path></svg> <strong>À comprendre</strong></p><p class="teaching-label essential"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="book" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5C9 3 5 3 2 4V20C5 19 9 19 12 21C15 19 19 19 22 20V4C19 3 15 3 12 5V21M5 8H8M5 12H8M16 8H19M16 12H19"></path></svg> <strong>À mémoriser</strong></p><p class="teaching-label example"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="code" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6L2 12L8 18M16 6L22 12L16 18M14 3L10 21"></path></svg> <strong>Exemple concret</strong></p><p class="teaching-label pitfall"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="warning" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3L23 21H1L12 3ZM12 9V14M12 17V18"></path></svg> <strong>Piège à éviter</strong></p><p class="teaching-label nuance"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="balance" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3V21M7 21H17M3 7L21 5M5 7L1 15H9L5 7M19 6L15 14H23L19 6M1 15Q5 20 9 15M15 14Q19 19 23 14"></path></svg> <strong>Nuance à connaître</strong></p><p>Précision, exception ou condition d’application d’une règle.</p></aside><section class="teaching-section" data-section="s-objectif"><h2 id="s-objectif" tabindex="-1">Objectif</h2><p>Comprendre ce que la dependency injection résout, distinguer recevoir un service
-et le demander au container, choisir la forme d'injection adaptée à une
-dependency, et savoir utiliser le component seul jusqu'à la compilation. Le
-container dans une application — definitions, visibilité, configuration — a sa
-propre page, <em>Service container</em>.</p></section><section class="teaching-section" data-section="s-l-essentiel"><h2 id="s-l-essentiel" tabindex="-1">L&#x27;essentiel</h2><p class="teaching-label essential"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="brain" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5C12 1 6 1 6 5C2 5 1 10 4 12C1 15 3 19 6 19C6 23 12 23 12 19V5M12 5C12 1 18 1 18 5C22 5 23 10 20 12C23 15 21 19 18 19C18 23 12 23 12 19M6 5C6 8 8 9 9 9M4 12H7L9 14M6 19V16M18 5C18 8 16 9 15 9M20 12H17L15 14M18 19V16"></path></svg> <strong>À comprendre</strong></p><aside class="section-digest" id="s-l-essentiel-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>La signature expose les dependencies.</li><li>La récupération masque les besoins réels.</li></ol></aside><p>Une class <strong>reçoit</strong> ses dependencies au lieu de les fabriquer ou de les
-demander au container. Elle les reçoit par l'une des <strong>quatre</strong> formes
-d'injection, selon que la dependency est obligatoire ou facultative. Le
-component, autonome, décrit les services, puis les <strong>compile</strong> : un container
-figé, d'où l'on ne fait qu'un <code>get()</code>, à l'entry point.</p></section><section class="teaching-section" data-section="s-le-schema"><h2 id="s-le-schema" tabindex="-1">Le schéma</h2><aside class="section-digest" id="s-le-schema-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Le kernel assemble l&#x27;application.</li><li>Les services reçoivent leurs collaborators.</li></ol></aside><figure class="diagram" aria-labelledby="CRS-htvm3b1gas0d-3-diagram-0-title CRS-htvm3b1gas0d-3-diagram-0-description"><figcaption id="CRS-htvm3b1gas0d-3-diagram-0-title">Une référence de configuration devient une dépendance d&#x27;objet</figcaption><p id="CRS-htvm3b1gas0d-3-diagram-0-description">Une Reference mailer dans la définition de newsletter_manager décrit une dépendance. Après compilation, demander le manager public fait construire le mailer, puis le manager avec cet objet. Le manager n&#x27;appelle pas le container.</p><div class="mermaid" hidden>---
+<html data-release-id="p11-b37866349f6a3cfc279d2bfb1cff41898e3009947dd80ba2f95152782a802f86" data-assessment-bank-url="assessment-bank.d0ceaf89ad85b8a34e1fe034972edd9ad7719b180c7ed1a82de30456e03d262a.json" data-assessment-bank-sha256="d0ceaf89ad85b8a34e1fe034972edd9ad7719b180c7ed1a82de30456e03d262a" lang="fr"><head><meta charset="utf-8"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; connect-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Dependency Injection component — Symfony 8 Preparation</title><link rel="stylesheet" href="styles.cf4b8a205d3b348a551c10beabfab74044facb706e5237287d7ad2569ed9595d.css" integrity="sha256-z0uKIF07NIpVHBC+q/q3QET6y3BuUjcofXrSVp7ZWV0="><link rel="stylesheet" href="reader.ec53bafeb1ced517a297562ec48dbc2fd65f841a0c510f70688dba341604c03b.css" integrity="sha256-7FO6/rHO1Reil1YuxI28L9ZfhBoMUQ9waI26NBYEwDs="><script src="mermaid.min.581ed7d74bd9048d0e3a91363927d72ef22942d7722546b27f7cc29e35390eb8.js" defer integrity="sha256-WB7X10vZBI0OOpE2OSfXLvIpQtdyJUayf3zCnjU5Drg="></script><script src="mermaid-init.353d880951a41ec68d08c83ada6de3bba460bee890902c3e2875e65cf6859a3d.js" defer integrity="sha256-NT2ICVGkHsaNCMg62m3ju6RgvuiQkCw+KHXmXPaFmj0="></script><link rel="stylesheet" href="assessment.d1166d7e46acc95c46f6cce351225db486d9c059be3974a273f313e51b278c68.css" integrity="sha256-0RZtfkasyVxG9szjUSJdtIbZwFm+OXSic/MT5RsnjGg="><script src="fixed-exams-data.d0fe28d6fd2edc4a926918faf77989294a713a25f5c5efaeaf90cf8c6c27c4c1.js" defer integrity="sha256-0P4o1v0u3EqSaRj693mJKUpxOiX1xe+ur5DPjGwnxME="></script><script src="fixed-exams.3827ae14894c7c2694ecd95e6210ffae6f7c703bbdf6c8d798b4ad0da8f7dd24.js" defer integrity="sha256-OCeuFIlMfCaU7NleYhD/rm98cDu99sjXmLStDaj33SQ="></script><script src="learning-state.0e30a82d8ea6191d66ddd7ab5fa150a34a8eca9fea93f371cf7e15ec3d4d18b8.js" defer integrity="sha256-DjCoLY6mGR1m3derX6FQo0qOyp/qk/Nxz34V7D1NGLg="></script><script src="guide.cfe16626524d42f3eb2a12ef9f3222c933a369d00624205b555112f641ab455e.js" defer integrity="sha256-z+FmJlJNQvPrKhLvnzIiyTOjadAGJCBbVVES9kGrRV4="></script><script src="reader-catalog.f591c86c355ae16cf9683c1bba8e989645e6dfba856cc53649c53e9285a5b6d5.js" defer integrity="sha256-9ZHIbDVa4Wz5aDwbuo6YlkXm37qFbMU2ScU+koWlttU="></script><script src="reader.5bbec76b339b11003a06b7d65f29b5e972f653d8087d34312b19ae50e8343d2f.js" defer integrity="sha256-W77HazObEQA6BrfWXym16XL2U9gIfTQxKxmuUOg0PS8="></script><script src="site-state.e8838686e4044896230e4197683cf058fb7a2669cc819468dacfd8506dfddaef.js" defer integrity="sha256-6IOGhuQESJYjDkGXaDzwWPt6JmnMgZRo2s/YUG392u8="></script><script src="assessment.c9b73beca808b07f09113cace7a1ce7de721408e34c4ef23645d26484e126a62.js" defer integrity="sha256-ybc77KgIsH8JETys56HOfechQI40xO8jZF0mSE4SamI="></script><script src="course-views.89ade462fbfdfce62fd2942b97de66188b8394f6d24c0b6315d2aa65ed33b7c5.js" defer integrity="sha256-ia3kYvv9/OYv0pQrl95mGIuDlPbSTAtjFdKqZe0zt8U="></script><link rel="stylesheet" href="syntax-highlight.607c4de7cf172fede1ec5bf44559f16b11d7367f124e15bf5297dcfc085e0a35.css" integrity="sha256-YHxN588XL+3h7Fv0RVnxaxHXNn8SThW/Upfc/AheCjU="><script src="prism-syntax.48937753ee5db33e5b0c80c72e05ac42ebee5ea14c24e21bed1bb5782fe8802a.js" defer integrity="sha256-SJN3U+5dsz5bDIDHLgWsQuvuXqFMJOIb7Ru1eC/ogCo="></script><script src="syntax-highlight.413bfb08668940246e3350fc8db272c818d0f9450545dc675e02d61429334f47.js" defer integrity="sha256-QTv7CGaJQCRuM1D8jbJyyBjQ+UUFRdxnXgLWFCkzT0c="></script></head><body data-course-id="CRS-htvm3b1gas0d"><a class="skip" href="#contenu">Aller au contenu</a><header class="site-header"><a class="brand" href="index.html">S8 Preparation</a><nav aria-label="Navigation principale"><a href="index.html">Accueil</a> <a href="catalogue.html">Parcours</a> <a href="assessment.html?mode=review">Réviser</a> <a href="examens.html">Examens blancs</a> <a href="jour-j.html">Jour J</a></nav></header><main id="contenu" tabindex="-1" class="corpus-reader"><nav class="breadcrumb" aria-label="Fil d’Ariane"><a href="index.html">Accueil</a> <span aria-hidden="true">›</span> <a href="catalogue.html">Parcours</a> <span aria-hidden="true">›</span> <a href="lot-09.html">Module 09 — Injection de dépendances</a> <span aria-hidden="true">›</span> <span aria-current="page">Dependency Injection component</span></nav><h1>Dependency Injection component</h1><p class="muted">Symfony 8.0 · API PHP ≤ 8.4 · Twig ≤ 3.22. Préparation indépendante.</p><p class="revision-status">Rédaction narrative P11 : projection nouvelle, non couverte par les décisions historiques P10. Aucune approbation officielle ni garantie de réussite.</p><aside class="narrative-context" aria-label="Repères de lecture"><p><strong>Prérequis de lecture :</strong> <a href="course-CRS-2hpcy2rscq7m.html">Event dispatcher and kernel events</a></p><p><strong>Concepts voisins :</strong> <a href="course-CRS-brn6frfqpxxj.html">Console component</a> — Réutiliser le service du blog sans navigateur. <a href="lot-09.html">Comparer les responsabilités dans ce module</a> · <a href="carte-composants.html">Situer cette responsabilité dans le blog</a> · <a href="glossaire.html">Distinguer les termes voisins</a></p><p><a href="ordre-lecture.html">Retrouver les 163 cours dans le parcours recommandé</a>. Ce repère ne modifie ni votre historique ni votre progression.</p></aside><div class="course-layout"><details class="lot-course-menu"><summary>Cours du module · 12 cours</summary><nav aria-label="Cours du module"><a class="lot-context" href="lot-09.html">Module 09 — Injection de dépendances</a><ol><li><a href="course-CRS-htvm3b1gas0d.html" aria-current="page">Dependency Injection component</a></li><li><a href="course-CRS-p1694d5f7r8c.html">Service container</a></li><li><a href="course-CRS-jtkmpfp3nwzk.html">Built-in services</a></li><li><a href="course-CRS-8zmj5ntgdhjv.html">Configuration parameters</a></li><li><a href="course-CRS-g8fteyd38nrt.html">Services registration (YAML and PHP attributes)</a></li><li><a href="course-CRS-fkebqqqke5y5.html">Service decoration</a></li><li><a href="course-CRS-b4g5s2asb9ye.html">Tags</a></li><li><a href="course-CRS-exs5dvtqa1as.html">Semantic configuration</a></li><li><a href="course-CRS-1bkg7pkf78c7.html">Factories</a></li><li><a href="course-CRS-d25bvr0097py.html">Compiler passes</a></li><li><a href="course-CRS-w6yfxm6ad4zy.html">Services autowiring</a></li><li><a href="course-CRS-0a0d5bp6769e.html">Service locators</a></li></ol><a href="lot-09.html#view-quiz">Quiz du module</a></nav></details><aside class="course-section-menu" aria-label="Sommaire du cours"><nav class="course-actions" aria-label="Activités du cours"><a id="tab-course" href="#view-course">Cours</a><a id="tab-flashcards" href="#view-flashcards">Flashcards</a><a id="tab-quiz" href="#view-quiz">Quiz</a></nav><details class="course-section-disclosure"><summary id="course-sections">Sections du cours</summary><nav aria-label="Sections du cours"><ul><li><a href="#s-objectif">Objectif</a></li><li><a href="#s-l-essentiel">L&#x27;essentiel</a></li><li><a href="#s-le-schema">Le schéma</a></li><li><a href="#s-le-fil-rouge-un-newslettermanager-et-son-mailer">Le fil rouge : un `NewsletterManager` et son `Mailer`</a></li><li><a href="#s-injecter-ou-recuperer-la-distinction-de-fond">Injecter ou récupérer : la distinction de fond</a></li><li><a href="#s-les-quatre-formes-d-injection">Les quatre formes d&#x27;injection</a></li><li><a href="#s-le-component-seul-ligne-par-ligne">Le component seul, ligne par ligne</a></li><li><a href="#s-pieges-d-examen">Pièges d&#x27;examen</a></li><li><a href="#s-fiche-express">Fiche express</a></li><li><a href="#reader-objectives">Objectifs d’apprentissage</a></li><li><a href="#reader-sources">Sources officielles et compléments</a></li><li><a href="#course-recalls">Rappels et liens avec les autres cours</a></li></ul></nav><nav aria-label="Flashcards par section"><a href="#view-flashcards">Flashcards par section</a><ul><li><a href="#cards-s-l-essentiel-1">L&#x27;essentiel</a></li><li><a href="#cards-s-le-schema-2">Le schéma</a></li><li><a href="#cards-s-le-fil-rouge-un-newslettermanager-et-son-mailer-3">Le fil rouge : un `NewsletterManager` et son `Mailer`</a></li><li><a href="#cards-s-injecter-ou-recuperer-la-distinction-de-fond-4">Injecter ou récupérer : la distinction de fond</a></li><li><a href="#cards-s-les-quatre-formes-d-injection-5">Les quatre formes d&#x27;injection</a></li><li><a href="#cards-s-le-component-seul-ligne-par-ligne-6">Le component seul, ligne par ligne</a></li><li><a href="#cards-s-pieges-d-examen-7">Pièges d&#x27;examen</a></li><li><a href="#cards-s-fiche-express-8">Fiche express</a></li><li><a href="#cards-previous">Module 03 — Architecture Symfony · Cours « Request handling » · Rappel : <span lang="en">When does kernel.view run?</span></a></li></ul></nav><nav aria-label="Retour au module"><a href="lot-09.html">Tous les cours du module</a></nav></details><p class="local-quiz-count">4 questions disponibles · 4 par session Quiz</p></aside><div class="course-content"><div id="view-course" data-course-panel role="region" aria-labelledby="view-course-title"><h2 id="view-course-title">Cours</h2><p class="course-introduction"><a href="#s-objectif">Introduction</a> · <a href="#course-sections">Sections du cours</a></p><h2 id="reader-objectives" tabindex="-1">Objectifs d’apprentissage</h2><ul><li><a href="course-CRS-htvm3b1gas0d.html#out-OUT-svr2vz7ebkv7">Distinguer injection et récupération de services</a></li><li><a href="course-CRS-htvm3b1gas0d.html#out-OUT-6ah70qtk60fe">Choisir constructor ou setter selon l&#x27;obligation de la dependency</a></li><li><a href="course-CRS-htvm3b1gas0d.html#out-OUT-dvs57dgffn57">Situer le component comme autonome et nommer compile()</a></li></ul><aside class="pedagogy-legend" aria-label="Repères pédagogiques"><p><strong>Repères pédagogiques</strong></p><p>Ces repères décrivent le rôle du bloc, pas une fréquence officielle à l’examen.</p><p class="teaching-label essential"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="brain" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5C12 1 6 1 6 5C2 5 1 10 4 12C1 15 3 19 6 19C6 23 12 23 12 19V5M12 5C12 1 18 1 18 5C22 5 23 10 20 12C23 15 21 19 18 19C18 23 12 23 12 19M6 5C6 8 8 9 9 9M4 12H7L9 14M6 19V16M18 5C18 8 16 9 15 9M20 12H17L15 14M18 19V16"></path></svg> <strong>À comprendre</strong></p><p class="teaching-label essential"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="book" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5C9 3 5 3 2 4V20C5 19 9 19 12 21C15 19 19 19 22 20V4C19 3 15 3 12 5V21M5 8H8M5 12H8M16 8H19M16 12H19"></path></svg> <strong>À mémoriser</strong></p><p class="teaching-label example"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="code" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6L2 12L8 18M16 6L22 12L16 18M14 3L10 21"></path></svg> <strong>Exemple concret</strong></p><p class="teaching-label pitfall"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="warning" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3L23 21H1L12 3ZM12 9V14M12 17V18"></path></svg> <strong>Piège à éviter</strong></p><p class="teaching-label nuance"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="balance" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3V21M7 21H17M3 7L21 5M5 7L1 15H9L5 7M19 6L15 14H23L19 6M1 15Q5 20 9 15M15 14Q19 19 23 14"></path></svg> <strong>Nuance à connaître</strong></p><p>Précision, exception ou condition d’application d’une règle.</p></aside><section class="teaching-section" data-section="s-objectif"><h2 id="s-objectif" tabindex="-1">Objectif</h2><p>Pour afficher <code>/blog/42</code>, <code>BlogController</code> a besoin d'un <code>ArticleCatalog</code>.
+Pour traiter l'inscription, un autre service peut avoir besoin d'un moyen
+de notification. Si chacun construit ses collaborateurs ou les recherche
+dans un container global, leur remplacement en test devient difficile
+et leurs besoins réels se cachent dans le corps du code.</p>
+<p>La <em>dependency injection</em>, ou injection de dépendances, consiste à fournir
+ces collaborateurs depuis l'extérieur. Nous allons distinguer ce principe
+du composant Symfony 8.0 qui peut organiser leur construction.
+Les laboratoires PHP 8.4 fonctionnent sans Request ; le cours suivant
+relie leurs définitions au container complet de l'application.</p></section><section class="teaching-section" data-section="s-l-essentiel"><h2 id="s-l-essentiel" tabindex="-1">L&#x27;essentiel</h2><p class="teaching-label essential"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="brain" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5C12 1 6 1 6 5C2 5 1 10 4 12C1 15 3 19 6 19C6 23 12 23 12 19V5M12 5C12 1 18 1 18 5C22 5 23 10 20 12C23 15 21 19 18 19C18 23 12 23 12 19M6 5C6 8 8 9 9 9M4 12H7L9 14M6 19V16M18 5C18 8 16 9 15 9M20 12H17L15 14M18 19V16"></path></svg> <strong>À comprendre</strong></p><aside class="section-digest" id="s-l-essentiel-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>La signature expose les dependencies.</li><li>La récupération masque les besoins réels.</li></ol></aside><p>Une dépendance est un collaborateur dont l'objet a besoin pour travailler.
+Recevoir <code>ArticleCatalog</code> au constructeur rend ce besoin visible et permet
+de fournir un catalogue adapté au scénario testé, par exemple article 42
+présent ou 999 absent. L'injection existe déjà avec un simple appel PHP
+à <code>new</code> : elle ne nécessite pas un container.</p>
+<p>Le composant DependencyInjection ajoute un outil d'assemblage.
+Une <em>définition</em> décrit comment obtenir un service ; une <em>Reference</em>
+désigne une autre définition ; un paramètre fournit une valeur de configuration.
+La compilation vérifie et transforme cet ensemble avant les demandes d'objets.
+Elle n'est pas une nouvelle étape métier de chaque GET du blog.</p>
+<p>La documentation distingue quatre formes d'injection.
+Le choix dépend de l'état dans lequel l'objet peut réellement être utilisé,
+pas d'une obligation d'employer les quatre. Les accès au container entier
+restent concentrés au point d'assemblage ; les services métier travaillent
+ensuite avec leurs collaborateurs. Après compilation, la lecture de paramètres
+et l'accès aux services autorisés restent possibles : « figé » ne signifie
+ni « seul <code>get()</code> existe » ni « tous les objets sont immuables ».</p>
+<div class="admonition info">
+<p class="admonition-title">🌍 In Real Life</p>
+<p><strong>La situation</strong> : on remet au cuisinier l'ustensile dont il a besoin, au lieu de lui demander de construire lui-même tous ses outils.</p>
+<p><strong>L’équivalent dans Symfony</strong> : ustensile fourni de l'extérieur → dépendance injectée ; cuisinier → service consommateur ; organisation de l'équipement → conteneur, lorsqu'on en utilise un.</p>
+<p><strong>Retour à la réalité technique</strong> : l'injection est un principe d'assemblage, déjà présent dans <code>new NewsletterManager($mailer)</code>. DependencyInjection 8.0 automatise l'assemblage à partir de définitions ; il n'est pas nécessaire pour que l'injection existe.</p>
+<p><strong>🧠 Comment le mémoriser</strong> : « Recevoir plutôt que fabriquer. » Image mentale : l'outil posé dans la main. Question-réflexe : l'objet reçoit-il son collaborateur ou décide-t-il lui-même comment le construire ?</p>
+<p><strong>⚠️ À ne pas confondre</strong> : le service qui travaille et le conteneur qui sait le fournir.</p>
+</div></section><section class="teaching-section" data-section="s-le-schema"><h2 id="s-le-schema" tabindex="-1">Le schéma</h2><aside class="section-digest" id="s-le-schema-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Le kernel assemble l&#x27;application.</li><li>Les services reçoivent leurs collaborators.</li></ol></aside><p>Nous conservons le laboratoire <code>NewsletterManager</code>/<code>Mailer</code> pour la branche
+d'inscription. Il illustre la même question que le catalogue du controller :
+comment fournir le collaborateur sans obliger le consommateur à savoir
+comment on le construit ?</p>
+<figure class="diagram" aria-labelledby="CRS-htvm3b1gas0d-3-diagram-0-title CRS-htvm3b1gas0d-3-diagram-0-description"><figcaption id="CRS-htvm3b1gas0d-3-diagram-0-title">Une référence de configuration devient une dépendance d&#x27;objet</figcaption><p id="CRS-htvm3b1gas0d-3-diagram-0-description">Une Reference mailer dans la définition de newsletter_manager décrit une dépendance. Après compilation, demander le manager public fait construire le mailer, puis le manager avec cet objet. Le manager n&#x27;appelle pas le container.</p><div class="mermaid" hidden>---
 title: Déclarer, décrire, compiler, obtenir
 ---
 flowchart TD
@@ -23,11 +52,36 @@ flowchart TD
   class D,M config
   class C,O runtime
   class N result</div></figure>
-<p>Pointillés orange : dépendance déclarée ; flèches pleines : construction.
-Chemin du premier accès, services non lazy encore absents. Ensuite, le manager
-utilise son mailer sans connaître le container. Pour le tester, on peut fournir
-un autre mailer au constructeur : c'est l'intérêt pratique de l'injection.</p></section><section class="teaching-section" data-section="s-le-fil-rouge-un-newslettermanager-et-son-mailer"><h2 id="s-le-fil-rouge-un-newslettermanager-et-son-mailer" tabindex="-1">Le fil rouge : un `NewsletterManager` et son `Mailer`</h2><aside class="section-digest" id="s-le-fil-rouge-un-newslettermanager-et-son-mailer-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Une string reste une valeur.</li><li>Reference désigne un service.</li></ol></aside><pre class="highlight" tabindex="0"><code class="language-php">use Symfony\Component\DependencyInjection\ContainerBuilder;
+<p>Les pointillés orange représentent les instructions, pas un mailer déjà créé.
+La compilation prépare leur utilisation. Lors du premier accès montré,
+les services ordinaires ne sont ni déjà construits ni configurés comme lazy,
+c'est-à-dire à initialisation différée : le container obtient d'abord
+le mailer, puis le passe au constructeur du manager.</p>
+<p>Les flèches pleines représentent cette construction effective.
+Le manager ne reçoit pas une <code>Reference</code> ni une chaîne d'identification,
+mais l'objet attendu. Il peut ensuite travailler sans connaître le container.
+Un test peut l'assembler directement ; choisir une interface pour sa dépendance
+permet en outre de varier les implémentations, sujet repris avec les aliases.</p></section><section class="teaching-section" data-section="s-le-fil-rouge-un-newslettermanager-et-son-mailer"><h2 id="s-le-fil-rouge-un-newslettermanager-et-son-mailer" tabindex="-1">Le fil rouge : un `NewsletterManager` et son `Mailer`</h2><aside class="section-digest" id="s-le-fil-rouge-un-newslettermanager-et-son-mailer-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Une string reste une valeur.</li><li>Reference désigne un service.</li></ol></aside><p>Voici les classes minimales qui rendent le laboratoire complet.
+Ce <code>Mailer</code> local ne désigne pas le composant Mailer : il mémorise seulement
+un nom de transport. Aucune commande système ni aucun email ne sera envoyé.
+Le script suppose l'autoload de DependencyInjection 8.0 chargé :</p>
+<pre class="highlight" tabindex="0"><code class="language-php">use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
+
+final class Mailer
+{
+    public function __construct(public readonly string $transport) {}
+}
+
+final class NewsletterManager
+{
+    public function __construct(private Mailer $mailer) {}
+
+    public function transport(): string
+    {
+        return $this-&gt;mailer-&gt;transport;
+    }
+}
 
 $container = new ContainerBuilder();
 $container-&gt;setParameter('mailer.transport', 'sendmail');
@@ -37,12 +91,35 @@ $container-&gt;register('newsletter_manager', NewsletterManager::class)
     -&gt;addArgument(new Reference('mailer'))               // un service
     -&gt;setPublic(true);                                   // privé par défaut
 $container-&gt;compile();
-$manager = $container-&gt;get('newsletter_manager');</code></pre>
-<p><code>addArgument('mailer')</code> passerait la <strong>string</strong> <code>'mailer'</code> : seul
-<code>new Reference('mailer')</code> désigne un service.</p></section><section class="teaching-section" data-section="s-injecter-ou-recuperer-la-distinction-de-fond"><span class="outcome-anchor" id="out-OUT-svr2vz7ebkv7" tabindex="-1"></span><h2 id="s-injecter-ou-recuperer-la-distinction-de-fond" tabindex="-1">Injecter ou récupérer : la distinction de fond</h2><aside class="section-digest" id="s-injecter-ou-recuperer-la-distinction-de-fond-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Le container ne décrit pas les besoins précis.</li><li>Préférer des arguments typés par collaborator.</li></ol></aside><p>Une classe qui reçoit <code>ContainerInterface</code> reçoit bien ce container par
-injection, mais <strong>localise</strong> ensuite son mailer avec <code>get('mailer')</code>. Sa
-dépendance métier reste cachée : injecter directement le mailer rend le contrat
-plus explicite et les tests plus simples.</p>
+$manager = $container-&gt;get('newsletter_manager');
+echo $manager-&gt;transport(), "\n";</code></pre>
+<p>L'entrée de configuration <code>mailer.transport</code> vaut <code>'sendmail'</code>.
+<code>%mailer.transport%</code> demande sa valeur ; <code>new Reference('mailer')</code>
+demande l'objet du service. Résultat attendu : <code>sendmail</code>.
+Le manager est public uniquement parce que ce programme le récupère
+directement à son point d'entrée ; le mailer reste privé et injectable.</p>
+<p><code>addArgument('mailer')</code> transmettrait la <strong>string</strong> <code>'mailer'</code>,
+incompatible ici avec le type <code>Mailer</code> du constructeur.
+La chaîne <code>Mailer::class</code> serait également une valeur, pas une demande
+d'instance. Ce contraste explique la nécessité de <code>Reference</code>.
+Changer la valeur de transport de ce laboratoire ne configure pas
+un vrai système d'envoi : nous observons seulement l'assemblage.</p>
+<div class="admonition info">
+<p class="admonition-title">🌍 In Real Life</p>
+<p><strong>La situation</strong> : une fiche d'équipement peut indiquer un réglage, écrire le mot « fouet », ou demander de fournir le véritable fouet.</p>
+<p><strong>L’équivalent dans Symfony</strong> : réglage nommé → <code>%mailer.transport%</code> ; mot seul → string <code>'mailer'</code> ; demande de l'objet → <code>new Reference('mailer')</code>.</p>
+<p><strong>Retour à la réalité technique</strong> : la Reference décrit un lien entre services avant leur obtention. Le constructeur reçoit ensuite l'objet résolu, pas la Reference. Ni le nom de classe ni l'identifiant écrit comme simple string ne deviennent automatiquement une instance.</p>
+<p><strong>🧠 Comment le mémoriser</strong> : « Le nom de l'outil n'est pas l'outil. » Image mentale : une étiquette à côté du fouet. Question-réflexe : cet argument représente-t-il une valeur, un paramètre ou une référence de service ?</p>
+<p><strong>⚠️ À ne pas confondre</strong> : le <code>Mailer</code> de ce laboratoire et un vrai composant d'envoi ; afficher <code>sendmail</code> n'envoie aucun message.</p>
+</div></section><section class="teaching-section" data-section="s-injecter-ou-recuperer-la-distinction-de-fond"><span class="outcome-anchor" id="out-OUT-svr2vz7ebkv7" tabindex="-1"></span><h2 id="s-injecter-ou-recuperer-la-distinction-de-fond" tabindex="-1">Injecter ou récupérer : la distinction de fond</h2><aside class="section-digest" id="s-injecter-ou-recuperer-la-distinction-de-fond-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Le container ne décrit pas les besoins précis.</li><li>Préférer des arguments typés par collaborator.</li></ol></aside><p>Le manager connaît maintenant son besoin par sa signature.
+Si nous lui fournissions plutôt <code>ContainerInterface</code>, ce container serait
+bien injecté, mais un appel interne <code>get('mailer')</code> servirait ensuite
+à <em>localiser</em> son vrai collaborateur. La signature ne dirait plus
+quel mailer préparer pour le tester.</p>
+<p>Recevoir directement la dépendance réduit ce couplage.
+Un <em>service locator</em> est un cas plus ciblé : il donne accès à un ensemble
+déclaré de collaborateurs, utile lorsque le choix doit être différé.
+Il n'est pas une raison de cacher une dépendance unique déjà connue.</p>
 <table>
 <thead>
 <tr>
@@ -60,10 +137,10 @@ plus explicite et les tests plus simples.</p>
 <td>une liste déclarée</td>
 </tr>
 <tr>
-<td>Identifier faux détecté</td>
-<td>à la compilation</td>
-<td>à l'exécution</td>
-<td>à l'exécution</td>
+<td>Identifier demandé inexistant</td>
+<td>référence obligatoire vérifiée sur le graphe conservé</td>
+<td>recherche dynamique à l'exécution</td>
+<td>recherche dynamique à l'exécution ; références déclarées vérifiables à la compilation</td>
 </tr>
 <tr>
 <td>Statut</td>
@@ -73,51 +150,31 @@ plus explicite et les tests plus simples.</p>
 </tr>
 </tbody>
 </table>
-<p>Dans la colonne DI, la détection à la compilation suppose que le consommateur
-reste dans le graphe compilé ; une définition privée inutilisée peut être
-retirée avant le contrôle de ses références.</p>
-<p>« As few times as possible at the entry point » : dans une application, cet
-entry point est le kernel.</p></section><section class="teaching-section" data-section="s-les-quatre-formes-d-injection"><span class="outcome-anchor" id="out-OUT-6ah70qtk60fe" tabindex="-1"></span><h2 id="s-les-quatre-formes-d-injection" tabindex="-1">Les quatre formes d&#x27;injection</h2><p class="teaching-label essential"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="brain" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5C12 1 6 1 6 5C2 5 1 10 4 12C1 15 3 19 6 19C6 23 12 23 12 19V5M12 5C12 1 18 1 18 5C22 5 23 10 20 12C23 15 21 19 18 19C18 23 12 23 12 19M6 5C6 8 8 9 9 9M4 12H7L9 14M6 19V16M18 5C18 8 16 9 15 9M20 12H17L15 14M18 19V16"></path></svg> <strong>À comprendre</strong></p><aside class="section-digest" id="s-les-quatre-formes-d-injection-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Le constructor garantit l&#x27;état initial.</li><li>Un setter convient aux dependencies facultatives.</li></ol></aside><div class="pedagogy-expansion"><h3 tabindex="-1">C'est quoi ?</h3>
-<p>Le point d'injection est l'endroit où l'objet reçoit une dépendance :</p>
-<ul>
-<li>Le constructeur la reçoit à la création : sans argument obligatoire, l'objet ne peut pas être construit.</li>
-<li>Un setter est une méthode qui modifie l'objet après sa création. L'appel doit être prévu séparément.</li>
-<li>Un immutable-setter, méthode de configuration immuable, retourne un nouvel objet ; ignorer le retour perd la modification.</li>
-<li>Une propriété publique autorise l'affectation directe, mais expose aussi la dépendance aux remplacements arbitraires.</li>
-</ul>
-<h3 tabindex="-1">À quoi ça sert ?</h3>
-<p>Le constructeur convient à une dépendance indispensable. Un setter convient à une option lorsque le comportement sans cette option est réellement défini. « Facultatif » ne signifie pas « propriété typée laissée non initialisée puis utilisée sans contrôle ».</p>
-<h3 tabindex="-1">Où dans Symfony ?</h3>
-<p>Une définition DI peut fournir des arguments de constructeur, programmer des appels de méthodes ou affecter des propriétés. Pour un appel immuable, elle doit conserver l'objet retourné : <code>addMethodCall()</code> possède un troisième argument prévu à cet effet. <code>#[Required]</code> concerne le câblage d'un service autowiré ; PHP seul n'appelle pas une méthode parce qu'elle porte cet attribut.</p>
-<h3 tabindex="-1">Comment, étape par étape ?</h3>
-<ol>
-<li>Décider si un objet utilisable peut exister sans la dépendance.</li>
-<li>Si non, choisir le constructeur et éviter un état partiellement initialisé.</li>
-<li>Si oui, définir explicitement le comportement par défaut.</li>
-<li>Avec une méthode immuable, réaffecter le résultat avant l'utilisation.</li>
-</ol>
-<h3 tabindex="-1">Exemple concret PHP</h3>
-<p>Le préfixe est ici une option simple pour isoler la différence entre mutation et copie ; le même contrat de retour s'applique à une dépendance objet.</p>
-<pre class="highlight" tabindex="0"><code class="language-php">&lt;?php
-final class Label
-{
-    public function __construct(private string $prefix = '') {}
-    public function withPrefix(string $prefix): static
-    {
-        $copy = clone $this;
-        $copy-&gt;prefix = $prefix;
-        return $copy;
-    }
-    public function render(string $text): string
-    {
-        return $this-&gt;prefix.$text;
-    }
-}
-$plain = new Label();
-$marked = $plain-&gt;withPrefix('[INFO] ');
-echo $plain-&gt;render('Prêt'), "\n";
-echo $marked-&gt;render('Prêt'), "\n";</code></pre>
-<p>Les sorties sont <code>Prêt</code>, puis <code>[INFO] Prêt</code>. <strong>Contre-exemple :</strong> appeler <code>$plain-&gt;withPrefix('[INFO] ')</code> sans conserver le résultat ne configure pas <code>$plain</code>. <strong>Correction :</strong> utiliser l'objet retourné. Un setter peut différer une liaison circulaire, mais cela ne justifie pas automatiquement le cycle : il faut vérifier qu'aucune méthode n'utilise l'autre objet avant la fin de l'assemblage.</p></div><details class="canonical-retained"><summary>Passage canonique conservé</summary><table>
+<p>Dans la colonne DI, une référence obligatoire manquante provoque une erreur
+si son consommateur reste dans le graphe compilé. Une définition privée
+inutilisée peut être retirée avant ce contrôle. Un identifiant inventé
+dynamiquement dans un <code>get()</code> ne bénéficie pas du même contrôle préalable.
+Pour un locator, distinguons aussi la validation de ses références déclarées
+de la key que le code décidera de demander plus tard.</p>
+<p>Dans une application Symfony, le kernel et l'intégration du framework
+organisent le container ; cela n'oblige pas le controller ou l'importeur
+à répéter des recherches dans le container entier.
+Le principe « aussi peu d'accès que possible au point d'entrée »
+décrit une frontière d'assemblage, pas une interdiction de toute API
+de container dans les outils qui ont précisément cette responsabilité.</p>
+<div class="admonition info">
+<p class="admonition-title">🌍 In Real Life</p>
+<p><strong>La situation</strong> : remettre un outil précis, donner accès à un petit casier identifié, et ouvrir tout le magasin ne révèlent pas les mêmes besoins.</p>
+<p><strong>L’équivalent dans Symfony</strong> : outil reçu → injection directe ; petit casier → service locator à liste déclarée ; magasin entier → conteneur global consulté par le consommateur.</p>
+<p><strong>Retour à la réalité technique</strong> : injecter le conteneur reste une injection de cet objet, mais ses recherches internes cachent les dépendances métier. Un locator permet un choix différé borné. Les références déclarées du graphe conservé sont vérifiables à la compilation ; une clé calculée à l'exécution peut encore être inconnue.</p>
+<p><strong>🧠 Comment le mémoriser</strong> : « Montrer le besoin, pas seulement la clé du magasin. » Image mentale : une main avec un outil face à une main avec une clé. Question-réflexe : la signature révèle-t-elle le collaborateur réellement utilisé ?</p>
+<p><strong>⚠️ À ne pas confondre</strong> : accès limité par conception et autorisation de sécurité ; un locator n'est pas un contrôle d'accès utilisateur.</p>
+</div></section><section class="teaching-section" data-section="s-les-quatre-formes-d-injection"><span class="outcome-anchor" id="out-OUT-6ah70qtk60fe" tabindex="-1"></span><h2 id="s-les-quatre-formes-d-injection" tabindex="-1">Les quatre formes d&#x27;injection</h2><aside class="section-digest" id="s-les-quatre-formes-d-injection-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Le constructor garantit l&#x27;état initial.</li><li>Un setter convient aux dependencies facultatives.</li></ol></aside><p>Demandons d'abord si un objet utilisable peut exister sans le collaborateur.
+Notre manager ne peut pas annoncer son transport sans mailer :
+le constructeur est donc le choix naturel. Un suivi d'activité réellement
+facultatif peut, lui, posséder un comportement défini lorsqu'il est absent.
+La table propose les formes à examiner :</p>
+<table>
 <thead>
 <tr>
 <th>La dependency est…</th>
@@ -148,22 +205,94 @@ echo $marked-&gt;render('Prêt'), "\n";</code></pre>
 </tr>
 </tbody>
 </table>
-<ul>
-<li>Le constructor garantit la présence et la stabilité ; le setter ne garantit
-  ni l'appel ni la stabilité.</li>
-<li><code>#[Required]</code> (<code>Symfony\Contracts\Service\Attribute</code>) n'agit <strong>que</strong> sur un
-  service autowiré ; l'autowiring n'appelle pas un setter qui ne le porte pas.
-  Un immutable-setter autowiré doit renvoyer <code>static</code>, sinon son résultat est
-  jeté.</li>
-<li>Deux constructors qui se reçoivent mutuellement : <code>compile()</code> lève
-  <code>ServiceCircularReferenceException</code>. Un <strong>setter</strong> d'un côté casse le cycle ;
-  un immutable-setter, non.</li>
-</ul></details></section><section class="teaching-section" data-section="s-le-component-seul-ligne-par-ligne"><span class="outcome-anchor" id="out-OUT-dvs57dgffn57" tabindex="-1"></span><h2 id="s-le-component-seul-ligne-par-ligne" tabindex="-1">Le component seul, ligne par ligne</h2><aside class="section-digest" id="s-le-component-seul-ligne-par-ligne-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>La compilation fige la configuration.</li><li>Les services restent ensuite accessibles selon leur visibilité.</li></ol></aside><p><code>ContainerBuilder</code> reçoit des définitions, c'est-à-dire des instructions de
-construction. <code>compile()</code> vérifie et transforme leur graphe ; compiler ne
-demande pas tous les objets. Dans le framework, le kernel organise cette
-préparation ; avec le component seul, le programme enregistre les définitions,
-charge l'autoload Composer et compile lui-même.</p>
-<p>Exemple autonome avec DependencyInjection 8.0 et son autoload déjà chargé :</p>
+<p><strong>Le constructeur</strong> impose la présence d'un argument requis et typé lors
+de la construction. Cela ne rend pas automatiquement la propriété
+qui le conserve immuable : le code de la class pourrait encore la réaffecter
+s'il l'autorise. PHP permet aussi des arguments optionnels au constructeur ;
+la table exprime une recommandation de conception, pas une restriction du langage.</p>
+<p><strong>Le setter ordinaire</strong> modifie l'objet existant. Il peut ne jamais être
+appelé ou l'être plusieurs fois. Une dépendance facultative doit donc avoir
+un état initial valide et être vérifiée avant usage ; laisser une propriété
+typée non initialisée ne constitue pas un comportement facultatif correct.</p>
+<p><strong>L'immutable-setter</strong>, ou <em>wither</em>, renvoie une autre instance portant
+le changement. Ce laboratoire utilise un préfixe de diagnostic d'import
+pour rendre visible la différence, sans ajouter de dépendance externe :</p>
+<pre class="highlight" tabindex="0"><code class="language-php">final class Label
+{
+    public function __construct(private string $prefix = '') {}
+
+    public function withPrefix(string $prefix): static
+    {
+        $copy = clone $this;
+        $copy-&gt;prefix = $prefix;
+        return $copy;
+    }
+
+    public function render(string $text): string
+    {
+        return $this-&gt;prefix.$text;
+    }
+}
+$plain = new Label();
+$marked = $plain-&gt;withPrefix('[INFO] ');
+echo $plain-&gt;render('Prêt'), "\n";
+echo $marked-&gt;render('Prêt'), "\n";</code></pre>
+<p>Les résultats attendus sont <code>Prêt</code>, puis <code>[INFO] Prêt</code>.
+Ignorer le retour de <code>withPrefix()</code> ne configure pas <code>$plain</code>.
+Le préfixe est ici une valeur ; avec une dépendance objet, il faudrait
+pareillement conserver l'instance retournée. Le container peut le faire
+avec le troisième argument de <code>addMethodCall()</code> :</p>
+<pre class="highlight" tabindex="0"><code class="language-php">// Même class Label, autoload DI et imports du laboratoire précédent.
+$labels = new ContainerBuilder();
+$labels-&gt;register('label', Label::class)
+    -&gt;addMethodCall('withPrefix', ['[INFO] '], true)
+    -&gt;setPublic(true);
+$labels-&gt;compile();
+echo $labels-&gt;get('label')-&gt;render('Prêt'), "\n";</code></pre>
+<p>Résultat attendu : <code>[INFO] Prêt</code>. Avec <code>false</code> au troisième argument
+dans ce cas, le retour serait ignoré et l'objet initial garderait son préfixe vide.
+Ce booléen ne transforme pas un setter mutable en méthode immuable :
+la méthode doit réellement respecter ce contrat.</p>
+<p><strong>La propriété publique</strong> peut recevoir une valeur avec <code>setProperty()</code>,
+mais autorise aussi d'autres écritures sans passer par un setter contrôlé.
+Elle sert notamment à intégrer du code tiers qui impose ce modèle ;
+ce n'est pas le premier choix pour notre propre manager.</p>
+<p>L'attribute <code>#[Required]</code>, du namespace
+<code>Symfony\Contracts\Service\Attribute</code>, demande le traitement automatique
+des méthodes d'un service <strong>autowiré</strong>. L'autowiring est le câblage
+des dépendances à partir de leurs types. Sans lui, cet attribute seul
+ne programme pas l'appel ; un <code>addMethodCall()</code> explicite peut néanmoins
+appeler la méthode, avec ou sans attribute.</p>
+<p>Pour reconnaître un wither automatiquement, Symfony 8.0 accepte
+le type de retour <code>static</code> <strong>ou un PHPDoc <code>@return static</code></strong>.
+Le résultat est alors conservé ; le seul nom <code>with...</code> ne suffit pas.
+La forme PHPDoc <code>@return $this</code> désigne au contraire le cas non-clonant
+dans cette détection.</p>
+<p>Enfin, deux dépendances de constructeur réciproques ordinaires et non lazy
+forment un cycle détecté par <code>compile()</code> avec
+<code>ServiceCircularReferenceException</code>. Un setter peut différer un lien
+et permettre l'assemblage, mais ne résout pas tous les cycles d'utilisation :
+il faut vérifier l'ordre et ne pas utiliser l'autre objet avant la fin
+de son initialisation. Un wither n'est pas un remplacement équivalent
+pour casser ce cycle ; les services lazy constituent un cas distinct.</p>
+<div class="admonition info">
+<p class="admonition-title">🌍 In Real Life</p>
+<p><strong>La situation</strong> : un poste doit être équipé avant ouverture ; un accessoire optionnel peut arriver plus tard. Pour modifier une fiche sans toucher à l'original, on utilise une copie.</p>
+<p><strong>L’équivalent dans Symfony</strong> : équipement indispensable à l'ouverture → argument de constructeur requis ; ajout sur le poste existant → setter ; nouvelle fiche à conserver → objet retourné par un wither ; emplacement accessible directement → propriété publique.</p>
+<p><strong>Retour à la réalité technique</strong> : ces formes décrivent comment la dépendance arrive, pas quatre étapes obligatoires. Un setter facultatif exige un état initial utilisable. Le booléen de <code>addMethodCall(..., true)</code> conserve le retour, sans rendre la méthode immuable par magie. Un clone PHP ne clone pas récursivement tous les objets qu'il référence.</p>
+<p><strong>🧠 Comment le mémoriser</strong> : « Le setter change ici ; le wither rend ailleurs. » Image mentale : original et copie côte à côte. Question-réflexe : quel objet dois-je utiliser après cet appel ?</p>
+<p><strong>⚠️ À ne pas confondre</strong> : recevoir une dépendance au constructeur et rendre tout l'objet immuable ; un setter ne résout pas non plus tous les cycles d'utilisation.</p>
+</div></section><section class="teaching-section" data-section="s-le-component-seul-ligne-par-ligne"><span class="outcome-anchor" id="out-OUT-dvs57dgffn57" tabindex="-1"></span><h2 id="s-le-component-seul-ligne-par-ligne" tabindex="-1">Le component seul, ligne par ligne</h2><aside class="section-digest" id="s-le-component-seul-ligne-par-ligne-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>La compilation fige la configuration.</li><li>Les services restent ensuite accessibles selon leur visibilité.</li></ol></aside><p>Nous savons maintenant ce que le consommateur reçoit. Revenons au programme
+qui l'assemble : <code>ContainerBuilder</code> reçoit les instructions de construction,
+et <code>compile()</code> résout, vérifie et optimise leur graphe.
+Le flux normal ne consiste pas à demander tous les objets applicatifs.
+Cela n'interdit pas à du code de compilation personnalisé de créer
+ses propres objets.</p>
+<p>Dans le framework, le kernel organise cette préparation et son cache.
+Avec le composant seul, notre programme charge l'autoload, enregistre
+les définitions et compile lui-même. Le laboratoire indépendant suivant
+garde <code>Prefix</code> et <code>Greeting</code> pour observer un résultat sans email ni Request.
+L'autoload de DependencyInjection 8.0 est supposé déjà chargé :</p>
 <pre class="highlight" tabindex="0"><code class="language-php">&lt;?php
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
@@ -179,20 +308,27 @@ $container-&gt;register('greeting', Greeting::class)
     -&gt;addArgument(new Reference('prefix'))-&gt;setPublic(true);
 $container-&gt;compile();
 echo $container-&gt;get('greeting')-&gt;text(), "\n";</code></pre>
-<p>La sortie est <code>Bonjour Léa</code>. Enregistrer les classes, fournir les arguments,
-exposer le point d'entrée, compiler puis le récupérer sont des étapes
-distinctes. <code>prefix</code> reste privé mais injectable ; seul <code>greeting</code> est
-récupéré directement. <code>addArgument('prefix')</code> transmettrait une string au
-lieu du <code>Prefix</code> attendu : utiliser <code>new Reference('prefix')</code>.</p>
-<p>La compilation peut incorporer la définition d'un service privé dans celle de
-son consommateur (<strong>inlining</strong>), lorsque les optimisations le permettent :
-l'injection reste utilisable sans exposer publiquement l'ancien identifiant.
-Dans une application Symfony, le kernel peut réutiliser un container compilé
-et dumpé en cache pour l'environnement ; sa reconstruction dépend de la présence
-et de la fraîcheur de ce cache, notamment du mode debug. Cette politique de cache
-relève du kernel, pas du simple appel standalone à <code>ContainerBuilder::compile()</code>.</p>
-<p><code>symfony/dependency-injection</code> s'installe seul et fournit un container
-<strong>PSR-11</strong>. Après <code>compile()</code> :</p>
+<p>L'entrée <code>'Bonjour'</code> devient la valeur de <code>Prefix</code>, puis <code>Greeting</code>
+reçoit cet objet ; la sortie attendue est <code>Bonjour Léa</code>.
+L'enregistrement ne déclenche pas l'affichage, et <code>compile()</code> n'appelle
+pas <code>text()</code>. Le résultat vient de la dernière ligne.</p>
+<p><code>prefix</code> reste privé mais injectable ; <code>greeting</code> est public parce que
+ce programme le récupère directement. <code>addArgument('prefix')</code> transmettrait
+une chaîne au lieu du <code>Prefix</code> requis. La définition décrit donc à la fois
+le bon type de donnée et le lien entre les services, sans demander
+à <code>Greeting</code> de consulter le container.</p>
+<p>L'<em>inlining</em> incorpore, lorsque les optimisations le permettent,
+la définition privée dans celle du consommateur. L'objet reste fourni,
+même si son ancien identifiant n'est plus accessible directement.
+« Privé » ne veut donc pas dire « absent du comportement de l'application ».</p>
+<p>Le kernel peut ensuite réutiliser une forme compilée et générée en PHP,
+mise en cache pour son environment. La présence et la fraîcheur du cache,
+notamment selon le mode debug, gouvernent la reconstruction.
+Un simple <code>ContainerBuilder::compile()</code> autonome ne crée pas à lui seul
+toute cette politique de fichiers et de démarrage.</p>
+<p>Le composant s'utilise indépendamment du framework et fournit un container
+compatible <strong>PSR-11</strong>, le contrat de consultation des services.
+Dans nos laboratoires de services ordinaires, après <code>compile()</code> :</p>
 <table>
 <thead>
 <tr>
@@ -223,64 +359,90 @@ relève du kernel, pas du simple appel standalone à <code>ContainerBuilder::com
 </tr>
 </tbody>
 </table>
-<ul>
-<li>Une référence obligatoire vers un service jamais déclaré fait <strong>échouer la
-  compilation si son consommateur est conservé dans le graphe compilé</strong>
-  (par exemple public ou accessible depuis un service public) :
-  c'est <code>EXCEPTION_ON_INVALID_REFERENCE</code>, le défaut.
-  Un consommateur privé inutilisé peut être supprimé avant ce contrôle ;
-  sa référence manquante ne provoque alors pas d'échec.</li>
-<li><code>new Reference('mailer', ContainerInterface::IGNORE_ON_INVALID_REFERENCE)</code>
-  dans un <code>addMethodCall()</code> : l'appel est <strong>omis</strong> si le service manque.
-  <code>NULL_ON_INVALID_REFERENCE</code> passerait <code>null</code>.</li>
-</ul></section><section class="teaching-section" data-section="s-pieges-d-examen"><h2 id="s-pieges-d-examen" tabindex="-1">Pièges d&#x27;examen</h2><p class="teaching-label pitfall"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="warning" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3L23 21H1L12 3ZM12 9V14M12 17V18"></path></svg> <strong>Piège à éviter</strong></p><aside class="section-digest" id="s-pieges-d-examen-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Required dépend de l&#x27;autowiring.</li><li>L&#x27;attribute seul ne déclenche pas l&#x27;appel.</li></ol></aside><ul class="pitfall-list"><li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : Injecter le container ne rend pas les dépendances métier explicites.</summary><p><strong>Injecter le container ne rend pas les dépendances métier explicites.</strong>
-Sa réception est une injection ; les appels <code>get()</code> restent de la localisation
-de services. Ne pas confondre le mécanisme de construction avec ce couplage.</p></details></li>
-<li class="pitfall-item"><details class="pitfall-explanation"><summary>Reconnaître les quatre formes d’injection</summary><p><strong>« Il existe trois formes d'injection. »</strong> La documentation 8.0 en décrit
-quatre : constructor, immutable-setter, setter et property. Un énoncé qui
-présente l'immutable-setter (une method <code>withX()</code> qui renvoie un clone) comme
-une invention ou une mauvaise pratique se trompe.</p></details></li>
-<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : Constructor et setter inversés.</summary><p><strong>Constructor et setter inversés.</strong> Le constructor est la voie normale, pour la
-dependency <strong>obligatoire</strong> ; le setter est réservé à la dependency
-<strong>facultative</strong> (ou à un cycle). Un choix qui met une dependency
-indispensable dans un setter crée un object qui peut exister sans elle.</p></details></li>
-<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : #[Required] sans autowiring.</summary><p><strong><code>#[Required]</code> sans autowiring.</strong> L'attribute seul ne fait rien : sur un
-service non autowiré, le setter n'est jamais appelé et la property reste
-<code>null</code>. À l'inverse, l'autowiring n'appelle pas un setter qui n'a pas
-<code>#[Required]</code>.</p></details></li>
-<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : Un service privé n&#x27;est pas « non injectable ».</summary><p><strong>Un service privé n'est pas « non injectable ».</strong> Privé interdit seulement le
-<code>get()</code> après compilation ; le service reste injectable dans les autres. Et
-c'est le défaut : un <code>register()</code> sans <code>setPublic(true)</code> donne un service
-privé.</p></details></li>
-<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : compile() fige.</summary><p><strong><code>compile()</code> fige.</strong> Après compilation, ni nouvelle definition ni nouveau
-parameter : <code>register()</code> lève une <code>BadMethodCallException</code>, <code>setParameter()</code> une
-<code>LogicException</code>. Lire un parameter reste possible.</p></details></li>
-<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : Référence obligatoire absente : vérifier que le consommateur est conservé.</summary><p><strong>Référence obligatoire absente : vérifier que le consommateur est conservé.</strong>
-Un service public, ou accessible depuis un service public, qui référence un
-service inexistant fait échouer <code>compile()</code> avant un éventuel <code>get()</code>.
-Un service privé inutilisé peut au contraire être retiré du graphe avant
-le contrôle des références manquantes : sa présence dans les définitions
-initiales ne garantit donc pas cet échec.</p></details></li>
-<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : Un cycle entre deux constructors aussi.</summary><p><strong>Un cycle entre deux constructors aussi.</strong> Deux services qui se reçoivent
-mutuellement par leur constructor lèvent <code>ServiceCircularReferenceException</code>
-dès <code>compile()</code>, pas au premier appel. Un setter d'un côté suffit à le casser.</p></details></li>
-<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : addArgument(&#x27;mailer&#x27;) n&#x27;injecte pas le service mailer.</summary><p><strong><code>addArgument('mailer')</code> n'injecte pas le service <code>mailer</code>.</strong> C'est la string
-<code>'mailer'</code> qui part dans le constructor. Pour un service, il faut
-<code>new Reference('mailer')</code>.</p></details></li></ul></section><section class="teaching-section" data-section="s-fiche-express"><h2 id="s-fiche-express" tabindex="-1">Fiche express</h2><p class="teaching-label essential"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="book" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5C9 3 5 3 2 4V20C5 19 9 19 12 21C15 19 19 19 22 20V4C19 3 15 3 12 5V21M5 8H8M5 12H8M16 8H19M16 12H19"></path></svg> <strong>À mémoriser</strong></p><aside class="section-digest" id="s-fiche-express-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>L&#x27;immutable setter rend un nouvel object.</li><li>Ne pas le confondre avec un setter mutable.</li></ol></aside><p><strong>Si tu dois retenir seulement 7 choses :</strong></p>
-<ul>
-<li>Injecter les <strong>dépendances métier</strong>, plutôt que le container pour les rechercher ;
-  limiter les <code>get()</code> au point d'assemblage.</li>
-<li><strong>Quatre formes</strong> : constructor, immutable-setter, setter, property.</li>
-<li><strong>Obligatoire → constructor. Facultative → setter.</strong> Un cycle se casse par un
-  setter.</li>
-<li><strong><code>#[Required]</code></strong> n'agit que sur un service autowiré.</li>
-<li><strong><code>Reference</code></strong> = un service ; <code>%x%</code> = un parameter ; sinon une string.</li>
-<li>Service <strong>privé par défaut</strong> ; <code>compile()</code> <strong>fige</strong> (ni <code>register()</code> ni
-  <code>setParameter()</code>).</li>
-<li>Référence obligatoire absente sur un consommateur <strong>conservé</strong> :
-  <strong><code>compile()</code></strong> échoue ; un consommateur privé inutilisé peut être supprimé.
-  Un cycle entre constructors fait échouer <code>compile()</code>, pas <code>get()</code>.</li>
-</ul>
-<p>Moyen mnémotechnique : <strong>« C-I-S-P : Constructor, Immuable, Setter, Public »</strong>,
-de la plus sûre à la moins sûre.</p>
-<pre class="highlight" tabindex="0"><code class="language-bash">composer require symfony/dependency-injection</code></pre></section><section class="official-sources"><h2 id="reader-sources" tabindex="-1">Sources officielles et compléments</h2><ul><li><a href="https://symfony.com/doc/8.0/components/dependency_injection.html">Symfony 8.0 — components / dependency injection</a></li><li><a href="https://symfony.com/doc/8.0/components/http_kernel.html">Symfony 8.0 — HttpKernel</a></li><li><a href="https://symfony.com/doc/8.0/service_container.html">Symfony 8.0 — DependencyInjection</a></li><li><a href="https://symfony.com/doc/8.0/service_container/injection_types.html">Symfony 8.0 — service container / injection types</a></li></ul></section><section id="course-recalls" aria-labelledby="course-recalls-title" tabindex="-1"><h2 id="course-recalls-title">Rappels et liens avec les autres cours</h2><div data-recall-group="other"><h3>Rappels des cours précédents / autres modules</h3><ul><li data-recall-course="CRS-96w05v20b8w1" data-recall-kind="previous_course"><p class="recall-provenance">Module 08 — Validation des données · Cours « Custom callback validators »</p><p>Le retour du callback est ignoré. Le contexte porte les violations.</p><p><a href="#cards-previous">Rappel : <span lang="en">Does returning false from a validation callback create a violation?</span></a></p></li></ul></div></section><nav class="course-sequence" aria-label="Ordre de lecture"><a rel="prev" href="course-CRS-d235sja3h7y2.html" aria-label="Précédent : Violations builder — Module 08 — Validation des données">Précédent : Violations builder</a> <a href="lot-09.html">Sommaire : Module 09 — Injection de dépendances</a> <a rel="next" href="course-CRS-p1694d5f7r8c.html" aria-label="Suivant : Service container — Module 09 — Injection de dépendances">Suivant : Service container</a></nav><p class="course-practice-entry"><a class="button" href="#view-quiz">Fin du cours — s’entraîner avec le Quiz</a></p></div><div id="view-flashcards" data-course-panel role="region" aria-labelledby="view-flashcards-title"><h2 id="view-flashcards-title">Flashcards</h2><p lang="en">Answer before revealing each card.</p><p>Ces cartes ne mesurent pas une maîtrise notée.</p><div id="cards-s-l-essentiel-1" data-card-section="s-l-essentiel"><h3><a href="#s-l-essentiel">Revoir : L&#x27;essentiel</a></h3><div class="reader-cards"><details class="reader-card" id="B-htvm3b1gas0d-01"><summary lang="en">What distinguishes dependency injection from retrieving dependencies from a container?</summary><p lang="en">The object receives its actual collaborators rather than looking them up itself.</p><p lang="fr">La signature expose les dependencies. La récupération masque les besoins réels.</p><a href="course-CRS-htvm3b1gas0d.html#out-OUT-svr2vz7ebkv7">Revoir le passage précis</a></details></div></div><div id="cards-s-le-schema-2" data-card-section="s-le-schema"><h3><a href="#s-le-schema">Revoir : Le schéma</a></h3><div class="reader-cards"><details class="reader-card" id="B-htvm3b1gas0d-02"><summary lang="en">At which boundary should access to the full service container be concentrated?</summary><p lang="en">At the application entry point rather than inside business services.</p><p lang="fr">Le kernel assemble l&#x27;application. Les services reçoivent leurs collaborators.</p><a href="course-CRS-htvm3b1gas0d.html#out-OUT-svr2vz7ebkv7">Revoir le passage précis</a></details></div></div><div id="cards-s-le-fil-rouge-un-newslettermanager-et-son-mailer-3" data-card-section="s-le-fil-rouge-un-newslettermanager-et-son-mailer"><h3><a href="#s-le-fil-rouge-un-newslettermanager-et-son-mailer">Revoir : Le fil rouge : un `NewsletterManager` et son `Mailer`</a></h3><div class="reader-cards"><details class="reader-card" id="B-htvm3b1gas0d-03"><summary lang="en">Does addArgument(&#x27;mailer&#x27;) inject the mailer service?</summary><p lang="en">No. It passes a string; use new Reference(&#x27;mailer&#x27;) for a service reference.</p><p lang="fr">Une string reste une valeur. Reference désigne un service.</p><a href="course-CRS-htvm3b1gas0d.html#out-OUT-6ah70qtk60fe">Revoir le passage précis</a></details></div></div><div id="cards-s-injecter-ou-recuperer-la-distinction-de-fond-4" data-card-section="s-injecter-ou-recuperer-la-distinction-de-fond"><h3><a href="#s-injecter-ou-recuperer-la-distinction-de-fond">Revoir : Injecter ou récupérer : la distinction de fond</a></h3><div class="reader-cards"><details class="reader-card" id="B-htvm3b1gas0d-04"><summary lang="en">Why does injecting ContainerInterface not make a class&#x27;s real dependencies explicit?</summary><p lang="en">The signature names only the container; later get() calls determine the hidden collaborators.</p><p lang="fr">Le container ne décrit pas les besoins précis. Préférer des arguments typés par collaborator.</p><a href="course-CRS-htvm3b1gas0d.html#out-OUT-svr2vz7ebkv7">Revoir le passage précis</a></details></div></div><div id="cards-s-les-quatre-formes-d-injection-5" data-card-section="s-les-quatre-formes-d-injection"><h3><a href="#s-les-quatre-formes-d-injection">Revoir : Les quatre formes d&#x27;injection</a></h3><div class="reader-cards"><details class="reader-card" id="B-htvm3b1gas0d-05"><summary lang="en">Which injection form best guarantees an essential dependency is present?</summary><p lang="en">Constructor injection; a setter may never be called.</p><p lang="fr">Le constructor garantit l&#x27;état initial. Un setter convient aux dependencies facultatives.</p><a href="course-CRS-htvm3b1gas0d.html#out-OUT-6ah70qtk60fe">Revoir le passage précis</a></details></div></div><div id="cards-s-le-component-seul-ligne-par-ligne-6" data-card-section="s-le-component-seul-ligne-par-ligne"><h3><a href="#s-le-component-seul-ligne-par-ligne">Revoir : Le component seul, ligne par ligne</a></h3><div class="reader-cards"><details class="reader-card" id="B-htvm3b1gas0d-06"><summary lang="en">Can a compiled ContainerBuilder accept new definitions or changed parameters?</summary><p lang="en">No. Compilation freezes definitions and the parameter bag.</p><p lang="fr">La compilation fige la configuration. Les services restent ensuite accessibles selon leur visibilité.</p><a href="course-CRS-htvm3b1gas0d.html#out-OUT-dvs57dgffn57">Revoir le passage précis</a></details></div></div><div id="cards-s-pieges-d-examen-7" data-card-section="s-pieges-d-examen"><h3><a href="#s-pieges-d-examen">Revoir : Pièges d&#x27;examen</a></h3><div class="reader-cards"><details class="reader-card" id="B-htvm3b1gas0d-07"><summary lang="en">Does Required on a setter work when autowiring is disabled?</summary><p lang="en">No. Required setters are processed through autowiring.</p><p lang="fr">Required dépend de l&#x27;autowiring. L&#x27;attribute seul ne déclenche pas l&#x27;appel.</p><a href="course-CRS-htvm3b1gas0d.html#out-OUT-6ah70qtk60fe">Revoir le passage précis</a></details></div></div><div id="cards-s-fiche-express-8" data-card-section="s-fiche-express"><h3><a href="#s-fiche-express">Revoir : Fiche express</a></h3><div class="reader-cards"><details class="reader-card" id="B-htvm3b1gas0d-08"><summary lang="en">How many injection forms does the Symfony documentation distinguish?</summary><p lang="en">Four: constructor, immutable setter, setter and public property.</p><p lang="fr">L&#x27;immutable setter rend un nouvel object. Ne pas le confondre avec un setter mutable.</p><a href="course-CRS-htvm3b1gas0d.html#out-OUT-6ah70qtk60fe">Revoir le passage précis</a></details></div></div><div id="cards-previous"><p class="recall-provenance">Module 08 — Validation des données · Cours « Custom callback validators »</p><aside class="checkpoint"><h2>Rappel d’un cours antérieur</h2><p>Avant de poursuivre : Custom callback validators.</p><details class="corpus-correction"><summary lang="en">Does returning false from a validation callback create a violation?</summary><p lang="en">No. The callback must add a violation through its execution context.</p><p>Le retour du callback est ignoré. Le contexte porte les violations.</p><a href="course-CRS-96w05v20b8w1.html#out-OUT-3mgrr61v77zn">Relire la correction dans le cours antérieur</a></details></aside></div></div><div id="view-quiz" data-course-panel role="region" aria-labelledby="view-quiz-title"><h2 id="view-quiz-title">Quiz</h2><p class="quiz-size" lang="en">4 eligible learning questions · 4 per session. Repeating a question does not demonstrate mastery.</p><p id="course-quiz-status" role="status">Quiz interactif non chargé. Démarrez après chargement de la banque locale.</p><div id="course-quiz-controls" class="assessment-main" hidden><div id="course-quiz-assessment-controls" hidden><select id="course-quiz-assessment-mode" aria-label="Mode du quiz" hidden><option value="learning">Entraînement</option></select><p id="course-quiz-training-scope"></p><button id="course-quiz-start-assessment" type="button" lang="en">Start practice</button><button id="course-quiz-finish-assessment" type="button" lang="en" hidden>End session</button></div><p id="course-quiz-assessment-error" role="alert"></p><p id="course-quiz-assessment-timer" hidden></p><p id="course-quiz-session-progress" class="quiz-progress" role="status" lang="en"></p><div id="course-quiz-assessment-app" tabindex="-1"></div><nav id="course-quiz-session-navigation" aria-label="Questions du cours"></nav><div id="course-quiz-learning-overview" aria-live="polite"></div></div><div id="course-quiz-native"><p>Sans JavaScript ou si le chargement échoue : aucune tentative notée. Les <a href="#view-flashcards">flashcards du cours</a> restent disponibles.</p><details class="course-quiz-fallback" data-question-id="L-htvm3b1gas0d-base-v1"><summary lang="en">What distinguishes dependency injection from retrieving dependencies from a container? Select one answer (radio).</summary><p>Correction de consultation — non notée.</p><p>La signature expose les dependencies. La récupération masque les besoins réels.</p><ul><li><strong lang="en">Distractor: The object receives the entire container and searches it.</strong><p>Cette récupération masque les dependencies au lieu de les exposer dans la signature.</p></li><li><strong lang="en">Distractor: The object constructs every collaborator in its constructor.</strong><p>Construire soi-même ses dependencies n&#x27;est pas les recevoir par injection.</p></li><li><strong lang="en">Correct: The object receives collaborators instead of looking them up.</strong><p>La signature expose les dependencies. La récupération masque les besoins réels.</p></li></ul><a href="course-CRS-htvm3b1gas0d.html#out-OUT-svr2vz7ebkv7">Relire le passage exact</a></details></div></div></div></div><details class="transfer-panel"><summary>Sauvegarde et transfert de progression</summary><p id="reading-status" role="status">Sans JavaScript : lecture libre ; progression non enregistrée.</p><p><a href="assessment.html#overview-title">Lecture, réussites immédiates et différées</a></p><p>Transfert manuel — aucune synchronisation automatique</p><p id="persistence-status" role="status"></p><button type="button" class="secondary" id="export-progress">Exporter ma progression</button><label for="import-progress">Choisir un JSON pour fusionner ma progression (sans remplacement)</label><input type="file" id="import-progress" accept="application/json,.json"><p id="transfer-status" role="status"></p></details></main><footer class="site-footer"><a href="catalogue.html">Catalogue</a> <a href="sources.html">Sources et attribution</a> <a href="#contenu">Haut de page</a></footer></body></html>
+<p>Le partage concerne les demandes au même container : répéter
+<code>get('greeting')</code> réutilise normalement l'instance. Il ne rend pas
+<code>Greeting</code> globalement unique dans tous les processus.
+Les exceptions de la table concernent l'ajout de définitions et
+la modification des paramètres figés ; lire <code>getParameter()</code> reste autorisé.</p>
+<p>Si une référence obligatoire vise un service jamais déclaré,
+<code>EXCEPTION_ON_INVALID_REFERENCE</code>, comportement par défaut, fait échouer
+la compilation lorsque le consommateur est <strong>conservé</strong>.
+Un consommateur privé inutilisé peut être supprimé avant ce contrôle ;
+il ne suffit pas qu'une mauvaise référence ait figuré dans la configuration initiale.</p>
+<p>Pour une variante ayant réellement un setter facultatif, la référence
+<code>new Reference('mailer', ContainerInterface::IGNORE_ON_INVALID_REFERENCE)</code>
+dans un <code>addMethodCall()</code> permet d'<strong>omettre cet appel</strong> si le service manque.
+Ici, <code>ContainerInterface</code> désigne celui de
+<code>Symfony\Component\DependencyInjection</code>, qui définit ces constantes,
+pas la seule interface PSR-11.
+<code>NULL_ON_INVALID_REFERENCE</code> transmettrait plutôt <code>null</code> :
+la signature et le comportement de la méthode doivent alors l'accepter.
+Ni l'un ni l'autre ne doit masquer l'absence du mailer indispensable
+de notre premier manager.</p>
+<div class="admonition info">
+<p class="admonition-title">🌍 In Real Life</p>
+<p><strong>La situation</strong> : l'équipe vérifie le plan d'équipement avant le service ; ce contrôle n'exécute pas les gestes de cuisine.</p>
+<p><strong>L’équivalent dans Symfony</strong> : plan → définitions ; liens d'équipement → <code>Reference</code> ; vérification et optimisation du plan → <code>compile()</code> ; matériel effectivement fourni → obtention des services.</p>
+<p><strong>Retour à la réalité technique</strong> : compiler résout et transforme le graphe, sans appeler les méthodes métier ni construire systématiquement tous les services. Le programme autonome ne reçoit pas automatiquement la génération et le cache organisés par Kernel. Une référence obligatoire absente est jugée sur le graphe conservé ; ignorer un appel facultatif n'est pas lui passer <code>null</code>.</p>
+<p><strong>🧠 Comment le mémoriser</strong> : « Vérifier le plan n'exécute pas le travail. » Image mentale : un plan coché devant un poste encore inactif. Question-réflexe : suis-je dans la définition, la compilation ou l'utilisation ?</p>
+<p><strong>⚠️ À ne pas confondre</strong> : paramètres figés et illisibles ; <code>getParameter()</code> reste utilisable après compilation.</p>
+</div></section><section class="teaching-section" data-section="s-pieges-d-examen"><h2 id="s-pieges-d-examen" tabindex="-1">Pièges d&#x27;examen</h2><p class="teaching-label pitfall"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="warning" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3L23 21H1L12 3ZM12 9V14M12 17V18"></path></svg> <strong>Piège à éviter</strong></p><aside class="section-digest" id="s-pieges-d-examen-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Required dépend de l&#x27;autowiring.</li><li>L&#x27;attribute seul ne déclenche pas l&#x27;appel.</li></ol></aside><ul class="pitfall-list"><li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : Recevoir le container ne révèle pas le besoin de mailer.</summary><p><strong>Recevoir le container ne révèle pas le besoin de mailer.</strong>
+Sa réception est bien une injection ; les recherches qu'il permet
+cachent encore les collaborateurs métier. Le manager peut recevoir
+son mailer directement.</p></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : Le retour d&#x27;un wither compte.</summary><p><strong>Le retour d'un wither compte.</strong> Les quatre formes incluent l'immutable-setter.
+Dans le laboratoire <code>Label</code>, utiliser l'original après <code>withPrefix()</code>
+ignore la configuration portée par le clone.</p></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : L&#x27;état utilisable gouverne le choix.</summary><p><strong>L'état utilisable gouverne le choix.</strong> Mettre une dépendance indispensable
+dans un setter permet de construire un objet sans elle.
+À l'inverse, un constructeur peut accepter une option explicite :
+la recommandation n'est pas une interdiction PHP.</p></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : Required n&#x27;est pas un appel PHP automatique.</summary><p><strong><code>Required</code> n'est pas un appel PHP automatique.</strong>
+Son traitement dépend de l'autowiring. Un appel de méthode configuré
+explicitement reste possible sans lui ; une propriété non initialisée
+ne devient pas magiquement <code>null</code>. Pour un wither automatique,
+le type <code>static</code> ou le PHPDoc <code>@return static</code> indique de garder le retour.</p></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : Privé ne signifie pas non injectable.</summary><p><strong>Privé ne signifie pas non injectable.</strong>
+Le mailer et le préfixe sont fournis à leurs consommateurs sans être publics.
+L'accès direct au container compilé est une autre question.</p></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : Figé ne signifie pas illisible ou objet métier immuable.</summary><p><strong>Figé ne signifie pas illisible ou objet métier immuable.</strong>
+<code>register()</code> après compilation échoue avec <code>BadMethodCallException</code>,
+<code>setParameter()</code> avec <code>LogicException</code>. Le paramètre peut toujours
+être lu, et la mutabilité des services dépend de leur propre code.</p></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : Une erreur de référence se juge sur le graphe conservé.</summary><p><strong>Une erreur de référence se juge sur le graphe conservé.</strong>
+Le consommateur public qui requiert un service inexistant échoue à la compilation.
+Un consommateur privé supprimé avant ce contrôle ne constitue pas
+le même scénario.</p></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : Un setter peut différer un lien, pas corriger toute architecture cyclique.</summary><p><strong>Un setter peut différer un lien, pas corriger toute architecture cyclique.</strong>
+Le cycle de constructeurs ordinaires non lazy est détecté à la compilation.
+Après passage par un setter, l'ordre d'assemblage et les usages trop précoces
+doivent encore être vérifiés ; un wither n'a pas le même effet.</p></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : Une chaîne de caractères n&#x27;est pas une Reference.</summary><p><strong>Une chaîne de caractères n'est pas une Reference.</strong>
+<code>'mailer'</code> reste une valeur ; <code>%mailer.transport%</code> lit un paramètre ;
+<code>new Reference('mailer')</code> demande l'objet du service.
+Le type attendu par le consommateur permet d'expliquer le résultat.</p></details></li></ul></section><section class="teaching-section" data-section="s-fiche-express"><h2 id="s-fiche-express" tabindex="-1">Fiche express</h2><p class="teaching-label essential"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="book" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5C9 3 5 3 2 4V20C5 19 9 19 12 21C15 19 19 19 22 20V4C19 3 15 3 12 5V21M5 8H8M5 12H8M16 8H19M16 12H19"></path></svg> <strong>À mémoriser</strong></p><aside class="section-digest" id="s-fiche-express-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>L&#x27;immutable setter rend un nouvel object.</li><li>Ne pas le confondre avec un setter mutable.</li></ol></aside><p>Pour assembler les collaborateurs du blog :</p>
+<ol>
+<li>Rendre leurs besoins visibles, plutôt que leur fournir le container entier.</li>
+<li>Choisir parmi constructeur, immuable-setter, setter et propriété publique
+   selon l'état dans lequel l'objet peut fonctionner.</li>
+<li>Conserver le retour d'un wither ; ne pas supposer qu'un setter sera
+   toujours appelé ou qu'il résoudra tous les cycles.</li>
+<li>Distinguer <code>Required</code> traité par autowiring et appel explicitement configuré ;
+   la détection du wither accepte <code>static</code> ou <code>@return static</code>.</li>
+<li>Séparer valeur, paramètre <code>%x%</code> et service <code>Reference</code>, puis respecter
+   le type attendu par le constructeur ou la méthode.</li>
+<li>Garder les services privés sauf besoin d'accès direct ; la compilation
+   interdit ensuite <code>register()</code> et <code>setParameter()</code>, pas la lecture.</li>
+<li>Interpréter les erreurs selon le graphe : référence obligatoire conservée,
+   suppression des privés inutilisés, cycle non lazy et politique
+   d'absence facultative ne sont pas un seul cas.</li>
+</ol>
+<p>La commande Composer 2 historique illustre l'installation du composant
+dans un projet de laboratoire, pas une étape d'une Request :</p>
+<pre class="highlight" tabindex="0"><code class="language-bash">composer require symfony/dependency-injection</code></pre>
+<p>Résultat attendu si la résolution réussit : la dépendance et son autoload
+sont disponibles. Cette commande sans contrainte explicite ne garantit
+pas Symfony 8.0 ; les contraintes du projet doivent préserver cette cible
+et PHP 8.4. Elle n'est pas exécutée ici.
+L'étape suivante est d'observer comment le container de l'application
+charge ces définitions, expose ses points d'entrée et réutilise son cache.</p></section><section class="official-sources"><h2 id="reader-sources" tabindex="-1">Sources officielles et compléments</h2><ul><li><a href="https://symfony.com/doc/8.0/components/dependency_injection.html">Symfony 8.0 — components / dependency injection</a></li><li><a href="https://symfony.com/doc/8.0/components/http_kernel.html">Symfony 8.0 — HttpKernel</a></li><li><a href="https://symfony.com/doc/8.0/service_container.html">Symfony 8.0 — DependencyInjection</a></li><li><a href="https://symfony.com/doc/8.0/service_container/injection_types.html">Symfony 8.0 — service container / injection types</a></li></ul></section><section id="course-recalls" aria-labelledby="course-recalls-title" tabindex="-1"><h2 id="course-recalls-title">Rappels et liens avec les autres cours</h2><div data-recall-group="other"><h3>Rappels des cours précédents / autres modules</h3><ul><li data-recall-course="CRS-mpwjc4g3vmj7" data-recall-kind="previous_course"><p class="recall-provenance">Module 03 — Architecture Symfony · Cours « Request handling »</p><p>kernel.view tente de convertir un résultat non-Response. kernel.response intervient sur la Response obtenue.</p><p><a href="#cards-previous">Rappel : <span lang="en">When does kernel.view run?</span></a></p></li></ul></div></section><nav class="course-sequence" aria-label="Ordre de lecture"><a rel="prev" href="course-CRS-2hpcy2rscq7m.html" aria-label="Précédent : Event dispatcher and kernel events — Module 03 — Architecture Symfony">Précédent : Event dispatcher and kernel events</a> <a href="lot-09.html">Sommaire : Module 09 — Injection de dépendances</a> <a rel="next" href="course-CRS-p1694d5f7r8c.html" aria-label="Suivant : Service container — Module 09 — Injection de dépendances">Suivant : Service container</a></nav><p class="course-practice-entry"><a class="button" href="#view-quiz">Fin du cours — s’entraîner avec le Quiz</a></p></div><div id="view-flashcards" data-course-panel role="region" aria-labelledby="view-flashcards-title"><h2 id="view-flashcards-title">Flashcards</h2><p lang="en">Answer before revealing each card.</p><p>Ces cartes ne mesurent pas une maîtrise notée.</p><div id="cards-s-l-essentiel-1" data-card-section="s-l-essentiel"><h3><a href="#s-l-essentiel">Revoir : L&#x27;essentiel</a></h3><div class="reader-cards"><details class="reader-card" id="B-htvm3b1gas0d-01"><summary lang="en">What distinguishes dependency injection from retrieving dependencies from a container?</summary><p lang="en">The object receives its actual collaborators rather than looking them up itself.</p><p lang="fr">La signature expose les dependencies. La récupération masque les besoins réels.</p><a href="course-CRS-htvm3b1gas0d.html#out-OUT-svr2vz7ebkv7">Revoir le passage précis</a></details></div></div><div id="cards-s-le-schema-2" data-card-section="s-le-schema"><h3><a href="#s-le-schema">Revoir : Le schéma</a></h3><div class="reader-cards"><details class="reader-card" id="B-htvm3b1gas0d-02"><summary lang="en">At which boundary should access to the full service container be concentrated?</summary><p lang="en">At the application entry point rather than inside business services.</p><p lang="fr">Le kernel assemble l&#x27;application. Les services reçoivent leurs collaborators.</p><a href="course-CRS-htvm3b1gas0d.html#out-OUT-svr2vz7ebkv7">Revoir le passage précis</a></details></div></div><div id="cards-s-le-fil-rouge-un-newslettermanager-et-son-mailer-3" data-card-section="s-le-fil-rouge-un-newslettermanager-et-son-mailer"><h3><a href="#s-le-fil-rouge-un-newslettermanager-et-son-mailer">Revoir : Le fil rouge : un `NewsletterManager` et son `Mailer`</a></h3><div class="reader-cards"><details class="reader-card" id="B-htvm3b1gas0d-03"><summary lang="en">Does addArgument(&#x27;mailer&#x27;) inject the mailer service?</summary><p lang="en">No. It passes a string; use new Reference(&#x27;mailer&#x27;) for a service reference.</p><p lang="fr">Une string reste une valeur. Reference désigne un service.</p><a href="course-CRS-htvm3b1gas0d.html#out-OUT-6ah70qtk60fe">Revoir le passage précis</a></details></div></div><div id="cards-s-injecter-ou-recuperer-la-distinction-de-fond-4" data-card-section="s-injecter-ou-recuperer-la-distinction-de-fond"><h3><a href="#s-injecter-ou-recuperer-la-distinction-de-fond">Revoir : Injecter ou récupérer : la distinction de fond</a></h3><div class="reader-cards"><details class="reader-card" id="B-htvm3b1gas0d-04"><summary lang="en">Why does injecting ContainerInterface not make a class&#x27;s real dependencies explicit?</summary><p lang="en">The signature names only the container; later get() calls determine the hidden collaborators.</p><p lang="fr">Le container ne décrit pas les besoins précis. Préférer des arguments typés par collaborator.</p><a href="course-CRS-htvm3b1gas0d.html#out-OUT-svr2vz7ebkv7">Revoir le passage précis</a></details></div></div><div id="cards-s-les-quatre-formes-d-injection-5" data-card-section="s-les-quatre-formes-d-injection"><h3><a href="#s-les-quatre-formes-d-injection">Revoir : Les quatre formes d&#x27;injection</a></h3><div class="reader-cards"><details class="reader-card" id="B-htvm3b1gas0d-05"><summary lang="en">Which injection form best guarantees an essential dependency is present?</summary><p lang="en">Constructor injection; a setter may never be called.</p><p lang="fr">Le constructor garantit l&#x27;état initial. Un setter convient aux dependencies facultatives.</p><a href="course-CRS-htvm3b1gas0d.html#out-OUT-6ah70qtk60fe">Revoir le passage précis</a></details></div></div><div id="cards-s-le-component-seul-ligne-par-ligne-6" data-card-section="s-le-component-seul-ligne-par-ligne"><h3><a href="#s-le-component-seul-ligne-par-ligne">Revoir : Le component seul, ligne par ligne</a></h3><div class="reader-cards"><details class="reader-card" id="B-htvm3b1gas0d-06"><summary lang="en">Can a compiled ContainerBuilder accept new definitions or changed parameters?</summary><p lang="en">No. Compilation freezes definitions and the parameter bag.</p><p lang="fr">La compilation fige la configuration. Les services restent ensuite accessibles selon leur visibilité.</p><a href="course-CRS-htvm3b1gas0d.html#out-OUT-dvs57dgffn57">Revoir le passage précis</a></details></div></div><div id="cards-s-pieges-d-examen-7" data-card-section="s-pieges-d-examen"><h3><a href="#s-pieges-d-examen">Revoir : Pièges d&#x27;examen</a></h3><div class="reader-cards"><details class="reader-card" id="B-htvm3b1gas0d-07"><summary lang="en">Does Required on a setter work when autowiring is disabled?</summary><p lang="en">No. Required setters are processed through autowiring.</p><p lang="fr">Required dépend de l&#x27;autowiring. L&#x27;attribute seul ne déclenche pas l&#x27;appel.</p><a href="course-CRS-htvm3b1gas0d.html#out-OUT-6ah70qtk60fe">Revoir le passage précis</a></details></div></div><div id="cards-s-fiche-express-8" data-card-section="s-fiche-express"><h3><a href="#s-fiche-express">Revoir : Fiche express</a></h3><div class="reader-cards"><details class="reader-card" id="B-htvm3b1gas0d-08"><summary lang="en">How many injection forms does the Symfony documentation distinguish?</summary><p lang="en">Four: constructor, immutable setter, setter and public property.</p><p lang="fr">L&#x27;immutable setter rend un nouvel object. Ne pas le confondre avec un setter mutable.</p><a href="course-CRS-htvm3b1gas0d.html#out-OUT-6ah70qtk60fe">Revoir le passage précis</a></details></div></div><div id="cards-previous"><p class="recall-provenance">Module 03 — Architecture Symfony · Cours « Request handling »</p><aside class="checkpoint"><h2>Rappel d’un cours antérieur</h2><p>Avant de poursuivre : Request handling.</p><details class="corpus-correction"><summary lang="en">When does kernel.view run?</summary><p lang="en">Only when the controller result is not already a Response.</p><p>kernel.view tente de convertir un résultat non-Response. kernel.response intervient sur la Response obtenue.</p><a href="course-CRS-mpwjc4g3vmj7.html#out-OUT-3p88arwajsx7">Relire la correction dans le cours antérieur</a></details></aside></div></div><div id="view-quiz" data-course-panel role="region" aria-labelledby="view-quiz-title"><aside class="revision-context"><p><strong>Avant le quiz :</strong> Pour afficher /blog/42, BlogController a besoin d&#x27;un ArticleCatalog. Pour traiter l&#x27;inscription, un autre service peut avoir besoin d&#x27;un moyen de notification. Si chacun construit ses collaborateurs ou les recherche dans un container global, leur remplacement en test devient difficile et leurs besoins réels se cachent dans le corps du code.</p><p>Quelle donnée entre, quelle responsabilité agit et quelle condition change le résultat ? Pour chaque correction, vérifiez ces conditions dans <a href="course-CRS-htvm3b1gas0d.html#s-objectif">le passage enseigné</a>, sans supposer que toutes les branches du blog sont exécutées.</p></aside><h2 id="view-quiz-title">Quiz</h2><p class="quiz-size" lang="en">4 eligible learning questions · 4 per session. Repeating a question does not demonstrate mastery.</p><p id="course-quiz-status" role="status">Quiz interactif non chargé. Démarrez après chargement de la banque locale.</p><div id="course-quiz-controls" class="assessment-main" hidden><div id="course-quiz-assessment-controls" hidden><select id="course-quiz-assessment-mode" aria-label="Mode du quiz" hidden><option value="learning">Entraînement</option></select><p id="course-quiz-training-scope"></p><button id="course-quiz-start-assessment" type="button" lang="en">Start practice</button><button id="course-quiz-finish-assessment" type="button" lang="en" hidden>End session</button></div><p id="course-quiz-assessment-error" role="alert"></p><p id="course-quiz-assessment-timer" hidden></p><p id="course-quiz-session-progress" class="quiz-progress" role="status" lang="en"></p><div id="course-quiz-assessment-app" tabindex="-1"></div><nav id="course-quiz-session-navigation" aria-label="Questions du cours"></nav><div id="course-quiz-learning-overview" aria-live="polite"></div></div><div id="course-quiz-native"><p>Sans JavaScript ou si le chargement échoue : aucune tentative notée. Les <a href="#view-flashcards">flashcards du cours</a> restent disponibles.</p><details class="course-quiz-fallback" data-question-id="L-htvm3b1gas0d-base-v1"><summary lang="en">What distinguishes dependency injection from retrieving dependencies from a container? Select one answer (radio).</summary><p>Correction de consultation — non notée.</p><p>La signature expose les dependencies. La récupération masque les besoins réels.</p><ul><li><strong lang="en">Distractor: The object receives the entire container and searches it.</strong><p>Cette récupération masque les dependencies au lieu de les exposer dans la signature.</p></li><li><strong lang="en">Distractor: The object constructs every collaborator in its constructor.</strong><p>Construire soi-même ses dependencies n&#x27;est pas les recevoir par injection.</p></li><li><strong lang="en">Correct: The object receives collaborators instead of looking them up.</strong><p>La signature expose les dependencies. La récupération masque les besoins réels.</p></li></ul><a href="course-CRS-htvm3b1gas0d.html#out-OUT-svr2vz7ebkv7">Relire le passage exact</a></details></div></div></div></div><details class="transfer-panel"><summary>Sauvegarde et transfert de progression</summary><p id="reading-status" role="status">Sans JavaScript : lecture libre ; progression non enregistrée.</p><p><a href="assessment.html#overview-title">Lecture, réussites immédiates et différées</a></p><p>Transfert manuel — aucune synchronisation automatique</p><p id="persistence-status" role="status"></p><button type="button" class="secondary" id="export-progress">Exporter ma progression</button><label for="import-progress">Choisir un JSON pour fusionner ma progression (sans remplacement)</label><input type="file" id="import-progress" accept="application/json,.json"><p id="transfer-status" role="status"></p></details></main><footer class="site-footer"><a href="catalogue.html">Catalogue</a> <a href="sources.html">Sources et attribution</a> <a href="#contenu">Haut de page</a></footer></body></html>
