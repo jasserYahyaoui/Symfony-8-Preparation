@@ -1,0 +1,484 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; connect-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Deprecations best practices — Symfony 8 Preparation</title><link rel="stylesheet" href="styles.css"><link rel="stylesheet" href="reader.css"><script src="mermaid.min.js" defer></script><script src="mermaid-init.js" defer></script><link rel="stylesheet" href="assessment.css"><script src="fixed-exams-data.js" defer></script><script src="fixed-exams.js" defer></script><script src="learning-state.js" defer></script><script src="guide.js" defer></script><script src="reader-catalog.js" defer></script><script src="reader.js" defer></script><script src="site-state.js" defer></script><script src="assessment.js" defer></script><script src="course-views.js" defer></script><link rel="stylesheet" href="syntax-highlight.css"><script src="prism-syntax.js" defer></script><script src="syntax-highlight.js" defer></script></head><body data-course-id="CRS-rkq1d437dw5d"><a class="skip" href="#contenu">Aller au contenu</a><header class="site-header"><a class="brand" href="index.html">S8 Preparation</a><nav aria-label="Navigation principale"><a href="index.html">Accueil</a> <a href="catalogue.html">Parcours</a> <a href="assessment.html?mode=review">Réviser</a> <a href="examens.html">Examens blancs</a> <a href="jour-j.html">Jour J</a></nav></header><main id="contenu" tabindex="-1" class="corpus-reader"><nav class="breadcrumb" aria-label="Fil d’Ariane"><a href="index.html">Accueil</a> <span aria-hidden="true">›</span> <a href="catalogue.html">Parcours</a> <span aria-hidden="true">›</span> <a href="lot-03.html">Module 03 — Architecture Symfony</a> <span aria-hidden="true">›</span> <span aria-current="page">Deprecations best practices</span></nav><h1>Deprecations best practices</h1><p class="muted">Symfony 8.0 · API PHP ≤ 8.4 · Twig ≤ 3.22. Préparation indépendante.</p><p class="revision-status">Rédaction narrative P11 : projection nouvelle, non couverte par les décisions historiques P10. Aucune approbation officielle ni garantie de réussite.</p><aside class="narrative-context" aria-label="Repères de lecture"><p><strong>Prérequis de lecture :</strong> <a href="course-CRS-tygmreqkkds3.html">HttpKernel component and FrameworkBundle</a></p><p><strong>Concepts voisins :</strong> <a href="course-CRS-p1694d5f7r8c.html">Service container</a> — Séparer assemblage de l’application et appel HTTP. <a href="lot-03.html">Comparer les responsabilités dans ce module</a> · <a href="carte-composants.html">Situer cette responsabilité dans le blog</a> · <a href="glossaire.html">Distinguer les termes voisins</a></p><p><a href="ordre-lecture.html">Retrouver les 163 cours dans le parcours recommandé</a>. Ce repère ne modifie ni votre historique ni votre progression.</p></aside><div class="course-layout"><details class="lot-course-menu"><summary>Cours du module · 15 cours</summary><nav aria-label="Cours du module"><a class="lot-context" href="lot-03.html">Module 03 — Architecture Symfony</a><ol><li><a href="course-CRS-epx8j3fhb38n.html">HttpFoundation component</a></li><li><a href="course-CRS-tyf3yfxjc3sa.html">Symfony Flex</a></li><li><a href="course-CRS-y84syktt20ww.html">License</a></li><li><a href="course-CRS-1bxqx6ks853z.html">Components and Bridges</a></li><li><a href="course-CRS-156khyjssm25.html">Code organization</a></li><li><a href="course-CRS-mpwjc4g3vmj7.html">Request handling</a></li><li><a href="course-CRS-kd67y4vnd0mm.html">Exception handling</a></li><li><a href="course-CRS-2hpcy2rscq7m.html">Event dispatcher and kernel events</a></li><li><a href="course-CRS-k2xvr11x936e.html">Official best practices</a></li><li><a href="course-CRS-21ec5kwrcmkm.html">Backward compatibility promise</a></li><li><a href="course-CRS-rkq1d437dw5d.html" aria-current="page">Deprecations best practices</a></li><li><a href="course-CRS-f9s8mpaydnbx.html">Framework overloading</a></li><li><a href="course-CRS-6m32av3nr9eh.html">Release management and roadmap schedule</a></li><li><a href="course-CRS-f74jcpnrrkhz.html">Framework interoperability and PSRs</a></li><li><a href="course-CRS-9g4qrgfs7nm4.html">Naming conventions</a></li></ol><a href="lot-03.html#view-quiz">Quiz du module</a></nav></details><aside class="course-section-menu" aria-label="Sommaire du cours"><nav class="course-actions" aria-label="Activités du cours"><a id="tab-course" href="#view-course">Cours</a><a id="tab-flashcards" href="#view-flashcards">Flashcards</a><a id="tab-quiz" href="#view-quiz">Quiz</a></nav><details class="course-section-disclosure"><summary id="course-sections">Sections du cours</summary><nav aria-label="Sections du cours"><ul><li><a href="#s-objectif">Objectif</a></li><li><a href="#s-l-essentiel">L&#x27;essentiel</a></li><li><a href="#s-le-schema">Le schéma</a></li><li><a href="#s-le-fil-rouge-request-get-de-7-4-a-8-0">Le fil rouge : `Request::get()`, de 7.4 à 8.0</a></li><li><a href="#s-regle-1-deprecier-en-mineure-supprimer-en-majeure">Règle 1 : déprécier en mineure, supprimer en majeure</a></li><li><a href="#s-regle-2-deux-signaux-deux-publics">Règle 2 : deux signaux, deux publics</a></li><li><a href="#s-trigger-deprecation-ligne-par-ligne">`trigger_deprecation()` ligne par ligne</a></li><li><a href="#s-regle-3-la-trace-ecrite-trois-files-dans-une-pull-request">Règle 3 : la trace écrite, trois files dans une pull request</a></li><li><a href="#s-le-changelog-md-a-ses-propres-regles">Le `CHANGELOG.md` a ses propres règles</a></li><li><a href="#s-la-suppression-a-sa-propre-trace">La suppression a sa propre trace</a></li><li><a href="#s-pieges-d-examen">Pièges d&#x27;examen</a></li><li><a href="#s-application">Application</a></li><li><a href="#s-fiche-express">Fiche express</a></li><li><a href="#s-sources-officielles">Sources officielles</a></li><li><a href="#reader-objectives">Objectifs d’apprentissage</a></li><li><a href="#course-recalls">Rappels et liens avec les autres cours</a></li></ul></nav><nav aria-label="Flashcards par section"><a href="#view-flashcards">Flashcards par section</a><ul><li><a href="#cards-s-l-essentiel-1">L&#x27;essentiel</a></li><li><a href="#cards-s-le-schema-2">Le schéma</a></li><li><a href="#cards-s-le-fil-rouge-request-get-de-7-4-a-8-0-3">Le fil rouge : `Request::get()`, de 7.4 à 8.0</a></li><li><a href="#cards-s-regle-1-deprecier-en-mineure-supprimer-en-majeure-4">Règle 1 : déprécier en mineure, supprimer en majeure</a></li><li><a href="#cards-s-regle-2-deux-signaux-deux-publics-5">Règle 2 : deux signaux, deux publics</a></li><li><a href="#cards-s-trigger-deprecation-ligne-par-ligne-6">`trigger_deprecation()` ligne par ligne</a></li><li><a href="#cards-s-regle-3-la-trace-ecrite-trois-files-dans-une-pull-request-7">Règle 3 : la trace écrite, trois files dans une pull request</a></li><li><a href="#cards-s-le-changelog-md-a-ses-propres-regles-8">Le `CHANGELOG.md` a ses propres règles</a></li><li><a href="#cards-s-la-suppression-a-sa-propre-trace-9">La suppression a sa propre trace</a></li><li><a href="#cards-s-pieges-d-examen-10">Pièges d&#x27;examen</a></li><li><a href="#cards-s-application-11">Application</a></li><li><a href="#cards-s-fiche-express-12">Fiche express</a></li><li><a href="#cards-previous">Module 03 — Architecture Symfony · Cours « Official best practices » · Rappel : <span lang="en">Where should an application value that almost never changes usually live?</span></a></li></ul></nav><nav aria-label="Retour au module"><a href="lot-03.html">Tous les cours du module</a></nav></details><p class="local-quiz-count">5 questions disponibles · 5 par session Quiz</p></aside><div class="course-content"><div id="view-course" data-course-panel role="region" aria-labelledby="view-course-title"><h2 id="view-course-title">Cours</h2><p class="course-introduction"><a href="#s-objectif">Introduction</a> · <a href="#course-sections">Sections du cours</a></p><h2 id="reader-objectives" tabindex="-1">Objectifs d’apprentissage</h2><ul><li><a href="course-CRS-rkq1d437dw5d.html#out-OUT-yqb3s91g64f7">Énoncer dans quelle version une deprecation peut être introduite puis supprimée</a></li><li><a href="course-CRS-rkq1d437dw5d.html#out-OUT-8dx7erg8d1eb">Distinguer @deprecated de trigger_deprecation()</a></li><li><a href="course-CRS-rkq1d437dw5d.html#out-OUT-crtr1pmq22t7">Nommer le package fournissant trigger_deprecation()</a></li><li><a href="course-CRS-rkq1d437dw5d.html#out-OUT-0j2bgvnbyj7p">Citer les trois files à mettre à jour</a></li></ul><aside class="pedagogy-legend" aria-label="Repères pédagogiques"><p><strong>Repères pédagogiques</strong></p><p>Ces repères décrivent le rôle du bloc, pas une fréquence officielle à l’examen.</p><p class="teaching-label essential"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="brain" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5C12 1 6 1 6 5C2 5 1 10 4 12C1 15 3 19 6 19C6 23 12 23 12 19V5M12 5C12 1 18 1 18 5C22 5 23 10 20 12C23 15 21 19 18 19C18 23 12 23 12 19M6 5C6 8 8 9 9 9M4 12H7L9 14M6 19V16M18 5C18 8 16 9 15 9M20 12H17L15 14M18 19V16"></path></svg> <strong>À comprendre</strong></p><p class="teaching-label essential"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="book" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5C9 3 5 3 2 4V20C5 19 9 19 12 21C15 19 19 19 22 20V4C19 3 15 3 12 5V21M5 8H8M5 12H8M16 8H19M16 12H19"></path></svg> <strong>À mémoriser</strong></p><p class="teaching-label example"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="code" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6L2 12L8 18M16 6L22 12L16 18M14 3L10 21"></path></svg> <strong>Exemple concret</strong></p><p class="teaching-label pitfall"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="warning" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3L23 21H1L12 3ZM12 9V14M12 17V18"></path></svg> <strong>Piège à éviter</strong></p><p class="teaching-label nuance"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="balance" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3V21M7 21H17M3 7L21 5M5 7L1 15H9L5 7M19 6L15 14H23L19 6M1 15Q5 20 9 15M15 14Q19 19 23 14"></path></svg> <strong>Nuance à connaître</strong></p><p>Précision, exception ou condition d’application d’une règle.</p></aside><section class="teaching-section" data-section="s-objectif"><h2 id="s-objectif" tabindex="-1">Objectif</h2><p>Notre blog cible Symfony 8.0, mais un ancien controller utilisait
+<code>Request::get()</code> pour lire l'identifiant d'article. Ce code doit être migré :
+la méthode n'existe plus en 8.0. Pour comprendre pourquoi l'équipe pouvait
+anticiper cette rupture, nous revenons explicitement à la transition
+historique 7.4 → 8.0, sans présenter l'ancienne API comme disponible aujourd'hui.</p>
+<p>Nous suivrons les deux côtés de cette transition : l'application qui repère
+et remplace un usage, puis l'auteur du composant qui l'annonce, conserve
+temporairement le comportement et documente son retrait.</p>
+<p>Ce cours est la <strong>mise en pratique</strong> de deux cours voisins : la promesse de
+<a href="course-CRS-21ec5kwrcmkm.html">compatibilité ascendante</a> (pourquoi on ne peut
+pas supprimer sans prévenir) et le calendrier de
+<a href="course-CRS-6m32av3nr9eh.html">gestion des versions</a> (quand la prévenance
+s'arrête). L'objet <code>Request</code> vient de
+<a href="course-CRS-epx8j3fhb38n.html">HttpFoundation</a>.</p></section><section class="teaching-section" data-section="s-l-essentiel"><h2 id="s-l-essentiel" tabindex="-1">L&#x27;essentiel</h2><p class="teaching-label essential"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="brain" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5C12 1 6 1 6 5C2 5 1 10 4 12C1 15 3 19 6 19C6 23 12 23 12 19V5M12 5C12 1 18 1 18 5C22 5 23 10 20 12C23 15 21 19 18 19C18 23 12 23 12 19M6 5C6 8 8 9 9 9M4 12H7L9 14M6 19V16M18 5C18 8 16 9 15 9M20 12H17L15 14M18 19V16"></path></svg> <strong>À comprendre</strong></p><aside class="section-digest" id="s-l-essentiel-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Déprécier en mineure prépare la migration.</li><li>Supprimer en majeure rend la rupture explicite.</li></ol></aside><p><strong>Ce que cette partie veut réellement vous apprendre.</strong></p>
+<ul>
+<li><em>Pourquoi ce sujet existe.</em> La promesse de BC interdit de casser une API en
+  cours de route ; la deprecation est l'outil qui <strong>permet d'évoluer quand même</strong>.</li>
+<li><em>Le piège de fond.</em> Deux signaux différents (<code>@deprecated</code> à la lecture,
+  <code>trigger_deprecation()</code> à l'exécution) pour deux publics, et trois traces
+  écrites dans la même pull request. On les confond sans cesse.</li>
+<li><em>Ce que l'auteur veut que vous compreniez.</em> La version passée à
+  <code>trigger_deprecation()</code> est celle d'<strong>introduction</strong>, jamais de suppression.</li>
+<li><em>Pourquoi c'est à l'examen.</em> Questions précises : sens de <code>'7.4'</code>, FQCN du
+  remplaçant, effet de <code>@</code>, exception « critique ».</li>
+</ul>
+<p>Une <em>deprecation</em> annonce qu'un usage doit être abandonné tout en conservant
+son fonctionnement pendant une transition. Elle n'est donc ni une suppression
+immédiate ni une garantie de disponibilité indéfinie.</p>
+<p>Sur l'ancienne branche, le controller pouvait encore répondre à <code>/blog/42</code>
+alors qu'un signal invitait l'équipe à remplacer sa lecture ambiguë.
+La règle normale est : <strong>une mineure prévient, la majeure suivante supprime</strong>.
+Le temps intermédiaire sert à choisir le bon remplacement, pas seulement
+à masquer les notices.</p>
+<p>Deux observations se complètent : lire les annotations et guides avant
+l'exécution, puis collecter les signaux des chemins réellement exécutés.
+Un GET réussi ne prouve pas l'absence de deprecations, et une commande
+d'import jamais lancée ne peut pas révéler ses usages par un signal d'exécution.</p>
+<pre class="highlight" tabindex="0"><code class="language-text">   7.0 ... 7.3        7.4                      8.0
+      |                |                        |
+      |        « Deprecate X »            « Remove X »
+      |        code marche + signal       code supprimé → Error
+      └────── période d'avertissement ───────────┘
+   (8.0 = 7.4 moins le code déprécié ; sorties simultanées)</code></pre></section><section class="teaching-section" data-section="s-le-schema"><h2 id="s-le-schema" tabindex="-1">Le schéma</h2><p><strong>Où en est-on ?</strong> On a la règle générale ; le schéma la rend concrète sur
+un cas réel de l'histoire du framework. Pourquoi ce schéma ? Parce qu'il
+oppose les deux issues possibles d'une migration : faite avant 8.0, ou oubliée.</p>
+<p>Le diagramme suit une migration déjà réalisée dans l'histoire du framework.
+L'entrée n'est pas une nouvelle Request en 8.0, mais un appel hérité
+encore exécutable en 7.4. La décision appartient à l'équipe de maintenance :</p>
+<figure class="diagram" aria-labelledby="CRS-rkq1d437dw5d-3-diagram-0-title CRS-rkq1d437dw5d-3-diagram-0-description"><figcaption id="CRS-rkq1d437dw5d-3-diagram-0-title">Migrer un appel avant sa suppression</figcaption><p id="CRS-rkq1d437dw5d-3-diagram-0-description">En Symfony 7.4, l&#x27;appel historique à Request.get fonctionne et émet une dépréciation collectable. L&#x27;application doit choisir le bag explicite avant Symfony 8.0. Un appel oublié à la méthode supprimée lève Error ; query.get continue à lire la query string.</p><div class="mermaid" hidden>---
+title: Déprécier, puis supprimer
+---
+flowchart TD
+  accTitle: Migrer un appel avant sa suppression
+  accDescr: En Symfony 7.4, l&#x27;appel historique à Request.get fonctionne et émet une dépréciation collectable. L&#x27;application doit choisir le bag explicite avant Symfony 8.0. Un appel oublié à la méthode supprimée lève Error ; query.get continue à lire la query string.
+  M[&quot;7.4 : Request.get historique&quot;] --&gt;|&quot;exécuter et collecter les notices&quot;| D{&quot;appel remplacé ?&quot;}
+  D --&gt;|&quot;oui : query.get pour ?page=2&quot;| R([&quot;8.0 : lecture de page&quot;])
+  D --&gt;|&quot;non : méthode supprimée&quot;| E([&quot;8.0 : Error&quot;])
+  classDef legacy fill:#e0f2fe,stroke:#0369a1,color:#0c4a6e
+  classDef decision fill:#fef3c7,stroke:#b45309,color:#78350f
+  classDef result fill:#dcfce7,stroke:#15803d,color:#14532d
+  classDef error fill:#fee2e2,stroke:#b91c1c,color:#7f1d1d
+  class M legacy
+  class D decision
+  class R result
+  class E error</div></figure>
+<p>Le chemin vert demande de choisir la provenance de la donnée avant le passage
+en 8.0. Pour la variante historique <code>?page=2</code>, <code>query</code> lit la query string ;
+pour l'identifiant de <code>blog_show</code>, il faut les attributes renseignés par
+le Routing. Notre pagination principale <code>/blog/page/{page}</code> utiliserait elle
+aussi un attribute de route, pas cette query string de laboratoire.</p>
+<p>Le chemin rouge aboutit à une <code>Error</code> parce qu'une méthode supprimée est
+appelée. Il ne s'agit plus d'une simple notice de migration. Bleu : ancien
+usage ; orange : travail de remplacement ; vert/rouge : conséquences.
+La collecte n'observe que les passages exécutés : il faut couvrir aussi
+l'inscription, les erreurs et l'import, puis compléter cette observation
+par la lecture et l'analyse du code.</p></section><section class="teaching-section" data-section="s-le-fil-rouge-request-get-de-7-4-a-8-0"><h2 id="s-le-fil-rouge-request-get-de-7-4-a-8-0" tabindex="-1">Le fil rouge : `Request::get()`, de 7.4 à 8.0</h2><aside class="section-digest" id="s-le-fil-rouge-request-get-de-7-4-a-8-0-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Request::get() illustre la dépréciation en 7.4 puis la suppression en 8.0.</li><li>Lire explicitement query, request ou attributes selon l&#x27;origine des données.</li></ol></aside><p><strong>Où en est-on ?</strong> Du schéma général au cas précis. Pourquoi <code>Request::get()</code> ?
+Parce qu'elle mélangeait trois provenances : la méthode est dépréciée
+<em>justement</em> à cause de cette ambiguïté, pas par caprice.</p>
+<p>Dans l'ancienne version, <code>Request::get()</code> cherchait dans les attributes,
+puis la query string, puis les données POST parsées. Un même nom pouvait
+donc désigner plusieurs entrées. Le remplacement ne consiste pas à choisir
+un autre raccourci universel, mais à rendre l'intention visible.</p>
+<p>Le code suivant suppose une variable <code>$request</code> de type HttpFoundation
+<code>Request</code>. Chaque ligne correspond à une provenance ; le commentaire
+<code>/article/{id}</code> conserve l'ancien chemin du laboratoire :</p>
+<pre class="highlight" tabindex="0"><code class="language-php">$id    = $request-&gt;attributes-&gt;get('id');    // placeholder de route : /article/{id}
+$page  = $request-&gt;query-&gt;get('page');       // query string : ?page=2
+$title = $request-&gt;request-&gt;get('title');    // body d'un form envoyé en POST</code></pre>
+<p>Après le matching de <code>/blog/42</code>, avec l'attribute <code>id</code> contenant la chaîne
+<code>'42'</code>, la première lecture renvoie cette valeur. Si ce GET porte aussi
+<code>?page=2</code>, la deuxième renvoie <code>'2'</code>. La troisième renvoie <code>null</code> sur ce GET
+sans données de form ; dans un scénario distinct de soumission de titre,
+elle lit le champ POST parsé.</p>
+<p>Ces getters ne prouvent ni l'existence de l'article dans <code>ArticleCatalog</code>,
+ni la validité métier de la page ou du titre. Ils ne convertissent pas
+non plus automatiquement un body JSON en données de form. La migration
+conserve la bonne provenance ; la validation et la recherche restent
+les étapes suivantes.</p>
+<table>
+<thead>
+<tr>
+<th>Ancien appel</th>
+<th>Remplacement explicite</th>
+<th>Source de la donnée</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>get('id')</code> (placeholder de route)</td>
+<td><code>-&gt;attributes-&gt;get('id')</code></td>
+<td>Routing (cf. <a href="course-CRS-mpwjc4g3vmj7.html">Request handling</a>)</td>
+</tr>
+<tr>
+<td><code>get('page')</code> (<code>?page=2</code>)</td>
+<td><code>-&gt;query-&gt;get('page')</code></td>
+<td>query string</td>
+</tr>
+<tr>
+<td><code>get('title')</code> (form POST)</td>
+<td><code>-&gt;request-&gt;get('title')</code></td>
+<td>body parsé</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition info">
+<p class="admonition-title">🌍 In Real Life</p>
+<p><strong>La situation</strong> : un ancien guichet mélangeait plusieurs bacs ; sa fermeture annoncée impose désormais de choisir le bac qui correspond réellement au document.</p>
+<p><strong>L’équivalent dans Symfony</strong> : ancien accès → <code>Request::get()</code> historique ; bacs distincts → <code>attributes</code>, <code>query</code>, <code>request</code>.</p>
+<p><strong>Retour à la réalité technique</strong> : la migration choisit la provenance, pas un nouveau getter universel. Le routage place <code>id</code> dans les attributes ; un body JSON n'est pas automatiquement un form parsé. Déprécié en 7.4 ne signifie pas encore disponible en 8.0.</p>
+<p><strong>🧠 Comment le mémoriser</strong> : « Remplacer l'accès, conserver l'intention. » Image mentale : trois bacs identifiés. Question-réflexe : d'où cette valeur doit-elle venir ?</p>
+<p><strong>⚠️ À ne pas confondre</strong> : lecture, validation et recherche de l'article.</p>
+</div></section><section class="teaching-section" data-section="s-regle-1-deprecier-en-mineure-supprimer-en-majeure"><span class="outcome-anchor" id="out-OUT-yqb3s91g64f7" tabindex="-1"></span><h2 id="s-regle-1-deprecier-en-mineure-supprimer-en-majeure" tabindex="-1">Règle 1 : déprécier en mineure, supprimer en majeure</h2><p><strong>Où en est-on ?</strong> On a un exemple ; place aux trois règles qu'applique
+l'auteur du composant. Pourquoi commencer par le calendrier ? Parce que
+c'est lui qui donne à l'équipe applicative une fenêtre de migration (voir
+<a href="course-CRS-6m32av3nr9eh.html">Release management</a>).</p>
+<p>L'auteur de Symfony introduit normalement la deprecation dans la <strong>prochaine
+mineure</strong> du composant, bundle, bridge ou contrat concerné. Une deprecation
+critique peut exceptionnellement rejoindre une version antérieure encore
+maintenue. Ce n'est pas une autorisation d'ajouter librement ces changements
+dans tous les correctifs.</p>
+<p>La suppression appartient à la <strong>prochaine majeure</strong>, selon le rythme
+normal d'une majeure tous les deux ans. Ainsi, l'équipe du blog pouvait
+remplacer l'ancien getter en 7.4 avant sa disparition en 8.0. Arriver
+directement en 8.0 avec cet appel ne laisse plus de période d'avertissement.</p>
+<p>Le repère « <strong>8.0 = 7.4 moins le code déprécié</strong> » décrit le partage des
+nouveautés entre ces versions publiées ensemble et le retrait des anciens usages.
+Il ne signifie pas que leurs exigences de plateforme sont identiques :
+Symfony 8.0 exige notamment PHP 8.4 ou supérieur, notre enseignement
+restant limité aux APIs PHP 8.4.</p>
+<p>Enfin, les conventions de contribution interdisent d'introduire une nouvelle
+class, interface ou trait déjà déprécié, ou contenant des méthodes dépréciées ;
+une nouvelle méthode ne naît pas dépréciée non plus. C'est une règle du projet,
+pas une impossibilité de syntaxe PHP.</p><aside class="enrichment" aria-label="Autre explication"><p>Une deprecation est un panneau « cette sortie fermera, utilisez l'autre » : l'ancienne voie fonctionne pendant la migration. Ce panneau n'est pas la barrière de suppression, réservée à la majeure.</p></aside></section><section class="teaching-section" data-section="s-regle-2-deux-signaux-deux-publics"><span class="outcome-anchor" id="out-OUT-8dx7erg8d1eb" tabindex="-1"></span><h2 id="s-regle-2-deux-signaux-deux-publics" tabindex="-1">Règle 2 : deux signaux, deux publics</h2><aside class="section-digest" id="s-regle-2-deux-signaux-deux-publics-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Le PHPDoc informe à la lecture.</li><li>Le signal runtime révèle les usages effectivement exécutés.</li></ol></aside><p><strong>Où en est-on ?</strong> La règle 1 dit <em>quand</em> ; la règle 2 dit <em>comment prévenir</em>.
+Pourquoi deux signaux ? Parce que deux personnes différentes doivent être
+prévenues à deux moments différents.</p>
+<p>Le développeur qui ouvre l'ancien controller doit comprendre le remplacement
+avant de lancer le site. Celui qui ne connaît pas encore l'appel caché dans
+une dépendance doit pouvoir le découvrir à l'exécution. Ces deux besoins
+expliquent les deux signaux :</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th><code>@deprecated</code></th>
+<th><code>trigger_deprecation()</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>nature</td>
+<td>annotation PHPDoc</td>
+<td>appel de function</td>
+</tr>
+<tr>
+<td>agit</td>
+<td>à la lecture du code</td>
+<td>à l'exécution, à chaque passage</td>
+</tr>
+<tr>
+<td>limite</td>
+<td>n'émet aucune notice à elle seule</td>
+<td>ne signale pas un chemin jamais exécuté</td>
+</tr>
+</tbody>
+</table>
+<p>L'annotation PHPDoc est un commentaire destiné aux lecteurs et outils
+d'analyse ; ces outils peuvent aussi inspecter des dépendances.
+Elle porte la version d'introduction (<strong>obligatoire</strong>) et, si possible,
+le remplacement. Si celui-ci vit dans un autre namespace, son <em>FQCN</em>,
+nom de class entièrement qualifié, lève l'ambiguïté. Voici l'indication
+historique concernant notre getter :</p>
+<pre class="highlight" tabindex="0"><code class="language-php">/**
+ * @deprecated since Symfony 7.4, use properties `-&gt;attributes`, `query` or `request` directly instead
+ */</code></pre>
+<p>Ce commentaire n'émet rien lorsqu'on le lit ou lorsqu'on appelle la méthode.
+Le signal d'exécution vient de la fonction globale <code>trigger_deprecation()</code>,
+fournie par <code>symfony/deprecation-contracts</code>, utilisable sans installer
+le framework complet. La commande suivante illustre sa déclaration comme
+dépendance avec Composer 2 ; pour le laboratoire PHP 8.4, on retient
+la branche Contracts 3.6 compatible, selon les contraintes du projet :</p>
+<pre class="highlight" tabindex="0"><code class="language-bash">composer require symfony/deprecation-contracts</code></pre>
+<p>Effet attendu si la résolution réussit : Composer ajoute la dépendance
+et prépare son autoload. Cette commande sans contrainte de version explicite
+ne garantit pas à elle seule la branche 3.6 ; ce n'est pas une commande
+exécutée pour ce cours.</p>
+<p>Voici une bibliothèque fictive <code>acme/demo</code> : le blog pourrait en utiliser
+le formatage dans son import. Le script est placé à la racine d'un projet
+disposant de l'autoload et du package de contrats :</p>
+<pre class="highlight" tabindex="0"><code class="language-php">&lt;?php
+require __DIR__.'/vendor/autoload.php';
+
+/** @deprecated since acme/demo 1.2, use normalizedLabel() instead */
+function legacyLabel(string $value): string
+{
+    trigger_deprecation('acme/demo', '1.2', 'Use normalizedLabel() instead of legacyLabel().');
+    return normalizedLabel($value);
+}
+function normalizedLabel(string $value): string
+{
+    return trim($value);
+}
+
+$notices = [];
+set_error_handler(static function (int $severity, string $message) use (&amp;$notices): bool {
+    if (E_USER_DEPRECATED !== $severity) {
+        return false;
+    }
+    $notices[] = $message;
+    return true;
+});
+try {
+    echo legacyLabel(' Article 42 '), "\n";
+} finally {
+    restore_error_handler();
+}
+echo count($notices), "\n";</code></pre>
+<p>Résultat attendu : <code>Article 42</code>, puis <code>1</code>. L'ancienne fonction garde son
+résultat et le handler de ce laboratoire collecte une notice ; l'appel
+direct à <code>normalizedLabel()</code> ne produirait pas cette notice. Le <code>finally</code>
+restaure le handler précédent. Ce collecteur minimal n'est pas une politique
+de journalisation de production et ne démontre pas que tous les autres
+chemins de l'application sont exempts de deprecations.</p><div class="retained-answer-context">
+<p><strong>Repère — La suppression a sa propre trace :</strong></p>
+<p lang="en"><strong>Question:</strong> Does removing deprecated code require another changelog entry?</p>
+<p lang="en"><strong>Answer:</strong> Yes. The removal change documents its consequences separately.</p>
+<p>La deprecation et la suppression sont deux changements. La suppression ajoute sa propre trace.</p>
+</div></section><section class="teaching-section" data-section="s-trigger-deprecation-ligne-par-ligne"><span class="outcome-anchor" id="out-OUT-crtr1pmq22t7" tabindex="-1"></span><h2 id="s-trigger-deprecation-ligne-par-ligne" tabindex="-1">`trigger_deprecation()` ligne par ligne</h2><aside class="section-digest" id="s-trigger-deprecation-ligne-par-ligne-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Le premier argument nomme le package Composer.</li><li>Le deuxième date l&#x27;introduction de la deprecation.</li></ol></aside><p><strong>Où en est-on ?</strong> On a vu que le signal d'exécution existe ; on le lit
+maintenant argument par argument. Pourquoi ligne par ligne ? Parce que chaque
+argument a un piège d'examen (nom de package, version d'introduction).</p>
+<p>Relisons maintenant le signal historique lui-même. Cet appel peut illustrer
+le message avec le package de contrats chargé ; il ne remet pas
+<code>Request::get()</code> à disposition en Symfony 8.0 :</p>
+<pre class="highlight" tabindex="0"><code class="language-php">trigger_deprecation(
+    'symfony/http-foundation',   // 1. le nom Composer du package, pas le namespace
+    '7.4',                       // 2. la version d'INTRODUCTION, jamais celle de suppression
+    'Request::get() is deprecated, use properties -&gt;attributes, query or request directly instead.', // 3. le message
+);                               // 4. puis, facultatifs, les ...$args insérés au format printf()</code></pre>
+<p>Le premier argument désigne le propriétaire Composer de l'API.
+Le deuxième date <strong>l'introduction de la deprecation</strong>, pas la suppression,
+ni la version de PHP, ni nécessairement la version actuellement installée.
+Le message explique le remplacement ; des arguments supplémentaires peuvent
+remplir ses marqueurs de formatage.</p>
+<p>Avec Contracts 3.6, la fonction appelle
+<code>@trigger_error(..., E_USER_DEPRECATED)</code>. Le message commence ici par
+<code>Since symfony/http-foundation 7.4:</code>. L'operator <code>@</code> supprime l'affichage
+ordinaire de la notice ; un handler approprié peut néanmoins la collecter,
+comme dans le laboratoire précédent. La fonction ne lève pas elle-même une
+exception pour forcer la migration. Un handler ou la politique des tests
+peut toutefois décider de transformer le signal en échec.</p>
+<p>Pour observer le formatage, cet autre appel fictif utilise deux marqueurs :</p>
+<pre class="highlight" tabindex="0"><code class="language-php">trigger_deprecation(
+    'acme/demo',
+    '1.2',
+    'The "%s" option is deprecated; use "%s" instead.',
+    'old_mode',
+    'mode',
+);</code></pre>
+<p>Le message collectable est
+<code>Since acme/demo 1.2: The "old_mode" option is deprecated; use "mode" instead.</code>
+Il faut toujours le package chargé et un collecteur pour l'observer
+dans ce scénario silencé. Le message conseille une migration ; il ne renomme
+pas l'option dans la configuration.</p>
+<p>Pour une <strong>méthode</strong>, le signal se place dans son corps et se déclenche
+à chaque passage qui l'atteint. Pour une <strong>class entière</strong>, la convention
+le place au niveau du fichier, <strong>après les déclarations <code>use</code></strong> :
+les noms courts des classes visées sont alors interprétés dans le contexte
+des imports prévus. Le signal est lié au chargement du fichier,
+pas à chaque construction d'objet. Un chargement unique ne recense donc
+pas toutes les utilisations ultérieures de la class.</p>
+<table>
+<thead>
+<tr>
+<th>Argument</th>
+<th>Contenu</th>
+<th>Piège classique</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>nom Composer (<code>symfony/http-foundation</code>)</td>
+<td>écrire <code>HttpFoundation</code> ou le namespace PHP</td>
+</tr>
+<tr>
+<td>2</td>
+<td>version d'<strong>introduction</strong> (<code>7.4</code>)</td>
+<td>mettre <code>8.0</code> (version de suppression)</td>
+</tr>
+<tr>
+<td>3</td>
+<td>message (remplacement)</td>
+<td>croire qu'il renomme quelque chose</td>
+</tr>
+<tr>
+<td>4+</td>
+<td>valeurs <code>printf()</code></td>
+<td>oublier que sans <code>$args</code> le message est utilisé tel quel</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition info">
+<p class="admonition-title">🌍 In Real Life</p>
+<p><strong>La situation</strong> : un panneau annonce un ancien passage ; un compteur signale ceux qui l'empruntent. Un compteur silencieux ne dit rien des passages jamais visités.</p>
+<p><strong>L’équivalent dans Symfony</strong> : panneau → <code>@deprecated</code> ; signal observé → <code>trigger_deprecation()</code> ; collecteur → error handler adapté.</p>
+<p><strong>Retour à la réalité technique</strong> : le signal indique package et version d'introduction, pas de retrait. <code>@</code> masque l'affichage ordinaire sans empêcher toute collecte. Une méthode signale au passage ; une classe entière au chargement du fichier.</p>
+<p><strong>🧠 Comment le mémoriser</strong> : « Lire les panneaux et observer les passages. » Image mentale : panneau devant un compteur. Question-réflexe : quels chemins n'ont pas été exercés ?</p>
+<p><strong>⚠️ À ne pas confondre</strong> : écran silencieux, absence de dépréciation et migration automatique.</p>
+</div><div class="retained-answer-context">
+<p><strong>Repère — Le fil rouge : <code>Request::get()</code>, de 7.4 à 8.0 :</strong></p>
+<p lang="en"><strong>Question:</strong> Which Request accessor must not be used in Symfony 8.0 because it was deprecated in 7.4 and removed in 8.0?</p>
+<p lang="en"><strong>Answer:</strong> Request::get(); use the appropriate explicit input bag instead.</p>
+<p>Request::get() illustre la dépréciation en 7.4 puis la suppression en 8.0. Lire explicitement query, request ou attributes selon l'origine des données.</p>
+</div></section><section class="teaching-section" data-section="s-regle-3-la-trace-ecrite-trois-files-dans-une-pull-request"><span class="outcome-anchor" id="out-OUT-0j2bgvnbyj7p" tabindex="-1"></span><h2 id="s-regle-3-la-trace-ecrite-trois-files-dans-une-pull-request" tabindex="-1">Règle 3 : la trace écrite, trois files dans une pull request</h2><aside class="section-digest" id="s-regle-3-la-trace-ecrite-trois-files-dans-une-pull-request-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>La trace de migration accompagne la deprecation.</li><li>La même pull request documente introduction et suppression prévue.</li></ol></aside><p><strong>Où en est-on ?</strong> Les signaux touchent ceux qui exécutent le code ; la
+règle 3 touche ceux qui <em>planifient</em>. Pourquoi des fichiers écrits ? Parce
+qu'une équipe doit pouvoir préparer sa migration sans avoir exécuté chaque
+chemin.</p>
+<p>Le signal atteint un développeur pendant ses essais ; les guides doivent
+aussi aider l'équipe qui planifie une migration sans avoir exécuté ce chemin.
+Une <em>pull request</em> propose un ensemble de modifications à faire relire.
+Lors de celle qui introduit la deprecation, les trois traces ont des rôles
+distincts :</p>
+<table>
+<thead>
+<tr>
+<th>File</th>
+<th>Pour <code>Request::get()</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>CHANGELOG.md</code> du component</td>
+<td>section <code>7.4</code> : « Deprecate method <code>Request::get()</code>, … »</td>
+</tr>
+<tr>
+<td><code>UPGRADE-&lt;mineure&gt;.md</code></td>
+<td><code>UPGRADE-7.4.md</code> : la deprecation</td>
+</tr>
+<tr>
+<td><code>UPGRADE-&lt;majeure suivante&gt;.md</code></td>
+<td><code>UPGRADE-8.0.md</code> : « Remove <code>Request::get()</code>, … »</td>
+</tr>
+</tbody>
+</table>
+<p>Le changelog annonce brièvement ce qui change dans le composant.
+Le guide de la mineure indique comment abandonner l'ancien usage pendant
+qu'il fonctionne encore. Le guide de la majeure décrit les conséquences
+du retrait à venir : pour notre controller, choisir le bag approprié
+au lieu de conserver l'appel global.</p>
+<p>Ces trois modifications sont <strong>obligatoires dans la même pull request</strong>
+selon les conventions Symfony. Écrire « Remove » dans le guide de 8.0
+ne signifie pas que la méthode disparaît déjà de 7.4 : la version du fichier
+fait partie de l'information. Un simple commentaire PHPDoc ne remplace
+aucune de ces trois traces.</p><div class="retained-answer-context">
+<p><strong>Repère — Le <code>CHANGELOG.md</code> a ses propres règles :</strong></p>
+<p lang="en"><strong>Question:</strong> Which changelog should a contributor edit?</p>
+<p lang="en"><strong>Answer:</strong> The component changelog, not generated root CHANGELOG-* files.</p>
+<p>Les entrées nouvelles vont en haut de la section mineure. Le message est bref, impératif et sans point final.</p>
+</div></section><section class="teaching-section" data-section="s-le-changelog-md-a-ses-propres-regles"><h2 id="s-le-changelog-md-a-ses-propres-regles" tabindex="-1">Le `CHANGELOG.md` a ses propres règles</h2><aside class="section-digest" id="s-le-changelog-md-a-ses-propres-regles-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Les entrées nouvelles vont en haut de la section mineure.</li><li>Le message est bref, impératif et sans point final.</li></ol></aside><p><strong>Où en est-on ?</strong> Parmi les trois traces, le changelog a le format le plus
+strict. Pourquoi y revenir ? Parce que l'examen teste ses règles de forme.</p>
+<p>Le changelog doit permettre à l'équipe du blog de repérer rapidement
+les changements de la version qu'elle adopte. Le titre reste <code>CHANGELOG</code>,
+avec une section par <strong>version mineure</strong> et les nouvelles entrées en haut
+de la liste. Une rubrique supplémentaire <code>### Deprecations</code> ne respecte
+pas cette convention : il n'y a pas de troisième niveau.</p>
+<p>Le message est court, commence par un verbe à l'impératif avec majuscule
+et ne se termine pas par un point. Le guide de migration, lui, peut porter
+l'explication détaillée des trois provenances de données.
+Ce fragment historique <code>5.3</code> illustre seulement le format documentaire ;
+il ne décrit pas une API <code>MagicConfig</code> à employer en Symfony 8.0 :</p>
+<pre class="highlight" tabindex="0"><code class="language-markdown">CHANGELOG
+=========
+
+5.3
+---
+
+ * Add `MagicConfig` that allows configuring things</code></pre>
+<p>Lu comme une entrée de changelog, il annonce un ajout dans la section 5.3 ;
+ce n'est ni du PHP à exécuter ni une configuration chargée par le blog.
+L'auteur modifie le <code>CHANGELOG.md</code> du composant concerné.
+Les <code>CHANGELOG-*</code> à la racine de <code>symfony/symfony</code> sont des agrégats générés
+à la préparation des versions, et ne doivent pas être édités manuellement.</p></section><section class="teaching-section" data-section="s-la-suppression-a-sa-propre-trace"><h2 id="s-la-suppression-a-sa-propre-trace" tabindex="-1">La suppression a sa propre trace</h2><aside class="section-digest" id="s-la-suppression-a-sa-propre-trace-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>La deprecation et la suppression sont deux changements.</li><li>La suppression ajoute sa propre trace.</li></ol></aside><p><strong>Où en est-on ?</strong> L'annonce est documentée ; reste la fin du cycle.
+Pourquoi une trace de suppression ? Pour que l'équipe qui arrive en 8.0 sache
+<em>ce qui a disparu</em> et par quoi le remplacer.</p>
+<p>La transition a été annoncée ; vient ensuite la modification qui retire
+effectivement l'ancienne API. Sa pull request ajoute les conséquences
+au <code>CHANGELOG.md</code> du composant sous la nouvelle majeure, par exemple
+« Remove the <code>Deprecated</code> class, use <code>Replacement</code> instead ».</p>
+<p>Pour HttpFoundation, l'équipe retrouve ainsi <em>Deprecate</em> sous 7.4 et
+<em>Remove</em> sous 8.0. Avec les deux guides de mise à jour, la transition laisse
+<strong>quatre entrées documentaires</strong>, pas nécessairement quatre fichiers
+distincts : deux entrées appartiennent au même changelog.</p>
+<p>Cette dernière trace confirme le retrait, elle ne remplace pas l'annonce
+antérieure. Si le controller appelle encore la méthode supprimée, relire
+le guide permet de la corriger, mais le changelog n'adapte pas le code
+automatiquement.</p></section><section class="teaching-section" data-section="s-pieges-d-examen"><h2 id="s-pieges-d-examen" tabindex="-1">Pièges d&#x27;examen</h2><p class="teaching-label pitfall"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="warning" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3L23 21H1L12 3ZM12 9V14M12 17V18"></path></svg> <strong>Piège à éviter</strong></p><ul class="pitfall-list"><li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : Où en est-on ?</summary><p><strong>Où en est-on ?</strong> Dernier passage sur ce qui trompe le plus. Chaque piège
+vient d'une confusion entre deux notions voisines (introduction/suppression,
+documentation/signal, convention/règle du moteur).</p></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : Lire la bonne date.</summary><p><strong>Lire la bonne date.</strong> Dans le message du getter, <code>'7.4'</code> signifie
+« déprécié depuis 7.4 ». Remplacer cette valeur par <code>'8.0'</code> parce que
+la méthode y disparaît fausserait l'histoire du signal.
+<em>Pourquoi on se trompe : on pense « version concernée » = « version de la rupture ».</em></p></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : Nommer le bon propriétaire.</summary><p><strong>Nommer le bon propriétaire.</strong> <code>'symfony/http-foundation'</code> identifie
+le package Composer ; <code>'HttpFoundation'</code> ou son namespace PHP ne respecte
+pas ce rôle. La version s'interprète par rapport à ce package.</p></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : Charger la fonction avant de l&#x27;appeler.</summary><p><strong>Charger la fonction avant de l'appeler.</strong> Le package de contrats fournit
+la fonction globale indépendamment du framework complet. Un simple
+commentaire ou un nom de package cité dans un message ne l'installe pas.</p></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : Distinguer silence et absence.</summary><p><strong>Distinguer silence et absence.</strong> <code>@deprecated</code> documente ; le signal
+d'exécution est collectable malgré <code>@</code>. Un écran silencieux ou un chemin
+jamais exécuté ne prouve pas que le projet est prêt pour la majeure.
+<em>Pourquoi on se trompe : « rien ne s'affiche » ressemble à « rien à corriger ».</em></p></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : Ne pas appliquer une convention comme une règle du moteur.</summary><p><strong>Ne pas appliquer une convention comme une règle du moteur.</strong>
+Symfony n'introduit pas de nouvelle class, interface, trait ou méthode
+déjà déprécié selon ses conventions de contribution ; PHP n'interdit pas
+techniquement d'écrire un tel commentaire.</p></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : Conserver la période de migration.</summary><p><strong>Conserver la période de migration.</strong> La prochaine mineure annonce
+normalement le retrait, la majeure suivante l'effectue ; l'exception
+critique vise l'annonce sur une version antérieure maintenue.
+Les trois premières traces documentaires accompagnent l'annonce.</p></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : Compter les entrées, pas inventer un quatrième fichier.</summary><p><strong>Compter les entrées, pas inventer un quatrième fichier.</strong>
+La suppression ajoute sa propre entrée au changelog du composant
+dans sa pull request. Cette entrée s'ajoute à la trace de deprecation
+et aux deux guides.</p></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : Modifier la source documentaire, pas l&#x27;agrégat.</summary><p><strong>Modifier la source documentaire, pas l'agrégat.</strong>
+Les changelogs de racine sont générés ; la contribution se fait
+dans celui du composant. Cela évite de perdre une correction au prochain
+assemblage des notes de version.</p></details></li></ul></section><section class="teaching-section" data-section="s-application"><h2 id="s-application" tabindex="-1">Application</h2><aside class="section-digest" id="s-application-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Le premier argument nomme le package Composer.</li><li>Le deuxième date l&#x27;introduction de la deprecation.</li><li>La trace de migration accompagne la deprecation.</li><li>La même pull request documente introduction et suppression prévue.</li></ol></aside>
+
+
+
+</section><section class="teaching-section" data-section="s-fiche-express"><h2 id="s-fiche-express" tabindex="-1">Fiche express</h2><p class="teaching-label essential"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="book" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5C9 3 5 3 2 4V20C5 19 9 19 12 21C15 19 19 19 22 20V4C19 3 15 3 12 5V21M5 8H8M5 12H8M16 8H19M16 12H19"></path></svg> <strong>À mémoriser</strong></p><p><strong>🧠 À retenir pour la certification :</strong></p>
+<p>Pour terminer la migration du blog, vérifions six points :</p>
+<ol>
+<li>L'ancien usage a été repéré sur la dernière mineure précédente
+   et remplacé avant sa suppression en majeure ; l'annonce critique
+   sur une version antérieure maintenue reste exceptionnelle.</li>
+<li>Le remplacement choisit la bonne provenance : attribute de route,
+   query string ou données de form, puis validation et recherche.</li>
+<li>L'annotation indique la version et le remplacement précis ;
+   le signal d'exécution complète cette documentation sans couvrir
+   les chemins jamais parcourus.</li>
+<li>L'appel fournit le package Composer, la version d'introduction,
+   le message et éventuellement ses valeurs de formatage.
+   Une class entière est signalée au chargement après les imports.</li>
+<li>Trois fichiers documentent l'annonce dans une même pull request ;
+   le retrait ajoute une quatrième <strong>entrée</strong>, dans le changelog du composant.</li>
+<li>Le changelog conserve son format court : version mineure, pas de
+   troisième niveau, impératif, majuscule, pas de point, nouvelles entrées
+   en haut ; les agrégats de racine restent générés.</li>
+</ol>
+<p>Une Request de l'article 42 qui réussit ne clôt pas cet audit :
+l'inscription, les erreurs et la commande d'import doivent aussi être
+examinées. Les notices collectées renseignent les usages observés,
+pas l'ensemble des usages possibles.</p>
+<p><strong>Phrase de mémorisation : « La mineure prévient (version d'introduction), la majeure supprime ; <code>@deprecated</code> se lit, <code>trigger_deprecation()</code> s'observe. »</strong></p></section><section class="teaching-section" data-section="s-sources-officielles"><h2 id="s-sources-officielles" tabindex="-1">Sources officielles</h2><ul>
+<li><a href="https://symfony.com/doc/8.0/contributing/code/conventions.html">Code Conventions, « Writing a CHANGELOG Entry », « Deprecating Code », « Removing Deprecated Code »</a></li>
+<li><a href="https://symfony.com/doc/8.0/contributing/code/releases.html">The Release Process</a></li>
+<li><a href="https://symfony.com/doc/8.0/contributing/code/bc.html">Our Backward Compatibility Promise</a></li>
+<li><a href="https://symfony.com/doc/8.0/setup/upgrade_major.html">Upgrading a Major Version</a></li>
+<li><a><code>trigger_deprecation()</code>, branche 8.0</a></li>
+<li><a href="https://symfony.com/doc/8.0/components/http_foundation.html"><code>CHANGELOG.md</code> d'HttpFoundation, branche 8.0</a></li>
+<li><a><code>UPGRADE-8.0.md</code></a></li>
+</ul></section><section id="course-recalls" aria-labelledby="course-recalls-title" tabindex="-1"><h2 id="course-recalls-title">Rappels et liens avec les autres cours</h2><div data-recall-group="current"><h3>Rappels du cours actuel</h3><ul><li data-recall-course="CRS-rkq1d437dw5d" data-recall-kind="digest_reference"><p class="recall-provenance">Module 03 — Architecture Symfony · Cours « Deprecations best practices »</p><p class="digest-reference"><a href="#s-l-essentiel-digest">Revoir la règle : Déprécier en mineure prépare la migration.</a></p></li><li data-recall-course="CRS-rkq1d437dw5d" data-recall-kind="digest_reference"><p class="recall-provenance">Module 03 — Architecture Symfony · Cours « Deprecations best practices »</p><p class="digest-reference"><a href="#s-trigger-deprecation-ligne-par-ligne-digest">Revoir la règle : Le premier argument nomme le package Composer.</a></p></li><li><nav aria-label="Flashcards de l’application"><ul><li data-recall-course="CRS-rkq1d437dw5d" data-recall-kind="application"><p class="recall-provenance">Module 03 — Architecture Symfony · Cours « Deprecations best practices »</p><a href="#A-rkq1d437dw5d-2cf5fb13bd-03">Flashcard : Le premier argument nomme le package Composer. Le deuxième date l&#x27;introduction de la deprecation.</a></li><li data-recall-course="CRS-rkq1d437dw5d" data-recall-kind="application"><p class="recall-provenance">Module 03 — Architecture Symfony · Cours « Deprecations best practices »</p><a href="#A-rkq1d437dw5d-8c73838d13-04">Flashcard : La trace de migration accompagne la deprecation. La même pull request documente introduction et suppression prévue.</a></li></ul></nav></li></ul></div><div data-recall-group="other"><h3>Rappels des cours précédents / autres modules</h3><ul><li data-recall-course="CRS-k2xvr11x936e" data-recall-kind="previous_course"><p class="recall-provenance">Module 03 — Architecture Symfony · Cours « Official best practices »</p><p>Une constante convient aux valeurs presque immuables. Les parameters applicatifs gardent des noms courts et préfixés app.</p><p><a href="#cards-previous">Rappel : <span lang="en">Where should an application value that almost never changes usually live?</span></a></p></li></ul></div></section><nav class="course-sequence" aria-label="Ordre de lecture"><a rel="prev" href="course-CRS-21ec5kwrcmkm.html" aria-label="Précédent : Backward compatibility promise — Module 03 — Architecture Symfony">Précédent : Backward compatibility promise</a> <a href="lot-03.html">Sommaire : Module 03 — Architecture Symfony</a> <a rel="next" href="course-CRS-f9s8mpaydnbx.html" aria-label="Suivant : Framework overloading — Module 03 — Architecture Symfony">Suivant : Framework overloading</a></nav><p class="course-practice-entry"><a class="button" href="#view-quiz">Fin du cours — s’entraîner avec le Quiz</a></p></div><div id="view-flashcards" data-course-panel role="region" aria-labelledby="view-flashcards-title"><h2 id="view-flashcards-title">Flashcards</h2><p lang="en">Answer before revealing each card.</p><p>Ces cartes ne mesurent pas une maîtrise notée.</p><div id="cards-s-l-essentiel-1" data-card-section="s-l-essentiel"><h3><a href="#s-l-essentiel">Revoir : L&#x27;essentiel</a></h3><div class="reader-cards"><details class="reader-card" id="A-rkq1d437dw5d-65c42c80d9-01"><summary lang="en">When should deprecated functionality normally be removed?</summary><p lang="en">In the next major release, not the minor release introducing the deprecation.</p><p lang="fr">Déprécier en mineure prépare la migration. Supprimer en majeure rend la rupture explicite.</p><a href="course-CRS-rkq1d437dw5d.html#out-OUT-yqb3s91g64f7">Revoir le passage précis</a></details></div></div><div id="cards-s-le-schema-2" data-card-section="s-le-schema"><h3><a href="#s-le-schema">Revoir : Le schéma</a></h3><div class="reader-cards"><p class="reader-card-reference" id="A-rkq1d437dw5d-6e0103f6cc-01">Rappel déjà proposé : <a lang="en" href="#A-rkq1d437dw5d-65c42c80d9-01">When should deprecated functionality normally be removed?</a> · <a href="course-CRS-rkq1d437dw5d.html#out-OUT-yqb3s91g64f7">Passage canonique</a></p></div></div><div id="cards-s-le-fil-rouge-request-get-de-7-4-a-8-0-3" data-card-section="s-le-fil-rouge-request-get-de-7-4-a-8-0"><h3><a href="#s-le-fil-rouge-request-get-de-7-4-a-8-0">Revoir : Le fil rouge : `Request::get()`, de 7.4 à 8.0</a></h3><div class="reader-cards"><details class="reader-card" id="A-rkq1d437dw5d-c4883bb1c3-07"><summary lang="en">Which Request accessor must not be used in Symfony 8.0 because it was deprecated in 7.4 and removed in 8.0?</summary><p lang="en">Request::get(); use the appropriate explicit input bag instead.</p><p lang="fr">Request::get() illustre la dépréciation en 7.4 puis la suppression en 8.0. Lire explicitement query, request ou attributes selon l&#x27;origine des données.</p><a href="course-CRS-rkq1d437dw5d.html#out-OUT-crtr1pmq22t7">Revoir le passage précis</a></details></div></div><div id="cards-s-regle-1-deprecier-en-mineure-supprimer-en-majeure-4" data-card-section="s-regle-1-deprecier-en-mineure-supprimer-en-majeure"><h3><a href="#s-regle-1-deprecier-en-mineure-supprimer-en-majeure">Revoir : Règle 1 : déprécier en mineure, supprimer en majeure</a></h3><div class="reader-cards"><p class="reader-card-reference" id="A-rkq1d437dw5d-6e8b9d5c9d-01">Rappel déjà proposé : <a lang="en" href="#A-rkq1d437dw5d-65c42c80d9-01">When should deprecated functionality normally be removed?</a> · <a href="course-CRS-rkq1d437dw5d.html#out-OUT-yqb3s91g64f7">Passage canonique</a></p></div></div><div id="cards-s-regle-2-deux-signaux-deux-publics-5" data-card-section="s-regle-2-deux-signaux-deux-publics"><h3><a href="#s-regle-2-deux-signaux-deux-publics">Revoir : Règle 2 : deux signaux, deux publics</a></h3><div class="reader-cards"><details class="reader-card" id="A-rkq1d437dw5d-28f1c741d5-02"><summary lang="en">Does @deprecated emit a runtime deprecation notice?</summary><p lang="en">No. PHPDoc documents it; trigger_deprecation() emits the runtime signal.</p><p lang="fr">Le PHPDoc informe à la lecture. Le signal runtime révèle les usages effectivement exécutés.</p><a href="course-CRS-rkq1d437dw5d.html#out-OUT-8dx7erg8d1eb">Revoir le passage précis</a></details></div></div><div id="cards-s-trigger-deprecation-ligne-par-ligne-6" data-card-section="s-trigger-deprecation-ligne-par-ligne"><h3><a href="#s-trigger-deprecation-ligne-par-ligne">Revoir : `trigger_deprecation()` ligne par ligne</a></h3><div class="reader-cards"><details class="reader-card" id="A-rkq1d437dw5d-2cf5fb13bd-03"><summary lang="en">What does the version argument of trigger_deprecation() identify?</summary><p lang="en">The version that introduced the deprecation, not the removal version.</p><p lang="fr">Le premier argument nomme le package Composer. Le deuxième date l&#x27;introduction de la deprecation.</p><a href="course-CRS-rkq1d437dw5d.html#out-OUT-crtr1pmq22t7">Revoir le passage précis</a></details></div></div><div id="cards-s-regle-3-la-trace-ecrite-trois-files-dans-une-pull-request-7" data-card-section="s-regle-3-la-trace-ecrite-trois-files-dans-une-pull-request"><h3><a href="#s-regle-3-la-trace-ecrite-trois-files-dans-une-pull-request">Revoir : Règle 3 : la trace écrite, trois files dans une pull request</a></h3><div class="reader-cards"><details class="reader-card" id="A-rkq1d437dw5d-8c73838d13-04"><summary lang="en">Where is a new deprecation documented in the contribution workflow?</summary><p lang="en">The component changelog and the upgrade files for the minor and next major release.</p><p lang="fr">La trace de migration accompagne la deprecation. La même pull request documente introduction et suppression prévue.</p><a href="course-CRS-rkq1d437dw5d.html#out-OUT-0j2bgvnbyj7p">Revoir le passage précis</a></details></div></div><div id="cards-s-le-changelog-md-a-ses-propres-regles-8" data-card-section="s-le-changelog-md-a-ses-propres-regles"><h3><a href="#s-le-changelog-md-a-ses-propres-regles">Revoir : Le `CHANGELOG.md` a ses propres règles</a></h3><div class="reader-cards"><details class="reader-card" id="A-rkq1d437dw5d-4d38fac0c1-05"><summary lang="en">Which changelog should a contributor edit?</summary><p lang="en">The component changelog, not generated root CHANGELOG-* files.</p><p lang="fr">Les entrées nouvelles vont en haut de la section mineure. Le message est bref, impératif et sans point final.</p><a href="course-CRS-rkq1d437dw5d.html#out-OUT-0j2bgvnbyj7p">Revoir le passage précis</a></details></div></div><div id="cards-s-la-suppression-a-sa-propre-trace-9" data-card-section="s-la-suppression-a-sa-propre-trace"><h3><a href="#s-la-suppression-a-sa-propre-trace">Revoir : La suppression a sa propre trace</a></h3><div class="reader-cards"><details class="reader-card" id="A-rkq1d437dw5d-1baabf91cf-06"><summary lang="en">Does removing deprecated code require another changelog entry?</summary><p lang="en">Yes. The removal change documents its consequences separately.</p><p lang="fr">La deprecation et la suppression sont deux changements. La suppression ajoute sa propre trace.</p><a href="course-CRS-rkq1d437dw5d.html#out-OUT-8dx7erg8d1eb">Revoir le passage précis</a></details></div></div><div id="cards-s-pieges-d-examen-10" data-card-section="s-pieges-d-examen"><h3><a href="#s-pieges-d-examen">Revoir : Pièges d&#x27;examen</a></h3><div class="reader-cards"><p class="reader-card-reference" id="A-rkq1d437dw5d-596d5af532-03">Rappel déjà proposé : <a lang="en" href="#A-rkq1d437dw5d-2cf5fb13bd-03">What does the version argument of trigger_deprecation() identify?</a> · <a href="course-CRS-rkq1d437dw5d.html#out-OUT-crtr1pmq22t7">Passage canonique</a></p></div></div><div id="cards-s-application-11" data-card-section="s-application"><h3><a href="#s-application">Revoir : Application</a></h3><div class="reader-cards"><p class="reader-card-reference" id="A-rkq1d437dw5d-e7ad522ea3-03">Rappel déjà proposé : <a lang="en" href="#A-rkq1d437dw5d-2cf5fb13bd-03">What does the version argument of trigger_deprecation() identify?</a> · <a href="course-CRS-rkq1d437dw5d.html#out-OUT-crtr1pmq22t7">Passage canonique</a></p><p class="reader-card-reference" id="A-rkq1d437dw5d-e7ad522ea3-04">Rappel déjà proposé : <a lang="en" href="#A-rkq1d437dw5d-8c73838d13-04">Where is a new deprecation documented in the contribution workflow?</a> · <a href="course-CRS-rkq1d437dw5d.html#out-OUT-0j2bgvnbyj7p">Passage canonique</a></p></div></div><div id="cards-s-fiche-express-12" data-card-section="s-fiche-express"><h3><a href="#s-fiche-express">Revoir : Fiche express</a></h3><div class="reader-cards"><p class="reader-card-reference" id="A-rkq1d437dw5d-b11e58e15e-03">Rappel déjà proposé : <a lang="en" href="#A-rkq1d437dw5d-2cf5fb13bd-03">What does the version argument of trigger_deprecation() identify?</a> · <a href="course-CRS-rkq1d437dw5d.html#out-OUT-crtr1pmq22t7">Passage canonique</a></p></div></div><div id="cards-previous"><p class="recall-provenance">Module 03 — Architecture Symfony · Cours « Official best practices »</p><aside class="checkpoint"><h2>Rappel d’un cours antérieur</h2><p>Avant de poursuivre : Official best practices.</p><details class="corpus-correction"><summary lang="en">Where should an application value that almost never changes usually live?</summary><p lang="en">In a class constant rather than a container parameter.</p><p>Une constante convient aux valeurs presque immuables. Les parameters applicatifs gardent des noms courts et préfixés app.</p><a href="course-CRS-k2xvr11x936e.html#out-OUT-bxcjgv614zqk">Relire la correction dans le cours antérieur</a></details></aside></div></div><div id="view-quiz" data-course-panel role="region" aria-labelledby="view-quiz-title"><aside class="revision-context"><p><strong>Avant le quiz :</strong> Notre blog cible Symfony 8.0, mais un ancien controller utilisait Request::get() pour lire l&#x27;identifiant d&#x27;article. Ce code doit être migré : la méthode n&#x27;existe plus en 8.0. Pour comprendre pourquoi l&#x27;équipe pouvait anticiper cette rupture, nous revenons explicitement à la transition historique 7.4 → 8.0, sans présenter l&#x27;ancienne API comme disponible aujourd&#x27;hui.</p><p>Quelle donnée entre, quelle responsabilité agit et quelle condition change le résultat ? Pour chaque correction, vérifiez ces conditions dans <a href="course-CRS-rkq1d437dw5d.html#s-objectif">le passage enseigné</a>, sans supposer que toutes les branches du blog sont exécutées.</p></aside><h2 id="view-quiz-title">Quiz</h2><p class="quiz-size" lang="en">5 eligible learning questions · 5 per session. Repeating a question does not demonstrate mastery.</p><p id="course-quiz-status" role="status">Quiz interactif non chargé. Démarrez après chargement de la banque locale.</p><div id="course-quiz-controls" class="assessment-main" hidden><div id="course-quiz-assessment-controls" hidden><select id="course-quiz-assessment-mode" aria-label="Mode du quiz" hidden><option value="learning">Entraînement</option></select><p id="course-quiz-training-scope"></p><button id="course-quiz-start-assessment" type="button" lang="en">Start practice</button><button id="course-quiz-finish-assessment" type="button" lang="en" hidden>End session</button></div><p id="course-quiz-assessment-error" role="alert"></p><p id="course-quiz-assessment-timer" hidden></p><p id="course-quiz-session-progress" class="quiz-progress" role="status" lang="en"></p><div id="course-quiz-assessment-app" tabindex="-1"></div><nav id="course-quiz-session-navigation" aria-label="Questions du cours"></nav><div id="course-quiz-learning-overview" aria-live="polite"></div></div><div id="course-quiz-native"><p>Sans JavaScript ou si le chargement échoue : aucune tentative notée. Les <a href="#view-flashcards">flashcards du cours</a> restent disponibles.</p><details class="course-quiz-fallback" data-question-id="L-rkq1d437dw5d-base-v1"><summary lang="en">When should deprecated functionality normally be removed? Select one answer (radio).</summary><p>Correction de consultation — non notée.</p><p>Déprécier en mineure prépare la migration. Supprimer en majeure rend la rupture explicite.</p><ul><li><strong lang="en">Correct: In the next major release after deprecation.</strong><p>Déprécier en mineure prépare la migration. Supprimer en majeure rend la rupture explicite.</p></li><li><strong lang="en">Distractor: In the same minor release that introduces the deprecation.</strong><p>La dépréciation en mineure prépare la migration ; elle ne supprime pas l&#x27;API.</p></li><li><strong lang="en">Distractor: In a patch release as soon as users see the notice.</strong><p>Une patch release ne sert pas à effectuer cette rupture d&#x27;API.</p></li></ul><a href="course-CRS-rkq1d437dw5d.html#out-OUT-yqb3s91g64f7">Relire le passage exact</a></details></div></div></div></div><details class="transfer-panel"><summary>Sauvegarde et transfert de progression</summary><p id="reading-status" role="status">Sans JavaScript : lecture libre ; progression non enregistrée.</p><p><a href="assessment.html#overview-title">Lecture, réussites immédiates et différées</a></p><p>Transfert manuel — aucune synchronisation automatique</p><p id="persistence-status" role="status"></p><button type="button" class="secondary" id="export-progress">Exporter ma progression</button><label for="import-progress">Choisir un JSON pour fusionner ma progression (sans remplacement)</label><input type="file" id="import-progress" accept="application/json,.json"><p id="transfer-status" role="status"></p></details></main><footer class="site-footer"><a href="catalogue.html">Catalogue</a> <a href="sources.html">Sources et attribution</a> <a href="#contenu">Haut de page</a></footer></body></html>

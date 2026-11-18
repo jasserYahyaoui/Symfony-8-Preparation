@@ -1,0 +1,704 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; connect-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Cache — Symfony 8 Preparation</title><link rel="stylesheet" href="styles.css"><link rel="stylesheet" href="reader.css"><script src="mermaid.min.js" defer></script><script src="mermaid-init.js" defer></script><link rel="stylesheet" href="assessment.css"><script src="fixed-exams-data.js" defer></script><script src="fixed-exams.js" defer></script><script src="learning-state.js" defer></script><script src="guide.js" defer></script><script src="reader-catalog.js" defer></script><script src="reader.js" defer></script><script src="site-state.js" defer></script><script src="assessment.js" defer></script><script src="course-views.js" defer></script><link rel="stylesheet" href="syntax-highlight.css"><script src="prism-syntax.js" defer></script><script src="syntax-highlight.js" defer></script></head><body data-course-id="CRS-p6yhxmpxrzbs"><a class="skip" href="#contenu">Aller au contenu</a><header class="site-header"><a class="brand" href="index.html">S8 Preparation</a><nav aria-label="Navigation principale"><a href="index.html">Accueil</a> <a href="catalogue.html">Parcours</a> <a href="assessment.html?mode=review">Réviser</a> <a href="examens.html">Examens blancs</a> <a href="jour-j.html">Jour J</a></nav></header><main id="contenu" tabindex="-1" class="corpus-reader"><nav class="breadcrumb" aria-label="Fil d’Ariane"><a href="index.html">Accueil</a> <span aria-hidden="true">›</span> <a href="catalogue.html">Parcours</a> <span aria-hidden="true">›</span> <a href="lot-18.html">Module 18 — Cache applicatif</a> <span aria-hidden="true">›</span> <span aria-current="page">Cache</span></nav><h1>Cache</h1><p class="muted">Symfony 8.0 · API PHP ≤ 8.4 · Twig ≤ 3.22. Préparation indépendante.</p><p class="revision-status">Rédaction narrative P11 : projection nouvelle, non couverte par les décisions historiques P10. Aucune approbation officielle ni garantie de réussite.</p><aside class="narrative-context" aria-label="Repères de lecture"><p><strong>Prérequis de lecture :</strong> <a href="course-CRS-p1694d5f7r8c.html">Service container</a> · <a href="course-CRS-mpwjc4g3vmj7.html">Request handling</a></p><p><strong>Concepts voisins :</strong> <a href="course-CRS-mpwjc4g3vmj7.html">Request handling</a> — Raccorder une capacité au blog sans en faire une étape HTTP obligatoire. <a href="lot-18.html">Comparer les responsabilités dans ce module</a> · <a href="carte-composants.html">Situer cette responsabilité dans le blog</a> · <a href="glossaire.html">Distinguer les termes voisins</a></p><p><a href="ordre-lecture.html">Retrouver les 163 cours dans le parcours recommandé</a>. Ce repère ne modifie ni votre historique ni votre progression.</p></aside><div class="course-layout"><details class="lot-course-menu"><summary>Cours du module · 1 cours</summary><nav aria-label="Cours du module"><a class="lot-context" href="lot-18.html">Module 18 — Cache applicatif</a><ol><li><a href="course-CRS-p6yhxmpxrzbs.html" aria-current="page">Cache</a></li></ol><a href="lot-18.html#view-quiz">Quiz du module</a></nav></details><aside class="course-section-menu" aria-label="Sommaire du cours"><nav class="course-actions" aria-label="Activités du cours"><a id="tab-course" href="#view-course">Cours</a><a id="tab-flashcards" href="#view-flashcards">Flashcards</a><a id="tab-quiz" href="#view-quiz">Quiz</a></nav><details class="course-section-disclosure"><summary id="course-sections">Sections du cours</summary><nav aria-label="Sections du cours"><ul><li><a href="#s-objectif">Objectif</a></li><li><a href="#s-l-essentiel">L&#x27;essentiel</a><ul><li><a href="#s-l-essentiel-nested-comparaison-cache-applicatif-et-cache-http">Comparaison : cache applicatif et cache HTTP</a></li></ul></li><li><a href="#s-le-schema">Le schéma</a><ul><li><a href="#s-le-schema-nested-les-trois-chemins-en-une-ligne">Les trois chemins, en une ligne</a></li></ul></li><li><a href="#s-l-exemple-un-calcul-couteux">L&#x27;exemple : un calcul coûteux</a><ul><li><a href="#s-l-exemple-un-calcul-couteux-nested-ce-que-fait-chaque-ligne-de-la-recette">Ce que fait chaque ligne de la recette</a></li><li><a href="#s-l-exemple-un-calcul-couteux-nested-pourquoi-l-item-recoit-il-tag-alors-que-cacheinterface-n-a-pas-de-tags">Pourquoi l&#x27;item reçoit-il tag() alors que CacheInterface n&#x27;a pas de tags ?</a></li></ul></li><li><a href="#s-trois-api-une-recommandee">Trois API, une recommandée</a><ul><li><a href="#s-trois-api-une-recommandee-nested-comparaison-des-trois-api">Comparaison des trois API</a></li></ul></li><li><a href="#s-quatre-mots">Quatre mots</a><ul><li><a href="#s-quatre-mots-nested-pourquoi-deux-pools-peuvent-ils-avoir-la-meme-cle-sans-collision">Pourquoi deux pools peuvent-ils avoir la même clé sans collision ?</a></li></ul></li><li><a href="#s-l-api-qui-surprend">L&#x27;API qui surprend</a><ul><li><a href="#s-l-api-qui-surprend-nested-pourquoi-save-est-il-passe-par-reference">Pourquoi $save est-il passé par référence ?</a></li><li><a href="#s-l-api-qui-surprend-nested-derouler-l-exemple-appel-par-appel">Dérouler l&#x27;exemple, appel par appel</a></li><li><a href="#s-l-api-qui-surprend-nested-comparaison-valeur-retournee-et-valeur-sauvegardee">Comparaison : valeur retournée et valeur sauvegardée</a></li></ul></li><li><a href="#s-la-ruee-sur-le-cache">La ruée sur le cache</a><ul><li><a href="#s-la-ruee-sur-le-cache-nested-comparaison-des-valeurs-de-beta">Comparaison des valeurs de beta</a></li></ul></li><li><a href="#s-psr-6-ecrire-soi-meme">PSR-6 : écrire soi-même</a><ul><li><a href="#s-psr-6-ecrire-soi-meme-nested-pourquoi-ishit-et-non-get-null">Pourquoi isHit() et non get() === null ?</a></li></ul></li><li><a href="#s-psr-16-et-les-bridges">PSR-16 et les bridges</a><ul><li><a href="#s-psr-16-et-les-bridges-nested-pourquoi-get-optional-absent-rend-il-null-et-non-absent">Pourquoi get(&#x27;optional&#x27;, &#x27;absent&#x27;) rend-il null et non &#x27;absent&#x27; ?</a></li><li><a href="#s-psr-16-et-les-bridges-nested-comparaison-psr16cache-et-psr16adapter">Comparaison : Psr16Cache et Psr16Adapter</a></li></ul></li><li><a href="#s-les-pools-du-framework">Les pools du framework</a><ul><li><a href="#s-les-pools-du-framework-nested-comparaison-delete-invalidatetags-clear">Comparaison : delete(), invalidateTags(), clear()</a></li><li><a href="#s-les-pools-du-framework-nested-pourquoi-cache-system-n-est-il-pas-un-cache-app-plus-rapide">Pourquoi cache.system n&#x27;est-il pas un cache.app plus rapide ?</a></li></ul></li><li><a href="#s-pieges-d-examen">Pièges d&#x27;examen</a></li><li><a href="#s-fiche-express">Fiche express</a></li><li><a href="#reader-objectives">Objectifs d’apprentissage</a></li><li><a href="#reader-sources">Sources officielles et compléments</a></li><li><a href="#course-recalls">Rappels et liens avec les autres cours</a></li></ul></nav><nav aria-label="Flashcards par section"><a href="#view-flashcards">Flashcards par section</a><ul><li><a href="#cards-s-l-essentiel-1">L&#x27;essentiel</a></li><li><a href="#cards-s-le-schema-2">Le schéma</a></li><li><a href="#cards-s-l-exemple-un-calcul-couteux-3">L&#x27;exemple : un calcul coûteux</a></li><li><a href="#cards-s-trois-api-une-recommandee-4">Trois API, une recommandée</a></li><li><a href="#cards-s-quatre-mots-5">Quatre mots</a></li><li><a href="#cards-s-l-api-qui-surprend-6">L&#x27;API qui surprend</a></li><li><a href="#cards-s-la-ruee-sur-le-cache-7">La ruée sur le cache</a></li><li><a href="#cards-s-psr-6-ecrire-soi-meme-8">PSR-6 : écrire soi-même</a></li><li><a href="#cards-s-psr-16-et-les-bridges-9">PSR-16 et les bridges</a></li><li><a href="#cards-s-les-pools-du-framework-10">Les pools du framework</a></li><li><a href="#cards-s-pieges-d-examen-11">Pièges d&#x27;examen</a></li><li><a href="#cards-s-fiche-express-12">Fiche express</a></li><li><a href="#cards-previous">Module 16 — Internationalisation et traduction · Cours « Internationalization and localization (Note: Intl component utilities to access ICU data are not included) » · Rappel : <span lang="en">What does trans() return when no translation is found after fallbacks?</span></a></li></ul></nav><nav aria-label="Retour au module"><a href="lot-18.html">Tous les cours du module</a></nav></details><p class="local-quiz-count">13 questions disponibles · 13 par session Quiz</p></aside><div class="course-content"><div id="view-course" data-course-panel role="region" aria-labelledby="view-course-title"><h2 id="view-course-title">Cours</h2><p class="course-introduction"><a href="#s-objectif">Introduction</a> · <a href="#course-sections">Sections du cours</a></p><h2 id="reader-objectives" tabindex="-1">Objectifs d’apprentissage</h2><ul><li><a href="course-CRS-p6yhxmpxrzbs.html#out-OUT-rmv013ank5zr">Nommer item, pool, adapter et provider</a></li><li><a href="course-CRS-p6yhxmpxrzbs.html#out-OUT-ggw5eh2abp9f">Expliquer pourquoi get() suffit et quand le rappel s&#x27;exécute</a></li><li><a href="course-CRS-p6yhxmpxrzbs.html#out-OUT-jvfb807ka1q6">Distinguer cache.app de cache.system et invalider par tag</a></li><li><a href="course-CRS-p6yhxmpxrzbs.html#out-OUT-wq0bg1r133y3">Écrire en PSR-6 — save, saveDeferred et commit — et distinguer un null stocké d&#x27;un manque</a></li><li><a href="course-CRS-p6yhxmpxrzbs.html#out-OUT-8h04z2xxjp34">Utiliser PSR-16 et passer d&#x27;un contrat à l&#x27;autre selon ce qu&#x27;attend le code consommateur</a></li></ul><aside class="pedagogy-legend" aria-label="Repères pédagogiques"><p><strong>Repères pédagogiques</strong></p><p>Ces repères décrivent le rôle du bloc, pas une fréquence officielle à l’examen.</p><p class="teaching-label essential"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="brain" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5C12 1 6 1 6 5C2 5 1 10 4 12C1 15 3 19 6 19C6 23 12 23 12 19V5M12 5C12 1 18 1 18 5C22 5 23 10 20 12C23 15 21 19 18 19C18 23 12 23 12 19M6 5C6 8 8 9 9 9M4 12H7L9 14M6 19V16M18 5C18 8 16 9 15 9M20 12H17L15 14M18 19V16"></path></svg> <strong>À comprendre</strong></p><p class="teaching-label essential"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="book" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5C9 3 5 3 2 4V20C5 19 9 19 12 21C15 19 19 19 22 20V4C19 3 15 3 12 5V21M5 8H8M5 12H8M16 8H19M16 12H19"></path></svg> <strong>À mémoriser</strong></p><p class="teaching-label example"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="code" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6L2 12L8 18M16 6L22 12L16 18M14 3L10 21"></path></svg> <strong>Exemple concret</strong></p><p class="teaching-label pitfall"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="warning" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3L23 21H1L12 3ZM12 9V14M12 17V18"></path></svg> <strong>Piège à éviter</strong></p><p class="teaching-label nuance"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="balance" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3V21M7 21H17M3 7L21 5M5 7L1 15H9L5 7M19 6L15 14H23L19 6M1 15Q5 20 9 15M15 14Q19 19 23 14"></path></svg> <strong>Nuance à connaître</strong></p><p>Précision, exception ou condition d’application d’une règle.</p></aside><section class="teaching-section" data-section="s-objectif"><h2 id="s-objectif" tabindex="-1">Objectif</h2><p>La requête <code>GET /blog/42</code> peut encore exécuter son contrôleur alors qu'un
+calcul réutilisable n'a pas changé. De même, consulter un rapport d'import
+ne devrait pas recalculer son résumé coûteux à chaque lecture.
+Le composant Cache mémorise ces <strong>valeurs applicatives</strong>, sans décider
+à lui seul si une réponse HTTP peut être partagée.</p>
+<p>Le fil du cours : <strong>demander une valeur au cache en lui donnant la recette
+pour la refaire</strong>. On le déroule en sept étapes : l'idée (<code>get()</code> + callable),
+le vocabulaire (item, pool…), l'API qui surprend, la ruée, PSR-6, PSR-16 et
+les bridges, enfin les pools du framework.</p></section><section class="teaching-section" data-section="s-l-essentiel"><h2 id="s-l-essentiel" tabindex="-1">L&#x27;essentiel</h2><p class="teaching-label essential"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="brain" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5C12 1 6 1 6 5C2 5 1 10 4 12C1 15 3 19 6 19C6 23 12 23 12 19V5M12 5C12 1 18 1 18 5C22 5 23 10 20 12C23 15 21 19 18 19C18 23 12 23 12 19M6 5C6 8 8 9 9 9M4 12H7L9 14M6 19V16M18 5C18 8 16 9 15 9M20 12H17L15 14M18 19V16"></path></svg> <strong>À comprendre</strong></p><aside class="section-digest" id="s-l-essentiel-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>La lecture et le calcul sont réunis.</li><li>Le caller fournit la stratégie de reconstruction.</li></ol></aside><p><strong>Ce que cette partie veut réellement vous apprendre.</strong></p>
+<ul>
+<li><em>Pourquoi ce sujet existe.</em> Certains calculs sont coûteux et leur résultat
+  change rarement. Écrire à la main « lire, tester, calculer, sauvegarder »
+  dans chaque action est répétitif et dangereux sous charge.</li>
+<li><em>Le problème que Symfony résout.</em> Une API où <strong>lecture et reconstruction
+  sont un seul appel</strong> (<code>get()</code> + callable), protégée par défaut contre la ruée.</li>
+<li><em>Ce que l'auteur veut que vous compreniez.</em> Il n'y a pas de <code>set()</code> : on ne
+  « range » pas une valeur, on <strong>demande</strong> une valeur avec la recette pour la
+  refaire. Les autres API (PSR-6, PSR-16) existent pour les bibliothèques
+  tierces.</li>
+<li><em>Pourquoi c'est à l'examen.</em> Les questions portent sur : l'absence de
+  <code>set()</code>, <code>$save</code> par référence, <code>beta</code>, <code>null</code> ≠ absence (<code>isHit()</code>/<code>has()</code>),
+  <code>saveDeferred()</code> + <code>commit()</code>, les bridges, <code>cache.app</code> ≠ <code>cache.system</code>,
+  les tags.</li>
+</ul>
+<p>Le component Cache met des valeurs en cache dans le code. L'API recommandée,
+les <strong>Cache Contracts</strong>, n'a que <code>get()</code> et <code>delete()</code> : pas de <code>set()</code>, car
+<code>get()</code> reçoit un callable qui produit la valeur au manque. Le reste de la page
+répond à trois questions : quelle API, que fait <code>get()</code> au juste, et quel pool.</p>
+<p>Un <em>pool</em> est un espace logique d'entrées, chacune identifiée par une clé.
+Le code déclare comment reconstruire la valeur si nécessaire.
+Il faut donc pouvoir la recalculer : ce cache n'est pas le stockage de
+référence du catalogue ni une file durable de travaux Messenger.
+Le cache HTTP, lui, peut répondre avant que ce code soit atteint.</p>
+<h3 tabindex="-1" id="s-l-essentiel-nested-comparaison-cache-applicatif-et-cache-http">Comparaison : cache applicatif et cache HTTP</h3>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Cache applicatif (ce cours)</th>
+<th>Cache HTTP</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Ce qui est mémorisé</td>
+<td>une <strong>valeur</strong> calculée</td>
+<td>une <strong>réponse</strong> HTTP entière</td>
+</tr>
+<tr>
+<td>Où il agit</td>
+<td><strong>dans</strong> le code (controller, service)</td>
+<td><strong>avant</strong> le code (proxy)</td>
+</tr>
+<tr>
+<td>Clé</td>
+<td>celle que vous choisissez</td>
+<td>l'URI</td>
+</tr>
+<tr>
+<td>Invalidation</td>
+<td><code>delete()</code>, tags</td>
+<td>expiration / validation</td>
+</tr>
+</tbody>
+</table></section><section class="teaching-section" data-section="s-le-schema"><h2 id="s-le-schema" tabindex="-1">Le schéma</h2><aside class="section-digest" id="s-le-schema-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Le miss déclenche le calcul.</li><li>La valeur retournée peut ensuite être réutilisée.</li></ol></aside><p><strong>Où en est-on ?</strong> Étape 1 sur 7 : avant le vocabulaire, on regarde ce que fait
+l'appel central, <code>get()</code>. Tout le reste du cours (ruée, PSR-6, pools) se rattache
+à ce diagramme.</p>
+<p>Lire le losange comme une décision de réutilisation, pas comme un simple
+test « la clé existe ». Une valeur présente peut être recalculée en avance :</p>
+<figure class="diagram" aria-labelledby="CRS-p6yhxmpxrzbs-3-diagram-0-title CRS-p6yhxmpxrzbs-3-diagram-0-description"><figcaption id="CRS-p6yhxmpxrzbs-3-diagram-0-title">get lit ou recalcule une valeur</figcaption><p id="CRS-p6yhxmpxrzbs-3-diagram-0-description">Une valeur utilisable est rendue sans callback sauf recalcul anticipé. Au manque ou lors du recalcul, le callback produit la valeur. save false empêche son enregistrement mais pas son retour à l&#x27;appelant.</p><div class="mermaid" hidden>---
+title: Trois façons de parler au cache
+---
+flowchart TD
+  accTitle: get lit ou recalcule une valeur
+  accDescr: Une valeur utilisable est rendue sans callback sauf recalcul anticipé. Au manque ou lors du recalcul, le callback produit la valeur. save false empêche son enregistrement mais pas son retour à l&#x27;appelant.
+  G[&quot;get clé et callback&quot;] --&gt;|&quot;lecture et politique beta&quot;| H{&quot;Valeur à réutiliser ?&quot;}
+  H --&gt;|&quot;oui&quot;| V([&quot;Valeur en cache&quot;])
+  H --&gt;|&quot;non : manque ou recalcul&quot;| C[&quot;Exécuter le callback&quot;]
+  C --&gt;|&quot;valeur produite&quot;| S{&quot;save autorisé ?&quot;}
+  S --&gt;|&quot;oui&quot;| W[&quot;Enregistrer avec échéance&quot;]
+  W --&gt;|&quot;puis retourner&quot;| R([&quot;Valeur calculée&quot;])
+  S --&gt;|&quot;non, sans écriture&quot;| R
+  classDef action fill:#e0f2fe,stroke:#075985,color:#0c4a6e
+  classDef decision fill:#fef3c7,stroke:#92400e,color:#78350f
+  classDef result fill:#dcfce7,stroke:#166534,color:#14532d
+  class G,C,W action
+  class H,S decision
+  class V,R result</div></figure>
+<p>Bleu : opérations ; ambre : décisions ; vert : valeur retournée. Vue logique
+hors coordination du lock et pannes du stockage. Le callback doit supporter
+plusieurs exécutions : le cache n'est pas une garantie d'exécution métier unique.</p>
+<h3 tabindex="-1" id="s-le-schema-nested-les-trois-chemins-en-une-ligne">Les trois chemins, en une ligne</h3>
+<pre class="highlight" tabindex="0"><code class="language-text"> get('k', $recette)
+   ├─ valeur présente, pas élue en avance → rendue, recette NON exécutée
+   ├─ manque, ou recalcul anticipé        → recette exécutée
+   │       ├─ $save = true  → stockée puis rendue
+   │       └─ $save = false → rendue seulement (rien n'est écrit)</code></pre></section><section class="teaching-section" data-section="s-l-exemple-un-calcul-couteux"><h2 id="s-l-exemple-un-calcul-couteux" tabindex="-1">L&#x27;exemple : un calcul coûteux</h2><p class="teaching-label example"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="code" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6L2 12L8 18M16 6L22 12L16 18M14 3L10 21"></path></svg> <strong>Exemple concret</strong></p><aside class="section-digest" id="s-l-exemple-un-calcul-couteux-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Le pool applicatif contient les données métier mises en cache.</li><li>Le pool système a une autre finalité.</li><li>Les tags de cet exemple exigent TagAwareCacheInterface ; l&#x27;alias standard est cache.app.taggable, pas le pool cache.app non tag-aware.</li></ol></aside><p><strong>Où en est-on ?</strong> Étape 2 sur 7 : un exemple complet mais court, pour voir
+<code>get()</code>, une échéance, un tag et <code>$save</code> ensemble. On reviendra sur chaque
+élément dans les parties suivantes.</p>
+<p>Le rapport résume ici le dernier état global de l'import du blog.
+Un <em>tag</em> regroupe des entrées à invalider ensemble ; ce n'est pas leur clé.
+Cet exemple reçoit explicitement un <code>TagAwareCacheInterface</code>. Le callable
+<code>$compute</code> représente le calcul métier fourni par l'appelant ; il doit retourner
+une string. La fonction conserve une valeur non vide pendant une heure et
+associe le tag <code>reports</code>. Une valeur vide est retournée mais non sauvegardée.</p>
+<pre class="highlight" tabindex="0"><code class="language-php">use Symfony\Contracts\Cache\ItemInterface;
+use Symfony\Contracts\Cache\TagAwareCacheInterface;
+
+function cachedReport(TagAwareCacheInterface $cache, callable $compute): string
+{
+    return $cache-&gt;get('blog.import.report.v1', function (ItemInterface $item, bool &amp;$save) use ($compute): string {
+        $item-&gt;expiresAfter(3600);
+        $item-&gt;tag(['reports']);
+        $result = $compute();
+        $save = '' !== $result;
+
+        return $result;
+    }, 0.0);
+}</code></pre>
+<p>Avec un pool compatible, deux appels successifs réutilisent la valeur non vide ;
+<code>$cache-&gt;invalidateTags(['reports'])</code> impose un nouveau calcul au prochain appel.
+Le <code>beta</code> égal à zéro désactive ici le recalcul anticipé, pas la mémorisation.
+Dans la configuration standard de FrameworkBundle 8.0, l'autowiring de
+<code>TagAwareCacheInterface</code> fournit <code>cache.app.taggable</code>, qui enveloppe <code>cache.app</code>.
+L'alias de <code>CacheInterface</code> reste <code>cache.app</code> : son adapter filesystem standard
+n'est pas tag-aware. Appeler <code>tag()</code> sur cet item non taggable lève une
+<code>LogicException</code>. Une application peut remplacer ces alias : vérifier sa
+configuration effective plutôt que déduire la capacité des tags du nom du pool.</p>
+<p>Les appels réutilisent la valeur tant qu'elle reste présente et non périmée,
+sans invalidation entre eux. Après un import qui change les données du rapport,
+l'application invalide le tag ; elle ne recompte pas sur un redémarrage
+du conteneur. Pour des rapports par import, langue ou lecteur, la clé doit
+inclure ces dimensions autorisées : une clé globale ne les sépare pas.
+Le calcul doit rester répétable et ne pas envoyer lui-même la notification.</p>
+<h3 tabindex="-1" id="s-l-exemple-un-calcul-couteux-nested-ce-que-fait-chaque-ligne-de-la-recette">Ce que fait chaque ligne de la recette</h3>
+<table>
+<thead>
+<tr>
+<th>Ligne</th>
+<th>Rôle</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>$item-&gt;expiresAfter(3600)</code></td>
+<td>l'entrée vit une heure</td>
+</tr>
+<tr>
+<td><code>$item-&gt;tag(['reports'])</code></td>
+<td>l'entrée rejoint le groupe <code>reports</code></td>
+</tr>
+<tr>
+<td><code>$save = '' !== $result</code></td>
+<td>ne sauvegarde pas une chaîne vide</td>
+</tr>
+<tr>
+<td><code>0.0</code> (3ᵉ argument)</td>
+<td><code>beta</code> : aucun recalcul anticipé</td>
+</tr>
+</tbody>
+</table>
+<h3 tabindex="-1" id="s-l-exemple-un-calcul-couteux-nested-pourquoi-l-item-recoit-il-tag-alors-que-cacheinterface-n-a-pas-de-tags">Pourquoi l'item reçoit-il <code>tag()</code> alors que <code>CacheInterface</code> n'a pas de tags ?</h3>
+<p>Parce que les tags sont une <strong>capacité du pool</strong>, pas de l'API <code>get()</code>. Avec
+l'autowiring de <code>TagAwareCacheInterface</code>, Symfony injecte <code>cache.app.taggable</code>
+(qui enveloppe <code>cache.app</code>) ; avec <code>CacheInterface</code>, c'est <code>cache.app</code>, dont
+l'adapter filesystem n'est pas tag-aware, et <code>tag()</code> lève une <code>LogicException</code>.</p></section><section class="teaching-section" data-section="s-trois-api-une-recommandee"><h2 id="s-trois-api-une-recommandee" tabindex="-1">Trois API, une recommandée</h2><aside class="section-digest" id="s-trois-api-une-recommandee-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Choisir l&#x27;API selon le contrat consommateur.</li><li>Un stockage peut servir plusieurs abstractions.</li></ol></aside><p><strong>Où en est-on ?</strong> Étape 3 sur 7 : avant le vocabulaire, il faut savoir <strong>quelle
+API</strong> utiliser : trois existent pour des raisons historiques et d'interopérabilité.</p>
+<p>Un service applicatif peut choisir les Contracts ; une bibliothèque
+existante impose parfois une autre interface. Ce choix ne dit pas encore
+si la valeur vit en mémoire, dans un fichier ou sur un serveur de cache :</p>
+<ul>
+<li>les <strong>Cache Contracts</strong> — recommandés : moins de code, et <strong>protection
+  contre la ruée par défaut</strong> ;</li>
+<li><strong>PSR-6</strong> — pools et items, quand une bibliothèque tierce l'exige ;</li>
+<li><strong>PSR-16</strong> — un cache « simple », sans object item.</li>
+</ul>
+<p>Les adapters parlent à la fois les Cache Contracts et PSR-6 : on choisit l'API
+selon le <strong>contrat qu'attend le code consommateur</strong>.</p>
+<p>La protection évoquée concerne l'implémentation Symfony et ses conditions
+de fonctionnement ; déclarer une interface n'installe pas un verrou
+distribué universel. Nous préciserons ce point dans « La ruée sur le cache ».</p>
+<h3 tabindex="-1" id="s-trois-api-une-recommandee-nested-comparaison-des-trois-api">Comparaison des trois API</h3>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Cache Contracts</th>
+<th>PSR-6</th>
+<th>PSR-16</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Opérations clés</td>
+<td><code>get()</code>, <code>delete()</code></td>
+<td><code>getItem()</code>, <code>save()</code>, <code>commit()</code>…</td>
+<td><code>get()</code>, <code>set()</code>, <code>has()</code></td>
+</tr>
+<tr>
+<td>Objet item</td>
+<td><code>ItemInterface</code> dans le callback</td>
+<td>oui (<code>CacheItemInterface</code>)</td>
+<td>non</td>
+</tr>
+<tr>
+<td>Écriture</td>
+<td>via le callback</td>
+<td><code>set()</code> puis <code>save()</code></td>
+<td><code>set()</code> direct</td>
+</tr>
+<tr>
+<td>Anti-ruée par défaut</td>
+<td><strong>oui</strong></td>
+<td>non</td>
+<td>non</td>
+</tr>
+<tr>
+<td>Quand</td>
+<td>code applicatif</td>
+<td>bibliothèque exigeant PSR-6</td>
+<td>bibliothèque exigeant PSR-16</td>
+</tr>
+</tbody>
+</table></section><section class="teaching-section" data-section="s-quatre-mots"><span class="outcome-anchor" id="out-OUT-rmv013ank5zr" tabindex="-1"></span><h2 id="s-quatre-mots" tabindex="-1">Quatre mots</h2><aside class="section-digest" id="s-quatre-mots-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Le pool isole les keys.</li><li>L&#x27;adapter choisit le mécanisme de stockage.</li></ol></aside><p><strong>Où en est-on ?</strong> Étape 4 sur 7 : le vocabulaire. Les mots <em>item</em>, <em>pool</em>,
+<em>adapter</em>, <em>provider</em> reviennent dans toutes les parties suivantes ; ils
+désignent quatre rôles différents.</p>
+<div class="admonition info">
+<p class="admonition-title">🌍 In Real Life</p>
+<p><strong>La situation</strong> : le secrétariat du blog range les résumés d'import dans des casiers nommés, éventuellement installés dans le même dépôt.</p>
+<p><strong>L’équivalent dans Symfony</strong> : fiche identifiée → item ; casier logique → pool ; dispositif de rangement → adapter ; liaison vers le dépôt → provider.</p>
+<p><strong>Retour à la réalité technique</strong> : les pools du framework disposent de namespaces pour séparer leurs clés. Cette séparation logique n'est pas une barrière d'autorisation entre utilisateurs et ne suppose pas des serveurs distincts.</p>
+<p><strong>🧠 Comment le mémoriser</strong> : « La même étiquette peut vivre dans deux casiers. » Image mentale : deux tiroirs contenant chacun une fiche 42. Question-réflexe : quel pool et quel namespace utilise cet appel ?</p>
+<p><strong>⚠️ À ne pas confondre</strong> : interface de cache, adapter de stockage et connexion au stockage.</p>
+</div>
+<table>
+<thead>
+<tr>
+<th>Terme</th>
+<th>Definition</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Item</strong></td>
+<td>une unité stockée : une key, une valeur</td>
+</tr>
+<tr>
+<td><strong>Pool</strong></td>
+<td>un repository logique d'items ; toutes les opérations passent par lui</td>
+</tr>
+<tr>
+<td><strong>Adapter</strong></td>
+<td>la class qui implémente le stockage réel — files, Redis…</td>
+</tr>
+<tr>
+<td><strong>Provider</strong></td>
+<td>le service de connexion au stockage, notion propre au framework</td>
+</tr>
+</tbody>
+</table>
+<pre class="highlight" tabindex="0"><code class="language-text"> votre code ──▶ Pool (interface) ──▶ Adapter ──▶ Provider ──▶ stockage
+   get('k')     « mon casier »       Filesystem   connexion    files, Redis…
+                                      / Redis…    (DSN)</code></pre>
+<p>Chaque pool du framework reçoit un <strong>namespace</strong> dérivé de son nom : deux pools
+ne se heurtent pas sur un stockage partagé.</p>
+<p>Par exemple, deux pools nommés peuvent stocker chacun une clé <code>summary</code>
+sur la même connexion sans désigner la même entrée. Ce namespace est
+une séparation logique, pas une permission : un code ayant accès au
+stockage n'est pas isolé comme par un contrôle d'accès.
+En standalone, deux adapters auxquels on donne volontairement le même
+namespace et le même stockage peuvent au contraire partager les données.</p>
+<h3 tabindex="-1" id="s-quatre-mots-nested-pourquoi-deux-pools-peuvent-ils-avoir-la-meme-cle-sans-collision">Pourquoi deux pools peuvent-ils avoir la même clé sans collision ?</h3>
+<p>Le namespace est préfixé à la clé avant d'arriver au stockage. <code>summary</code>
+dans le pool A et <code>summary</code> dans le pool B deviennent donc deux clés
+distinctes, même sur la même connexion.</p>
+<p>⚠️ <strong>À ne pas confondre</strong> : <em>adapter</em> et <em>provider</em>. <em>Plausible car</em> les deux
+« parlent au stockage » ; mais l'adapter <strong>implémente</strong> le stockage, le
+provider est seulement la <strong>connexion</strong> que l'adapter utilise.</p></section><section class="teaching-section" data-section="s-l-api-qui-surprend"><span class="outcome-anchor" id="out-OUT-ggw5eh2abp9f" tabindex="-1"></span><h2 id="s-l-api-qui-surprend" tabindex="-1">L&#x27;API qui surprend</h2><aside class="section-digest" id="s-l-api-qui-surprend-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Un callback ne signifie pas toujours un miss.</li><li>Le recalcul anticipé peut voir un hit.</li></ol></aside><p><strong>Où en est-on ?</strong> Étape 5 sur 7 : on revient sur <code>get()</code> pour comprendre ce
+qui surprend : un callable qui n'est pas toujours exécuté, et un <code>$save</code>
+passé par référence.</p>
+<div class="admonition info">
+<p class="admonition-title">🌍 In Real Life</p>
+<p><strong>La situation</strong> : on demande au secrétariat le résumé d'import du blog en lui donnant aussi la recette pour le refaire si nécessaire.</p>
+<p><strong>L’équivalent dans Symfony</strong> : résumé demandé → clé ; recette → callback de <code>get()</code> ; résumé réutilisé → valeur du cache ; préparation requise → calcul puis retour.</p>
+<p><strong>Retour à la réalité technique</strong> : les Contracts regroupent lecture et reconstruction. Le callback peut aussi être choisi pour un recalcul anticipé ; sa présence ne prouve ni son exécution à chaque appel ni une absence systématique de valeur.</p>
+<p><strong>🧠 Comment le mémoriser</strong> : « Demander avec la recette de secours. » Image mentale : fiche conservée avec son mode de fabrication. Question-réflexe : pourquoi le callback est-il appelé cette fois ?</p>
+<p><strong>⚠️ À ne pas confondre</strong> : valeur retournée au demandeur et valeur effectivement sauvegardée.</p>
+</div>
+<p>La fonction de reconstruction évite de répéter « lire, tester, calculer,
+sauvegarder » dans chaque action. La présence d'un callback ne signifie
+pas qu'il sera exécuté à chaque demande :</p>
+<ul>
+<li><code>get()</code> lit <strong>et</strong> écrit : la valeur et la façon de la produire sont
+  déclarées au même endroit.</li>
+<li>Le callable tourne au manque, et sur une key présente quand le recalcul
+  anticipé l'élit ou que <code>beta</code> vaut <code>INF</code> ; <code>$item-&gt;isHit()</code> y rend alors
+  <code>true</code>.</li>
+<li><code>bool &amp;$save</code>, passé <strong>par référence</strong> : <code>false</code> empêche l'enregistrement.</li>
+</ul>
+<h3 tabindex="-1" id="s-l-api-qui-surprend-nested-pourquoi-save-est-il-passe-par-reference">Pourquoi <code>$save</code> est-il passé par référence ?</h3>
+<p>Le callback <strong>retourne la valeur</strong> ; il n'a pas d'autre canal pour dire
+« ne la sauvegarde pas ». Le <code>&amp;</code> permet à Symfony de lire, après l'appel, ce
+que le callback a mis dans <code>$save</code>. Sans <code>&amp;</code>, la modification resterait locale.</p>
+<p>Avec Cache 8.0 et son autoload chargés, ce petit calcul en mémoire
+permet d'observer la réutilisation sans stockage externe :</p>
+<pre class="highlight" tabindex="0"><code class="language-php">&lt;?php
+use Symfony\Component\Cache\Adapter\ArrayAdapter;
+use Symfony\Contracts\Cache\ItemInterface;
+
+$cache = new ArrayAdapter();
+$calls = 0;
+$compute = static function (ItemInterface $item) use (&amp;$calls): int {
+    ++$calls;
+    $item-&gt;expiresAfter(60);
+    return 6 * 7;
+};
+$first = $cache-&gt;get('answer', $compute, 0.0);
+$second = $cache-&gt;get('answer', $compute, 0.0);
+var_dump($first, $second, $calls);</code></pre>
+<p>Avant expiration, valeurs attendues : <code>42</code>, <code>42</code>, <code>1</code>.
+Cet ArrayAdapter appartient à cette instance PHP : ce test ne démontre
+pas un partage entre un worker et le serveur HTTP.
+<code>$save = false</code> ne supprime pas la valeur retournée, ne prouve pas une
+sauvegarde et ne vaut pas <code>delete()</code> d'une ancienne entrée.
+Une exception du calcul n'est pas transformée en résultat métier valide.</p>
+<h3 tabindex="-1" id="s-l-api-qui-surprend-nested-derouler-l-exemple-appel-par-appel">Dérouler l'exemple, appel par appel</h3>
+<pre class="highlight" tabindex="0"><code class="language-text"> appel 1 : get('answer')  → manque → recette exécutée ($calls = 1) → 42 stocké
+ appel 2 : get('answer')  → présent, beta = 0.0 → recette NON exécutée → 42
+ résultat : var_dump → 42, 42, 1</code></pre>
+<h3 tabindex="-1" id="s-l-api-qui-surprend-nested-comparaison-valeur-retournee-et-valeur-sauvegardee">Comparaison : valeur retournée et valeur sauvegardée</h3>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Valeur retournée</th>
+<th>Valeur sauvegardée</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>$save = true</code> (défaut)</td>
+<td>oui</td>
+<td>oui</td>
+</tr>
+<tr>
+<td><code>$save = false</code></td>
+<td><strong>oui</strong></td>
+<td>non</td>
+</tr>
+<tr>
+<td>exception dans le callback</td>
+<td>non (propagée)</td>
+<td>non</td>
+</tr>
+</tbody>
+</table></section><section class="teaching-section" data-section="s-la-ruee-sur-le-cache"><h2 id="s-la-ruee-sur-le-cache" tabindex="-1">La ruée sur le cache</h2><aside class="section-digest" id="s-la-ruee-sur-le-cache-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Zéro ne désactive pas le cache.</li><li>INF demande le calcul immédiatement.</li></ol></aside><p><strong>Où en est-on ?</strong> Étape 6 sur 7 (partie 1/2) : on comprend ce que la
+« protection par défaut » des Contracts fait vraiment, et ce qu'elle ne fait pas.</p>
+<div class="admonition info">
+<p class="admonition-title">🌍 In Real Life</p>
+<p><strong>La situation</strong> : toute l'équipe réclame le même résumé périmé. Un bureau coordonne sa préparation et peut choisir de le refaire avant l'heure limite.</p>
+<p><strong>L’équivalent dans Symfony</strong> : coordination locale → verrou ; préparation choisie avant échéance → recalcul probabiliste ; anticipation réglée → <code>beta</code>.</p>
+<p><strong>Retour à la réalité technique</strong> : le verrou local ne devient pas distribué parce que le stockage est partagé. <code>beta = 0</code> désactive l'anticipation, pas le cache ; une expiration et les métadonnées adaptées permettent la sélection anticipée.</p>
+<p><strong>🧠 Comment le mémoriser</strong> : « Anticiper la file, sans promettre un chef mondial. » Image mentale : un responsable dans chaque bureau. Question-réflexe : quelle est la portée réelle du verrou ?</p>
+<p><strong>⚠️ À ne pas confondre</strong> : protection contre les recalculs concurrents et garantie globale d'exécution unique.</p>
+</div>
+<p>Quand une key coûteuse expire, des Requests simultanées pourraient toutes
+refaire le même travail. L'implémentation Symfony réduit cette ruée par
+un <strong>verrou local</strong> et un <strong>recalcul anticipé probabiliste</strong>.
+Le verrou de calcul ne devient pas un mutex distribué parce que deux
+serveurs utilisent la même clé ou le même stockage.
+Le <code>beta</code>, troisième parameter de <code>get()</code>, règle l'anticipation :
+<code>1.0</code> par défaut, plus haut = plus tôt, <strong><code>0</code> la désactive</strong> sans désactiver
+le cache, <strong><code>INF</code> force le recalcul</strong>. Seul un item doté d'une échéance peut
+être élu en avance, avec les métadonnées de durée de calcul utilisées
+par le mécanisme.</p>
+<pre class="highlight" tabindex="0"><code class="language-text"> sans protection :   100 requêtes ─ clé expirée ─▶ 100 calculs coûteux
+ avec protection :   100 requêtes ─ clé expirée ─▶ 1 calcul (verrou local)
+                     + recalcul élu AVANT l'échéance (beta) pour éviter le trou</code></pre>
+<p>Le calcul élu s'effectue dans l'appel courant, sauf intégration de
+recalcul asynchrone explicitement configurée. Ce n'est pas un worker
+Messenger implicite. Augmenter <code>beta</code> favorise une reconstruction plus
+précoce ; ce n'est ni une nouvelle durée de vie ni une garantie de cadence.</p>
+<p>Le verrou par défaut s'appuie sur des fichiers locaux et <code>flock()</code>.
+Il dépend du support disponible et est désactivé par défaut sur Windows ;
+certains chemins exécutent le callback sans verrou, notamment si son
+ouverture n'est pas possible. Il ne faut donc jamais traiter le callback
+comme une opération métier « exactement une fois ». Le rapport se recalcule ;
+l'envoi du courriel et la publication d'un article demandent un autre contrat.</p>
+<h3 tabindex="-1" id="s-la-ruee-sur-le-cache-nested-comparaison-des-valeurs-de-beta">Comparaison des valeurs de <code>beta</code></h3>
+<table>
+<thead>
+<tr>
+<th><code>beta</code></th>
+<th>Effet</th>
+<th>Cas d'usage</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>0</code></td>
+<td><strong>aucun</strong> recalcul anticipé ; le cache reste actif</td>
+<td>comportement prévisible</td>
+</tr>
+<tr>
+<td><code>1.0</code></td>
+<td>défaut</td>
+<td>équilibre</td>
+</tr>
+<tr>
+<td><code>&gt; 1</code></td>
+<td>anticipation plus précoce</td>
+<td>calcul très coûteux</td>
+</tr>
+<tr>
+<td><code>INF</code></td>
+<td>recalcul <strong>immédiat</strong> même sur une key présente</td>
+<td>forcer / tester</td>
+</tr>
+</tbody>
+</table></section><section class="teaching-section" data-section="s-psr-6-ecrire-soi-meme"><span class="outcome-anchor" id="out-OUT-wq0bg1r133y3" tabindex="-1"></span><h2 id="s-psr-6-ecrire-soi-meme" tabindex="-1">PSR-6 : écrire soi-même</h2><aside class="section-digest" id="s-psr-6-ecrire-soi-meme-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>L&#x27;item modifié reste local avant sauvegarde.</li><li>save() réalise la persistance.</li></ol></aside><p><strong>Où en est-on ?</strong> Étape 6 sur 7 (partie 2/2) : les Contracts cachent
+« lire / écrire ». PSR-6 les <strong>rend visibles</strong> : on obtient un item, on le
+modifie, on demande au pool de le sauvegarder.</p>
+<div class="admonition info">
+<p class="admonition-title">🌍 In Real Life</p>
+<p><strong>La situation</strong> : corriger une fiche de résumé sur son bureau ne la remet pas dans l'armoire commune du blog.</p>
+<p><strong>L’équivalent dans Symfony</strong> : fiche locale modifiée → <code>CacheItem::set()</code> ; demande de rangement → <code>save()</code> ; pile d'attente → <code>saveDeferred()</code> ; enregistrement du lot → <code>commit()</code>.</p>
+<p><strong>Retour à la réalité technique</strong> : l'item et le pool jouent des rôles distincts. Un <code>null</code> sauvegardé peut être un hit ; le manque se détermine par <code>isHit()</code>, pas seulement par la valeur. Le moment du commit dépend aussi du pool.</p>
+<p><strong>🧠 Comment le mémoriser</strong> : « Corriger, puis ranger. » Image mentale : fiche encore posée devant l'armoire fermée. Question-réflexe : quelle opération a demandé la sauvegarde ?</p>
+<p><strong>⚠️ À ne pas confondre</strong> : écriture différée locale et file de travail Messenger.</p>
+</div>
+<p>PSR-6 rend visibles les étapes que les Contracts regroupent. L'item obtenu
+est un objet local ; le modifier n'est pas encore demander au pool
+de sauvegarder sa nouvelle valeur :</p>
+<table>
+<thead>
+<tr>
+<th>Opération</th>
+<th>Effet</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>set('x')</code> sans <code>save()</code></td>
+<td>rien n'est stocké</td>
+</tr>
+<tr>
+<td><code>set(null)</code> puis <code>save()</code></td>
+<td><code>isHit()</code> <strong>vrai</strong>, <code>get()</code> rend <code>null</code></td>
+</tr>
+<tr>
+<td><code>saveDeferred()</code> avec FilesystemAdapter</td>
+<td>reste différé jusqu'à un <code>commit()</code> explicite ou déclenché par le pool</td>
+</tr>
+<tr>
+<td><code>deleteItem('k')</code></td>
+<td>l'item disparaît</td>
+</tr>
+</tbody>
+</table>
+<p><code>ArrayAdapter</code> enregistre tout de suite : son <code>saveDeferred()</code> appelle <code>save()</code>.
+<code>expiresAfter()</code> et <code>expiresAt()</code> fixent l'échéance.</p>
+<pre class="highlight" tabindex="0"><code class="language-text"> $item = $pool-&gt;getItem('k')   ← objet LOCAL (copie de travail)
+ $item-&gt;set($v)                ← modifie la copie, rien n'est stocké
+ $pool-&gt;save($item)            ← écrit tout de suite
+ $pool-&gt;saveDeferred($item)    ← met en file ; écrit au commit()
+ $pool-&gt;commit()               ← écrit la file</code></pre>
+<p>Dans l'implémentation des adapters fondés sur <code>AbstractAdapterTrait</code>,
+<code>getItem()</code> d'une clé encore différée appelle <code>commit()</code> avant de lire.
+Cela peut rendre les sauvegardes visibles à un autre pool partageant
+le stockage ; ce n'est pas une visibilité spéciale réservée au premier
+objet PHP. La sauvegarde reste soumise à son résultat et à l'expiration.
+Pour vider explicitement le lot, appeler <code>commit()</code> plutôt que dépendre
+d'un effet de bord de lecture ; cela ne constitue pas une transaction métier.</p>
+<p>Un résultat absent du catalogue peut être représenté volontairement par
+<code>null</code>, avec une politique d'expiration adaptée. Voici la différence entre
+cette valeur et un manque, en mémoire :</p>
+<pre class="highlight" tabindex="0"><code class="language-php">&lt;?php
+use Symfony\Component\Cache\Adapter\ArrayAdapter;
+
+$pool = new ArrayAdapter();
+$item = $pool-&gt;getItem('optional-result');
+$item-&gt;set(null);
+$pool-&gt;save($item);
+$loaded = $pool-&gt;getItem('optional-result');
+var_dump($loaded-&gt;isHit(), $loaded-&gt;get());</code></pre>
+<p>Résultat attendu : <code>true</code>, puis <code>null</code>. Tester seulement
+<code>$loaded-&gt;get() === null</code> ferait recalculer inutilement ce résultat connu.
+À l'inverse, garder indéfiniment l'absence de l'article 999 empêcherait
+de voir sa création ultérieure sans invalidation.</p>
+<h3 tabindex="-1" id="s-psr-6-ecrire-soi-meme-nested-pourquoi-ishit-et-non-get-null">Pourquoi <code>isHit()</code> et non <code>get() === null</code> ?</h3>
+<p><code>get()</code> rend <code>null</code> dans <strong>deux</strong> situations : valeur <code>null</code> sauvegardée, ou
+manque. Seul <code>isHit()</code> les distingue.</p>
+<table>
+<thead>
+<tr>
+<th>Situation</th>
+<th><code>isHit()</code></th>
+<th><code>get()</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>null</code> sauvegardé</td>
+<td><code>true</code></td>
+<td><code>null</code></td>
+</tr>
+<tr>
+<td>clé absente</td>
+<td><code>false</code></td>
+<td><code>null</code></td>
+</tr>
+</tbody>
+</table></section><section class="teaching-section" data-section="s-psr-16-et-les-bridges"><span class="outcome-anchor" id="out-OUT-8h04z2xxjp34" tabindex="-1"></span><h2 id="s-psr-16-et-les-bridges" tabindex="-1">PSR-16 et les bridges</h2><aside class="section-digest" id="s-psr-16-et-les-bridges-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>null peut être une valeur valide.</li><li>L&#x27;existence est une information distincte.</li></ol></aside><p><strong>Où en est-on ?</strong> Étape 7 sur 7 : la dernière API. Les bridges relient les
+trois API entre elles pour qu'une bibliothèque PSR-16 puisse parler à votre code
+Contracts, et inversement.</p>
+<p>Ici, « bridge » désigne seulement l'adaptation entre contrats de cache
+fournie par le composant Cache, pas une intégration tierce supplémentaire.
+La bibliothèque consommatrice choisit le sens nécessaire :</p>
+<p><code>get('k', 'défaut')</code> rend le défaut au manque ; <code>has()</code> distingue un <code>null</code>
+stocké d'une absence. <code>Psr16Cache</code> fait d'un pool PSR-6 un cache PSR-16 ;
+<code>Psr16Adapter</code> fait l'inverse, et parle aussi les Cache Contracts.</p>
+<pre class="highlight" tabindex="0"><code class="language-text">   pool PSR-6 ──────── Psr16Cache ────────▶ cache PSR-16
+   cache PSR-16 ────── Psr16Adapter ──────▶ pool PSR-6 (+ Cache Contracts)</code></pre>
+<p>Avec Cache 8.0, les interfaces PSR-6 et PSR-16 disponibles et l'autoload
+chargé, cet exemple ne manipule que des données en mémoire :</p>
+<pre class="highlight" tabindex="0"><code class="language-php">&lt;?php
+use Symfony\Component\Cache\Adapter\ArrayAdapter;
+use Symfony\Component\Cache\Adapter\Psr16Adapter;
+use Symfony\Component\Cache\Psr16Cache;
+
+$pool = new ArrayAdapter();
+$simple = new Psr16Cache($pool);
+if (!$simple-&gt;set('optional', null, 60)) {
+    throw new RuntimeException('Échec de sauvegarde.');
+}
+var_dump($simple-&gt;has('optional'));
+var_dump($simple-&gt;get('optional', 'absent'));
+var_dump($simple-&gt;get('missing', 'absent'));
+
+$poolForAnotherConsumer = new Psr16Adapter($simple);
+$item = $poolForAnotherConsumer-&gt;getItem('optional');
+var_dump($item-&gt;isHit(), $item-&gt;get());</code></pre>
+<p>Sorties attendues avant expiration : <code>true</code>, <code>null</code>, <code>absent</code>, puis
+<code>true</code> et <code>null</code>. Le défaut PSR-16 n'est pas le callback des Contracts.
+Le dernier wrapper sert à comparer les interfaces ; il est inutile si le
+consommateur accepte déjà le pool initial. L'adaptation ne rend pas les
+données durables et n'ajoute pas les tags.
+Enfin, <code>has()</code> puis <code>get()</code> ne sont pas une lecture atomique : une autre
+opération peut modifier l'entrée entre les deux appels.</p>
+<h3 tabindex="-1" id="s-psr-16-et-les-bridges-nested-pourquoi-get-optional-absent-rend-il-null-et-non-absent">Pourquoi <code>get('optional', 'absent')</code> rend-il <code>null</code> et non <code>'absent'</code> ?</h3>
+<p>La clé <strong>existe</strong> avec la valeur <code>null</code> : ce n'est pas un manque, donc le
+défaut n'est pas utilisé. Seule <code>missing</code>, absente, rend <code>'absent'</code>.</p>
+<h3 tabindex="-1" id="s-psr-16-et-les-bridges-nested-comparaison-psr16cache-et-psr16adapter">Comparaison : <code>Psr16Cache</code> et <code>Psr16Adapter</code></h3>
+<table>
+<thead>
+<tr>
+<th></th>
+<th><code>Psr16Cache</code></th>
+<th><code>Psr16Adapter</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Part de</td>
+<td>un pool <strong>PSR-6</strong></td>
+<td>un cache <strong>PSR-16</strong></td>
+</tr>
+<tr>
+<td>Donne</td>
+<td>un cache PSR-16</td>
+<td>un pool PSR-6 (et Cache Contracts)</td>
+</tr>
+<tr>
+<td>Quand</td>
+<td>une bibliothèque exige PSR-16, vous avez un pool</td>
+<td>votre code attend pool/Contracts, vous avez du PSR-16</td>
+</tr>
+</tbody>
+</table></section><section class="teaching-section" data-section="s-les-pools-du-framework"><span class="outcome-anchor" id="out-OUT-jvfb807ka1q6" tabindex="-1"></span><h2 id="s-les-pools-du-framework" tabindex="-1">Les pools du framework</h2><aside class="section-digest" id="s-les-pools-du-framework-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Le cache système suit le code déployé.</li><li>Il n&#x27;est pas seulement un cache applicatif plus rapide.</li><li>Le tag regroupe des items par préoccupation.</li><li>L&#x27;invalidation par tag exige un pool tag-aware.</li></ol></aside><p><strong>Où en est-on ?</strong> Fin du parcours : on sait appeler le cache ; reste à savoir
+<strong>quel pool</strong> le framework nous fournit et pourquoi il y en a deux.</p>
+<p>Le rapport d'import change avec les données métier ; des métadonnées
+dérivées des classes changent avec le code déployé. Cette différence,
+pas une préférence de vitesse, guide le choix :</p>
+<table>
+<thead>
+<tr>
+<th>Pool</th>
+<th>Usage</th>
+<th>Adapter par défaut</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>cache.app</code></td>
+<td>données applicatives</td>
+<td><code>cache.adapter.filesystem</code></td>
+</tr>
+<tr>
+<td><code>cache.system</code></td>
+<td>ce qui <strong>dérive du code source</strong></td>
+<td><code>cache.adapter.system</code></td>
+</tr>
+</tbody>
+</table>
+<p><code>cache.system</code> se régénère au préchauffage et ne change qu'au deployment ;
+<code>cache.adapter.system</code> <strong>choisit</strong> le stockage : files PHP, chaînés derrière
+APCu quand il est là. Pour <code>cache.app</code>, Redis permet de survivre au deployment et
+de partager entre serveurs. Adapters : <code>apcu</code>, <code>array</code>, <code>filesystem</code>,
+<code>memcached</code>, <code>pdo</code>, <code>psr6</code>, <code>redis</code>, <code>valkey</code>.</p>
+<p>La survie à un déploiement exige aussi un stockage conservé, un namespace
+stable et une représentation compatible avec le nouveau code. Changer
+simplement le nom d'adapter ne garantit aucune de ces conditions.
+Le préchauffage du cache système n'est pas le recalcul systématique du
+rapport à chaque requête, ni la reconstruction de tous les services.</p>
+<p>Avec un pool tag-aware, deux rapports portant <code>reports</code> sont invalidés
+par <code>invalidateTags(['reports'])</code> sans connaître leurs clés ; une entrée
+portant seulement <code>settings</code> n'est pas ciblée. <code>delete('reports')</code>
+viserait une clé, et <code>clear()</code> viderait plus largement le pool.
+Les tags servent à la cohérence de valeurs applicatives : ils ne purgent
+pas automatiquement un reverse proxy HTTP.</p>
+<h3 tabindex="-1" id="s-les-pools-du-framework-nested-comparaison-delete-invalidatetags-clear">Comparaison : <code>delete()</code>, <code>invalidateTags()</code>, <code>clear()</code></h3>
+<table>
+<thead>
+<tr>
+<th>Opération</th>
+<th>Portée</th>
+<th>Exemple</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>delete('reports')</code></td>
+<td><strong>une clé</strong></td>
+<td>l'entrée nommée <code>reports</code></td>
+</tr>
+<tr>
+<td><code>invalidateTags(['reports'])</code></td>
+<td>toutes les entrées portant ce <strong>tag</strong></td>
+<td>deux rapports, sans connaître leurs clés</td>
+</tr>
+<tr>
+<td><code>clear()</code></td>
+<td><strong>tout le pool</strong></td>
+<td>tout <code>cache.app</code></td>
+</tr>
+</tbody>
+</table>
+<h3 tabindex="-1" id="s-les-pools-du-framework-nested-pourquoi-cache-system-n-est-il-pas-un-cache-app-plus-rapide">Pourquoi <code>cache.system</code> n'est-il pas un <code>cache.app</code> plus rapide ?</h3>
+<p>Il suppose que ses données se <strong>recalculent depuis le code source</strong> : il est
+régénéré au préchauffage et ne change qu'au deployment. Y stocker un rapport
+métier qui change avec les données serait une erreur de catégorie.</p>
+<p>⚠️ <strong>À ne pas confondre</strong> : « stocker durablement » et « survivre à un
+déploiement ». <em>Plausible car</em> un file ou Redis persistent ; mais il faut aussi
+un namespace stable et une représentation compatible avec le nouveau code.</p><aside class="enrichment" aria-label="Autre explication"><p>Un pool compatible <code>TagAwareCacheInterface</code> associe des tags aux items dans le callback avec <code>$item-&gt;tag(['products'])</code>. <code>invalidateTags(['products'])</code> invalide ensuite les items liés à cette préoccupation sans connaître chacune de leurs keys. Le pool doit être tag-aware ; les tags ne sont pas une propriété de toutes les implémentations PSR-6.</p>
+<p><a href="https://symfony.com/doc/8.0/components/cache/cache_invalidation.html">Documentation Symfony 8.0</a>.</p></aside></section><section class="teaching-section" data-section="s-pieges-d-examen"><h2 id="s-pieges-d-examen" tabindex="-1">Pièges d&#x27;examen</h2><p class="teaching-label pitfall"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="warning" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3L23 21H1L12 3ZM12 9V14M12 17V18"></path></svg> <strong>Piège à éviter</strong></p><aside class="section-digest" id="s-pieges-d-examen-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Le callback contrôle la sauvegarde.</li><li>Le passage par référence est essentiel.</li></ol></aside><ul class="pitfall-list"><li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : Où en est-on ?</summary><p><strong>Où en est-on ?</strong> Les sept étapes sont faites. Voici les erreurs de QCM
+probables et la raison de leur plausibilité.</p></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : Il n&#x27;existe pas de set()</summary><p><strong>Il n'existe pas de <code>set()</code></strong> dans les Cache Contracts ; en PSR-6, <code>set()</code> sans
+<code>save()</code> n'écrit rien. <em>Pourquoi on se trompe : PSR-16 a un <code>set()</code> et l'on
+généralise.</em></p></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : null n&#x27;est pas une absence</summary><p><strong><code>null</code> n'est pas une absence</strong> : <code>isHit()</code> en PSR-6, <code>has()</code> en PSR-16.
+<em>Pourquoi on se trompe : en PHP, <code>null</code> évoque « rien ».</em></p></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : $save est passé par référence</summary><p><strong><code>$save</code> est passé par référence</strong> ; le mettre à <code>false</code> empêche
+l'enregistrement. <em>Pourquoi on se trompe : on croit qu'il faut le retourner.</em></p></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : Le rappel ne tourne pas qu&#x27;au manque.</summary><p><strong>Le rappel ne tourne pas qu'au manque.</strong> Avec <code>beta</code> à <code>INF</code>, il
+tourne sur une key présente, et <code>isHit()</code> y rend <code>true</code>. <em>Pourquoi on se
+trompe : « callback = cache miss » est le cas le plus courant.</em></p></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : cache.system n&#x27;est pas un cache.app plus rapide</summary><p><strong><code>cache.system</code> n'est pas un <code>cache.app</code> plus rapide</strong> : il suppose des données
+dérivables du code source. <em>Pourquoi on se trompe : le nom « system » évoque
+un cache générique optimisé.</em></p></details></li></ul></section><section class="teaching-section" data-section="s-fiche-express"><h2 id="s-fiche-express" tabindex="-1">Fiche express</h2><p class="teaching-label essential"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="book" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5C9 3 5 3 2 4V20C5 19 9 19 12 21C15 19 19 19 22 20V4C19 3 15 3 12 5V21M5 8H8M5 12H8M16 8H19M16 12H19"></path></svg> <strong>À mémoriser</strong></p><aside class="section-digest" id="s-fiche-express-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>La valeur et l&#x27;état de présence sont indépendants.</li><li>Utiliser isHit() pour décider.</li></ol></aside><p>Pour la consultation du rapport, la question est : « puis-je réutiliser
+cette valeur et comment la reconstruire ? » Pour <code>/blog/42</code> au niveau HTTP,
+c'est : « puis-je réutiliser cette réponse pour ce lecteur ? »
+Les deux caches peuvent coexister, mais leurs clés et invalidations
+ne se synchronisent pas automatiquement.</p>
+<p><strong>Si tu dois retenir seulement 7 choses :</strong></p>
+<ul>
+<li>Item, <strong>pool</strong>, <strong>adapter</strong>, provider ; un namespace par pool.</li>
+<li>Cache Contracts : <strong><code>get()</code> et <code>delete()</code></strong>, pas de <code>set()</code>.</li>
+<li>Callable : au manque ou en avance ; <strong><code>&amp;$save</code></strong> ; <code>beta</code> 0 = jamais en
+  avance, <code>INF</code> = tout de suite.</li>
+<li>PSR-6 : <strong><code>save()</code></strong> ; <code>saveDeferred()</code> + <code>commit()</code> explicite,
+  avec des déclenchements anticipés possibles selon l'adapter.</li>
+<li><code>null</code> n'est pas une absence : <strong><code>isHit()</code></strong>, <strong><code>has()</code></strong>.</li>
+<li><strong><code>cache.app</code></strong> pour les données, <strong><code>cache.system</code></strong> pour le dérivé du code.</li>
+<li><code>tag()</code> + <strong><code>invalidateTags()</code></strong> (<code>TagAwareCacheInterface</code>).</li>
+</ul>
+<p><strong>🧠 À retenir pour la certification :</strong></p>
+<ul>
+<li>Cache Contracts = <code>get()</code> + <code>delete()</code> ; <strong>pas de <code>set()</code></strong> : le callable produit la valeur.</li>
+<li>Le callable tourne au manque <strong>ou</strong> en recalcul anticipé ; <code>&amp;$save = false</code> n'écrit pas mais la valeur est retournée.</li>
+<li><code>beta</code> : <code>0</code> désactive l'anticipation, <code>INF</code> force le recalcul ; le verrou est <strong>local</strong>, pas distribué.</li>
+<li>PSR-6 : <code>set()</code> ne stocke rien sans <code>save()</code> ; <code>saveDeferred()</code> attend <code>commit()</code> (ou un <code>getItem()</code> de la même clé).</li>
+<li><code>null</code> stocké = hit : <code>isHit()</code> (PSR-6), <code>has()</code> (PSR-16).</li>
+<li><code>Psr16Cache</code> : pool PSR-6 → PSR-16 ; <code>Psr16Adapter</code> : PSR-16 → pool (et Contracts).</li>
+<li><code>cache.app</code> (données) ≠ <code>cache.system</code> (dérivé du code) ; tags → <code>TagAwareCacheInterface</code>, jamais le proxy HTTP.</li>
+</ul>
+<p>Moyen mnémotechnique : <strong>« Demander, pas écrire »</strong>.</p>
+<p>Phrase de mémorisation : <strong>« Je demande une valeur au pool avec la recette pour la
+refaire ; le cache la rend telle quelle ou la recalcule, et <code>isHit()</code> me dit si
+une valeur <code>null</code> est un vrai hit. »</strong></p>
+<p>Pour vérifier ces contrats sans réseau, repartir des
+<a href="course-CRS-tt9yn0a06ngb.html">tests unitaires</a> et d'un pool mémoire ;
+tester séparément le stockage partagé et la concurrence dans un
+environnement adapté.</p></section><section class="official-sources"><h2 id="reader-sources" tabindex="-1">Sources officielles et compléments</h2><ul><li><a href="https://symfony.com/doc/8.0/cache.html">Symfony 8.0 — Cache</a></li></ul></section><section id="course-recalls" aria-labelledby="course-recalls-title" tabindex="-1"><h2 id="course-recalls-title">Rappels et liens avec les autres cours</h2><div data-recall-group="other"><h3>Rappels des cours précédents / autres modules</h3><ul><li data-recall-course="CRS-v1808qnchx6g" data-recall-kind="previous_course"><p class="recall-provenance">Module 16 — Internationalisation et traduction · Cours « Internationalization and localization (Note: Intl component utilities to access ICU data are not included) »</p><p>Une key absente ne lève pas nécessairement d&#x27;erreur. Le texte source sert de dernier repli.</p><p><a href="#cards-previous">Rappel : <span lang="en">What does trans() return when no translation is found after fallbacks?</span></a></p></li></ul></div></section><nav class="course-sequence" aria-label="Ordre de lecture"><a rel="prev" href="course-CRS-1k0ce9dvdr99.html" aria-label="Précédent : HTTP Caching (reverse proxies, expiration, validation) Note: ESI (Edge Side Includes) is not included — Module 17 — Cache HTTP">Précédent : HTTP Caching (reverse proxies, expiration, validation) Note: ESI (Edge Side Includes) is not included</a> <a href="lot-18.html">Sommaire : Module 18 — Cache applicatif</a> <a rel="next" href="course-CRS-6hcrc92xv6vt.html" aria-label="Suivant : Clock — Module 19 — Clock">Suivant : Clock</a></nav><p class="course-practice-entry"><a class="button" href="#view-quiz">Fin du cours — s’entraîner avec le Quiz</a></p></div><div id="view-flashcards" data-course-panel role="region" aria-labelledby="view-flashcards-title"><h2 id="view-flashcards-title">Flashcards</h2><p lang="en">Answer before revealing each card.</p><p>Ces cartes ne mesurent pas une maîtrise notée.</p><div id="cards-s-l-essentiel-1" data-card-section="s-l-essentiel"><h3><a href="#s-l-essentiel">Revoir : L&#x27;essentiel</a></h3><div class="reader-cards"><details class="reader-card" id="B-p6yhxmpxrzbs-01"><summary lang="en">Why do Cache Contracts expose get() rather than a separate required set() operation?</summary><p lang="en">get() accepts a callback that computes and stores a value when needed.</p><p lang="fr">La lecture et le calcul sont réunis. Le caller fournit la stratégie de reconstruction.</p><a href="course-CRS-p6yhxmpxrzbs.html#out-OUT-ggw5eh2abp9f">Revoir le passage précis</a></details></div></div><div id="cards-s-le-schema-2" data-card-section="s-le-schema"><h3><a href="#s-le-schema">Revoir : Le schéma</a></h3><div class="reader-cards"><details class="reader-card" id="B-p6yhxmpxrzbs-02"><summary lang="en">How does the contracts cache flow handle a missing key?</summary><p lang="en">Invoke the callback, obtain the value, and save it unless saving is disabled.</p><p lang="fr">Le miss déclenche le calcul. La valeur retournée peut ensuite être réutilisée.</p><a href="course-CRS-p6yhxmpxrzbs.html#out-OUT-jvfb807ka1q6">Revoir le passage précis</a></details></div></div><div id="cards-s-l-exemple-un-calcul-couteux-3" data-card-section="s-l-exemple-un-calcul-couteux"><h3><a href="#s-l-exemple-un-calcul-couteux">Revoir : L&#x27;exemple : un calcul coûteux</a></h3><div class="reader-cards"><details class="reader-card" id="B-p6yhxmpxrzbs-03"><summary lang="en">Which framework pool is normally injected for CacheInterface?</summary><p lang="en">cache.app.</p><p lang="fr">Le pool applicatif contient les données métier mises en cache. Le pool système a une autre finalité. Les tags de cet exemple exigent TagAwareCacheInterface ; l&#x27;alias standard est cache.app.taggable, pas le pool cache.app non tag-aware.</p><a href="course-CRS-p6yhxmpxrzbs.html#out-OUT-jvfb807ka1q6">Revoir le passage précis</a></details></div></div><div id="cards-s-trois-api-une-recommandee-4" data-card-section="s-trois-api-une-recommandee"><h3><a href="#s-trois-api-une-recommandee">Revoir : Trois API, une recommandée</a></h3><div class="reader-cards"><details class="reader-card" id="B-p6yhxmpxrzbs-04"><summary lang="en">How do Cache Contracts, PSR-6 and PSR-16 differ at the API boundary?</summary><p lang="en">Contracts use callbacks, PSR-6 uses pools and items, and PSR-16 offers simple key/value operations.</p><p lang="fr">Choisir l&#x27;API selon le contrat consommateur. Un stockage peut servir plusieurs abstractions.</p><a href="course-CRS-p6yhxmpxrzbs.html#out-OUT-8h04z2xxjp34">Revoir le passage précis</a></details></div></div><div id="cards-s-quatre-mots-5" data-card-section="s-quatre-mots"><h3><a href="#s-quatre-mots">Revoir : Quatre mots</a></h3><div class="reader-cards"><details class="reader-card" id="B-p6yhxmpxrzbs-05"><summary lang="en">What separates a cache pool from its adapter?</summary><p lang="en">The pool is the logical collection of items; the adapter implements storage behavior.</p><p lang="fr">Le pool isole les keys. L&#x27;adapter choisit le mécanisme de stockage.</p><a href="course-CRS-p6yhxmpxrzbs.html#out-OUT-rmv013ank5zr">Revoir le passage précis</a></details></div></div><div id="cards-s-l-api-qui-surprend-6" data-card-section="s-l-api-qui-surprend"><h3><a href="#s-l-api-qui-surprend">Revoir : L&#x27;API qui surprend</a></h3><div class="reader-cards"><details class="reader-card" id="B-p6yhxmpxrzbs-06"><summary lang="en">Can a Cache Contracts callback execute while an item still exists?</summary><p lang="en">Yes, during early recomputation or when beta is INF.</p><p lang="fr">Un callback ne signifie pas toujours un miss. Le recalcul anticipé peut voir un hit.</p><a href="course-CRS-p6yhxmpxrzbs.html#out-OUT-ggw5eh2abp9f">Revoir le passage précis</a></details></div></div><div id="cards-s-la-ruee-sur-le-cache-7" data-card-section="s-la-ruee-sur-le-cache"><h3><a href="#s-la-ruee-sur-le-cache">Revoir : La ruée sur le cache</a></h3><div class="reader-cards"><details class="reader-card" id="B-p6yhxmpxrzbs-07"><summary lang="en">What do beta=0 and beta=INF do in contracts get()?</summary><p lang="en">Zero disables probabilistic early recomputation; INF forces recomputation.</p><p lang="fr">Zéro ne désactive pas le cache. INF demande le calcul immédiatement.</p><a href="course-CRS-p6yhxmpxrzbs.html#out-OUT-jvfb807ka1q6">Revoir le passage précis</a></details></div></div><div id="cards-s-psr-6-ecrire-soi-meme-8" data-card-section="s-psr-6-ecrire-soi-meme"><h3><a href="#s-psr-6-ecrire-soi-meme">Revoir : PSR-6 : écrire soi-même</a></h3><div class="reader-cards"><details class="reader-card" id="B-p6yhxmpxrzbs-08"><summary lang="en">Does CacheItem::set() alone persist a PSR-6 value?</summary><p lang="en">No. Save the item through the pool.</p><p lang="fr">L&#x27;item modifié reste local avant sauvegarde. save() réalise la persistance.</p><a href="course-CRS-p6yhxmpxrzbs.html#out-OUT-wq0bg1r133y3">Revoir le passage précis</a></details></div></div><div id="cards-s-psr-16-et-les-bridges-9" data-card-section="s-psr-16-et-les-bridges"><h3><a href="#s-psr-16-et-les-bridges">Revoir : PSR-16 et les bridges</a></h3><div class="reader-cards"><details class="reader-card" id="B-p6yhxmpxrzbs-09"><summary lang="en">How can a simple-cache caller distinguish a stored null from a missing key?</summary><p lang="en">Use has(), rather than treating null as proof of absence.</p><p lang="fr">null peut être une valeur valide. L&#x27;existence est une information distincte.</p><a href="course-CRS-p6yhxmpxrzbs.html#out-OUT-8h04z2xxjp34">Revoir le passage précis</a></details></div></div><div id="cards-s-les-pools-du-framework-10" data-card-section="s-les-pools-du-framework"><h3><a href="#s-les-pools-du-framework">Revoir : Les pools du framework</a></h3><div class="reader-cards"><details class="reader-card" id="B-p6yhxmpxrzbs-10"><summary lang="en">How do cache.app and cache.system differ in intended data?</summary><p lang="en">cache.app stores application data; cache.system stores values derived from source code.</p><p lang="fr">Le cache système suit le code déployé. Il n&#x27;est pas seulement un cache applicatif plus rapide.</p><a href="course-CRS-p6yhxmpxrzbs.html#out-OUT-jvfb807ka1q6">Revoir le passage précis</a></details><details class="reader-card" id="B-p6yhxmpxrzbs-E71"><summary lang="en">Why use invalidateTags() instead of enumerating every key for related cached values?</summary><p lang="en">A tag-aware pool invalidates all items carrying the selected tag, so callers do not need to know their individual keys.</p><p lang="fr">Le tag regroupe des items par préoccupation. L&#x27;invalidation par tag exige un pool tag-aware.</p><a href="course-CRS-p6yhxmpxrzbs.html#out-OUT-jvfb807ka1q6">Revoir le passage précis</a></details></div></div><div id="cards-s-pieges-d-examen-11" data-card-section="s-pieges-d-examen"><h3><a href="#s-pieges-d-examen">Revoir : Pièges d&#x27;examen</a></h3><div class="reader-cards"><details class="reader-card" id="B-p6yhxmpxrzbs-11"><summary lang="en">How can a contracts callback prevent its result from being saved?</summary><p lang="en">Set the by-reference $save argument to false.</p><p lang="fr">Le callback contrôle la sauvegarde. Le passage par référence est essentiel.</p><a href="course-CRS-p6yhxmpxrzbs.html#out-OUT-wq0bg1r133y3">Revoir le passage précis</a></details></div></div><div id="cards-s-fiche-express-12" data-card-section="s-fiche-express"><h3><a href="#s-fiche-express">Revoir : Fiche express</a></h3><div class="reader-cards"><details class="reader-card" id="B-p6yhxmpxrzbs-12"><summary lang="en">Does PSR-6 isHit() become false merely because the stored value is null?</summary><p lang="en">No. A cached null can still be a hit.</p><p lang="fr">La valeur et l&#x27;état de présence sont indépendants. Utiliser isHit() pour décider.</p><a href="course-CRS-p6yhxmpxrzbs.html#out-OUT-wq0bg1r133y3">Revoir le passage précis</a></details></div></div><div id="cards-previous"><p class="recall-provenance">Module 16 — Internationalisation et traduction · Cours « Internationalization and localization (Note: Intl component utilities to access ICU data are not included) »</p><aside class="checkpoint"><h2>Rappel d’un cours antérieur</h2><p>Avant de poursuivre : Internationalization and localization (Note: Intl component utilities to access ICU data are not included).</p><details class="corpus-correction"><summary lang="en">What does trans() return when no translation is found after fallbacks?</summary><p lang="en">The original message identifier.</p><p>Une key absente ne lève pas nécessairement d&#x27;erreur. Le texte source sert de dernier repli.</p><a href="course-CRS-v1808qnchx6g.html#out-OUT-z28gpra0mn3s">Relire la correction dans le cours antérieur</a></details></aside></div></div><div id="view-quiz" data-course-panel role="region" aria-labelledby="view-quiz-title"><aside class="revision-context"><p><strong>Avant le quiz :</strong> La requête GET /blog/42 peut encore exécuter son contrôleur alors qu&#x27;un calcul réutilisable n&#x27;a pas changé. De même, consulter un rapport d&#x27;import ne devrait pas recalculer son résumé coûteux à chaque lecture. Le composant Cache mémorise ces valeurs applicatives, sans décider à lui seul si une réponse HTTP peut être partagée.</p><p>Quelle donnée entre, quelle responsabilité agit et quelle condition change le résultat ? Pour chaque correction, vérifiez ces conditions dans <a href="course-CRS-p6yhxmpxrzbs.html#s-objectif">le passage enseigné</a>, sans supposer que toutes les branches du blog sont exécutées.</p></aside><h2 id="view-quiz-title">Quiz</h2><p class="quiz-size" lang="en">13 eligible learning questions · 13 per session. Repeating a question does not demonstrate mastery.</p><p id="course-quiz-status" role="status">Quiz interactif non chargé. Démarrez après chargement de la banque locale.</p><div id="course-quiz-controls" class="assessment-main" hidden><div id="course-quiz-assessment-controls" hidden><select id="course-quiz-assessment-mode" aria-label="Mode du quiz" hidden><option value="learning">Entraînement</option></select><p id="course-quiz-training-scope"></p><button id="course-quiz-start-assessment" type="button" lang="en">Start practice</button><button id="course-quiz-finish-assessment" type="button" lang="en" hidden>End session</button></div><p id="course-quiz-assessment-error" role="alert"></p><p id="course-quiz-assessment-timer" hidden></p><p id="course-quiz-session-progress" class="quiz-progress" role="status" lang="en"></p><div id="course-quiz-assessment-app" tabindex="-1"></div><nav id="course-quiz-session-navigation" aria-label="Questions du cours"></nav><div id="course-quiz-learning-overview" aria-live="polite"></div></div><div id="course-quiz-native"><p>Sans JavaScript ou si le chargement échoue : aucune tentative notée. Les <a href="#view-flashcards">flashcards du cours</a> restent disponibles.</p><details class="course-quiz-fallback" data-question-id="L-p6yhxmpxrzbs-base-v1"><summary lang="en">Why do Cache Contracts expose get() rather than a separate required set() operation?</summary><p>Correction de consultation — non notée.</p><p>La lecture et le calcul sont réunis. Le caller fournit la stratégie de reconstruction.</p><ul><li><strong lang="en">Distractor: get() always recomputes and never stores callback results.</strong><p>Le résultat peut être sauvegardé et réutilisé.</p></li><li><strong lang="en">Correct: get() computes and stores through a callback when needed.</strong><p>La lecture et le calcul sont réunis. Le caller fournit la stratégie de reconstruction.</p></li><li><strong lang="en">Distractor: get() only reads; every miss requires a separate set() call.</strong><p>Le callback réunit le calcul et la sauvegarde dans ce contrat.</p></li></ul><a href="course-CRS-p6yhxmpxrzbs.html#out-OUT-ggw5eh2abp9f">Relire le passage exact</a></details></div></div></div></div><details class="transfer-panel"><summary>Sauvegarde et transfert de progression</summary><p id="reading-status" role="status">Sans JavaScript : lecture libre ; progression non enregistrée.</p><p><a href="assessment.html#overview-title">Lecture, réussites immédiates et différées</a></p><p>Transfert manuel — aucune synchronisation automatique</p><p id="persistence-status" role="status"></p><button type="button" class="secondary" id="export-progress">Exporter ma progression</button><label for="import-progress">Choisir un JSON pour fusionner ma progression (sans remplacement)</label><input type="file" id="import-progress" accept="application/json,.json"><p id="transfer-status" role="status"></p></details></main><footer class="site-footer"><a href="catalogue.html">Catalogue</a> <a href="sources.html">Sources et attribution</a> <a href="#contenu">Haut de page</a></footer></body></html>

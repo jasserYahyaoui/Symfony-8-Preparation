@@ -1,0 +1,416 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; connect-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Content negotiation — Symfony 8 Preparation</title><link rel="stylesheet" href="styles.css"><link rel="stylesheet" href="reader.css"><script src="mermaid.min.js" defer></script><script src="mermaid-init.js" defer></script><link rel="stylesheet" href="assessment.css"><script src="fixed-exams-data.js" defer></script><script src="fixed-exams.js" defer></script><script src="learning-state.js" defer></script><script src="guide.js" defer></script><script src="reader-catalog.js" defer></script><script src="reader.js" defer></script><script src="site-state.js" defer></script><script src="assessment.js" defer></script><script src="course-views.js" defer></script><link rel="stylesheet" href="syntax-highlight.css"><script src="prism-syntax.js" defer></script><script src="syntax-highlight.js" defer></script></head><body data-course-id="CRS-dab7evz3fe29"><a class="skip" href="#contenu">Aller au contenu</a><header class="site-header"><a class="brand" href="index.html">S8 Preparation</a><nav aria-label="Navigation principale"><a href="index.html">Accueil</a> <a href="catalogue.html">Parcours</a> <a href="assessment.html?mode=review">Réviser</a> <a href="examens.html">Examens blancs</a> <a href="jour-j.html">Jour J</a></nav></header><main id="contenu" tabindex="-1" class="corpus-reader"><nav class="breadcrumb" aria-label="Fil d’Ariane"><a href="index.html">Accueil</a> <span aria-hidden="true">›</span> <a href="catalogue.html">Parcours</a> <span aria-hidden="true">›</span> <a href="lot-02.html">Module 02 — Fondamentaux HTTP</a> <span aria-hidden="true">›</span> <span aria-current="page">Content negotiation</span></nav><h1>Content negotiation</h1><p class="muted">Symfony 8.0 · API PHP ≤ 8.4 · Twig ≤ 3.22. Préparation indépendante.</p><p class="revision-status">Rédaction narrative P11 : projection nouvelle, non couverte par les décisions historiques P10. Aucune approbation officielle ni garantie de réussite.</p><aside class="narrative-context" aria-label="Repères de lecture"><p><strong>Prérequis de lecture :</strong> <a href="course-CRS-a669jpap5zf2.html">The response</a> · <a href="course-CRS-w6yfxm6ad4zy.html">Services autowiring</a></p><p><strong>Concepts voisins :</strong> <a href="course-CRS-epx8j3fhb38n.html">HttpFoundation component</a> — Relier le message HTTP à ses objets PHP. <a href="lot-02.html">Comparer les responsabilités dans ce module</a> · <a href="carte-composants.html">Situer cette responsabilité dans le blog</a> · <a href="glossaire.html">Distinguer les termes voisins</a></p><p><a href="ordre-lecture.html">Retrouver les 163 cours dans le parcours recommandé</a>. Ce repère ne modifie ni votre historique ni votre progression.</p></aside><div class="course-layout"><details class="lot-course-menu"><summary>Cours du module · 10 cours</summary><nav aria-label="Cours du module"><a class="lot-context" href="lot-02.html">Module 02 — Fondamentaux HTTP</a><ol><li><a href="course-CRS-depbnbc0g82x.html">HTTP Specification (RFC 9110)</a></li><li><a href="cours-http.html">Status codes</a></li><li><a href="course-CRS-222wq64mqxye.html">HTTP request</a></li><li><a href="course-CRS-hdsq2qdz7qdv.html">HTTP response</a></li><li><a href="course-CRS-erfvgqsx1z2p.html">HTTP methods</a></li><li><a href="course-CRS-7fa2behkxmf9.html">Cookies</a></li><li><a href="course-CRS-e3j0d3a8ndrf.html">Caching</a></li><li><a href="course-CRS-dab7evz3fe29.html" aria-current="page">Content negotiation</a></li><li><a href="course-CRS-qa0x33akw264.html">Language detection</a></li><li><a href="course-CRS-ez2qmqfk902e.html">Symfony HttpClient component</a></li></ol><a href="lot-02.html#view-quiz">Quiz du module</a></nav></details><aside class="course-section-menu" aria-label="Sommaire du cours"><nav class="course-actions" aria-label="Activités du cours"><a id="tab-course" href="#view-course">Cours</a><a id="tab-flashcards" href="#view-flashcards">Flashcards</a><a id="tab-quiz" href="#view-quiz">Quiz</a></nav><details class="course-section-disclosure"><summary id="course-sections">Sections du cours</summary><nav aria-label="Sections du cours"><ul><li><a href="#s-objectif">Objectif</a></li><li><a href="#s-l-essentiel">L&#x27;essentiel</a></li><li><a href="#s-le-schema">Le schéma</a></li><li><a href="#s-l-exemple-lire-les-preferences">L&#x27;exemple : lire les préférences</a></li><li><a href="#s-le-facteur-de-qualite-exactement">Le facteur de qualité, exactement</a></li><li><a href="#s-les-headers-de-response">Les headers de Response</a></li><li><a href="#s-proactive-contre-reactive">Proactive contre réactive</a></li><li><a href="#s-pieges-d-examen">Pièges d&#x27;examen</a></li><li><a href="#s-application">Application</a></li><li><a href="#s-fiche-express">Fiche express</a><ul><li><a href="#s-fiche-express-nested-a-retenir-pour-la-certification">🧠 À retenir pour la certification</a></li></ul></li><li><a href="#s-sources-officielles">Sources officielles</a></li><li><a href="#reader-objectives">Objectifs d’apprentissage</a></li><li><a href="#course-recalls">Rappels et liens avec les autres cours</a></li></ul></nav><nav aria-label="Flashcards par section"><a href="#view-flashcards">Flashcards par section</a><ul><li><a href="#cards-s-l-essentiel-1">L&#x27;essentiel</a></li><li><a href="#cards-s-le-schema-2">Le schéma</a></li><li><a href="#cards-s-l-exemple-lire-les-preferences-3">L&#x27;exemple : lire les préférences</a></li><li><a href="#cards-s-le-facteur-de-qualite-exactement-4">Le facteur de qualité, exactement</a></li><li><a href="#cards-s-les-headers-de-response-5">Les headers de Response</a></li><li><a href="#cards-s-proactive-contre-reactive-6">Proactive contre réactive</a></li><li><a href="#cards-s-pieges-d-examen-7">Pièges d&#x27;examen</a></li><li><a href="#cards-s-application-8">Application</a></li><li><a href="#cards-s-fiche-express-9">Fiche express</a></li><li><a href="#cards-previous">Module 07 — Formulaires · Cours « CSRF protection » · Rappel : <span lang="en">Does stateless CSRF mean no request validation?</span></a></li></ul></nav><nav aria-label="Retour au module"><a href="lot-02.html">Tous les cours du module</a></nav></details><p class="local-quiz-count">3 questions disponibles · 3 par session Quiz</p></aside><div class="course-content"><div id="view-course" data-course-panel role="region" aria-labelledby="view-course-title"><h2 id="view-course-title">Cours</h2><p class="course-introduction"><a href="#s-objectif">Introduction</a> · <a href="#course-sections">Sections du cours</a></p><h2 id="reader-objectives" tabindex="-1">Objectifs d’apprentissage</h2><ul><li><a href="course-CRS-dab7evz3fe29.html#out-OUT-em6af2cxwyj0">Interpréter les facteurs de qualité, y compris q=0</a></li><li><a href="course-CRS-dab7evz3fe29.html#out-OUT-2brhvb6bgms5">Déterminer la représentation choisie face à un header Accept donne</a></li><li><a href="course-CRS-dab7evz3fe29.html#out-OUT-gqzyfd5s32ta">Annoncer le choix par Content-Type, Content-Language et Vary</a></li></ul><aside class="pedagogy-legend" aria-label="Repères pédagogiques"><p><strong>Repères pédagogiques</strong></p><p>Ces repères décrivent le rôle du bloc, pas une fréquence officielle à l’examen.</p><p class="teaching-label essential"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="brain" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5C12 1 6 1 6 5C2 5 1 10 4 12C1 15 3 19 6 19C6 23 12 23 12 19V5M12 5C12 1 18 1 18 5C22 5 23 10 20 12C23 15 21 19 18 19C18 23 12 23 12 19M6 5C6 8 8 9 9 9M4 12H7L9 14M6 19V16M18 5C18 8 16 9 15 9M20 12H17L15 14M18 19V16"></path></svg> <strong>À comprendre</strong></p><p class="teaching-label essential"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="book" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5C9 3 5 3 2 4V20C5 19 9 19 12 21C15 19 19 19 22 20V4C19 3 15 3 12 5V21M5 8H8M5 12H8M16 8H19M16 12H19"></path></svg> <strong>À mémoriser</strong></p><p class="teaching-label example"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="code" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6L2 12L8 18M16 6L22 12L16 18M14 3L10 21"></path></svg> <strong>Exemple concret</strong></p><p class="teaching-label pitfall"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="warning" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3L23 21H1L12 3ZM12 9V14M12 17V18"></path></svg> <strong>Piège à éviter</strong></p><p class="teaching-label nuance"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="balance" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3V21M7 21H17M3 7L21 5M5 7L1 15H9L5 7M19 6L15 14H23L19 6M1 15Q5 20 9 15M15 14Q19 19 23 14"></path></svg> <strong>Nuance à connaître</strong></p><p>Précision, exception ou condition d’application d’une règle.</p></aside><section class="teaching-section" data-section="s-objectif"><h2 id="s-objectif" tabindex="-1">Objectif</h2><p>L'article 42 existe dans le catalogue. Le navigateur veut une page HTML,
+tandis qu'un client de notre branche JSON veut des données structurées.
+La ressource reste la même ; sa <em>représentation</em>, la forme transmise
+au client, peut changer.</p>
+<p>Nous allons lire les préférences de <code>GET /blog/42</code>, les confronter aux
+formats réellement disponibles, puis annoncer le choix et ses critères
+de cache. Lire un header avec Symfony n'effectue pas à lui seul ces
+trois opérations.</p>
+<pre class="highlight" tabindex="0"><code class="language-text">Fil du cours
+1. LIRE        Accept, Accept-Language…      → ce que le client préfère
+2. CHOISIR     parmi ce que l'action produit → décision du serveur (q, spécificité)
+3. ANNONCER    Content-Type, Content-Language, Vary → ce qui a été choisi et pourquoi</code></pre></section><section class="teaching-section" data-section="s-l-essentiel"><h2 id="s-l-essentiel" tabindex="-1">L&#x27;essentiel</h2><p class="teaching-label essential"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="brain" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5C12 1 6 1 6 5C2 5 1 10 4 12C1 15 3 19 6 19C6 23 12 23 12 19V5M12 5C12 1 18 1 18 5C22 5 23 10 20 12C23 15 21 19 18 19C18 23 12 23 12 19M6 5C6 8 8 9 9 9M4 12H7L9 14M6 19V16M18 5C18 8 16 9 15 9M20 12H17L15 14M18 19V16"></path></svg> <strong>À comprendre</strong></p><aside class="section-digest" id="s-l-essentiel-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Content-Type annonce la représentation choisie.</li><li>Vary protège la séparation des variantes en cache.</li></ol></aside><p><strong>Ce que cette partie veut réellement vous apprendre.</strong></p>
+<ul>
+<li><em>Pourquoi ce sujet existe.</em> Une même URL (<code>/blog/42</code>) doit pouvoir servir
+  un navigateur (HTML) et une API (JSON). Plutôt que deux URL, HTTP prévoit
+  que le client <strong>exprime des préférences</strong> et que le serveur <strong>choisit</strong> :
+  c'est la <em>content negotiation</em>.</li>
+<li><em>Le piège de fond.</em> Lire <code>Accept</code> n'est qu'<strong>un tiers</strong> du travail. Trier
+  une liste ≠ choisir une représentation ≠ annoncer le choix. Symfony fournit
+  des accessors, pas le moteur de décision.</li>
+<li><em>Ce que l'auteur veut que vous compreniez.</em> <code>q</code> est une préférence
+  <strong>relative</strong>, <code>q=0</code> est un <strong>refus</strong>, la règle la plus <strong>spécifique</strong>
+  fixe le poids d'un candidat, et <code>Vary</code> décrit les critères pour les caches.</li>
+<li><em>Pourquoi c'est à l'examen.</em> Les questions portent sur la grammaire de <code>q</code>,
+  <code>identity</code>, proactive/réactive, <code>Vary: *</code>, <code>406</code>/<code>415</code>, et sur ce que
+  <code>getAcceptableContentTypes()</code> et <code>getPreferredFormat()</code> font — et ne font
+  pas.</li>
+</ul>
+<p>Supposons que l'action sache produire HTML et JSON. <code>Accept</code> décrit
+les types de contenu souhaités, appelés <em>media types</em>, comme <code>text/html</code>
+ou <code>application/json</code>. <code>Accept-Language</code> porte des préférences de langue ;
+<code>Accept-Encoding</code> concerne les codages du contenu, par exemple la compression.
+Ces informations ne créent pas un format que le serveur ne sait pas produire.</p>
+<p>Le paramètre <code>q</code>, facteur de qualité, exprime une préférence relative,
+pas la qualité technique du document. Il vaut <code>1</code> lorsqu'il est absent.
+Le serveur doit déterminer la préférence applicable à chaque représentation
+disponible avant de choisir.</p>
+<p>Côté Symfony 8.0, <code>getAcceptableContentTypes()</code> expose une liste triée,
+pas un moteur complet de négociation. <code>getPreferredFormat()</code> retourne
+un nom de format et donne priorité au format déjà fixé sur la Request,
+notamment par <code>_format</code>, lors de son calcul. Nous allons observer
+ces raccourcis sans leur attribuer une validation complète du contrat HTTP.
+Si aucun format connu n'est trouvé, <code>getPreferredFormat()</code> retourne
+son argument de repli, <code>html</code> par défaut. Ce résultat ne prouve donc
+pas à lui seul une préférence HTML exprimée par le client.</p>
+<pre class="highlight" tabindex="0"><code class="language-text">┌──────────────────────────────┐   ┌───────────────────────────────────────┐
+│ ACCESSOR SYMFONY             │   │ CE QU'IL NE FAIT PAS                  │
+├──────────────────────────────┤   ├───────────────────────────────────────┤
+│ getAcceptableContentTypes()  │   │ ne choisit pas ; ne retire pas q=0 ;  │
+│  → liste triée (q, puis      │   │ n'applique pas la spécificité aux     │
+│    ordre d'écriture)         │   │ candidats disponibles                 │
+├──────────────────────────────┤   ├───────────────────────────────────────┤
+│ getPreferredFormat('html')   │   │ ne sérialise rien ; ne vérifie pas    │
+│  → format déjà posé (_format)│   │ que l'action sait produire ce format ;│
+│    sinon 1er format connu    │   │ repli 'html' ≠ préférence HTML        │
+│    sinon l'argument de repli │   │ exprimée                              │
+└──────────────────────────────┘   └───────────────────────────────────────┘</code></pre></section><section class="teaching-section" data-section="s-le-schema"><h2 id="s-le-schema" tabindex="-1">Le schéma</h2><aside class="section-digest" id="s-le-schema-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Proactive signifie server-driven.</li><li>Réactive signifie agent-driven.</li></ol></aside><p><strong>Où en est-on ?</strong> Avant de lire les headers un par un, voici la règle la
+plus contre-intuitive du cours : <strong>laquelle des règles d'un header <code>Accept</code>
+s'applique à un candidat donné ?</strong> On ajoute une variante texte brut au
+laboratoire pour la rendre visible. Ce schéma prépare l'étape 2 (choisir).</p>
+<p>Pour isoler la règle de spécificité, ajoutons une variante texte brut
+à notre laboratoire. Le client accepte les types <code>text/*</code> avec un poids
+de 0.8, mais nomme HTML précisément avec un poids de 0.2.
+Lequel s'applique à HTML ?</p>
+<figure class="diagram" aria-labelledby="CRS-dab7evz3fe29-3-diagram-0-title CRS-dab7evz3fe29-3-diagram-0-description"><figcaption id="CRS-dab7evz3fe29-3-diagram-0-title">La spécificité fixe la qualité d&#x27;un type avant le choix</figcaption><p id="CRS-dab7evz3fe29-3-diagram-0-description">Accept text/* q 0.8 et text/html q 0.2 donne à HTML la qualité 0.2, car la règle exacte prime. Le texte brut reçoit 0.8. Si les deux représentations sont disponibles et que le serveur privilégie cette qualité, il sélectionne le texte brut et décrit la variation par Accept.</p><div class="mermaid" hidden>---
+title: Qui choisit la représentation
+---
+flowchart TD
+  accTitle: La spécificité fixe la qualité d&#x27;un type avant le choix
+  accDescr: Accept text/* q 0.8 et text/html q 0.2 donne à HTML la qualité 0.2, car la règle exacte prime. Le texte brut reçoit 0.8. Si les deux représentations sont disponibles et que le serveur privilégie cette qualité, il sélectionne le texte brut et décrit la variation par Accept.
+  A[&quot;Accept : text/*;q=0.8&lt;br/&gt;text/html;q=0.2&quot;] --&gt;|&quot;règle exacte pour HTML&quot;| H[&quot;text/html : q=0.2&quot;]
+  A --&gt;|&quot;règle générique pour texte brut&quot;| T[&quot;text/plain : q=0.8&quot;]
+  H --&gt;|&quot;comparer les représentations disponibles&quot;| C{&quot;meilleure qualité ?&quot;}
+  T --&gt;|&quot;comparer les représentations disponibles&quot;| C
+  C --&gt;|&quot;texte brut dans cet exemple&quot;| R([&quot;Content-Type : text/plain&lt;br/&gt;Vary : Accept&quot;])
+  classDef input fill:#e0f2fe,stroke:#0369a1,color:#0c4a6e
+  classDef decision fill:#fef3c7,stroke:#b45309,color:#78350f
+  classDef result fill:#dcfce7,stroke:#15803d,color:#14532d
+  class A,H,T input
+  class C decision
+  class R result</div></figure>
+<p>En bleu, la règle applicable attribue à chaque candidat son poids.
+HTML reçoit 0.2, et non le meilleur poids de tous les motifs auxquels
+il correspond. Le texte brut reçoit 0.8. En orange, la politique
+applicative choisit ensuite entre les variantes disponibles ; ici elle
+privilégie cette qualité et retient le texte brut.</p>
+<p>En vert, <code>Content-Type</code> annonce le résultat et <code>Vary: Accept</code> décrit
+le critère de variation pour le cache. <code>Vary</code> ne produit pas la variante
+et ne rend pas à lui seul la Response stockable. Aucun accessor
+de Request n'accomplit seul toute cette chaîne.</p>
+<p><strong>Pourquoi HTML reçoit-il 0.2 et pas 0.8 ?</strong> Le client a écrit une règle
+<strong>nominative</strong> pour HTML. Elle exprime sa volonté précise ; la règle
+générique <code>text/*</code> couvre « le reste des types texte ». Prendre le plus grand
+poids parmi les règles qui correspondent ignorerait cette exception.</p></section><section class="teaching-section" data-section="s-l-exemple-lire-les-preferences"><h2 id="s-l-exemple-lire-les-preferences" tabindex="-1">L&#x27;exemple : lire les préférences</h2><p class="teaching-label example"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="code" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6L2 12L8 18M16 6L22 12L16 18M14 3L10 21"></path></svg> <strong>Exemple concret</strong></p><aside class="section-digest" id="s-l-exemple-lire-les-preferences-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>getAcceptableContentTypes() lit les media types du header Accept.</li><li>getPreferredFormat() donne priorité au format déjà fixé sur la Request.</li></ol></aside><p><strong>Où en est-on ?</strong> Étape 1 sur 3 : <strong>lire</strong>. Retour aux préférences
+habituelles d'un navigateur, avec du code minimal : on fabrique la Request,
+on lit la liste triée, puis le format préféré.</p>
+<p>Revenons aux préférences usuelles d'un navigateur. Avec PHP 8.4 et
+HttpFoundation 8.0 chargés par l'autoloader, construisons une Request
+locale, sans envoyer de message réseau :</p>
+<pre class="highlight" tabindex="0"><code class="language-php">use Symfony\Component\HttpFoundation\Request;
+
+$request = Request::create('/blog/42', 'GET');
+$request-&gt;headers-&gt;set('Accept', 'text/html,application/xhtml+xml,application/json;q=0.9,*/*;q=0.8');</code></pre>
+<p>Les appels suivants retournent les valeurs indiquées en commentaire ;
+ils ne rendent ni page HTML ni document JSON :</p>
+<pre class="highlight" tabindex="0"><code class="language-php">// Accept: text/html,application/xhtml+xml,application/json;q=0.9,*/*;q=0.8
+$request-&gt;getAcceptableContentTypes();
+// ['text/html', 'application/xhtml+xml', 'application/json', '*/*']
+
+$request-&gt;getPreferredFormat();     // 'html' — sauf si _format est posé</code></pre>
+<p>HTML et XHTML ont chacun le poids implicite 1 ; leur ordre initial
+départage ces deux entrées dans la liste Symfony. JSON suit avec 0.9,
+puis le joker avec 0.8. Le nom de format retourné est <code>html</code>.</p>
+<pre class="highlight" tabindex="0"><code class="language-text">Accept: text/html , application/xhtml+xml , application/json;q=0.9 , */*;q=0.8
+        q=1 (défaut)   q=1 (défaut)          q=0.9                   q=0.8
+        └ index 0      └ index 1             └ 3ᵉ                    └ 4ᵉ
+tri : qualité décroissante, puis ordre d'écriture à qualité égale</code></pre>
+<p><strong>Pourquoi <code>getPreferredFormat()</code> rend-il <code>html</code> ?</strong> Il parcourt la liste
+triée et traduit le premier media type qu'il sait nommer (<code>text/html</code> →
+<code>html</code>). Si rien n'est reconnu, il rend l'argument de repli (<code>'html'</code> par
+défaut) : ce <code>html</code> peut donc être un simple défaut.</p>
+<p>Pour observer la priorité du format de Request, utilisons un autre
+object, configuré <strong>avant</strong> le premier appel :</p>
+<pre class="highlight" tabindex="0"><code class="language-php">use Symfony\Component\HttpFoundation\Request;
+
+$request = Request::create('/blog/42', 'GET');
+$request-&gt;headers-&gt;set('Accept', 'text/html');
+$request-&gt;attributes-&gt;set('_format', 'json');
+echo $request-&gt;getPreferredFormat();</code></pre>
+<p>La sortie est <code>json</code>. Nous avons posé l'attribute à la main pour
+simuler une information de route ; aucune route n'a été exécutée.
+Ce retour ne sérialise pas l'<code>ArticleView</code>, ne vérifie pas que l'action
+sait produire du JSON et ne garantit pas que le client l'acceptera.
+Ces accessors mémorisent des résultats sur la Request : modifier
+les entrées après leur lecture n'est pas une façon fiable de relancer
+la négociation. Prépare les entrées avant l'inspection, comme ici.</p></section><section class="teaching-section" data-section="s-le-facteur-de-qualite-exactement"><span class="outcome-anchor" id="out-OUT-em6af2cxwyj0" tabindex="-1"></span><span class="outcome-anchor" id="out-OUT-2brhvb6bgms5" tabindex="-1"></span><h2 id="s-le-facteur-de-qualite-exactement" tabindex="-1">Le facteur de qualité, exactement</h2><aside class="section-digest" id="s-le-facteur-de-qualite-exactement-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Sans q, la qualité vaut 1.</li><li>q=0 est un refus, pas une faible préférence.</li></ol></aside><p><strong>Où en est-on ?</strong> Étape 2 sur 3 : <strong>choisir</strong>. On connaît la liste des
+préférences ; il faut maintenant leur donner un sens exact (valeur par
+défaut, bornes, refus, spécificité) pour décider entre HTML et JSON.</p>
+<p>Nous devons maintenant choisir entre HTML et JSON, pas simplement
+afficher la liste du header. Sans <code>q</code>, une entrée vaut <strong>1</strong>, quelle
+que soit sa position. L'échelle va de 0 à 1, avec au plus <strong>trois
+décimales</strong> : 0.001 est le plus petit poids positif représentable,
+et <code>q=0.3333</code> est mal formé selon la grammaire HTTP.
+Le nom du paramètre <code>q</code> est insensible à la casse.</p>
+<p>La valeur <strong>0 signifie « non acceptable »</strong>, pas « disponible en dernier
+recours parmi les choix acceptés ». Il faut aussi appliquer le motif
+le plus spécifique à chaque candidat. Pour HTML, <code>text/html</code> est
+plus précis que <code>text/*</code>, lui-même plus précis que <code>*/*</code>.
+Cette opération fixe d'abord le poids du candidat ; elle n'est
+pas un classement universel des noms de types.</p>
+<table>
+<thead>
+<tr>
+<th>Écriture</th>
+<th>Verdict</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>q</code> absent</td>
+<td>poids <strong>1</strong></td>
+</tr>
+<tr>
+<td><code>q=0.001</code></td>
+<td>valide, le plus petit poids positif</td>
+</tr>
+<tr>
+<td><code>Q=1.000</code></td>
+<td>valide (nom <code>q</code> insensible à la casse ; 3 décimales max)</td>
+</tr>
+<tr>
+<td><code>q=0</code></td>
+<td>valide : <strong>non acceptable</strong></td>
+</tr>
+<tr>
+<td><code>q=0.3333</code></td>
+<td><strong>mal formé</strong> (4 décimales)</td>
+</tr>
+</tbody>
+</table>
+<p>Prenons ce header isolé :</p>
+<pre class="highlight" tabindex="0"><code class="language-http">Accept: text/*;q=0.8, text/html;q=0.2, application/json;q=0.5</code></pre>
+<p>Si l'action propose seulement HTML et JSON, HTML reçoit 0.2 et JSON
+0.5. Une politique privilégiant ce poids choisit JSON. Elle ne peut
+pas attribuer 0.8 à HTML en ignorant la règle exacte, ni produire
+du texte brut simplement parce que <code>text/*</code> est en tête.</p>
+<pre class="highlight" tabindex="0"><code class="language-text">Candidat        Règles qui correspondent            Règle retenue   Poids
+text/html       text/* (0.8)  text/html (0.2)       text/html       0.2
+application/json application/json (0.5)             application/json 0.5
+→ JSON (0.5) l'emporte sur HTML (0.2)</code></pre>
+<p>La même règle explique l'exclusion suivante :</p>
+<pre class="highlight" tabindex="0"><code class="language-http">Accept: */*;q=0.8, image/png;q=0</code></pre>
+<p>PNG est refusé selon la préférence exprimée malgré le joker général.
+Choisir le maximum de tous les poids correspondants annulerait
+à tort cette exclusion.</p>
+<p>Pour <code>Accept-Language</code>, ne fonde pas un contrat portable sur l'ordre
+d'écriture de langues de qualité égale : la RFC précise qu'on ne peut
+pas s'y fier. Dans <code>Accept-Encoding</code>, <code>identity</code> signifie absence
+de codage de contenu ; ce n'est ni l'identité de l'utilisateur
+ni « tout codage est acceptable ».</p>
+<p><code>getAcceptableContentTypes()</code> trie les entrées par qualité décroissante,
+puis par <strong>ordre d'écriture</strong>, sans appliquer ce raisonnement de
+spécificité à tous les candidats disponibles et sans retirer les <code>q=0</code>.
+<code>AcceptHeader</code> permet de lire des entrées et leurs attributes, mais
+lire ou trier ces données ne remplace pas la politique de sélection.
+Le nom « acceptable » de l'accessor ne doit pas te faire perdre
+les exclusions exprimées.</p>
+<p><strong>Pourquoi l'accessor ne suffit-il pas ?</strong> Il rend les <em>clés</em> du header
+triées (<code>array_keys(AcceptHeader::all())</code>) : les <code>q=0</code> y figurent encore, et
+aucune comparaison avec vos formats disponibles n'a eu lieu. (La classe
+<code>AcceptHeader</code> de la branche 8.0 propose par ailleurs <code>get()</code>, qui pour un
+type donné préfère la règle la plus spécifique ; l'accessor <code>Request</code>, lui,
+ne l'utilise pas.)</p>
+<div class="admonition info">
+<p class="admonition-title">🌍 In Real Life</p>
+<p><strong>La situation</strong> : un convive préfère les desserts en général, mais refuse précisément un dessert donné ; la préférence générale n'annule pas cette exception.</p>
+<p><strong>L’équivalent dans Symfony</strong> : préférence générale → joker Accept ; exception précise → media range spécifique ; refus → <code>q=0</code> ; plats disponibles → représentations réellement produisibles.</p>
+<p><strong>Retour à la réalité technique</strong> : la spécificité fixe d'abord le poids applicable à chaque candidat. <code>getAcceptableContentTypes()</code> trie des entrées sans réaliser tout ce choix ni éliminer les refus ; la politique applicative reste nécessaire.</p>
+<p><strong>🧠 Comment le mémoriser</strong> : « La règle précise fixe le poids. » Image mentale : un dessert barré dans une catégorie appréciée. Question-réflexe : quelle règle s'applique à ce candidat exact ?</p>
+<p><strong>⚠️ À ne pas confondre</strong> : préférence relative, qualité du document et disponibilité du format.</p>
+</div><div class="retained-answer-context">
+<p><strong>Repère — Proactive contre réactive :</strong></p>
+<p lang="en"><strong>Question:</strong> Who selects the representation in proactive negotiation?</p>
+<p lang="en"><strong>Answer:</strong> The server; in reactive negotiation the client selects from alternatives.</p>
+<p>Proactive signifie server-driven. Réactive signifie agent-driven.</p>
+</div>
+
+<div class="retained-answer-context">
+<p><strong>Repère de l’exemple :</strong></p>
+<p lang="en"><strong>Question:</strong> Which Request method returns the client's accepted media types in preference order?</p>
+<p lang="en"><strong>Answer:</strong> getAcceptableContentTypes(); getPreferredFormat() instead returns a known format and gives an existing request format priority.</p>
+<p>getAcceptableContentTypes() lit les media types du header Accept. getPreferredFormat() donne priorité au format déjà fixé sur la Request.</p>
+</div></section><section class="teaching-section" data-section="s-les-headers-de-response"><span class="outcome-anchor" id="out-OUT-gqzyfd5s32ta" tabindex="-1"></span><h2 id="s-les-headers-de-response" tabindex="-1">Les headers de Response</h2><p><strong>Où en est-on ?</strong> Étape 3 sur 3 : <strong>annoncer</strong>. Le choix est fait ; il faut
+le dire dans la Response, et dire aux caches de quoi il dépendait. Sans
+cette annonce, un cache pourrait resservir du HTML à un client JSON.</p>
+<p>Notre action a choisi une représentation JSON destinée au lectorat
+francophone, en tenant compte d'Accept et d'Accept-Language.
+Elle peut décrire ce résultat par ces headers, extrait d'une Response :</p>
+<pre class="highlight" tabindex="0"><code class="language-http">Content-Type: application/json
+Content-Language: fr
+Vary: Accept, Accept-Language</code></pre>
+<p><code>Content-Type</code> annonce le type effectivement envoyé. <code>Content-Language</code>
+décrit la langue du public auquel la représentation est destinée ;
+il ne traduit pas son contenu. <code>Vary</code> énumère les headers de Request
+qui ont influencé la sélection afin de distinguer les copies réutilisables.
+Si <code>_format</code> impose une variante indépendamment d'Accept, ne prétends
+pas que cet accessor a négocié le résultat à partir d'Accept.</p>
+<table>
+<thead>
+<tr>
+<th>Header de Response</th>
+<th>Dit…</th>
+<th>Ne fait pas…</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Content-Type</code></td>
+<td>le type réellement envoyé</td>
+<td>ne produit ni ne convertit le contenu</td>
+</tr>
+<tr>
+<td><code>Content-Language</code></td>
+<td>la langue du public visé</td>
+<td>ne traduit rien</td>
+</tr>
+<tr>
+<td><code>Vary</code></td>
+<td>quels headers de Request ont influencé le choix</td>
+<td>ne produit pas la variante ; ne rend pas seul la Response stockable</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Pourquoi <code>Vary</code> ?</strong> Un cache stocke la Response sous l'URL <code>/blog/42</code>. Sans
+<code>Vary: Accept</code>, il ne sait pas que cette copie JSON ne convient qu'aux
+requêtes qui demandaient du JSON : le client suivant, qui voulait du HTML,
+reçoit du JSON. <code>Vary</code> est la « clé secondaire » de la copie.</p>
+<p>RFC 9110 §12.5.5 formule pour Vary une recommandation <strong>SHOULD</strong>,
+avec des exceptions, notamment lorsque d'autres directives limitent
+déjà la réutilisation. Ce n'est pas une obligation universelle pour
+toute Response. Pour les variantes publiques de notre exemple,
+annoncer les critères réels évite néanmoins de servir du HTML
+à un client qui avait sélectionné du JSON.</p>
+<p><code>Vary: *</code> est légal pour l'origine : le cache ne peut pas déterminer
+la réutilisation à partir des seuls headers de la Request.
+Un <strong>proxy ne doit pas générer</strong> cette valeur. Elle n'est ni une
+déclaration de tous les formats disponibles ni un synonyme de <code>no-store</code>.</p>
+<p>Si aucune représentation ne convient aux préférences, le serveur
+peut répondre <code>406 Not Acceptable</code>, ou décider de les ignorer et
+d'envoyer une représentation correctement annoncée. Le client pourrait
+alors ne pas savoir l'utiliser : le contrat de notre API doit rendre
+ce comportement prévisible. Ce problème de sortie est distinct du
+<code>415</code> d'un import dont le format <strong>entrant</strong> n'est pas pris en charge.</p>
+<pre class="highlight" tabindex="0"><code class="language-text">406 Not Acceptable            415 Unsupported Media Type
+ sens : SORTIE                 sens : ENTRÉE
+ « je n'ai rien qui           « je ne sais pas lire le corps
+   corresponde à ton Accept »   que tu m'envoies (Content-Type) »</code></pre>
+<div class="admonition info">
+<p class="admonition-title">🌍 In Real Life</p>
+<p><strong>La situation</strong> : la cuisine étiquette le plat servi et note les critères qui ont distingué cette commande d'une autre.</p>
+<p><strong>L’équivalent dans Symfony</strong> : plat livré → <code>Content-Type</code> ; public linguistique visé → <code>Content-Language</code> ; critères de sélection utiles aux copies → <code>Vary</code>.</p>
+<p><strong>Retour à la réalité technique</strong> : ces champs décrivent la décision, sans produire ni traduire le contenu. Vary ne rend pas seul une réponse stockable ; <code>Vary: *</code> n'est pas <code>no-store</code>. Un <code>_format</code> imposé n'est pas une négociation complète d'Accept.</p>
+<p><strong>🧠 Comment le mémoriser</strong> : « Décrire le résultat et sa variation. » Image mentale : étiquette du plat et fiche de sélection. Question-réflexe : quels headers ont réellement influencé cette variante ?</p>
+<p><strong>⚠️ À ne pas confondre</strong> : 406 pour l'offre de sortie et 415 pour le contenu entrant.</p>
+</div><aside class="enrichment" aria-label="Autre explication"><p>Le client commande « français si possible, sinon anglais ». Content-Language annonce le choix servi ; Vary indique au classeur du cache de garder des versions séparées selon Accept-Language.</p></aside></section><section class="teaching-section" data-section="s-proactive-contre-reactive"><h2 id="s-proactive-contre-reactive" tabindex="-1">Proactive contre réactive</h2><p><strong>Où en est-on ?</strong> Prolongement des trois étapes : jusqu'ici, c'est le
+<strong>serveur</strong> qui a décidé. La RFC décrit une seconde famille, où le <strong>client</strong>
+décide. Question unique : <em>qui pilote le choix ?</em></p>
+<p>Dans le trajet que nous venons de suivre, le client envoie ses préférences
+avec GET et le serveur choisit la représentation de l'article.
+C'est la négociation <strong>proactive</strong>, dite <em>server-driven</em> (§12.1).
+Le serveur peut prendre en compte des informations explicites comme
+Accept et des caractéristiques implicites, par exemple l'adresse
+réseau ou des éléments de User-Agent. Ces indices ne prouvent pas
+l'identité ou les capacités réelles du lecteur.</p>
+<p>Une autre politique consiste à proposer des alternatives puis à
+laisser le client choisir celle qu'il redemandera. C'est la négociation
+<strong>réactive</strong>, dite <em>agent-driven</em> (§12.2), illustrée notamment par
+une réponse <code>300 Multiple Choices</code> contenant des possibilités.
+Elle peut nécessiter un échange supplémentaire ; ce n'est pas
+un mécanisme asynchrone ou un événement Symfony.</p>
+<p>Le mot <em>driven</em> désigne donc celui qui pilote le choix :
+le serveur dans la première approche, le client dans la seconde.
+Connaître les deux évite de confondre une liste d'alternatives
+avec un échec obligatoirement traduit en <code>406</code>.</p>
+<figure class="diagram" aria-labelledby="CRS-dab7evz3fe29-7-diagram-0-title CRS-dab7evz3fe29-7-diagram-0-description"><figcaption id="CRS-dab7evz3fe29-7-diagram-0-title">Négociation proactive et réactive</figcaption><p id="CRS-dab7evz3fe29-7-diagram-0-description">En négociation proactive, le client envoie GET avec Accept et le serveur répond directement avec la représentation choisie. En négociation réactive, le serveur répond par une liste d&#x27;alternatives, par exemple avec 300 Multiple Choices, puis le client choisit et redemande la représentation voulue.</p><div class="mermaid" hidden>---
+title: Proactive contre réactive
+---
+sequenceDiagram
+  accTitle: Négociation proactive et réactive
+  accDescr: En négociation proactive, le client envoie GET avec Accept et le serveur répond directement avec la représentation choisie. En négociation réactive, le serveur répond par une liste d&#x27;alternatives, par exemple avec 300 Multiple Choices, puis le client choisit et redemande la représentation voulue.
+  participant C as Client
+  participant S as Serveur
+  Note over C,S: Proactive (server-driven)
+  C-&gt;&gt;S: GET /blog/42 + Accept
+  S--&gt;&gt;C: 200 représentation choisie par le serveur
+  Note over C,S: Réactive (agent-driven)
+  C-&gt;&gt;S: GET /blog/42
+  S--&gt;&gt;C: 300 liste d&#x27;alternatives
+  C-&gt;&gt;S: GET de l&#x27;alternative choisie
+  S--&gt;&gt;C: 200 représentation</div></figure>
+<div class="admonition info">
+<p class="admonition-title">🌍 In Real Life</p>
+<p><strong>La situation</strong> : le restaurant choisit un plat d'après les préférences reçues, ou présente une liste pour laisser le convive commander ensuite.</p>
+<p><strong>L’équivalent dans Symfony</strong> : choix par le serveur → négociation proactive ; alternatives puis nouveau choix du client → négociation réactive.</p>
+<p><strong>Retour à la réalité technique</strong> : la seconde peut demander un échange supplémentaire, par exemple après 300. Aucun accessor de Request ne réalise automatiquement ce parcours ; un repli ignorant une préférence est une politique distincte.</p>
+<p><strong>🧠 Comment le mémoriser</strong> : « Qui choisit la variante ? » Image mentale : cuisine décidant face au convive choisissant sur la liste. Question-réflexe : le choix est-il déjà effectué ou reste-t-il au client ?</p>
+<p><strong>⚠️ À ne pas confondre</strong> : négociation réactive, événement Symfony et tâche asynchrone.</p>
+</div></section><section class="teaching-section" data-section="s-pieges-d-examen"><h2 id="s-pieges-d-examen" tabindex="-1">Pièges d&#x27;examen</h2><p class="teaching-label pitfall"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="warning" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3L23 21H1L12 3ZM12 9V14M12 17V18"></path></svg> <strong>Piège à éviter</strong></p><ul class="pitfall-list"><li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : q=0 refuse explicitement.</summary><p><strong><code>q=0</code> refuse explicitement.</strong> <code>Accept: */*;q=0.8, image/png;q=0</code> signifie
+« tout sauf du PNG ». Si la politique respecte ces préférences,
+le joker ne peut pas réhabiliter PNG ; un repli ignorant Accept
+est une décision distincte à annoncer, pas une autre interprétation de <code>q</code>.
+<em>Pourquoi on se trompe : 0 « ressemble » au plus petit poids, donc à « dernier
+recours ».</em></p></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : Sans q, la valeur est 1.0</summary><p><strong>Sans <code>q</code>, la valeur est <code>1.0</code></strong> — pas <code>0</code>, et pas une pondération implicite
+par la position. Dans l'exemple du navigateur, HTML et XHTML ont
+donc le même poids ; le tri de l'accessor les conserve dans l'ordre initial.
+<em>Pourquoi on se trompe : on croit que « premier écrit = préféré » par défaut,
+alors que c'est seulement le départage à qualité égale.</em></p></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : Oublier Vary peut masquer un bug de cache pendant le développement.</summary><p><strong>Oublier <code>Vary</code> peut masquer un bug de cache pendant le développement.</strong>
+Sans cache réutilisant les variantes dans ton test, les réponses
+semblent correctes ; avec réutilisation, une mauvaise représentation
+peut ressortir. Un environnement local peut aussi disposer d'un cache :
+ce n'est pas le lieu d'exécution qui garantit l'absence de symptôme.
+<em>Pourquoi on se trompe : « ça marche chez moi » prouve seulement l'absence de
+cache partagé.</em></p></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : Accept est une préférence, pas une constraint.</summary><p><strong><code>Accept</code> est une préférence, pas une constraint.</strong> Un serveur peut répondre
+autre chose ; il l'annonce par <code>Content-Type</code>.
+Pour notre branche JSON, décide explicitement entre <code>406</code> et repli
+documenté. Le droit de ne pas suivre une préférence n'est pas une
+raison de décrire un body JSON comme du HTML.
+<em>Pourquoi on se trompe : on croit que <code>406</code> est obligatoire dès que <code>Accept</code>
+n'est pas satisfait.</em></p></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : getAcceptableContentTypes() ≠ moteur de négociation.</summary><p><strong><code>getAcceptableContentTypes()</code> ≠ moteur de négociation.</strong> Il trie et ne
+filtre rien : les <code>q=0</code> restent dans la liste. <em>Pourquoi on se trompe :
+« acceptable » dans le nom laisse croire que la liste est déjà filtrée.</em></p></details></li></ul></section><section class="teaching-section" data-section="s-application"><h2 id="s-application" tabindex="-1">Application</h2><aside class="section-digest" id="s-application-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Content-Type annonce la représentation choisie.</li><li>Vary protège la séparation des variantes en cache.</li><li>Sans q, la qualité vaut 1.</li><li>q=0 est un refus, pas une faible préférence.</li></ol></aside>
+
+
+
+</section><section class="teaching-section" data-section="s-fiche-express"><h2 id="s-fiche-express" tabindex="-1">Fiche express</h2><p class="teaching-label essential"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="book" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5C9 3 5 3 2 4V20C5 19 9 19 12 21C15 19 19 19 22 20V4C19 3 15 3 12 5V21M5 8H8M5 12H8M16 8H19M16 12H19"></path></svg> <strong>À mémoriser</strong></p><p><strong>De la préférence reçue à la variante envoyée, garde sept repères :</strong></p>
+<ul>
+<li>Une ressource, plusieurs <strong>représentations</strong> ; le client préfère, le serveur
+  choisit.</li>
+<li><code>q</code> par défaut <strong><code>1</code></strong> ; <strong><code>q=0</code> refuse</strong> ; <code>0.001</code> le plus faible ; 3
+  décimales.</li>
+<li>La spécificité choisit le pattern qui fixe le <code>q</code> d'un type, elle n'ordonne pas deux types entre eux.</li>
+<li><code>getAcceptableContentTypes()</code> : qualité, puis <strong>ordre d'écriture</strong>.</li>
+<li><code>getPreferredFormat()</code> : format de Request, notamment <strong><code>_format</code>,
+  avant <code>Accept</code></strong> lors du calcul ; pas un sérialiseur ni une vérification
+  complète des préférences.</li>
+<li>Variantes réutilisables : annoncer leurs critères avec <strong><code>Vary</code></strong>.
+  Sans représentation acceptable : <strong><code>406</code> ou préférence ignorée</strong>, pas un
+  <code>406</code> systématiquement obligatoire.</li>
+<li>Proactive = <em>server-driven</em> ; réactive = <em>agent-driven</em>.</li>
+</ul>
+<p>Moyen mnémotechnique pour l'approche proactive :
+<strong>« Le client préfère, le serveur choisit, Content-Type décrit,
+Vary distingue les variantes »</strong>.</p>
+<h3 tabindex="-1" id="s-fiche-express-nested-a-retenir-pour-la-certification">🧠 À retenir pour la certification</h3>
+<ul>
+<li><code>Accept</code> = préférence (pas contrainte) ; <code>q</code> ∈ [0 ; 1], 3 décimales, défaut 1,
+  <code>0</code> = refus.</li>
+<li>La règle <strong>la plus spécifique</strong> fixe le poids d'un candidat (<code>text/html</code> &gt;
+  <code>text/*</code> &gt; <code>*/*</code>).</li>
+<li><code>getAcceptableContentTypes()</code> : tri qualité puis ordre d'écriture, <code>q=0</code>
+  conservés ; <code>getPreferredFormat()</code> : <code>_format</code> d'abord, repli <code>html</code>.</li>
+<li>Réponse : <code>Content-Type</code>, <code>Content-Language</code>, <code>Vary</code> (SHOULD, pas MUST
+  universel) ; <code>Vary: *</code> interdit à un proxy.</li>
+<li><code>406</code> = sortie impossible, <code>415</code> = entrée non supportée.</li>
+<li>Proactive = serveur pilote ; réactive = client pilote (ex. <code>300</code>).</li>
+</ul>
+<p><strong>Phrase de mémorisation</strong> : « Le client préfère avec <code>q</code>, la règle précise
+fixe le poids, le serveur choisit puis annonce avec <code>Content-Type</code> et <code>Vary</code>. »</p></section><section class="teaching-section" data-section="s-sources-officielles"><h2 id="s-sources-officielles" tabindex="-1">Sources officielles</h2><ul>
+<li><a href="https://www.rfc-editor.org/rfc/rfc9110.html">RFC 9110</a></li>
+<li><a href="https://symfony.com/doc/8.0/components/http_foundation.html">Symfony 8.0 — HttpFoundation</a></li>
+</ul></section><section id="course-recalls" aria-labelledby="course-recalls-title" tabindex="-1"><h2 id="course-recalls-title">Rappels et liens avec les autres cours</h2><div data-recall-group="current"><h3>Rappels du cours actuel</h3><ul><li data-recall-course="CRS-dab7evz3fe29" data-recall-kind="digest_reference"><p class="recall-provenance">Module 02 — Fondamentaux HTTP · Cours « Content negotiation »</p><p class="digest-reference"><a href="#s-l-essentiel-digest">Revoir la règle : Content-Type annonce la représentation choisie.</a></p></li><li data-recall-course="CRS-dab7evz3fe29" data-recall-kind="digest_reference"><p class="recall-provenance">Module 02 — Fondamentaux HTTP · Cours « Content negotiation »</p><p class="digest-reference"><a href="#s-le-schema-digest">Revoir la règle : Proactive signifie server-driven.</a></p></li><li><nav aria-label="Flashcards de l’application"><ul><li data-recall-course="CRS-dab7evz3fe29" data-recall-kind="application"><p class="recall-provenance">Module 02 — Fondamentaux HTTP · Cours « Content negotiation »</p><a href="#A-dab7evz3fe29-65c42c80d9-02">Flashcard : Content-Type annonce la représentation choisie. Vary protège la séparation des variantes en cache.</a></li><li data-recall-course="CRS-dab7evz3fe29" data-recall-kind="application"><p class="recall-provenance">Module 02 — Fondamentaux HTTP · Cours « Content negotiation »</p><a href="#A-dab7evz3fe29-1bbaee857e-01">Flashcard : Sans q, la qualité vaut 1. q=0 est un refus, pas une faible préférence.</a></li></ul></nav></li></ul></div><div data-recall-group="other"><h3>Rappels des cours précédents / autres modules</h3><ul><li data-recall-course="CRS-0yhqc0b1q7hz" data-recall-kind="previous_course"><p class="recall-provenance">Module 07 — Formulaires · Cours « CSRF protection »</p><p>Aucune valeur de token n&#x27;est stockée en session. Origine et/ou double envoi fournissent une preuve ; une preuve explicitement invalide ou une dégradation de la stratégie d&#x27;une session existante entraîne un refus.</p><p><a href="#cards-previous">Rappel : <span lang="en">Does stateless CSRF mean no request validation?</span></a></p></li></ul></div></section><nav class="course-sequence" aria-label="Ordre de lecture"><a rel="prev" href="course-CRS-cj36gys6vatx.html" aria-label="Précédent : Data transformers — Module 07 — Formulaires">Précédent : Data transformers</a> <a href="lot-02.html">Sommaire : Module 02 — Fondamentaux HTTP</a> <a rel="next" href="course-CRS-3z96cp2s1dka.html" aria-label="Suivant : Serializer — Module 26 — Serializer">Suivant : Serializer</a></nav><p class="course-practice-entry"><a class="button" href="#view-quiz">Fin du cours — s’entraîner avec le Quiz</a></p></div><div id="view-flashcards" data-course-panel role="region" aria-labelledby="view-flashcards-title"><h2 id="view-flashcards-title">Flashcards</h2><p lang="en">Answer before revealing each card.</p><p>Ces cartes ne mesurent pas une maîtrise notée.</p><div id="cards-s-l-essentiel-1" data-card-section="s-l-essentiel"><h3><a href="#s-l-essentiel">Revoir : L&#x27;essentiel</a></h3><div class="reader-cards"><details class="reader-card" id="A-dab7evz3fe29-65c42c80d9-02"><summary lang="en">Which response headers describe the selected representation and its cache variants?</summary><p lang="en">Content-Type and Content-Language describe it; Vary identifies relevant request headers.</p><p lang="fr">Content-Type annonce la représentation choisie. Vary protège la séparation des variantes en cache.</p><a href="course-CRS-dab7evz3fe29.html#out-OUT-gqzyfd5s32ta">Revoir le passage précis</a></details></div></div><div id="cards-s-le-schema-2" data-card-section="s-le-schema"><h3><a href="#s-le-schema">Revoir : Le schéma</a></h3><div class="reader-cards"><details class="reader-card" id="A-dab7evz3fe29-6e0103f6cc-03"><summary lang="en">Who selects the representation in proactive negotiation?</summary><p lang="en">The server; in reactive negotiation the client selects from alternatives.</p><p lang="fr">Proactive signifie server-driven. Réactive signifie agent-driven.</p><a href="course-CRS-dab7evz3fe29.html#out-OUT-2brhvb6bgms5">Revoir le passage précis</a></details></div></div><div id="cards-s-l-exemple-lire-les-preferences-3" data-card-section="s-l-exemple-lire-les-preferences"><h3><a href="#s-l-exemple-lire-les-preferences">Revoir : L&#x27;exemple : lire les préférences</a></h3><div class="reader-cards"><details class="reader-card" id="A-dab7evz3fe29-cacf84f77e-02"><summary lang="en">Which Request method returns the client&#x27;s accepted media types in preference order?</summary><p lang="en">getAcceptableContentTypes(); getPreferredFormat() instead returns a known format and gives an existing request format priority.</p><p lang="fr">getAcceptableContentTypes() lit les media types du header Accept. getPreferredFormat() donne priorité au format déjà fixé sur la Request.</p><a href="course-CRS-dab7evz3fe29.html#out-OUT-em6af2cxwyj0">Revoir le passage précis</a></details></div></div><div id="cards-s-le-facteur-de-qualite-exactement-4" data-card-section="s-le-facteur-de-qualite-exactement"><h3><a href="#s-le-facteur-de-qualite-exactement">Revoir : Le facteur de qualité, exactement</a></h3><div class="reader-cards"><details class="reader-card" id="A-dab7evz3fe29-1bbaee857e-01"><summary lang="en">What do a missing q value and q=0 mean?</summary><p lang="en">A missing q means 1; q=0 means not acceptable.</p><p lang="fr">Sans q, la qualité vaut 1. q=0 est un refus, pas une faible préférence.</p><a href="course-CRS-dab7evz3fe29.html#out-OUT-em6af2cxwyj0">Revoir le passage précis</a></details></div></div><div id="cards-s-les-headers-de-response-5" data-card-section="s-les-headers-de-response"><h3><a href="#s-les-headers-de-response">Revoir : Les headers de Response</a></h3><div class="reader-cards"><p class="reader-card-reference" id="A-dab7evz3fe29-cca6f20e94-02">Rappel déjà proposé : <a lang="en" href="#A-dab7evz3fe29-65c42c80d9-02">Which response headers describe the selected representation and its cache variants?</a> · <a href="course-CRS-dab7evz3fe29.html#out-OUT-gqzyfd5s32ta">Passage canonique</a></p></div></div><div id="cards-s-proactive-contre-reactive-6" data-card-section="s-proactive-contre-reactive"><h3><a href="#s-proactive-contre-reactive">Revoir : Proactive contre réactive</a></h3><div class="reader-cards"><p class="reader-card-reference" id="A-dab7evz3fe29-3da5f45dde-03">Rappel déjà proposé : <a lang="en" href="#A-dab7evz3fe29-6e0103f6cc-03">Who selects the representation in proactive negotiation?</a> · <a href="course-CRS-dab7evz3fe29.html#out-OUT-2brhvb6bgms5">Passage canonique</a></p></div></div><div id="cards-s-pieges-d-examen-7" data-card-section="s-pieges-d-examen"><h3><a href="#s-pieges-d-examen">Revoir : Pièges d&#x27;examen</a></h3><div class="reader-cards"><p class="reader-card-reference" id="A-dab7evz3fe29-596d5af532-02">Rappel déjà proposé : <a lang="en" href="#A-dab7evz3fe29-65c42c80d9-02">Which response headers describe the selected representation and its cache variants?</a> · <a href="course-CRS-dab7evz3fe29.html#out-OUT-gqzyfd5s32ta">Passage canonique</a></p></div></div><div id="cards-s-application-8" data-card-section="s-application"><h3><a href="#s-application">Revoir : Application</a></h3><div class="reader-cards"><p class="reader-card-reference" id="A-dab7evz3fe29-e7ad522ea3-02">Rappel déjà proposé : <a lang="en" href="#A-dab7evz3fe29-65c42c80d9-02">Which response headers describe the selected representation and its cache variants?</a> · <a href="course-CRS-dab7evz3fe29.html#out-OUT-gqzyfd5s32ta">Passage canonique</a></p><p class="reader-card-reference" id="A-dab7evz3fe29-e7ad522ea3-01">Rappel déjà proposé : <a lang="en" href="#A-dab7evz3fe29-1bbaee857e-01">What do a missing q value and q=0 mean?</a> · <a href="course-CRS-dab7evz3fe29.html#out-OUT-em6af2cxwyj0">Passage canonique</a></p></div></div><div id="cards-s-fiche-express-9" data-card-section="s-fiche-express"><h3><a href="#s-fiche-express">Revoir : Fiche express</a></h3><div class="reader-cards"><p class="reader-card-reference" id="A-dab7evz3fe29-b11e58e15e-03">Rappel déjà proposé : <a lang="en" href="#A-dab7evz3fe29-6e0103f6cc-03">Who selects the representation in proactive negotiation?</a> · <a href="course-CRS-dab7evz3fe29.html#out-OUT-2brhvb6bgms5">Passage canonique</a></p></div></div><div id="cards-previous"><p class="recall-provenance">Module 07 — Formulaires · Cours « CSRF protection »</p><aside class="checkpoint"><h2>Rappel d’un cours antérieur</h2><p>Avant de poursuivre : CSRF protection.</p><details class="corpus-correction"><summary lang="en">Does stateless CSRF mean no request validation?</summary><p lang="en">No. Origin checks and/or double-submit evidence are required, subject to explicit failures and the previous session strategy.</p><p>Aucune valeur de token n&#x27;est stockée en session. Origine et/ou double envoi fournissent une preuve ; une preuve explicitement invalide ou une dégradation de la stratégie d&#x27;une session existante entraîne un refus.</p><a href="course-CRS-0yhqc0b1q7hz.html#out-OUT-wc1yk5bm6nw6">Relire la correction dans le cours antérieur</a></details></aside></div></div><div id="view-quiz" data-course-panel role="region" aria-labelledby="view-quiz-title"><aside class="revision-context"><p><strong>Avant le quiz :</strong> L&#x27;article 42 existe dans le catalogue. Le navigateur veut une page HTML, tandis qu&#x27;un client de notre branche JSON veut des données structurées. La ressource reste la même ; sa représentation, la forme transmise au client, peut changer.</p><p>Quelle donnée entre, quelle responsabilité agit et quelle condition change le résultat ? Pour chaque correction, vérifiez ces conditions dans <a href="course-CRS-dab7evz3fe29.html#s-objectif">le passage enseigné</a>, sans supposer que toutes les branches du blog sont exécutées.</p></aside><h2 id="view-quiz-title">Quiz</h2><p class="quiz-size" lang="en">3 eligible learning questions · 3 per session. Repeating a question does not demonstrate mastery.</p><p id="course-quiz-status" role="status">Quiz interactif non chargé. Démarrez après chargement de la banque locale.</p><div id="course-quiz-controls" class="assessment-main" hidden><div id="course-quiz-assessment-controls" hidden><select id="course-quiz-assessment-mode" aria-label="Mode du quiz" hidden><option value="learning">Entraînement</option></select><p id="course-quiz-training-scope"></p><button id="course-quiz-start-assessment" type="button" lang="en">Start practice</button><button id="course-quiz-finish-assessment" type="button" lang="en" hidden>End session</button></div><p id="course-quiz-assessment-error" role="alert"></p><p id="course-quiz-assessment-timer" hidden></p><p id="course-quiz-session-progress" class="quiz-progress" role="status" lang="en"></p><div id="course-quiz-assessment-app" tabindex="-1"></div><nav id="course-quiz-session-navigation" aria-label="Questions du cours"></nav><div id="course-quiz-learning-overview" aria-live="polite"></div></div><div id="course-quiz-native"><p>Sans JavaScript ou si le chargement échoue : aucune tentative notée. Les <a href="#view-flashcards">flashcards du cours</a> restent disponibles.</p><details class="course-quiz-fallback" data-question-id="L-dab7evz3fe29-base-v1"><summary lang="en">Which response headers describe the selected representation and its cache variants? Select one answer (radio).</summary><p>Correction de consultation — non notée.</p><p>Content-Type annonce la représentation choisie. Vary protège la séparation des variantes en cache.</p><ul><li><strong lang="en">Distractor: Accept and Accept-Language; Vary selects the response body.</strong><p>Accept décrit les préférences de la Request, pas la représentation choisie.</p></li><li><strong lang="en">Distractor: Content-Type and Content-Language; Age separates variants.</strong><p>Age exprime l&#x27;âge ; Vary nomme les headers de Request qui distinguent les variantes.</p></li><li><strong lang="en">Correct: Content-Type and Content-Language; Vary separates variants.</strong><p>Content-Type annonce la représentation choisie. Vary protège la séparation des variantes en cache.</p></li></ul><a href="course-CRS-dab7evz3fe29.html#out-OUT-gqzyfd5s32ta">Relire le passage exact</a></details></div></div></div></div><details class="transfer-panel"><summary>Sauvegarde et transfert de progression</summary><p id="reading-status" role="status">Sans JavaScript : lecture libre ; progression non enregistrée.</p><p><a href="assessment.html#overview-title">Lecture, réussites immédiates et différées</a></p><p>Transfert manuel — aucune synchronisation automatique</p><p id="persistence-status" role="status"></p><button type="button" class="secondary" id="export-progress">Exporter ma progression</button><label for="import-progress">Choisir un JSON pour fusionner ma progression (sans remplacement)</label><input type="file" id="import-progress" accept="application/json,.json"><p id="transfer-status" role="status"></p></details></main><footer class="site-footer"><a href="catalogue.html">Catalogue</a> <a href="sources.html">Sources et attribution</a> <a href="#contenu">Haut de page</a></footer></body></html>

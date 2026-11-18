@@ -1,0 +1,357 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; connect-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Providers — Symfony 8 Preparation</title><link rel="stylesheet" href="styles.css"><link rel="stylesheet" href="reader.css"><script src="mermaid.min.js" defer></script><script src="mermaid-init.js" defer></script><link rel="stylesheet" href="assessment.css"><script src="fixed-exams-data.js" defer></script><script src="fixed-exams.js" defer></script><script src="learning-state.js" defer></script><script src="guide.js" defer></script><script src="reader-catalog.js" defer></script><script src="reader.js" defer></script><script src="site-state.js" defer></script><script src="assessment.js" defer></script><script src="course-views.js" defer></script><link rel="stylesheet" href="syntax-highlight.css"><script src="prism-syntax.js" defer></script><script src="syntax-highlight.js" defer></script></head><body data-course-id="CRS-enbbsykx22xe"><a class="skip" href="#contenu">Aller au contenu</a><header class="site-header"><a class="brand" href="index.html">S8 Preparation</a><nav aria-label="Navigation principale"><a href="index.html">Accueil</a> <a href="catalogue.html">Parcours</a> <a href="assessment.html?mode=review">Réviser</a> <a href="examens.html">Examens blancs</a> <a href="jour-j.html">Jour J</a></nav></header><main id="contenu" tabindex="-1" class="corpus-reader"><nav class="breadcrumb" aria-label="Fil d’Ariane"><a href="index.html">Accueil</a> <span aria-hidden="true">›</span> <a href="catalogue.html">Parcours</a> <span aria-hidden="true">›</span> <a href="lot-10.html">Module 10 — Sécurité</a> <span aria-hidden="true">›</span> <span aria-current="page">Providers</span></nav><h1>Providers</h1><p class="muted">Symfony 8.0 · API PHP ≤ 8.4 · Twig ≤ 3.22. Préparation indépendante.</p><p class="revision-status">Rédaction narrative P11 : projection nouvelle, non couverte par les décisions historiques P10. Aucune approbation officielle ni garantie de réussite.</p><aside class="narrative-context" aria-label="Repères de lecture"><p><strong>Prérequis de lecture :</strong> <a href="course-CRS-rdzx4ka72saj.html">Authentication</a> · <a href="course-CRS-8hwpzyk1hrq9.html">Authorization</a></p><p><strong>Concepts voisins :</strong> <a href="course-CRS-y3g0v9nmne3t.html">Voters and voting strategies</a> — Distinguer identité et décision sur l’article. <a href="lot-10.html">Comparer les responsabilités dans ce module</a> · <a href="carte-composants.html">Situer cette responsabilité dans le blog</a> · <a href="glossaire.html">Distinguer les termes voisins</a></p><p><a href="ordre-lecture.html">Retrouver les 163 cours dans le parcours recommandé</a>. Ce repère ne modifie ni votre historique ni votre progression.</p></aside><div class="course-layout"><details class="lot-course-menu"><summary>Cours du module · 12 cours</summary><nav aria-label="Cours du module"><a class="lot-context" href="lot-10.html">Module 10 — Sécurité</a><ol><li><a href="course-CRS-awb7sd999c5j.html">Security Core, CSRF and PasswordHasher components</a></li><li><a href="course-CRS-rdzx4ka72saj.html">Authentication</a></li><li><a href="course-CRS-8hwpzyk1hrq9.html">Authorization</a></li><li><a href="course-CRS-yvhg325ax38y.html">Configuration</a></li><li><a href="course-CRS-enbbsykx22xe.html" aria-current="page">Providers</a></li><li><a href="course-CRS-x5frtpg07mmd.html">Firewalls</a></li><li><a href="course-CRS-n9ngfssrq1bt.html">Users</a></li><li><a href="course-CRS-g4sth72ww979.html">Password hashers</a></li><li><a href="course-CRS-2s6e4qgkcqza.html">Roles</a></li><li><a href="course-CRS-2ec5yksjfm9s.html">Access Control Rules</a></li><li><a href="course-CRS-6gc45etcssfb.html">Authenticators, Passports and Badges</a></li><li><a href="course-CRS-y3g0v9nmne3t.html">Voters and voting strategies</a></li></ol><a href="lot-10.html#view-quiz">Quiz du module</a></nav></details><aside class="course-section-menu" aria-label="Sommaire du cours"><nav class="course-actions" aria-label="Activités du cours"><a id="tab-course" href="#view-course">Cours</a><a id="tab-flashcards" href="#view-flashcards">Flashcards</a><a id="tab-quiz" href="#view-quiz">Quiz</a></nav><details class="course-section-disclosure"><summary id="course-sections">Sections du cours</summary><nav aria-label="Sections du cours"><ul><li><a href="#s-objectif">Objectif</a></li><li><a href="#s-l-essentiel">L&#x27;essentiel</a></li><li><a href="#s-le-schema">Le schéma</a></li><li><a href="#s-l-exemple">L&#x27;exemple</a></li><li><a href="#s-le-contrat">Le contrat</a></li><li><a href="#s-ce-que-l-execution-montre">Ce que l&#x27;exécution montre</a></li><li><a href="#s-les-providers-fournis">Les providers fournis</a></li><li><a href="#s-provider-et-firewall">Provider et firewall</a></li><li><a href="#s-pieges-d-examen">Pièges d&#x27;examen</a></li><li><a href="#s-fiche-express">Fiche express</a></li><li><a href="#reader-objectives">Objectifs d’apprentissage</a></li><li><a href="#reader-sources">Sources officielles et compléments</a></li><li><a href="#course-recalls">Rappels et liens avec les autres cours</a></li></ul></nav><nav aria-label="Flashcards par section"><a href="#view-flashcards">Flashcards par section</a><ul><li><a href="#cards-s-l-essentiel-1">L&#x27;essentiel</a></li><li><a href="#cards-s-le-schema-2">Le schéma</a></li><li><a href="#cards-s-l-exemple-3">L&#x27;exemple</a></li><li><a href="#cards-s-le-contrat-4">Le contrat</a></li><li><a href="#cards-s-ce-que-l-execution-montre-5">Ce que l&#x27;exécution montre</a></li><li><a href="#cards-s-les-providers-fournis-6">Les providers fournis</a></li><li><a href="#cards-s-provider-et-firewall-7">Provider et firewall</a></li><li><a href="#cards-s-pieges-d-examen-8">Pièges d&#x27;examen</a></li><li><a href="#cards-s-fiche-express-9">Fiche express</a></li><li><a href="#cards-previous">Module 09 — Injection de dépendances · Cours « Service locators » · Rappel : <span lang="en">Why use a service locator instead of injecting every possible handler eagerly?</span></a></li></ul></nav><nav aria-label="Retour au module"><a href="lot-10.html">Tous les cours du module</a></nav></details><p class="local-quiz-count">7 questions disponibles · 7 par session Quiz</p></aside><div class="course-content"><div id="view-course" data-course-panel role="region" aria-labelledby="view-course-title"><h2 id="view-course-title">Cours</h2><p class="course-introduction"><a href="#s-objectif">Introduction</a> · <a href="#course-sections">Sections du cours</a></p><h2 id="reader-objectives" tabindex="-1">Objectifs d’apprentissage</h2><ul><li><a href="course-CRS-enbbsykx22xe.html#out-OUT-58qtgyk785j9">Distinguer loadUserByIdentifier() de refreshUser()</a></li><li><a href="course-CRS-enbbsykx22xe.html#out-OUT-km3tbkkw36s3">Énoncer l&#x27;effet du rechargement à chaque Request</a></li><li><a href="course-CRS-enbbsykx22xe.html#out-OUT-18068akbjm47">Nommer les keys de provider reconnues par Security Core et relier une key id à un provider maison</a></li><li><a href="course-CRS-enbbsykx22xe.html#out-OUT-sy6g8zgjqqpj">Énoncer la constraint à plusieurs providers</a></li></ul><aside class="pedagogy-legend" aria-label="Repères pédagogiques"><p><strong>Repères pédagogiques</strong></p><p>Ces repères décrivent le rôle du bloc, pas une fréquence officielle à l’examen.</p><p class="teaching-label essential"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="brain" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5C12 1 6 1 6 5C2 5 1 10 4 12C1 15 3 19 6 19C6 23 12 23 12 19V5M12 5C12 1 18 1 18 5C22 5 23 10 20 12C23 15 21 19 18 19C18 23 12 23 12 19M6 5C6 8 8 9 9 9M4 12H7L9 14M6 19V16M18 5C18 8 16 9 15 9M20 12H17L15 14M18 19V16"></path></svg> <strong>À comprendre</strong></p><p class="teaching-label essential"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="book" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5C9 3 5 3 2 4V20C5 19 9 19 12 21C15 19 19 19 22 20V4C19 3 15 3 12 5V21M5 8H8M5 12H8M16 8H19M16 12H19"></path></svg> <strong>À mémoriser</strong></p><p class="teaching-label example"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="code" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6L2 12L8 18M16 6L22 12L16 18M14 3L10 21"></path></svg> <strong>Exemple concret</strong></p><p class="teaching-label pitfall"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="warning" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3L23 21H1L12 3ZM12 9V14M12 17V18"></path></svg> <strong>Piège à éviter</strong></p><p class="teaching-label nuance"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="balance" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3V21M7 21H17M3 7L21 5M5 7L1 15H9L5 7M19 6L15 14H23L19 6M1 15Q5 20 9 15M15 14Q19 19 23 14"></path></svg> <strong>Nuance à connaître</strong></p><p>Précision, exception ou condition d’application d’une règle.</p></aside><section class="teaching-section" data-section="s-objectif"><h2 id="s-objectif" tabindex="-1">Objectif</h2><p>Alice revient consulter l'article avec sa session, mais son compte a pu
+changer depuis sa connexion. Le provider relie l'identifiant à la source
+actuelle des utilisateurs : nous distinguons le chargement initial,
+le rafraîchissement et la décision d'abandonner un ancien contexte.</p>
+<p>Question du cours : <strong>qui retrouve l'utilisateur à partir d'un identifiant,
+quand le relit-on, et que se passe-t-il quand il a changé ou disparu ?</strong></p></section><section class="teaching-section" data-section="s-l-essentiel"><h2 id="s-l-essentiel" tabindex="-1">L&#x27;essentiel</h2><p class="teaching-label essential"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="brain" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5C12 1 6 1 6 5C2 5 1 10 4 12C1 15 3 19 6 19C6 23 12 23 12 19V5M12 5C12 1 18 1 18 5C22 5 23 10 20 12C23 15 21 19 18 19C18 23 12 23 12 19M6 5C6 8 8 9 9 9M4 12H7L9 14M6 19V16M18 5C18 8 16 9 15 9M20 12H17L15 14M18 19V16"></path></svg> <strong>À comprendre</strong></p><aside class="section-digest" id="s-l-essentiel-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Le provider charge et relit le user.</li><li>supportsClass() décrit les classes prises en charge.</li></ol></aside><p><strong>Ce que cette partie veut réellement vous apprendre.</strong></p>
+<ul>
+<li><em>Pourquoi ce sujet existe.</em> Une session conserve une <em>copie</em> d'Alice. Entre
+  deux requêtes, le compte réel peut changer : il faut une façon de le relire.</li>
+<li><em>Le piège de fond.</em> Le provider <strong>retrouve</strong> un user ; il ne vérifie ni son
+  mot de passe ni son droit d'agir.</li>
+<li><em>Ce que l'auteur veut que vous compreniez.</em> Deux moments distincts :
+  <code>loadUserByIdentifier()</code> (chargement) et <code>refreshUser()</code> (restauration d'un
+  token de session sur un firewall avec état).</li>
+<li><em>Pourquoi c'est à l'examen.</em> Stateless contre stateful, user supprimé, rôles
+  modifiés, chaîne de providers, choix du provider avec plusieurs sources.</li>
+</ul>
+<p>Un <em>user provider</em> retrouve un objet utilisateur depuis un identifiant.
+Il répond à « quel utilisateur correspond à cet identifiant ? », pas à
+« son mot de passe est-il correct ? » ni à « a-t-il le droit d'agir ? ».
+Ces responsabilités appartiennent aux autres étapes de Security.</p>
+<p>Lorsqu'un firewall avec état restaure un token de session, <code>ContextListener</code>
+demande au provider de rafraîchir l'utilisateur et vérifie s'il est toujours
+acceptable. Avec un firewall lazy, ce travail peut être différé jusqu'à
+l'utilisation de la sécurité. Il ne faut donc pas imaginer un chargement
+inconditionnel pour toute requête, même publique et sans token.</p>
+<p><code>ArticleCatalog</code> cherche l'article 42 ; le user provider cherche Alice.
+Ces deux recherches ne partagent ni le même contrat ni le même résultat :
+un article absent peut conduire à 404, un utilisateur absent fait échouer
+la résolution d'identité avant la décision d'accès.</p>
+<pre class="highlight" tabindex="0"><code class="language-text"> Provider           ne fait PAS                     fait
+ ────────           ────────────────────────────    ──────────────────────
+ retrouve Alice     vérifier son mot de passe       identifiant → UserInterface
+                    décider si elle peut éditer     ou UserNotFoundException</code></pre></section><section class="teaching-section" data-section="s-le-schema"><h2 id="s-le-schema" tabindex="-1">Le schéma</h2><aside class="section-digest" id="s-le-schema-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>La restauration déclenche une relecture.</li><li>Un firewall stateless ne suit pas ce cycle de session.</li></ol></aside><p><strong>Où en est-on ?</strong> Carte du cours, en deux graphes : le premier concerne la
+preuve présentée aujourd'hui (chargement), le second la relecture d'une identité
+gardée en session (refresh). Les séparer explique pourquoi une API stateless ne
+restaure pas le token d'une précédente lecture.</p>
+<figure class="diagram" aria-labelledby="CRS-enbbsykx22xe-3-diagram-0-title CRS-enbbsykx22xe-3-diagram-0-description"><figcaption id="CRS-enbbsykx22xe-3-diagram-0-title">Le chargement par le provider fournit un utilisateur à l&#x27;authentification</figcaption><p id="CRS-enbbsykx22xe-3-diagram-0-description">Dans le parcours utilisant le provider configuré, la résolution de l&#x27;utilisateur appelle loadUserByIdentifier. Le provider consulte sa source et retourne un UserInterface, ou lève UserNotFoundException. Le résultat doit encore passer les contrôles d&#x27;authentification. Un UserBadge avec un chargeur explicite peut suivre un autre chemin.</p><div class="mermaid" hidden>---
+title: Charger un utilisateur n&#x27;est pas vérifier ses permissions
+---
+flowchart TD
+  accTitle: Le chargement par le provider fournit un utilisateur à l&#x27;authentification
+  accDescr: Dans le parcours utilisant le provider configuré, la résolution de l&#x27;utilisateur appelle loadUserByIdentifier. Le provider consulte sa source et retourne un UserInterface, ou lève UserNotFoundException. Le résultat doit encore passer les contrôles d&#x27;authentification. Un UserBadge avec un chargeur explicite peut suivre un autre chemin.
+  A[&quot;Résolution du user&quot;] --&gt;|&quot;loadUserByIdentifier&quot;| P[&quot;Provider configuré&quot;]
+  P --&gt;|&quot;cherche l&#x27;identifiant&quot;| D[(&quot;Source des utilisateurs&quot;)]
+  D --&gt;|&quot;résultat de la recherche&quot;| Q{&quot;Utilisateur trouvé ?&quot;}
+  Q --&gt;|&quot;oui&quot;| U([&quot;Objet UserInterface&quot;])
+  Q --&gt;|&quot;non&quot;| E([&quot;UserNotFoundException&quot;])
+  classDef actor fill:#e0f2fe,stroke:#075985,color:#0c4a6e
+  classDef choice fill:#fef3c7,stroke:#92400e,color:#78350f
+  classDef result fill:#dcfce7,stroke:#166534,color:#14532d
+  class A,P actor
+  class Q choice
+  class D,U,E result</div></figure>
+<p>Bleu : acteurs ; ambre : condition ; vert : données ou résultat. Les flèches
+sont des appels et des retours, pas une relation d'héritage. Un <code>UserBadge</code>
+peut fournir son propre chargeur : le provider configuré n'est pas un passage
+obligatoire de toute forme d'authentification.</p>
+<figure class="diagram" aria-labelledby="CRS-enbbsykx22xe-3-diagram-1-title CRS-enbbsykx22xe-3-diagram-1-description"><figcaption id="CRS-enbbsykx22xe-3-diagram-1-title">Rafraîchir le user d&#x27;un token restauré depuis la session</figcaption><p id="CRS-enbbsykx22xe-3-diagram-1-description">Pour un token restauré sur un firewall avec état, ContextListener choisit un provider compatible et appelle refreshUser. Un utilisateur introuvable ou jugé changé entraîne l&#x27;abandon du token. Sinon le token utilise l&#x27;utilisateur rafraîchi. Un firewall stateless ne restaure pas ce token de session.</p><div class="mermaid" hidden>flowchart TD
+  accTitle: Rafraîchir le user d&#x27;un token restauré depuis la session
+  accDescr: Pour un token restauré sur un firewall avec état, ContextListener choisit un provider compatible et appelle refreshUser. Un utilisateur introuvable ou jugé changé entraîne l&#x27;abandon du token. Sinon le token utilise l&#x27;utilisateur rafraîchi. Un firewall stateless ne restaure pas ce token de session.
+  C[&quot;ContextListener&quot;] --&gt;|&quot;supportsClass puis refreshUser&quot;| P[&quot;Provider compatible&quot;]
+  P --&gt;|&quot;retourne le user rafraîchi&quot;| Q{&quot;User encore acceptable ?&quot;}
+  P --&gt;|&quot;UserNotFoundException&quot;| N([&quot;Token abandonné&quot;])
+  Q --&gt;|&quot;oui&quot;| T([&quot;Token avec user rafraîchi&quot;])
+  Q --&gt;|&quot;non : comparaison&quot;| N
+  classDef actor fill:#e0f2fe,stroke:#075985,color:#0c4a6e
+  classDef choice fill:#fef3c7,stroke:#92400e,color:#78350f
+  classDef result fill:#dcfce7,stroke:#166534,color:#14532d
+  class C,P actor
+  class Q choice
+  class T,N result</div></figure>
+<p>Ce parcours suppose un token restaurable. La comparaison par défaut vérifie
+notamment les rôles, le mot de passe et l'identifiant ; <code>EquatableInterface</code>
+permet au user de définir sa comparaison. Une déconnexion peut ensuite
+entraîner un 401 ou une redirection sur une ressource protégée, selon
+l'authentification configurée ; le provider ne décide pas lui-même du statut HTTP.</p></section><section class="teaching-section" data-section="s-l-exemple"><h2 id="s-l-exemple" tabindex="-1">L&#x27;exemple</h2><p class="teaching-label example"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="code" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6L2 12L8 18M16 6L22 12L16 18M14 3L10 21"></path></svg> <strong>Exemple concret</strong></p><aside class="section-digest" id="s-l-exemple-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Le contrat suffit pour un provider maison.</li><li>Aucun stockage tiers n&#x27;est requis par ce contrat.</li></ol></aside><p><strong>Où en est-on ?</strong> Un provider maison minimal. On y repère les trois méthodes
+du contrat et ce qu'elles rendent ou lèvent.</p>
+<p>Extrait du contrat d'un provider maison : <code>all()</code> représente ici une méthode
+applicative qui lit une source de confiance et retourne les utilisateurs
+indexés par identifiant. <code>pw</code> contient un <strong>hash</strong>, jamais un mot de passe en
+clair. Les imports sont indiqués ; la lecture de cette source reste à fournir.</p>
+<pre class="highlight" tabindex="0"><code class="language-php">use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
+use Symfony\Component\Security\Core\Exception\UserNotFoundException;
+use Symfony\Component\Security\Core\User\InMemoryUser;
+use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Security\Core\User\UserProviderInterface;
+
+class FileUserProvider implements UserProviderInterface
+{
+    public function loadUserByIdentifier(string $identifier): UserInterface
+    {
+        $data = $this-&gt;all()[$identifier] ?? throw new UserNotFoundException();
+
+        return new InMemoryUser($identifier, $data['pw'], $data['roles']);
+    }
+
+    public function refreshUser(UserInterface $user): UserInterface
+    {
+        if (!$this-&gt;supportsClass($user::class)) {
+            throw new UnsupportedUserException('Type utilisateur non pris en charge');
+        }
+
+        return $this-&gt;loadUserByIdentifier($user-&gt;getUserIdentifier());
+    }
+
+    public function supportsClass(string $class): bool
+    {
+        return InMemoryUser::class === $class;
+    }
+}</code></pre>
+<p>L'extrait nécessite toujours l'implémentation applicative de <code>all()</code> :
+il n'est pas un programme autonome ni un lecteur de fichiers non fiables.
+Avec une entrée Alice contenant un hash valide et <code>['ROLE_USER']</code>,
+<code>loadUserByIdentifier('alice')</code> rend un <code>InMemoryUser</code> portant cet identifiant.
+Avec une clé absente, il lève <code>UserNotFoundException</code>, pas <code>null</code>.
+Le résultat trouvé ne prouve pas que le mot de passe présenté correspond.</p>
+<table>
+<thead>
+<tr>
+<th>Appel</th>
+<th>Entrée</th>
+<th>Sortie</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>loadUserByIdentifier('alice')</code></td>
+<td>clé présente</td>
+<td><code>InMemoryUser</code></td>
+</tr>
+<tr>
+<td><code>loadUserByIdentifier('zoe')</code></td>
+<td>clé absente</td>
+<td><code>UserNotFoundException</code></td>
+</tr>
+<tr>
+<td><code>refreshUser($user)</code></td>
+<td>autre classe de user</td>
+<td><code>UnsupportedUserException</code></td>
+</tr>
+<tr>
+<td><code>supportsClass(InMemoryUser::class)</code></td>
+<td>type PHP</td>
+<td><code>true</code></td>
+</tr>
+</tbody>
+</table></section><section class="teaching-section" data-section="s-le-contrat"><span class="outcome-anchor" id="out-OUT-58qtgyk785j9" tabindex="-1"></span><h2 id="s-le-contrat" tabindex="-1">Le contrat</h2><aside class="section-digest" id="s-le-contrat-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>L&#x27;identifier est celui de l&#x27;authentication.</li><li>Il n&#x27;est pas nécessairement une key de stockage.</li></ol></aside><p><strong>Où en est-on ?</strong> Étape 1 sur 4 : les trois méthodes du contrat. Question :
+<strong>quand</strong> chacune est-elle appelée ?</p>
+<div class="admonition info">
+<p class="admonition-title">🌍 In Real Life</p>
+<p><strong>La situation</strong> : le secrétariat du blog retrouve la fiche d'Alice par son identifiant. À son retour, il relit sa fiche actuelle plutôt que croire éternellement une ancienne copie.</p>
+<p><strong>L’équivalent dans Symfony</strong> : recherche initiale → <code>loadUserByIdentifier()</code> ; relecture de l'utilisateur restauré → <code>refreshUser()</code> ; compatibilité du type de fiche → <code>supportsClass()</code>.</p>
+<p><strong>Retour à la réalité technique</strong> : le provider fournit un utilisateur, sans vérifier lui-même son mot de passe ni décider son droit sur l'article. Le refresh décrit le parcours de restauration de session, pas une étape universelle de toute requête.</p>
+<p><strong>🧠 Comment le mémoriser</strong> : « Trouver la fiche, puis la relire au retour. » Image mentale : fiche courante comparée à sa copie. Question-réflexe : est-ce un chargement initial ou une restauration ?</p>
+<p><strong>⚠️ À ne pas confondre</strong> : retrouver un compte et authentifier son détenteur.</p>
+</div>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Quand</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>loadUserByIdentifier()</code></td>
+<td>lorsque la résolution d'identité utilise ce provider</td>
+</tr>
+<tr>
+<td><code>refreshUser()</code></td>
+<td>lors de la restauration du user d'un token de session sur un firewall avec état</td>
+</tr>
+<tr>
+<td><code>supportsClass()</code></td>
+<td>dire si ce provider gère cette class</td>
+</tr>
+</tbody>
+</table>
+<p>Le user n'est pas conservé tel quel : il est <strong>rechargé</strong>, puis <strong>comparé</strong> à
+celui du token.</p>
+<p><strong>Pourquoi recharger au lieu de faire confiance à la session ?</strong> Parce que la
+session contient une photo ancienne. Si on la croyait toujours, un compte
+supprimé ou rétrogradé resterait actif jusqu'à l'expiration de la session.</p>
+<p><code>supportsClass()</code> répond sur le type PHP, pas sur l'existence d'Alice
+ni sur son autorisation de modifier 42. Dans cet exemple,
+<code>refreshUser()</code> réutilise <code>loadUserByIdentifier()</code> : le chargement n'est
+donc pas une méthode réservée exclusivement à la première connexion.</p></section><section class="teaching-section" data-section="s-ce-que-l-execution-montre"><span class="outcome-anchor" id="out-OUT-km3tbkkw36s3" tabindex="-1"></span><h2 id="s-ce-que-l-execution-montre" tabindex="-1">Ce que l&#x27;exécution montre</h2><aside class="section-digest" id="s-ce-que-l-execution-montre-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Un user disparu ne reste pas authentifié.</li><li>La session peut subsister sans son token.</li></ol></aside><p><strong>Où en est-on ?</strong> Étape 2 sur 4 : le contrat en action. Cinq scénarios, du plus
+courant au plus surprenant ; chacun dit quelle méthode est appelée.</p>
+<p>Le titre et les observations historiques sont conservés ; aucune nouvelle
+exécution P11 n'est revendiquée. Pour relier le tableau au blog, prendre
+une sonde protégée de l'identité, pas la page publique <code>/blog/42</code> :</p>
+<p>Ces scénarios utilisent HTTP Basic, un token de session restauré pour le
+parcours avec état, et la comparaison standard du user, sans personnalisation
+par <code>EquatableInterface</code>. Les réponses 200 supposent une ressource autorisée.</p>
+<table>
+<thead>
+<tr>
+<th>Request</th>
+<th>Methods appelées</th>
+<th>Résultat</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>connexion HTTP Basic</td>
+<td><code>loadUserByIdentifier(alice)</code></td>
+<td>200</td>
+</tr>
+<tr>
+<td>Request suivante, cookie de session</td>
+<td><code>refreshUser(alice)</code></td>
+<td>200</td>
+</tr>
+<tr>
+<td>après suppression d'<code>alice</code></td>
+<td><code>refreshUser</code> lève <code>UserNotFoundException</code></td>
+<td><strong>401</strong> : token retiré</td>
+</tr>
+<tr>
+<td>après ajout de <code>ROLE_EDITOR</code> à <code>alice</code></td>
+<td><code>refreshUser(alice)</code></td>
+<td>token abandonné, <code>alice</code> <strong>anonyme</strong></td>
+</tr>
+<tr>
+<td>firewall sans état, deux Requests</td>
+<td><code>loadUserByIdentifier</code> à chaque fois</td>
+<td>200, jamais <code>refreshUser</code></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>Un user supprimé : <code>ContextListener</code> retire la key du token de la session,
+  qui survit ; le user redevient anonyme.</li>
+<li><code>ContextListener::hasUserChanged()</code> abandonne le token quand le password, les
+  roles ou l'identifier diffèrent — ou quand <code>isEqualTo()</code> rend <code>false</code> pour une
+  class <code>EquatableInterface</code>. Un role ajouté en base <strong>déconnecte</strong>.</li>
+</ul>
+<pre class="highlight" tabindex="0"><code class="language-text">Requête N+1 avec cookie, firewall avec état
+   │ ContextListener lit le token en session
+   │ provider-&gt;refreshUser(user_ancien)  ──► user_frais  (ou UserNotFound)
+   │ hasUserChanged(token, ancien, frais) ?
+   │      password / roles / identifiant différents  ─► token abandonné
+   │      EquatableInterface : isEqualTo() == false  ─► token abandonné
+   ▼ sinon : le token garde user_frais</code></pre>
+<p>Une relecture invalide ne détruit pas nécessairement les autres données
+de session, comme une préférence de langue. Et si un autre mécanisme
+réauthentifie ensuite la requête avec des credentials valides, le résultat
+final dépend de ce second chemin : le tableau isole la restauration.</p></section><section class="teaching-section" data-section="s-les-providers-fournis"><span class="outcome-anchor" id="out-OUT-18068akbjm47" tabindex="-1"></span><h2 id="s-les-providers-fournis" tabindex="-1">Les providers fournis</h2><aside class="section-digest" id="s-les-providers-fournis-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Le chain compose plusieurs sources.</li><li>L&#x27;ordre de recherche compte.</li></ol></aside><p><strong>Où en est-on ?</strong> Étape 3 sur 4 : quels providers existent dans Security Core
+et comment on les déclare. Question : comment combiner plusieurs sources ?</p>
+<div class="admonition info">
+<p class="admonition-title">🌍 In Real Life</p>
+<p><strong>La situation</strong> : le secrétariat cherche Alice dans un annuaire puis, seulement si elle n'y figure pas, dans un autre. Une panne du premier n'est pas simplement « personne absente ».</p>
+<p><strong>L’équivalent dans Symfony</strong> : annuaires ordonnés → providers de la chaîne ; premier utilisateur trouvé → résultat conservé ; absence reconnue → <code>UserNotFoundException</code> permettant de poursuivre le chargement.</p>
+<p><strong>Retour à la réalité technique</strong> : la chaîne ne fusionne ni comptes ni rôles et ne relance pas une autre authentification après un mot de passe incorrect. D'autres exceptions peuvent interrompre la recherche ; le refresh a son propre parcours.</p>
+<p><strong>🧠 Comment le mémoriser</strong> : « Première fiche trouvée, pas addition des fiches. » Image mentale : annuaire suivant encore fermé. Question-réflexe : quel événement autorise vraiment le passage au provider suivant ?</p>
+<p><strong>⚠️ À ne pas confondre</strong> : utilisateur introuvable et preuve d'identité invalide.</p>
+</div>
+<p>Une source mémoire suffit aux comptes d'exercice du blog. Pour essayer
+deux sources de confiance, une chaîne est un provider composé, pas
+deux authentifications indépendantes :</p>
+<table>
+<thead>
+<tr>
+<th>Mécanisme Core ou configuration associée</th>
+<th>Rôle</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>memory</code></td>
+<td>des users écrits dans la configuration (tests, prototypes)</td>
+</tr>
+<tr>
+<td><code>chain</code></td>
+<td>plusieurs providers essayés dans l'ordre</td>
+</tr>
+<tr>
+<td><code>id</code></td>
+<td>un service qui implémente <code>UserProviderInterface</code></td>
+</tr>
+</tbody>
+</table>
+<p>Le périmètre évalué ici est <strong>Security Core</strong> : <code>InMemoryUserProvider</code>,
+<code>ChainUserProvider</code> et le contrat d'un provider maison. Les clés <code>memory</code>,
+<code>chain</code> et <code>id</code> sont les moyens de les déclarer dans l'intégration framework,
+pas trois méthodes de <code>UserProviderInterface</code>.</p>
+<p><code>ChainUserProvider::loadUserByIdentifier()</code> essaie les providers dans l'ordre,
+retourne le premier utilisateur trouvé et ne poursuit qu'après
+<code>UserNotFoundException</code>. Un mauvais mot de passe vérifié ensuite ne relance
+pas la recherche dans la source suivante. Les autres erreurs ne deviennent
+pas silencieusement « utilisateur absent ».
+Au refresh, la chaîne filtre par <code>supportsClass()</code> et peut poursuivre
+après <code>UnsupportedUserException</code> ou <code>UserNotFoundException</code>.</p>
+<pre class="highlight" tabindex="0"><code class="language-text">chain : [ annuaire A , annuaire B ]
+  loadUserByIdentifier('alice')
+     A trouve alice            ─► résultat = alice de A (B jamais consulté)
+     A : UserNotFoundException ─► on essaie B
+     A : autre exception       ─► la recherche s'arrête (pas « absent »)
+  mot de passe faux (vérifié plus tard) ─► on ne retourne PAS chercher dans B</code></pre>
+<p>Les providers <code>ldap</code> et <code>entity</code> relèvent d'intégrations distinctes et restent
+hors du contenu évalué de ce cours. Leur existence ne les transforme pas en
+providers livrés par Security Core.</p></section><section class="teaching-section" data-section="s-provider-et-firewall"><span class="outcome-anchor" id="out-OUT-sy6g8zgjqqpj" tabindex="-1"></span><h2 id="s-provider-et-firewall" tabindex="-1">Provider et firewall</h2><aside class="section-digest" id="s-provider-et-firewall-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Le hasher calcule le nouveau hash.</li><li>L&#x27;upgrader l&#x27;enregistre.</li></ol></aside><p><strong>Où en est-on ?</strong> Étape 4 sur 4 : relier provider et firewall. Question :
+quand il y a plusieurs sources, <strong>lequel</strong> est utilisé, et qui le dit ?</p>
+<p>Un firewall peut désigner un provider par défaut, éventuellement une chaîne.
+Avec plusieurs sources, rendre explicite le choix utilisé par le mécanisme :
+<code>provider</code> sur le firewall, ou sur l'authenticator qui propose ce réglage.
+L'absence de choix effectif est ambiguë pour HTTP Basic et provoque
+<code>InvalidConfigurationException</code> ; un loader explicite de <code>UserBadge</code>
+reste un autre contrat, pas une recherche automatique dans toutes les sources.</p>
+<p>Un provider qui implémente <code>PasswordUpgraderInterface</code> reçoit le password
+réencodé quand l'algorithme change.</p>
+<p>Le hasher calcule le nouveau hash ; l'upgrader l'enregistre lorsque le
+parcours de connexion et de migration le permet. Implémenter l'interface
+sans persister la valeur reçue ne met pas à jour la source d'Alice.</p>
+<p><strong>Pourquoi l'ambiguïté est-elle une erreur ?</strong> Symfony refuse de deviner : avec
+deux sources, choisir au hasard celle qui authentifie serait un risque de
+sécurité. D'où l'exception de configuration plutôt qu'un choix silencieux.</p></section><section class="teaching-section" data-section="s-pieges-d-examen"><h2 id="s-pieges-d-examen" tabindex="-1">Pièges d&#x27;examen</h2><p class="teaching-label pitfall"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="warning" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3L23 21H1L12 3ZM12 9V14M12 17V18"></path></svg> <strong>Piège à éviter</strong></p><aside class="section-digest" id="s-pieges-d-examen-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Le mode stateless évite la restauration de session.</li><li>Le chargement suit la preuve de chaque Request.</li></ol></aside><ul class="pitfall-list"><li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : refreshUser() appartient au parcours de restauration du token de session</summary><p><strong><code>refreshUser()</code> appartient au parcours de restauration du token de session</strong>,
+pas seulement à la connexion. Un firewall stateless ne suit pas ce parcours.
+<em>Pourquoi on se trompe : le mot « refresh » fait penser à un rechargement à
+chaque requête, ou au contraire à un simple appel de connexion.</em></p></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : Un user supprimé est déconnecté</summary><p><strong>Un user supprimé est déconnecté</strong> au rechargement suivant : 401 ou
+redirect, pas 500 ; la session survit, sans son token.
+<em>Pourquoi on se trompe : une exception non attrapée évoque spontanément une 500.</em></p></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : Avec la comparaison standard, des rôles modifiés invalident aussi le token</summary><p><strong>Avec la comparaison standard, des rôles modifiés invalident aussi le token</strong> :
+le nouveau rôle n'est pas simplement ajouté au token existant.
+<code>EquatableInterface</code> peut personnaliser cette comparaison.
+<em>Pourquoi on se trompe : on imagine que le refresh « met à jour » le token
+plutôt que de le jeter.</em></p></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : entity n&#x27;est pas fourni par SecurityBundle</summary><p><strong><code>entity</code> n'est pas fourni par SecurityBundle</strong> : il faut l'intégration
+Doctrine. <code>id</code> branche un provider maison.
+<em>Pourquoi on se trompe : <code>entity</code> est omniprésent dans les tutoriels.</em></p></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : Plusieurs providers exigent un choix effectif non ambigu</summary><p><strong>Plusieurs providers exigent un choix effectif non ambigu</strong> pour le
+mécanisme concerné ; les sources ne sont pas essayées automatiquement.
+<em>Pourquoi on se trompe : la chaîne existe, donc on suppose qu'elle est implicite.</em></p></details></li></ul></section><section class="teaching-section" data-section="s-fiche-express"><h2 id="s-fiche-express" tabindex="-1">Fiche express</h2><p class="teaching-label essential"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="book" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5C9 3 5 3 2 4V20C5 19 9 19 12 21C15 19 19 19 22 20V4C19 3 15 3 12 5V21M5 8H8M5 12H8M16 8H19M16 12H19"></path></svg> <strong>À mémoriser</strong></p><aside class="section-digest" id="s-fiche-express-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Les roles font partie de la comparaison par défaut.</li><li>Une comparaison personnalisée doit rester prudente.</li></ol></aside><p>Le user obtenu reste un objet avec un contrat précis. La suite examine
+les <a href="course-CRS-n9ngfssrq1bt.html">utilisateurs</a>, puis le
+<a href="course-CRS-g4sth72ww979.html">hachage des mots de passe</a> :
+charger Alice n'effectue ni l'un ni l'autre à sa place.</p>
+<p><strong>🧠 À retenir pour la certification :</strong></p>
+<ul>
+<li><strong><code>loadUserByIdentifier()</code></strong> lorsque le provider est utilisé pour charger
+  l'identité ; un loader explicite de <code>UserBadge</code> peut le remplacer.</li>
+<li><strong><code>refreshUser()</code></strong> pour restaurer le user d'un token sur un firewall <strong>avec état</strong>.</li>
+<li>Sans état : pas de <code>refreshUser()</code> par restauration d'un token de session.</li>
+<li>User supprimé : <strong>anonyme</strong> ; l'entry point peut répondre 401 ou rediriger,
+  sans erreur 500 imposée ; la session survit.</li>
+<li>Rôles, password ou identifier changés : <strong>déconnexion selon la comparaison
+  du user</strong> ; <code>EquatableInterface</code> permet de la personnaliser.</li>
+<li>Core : provider mémoire, chaîne et provider maison par <strong><code>id</code></strong> ;
+  les providers de stockage externe restent hors périmètre.</li>
+<li>Plusieurs providers : <strong>choix explicite du provider utilisé</strong>.</li>
+</ul>
+<p>Moyen mnémotechnique : <strong>« Charger l'identité, rafraîchir le contexte restauré »</strong>.</p>
+<pre class="highlight" tabindex="0"><code class="language-text">provider : charger le user ; contexte avec token de session : le
+rafraîchir et le comparer ; stateless : pas de restauration du token ;
+Core : mémoire, chaîne, contrat maison ; intégrations externes exclues</code></pre></section><section class="official-sources"><h2 id="reader-sources" tabindex="-1">Sources officielles et compléments</h2><ul><li><a href="https://symfony.com/doc/8.0/security.html">Symfony 8.0 — Security</a></li><li><a href="https://symfony.com/doc/8.0/security/user_providers.html">Symfony 8.0 — security / user providers</a></li></ul></section><section id="course-recalls" aria-labelledby="course-recalls-title" tabindex="-1"><h2 id="course-recalls-title">Rappels et liens avec les autres cours</h2><div data-recall-group="other"><h3>Rappels des cours précédents / autres modules</h3><ul><li data-recall-course="CRS-0a0d5bp6769e" data-recall-kind="previous_course"><p class="recall-provenance">Module 09 — Injection de dépendances · Cours « Service locators »</p><p>Le locator limite les dependencies accessibles. La création est différée au get().</p><p><a href="#cards-previous">Rappel : <span lang="en">Why use a service locator instead of injecting every possible handler eagerly?</span></a></p></li></ul></div></section><nav class="course-sequence" aria-label="Ordre de lecture"><a rel="prev" href="course-CRS-yvhg325ax38y.html" aria-label="Précédent : Configuration — Module 10 — Sécurité">Précédent : Configuration</a> <a href="lot-10.html">Sommaire : Module 10 — Sécurité</a> <a rel="next" href="course-CRS-2s6e4qgkcqza.html" aria-label="Suivant : Roles — Module 10 — Sécurité">Suivant : Roles</a></nav><p class="course-practice-entry"><a class="button" href="#view-quiz">Fin du cours — s’entraîner avec le Quiz</a></p></div><div id="view-flashcards" data-course-panel role="region" aria-labelledby="view-flashcards-title"><h2 id="view-flashcards-title">Flashcards</h2><p lang="en">Answer before revealing each card.</p><p>Ces cartes ne mesurent pas une maîtrise notée.</p><div id="cards-s-l-essentiel-1" data-card-section="s-l-essentiel"><h3><a href="#s-l-essentiel">Revoir : L&#x27;essentiel</a></h3><div class="reader-cards"><details class="reader-card" id="B-enbbsykx22xe-01"><summary lang="en">What are a user provider&#x27;s main responsibilities?</summary><p lang="en">Load a user by identifier, refresh it, and report supported user classes.</p><p lang="fr">Le provider charge et relit le user. supportsClass() décrit les classes prises en charge.</p><a href="course-CRS-enbbsykx22xe.html#out-OUT-58qtgyk785j9">Revoir le passage précis</a></details></div></div><div id="cards-s-le-schema-2" data-card-section="s-le-schema"><h3><a href="#s-le-schema">Revoir : Le schéma</a></h3><div class="reader-cards"><details class="reader-card" id="B-enbbsykx22xe-02"><summary lang="en">When is refreshUser() normally used?</summary><p lang="en">On later Requests of a stateful firewall when restoring authentication.</p><p lang="fr">La restauration déclenche une relecture. Un firewall stateless ne suit pas ce cycle de session.</p><a href="course-CRS-enbbsykx22xe.html#out-OUT-58qtgyk785j9">Revoir le passage précis</a></details></div></div><div id="cards-s-l-exemple-3" data-card-section="s-l-exemple"><h3><a href="#s-l-exemple">Revoir : L&#x27;exemple</a></h3><div class="reader-cards"><details class="reader-card" id="B-enbbsykx22xe-03"><summary lang="en">How can a custom in-memory application user source be connected to a firewall?</summary><p lang="en">Register a UserProviderInterface service and reference its id in provider configuration.</p><p lang="fr">Le contrat suffit pour un provider maison. Aucun stockage tiers n&#x27;est requis par ce contrat.</p><a href="course-CRS-enbbsykx22xe.html#out-OUT-sy6g8zgjqqpj">Revoir le passage précis</a></details></div></div><div id="cards-s-le-contrat-4" data-card-section="s-le-contrat"><h3><a href="#s-le-contrat">Revoir : Le contrat</a></h3><div class="reader-cards"><details class="reader-card" id="B-enbbsykx22xe-04"><summary lang="en">Which method receives the login identifier?</summary><p lang="en">loadUserByIdentifier().</p><p lang="fr">L&#x27;identifier est celui de l&#x27;authentication. Il n&#x27;est pas nécessairement une key de stockage.</p><a href="course-CRS-enbbsykx22xe.html#out-OUT-58qtgyk785j9">Revoir le passage précis</a></details></div></div><div id="cards-s-ce-que-l-execution-montre-5" data-card-section="s-ce-que-l-execution-montre"><h3><a href="#s-ce-que-l-execution-montre">Revoir : Ce que l&#x27;exécution montre</a></h3><div class="reader-cards"><details class="reader-card" id="B-enbbsykx22xe-05"><summary lang="en">What happens when a previously authenticated user can no longer be refreshed?</summary><p lang="en">The stored authentication is invalidated; access handling then invokes the appropriate entry point.</p><p lang="fr">Un user disparu ne reste pas authentifié. La session peut subsister sans son token.</p><a href="course-CRS-enbbsykx22xe.html#out-OUT-km3tbkkw36s3">Revoir le passage précis</a></details></div></div><div id="cards-s-les-providers-fournis-6" data-card-section="s-les-providers-fournis"><h3><a href="#s-les-providers-fournis">Revoir : Les providers fournis</a></h3><div class="reader-cards"><details class="reader-card" id="B-enbbsykx22xe-06"><summary lang="en">What is a chain provider used for?</summary><p lang="en">Trying several configured user providers in order.</p><p lang="fr">Le chain compose plusieurs sources. L&#x27;ordre de recherche compte.</p><a href="course-CRS-enbbsykx22xe.html#out-OUT-18068akbjm47">Revoir le passage précis</a></details></div></div><div id="cards-s-provider-et-firewall-7" data-card-section="s-provider-et-firewall"><h3><a href="#s-provider-et-firewall">Revoir : Provider et firewall</a></h3><div class="reader-cards"><details class="reader-card" id="B-enbbsykx22xe-07"><summary lang="en">Which interface lets a provider persist an upgraded password hash?</summary><p lang="en">PasswordUpgraderInterface.</p><p lang="fr">Le hasher calcule le nouveau hash. L&#x27;upgrader l&#x27;enregistre.</p><a href="course-CRS-enbbsykx22xe.html#out-OUT-sy6g8zgjqqpj">Revoir le passage précis</a></details></div></div><div id="cards-s-pieges-d-examen-8" data-card-section="s-pieges-d-examen"><h3><a href="#s-pieges-d-examen">Revoir : Pièges d&#x27;examen</a></h3><div class="reader-cards"><details class="reader-card" id="B-enbbsykx22xe-08"><summary lang="en">Does a stateless firewall refresh a user from a session token on each Request?</summary><p lang="en">No. It authenticates Requests independently instead of restoring a session token.</p><p lang="fr">Le mode stateless évite la restauration de session. Le chargement suit la preuve de chaque Request.</p><a href="course-CRS-enbbsykx22xe.html#out-OUT-km3tbkkw36s3">Revoir le passage précis</a></details></div></div><div id="cards-s-fiche-express-9" data-card-section="s-fiche-express"><h3><a href="#s-fiche-express">Revoir : Fiche express</a></h3><div class="reader-cards"><details class="reader-card" id="B-enbbsykx22xe-09"><summary lang="en">Can changing a refreshed user&#x27;s roles invalidate its existing authentication?</summary><p lang="en">Yes, under the default user comparison; EquatableInterface can customize comparison.</p><p lang="fr">Les roles font partie de la comparaison par défaut. Une comparaison personnalisée doit rester prudente.</p><a href="course-CRS-enbbsykx22xe.html#out-OUT-km3tbkkw36s3">Revoir le passage précis</a></details></div></div><div id="cards-previous"><p class="recall-provenance">Module 09 — Injection de dépendances · Cours « Service locators »</p><aside class="checkpoint"><h2>Rappel d’un cours antérieur</h2><p>Avant de poursuivre : Service locators.</p><details class="corpus-correction"><summary lang="en">Why use a service locator instead of injecting every possible handler eagerly?</summary><p lang="en">It exposes a declared subset and creates a selected service on demand.</p><p>Le locator limite les dependencies accessibles. La création est différée au get().</p><a href="course-CRS-0a0d5bp6769e.html#out-OUT-3c8n410rjew2">Relire la correction dans le cours antérieur</a></details></aside></div></div><div id="view-quiz" data-course-panel role="region" aria-labelledby="view-quiz-title"><aside class="revision-context"><p><strong>Avant le quiz :</strong> Alice revient consulter l&#x27;article avec sa session, mais son compte a pu changer depuis sa connexion. Le provider relie l&#x27;identifiant à la source actuelle des utilisateurs : nous distinguons le chargement initial, le rafraîchissement et la décision d&#x27;abandonner un ancien contexte.</p><p>Quelle donnée entre, quelle responsabilité agit et quelle condition change le résultat ? Pour chaque correction, vérifiez ces conditions dans <a href="course-CRS-enbbsykx22xe.html#s-objectif">le passage enseigné</a>, sans supposer que toutes les branches du blog sont exécutées.</p></aside><h2 id="view-quiz-title">Quiz</h2><p class="quiz-size" lang="en">7 eligible learning questions · 7 per session. Repeating a question does not demonstrate mastery.</p><p id="course-quiz-status" role="status">Quiz interactif non chargé. Démarrez après chargement de la banque locale.</p><div id="course-quiz-controls" class="assessment-main" hidden><div id="course-quiz-assessment-controls" hidden><select id="course-quiz-assessment-mode" aria-label="Mode du quiz" hidden><option value="learning">Entraînement</option></select><p id="course-quiz-training-scope"></p><button id="course-quiz-start-assessment" type="button" lang="en">Start practice</button><button id="course-quiz-finish-assessment" type="button" lang="en" hidden>End session</button></div><p id="course-quiz-assessment-error" role="alert"></p><p id="course-quiz-assessment-timer" hidden></p><p id="course-quiz-session-progress" class="quiz-progress" role="status" lang="en"></p><div id="course-quiz-assessment-app" tabindex="-1"></div><nav id="course-quiz-session-navigation" aria-label="Questions du cours"></nav><div id="course-quiz-learning-overview" aria-live="polite"></div></div><div id="course-quiz-native"><p>Sans JavaScript ou si le chargement échoue : aucune tentative notée. Les <a href="#view-flashcards">flashcards du cours</a> restent disponibles.</p><details class="course-quiz-fallback" data-question-id="L-enbbsykx22xe-base-v1"><summary lang="en">What are a user provider&#x27;s main responsibilities?</summary><p>Correction de consultation — non notée.</p><p>Le provider charge et relit le user. supportsClass() décrit les classes prises en charge.</p><ul><li><strong lang="en">Correct: Load by identifier, refresh users and report supported classes.</strong><p>Le provider charge et relit le user. supportsClass() décrit les classes prises en charge.</p></li><li><strong lang="en">Distractor: Hash passwords and grant access to every protected object.</strong><p>Le provider charge le user ; hasher et authorization ont d&#x27;autres responsabilités.</p></li><li><strong lang="en">Distractor: Generate sessions and serialize every HTTP response.</strong><p>Ce ne sont pas les responsabilités du user provider.</p></li></ul><a href="course-CRS-enbbsykx22xe.html#out-OUT-58qtgyk785j9">Relire le passage exact</a></details></div></div></div></div><details class="transfer-panel"><summary>Sauvegarde et transfert de progression</summary><p id="reading-status" role="status">Sans JavaScript : lecture libre ; progression non enregistrée.</p><p><a href="assessment.html#overview-title">Lecture, réussites immédiates et différées</a></p><p>Transfert manuel — aucune synchronisation automatique</p><p id="persistence-status" role="status"></p><button type="button" class="secondary" id="export-progress">Exporter ma progression</button><label for="import-progress">Choisir un JSON pour fusionner ma progression (sans remplacement)</label><input type="file" id="import-progress" accept="application/json,.json"><p id="transfer-status" role="status"></p></details></main><footer class="site-footer"><a href="catalogue.html">Catalogue</a> <a href="sources.html">Sources et attribution</a> <a href="#contenu">Haut de page</a></footer></body></html>

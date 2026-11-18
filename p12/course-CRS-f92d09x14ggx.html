@@ -1,0 +1,326 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; connect-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Conditional request matching — Symfony 8 Preparation</title><link rel="stylesheet" href="styles.css"><link rel="stylesheet" href="reader.css"><script src="mermaid.min.js" defer></script><script src="mermaid-init.js" defer></script><link rel="stylesheet" href="assessment.css"><script src="fixed-exams-data.js" defer></script><script src="fixed-exams.js" defer></script><script src="learning-state.js" defer></script><script src="guide.js" defer></script><script src="reader-catalog.js" defer></script><script src="reader.js" defer></script><script src="site-state.js" defer></script><script src="assessment.js" defer></script><script src="course-views.js" defer></script><link rel="stylesheet" href="syntax-highlight.css"><script src="prism-syntax.js" defer></script><script src="syntax-highlight.js" defer></script></head><body data-course-id="CRS-f92d09x14ggx"><a class="skip" href="#contenu">Aller au contenu</a><header class="site-header"><a class="brand" href="index.html">S8 Preparation</a><nav aria-label="Navigation principale"><a href="index.html">Accueil</a> <a href="catalogue.html">Parcours</a> <a href="assessment.html?mode=review">Réviser</a> <a href="examens.html">Examens blancs</a> <a href="jour-j.html">Jour J</a></nav></header><main id="contenu" tabindex="-1" class="corpus-reader"><nav class="breadcrumb" aria-label="Fil d’Ariane"><a href="index.html">Accueil</a> <span aria-hidden="true">›</span> <a href="catalogue.html">Parcours</a> <span aria-hidden="true">›</span> <a href="lot-05.html">Module 05 — Routage</a> <span aria-hidden="true">›</span> <span aria-current="page">Conditional request matching</span></nav><h1>Conditional request matching</h1><p class="muted">Symfony 8.0 · API PHP ≤ 8.4 · Twig ≤ 3.22. Préparation indépendante.</p><p class="revision-status">Rédaction narrative P11 : projection nouvelle, non couverte par les décisions historiques P10. Aucune approbation officielle ni garantie de réussite.</p><aside class="narrative-context" aria-label="Repères de lecture"><p><strong>Prérequis de lecture :</strong> <a href="course-CRS-kqq96z5y9r2f.html">Configuration (YAML and PHP attributes)</a></p><p><strong>Concepts voisins :</strong> <a href="course-CRS-d5ffd8b704zs.html">Argument value resolvers</a> — Distinguer matching et préparation des arguments. <a href="lot-05.html">Comparer les responsabilités dans ce module</a> · <a href="carte-composants.html">Situer cette responsabilité dans le blog</a> · <a href="glossaire.html">Distinguer les termes voisins</a></p><p><a href="ordre-lecture.html">Retrouver les 163 cours dans le parcours recommandé</a>. Ce repère ne modifie ni votre historique ni votre progression.</p></aside><div class="course-layout"><details class="lot-course-menu"><summary>Cours du module · 12 cours</summary><nav aria-label="Cours du module"><a class="lot-context" href="lot-05.html">Module 05 — Routage</a><ol><li><a href="course-CRS-2nwv1v57j7ef.html">Routing component and FrameworkBundle</a></li><li><a href="course-CRS-kqq96z5y9r2f.html">Configuration (YAML and PHP attributes)</a></li><li><a href="course-CRS-wg3j0t5pm7w1.html">Restrict URL parameters</a></li><li><a href="course-CRS-vkgr06y3x72g.html">Set default values to URL parameters</a></li><li><a href="course-CRS-sx61as7r7p0d.html">URLs generation</a></li><li><a href="course-CRS-tgbv3wp66rcc.html">Trigger redirects</a></li><li><a href="course-CRS-nhebf7arqvn4.html">Special internal routing attributes</a></li><li><a href="course-CRS-2b1wzm3rwdrn.html">Domain name matching</a></li><li><a href="course-CRS-f92d09x14ggx.html" aria-current="page">Conditional request matching</a></li><li><a href="course-CRS-h3q0qxnq8eq0.html">HTTP methods matching</a></li><li><a href="course-CRS-evzcj63fgdb7.html">User&#x27;s locale guessing</a></li><li><a href="course-CRS-8dgxs89hrah0.html">Router debugging</a></li></ol><a href="lot-05.html#view-quiz">Quiz du module</a></nav></details><aside class="course-section-menu" aria-label="Sommaire du cours"><nav class="course-actions" aria-label="Activités du cours"><a id="tab-course" href="#view-course">Cours</a><a id="tab-flashcards" href="#view-flashcards">Flashcards</a><a id="tab-quiz" href="#view-quiz">Quiz</a></nav><details class="course-section-disclosure"><summary id="course-sections">Sections du cours</summary><nav aria-label="Sections du cours"><ul><li><a href="#s-objectif">Objectif</a></li><li><a href="#s-l-essentiel">L&#x27;essentiel</a></li><li><a href="#s-le-schema">Le schéma</a></li><li><a href="#s-l-exemple">L&#x27;exemple</a></li><li><a href="#s-l-option-condition">L&#x27;option `condition`</a></li><li><a href="#s-les-variables-disponibles">Les variables disponibles</a></li><li><a href="#s-une-condition-fausse-efface-la-route">Une condition fausse efface la route</a></li><li><a href="#s-la-limite-et-elle-est-importante">La limite, et elle est importante</a></li><li><a href="#s-pieges-d-examen">Pièges d&#x27;examen</a></li><li><a href="#s-application">Application</a></li><li><a href="#s-fiche-express">Fiche express</a></li><li><a href="#s-sources-officielles">Sources officielles</a></li><li><a href="#reader-objectives">Objectifs d’apprentissage</a></li><li><a href="#course-recalls">Rappels et liens avec les autres cours</a></li></ul></nav><nav aria-label="Flashcards par section"><a href="#view-flashcards">Flashcards par section</a><ul><li><a href="#cards-s-l-essentiel-1">L&#x27;essentiel</a></li><li><a href="#cards-s-le-schema-2">Le schéma</a></li><li><a href="#cards-s-l-exemple-3">L&#x27;exemple</a></li><li><a href="#cards-s-l-option-condition-4">L&#x27;option `condition`</a></li><li><a href="#cards-s-les-variables-disponibles-5">Les variables disponibles</a></li><li><a href="#cards-s-une-condition-fausse-efface-la-route-6">Une condition fausse efface la route</a></li><li><a href="#cards-s-la-limite-et-elle-est-importante-7">La limite, et elle est importante</a></li><li><a href="#cards-s-pieges-d-examen-8">Pièges d&#x27;examen</a></li><li><a href="#cards-s-application-9">Application</a></li><li><a href="#cards-s-fiche-express-10">Fiche express</a></li><li><a href="#cards-previous">Module 05 — Routage · Cours « Trigger redirects » · Rappel : <span lang="en">Does the basic UrlMatcher issue canonicalisation redirects?</span></a></li></ul></nav><nav aria-label="Retour au module"><a href="lot-05.html">Tous les cours du module</a></nav></details><p class="local-quiz-count">5 questions disponibles · 5 par session Quiz</p></aside><div class="course-content"><div id="view-course" data-course-panel role="region" aria-labelledby="view-course-title"><h2 id="view-course-title">Cours</h2><p class="course-introduction"><a href="#s-objectif">Introduction</a> · <a href="#course-sections">Sections du cours</a></p><h2 id="reader-objectives" tabindex="-1">Objectifs d’apprentissage</h2><ul><li><a href="course-CRS-f92d09x14ggx.html#out-OUT-s9bajh1gydjw">Écrire une condition d&#x27;appariement de route</a></li><li><a href="course-CRS-f92d09x14ggx.html#out-OUT-er1yxf3bmwn9">Nommer les variables et les functions disponibles dans une condition</a></li><li><a href="course-CRS-f92d09x14ggx.html#out-OUT-tgxzpmwjg951">Exposer un service aux conditions par AsRoutingConditionService</a></li><li><a href="course-CRS-f92d09x14ggx.html#out-OUT-413aqdhzwkfw">Énoncer que les conditions sont ignorées à la génération d&#x27;URL</a></li></ul><aside class="pedagogy-legend" aria-label="Repères pédagogiques"><p><strong>Repères pédagogiques</strong></p><p>Ces repères décrivent le rôle du bloc, pas une fréquence officielle à l’examen.</p><p class="teaching-label essential"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="brain" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5C12 1 6 1 6 5C2 5 1 10 4 12C1 15 3 19 6 19C6 23 12 23 12 19V5M12 5C12 1 18 1 18 5C22 5 23 10 20 12C23 15 21 19 18 19C18 23 12 23 12 19M6 5C6 8 8 9 9 9M4 12H7L9 14M6 19V16M18 5C18 8 16 9 15 9M20 12H17L15 14M18 19V16"></path></svg> <strong>À comprendre</strong></p><p class="teaching-label essential"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="book" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5C9 3 5 3 2 4V20C5 19 9 19 12 21C15 19 19 19 22 20V4C19 3 15 3 12 5V21M5 8H8M5 12H8M16 8H19M16 12H19"></path></svg> <strong>À mémoriser</strong></p><p class="teaching-label example"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="code" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6L2 12L8 18M16 6L22 12L16 18M14 3L10 21"></path></svg> <strong>Exemple concret</strong></p><p class="teaching-label pitfall"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="warning" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3L23 21H1L12 3ZM12 9V14M12 17V18"></path></svg> <strong>Piège à éviter</strong></p><p class="teaching-label nuance"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="balance" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3V21M7 21H17M3 7L21 5M5 7L1 15H9L5 7M19 6L15 14H23L19 6M1 15Q5 20 9 15M15 14Q19 19 23 14"></path></svg> <strong>Nuance à connaître</strong></p><p>Précision, exception ou condition d’application d’une règle.</p></aside><section class="teaching-section" data-section="s-objectif"><h2 id="s-objectif" tabindex="-1">Objectif</h2><p>Conditionner l'appariement d'une route à une logique arbitraire, et connaître la
+limite de ce mécanisme.</p>
+<p>Question fil rouge : <strong>« Le path, la method, le host et le schéma ne me suffisent
+pas pour choisir ma route : comment ajouter mon propre critère, et qu'est-ce que
+Symfony en fait vraiment ? »</strong></p></section><section class="teaching-section" data-section="s-l-essentiel"><h2 id="s-l-essentiel" tabindex="-1">L&#x27;essentiel</h2><p class="teaching-label essential"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="brain" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5C12 1 6 1 6 5C2 5 1 10 4 12C1 15 3 19 6 19C6 23 12 23 12 19V5M12 5C12 1 18 1 18 5C22 5 23 10 20 12C23 15 21 19 18 19C18 23 12 23 12 19M6 5C6 8 8 9 9 9M4 12H7L9 14M6 19V16M18 5C18 8 16 9 15 9M20 12H17L15 14M18 19V16"></path></svg> <strong>À comprendre</strong></p><aside class="section-digest" id="s-l-essentiel-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>condition filtre l&#x27;entrée.</li><li>L&#x27;expression peut être compilée dans le cache du matcher.</li></ol></aside><p><strong>Ce que cette partie veut réellement vous apprendre.</strong></p>
+<ul>
+<li><em>Pourquoi ce sujet existe.</em> <code>path</code>, <code>methods</code>, <code>host</code> et <code>schemes</code> couvrent la
+  plupart des besoins. Pour le reste (un feature flag, un header, une valeur de
+  parameter), il faut une <strong>porte de sortie</strong> : l'option <code>condition</code>.</li>
+<li><em>Le piège de fond.</em> Une condition est du <strong>matching</strong>, pas de la sécurité, et
+  elle ne vaut qu'<strong>à l'entrée</strong>. La génération d'URL l'ignore complètement.</li>
+<li><em>Ce que l'auteur veut que vous compreniez.</em> L'expression est <strong>compilée une
+  fois</strong> en PHP (dans le cache), puis ce PHP est <strong>exécuté</strong> pour chaque candidate.
+  Fausse, elle écarte la route <strong>avant</strong> les contrôles de barre finale, schéma et
+  method : pas de 405, pas de redirect.</li>
+<li><em>Pourquoi c'est à l'examen.</em> Variables (<code>context</code>, <code>request</code>, <code>params</code>),
+  functions (<code>env()</code>, <code>service()</code>), moment de la compilation, absence de 405, et
+  limite « ignorée à la génération ».</li>
+</ul>
+<p>L'option <code>condition</code> prend une expression <strong>ExpressionLanguage</strong>, compilée une
+fois en PHP dans le cache du router, puis exécutée à chaque Request qui atteint
+la route. Elle voit <code>context</code>, <code>request</code> et <code>params</code>, et appelle <code>env()</code> ou
+<code>service()</code>. Fausse, elle <strong>efface</strong> la route : ni 405, ni redirect. Et elle est
+<strong>ignorée à la génération</strong> d'URL.</p></section><section class="teaching-section" data-section="s-le-schema"><h2 id="s-le-schema" tabindex="-1">Le schéma</h2><aside class="section-digest" id="s-le-schema-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>context expose le RequestContext.</li><li>request donne la Request ; params les parameters déjà appariés.</li></ol></aside><p><strong>Où en est-on ?</strong> Carte du cours, puis le cycle de vie d'une condition, de la
+configuration jusqu'à la décision du matcher.</p>
+<pre class="highlight" tabindex="0"><code class="language-text">Cours « Conditional request matching »
+   ├─ exemple                       → contact selon le User-Agent
+   ├─ 1. L'option condition         → expression compilée en PHP
+   ├─ 2. Les variables disponibles  → context, request, params, env(), service()
+   ├─ 3. Condition fausse           → la route est écartée (pas de 405)
+   └─ 4. La limite                  → ignorée à la génération d'URL</code></pre>
+<figure class="diagram" aria-labelledby="CRS-f92d09x14ggx-3-diagram-0-title CRS-f92d09x14ggx-3-diagram-0-description"><figcaption id="CRS-f92d09x14ggx-3-diagram-0-title">Compilation, variables et effets d&#x27;une condition de route</figcaption><p id="CRS-f92d09x14ggx-3-diagram-0-description">condition: &quot;…&quot; est compilée une fois par ExpressionLanguage::compile() en PHP, dans le matcher en cache. Les variables sont context, le RequestContext, request, la Request, et params, les parameters appariés ; la Request n&#x27;est construite que si le PHP compilé mentionne $request. Les functions sont env(&#x27;NOM&#x27;) et service(&#x27;alias&#x27;), pour un service marqué #[AsRoutingConditionService] ou tagué routing.condition_service. Une condition fausse ignore la route avant la barre finale, le schéma et la method : pas de 405, pas de redirect. À la génération, la condition n&#x27;est jamais évaluée et l&#x27;URL est produite quand même.</p><div class="mermaid" hidden>---
+title: Une condition de route
+---
+flowchart TD
+  accTitle: Compilation, variables et effets d&#x27;une condition de route
+  accDescr: condition: &quot;…&quot; est compilée une fois par ExpressionLanguage::compile() en PHP, dans le matcher en cache. Les variables sont context, le RequestContext, request, la Request, et params, les parameters appariés ; la Request n&#x27;est construite que si le PHP compilé mentionne $request. Les functions sont env(&#x27;NOM&#x27;) et service(&#x27;alias&#x27;), pour un service marqué #[AsRoutingConditionService] ou tagué routing.condition_service. Une condition fausse ignore la route avant la barre finale, le schéma et la method : pas de 405, pas de redirect. À la génération, la condition n&#x27;est jamais évaluée et l&#x27;URL est produite quand même.
+  C[&quot;Expression de configuration&quot;] --&gt;|&quot;compiler lors du dump&quot;| V[&quot;PHP du matcher&quot;]
+  V --&gt;|&quot;exécuter pour la candidate&quot;| RQ{&quot;Condition vraie ?&quot;}
+  RQ --&gt;|&quot;non&quot;| M[&quot;Essayer les autres routes&quot;]
+  RQ --&gt;|&quot;oui&quot;| G[&quot;Poursuivre les contrôles de matching&quot;]
+  classDef operation fill:#e0f2fe,stroke:#0369a1,color:#0c4a6e
+  classDef choice fill:#fef3c7,stroke:#b45309,color:#78350f
+  class C,V,M,G operation
+  class RQ choice</div></figure><p>
+Bleu = compilation ou exécution ; ambre = décision. Une condition ne remplace
+pas l'autorisation : le User-Agent de l'exemple est contrôlé par le client.
+Une condition fausse retire <strong>cette candidate</strong>, pas toutes les autres routes.
+Le coût du PHP compilé inclut les appels de services : éviter un accès réseau
+répété pour chaque candidate.</p>
+<p><strong>Où en est-on ?</strong> Même mécanisme, vu sous l'angle de l'<strong>ordre des contrôles</strong>
+dans le matcher compilé : la condition passe avant tout le reste, ce qui explique
+l'absence de 405.</p>
+<pre class="highlight" tabindex="0"><code class="language-text">Pour une route candidate dont le path correspond :
+   1. host        → ne correspond pas ? route écartée
+   2. condition   → fausse ?            route écartée ici (rien n'est retenu)
+   3. barre finale → redirect éventuel
+   4. schéma      → redirect/erreur éventuelle
+   5. method      → 405 avec Allow
+   6. route retenue</code></pre></section><section class="teaching-section" data-section="s-l-exemple"><h2 id="s-l-exemple" tabindex="-1">L&#x27;exemple</h2><p class="teaching-label example"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="code" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6L2 12L8 18M16 6L22 12L16 18M14 3L10 21"></path></svg> <strong>Exemple concret</strong></p><p><strong>Où en est-on ?</strong> Cas concret : une variante de la page de contact selon le
+navigateur. Code d'abord, mécanisme ensuite.</p>
+<p>La page de contact du blog sert ici de variante expérimentale selon le
+User-Agent. Cette donnée est contrôlée par le client : l'exemple montre
+une sélection de route, pas un mécanisme d'authentification. Un lecteur
+dont la condition échoue peut encore correspondre à une autre route.</p>
+<pre class="highlight" tabindex="0"><code class="language-php">#[Route(
+    '/contact',
+    name: 'contact',
+    condition: "context.getMethod() in ['GET', 'HEAD'] and request.headers.get('User-Agent') matches '/firefox/i'",
+)]</code></pre>
+<p>Ce que Symfony voit pour <code>GET /contact</code> :</p>
+<pre class="highlight" tabindex="0"><code class="language-text">GET /contact, User-Agent: Mozilla/5.0 (… Firefox/…)
+   │
+   ├─ path /contact → correspond
+   ├─ condition : context.getMethod() ∈ [GET, HEAD]   → vrai
+   │              User-Agent matches /firefox/i         → vrai
+   └─ route retenue
+
+GET /contact, User-Agent: Chrome  → condition fausse → route écartée
+                                    (une autre route /contact peut répondre)</code></pre></section><section class="teaching-section" data-section="s-l-option-condition"><span class="outcome-anchor" id="out-OUT-s9bajh1gydjw" tabindex="-1"></span><h2 id="s-l-option-condition" tabindex="-1">L&#x27;option `condition`</h2><p><strong>Où en est-on ?</strong> Étape 1 sur 4. Pourquoi une expression plutôt que du PHP libre ?
+Parce que le matcher est <strong>compilé en cache</strong> : il lui faut un langage qu'il sait
+transformer en PHP statique.</p>
+<p>Une fonctionnalité de prévisualisation peut nécessiter un critère que le
+path ne représente pas. L'expression devient du PHP dans le matcher
+compilé ; à chaque candidate atteinte, ce PHP décide de poursuivre ou non.
+Cela évite de recompiler l'expression à chaque visite, pas d'exécuter
+les services qu'elle appelle.</p>
+<p>L'expression est évaluée à l'appariement ; fausse, la route ne correspond pas.
+C'est la porte de sortie pour ce que <code>methods</code>, <code>host</code> et <code>schemes</code> ne savent
+pas exprimer.</p>
+<p><code>CompiledUrlMatcherDumper</code> la <strong>compile</strong> en PHP brut quand il écrit le matcher
+en cache, par <code>ExpressionLanguage::compile()</code> avec les noms <code>context</code>,
+<code>request</code> et <code>params</code>. Une condition ne coûte donc que l'exécution de ce PHP. Si
+le code compilé ne mentionne pas <code>$request</code>, le matcher ne construit pas
+d'object <code>Request</code> supplémentaire pour cette évaluation. Dans l'application
+HTTP, la Request de <code>/blog/42</code> existe déjà : ce détail d'optimisation du
+matcher ne supprime pas l'objet reçu par HttpKernel.</p>
+<p>Compiler ou exécuter : deux moments distincts.</p>
+<pre class="highlight" tabindex="0"><code class="language-text">  À L'ÉCRITURE DU CACHE (une fois)        À CHAQUE REQUEST (pour chaque candidate)
+┌───────────────────────────────────┐   ┌───────────────────────────────────┐
+│ expression "params['id'] &lt; 1000"  │   │ exécuter le PHP compilé           │
+│        ↓ ExpressionLanguage       │   │ → vrai : on poursuit              │
+│ PHP : $params['id'] &lt; 1000        │   │ → faux : on passe à la suivante   │
+│ rangé dans le matcher en cache    │   │ (les appels service() s'exécutent │
+│                                   │   │  réellement à ce moment)          │
+└───────────────────────────────────┘   └───────────────────────────────────┘</code></pre>
+<div class="admonition info">
+<p class="admonition-title">🌍 In Real Life</p>
+<p><strong>La situation</strong> : l'accueil traduit une consigne en fiche de contrôle réutilisable. La fiche est préparée une fois, mais chaque visiteur doit encore passer le contrôle ; téléphoner à un service à chaque passage reste coûteux.</p>
+<p><strong>L’équivalent dans Symfony</strong> : le dumper compile l'expression de <code>condition</code> en PHP dans le matcher en cache. Ce PHP s'exécute lorsque la recherche atteint la candidate ; ses appels de services restent du travail à effectuer.</p>
+<p><strong>Retour à la réalité technique</strong> : compilation ne signifie pas résultat booléen mémorisé pour toutes les requêtes. Le cache peut être reconstruit. L'optimisation évitant une Request supplémentaire au matcher ne supprime pas la Request déjà reçue par HttpKernel.</p>
+<p><strong>🧠 Comment le mémoriser</strong> : « Préparer la grille une fois, contrôler chaque passage. » Image mentale : même fiche de contrôle devant plusieurs visiteurs. Question-réflexe : qu'ai-je mis en cache, la procédure ou son résultat ?</p>
+<p><strong>⚠️ À ne pas confondre</strong> : compilation, exécution et cache d'un résultat métier.</p>
+</div><div class="retained-answer-context">
+<p><strong>Repère — Une condition fausse efface la route :</strong></p>
+<p lang="en"><strong>Question:</strong> Does a route with a false condition contribute its methods to a 405 response?</p>
+<p lang="en"><strong>Answer:</strong> No. It is rejected before that method decision.</p>
+<p>Une condition fausse retire la route des candidates. Sans autre correspondance, le résultat est 404.</p>
+</div></section><section class="teaching-section" data-section="s-les-variables-disponibles"><span class="outcome-anchor" id="out-OUT-er1yxf3bmwn9" tabindex="-1"></span><span class="outcome-anchor" id="out-OUT-tgxzpmwjg951" tabindex="-1"></span><h2 id="s-les-variables-disponibles" tabindex="-1">Les variables disponibles</h2><p><strong>Où en est-on ?</strong> Étape 2 sur 4. Que peut <strong>lire</strong> une condition ? Trois variables
+et deux functions, rien de plus : l'expression n'a pas accès à tout le conteneur.</p>
+<p><code>params['id']</code> décrit ici la capture de route, pas un article déjà chargé.
+<code>context</code> suffit pour méthode et hôte ; <code>request</code> ouvre les données complètes
+de la requête. Si une règle appelle <code>service()</code>, son service doit figurer
+dans le locator prévu : compiler l'expression n'expose pas tout le conteneur.</p>
+<table>
+<thead>
+<tr>
+<th>Variable</th>
+<th>Contenu</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>context</code></td>
+<td>le <code>RequestContext</code> : method, host, schéma, port</td>
+</tr>
+<tr>
+<td><code>request</code></td>
+<td>l'object <code>Request</code> complet</td>
+</tr>
+<tr>
+<td><code>params</code></td>
+<td>les parameters de route déjà appariés : <code>"params['id'] &lt; 1000"</code></td>
+</tr>
+</tbody>
+</table>
+<p>FrameworkBundle ajoute deux functions : <code>env('NOM')</code> lit une variable
+d'environment, avec ses processeurs ; <code>service('alias')</code> appelle un service
+marqué <code>#[AsRoutingConditionService]</code> ou tagué <code>routing.condition_service</code> —
+sans alias, par son identifier. <code>service()</code> passe par un locator de ces seuls
+services : une condition n'atteint pas le reste du container. Un parameter de
+configuration s'écrit entre pourcents.</p>
+<p>Exemples minimaux (3 usages, 3 sources) :</p>
+<pre class="highlight" tabindex="0"><code class="language-php">condition: "params['id'] &lt; 1000"                         // capture de route
+condition: "context.getHost() == env('APP_MAIN_HOST')"   // contexte + environment
+condition: "service('route_checker').check(request)"     // service autorisé</code></pre>
+<p>Pour <code>service()</code>, le service doit être déclaré explicitement :</p>
+<pre class="highlight" tabindex="0"><code class="language-php">#[AsRoutingConditionService(alias: 'route_checker')]
+final class RouteChecker
+{
+    public function check(Request $request): bool { /* … */ }
+}</code></pre>
+<p>Comparaison des trois variables :</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th><code>context</code></th>
+<th><code>request</code></th>
+<th><code>params</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Type</td>
+<td><code>RequestContext</code></td>
+<td><code>Request</code></td>
+<td>tableau des captures</td>
+</tr>
+<tr>
+<td>Contient</td>
+<td>method, host, schéma, port</td>
+<td>headers, query, cookies…</td>
+<td><code>id</code>, <code>page</code>, <code>_locale</code>…</td>
+</tr>
+<tr>
+<td>Coût</td>
+<td>le plus léger</td>
+<td><code>Request</code> construite si <code>$request</code> est mentionné</td>
+<td>léger</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition info">
+<p class="admonition-title">🌍 In Real Life</p>
+<p><strong>La situation</strong> : l'agent dispose d'un résumé de visite, du dossier complet et des références déjà relevées. Son annuaire interne ne contient que les spécialistes autorisés à répondre à ce contrôle.</p>
+<p><strong>L’équivalent dans Symfony</strong> : <code>context</code> fournit le RequestContext ; <code>request</code> la Request ; <code>params</code> les valeurs de route disponibles. <code>service()</code> accède au locator des services déclarés pour les conditions, et <code>env()</code> est fourni par l'intégration FrameworkBundle.</p>
+<p><strong>Retour à la réalité technique</strong> : <code>params['id']</code> n'est pas un article chargé. Le locator ne donne pas accès à tout le conteneur. Les données client, dont User-Agent, ne constituent pas une identité vérifiée ; les expressions restent une configuration de confiance, pas du code fourni par l'utilisateur.</p>
+<p><strong>🧠 Comment le mémoriser</strong> : « Résumé, dossier, captures ; annuaire limité. » Image mentale : trois sources sur le bureau et un petit annuaire dédié. Question-réflexe : quelle source contient ma donnée et quel service est réellement exposé ?</p>
+<p><strong>⚠️ À ne pas confondre</strong> : RequestContext, Request, captures et objets métier ; sélection de route et authentification.</p>
+</div></section><section class="teaching-section" data-section="s-une-condition-fausse-efface-la-route"><h2 id="s-une-condition-fausse-efface-la-route" tabindex="-1">Une condition fausse efface la route</h2><aside class="section-digest" id="s-une-condition-fausse-efface-la-route-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Une condition fausse retire la route des candidates.</li><li>Sans autre correspondance, le résultat est 404.</li></ol></aside><p><strong>Où en est-on ?</strong> Étape 3 sur 4. Que devient une route dont la condition est
+fausse ? Elle sort du jeu <strong>avant</strong> les contrôles qui produisent 405 ou redirect.</p>
+<p>Si la prévisualisation est désactivée, cette candidate ne contribue plus
+aux méthodes autorisées ni à une correction de slash. Le matcher continue
+avec les autres routes ; 404 n'est le résultat que si elles échouent aussi.
+La route reste définie dans la collection : « effacer » décrit son exclusion
+pour cette tentative, pas une suppression durable de configuration.</p>
+<p>Dans le matcher compilé, la condition est testée <strong>avant</strong> la barre finale, le
+schéma et la method. Une route dont la condition est fausse n'ajoute pas ses
+methods à la liste d'un <strong>405</strong>, et ne déclenche aucun redirect de barre finale
+ou de schéma. Si rien d'autre ne correspond : 404.</p>
+<p>Comparaison de deux routes <code>/order/3</code> en POST seul :</p>
+<pre class="highlight" tabindex="0"><code class="language-text">┌───────────────────────────────────┐   ┌───────────────────────────────────┐
+│     CONDITION FAUSSE              │   │     CONDITION VRAIE               │
+├───────────────────────────────────┤   ├───────────────────────────────────┤
+│ GET /order/3                      │   │ GET /order/3                      │
+│ → route écartée avant la method   │   │ → route candidate conservée       │
+│ → Allow non alimenté              │   │ → method GET refusée              │
+├───────────────────────────────────┤   ├───────────────────────────────────┤
+│ Résultat : 404                    │   │ Résultat : 405 + Allow: POST      │
+│ (si aucune autre route)           │   │                                   │
+└───────────────────────────────────┘   └───────────────────────────────────┘</code></pre>
+<div class="admonition info">
+<p class="admonition-title">🌍 In Real Life</p>
+<p><strong>La situation</strong> : une ligne du plan d'accueil ne convient pas à cette visite ; l'agent passe à la suivante sans déchirer le plan. Cette ligne écartée ne propose plus sa correction d'adresse ni ses modalités.</p>
+<p><strong>L’équivalent dans Symfony</strong> : une condition fausse exclut cette candidate de la tentative. Dans le matcher décrit, elle ne contribue alors ni aux méthodes d'un 405 ni aux corrections de slash ou de schéma ; les autres routes restent examinées.</p>
+<p><strong>Retour à la réalité technique</strong> : aucune route n'est supprimée durablement de la collection. Le résultat HTTP final dépend des autres candidates et de l'intégration. Une condition vraie permet seulement de poursuivre les contrôles, pas de garantir une réponse 200.</p>
+<p><strong>🧠 Comment le mémoriser</strong> : « Sauter une ligne n'efface pas le plan. » Image mentale : doigt passant une consigne inapplicable. Question-réflexe : cette candidate a-t-elle été écartée, et que peuvent encore produire les autres ?</p>
+<p><strong>⚠️ À ne pas confondre</strong> : condition fausse, méthode non autorisée, route supprimée et autorisation refusée.</p>
+</div></section><section class="teaching-section" data-section="s-la-limite-et-elle-est-importante"><span class="outcome-anchor" id="out-OUT-413aqdhzwkfw" tabindex="-1"></span><h2 id="s-la-limite-et-elle-est-importante" tabindex="-1">La limite, et elle est importante</h2><aside class="section-digest" id="s-la-limite-et-elle-est-importante-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Le generator ne dispose pas du contexte de matching.</li><li>Un lien généré peut viser une route qui ne correspondrait pas à la Request.</li></ol></aside><p><strong>Où en est-on ?</strong> Étape 4 sur 4 : ce que la condition <strong>ne fait pas</strong>. Pourquoi
+cette limite ? Parce que le générateur travaille <strong>sans Request</strong> : il ne sait pas
+qui visitera le lien.</p>
+<p>Un lien vers cette prévisualisation peut pourtant être généré et affiché.
+Le générateur n'évalue pas la condition du futur lecteur ; il écrit une
+URL à partir de la route. Contrôle donc séparément l'affichage du lien
+si nécessaire, et conserve l'autorisation dans Security plutôt que
+d'assimiler un lien générable à un accès accordé.</p>
+<blockquote>
+<p>Les conditions <strong>ne sont pas prises en compte lors de la génération d'URL</strong>.</p>
+</blockquote>
+<p>Le generator ne connaît ni la Request ni le user agent : une route protégée par
+une <code>condition</code> reste générable, y compris vers un contexte où elle ne
+correspondrait pas. Une condition filtre l'entrée ; un requirement, lui, vaut
+dans les deux sens.</p>
+<p>Comparaison condition / requirement :</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th><code>condition</code></th>
+<th><code>requirements</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Valable au matching</td>
+<td>oui</td>
+<td>oui</td>
+</tr>
+<tr>
+<td>Valable à la génération</td>
+<td><strong>non</strong></td>
+<td><strong>oui</strong> (vérifié selon la politique active)</td>
+</tr>
+<tr>
+<td>Peut lire la Request</td>
+<td>oui</td>
+<td>non (regex sur une valeur)</td>
+</tr>
+<tr>
+<td>Sert à</td>
+<td>filtrer l'arrivée</td>
+<td>contraindre une valeur de parameter</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition info">
+<p class="admonition-title">🌍 In Real Life</p>
+<p><strong>La situation</strong> : imprimer l'adresse d'un guichet ne vérifie pas que sa règle d'accueil acceptera la prochaine visite. L'adresse peut être correcte alors que cette demande sera orientée ailleurs.</p>
+<p><strong>L’équivalent dans Symfony</strong> : le générateur écrit l'URL de la route sans évaluer sa <code>condition</code>. Le matching de la future Request reste indépendant ; l'affichage conditionnel du lien et l'autorisation nécessitent leurs propres décisions.</p>
+<p><strong>Retour à la réalité technique</strong> : cette limite n'enlève pas les autres contrôles de génération, notamment variables obligatoires et requirements selon la politique active. Masquer un lien ne protège pas la ressource et une URL générable ne prouve aucun droit d'accès.</p>
+<p><strong>🧠 Comment le mémoriser</strong> : « Adresse imprimable n'est pas visite admissible. » Image mentale : invitation prête devant un contrôle encore à passer. Question-réflexe : ai-je seulement généré le lien ou vérifié le contexte de sa future utilisation ?</p>
+<p><strong>⚠️ À ne pas confondre</strong> : condition de matching, requirement de paramètre et règle Security.</p>
+</div><aside class="enrichment" aria-label="Autre explication"><p>Une invitation peut imprimer une adresse même si une condition d'entrée refuserait son porteur. Le generator imprime le lien ; la condition reste une décision du matching, pas une règle d'authorization.</p></aside></section><section class="teaching-section" data-section="s-pieges-d-examen"><h2 id="s-pieges-d-examen" tabindex="-1">Pièges d&#x27;examen</h2><p class="teaching-label pitfall"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="warning" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3L23 21H1L12 3ZM12 9V14M12 17V18"></path></svg> <strong>Piège à éviter</strong></p><ul class="pitfall-list"><li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : Où en est-on ?</summary><p><strong>Où en est-on ?</strong> Les erreurs de QCM probables et la raison de leur plausibilité.</p></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : Une condition ne s&#x27;applique pas à la génération d&#x27;URL.</summary><p><strong>Une condition ne s'applique pas à la génération d'URL.</strong> Une route protégée
+par une condition reste parfaitement générable, y compris vers un contexte où
+elle ne correspondrait pas.
+<em>Pourquoi on se trompe :</em> on lit « condition » comme « règle de la route », donc
+valable dans les deux sens, comme un requirement.</p></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : Une condition filtre l&#x27;entrée ; elle ne documente pas l&#x27;output.</summary><p><strong>Une condition filtre l'entrée ; elle ne documente pas l'output.</strong> C'est toute
+la différence avec un requirement de parameter, qui vaut dans les deux sens.
+<em>Pourquoi on se trompe :</em> les deux options restreignent la route.</p></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : L&#x27;expression est compilée en PHP, pas interprétée à chaque Request.</summary><p><strong>L'expression est compilée en PHP, pas interprétée à chaque Request.</strong> Elle est
+compilée une fois dans le cache du router ; seul le PHP qui en résulte
+s'exécute à chaque Request.
+<em>Pourquoi on se trompe :</em> ExpressionLanguage évoque un interpréteur appelé à
+chaque évaluation.</p></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : Condition fausse : pas de 405.</summary><p><strong>Condition fausse : pas de 405.</strong> La route disparaît avant le contrôle de
+method.
+<em>Pourquoi on se trompe :</em> on imagine que la method est toujours vérifiée en
+premier, comme pour une route sans condition.</p></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : Une condition n&#x27;est pas une autorisation.</summary><p><strong>Une condition n'est pas une autorisation.</strong> Le User-Agent est fourni par le
+client ; la sécurité relève du component Security.
+<em>Pourquoi on se trompe :</em> « seuls les Firefox accèdent à la route » ressemble à
+un contrôle d'accès.</p></details></li></ul></section><section class="teaching-section" data-section="s-application"><h2 id="s-application" tabindex="-1">Application</h2><aside class="section-digest" id="s-application-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>condition filtre l&#x27;entrée.</li><li>L&#x27;expression peut être compilée dans le cache du matcher.</li><li>Une condition fausse retire la route des candidates.</li><li>Sans autre correspondance, le résultat est 404.</li></ol></aside>
+
+
+
+</section><section class="teaching-section" data-section="s-fiche-express"><h2 id="s-fiche-express" tabindex="-1">Fiche express</h2><p class="teaching-label essential"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="book" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5C9 3 5 3 2 4V20C5 19 9 19 12 21C15 19 19 19 22 20V4C19 3 15 3 12 5V21M5 8H8M5 12H8M16 8H19M16 12H19"></path></svg> <strong>À mémoriser</strong></p><p><strong>🧠 À retenir pour la certification :</strong></p>
+<ul>
+<li><code>condition</code> = <strong>ExpressionLanguage</strong>, compilée <strong>une fois</strong> en PHP.</li>
+<li>Variables : <strong><code>context</code></strong>, <strong><code>request</code></strong>, <strong><code>params</code></strong>.</li>
+<li>Functions : <strong><code>env()</code></strong>, <strong><code>service()</code></strong> (<code>#[AsRoutingConditionService]</code>).</li>
+<li>Fausse → candidate ignorée ; <strong>404 seulement si aucune autre ne correspond</strong>.</li>
+<li>Vraie → les contrôles suivants (method, schéma) s'appliquent.</li>
+<li><strong>Ignorée</strong> à la génération d'URL.</li>
+</ul>
+<p>Moyen mnémotechnique : <strong>« La condition filtre l'arrivée, jamais la génération »</strong>.</p>
+<p>Phrase de mémorisation : <strong>« Mon expression est compilée une fois en PHP, exécutée
+pour chaque candidate avant method et schéma ; fausse, la route disparaît sans 405 ;
+et le générateur, qui n'a pas de Request, ne la connaît pas. »</strong></p></section><section class="teaching-section" data-section="s-sources-officielles"><h2 id="s-sources-officielles" tabindex="-1">Sources officielles</h2><ul>
+<li><a href="https://symfony.com/doc/8.0/routing.html">Routing, section « Matching Expressions »</a></li>
+<li><a href="https://symfony.com/doc/8.0/routing.html"><code>CompiledUrlMatcherDumper::compileRoute()</code></a> et <a href="https://symfony.com/doc/8.0/routing.html"><code>CompiledUrlMatcherTrait::doMatch()</code></a></li>
+<li><a href="https://symfony.com/doc/8.0/reference/configuration/framework.html">FrameworkBundle, <code>services.php</code></a> et <a href="https://symfony.com/doc/8.0/reference/configuration/framework.html"><code>AsRoutingConditionService</code></a></li>
+</ul></section><section id="course-recalls" aria-labelledby="course-recalls-title" tabindex="-1"><h2 id="course-recalls-title">Rappels et liens avec les autres cours</h2><div data-recall-group="current"><h3>Rappels du cours actuel</h3><ul><li data-recall-course="CRS-f92d09x14ggx" data-recall-kind="digest_reference"><p class="recall-provenance">Module 05 — Routage · Cours « Conditional request matching »</p><p class="digest-reference"><a href="#s-le-schema-digest">Revoir la règle : context expose le RequestContext.</a></p></li><li data-recall-course="CRS-f92d09x14ggx" data-recall-kind="digest_reference"><p class="recall-provenance">Module 05 — Routage · Cours « Conditional request matching »</p><p class="digest-reference"><a href="#s-l-essentiel-digest">Revoir la règle : condition filtre l&#x27;entrée.</a></p></li><li><nav aria-label="Flashcards de l’application"><ul><li data-recall-course="CRS-f92d09x14ggx" data-recall-kind="application"><p class="recall-provenance">Module 05 — Routage · Cours « Conditional request matching »</p><a href="#A-f92d09x14ggx-65c42c80d9-01">Flashcard : condition filtre l&#x27;entrée. L&#x27;expression peut être compilée dans le cache du matcher.</a></li><li data-recall-course="CRS-f92d09x14ggx" data-recall-kind="application"><p class="recall-provenance">Module 05 — Routage · Cours « Conditional request matching »</p><a href="#A-f92d09x14ggx-10f2a008bc-03">Flashcard : Une condition fausse retire la route des candidates. Sans autre correspondance, le résultat est 404.</a></li></ul></nav></li><li data-recall-course="CRS-f92d09x14ggx" data-recall-kind="digest_reference"><p class="recall-provenance">Module 05 — Routage · Cours « Conditional request matching »</p><p class="digest-reference"><a href="#s-une-condition-fausse-efface-la-route-digest">Revoir la règle : Une condition fausse retire la route des candidates.</a></p></li></ul></div><div data-recall-group="other"><h3>Rappels des cours précédents / autres modules</h3><ul><li data-recall-course="CRS-tgbv3wp66rcc" data-recall-kind="previous_course"><p class="recall-provenance">Module 05 — Routage · Cours « Trigger redirects »</p><p>UrlMatcher peut échouer sans rediriger. Le matcher du framework cible RedirectController.</p><p><a href="#cards-previous">Rappel : <span lang="en">Does the basic UrlMatcher issue canonicalisation redirects?</span></a></p></li></ul></div></section><nav class="course-sequence" aria-label="Ordre de lecture"><a rel="prev" href="course-CRS-2b1wzm3rwdrn.html" aria-label="Précédent : Domain name matching — Module 05 — Routage">Précédent : Domain name matching</a> <a href="lot-05.html">Sommaire : Module 05 — Routage</a> <a rel="next" href="course-CRS-evzcj63fgdb7.html" aria-label="Suivant : User&#x27;s locale guessing — Module 05 — Routage">Suivant : User&#x27;s locale guessing</a></nav><p class="course-practice-entry"><a class="button" href="#view-quiz">Fin du cours — s’entraîner avec le Quiz</a></p></div><div id="view-flashcards" data-course-panel role="region" aria-labelledby="view-flashcards-title"><h2 id="view-flashcards-title">Flashcards</h2><p lang="en">Answer before revealing each card.</p><p>Ces cartes ne mesurent pas une maîtrise notée.</p><div id="cards-s-l-essentiel-1" data-card-section="s-l-essentiel"><h3><a href="#s-l-essentiel">Revoir : L&#x27;essentiel</a></h3><div class="reader-cards"><details class="reader-card" id="A-f92d09x14ggx-65c42c80d9-01"><summary lang="en">When is a route condition evaluated?</summary><p lang="en">During matching; compiled routing caches contain its compiled PHP expression.</p><p lang="fr">condition filtre l&#x27;entrée. L&#x27;expression peut être compilée dans le cache du matcher.</p><a href="course-CRS-f92d09x14ggx.html#out-OUT-s9bajh1gydjw">Revoir le passage précis</a></details></div></div><div id="cards-s-le-schema-2" data-card-section="s-le-schema"><h3><a href="#s-le-schema">Revoir : Le schéma</a></h3><div class="reader-cards"><details class="reader-card" id="A-f92d09x14ggx-6e0103f6cc-02"><summary lang="en">Which three variables are available to routing conditions?</summary><p lang="en">context, request and params.</p><p lang="fr">context expose le RequestContext. request donne la Request ; params les parameters déjà appariés.</p><a href="course-CRS-f92d09x14ggx.html#out-OUT-er1yxf3bmwn9">Revoir le passage précis</a></details></div></div><div id="cards-s-l-exemple-3" data-card-section="s-l-exemple"><h3><a href="#s-l-exemple">Revoir : L&#x27;exemple</a></h3><div class="reader-cards"><p class="reader-card-reference" id="A-f92d09x14ggx-88b6fbd62c-02">Rappel déjà proposé : <a lang="en" href="#A-f92d09x14ggx-6e0103f6cc-02">Which three variables are available to routing conditions?</a> · <a href="course-CRS-f92d09x14ggx.html#out-OUT-er1yxf3bmwn9">Passage canonique</a></p></div></div><div id="cards-s-l-option-condition-4" data-card-section="s-l-option-condition"><h3><a href="#s-l-option-condition">Revoir : L&#x27;option `condition`</a></h3><div class="reader-cards"><p class="reader-card-reference" id="A-f92d09x14ggx-8e34a46fe2-01">Rappel déjà proposé : <a lang="en" href="#A-f92d09x14ggx-65c42c80d9-01">When is a route condition evaluated?</a> · <a href="course-CRS-f92d09x14ggx.html#out-OUT-s9bajh1gydjw">Passage canonique</a></p></div></div><div id="cards-s-les-variables-disponibles-5" data-card-section="s-les-variables-disponibles"><h3><a href="#s-les-variables-disponibles">Revoir : Les variables disponibles</a></h3><div class="reader-cards"><p class="reader-card-reference" id="A-f92d09x14ggx-5e76cab920-02">Rappel déjà proposé : <a lang="en" href="#A-f92d09x14ggx-6e0103f6cc-02">Which three variables are available to routing conditions?</a> · <a href="course-CRS-f92d09x14ggx.html#out-OUT-er1yxf3bmwn9">Passage canonique</a></p><details class="reader-card" id="INT-037"><summary lang="en">How can a service be exposed to routing conditions?</summary><p lang="en">Mark it with AsRoutingConditionService or the routing.condition_service tag, then use service(alias).</p><p lang="fr">La condition utilise un locator limité à ces services, pas tout le container.</p><a href="course-CRS-f92d09x14ggx.html#out-OUT-tgxzpmwjg951">Revoir le passage précis</a></details></div></div><div id="cards-s-une-condition-fausse-efface-la-route-6" data-card-section="s-une-condition-fausse-efface-la-route"><h3><a href="#s-une-condition-fausse-efface-la-route">Revoir : Une condition fausse efface la route</a></h3><div class="reader-cards"><details class="reader-card" id="A-f92d09x14ggx-10f2a008bc-03"><summary lang="en">Does a route with a false condition contribute its methods to a 405 response?</summary><p lang="en">No. It is rejected before that method decision.</p><p lang="fr">Une condition fausse retire la route des candidates. Sans autre correspondance, le résultat est 404.</p><a href="course-CRS-f92d09x14ggx.html#out-OUT-s9bajh1gydjw">Revoir le passage précis</a></details></div></div><div id="cards-s-la-limite-et-elle-est-importante-7" data-card-section="s-la-limite-et-elle-est-importante"><h3><a href="#s-la-limite-et-elle-est-importante">Revoir : La limite, et elle est importante</a></h3><div class="reader-cards"><details class="reader-card" id="A-f92d09x14ggx-f007ade03a-04"><summary lang="en">Does a false route condition prevent generating its URL?</summary><p lang="en">No. Conditions are not evaluated during URL generation.</p><p lang="fr">Le generator ne dispose pas du contexte de matching. Un lien généré peut viser une route qui ne correspondrait pas à la Request.</p><a href="course-CRS-f92d09x14ggx.html#out-OUT-413aqdhzwkfw">Revoir le passage précis</a></details></div></div><div id="cards-s-pieges-d-examen-8" data-card-section="s-pieges-d-examen"><h3><a href="#s-pieges-d-examen">Revoir : Pièges d&#x27;examen</a></h3><div class="reader-cards"><p class="reader-card-reference" id="A-f92d09x14ggx-596d5af532-01">Rappel déjà proposé : <a lang="en" href="#A-f92d09x14ggx-65c42c80d9-01">When is a route condition evaluated?</a> · <a href="course-CRS-f92d09x14ggx.html#out-OUT-s9bajh1gydjw">Passage canonique</a></p></div></div><div id="cards-s-application-9" data-card-section="s-application"><h3><a href="#s-application">Revoir : Application</a></h3><div class="reader-cards"><p class="reader-card-reference" id="A-f92d09x14ggx-e7ad522ea3-01">Rappel déjà proposé : <a lang="en" href="#A-f92d09x14ggx-65c42c80d9-01">When is a route condition evaluated?</a> · <a href="course-CRS-f92d09x14ggx.html#out-OUT-s9bajh1gydjw">Passage canonique</a></p><p class="reader-card-reference" id="A-f92d09x14ggx-e7ad522ea3-03">Rappel déjà proposé : <a lang="en" href="#A-f92d09x14ggx-10f2a008bc-03">Does a route with a false condition contribute its methods to a 405 response?</a> · <a href="course-CRS-f92d09x14ggx.html#out-OUT-s9bajh1gydjw">Passage canonique</a></p></div></div><div id="cards-s-fiche-express-10" data-card-section="s-fiche-express"><h3><a href="#s-fiche-express">Revoir : Fiche express</a></h3><div class="reader-cards"><p class="reader-card-reference" id="A-f92d09x14ggx-b11e58e15e-03">Rappel déjà proposé : <a lang="en" href="#A-f92d09x14ggx-10f2a008bc-03">Does a route with a false condition contribute its methods to a 405 response?</a> · <a href="course-CRS-f92d09x14ggx.html#out-OUT-s9bajh1gydjw">Passage canonique</a></p></div></div><div id="cards-previous"><p class="recall-provenance">Module 05 — Routage · Cours « Trigger redirects »</p><aside class="checkpoint"><h2>Rappel d’un cours antérieur</h2><p>Avant de poursuivre : Trigger redirects.</p><details class="corpus-correction"><summary lang="en">Does the basic UrlMatcher issue canonicalisation redirects?</summary><p lang="en">No. FrameworkBundle&#x27;s redirectable matcher supplies that behaviour.</p><p>UrlMatcher peut échouer sans rediriger. Le matcher du framework cible RedirectController.</p><a href="course-CRS-tgbv3wp66rcc.html#out-OUT-khhjkt6203k6">Relire la correction dans le cours antérieur</a></details></aside></div></div><div id="view-quiz" data-course-panel role="region" aria-labelledby="view-quiz-title"><aside class="revision-context"><p><strong>Avant le quiz :</strong> Conditionner l&#x27;appariement d&#x27;une route à une logique arbitraire, et connaître la limite de ce mécanisme.</p><p>Quelle donnée entre, quelle responsabilité agit et quelle condition change le résultat ? Pour chaque correction, vérifiez ces conditions dans <a href="course-CRS-f92d09x14ggx.html#s-objectif">le passage enseigné</a>, sans supposer que toutes les branches du blog sont exécutées.</p></aside><h2 id="view-quiz-title">Quiz</h2><p class="quiz-size" lang="en">5 eligible learning questions · 5 per session. Repeating a question does not demonstrate mastery.</p><p id="course-quiz-status" role="status">Quiz interactif non chargé. Démarrez après chargement de la banque locale.</p><div id="course-quiz-controls" class="assessment-main" hidden><div id="course-quiz-assessment-controls" hidden><select id="course-quiz-assessment-mode" aria-label="Mode du quiz" hidden><option value="learning">Entraînement</option></select><p id="course-quiz-training-scope"></p><button id="course-quiz-start-assessment" type="button" lang="en">Start practice</button><button id="course-quiz-finish-assessment" type="button" lang="en" hidden>End session</button></div><p id="course-quiz-assessment-error" role="alert"></p><p id="course-quiz-assessment-timer" hidden></p><p id="course-quiz-session-progress" class="quiz-progress" role="status" lang="en"></p><div id="course-quiz-assessment-app" tabindex="-1"></div><nav id="course-quiz-session-navigation" aria-label="Questions du cours"></nav><div id="course-quiz-learning-overview" aria-live="polite"></div></div><div id="course-quiz-native"><p>Sans JavaScript ou si le chargement échoue : aucune tentative notée. Les <a href="#view-flashcards">flashcards du cours</a> restent disponibles.</p><details class="course-quiz-fallback" data-question-id="L-f92d09x14ggx-base-v1"><summary lang="en">RADIO — Select one answer. When is a route condition evaluated?</summary><p>Correction de consultation — non notée.</p><p>condition filtre l&#x27;entrée. L&#x27;expression peut être compilée dans le cache du matcher.</p><ul><li><strong lang="en">Distractor: Only during URL generation, never on incoming requests.</strong><p>condition filtre le matching entrant.</p></li><li><strong lang="en">Distractor: Only when clearing the cache, using that moment&#x27;s request.</strong><p>Le cache contient l&#x27;expression compilée ; elle s&#x27;évalue pour la Request.</p></li><li><strong lang="en">Correct: During matching; its expression may be compiled into PHP.</strong><p>condition filtre l&#x27;entrée. L&#x27;expression peut être compilée dans le cache du matcher.</p></li></ul><a href="course-CRS-f92d09x14ggx.html#out-OUT-s9bajh1gydjw">Relire le passage exact</a><a href="course-CRS-f92d09x14ggx.html#s-l-option-condition">Relire la correction précise</a></details></div></div></div></div><details class="transfer-panel"><summary>Sauvegarde et transfert de progression</summary><p id="reading-status" role="status">Sans JavaScript : lecture libre ; progression non enregistrée.</p><p><a href="assessment.html#overview-title">Lecture, réussites immédiates et différées</a></p><p>Transfert manuel — aucune synchronisation automatique</p><p id="persistence-status" role="status"></p><button type="button" class="secondary" id="export-progress">Exporter ma progression</button><label for="import-progress">Choisir un JSON pour fusionner ma progression (sans remplacement)</label><input type="file" id="import-progress" accept="application/json,.json"><p id="transfer-status" role="status"></p></details></main><footer class="site-footer"><a href="catalogue.html">Catalogue</a> <a href="sources.html">Sources et attribution</a> <a href="#contenu">Haut de page</a></footer></body></html>

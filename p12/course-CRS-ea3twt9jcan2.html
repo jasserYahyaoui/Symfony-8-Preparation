@@ -1,0 +1,413 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; connect-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'"><meta name="viewport" content="width=device-width, initial-scale=1"><title>The request — Symfony 8 Preparation</title><link rel="stylesheet" href="styles.css"><link rel="stylesheet" href="reader.css"><script src="mermaid.min.js" defer></script><script src="mermaid-init.js" defer></script><link rel="stylesheet" href="assessment.css"><script src="fixed-exams-data.js" defer></script><script src="fixed-exams.js" defer></script><script src="learning-state.js" defer></script><script src="guide.js" defer></script><script src="reader-catalog.js" defer></script><script src="reader.js" defer></script><script src="site-state.js" defer></script><script src="assessment.js" defer></script><script src="course-views.js" defer></script><link rel="stylesheet" href="syntax-highlight.css"><script src="prism-syntax.js" defer></script><script src="syntax-highlight.js" defer></script></head><body data-course-id="CRS-ea3twt9jcan2"><a class="skip" href="#contenu">Aller au contenu</a><header class="site-header"><a class="brand" href="index.html">S8 Preparation</a><nav aria-label="Navigation principale"><a href="index.html">Accueil</a> <a href="catalogue.html">Parcours</a> <a href="assessment.html?mode=review">Réviser</a> <a href="examens.html">Examens blancs</a> <a href="jour-j.html">Jour J</a></nav></header><main id="contenu" tabindex="-1" class="corpus-reader"><nav class="breadcrumb" aria-label="Fil d’Ariane"><a href="index.html">Accueil</a> <span aria-hidden="true">›</span> <a href="catalogue.html">Parcours</a> <span aria-hidden="true">›</span> <a href="lot-04.html">Module 04 — Contrôleurs</a> <span aria-hidden="true">›</span> <span aria-current="page">The request</span></nav><h1>The request</h1><p class="muted">Symfony 8.0 · API PHP ≤ 8.4 · Twig ≤ 3.22. Préparation indépendante.</p><p class="revision-status">Rédaction narrative P11 : projection nouvelle, non couverte par les décisions historiques P10. Aucune approbation officielle ni garantie de réussite.</p><aside class="narrative-context" aria-label="Repères de lecture"><p><strong>Prérequis de lecture :</strong> <a href="course-CRS-wg3j0t5pm7w1.html">Restrict URL parameters</a></p><p><strong>Concepts voisins :</strong> <a href="course-CRS-kqq96z5y9r2f.html">Configuration (YAML and PHP attributes)</a> — Retrouver la route avant le callable. <a href="lot-04.html">Comparer les responsabilités dans ce module</a> · <a href="carte-composants.html">Situer cette responsabilité dans le blog</a> · <a href="glossaire.html">Distinguer les termes voisins</a></p><p><a href="ordre-lecture.html">Retrouver les 163 cours dans le parcours recommandé</a>. Ce repère ne modifie ni votre historique ni votre progression.</p></aside><div class="course-layout"><details class="lot-course-menu"><summary>Cours du module · 14 cours</summary><nav aria-label="Cours du module"><a class="lot-context" href="lot-04.html">Module 04 — Contrôleurs</a><ol><li><a href="course-CRS-tygmreqkkds3.html">HttpKernel component and FrameworkBundle</a></li><li><a href="course-CRS-9fz4erg0wmbq.html">Naming conventions</a></li><li><a href="course-CRS-h8s87edcx8ae.html">The base AbstractController class</a></li><li><a href="course-CRS-ea3twt9jcan2.html" aria-current="page">The request</a></li><li><a href="course-CRS-a669jpap5zf2.html">The response</a></li><li><a href="course-CRS-thmkagkjcvh3.html">The cookies</a></li><li><a href="course-CRS-a51fqgqynr2d.html">The session</a></li><li><a href="course-CRS-ak7sdgcdjb7e.html">The flash messages</a></li><li><a href="course-CRS-7zy5ndjgnpk1.html">HTTP redirects</a></li><li><a href="course-CRS-fd24qxy0x1s6.html">Internal redirects</a></li><li><a href="course-CRS-p57qsnnfpd2a.html">Generate 404 pages</a></li><li><a href="course-CRS-5pns7nw7612s.html">File upload</a></li><li><a href="course-CRS-zmg0wrxvqqdq.html">Built-in internal controllers</a></li><li><a href="course-CRS-d5ffd8b704zs.html">Argument value resolvers</a></li></ol><a href="lot-04.html#view-quiz">Quiz du module</a></nav></details><aside class="course-section-menu" aria-label="Sommaire du cours"><nav class="course-actions" aria-label="Activités du cours"><a id="tab-course" href="#view-course">Cours</a><a id="tab-flashcards" href="#view-flashcards">Flashcards</a><a id="tab-quiz" href="#view-quiz">Quiz</a></nav><details class="course-section-disclosure"><summary id="course-sections">Sections du cours</summary><nav aria-label="Sections du cours"><ul><li><a href="#s-objectif">Objectif</a></li><li><a href="#s-l-essentiel">L&#x27;essentiel</a></li><li><a href="#s-le-schema">Le schéma</a></li><li><a href="#s-l-exemple-une-route-a-parameter">L&#x27;exemple : une route à parameter</a></li><li><a href="#s-l-obtenir">L&#x27;obtenir</a><ul><li><a href="#s-l-obtenir-nested-1-dans-un-controleur-pourquoi-symfony-peut-il-mettre-une-request-dans-request">1. Dans un contrôleur : pourquoi Symfony peut-il mettre une Request dans $request ?</a></li><li><a href="#s-l-obtenir-nested-2-dans-un-service-pourquoi-requeststack-et-pas-request">2. Dans un service : pourquoi RequestStack et pas Request ?</a></li><li><a href="#s-l-obtenir-nested-3-pourquoi-une-pile">3. Pourquoi une pile ?</a></li></ul></li><li><a href="#s-les-parameters-de-route">Les parameters de route</a></li><li><a href="#s-body-et-query-string">Body et query string</a></li><li><a href="#s-pieges-d-examen">Pièges d&#x27;examen</a></li><li><a href="#s-application">Application</a></li><li><a href="#s-fiche-express">Fiche express</a></li><li><a href="#s-sources-officielles">Sources officielles</a></li><li><a href="#reader-objectives">Objectifs d’apprentissage</a></li><li><a href="#course-recalls">Rappels et liens avec les autres cours</a></li></ul></nav><nav aria-label="Flashcards par section"><a href="#view-flashcards">Flashcards par section</a><ul><li><a href="#cards-s-l-essentiel-1">L&#x27;essentiel</a></li><li><a href="#cards-s-le-schema-2">Le schéma</a></li><li><a href="#cards-s-l-exemple-une-route-a-parameter-3">L&#x27;exemple : une route à parameter</a></li><li><a href="#cards-s-l-obtenir-4">L&#x27;obtenir</a></li><li><a href="#cards-s-les-parameters-de-route-5">Les parameters de route</a></li><li><a href="#cards-s-body-et-query-string-6">Body et query string</a></li><li><a href="#cards-s-pieges-d-examen-7">Pièges d&#x27;examen</a></li><li><a href="#cards-s-application-8">Application</a></li><li><a href="#cards-s-fiche-express-9">Fiche express</a></li><li><a href="#cards-previous">Module 05 — Routage · Cours « Configuration (YAML and PHP attributes) » · Rappel : <span lang="en">Does Symfony choose the most specific matching route automatically?</span></a></li></ul></nav><nav aria-label="Retour au module"><a href="lot-04.html">Tous les cours du module</a></nav></details><p class="local-quiz-count">5 questions disponibles · 5 par session Quiz</p></aside><div class="course-content"><div id="view-course" data-course-panel role="region" aria-labelledby="view-course-title"><h2 id="view-course-title">Cours</h2><p class="course-introduction"><a href="#s-objectif">Introduction</a> · <a href="#course-sections">Sections du cours</a></p><h2 id="reader-objectives" tabindex="-1">Objectifs d’apprentissage</h2><ul><li><a href="course-CRS-ea3twt9jcan2.html#out-OUT-gvjp79xbcjsb">Obtenir la Request dans un controller et dans un service</a></li><li><a href="course-CRS-ea3twt9jcan2.html#out-OUT-8y8ytxt6m5v1">Expliquer l&#x27;appariement par nom des parameters de route</a></li><li><a href="course-CRS-ea3twt9jcan2.html#out-OUT-y2d9m024g5gk">Citer _route et _controller comme attributes de Request</a></li><li><a href="course-CRS-ea3twt9jcan2.html#out-OUT-axr8r9fatztr">Distinguer getPayload() du sac request</a></li></ul><aside class="pedagogy-legend" aria-label="Repères pédagogiques"><p><strong>Repères pédagogiques</strong></p><p>Ces repères décrivent le rôle du bloc, pas une fréquence officielle à l’examen.</p><p class="teaching-label essential"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="brain" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5C12 1 6 1 6 5C2 5 1 10 4 12C1 15 3 19 6 19C6 23 12 23 12 19V5M12 5C12 1 18 1 18 5C22 5 23 10 20 12C23 15 21 19 18 19C18 23 12 23 12 19M6 5C6 8 8 9 9 9M4 12H7L9 14M6 19V16M18 5C18 8 16 9 15 9M20 12H17L15 14M18 19V16"></path></svg> <strong>À comprendre</strong></p><p class="teaching-label essential"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="book" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5C9 3 5 3 2 4V20C5 19 9 19 12 21C15 19 19 19 22 20V4C19 3 15 3 12 5V21M5 8H8M5 12H8M16 8H19M16 12H19"></path></svg> <strong>À mémoriser</strong></p><p class="teaching-label example"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="code" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6L2 12L8 18M16 6L22 12L16 18M14 3L10 21"></path></svg> <strong>Exemple concret</strong></p><p class="teaching-label pitfall"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="warning" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3L23 21H1L12 3ZM12 9V14M12 17V18"></path></svg> <strong>Piège à éviter</strong></p><p class="teaching-label nuance"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="balance" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3V21M7 21H17M3 7L21 5M5 7L1 15H9L5 7M19 6L15 14H23L19 6M1 15Q5 20 9 15M15 14Q19 19 23 14"></path></svg> <strong>Nuance à connaître</strong></p><p>Précision, exception ou condition d’application d’une règle.</p></aside><section class="teaching-section" data-section="s-objectif"><h2 id="s-objectif" tabindex="-1">Objectif</h2><p>Sur <code>GET /blog/42?limit=5</code>, le contrôleur reçoit des valeurs qui viennent de
+trois endroits différents : la <code>Request</code> elle-même, l'identifiant <code>42</code> du
+chemin et la limite <code>5</code> de la query string. Ce cours répond à une seule
+question : <strong>d'où vient chaque valeur, et qui la fournit à mon code ?</strong></p>
+<p>Le modèle des sacs appartient au Module 02 — Fondamentaux HTTP, le component
+lui-même au Module 03 — Architecture Symfony.</p></section><section class="teaching-section" data-section="s-l-essentiel"><h2 id="s-l-essentiel" tabindex="-1">L&#x27;essentiel</h2><p class="teaching-label essential"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="brain" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5C12 1 6 1 6 5C2 5 1 10 4 12C1 15 3 19 6 19C6 23 12 23 12 19V5M12 5C12 1 18 1 18 5C22 5 23 10 20 12C23 15 21 19 18 19C18 23 12 23 12 19M6 5C6 8 8 9 9 9M4 12H7L9 14M6 19V16M18 5C18 8 16 9 15 9M20 12H17L15 14M18 19V16"></path></svg> <strong>À comprendre</strong></p><aside class="section-digest" id="s-l-essentiel-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Le type déclenche le resolver.</li><li>Dans un service durable, utiliser RequestStack.</li></ol></aside><p><strong>Ce que cette partie veut réellement vous apprendre.</strong></p>
+<ul>
+<li><em>Pourquoi ce sujet existe.</em> Votre code a besoin du contexte HTTP, mais il
+  n'a pas accès aux variables globales <code>$_GET</code> ou <code>$_POST</code>. Symfony les
+  enveloppe dans un objet <code>Request</code> et doit donc vous dire <strong>comment le
+  récupérer</strong>.</li>
+<li><em>Le piège de fond.</em> Il existe deux chemins différents, selon que vous êtes
+  dans un <strong>contrôleur</strong> ou dans un <strong>service</strong>. Les confondre est l'erreur
+  classique de certification.</li>
+<li><em>Ce que l'auteur veut que vous compreniez.</em> Dans un contrôleur, Symfony
+  <strong>vous donne</strong> la Request pendant l'appel. Dans un service, vous
+  <strong>consultez</strong> la pile des requêtes quand vous en avez besoin.</li>
+<li><em>Pourquoi c'est à l'examen.</em> Les questions portent presque toujours sur
+  cette frontière (résolution d'argument ≠ autowiring), sur <code>RequestStack</code>
+  (courante, principale, parente, session) et sur <code>getPayload()</code>.</li>
+</ul></section><section class="teaching-section" data-section="s-le-schema"><h2 id="s-le-schema" tabindex="-1">Le schéma</h2><p>La Request est un objet qui contient <strong>toutes les données HTTP reçues</strong>.
+Ce cours la suit en trois étapes :</p>
+<pre class="highlight" tabindex="0"><code class="language-text">La Request
+   ├─ 1. Comment l'obtenir ?       → contrôleur / RequestStack
+   ├─ 2. Où est l'info de l'URL ?  → attributes (route), query (?limit=5)
+   └─ 3. Où est l'info du corps ?  → request (formulaire) ou JSON
+                                      └─ getPayload() choisit entre les deux</code></pre>
+<p>Commençons par le chemin d'exécution complet de <code>GET /blog/42?limit=5</code>.</p>
+<figure class="diagram" aria-labelledby="CRS-ea3twt9jcan2-3-diagram-0-title CRS-ea3twt9jcan2-3-diagram-0-description"><figcaption id="CRS-ea3twt9jcan2-3-diagram-0-title">Chemin d&#x27;exécution de GET /blog/42?limit=5</figcaption><p id="CRS-ea3twt9jcan2-3-diagram-0-description">Le navigateur envoie la requête au HttpKernel qui crée la Request. Le routeur reconnaît /blog/{id} et range id dans attributes. Le ControllerResolver trouve l&#x27;action. L&#x27;ArgumentResolver prépare Request et id, puis l&#x27;action show est appelée.</p><div class="mermaid" hidden>---
+title: Chemin d&#x27;exécution de GET /blog/42?limit=5
+---
+sequenceDiagram
+  accTitle: Chemin d&#x27;exécution de GET /blog/42?limit=5
+  accDescr: Le navigateur envoie la requête au HttpKernel qui crée la Request. Le routeur reconnaît /blog/{id} et range id dans attributes. Le ControllerResolver trouve l&#x27;action. L&#x27;ArgumentResolver prépare Request et id, puis l&#x27;action show est appelée.
+  autonumber
+  participant N as Navigateur
+  participant K as HttpKernel
+  participant R as Router
+  participant A as ArgumentResolver
+  participant C as show(Request $request, int $id)
+  N-&gt;&gt;K: GET /blog/42?limit=5
+  K-&gt;&gt;K: crée la Request
+  K-&gt;&gt;R: quelle route ?
+  R--&gt;&gt;K: /blog/{id} → attributes[&#x27;id&#x27;] = &quot;42&quot;
+  K-&gt;&gt;A: prépare les arguments de show()
+  A--&gt;&gt;A: Request $request → RequestValueResolver
+  A--&gt;&gt;A: int $id → attribut « id »
+  A-&gt;&gt;C: appel avec $request et $id = 42
+  Note over A,C: Zoom du cours : cette étape</div></figure>
+<p>Nous allons zoomer sur <strong>deux</strong> cases : <code>ArgumentResolver</code> (contrôleur) et ce
+qui se passe quand c'est un <strong>service</strong> qui veut la Request.</p>
+<figure class="diagram" aria-labelledby="CRS-ea3twt9jcan2-3-diagram-1-title CRS-ea3twt9jcan2-3-diagram-1-description"><figcaption id="CRS-ea3twt9jcan2-3-diagram-1-title">La Request dans un controller, dans un service, et ses attributes</figcaption><p id="CRS-ea3twt9jcan2-3-diagram-1-description">Dans un controller, index(Request $request) : le type déclenche la résolution d&#x27;argument, le nom est libre. Dans un service, RequestStack donne getCurrentRequest(), getMainRequest(), getParentRequest() et getSession(), qui lève sans session. Pour la route /lucky/{max}, la valeur est rangée dans attributes[&#x27;max&#x27;] et passée à number(int $max), appariée par nom ; _route et _controller sont aussi dans attributes.</p><div class="mermaid" hidden>---
+title: Atteindre la Request
+---
+flowchart TD
+  accTitle: La Request dans un controller, dans un service, et ses attributes
+  accDescr: Dans un controller, index(Request $request) : le type déclenche la résolution d&#x27;argument, le nom est libre. Dans un service, RequestStack donne getCurrentRequest(), getMainRequest(), getParentRequest() et getSession(), qui lève sans session. Pour la route /lucky/{max}, la valeur est rangée dans attributes[&#x27;max&#x27;] et passée à number(int $max), appariée par nom ; _route et _controller sont aussi dans attributes.
+  RQ([&quot;la Request&quot;]) --&gt;|&quot;dans un controller&quot;| C[&quot;index(Request $request)&lt;br/&gt;le type déclenche la résolution d&#x27;argument,&lt;br/&gt;le nom est libre&quot;]
+  RQ --&gt;|&quot;dans un service&quot;| S[&quot;RequestStack →&lt;br/&gt;getCurrentRequest()&lt;br/&gt;getMainRequest()&lt;br/&gt;getParentRequest()&lt;br/&gt;getSession() (lève)&quot;]
+  C --&gt;|&quot;résolution des arguments à partir des attributs&quot;| R[&quot;/lucky/{max}&lt;br/&gt;attributes[&#x27;max&#x27;] → argument $max&quot;]
+  classDef access fill:#e0f2fe,stroke:#0369a1,color:#0c4a6e
+  class RQ,C,S,R access</div></figure></section><section class="teaching-section" data-section="s-l-exemple-une-route-a-parameter"><h2 id="s-l-exemple-une-route-a-parameter" tabindex="-1">L&#x27;exemple : une route à parameter</h2><p class="teaching-label example"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="code" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6L2 12L8 18M16 6L22 12L16 18M14 3L10 21"></path></svg> <strong>Exemple concret</strong></p><p>On met les trois étapes dans un seul mini-contrôleur : on <strong>obtient</strong> la
+Request (1), on lit une valeur de <strong>route</strong> (2) et une valeur de <strong>query
+string</strong> (2). Le corps (3) vient plus loin.</p>
+<p>Code minimal d'abord : un seul contrôleur, une seule route.</p>
+<pre class="highlight" tabindex="0"><code class="language-php">use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Attribute\Route;
+
+final class LuckyController
+{
+    #[Route('/lucky/number/{max}', requirements: ['max' =&gt; '\d+'])]
+    public function number(Request $request, int $max): Response
+    {
+        $limit = $request-&gt;query-&gt;getInt('limit', 10);   // ?limit=5
+        return new Response(sprintf('max=%d, limit=%d', $max, $limit));
+    }
+}</code></pre>
+<p>Pour <code>/lucky/number/42?limit=5</code>, le résultat est <code>max=42, limit=5</code>.</p>
+<p>Avant / après, pour visualiser l'origine de chaque valeur :</p>
+<pre class="highlight" tabindex="0"><code class="language-text">/lucky/number/42?limit=5
+              │  │     │
+              │  │     └── query string  → $request-&gt;query   (lu explicitement)
+              │  └──────── {max}         → attributes['max'] → argument $max
+              └─────────── chemin reconnu par le routeur</code></pre>
+<p>Ce que Symfony voit dans <code>number(Request $request, int $max)</code> :</p>
+<table>
+<thead>
+<tr>
+<th>Argument</th>
+<th>Ce que Symfony cherche</th>
+<th>Qui le fournit</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Request $request</code></td>
+<td>un argument typé <code>Request</code></td>
+<td>le <code>RequestValueResolver</code></td>
+</tr>
+<tr>
+<td><code>int $max</code></td>
+<td>un attribut de Request nommé <code>max</code></td>
+<td>le resolver d'attributs</td>
+</tr>
+<tr>
+<td>(rien pour <code>limit</code>)</td>
+<td>—</td>
+<td><strong>personne</strong> : on le lit nous-mêmes dans <code>query</code></td>
+</tr>
+</tbody>
+</table>
+<p>La route ne mappe pas automatiquement les paramètres de la query string vers
+les arguments.</p>
+<div class="admonition info">
+<p class="admonition-title">🌍 In Real Life</p>
+<p><strong>La situation</strong> : le bon porte le numéro demandé et une note complémentaire. Lire le numéro ne revient pas à lire toutes les notes.</p>
+<p><strong>L’équivalent dans Symfony</strong> : numéro extrait de la destination → <code>{max}</code> dans les attributes ; note après <code>?</code> → <code>limit</code> dans <code>query</code> ; lecture explicite de la note → <code>query-&gt;getInt('limit', 10)</code>.</p>
+<p><strong>Retour à la réalité technique</strong> : pour <code>/lucky/number/42?limit=5</code>, les deux valeurs viennent de sources distinctes. Le requirement <code>\d+</code> contraint le matching du segment ; il ne mappe pas la query string, ne valide pas toutes les règles métier et ne charge aucune donnée du blog.</p>
+<p><strong>🧠 Comment le mémoriser</strong> : « Même URL, tiroirs différents. » Image mentale : numéro et note dans deux cases du bon. Question-réflexe : « Cette valeur vient-elle du chemin reconnu ou de la query string ? »</p>
+<p><strong>⚠️ À ne pas confondre</strong> : obtenir un entier ne garantit pas qu’il soit acceptable pour le métier.</p>
+</div></section><section class="teaching-section" data-section="s-l-obtenir"><span class="outcome-anchor" id="out-OUT-gvjp79xbcjsb" tabindex="-1"></span><h2 id="s-l-obtenir" tabindex="-1">L&#x27;obtenir</h2><p><strong>Où en est-on ?</strong> Étape 1 sur 3 : avant de lire la moindre donnée HTTP, il
+faut déjà <strong>avoir la Request entre les mains</strong>. Un contrôleur et un service
+n'y arrivent pas de la même façon ; c'est ce que cette partie sépare.</p>
+<h3 tabindex="-1" id="s-l-obtenir-nested-1-dans-un-controleur-pourquoi-symfony-peut-il-mettre-une-request-dans-request">1. Dans un contrôleur : pourquoi Symfony peut-il mettre une Request dans <code>$request</code> ?</h3>
+<p>Écrivons le contrôleur le plus simple possible :</p>
+<pre class="highlight" tabindex="0"><code class="language-php">public function index(Request $request): Response
+{
+}</code></pre>
+<p>Il y a ici un mystère : <strong>personne n'a écrit</strong> <code>$controller-&gt;index($request)</code>.
+Qui appelle l'action, et d'où sort <code>$request</code> ?</p>
+<p>Symfony doit appeler <code>index(...)</code>. Avant de le faire, il inspecte la signature :</p>
+<pre class="highlight" tabindex="0"><code class="language-text">Je dois appeler index(Request $request)
+        ↓
+Je lis la liste des arguments demandés
+        ↓
+Je vois un argument de type Request
+        ↓
+RequestValueResolver sait fournir ce type
+        ↓
+il donne la Request actuellement traitée
+        ↓
+l'action est appelée avec cette Request</code></pre>
+<p>Ce mécanisme s'appelle la <strong>résolution d'argument</strong> (<em>argument resolution</em>).
+Le composant qui l'orchestre est l'<code>ArgumentResolver</code> ; le resolver spécialisé
+pour ce type est <code>RequestValueResolver</code> (dans le câblage standard).</p>
+<p>Trois questions que l'on se pose naturellement :</p>
+<p><strong>Pourquoi le nom est-il libre ?</strong> Parce que Symfony regarde le <strong>type</strong>, pas
+le nom de variable. <code>Request $request</code>, <code>Request $req</code> et <code>Request $toto</code>
+fonctionnent de la même façon.</p>
+<p><strong>Symfony crée-t-il une nouvelle Request ?</strong> Non. Il fournit la Request qu'il
+est <strong>déjà en train de traiter</strong>. Une seule, celle de l'appel en cours.</p>
+<p><strong>Est-ce de l'autowiring ?</strong> Non, et c'est le point que le programme veut
+vous faire retenir. Comparons :</p>
+<pre class="highlight" tabindex="0"><code class="language-text">┌───────────────────────────────────────┐   ┌───────────────────────────────────────┐
+│              CONTRÔLEUR               │   │                SERVICE                │
+├───────────────────────────────────────┤   ├───────────────────────────────────────┤
+│ public function index(                │   │ public function __construct(          │
+│     Request $request                  │   │     RequestStack $requestStack        │
+│ )                                     │   │ )                                     │
+├───────────────────────────────────────┤   ├───────────────────────────────────────┤
+│ Qui intervient ?                      │   │ Qui intervient ?                      │
+│  → l'ArgumentResolver                 │   │  → le conteneur de services           │
+│  → RequestValueResolver               │   │  → l'autowiring                       │
+├───────────────────────────────────────┤   ├───────────────────────────────────────┤
+│ Quand ?                               │   │ Quand ?                               │
+│  → à CHAQUE appel de l'action         │   │  → une fois, à la construction        │
+│                                       │   │    du service                         │
+├───────────────────────────────────────┤   ├───────────────────────────────────────┤
+│ Ce que je reçois                      │   │ Ce que je reçois                      │
+│  → LA Request de cet appel            │   │  → la pile RequestStack               │
+│                                       │   │    (pas une Request figée)            │
+├───────────────────────────────────────┤   ├───────────────────────────────────────┤
+│ Mécanisme                             │   │ Mécanisme                             │
+│  = résolution d'argument              │   │  = service injecté                    │
+│                                       │   │    puis CONSULTÉ au moment utile      │
+│                                       │   │    getCurrentRequest()                │
+└───────────────────────────────────────┘   └───────────────────────────────────────┘</code></pre>
+<p>Pourquoi la mauvaise réponse semble plausible : dans les deux cas on écrit un
+type dans une signature, donc on croit qu'une seule mécanique (l'autowiring)
+est à l'œuvre. Le contrôleur est résolu <strong>argument par argument, à chaque
+appel</strong> ; le service est construit <strong>par le conteneur</strong>, avec ses
+dépendances.</p>
+<h3 tabindex="-1" id="s-l-obtenir-nested-2-dans-un-service-pourquoi-requeststack-et-pas-request">2. Dans un service : pourquoi <code>RequestStack</code> et pas <code>Request</code> ?</h3>
+<p>Un service est créé par le conteneur, puis réutilisé. Les services sont
+partagés par défaut dans leur conteneur, mais leur durée de vie n'est pas
+universellement « une fois pour toutes » : elle dépend du conteneur et de la
+configuration. La requête courante, elle, <strong>change</strong> (autre requête, sous-requête,
+absence totale de requête en console).</p>
+<p>Si on figeait une <code>Request</code> dans le constructeur, on risquerait de conserver
+une ancienne requête. Donc on garde le <strong>moyen de la retrouver</strong> :</p>
+<pre class="highlight" tabindex="0"><code class="language-php">use Symfony\Component\HttpFoundation\RequestStack;
+
+final class LocaleReader
+{
+    public function __construct(private RequestStack $requestStack)
+    {
+    }
+
+    public function locale(): ?string
+    {
+        return $this-&gt;requestStack-&gt;getCurrentRequest()?-&gt;getLocale();
+    }
+}</code></pre>
+<p><code>?-&gt;</code> : hors HTTP (commande console), <code>getCurrentRequest()</code> peut rendre <code>null</code>.</p>
+<h3 tabindex="-1" id="s-l-obtenir-nested-3-pourquoi-une-pile">3. Pourquoi une <em>pile</em> ?</h3>
+<p>Symfony peut traiter une requête <strong>pendant</strong> une autre : c'est la <strong>sous-requête</strong>
+(par exemple un fragment de page rendu séparément).</p>
+<pre class="highlight" tabindex="0"><code class="language-text">RequestStack  (le dessus = ce qui est traité maintenant)
+
+┌─────────────────────────────┐
+│ GET /fragment/menu          │ ← Current Request  (sous-requête)
+├─────────────────────────────┤
+│ GET /page                   │ ← Main Request  ET  Parent Request
+└─────────────────────────────┘</code></pre>
+<p>Avec <strong>une seule</strong> requête sur la pile :</p>
+<pre class="highlight" tabindex="0"><code class="language-text">┌─────────────────────────────┐
+│ GET /page                   │ ← Current = Main
+└─────────────────────────────┘          Parent = null</code></pre>
+<table>
+<thead>
+<tr>
+<th>Méthode</th>
+<th>Question posée</th>
+<th>Dans une sous-requête <code>/fragment/menu</code></th>
+<th>Sur la requête principale <code>/page</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>getCurrentRequest()</code></td>
+<td>Que traite-t-on maintenant ?</td>
+<td><code>/fragment/menu</code></td>
+<td><code>/page</code></td>
+</tr>
+<tr>
+<td><code>getMainRequest()</code></td>
+<td>Qui a démarré tout ?</td>
+<td><code>/page</code></td>
+<td><code>/page</code></td>
+</tr>
+<tr>
+<td><code>getParentRequest()</code></td>
+<td>Qui a déclenché la courante ?</td>
+<td><code>/page</code></td>
+<td><code>null</code></td>
+</tr>
+<tr>
+<td><code>getSession()</code></td>
+<td>Session de la requête courante ?</td>
+<td>session, si elle existe</td>
+<td>session, si elle existe</td>
+</tr>
+</tbody>
+</table>
+<p>Pourquoi <code>getCurrentRequest()</code> et <code>getMainRequest()</code> peuvent-elles différer ?
+Uniquement quand on est <strong>dans une sous-requête</strong>. Sur une requête simple,
+elles rendent la même Request.</p>
+<p><code>getSession()</code> ne rend <strong>pas</strong> <code>null</code> quand il n'y a pas de session : elle
+lève une <code>SessionNotFoundException</code>.</p>
+<div class="admonition info">
+<p class="admonition-title">🌍 In Real Life</p>
+<p><strong>La situation</strong> : un poste reçoit le bon traité ; un autre consulte le porte-bons au moment utile. Garder la première fiche toute la journée risquerait de conserver une ancienne demande.</p>
+<p><strong>L’équivalent dans Symfony</strong> : bon remis à l’action → <code>RequestValueResolver</code> fournit la Request ; porte-bons consultable → service <code>RequestStack</code> ; fiche au sommet → requête courante, éventuellement une sous-requête.</p>
+<p><strong>Retour à la réalité technique</strong> : la pile décrit un contexte changeant, pas une file de tâches. Elle peut être vide ; la principale et la parente ne sont pas toujours la courante. Une Request d’action est résolue pour l’appel, non construite comme service applicatif par autowiring.</p>
+<p><strong>🧠 Comment le mémoriser</strong> : « Consulter maintenant, ne pas figer hier. » Image mentale : fiche du dessus qui change. Question-réflexe : « Ai-je besoin de la requête courante, principale ou parente ? »</p>
+<p><strong>⚠️ À ne pas confondre</strong> : service partagé dans son conteneur ne signifie pas contexte HTTP immuable.</p>
+</div></section><section class="teaching-section" data-section="s-les-parameters-de-route"><span class="outcome-anchor" id="out-OUT-8y8ytxt6m5v1" tabindex="-1"></span><span class="outcome-anchor" id="out-OUT-y2d9m024g5gk" tabindex="-1"></span><h2 id="s-les-parameters-de-route" tabindex="-1">Les parameters de route</h2><aside class="section-digest" id="s-les-parameters-de-route-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Réordonner les arguments ne change pas la correspondance.</li><li>Renommer un argument impose de vérifier le parameter de route.</li></ol></aside><p><strong>Où en est-on ?</strong> Étape 2 sur 3 : on a la Request, on veut maintenant lire
+l'information <strong>portée par l'URL</strong>. Le routeur a déjà fait un travail avant
+l'appel du contrôleur : il a rangé les morceaux du chemin dans
+<code>$request-&gt;attributes</code>. Cette partie montre comment ils deviennent des
+arguments de l'action.</p>
+<p><strong>Pourquoi <code>$id</code> reçoit-il 42 ?</strong> Suivons <code>GET /blog/42</code> pas à pas :</p>
+<pre class="highlight" tabindex="0"><code class="language-text">GET /blog/42
+     ▼
+RouterListener appelle le matcher
+     ▼
+le routeur reconnaît /blog/{id} et obtient  id = "42"
+     ▼
+RouterListener ajoute ce résultat à $request-&gt;attributes
+     attributes = ['id' =&gt; '42', '_route' =&gt; ..., '_controller' =&gt; ...]
+     ▼
+ArgumentResolver : l'action demande $id
+     ▼
+le resolver d'attributs cherche un attribut nommé « id »
+     ▼
+show(..., $id = 42)</code></pre>
+<p>Ce qu'il faut voir :</p>
+<ul>
+<li><code>id</code> vaut la chaîne <code>"42"</code> avant les conversions éventuelles (<code>int $id</code> la
+  convertit).</li>
+<li>L'appariement se fait sur le <strong>nom</strong> de l'argument, <strong>jamais sur la position</strong>.</li>
+<li>Aucune requête en base : le resolver d'attributs lit seulement
+  <code>$request-&gt;attributes</code>. Le scénario principal consulte explicitement
+  <code>ArticleCatalog</code> en mémoire dans l'action.</li>
+<li>Une intégration Doctrine configurée peut résoudre une entité avant l’action ; ce comportement appartient au bridge, pas à HttpKernel seul, et l’ORM reste hors du programme étudié.</li>
+</ul>
+<p>Avant / après un renommage, route <code>/post/{year}/{slug}</code> :</p>
+<pre class="highlight" tabindex="0"><code class="language-text">show(string $slug, int $year)   ← ordre inversé : fonctionne (nom = clé)
+show(string $s,    int $y)      ← renommés : plus d'attribut « s » ni « y »
+                                  → casse, sauf autre resolver ou valeur par défaut</code></pre>
+<p><code>attributes</code> contient aussi <code>_route</code> et <code>_controller</code>.</p>
+<div class="admonition info">
+<p class="admonition-title">🌍 In Real Life</p>
+<p><strong>La situation</strong> : le responsable recopie « numéro : 42 » sur le bon ; le poste cherche la case « numéro », pas la première case disponible.</p>
+<p><strong>L’équivalent dans Symfony</strong> : case renseignée après orientation → <code>RouterListener</code> ajoute <code>id: '42'</code> aux attributes ; recherche par étiquette → resolver d’attributs associé au nom <code>$id</code> ; consultation ultérieure du catalogue → appel métier distinct.</p>
+<p><strong>Retour à la réalité technique</strong> : l’appariement repose sur le nom, non sur la position. Renommer <code>$id</code> rompt cette correspondance, sauf autre source de valeur. Une intégration d’entité exige son resolver et son mapping configurés ; le routeur ne réalise pas cette lecture.</p>
+<p><strong>🧠 Comment le mémoriser</strong> : « L’étiquette relie, la place ne décide pas. » Image mentale : cases réordonnées dont les étiquettes restent identiques. Question-réflexe : « Quel attribute porte exactement le nom de cet argument ? »</p>
+<p><strong>⚠️ À ne pas confondre</strong> : attributes de la Request = données d’exécution ; attribut PHP <code>#[Route]</code> = métadonnée de configuration.</p>
+</div>
+<p>La suite précise comment ces valeurs et les services sont préparés dans
+<a href="course-CRS-d5ffd8b704zs.html">les argument value resolvers</a>.</p><aside class="enrichment" aria-label="Autre explication"><p>Les parameters de route sont des notes agrafées au dossier par le bureau de routing. Les chercher dans query revient à ouvrir le tiroir des informations de l'URL après le point d'interrogation : ce n'est pas la même origine.</p></aside></section><section class="teaching-section" data-section="s-body-et-query-string"><span class="outcome-anchor" id="out-OUT-axr8r9fatztr" tabindex="-1"></span><h2 id="s-body-et-query-string" tabindex="-1">Body et query string</h2><aside class="section-digest" id="s-body-et-query-string-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Le form bag prime sur le JSON.</li><li>Un JSON invalide lève ; un body vide donne un bag vide.</li></ol></aside><p><strong>Où en est-on ?</strong> Étape 3 sur 3 : l'URL n'est pas la seule source de données.
+Un <code>POST</code> (inscription, formulaire, appel d'API) envoie aussi un <strong>corps</strong>.
+La Request sait le lire : <code>$request-&gt;query</code> pour ce qui suit le <code>?</code>, et la
+méthode <code>getPayload()</code> pour le corps. <code>getPayload()</code> n'est donc pas un autre
+sujet : c'est <strong>une méthode de la Request, qui sert à lire le corps du
+<code>POST</code></strong>. Elle existe parce que le corps arrive sous deux formats possibles
+(formulaire ou JSON) et qu'on veut une seule façon de le lire.</p>
+<p><strong>Pourquoi deux sources ?</strong> Une URL transporte des données (<code>?limit=5</code>) ;
+un <code>POST</code> en transporte d'autres dans son <strong>corps</strong> (formulaire ou JSON).
+Chacune a son sac :</p>
+<pre class="highlight" tabindex="0"><code class="language-text">POST /register?ref=newsletter
+Content-Type: application/x-www-form-urlencoded
+
+email=a@b.c
+
+?ref=newsletter   → $request-&gt;query     (query string)
+email=a@b.c       → $request-&gt;request   (corps de formulaire)
+corps JSON brut   → pas dans -&gt;request : il faut le décoder</code></pre>
+<p>La consultation de <code>/blog/42</code> n'utilise que <code>query</code> (<code>limit=5</code>) et n'a pas
+besoin de body. Le <code>POST</code> d'inscription ouvre une autre branche : formulaire
+encodé ou JSON selon le client.</p>
+<p><code>getPayload()</code> répond à : « Donne-moi les données du corps, quel que soit le
+format ». Elle procède <strong>dans cet ordre</strong> :</p>
+<pre class="highlight" tabindex="0"><code class="language-text">getPayload()
+   │
+   ├─ $request-&gt;request non vide ? ──► oui : un CLONE de ce sac (JSON ignoré)
+   │
+   ├─ corps vide ? ───────────────────► oui : InputBag vide
+   │
+   └─ sinon : décoder le JSON
+          ├─ JSON valide qui donne un array ──► les données décodées
+          └─ JSON invalide, ou pas un array ──► JsonException</code></pre>
+<figure class="diagram" aria-labelledby="CRS-ea3twt9jcan2-7-diagram-0-title CRS-ea3twt9jcan2-7-diagram-0-description"><figcaption id="CRS-ea3twt9jcan2-7-diagram-0-title">Les trois cas de getPayload</figcaption><p id="CRS-ea3twt9jcan2-7-diagram-0-description">getPayload() rend d&#x27;abord un clone de $request-&gt;request s&#x27;il n&#x27;est pas vide ; sinon, pour un body vide, un InputBag vide ; sinon le JSON décodé, et lève JsonException s&#x27;il est invalide ou n&#x27;est pas un array.</p><div class="mermaid" hidden>---
+title: Ce que rend getPayload()
+---
+flowchart TD
+  accTitle: Les trois cas de getPayload
+  accDescr: getPayload() rend d&#x27;abord un clone de $request-&gt;request s&#x27;il n&#x27;est pas vide ; sinon, pour un body vide, un InputBag vide ; sinon le JSON décodé, et lève JsonException s&#x27;il est invalide ou n&#x27;est pas un array.
+  P{&quot;getPayload()&quot;} --&gt;|&quot;1. $request-&gt;request&lt;br/&gt;non vide&quot;| P1[&quot;un CLONE&lt;br/&gt;de ce sac&quot;]
+  P --&gt;|&quot;2. body vide&quot;| P2[&quot;InputBag vide&quot;]
+  P --&gt;|&quot;3. sinon&quot;| P3[&quot;JSON décodé&lt;br/&gt;invalide ou pas un array :&lt;br/&gt;JsonException&quot;]
+  classDef choice fill:#fef3c7,stroke:#b45309,color:#78350f
+  classDef data fill:#e0f2fe,stroke:#0369a1,color:#0c4a6e
+  class P choice
+  class P1,P2,P3 data</div></figure>
+<p>Bleu = données retournées ; ambre = sélection ordonnée. Le JSON <code>{}</code> ou <code>[]</code>
+donne aussi un bag vide : « vide » ne signifie pas nécessairement « aucun body ».</p>
+<p>Points d'attention :</p>
+<ul>
+<li>Le formulaire <strong>l'emporte</strong> sur le JSON : pas de fusion.</li>
+<li>Un JSON mal formé <strong>lève</strong> ; il ne devient jamais un sac vide.</li>
+<li>Un body vide, ou un JSON <code>{}</code> / <code>[]</code>, donne un sac vide.</li>
+<li><code>getPayload()</code> ne valide pas l'adresse e-mail, ne soumet pas un Form Symfony
+  et ne lit pas la query string.</li>
+</ul>
+<div class="admonition info">
+<p class="admonition-title">🌍 In Real Life</p>
+<p><strong>La situation</strong> : après avoir lu le billet, le lecteur envoie son inscription. Le guichet dispose soit de champs déjà transcrits, soit d’un document à décoder ; lire le document ne certifie pas son contenu.</p>
+<p><strong>L’équivalent dans Symfony</strong> : champs disponibles → sac <code>request</code> non vide, cloné par <code>getPayload()</code> ; document absent → <code>InputBag</code> vide ; document restant → décodage du body JSON.</p>
+<p><strong>Retour à la réalité technique</strong> : la sélection est ordonnée, sans fusion avec la query string ni avec une seconde source JSON. Un JSON invalide ou non décodable en tableau déclenche une exception. Ce choix d’entrée ne soumet pas un Form Symfony et ne valide pas une adresse e-mail.</p>
+<p><strong>🧠 Comment le mémoriser</strong> : « Choisir, décoder, puis contrôler. » Image mentale : deux formats d’inscription, puis un contrôle séparé. Question-réflexe : « Ai-je seulement obtenu des données ou déjà évalué leurs contraintes ? »</p>
+<p><strong>⚠️ À ne pas confondre</strong> : paramètres de formulaire HTTP, composant Form, désérialisation et Validation sont des opérations distinctes.</p>
+</div></section><section class="teaching-section" data-section="s-pieges-d-examen"><h2 id="s-pieges-d-examen" tabindex="-1">Pièges d&#x27;examen</h2><p class="teaching-label pitfall"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="warning" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3L23 21H1L12 3ZM12 9V14M12 17V18"></path></svg> <strong>Piège à éviter</strong></p><ul class="pitfall-list"><li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : Les parameters de route s&#x27;apparient par leur nom, jamais par leur position.</summary><p><strong>Les parameters de route s'apparient par leur nom, jamais par leur position.</strong>
+Réordonner les arguments ne casse pas cette correspondance ; renommer
+celui qui dépend d'un attribut la rompt, sauf autre resolver ou valeur
+par défaut capable de fournir l'argument. <em>Pourquoi on se trompe : on pense
+que <code>{year}/{slug}</code> impose l'ordre <code>($year, $slug)</code>.</em></p></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : Request dans une action n&#x27;est pas un service Request obtenu par autowiring.</summary><p><strong><code>Request</code> dans une action n'est pas un service Request obtenu par autowiring.</strong>
+C'est une résolution d'argument faite par <code>RequestValueResolver</code>. Un service
+qui consulte le contexte reçoit <code>RequestStack</code> et lit la requête courante au
+moment utile. <em>Pourquoi on se trompe : même syntaxe (un type dans une
+signature), mécanismes différents.</em></p></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : getSession() ≠ null sans session.</summary><p><strong><code>getSession()</code> ≠ <code>null</code> sans session.</strong> Elle lève <code>SessionNotFoundException</code>.
+<em>Pourquoi on se trompe : <code>getCurrentRequest()</code> et <code>getParentRequest()</code> peuvent,
+eux, rendre <code>null</code>, d'où l'idée que tout rend <code>null</code>.</em></p></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : getPayload() ne fusionne pas form et JSON.</summary><p><strong><code>getPayload()</code> ne fusionne pas form et JSON.</strong> Si le sac des parameters
+de form n'est pas vide, elle rend celui-là et ne regarde même pas le body
+brut.</p></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : Un body JSON invalide ne donne pas un sac vide</summary><p><strong>Un body JSON invalide ne donne pas un sac vide</strong> : il lève une exception. Le
+sac vide provient d'un body vide ou d'un JSON décodé en tableau vide.</p></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : getPayload() rend un clone.</summary><p><strong><code>getPayload()</code> rend un clone.</strong> Écrire dans l'object retourné ne change rien à
+la Request.</p></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : Requirement de route ≠ validation métier.</summary><p><strong>Requirement de route ≠ validation métier.</strong> <code>\d+</code> contraint le matching du
+segment, il ne dit pas si l'identifiant est acceptable pour le métier.</p></details></li></ul></section><section class="teaching-section" data-section="s-application"><h2 id="s-application" tabindex="-1">Application</h2><aside class="section-digest" id="s-application-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Le form bag prime sur le JSON.</li><li>Un JSON invalide lève ; un body vide donne un bag vide.</li><li>Le type déclenche le resolver.</li><li>Dans un service durable, utiliser RequestStack.</li></ol></aside>
+
+
+
+</section><section class="teaching-section" data-section="s-fiche-express"><h2 id="s-fiche-express" tabindex="-1">Fiche express</h2><p class="teaching-label essential"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="book" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5C9 3 5 3 2 4V20C5 19 9 19 12 21C15 19 19 19 22 20V4C19 3 15 3 12 5V21M5 8H8M5 12H8M16 8H19M16 12H19"></path></svg> <strong>À mémoriser</strong></p><p><strong>🧠 À retenir pour la certification :</strong></p>
+<ul>
+<li>Controller veut la Request → <strong>résolution d'argument</strong> (<code>RequestValueResolver</code>), pas autowiring.</li>
+<li>Service veut le contexte HTTP → <strong><code>RequestStack</code></strong>, consulté au moment utile.</li>
+<li>Current = traitée maintenant ; Main = origine ; Parent = juste en dessous (<code>null</code> si on est sur la principale).</li>
+<li><code>getSession()</code> <strong>lève</strong> <code>SessionNotFoundException</code> au lieu de rendre <code>null</code>.</li>
+<li>Route : <code>attributes</code>, puis le <strong>nom</strong> de l'argument ; <code>_route</code> et <code>_controller</code> y sont aussi.</li>
+<li><code>getPayload()</code> : form d'abord, en <strong>clone</strong> ; body vide → sac vide ; JSON invalide ou pas un array → <strong><code>JsonException</code></strong>.</li>
+</ul>
+<p>Moyen mnémotechnique : <strong>« Contrôleur = Symfony me donne la Request. Service = je consulte la RequestStack. »</strong></p></section><section class="teaching-section" data-section="s-sources-officielles"><h2 id="s-sources-officielles" tabindex="-1">Sources officielles</h2><ul>
+<li><a href="https://symfony.com/doc/8.0/controller.html">Controller, « The Request Object as a Controller Argument »</a></li>
+<li><a href="https://symfony.com/doc/8.0/components/http_foundation.html"><code>Request::getPayload()</code>, branche 8.0</a></li>
+<li><a href="https://symfony.com/doc/8.0/components/http_foundation.html"><code>RequestStack</code>, branche 8.0</a></li>
+</ul></section><section id="course-recalls" aria-labelledby="course-recalls-title" tabindex="-1"><h2 id="course-recalls-title">Rappels et liens avec les autres cours</h2><div data-recall-group="current"><h3>Rappels du cours actuel</h3><ul><li data-recall-course="CRS-ea3twt9jcan2" data-recall-kind="digest_reference"><p class="recall-provenance">Module 04 — Contrôleurs · Cours « The request »</p><p class="digest-reference"><a href="#s-l-essentiel-digest">Revoir la règle : Le type déclenche le resolver.</a></p></li><li data-recall-course="CRS-ea3twt9jcan2" data-recall-kind="digest_reference"><p class="recall-provenance">Module 04 — Contrôleurs · Cours « The request »</p><p class="digest-reference"><a href="#s-body-et-query-string-digest">Revoir la règle : Le form bag prime sur le JSON.</a></p></li><li><nav aria-label="Flashcards de l’application"><ul><li data-recall-course="CRS-ea3twt9jcan2" data-recall-kind="application"><p class="recall-provenance">Module 04 — Contrôleurs · Cours « The request »</p><a href="#A-ea3twt9jcan2-285466e22a-03">Flashcard : Le form bag prime sur le JSON. Un JSON invalide lève ; un body vide donne un bag vide.</a></li><li data-recall-course="CRS-ea3twt9jcan2" data-recall-kind="application"><p class="recall-provenance">Module 04 — Contrôleurs · Cours « The request »</p><a href="#A-ea3twt9jcan2-65c42c80d9-01">Flashcard : Le type déclenche le resolver. Dans un service durable, utiliser RequestStack.</a></li></ul></nav></li></ul></div><div data-recall-group="other"><h3>Rappels des cours précédents / autres modules</h3><ul><li data-recall-course="CRS-kqq96z5y9r2f" data-recall-kind="previous_course"><p class="recall-provenance">Module 05 — Routage · Cours « Configuration (YAML and PHP attributes) »</p><p>La première correspondance gagne. En YAML, réordonner les routes ; en attributes, utiliser priority.</p><p><a href="#cards-previous">Rappel : <span lang="en">Does Symfony choose the most specific matching route automatically?</span></a></p></li></ul></div></section><nav class="course-sequence" aria-label="Ordre de lecture"><a rel="prev" href="course-CRS-wg3j0t5pm7w1.html" aria-label="Précédent : Restrict URL parameters — Module 05 — Routage">Précédent : Restrict URL parameters</a> <a href="lot-04.html">Sommaire : Module 04 — Contrôleurs</a> <a rel="next" href="course-CRS-d5ffd8b704zs.html" aria-label="Suivant : Argument value resolvers — Module 04 — Contrôleurs">Suivant : Argument value resolvers</a></nav><p class="course-practice-entry"><a class="button" href="#view-quiz">Fin du cours — s’entraîner avec le Quiz</a></p></div><div id="view-flashcards" data-course-panel role="region" aria-labelledby="view-flashcards-title"><h2 id="view-flashcards-title">Flashcards</h2><p lang="en">Answer before revealing each card.</p><p>Ces cartes ne mesurent pas une maîtrise notée.</p><div id="cards-s-l-essentiel-1" data-card-section="s-l-essentiel"><h3><a href="#s-l-essentiel">Revoir : L&#x27;essentiel</a></h3><div class="reader-cards"><details class="reader-card" id="A-ea3twt9jcan2-65c42c80d9-01"><summary lang="en">How does a controller request the current Request object?</summary><p lang="en">By type-hinting Symfony HttpFoundation Request on an action argument.</p><p lang="fr">Le type déclenche le resolver. Dans un service durable, utiliser RequestStack.</p><a href="course-CRS-ea3twt9jcan2.html#out-OUT-gvjp79xbcjsb">Revoir le passage précis</a></details></div></div><div id="cards-s-le-schema-2" data-card-section="s-le-schema"><h3><a href="#s-le-schema">Revoir : Le schéma</a></h3><div class="reader-cards"><p class="reader-card-reference" id="A-ea3twt9jcan2-6e0103f6cc-01">Rappel déjà proposé : <a lang="en" href="#A-ea3twt9jcan2-65c42c80d9-01">How does a controller request the current Request object?</a> · <a href="course-CRS-ea3twt9jcan2.html#out-OUT-gvjp79xbcjsb">Passage canonique</a></p></div></div><div id="cards-s-l-exemple-une-route-a-parameter-3" data-card-section="s-l-exemple-une-route-a-parameter"><h3><a href="#s-l-exemple-une-route-a-parameter">Revoir : L&#x27;exemple : une route à parameter</a></h3><div class="reader-cards"><p class="reader-card-reference" id="A-ea3twt9jcan2-ea41086355-01">Rappel déjà proposé : <a lang="en" href="#A-ea3twt9jcan2-65c42c80d9-01">How does a controller request the current Request object?</a> · <a href="course-CRS-ea3twt9jcan2.html#out-OUT-gvjp79xbcjsb">Passage canonique</a></p></div></div><div id="cards-s-l-obtenir-4" data-card-section="s-l-obtenir"><h3><a href="#s-l-obtenir">Revoir : L&#x27;obtenir</a></h3><div class="reader-cards"><p class="reader-card-reference" id="A-ea3twt9jcan2-8b7026e6a9-01">Rappel déjà proposé : <a lang="en" href="#A-ea3twt9jcan2-65c42c80d9-01">How does a controller request the current Request object?</a> · <a href="course-CRS-ea3twt9jcan2.html#out-OUT-gvjp79xbcjsb">Passage canonique</a></p></div></div><div id="cards-s-les-parameters-de-route-5" data-card-section="s-les-parameters-de-route"><h3><a href="#s-les-parameters-de-route">Revoir : Les parameters de route</a></h3><div class="reader-cards"><details class="reader-card" id="A-ea3twt9jcan2-13bbeea358-02"><summary lang="en">Are route parameters matched to controller arguments by position?</summary><p lang="en">No. They are matched by name.</p><p lang="fr">Réordonner les arguments ne change pas la correspondance. Renommer un argument impose de vérifier le parameter de route.</p><a href="course-CRS-ea3twt9jcan2.html#out-OUT-8y8ytxt6m5v1">Revoir le passage précis</a></details><details class="reader-card" id="INT-021"><summary lang="en">Where are _route and _controller stored on the Request?</summary><p lang="en">In Request attributes, alongside matched route parameters.</p><p lang="fr">Ils ne sont pas des query parameters ; le matching les dépose dans attributes.</p><a href="course-CRS-ea3twt9jcan2.html#out-OUT-y2d9m024g5gk">Revoir le passage précis</a></details></div></div><div id="cards-s-body-et-query-string-6" data-card-section="s-body-et-query-string"><h3><a href="#s-body-et-query-string">Revoir : Body et query string</a></h3><div class="reader-cards"><details class="reader-card" id="A-ea3twt9jcan2-285466e22a-03"><summary lang="en">Does getPayload() merge form parameters with JSON?</summary><p lang="en">No. A nonempty form bag wins; otherwise the body is decoded as JSON.</p><p lang="fr">Le form bag prime sur le JSON. Un JSON invalide lève ; un body vide donne un bag vide.</p><a href="course-CRS-ea3twt9jcan2.html#out-OUT-axr8r9fatztr">Revoir le passage précis</a></details></div></div><div id="cards-s-pieges-d-examen-7" data-card-section="s-pieges-d-examen"><h3><a href="#s-pieges-d-examen">Revoir : Pièges d&#x27;examen</a></h3><div class="reader-cards"><p class="reader-card-reference" id="A-ea3twt9jcan2-596d5af532-03">Rappel déjà proposé : <a lang="en" href="#A-ea3twt9jcan2-285466e22a-03">Does getPayload() merge form parameters with JSON?</a> · <a href="course-CRS-ea3twt9jcan2.html#out-OUT-axr8r9fatztr">Passage canonique</a></p></div></div><div id="cards-s-application-8" data-card-section="s-application"><h3><a href="#s-application">Revoir : Application</a></h3><div class="reader-cards"><p class="reader-card-reference" id="A-ea3twt9jcan2-e7ad522ea3-03">Rappel déjà proposé : <a lang="en" href="#A-ea3twt9jcan2-285466e22a-03">Does getPayload() merge form parameters with JSON?</a> · <a href="course-CRS-ea3twt9jcan2.html#out-OUT-axr8r9fatztr">Passage canonique</a></p><p class="reader-card-reference" id="A-ea3twt9jcan2-e7ad522ea3-01">Rappel déjà proposé : <a lang="en" href="#A-ea3twt9jcan2-65c42c80d9-01">How does a controller request the current Request object?</a> · <a href="course-CRS-ea3twt9jcan2.html#out-OUT-gvjp79xbcjsb">Passage canonique</a></p></div></div><div id="cards-s-fiche-express-9" data-card-section="s-fiche-express"><h3><a href="#s-fiche-express">Revoir : Fiche express</a></h3><div class="reader-cards"><p class="reader-card-reference" id="A-ea3twt9jcan2-b11e58e15e-03">Rappel déjà proposé : <a lang="en" href="#A-ea3twt9jcan2-285466e22a-03">Does getPayload() merge form parameters with JSON?</a> · <a href="course-CRS-ea3twt9jcan2.html#out-OUT-axr8r9fatztr">Passage canonique</a></p></div></div><div id="cards-previous"><p class="recall-provenance">Module 05 — Routage · Cours « Configuration (YAML and PHP attributes) »</p><aside class="checkpoint"><h2>Rappel d’un cours antérieur</h2><p>Avant de poursuivre : Configuration (YAML and PHP attributes).</p><details class="corpus-correction"><summary lang="en">Does Symfony choose the most specific matching route automatically?</summary><p lang="en">No. The first matching route wins; use ordering or attribute priority.</p><p>La première correspondance gagne. En YAML, réordonner les routes ; en attributes, utiliser priority.</p><a href="course-CRS-kqq96z5y9r2f.html#out-OUT-jjd0fkj8bsy5">Relire la correction dans le cours antérieur</a></details></aside></div></div><div id="view-quiz" data-course-panel role="region" aria-labelledby="view-quiz-title"><aside class="revision-context"><p><strong>Avant le quiz :</strong> Sur GET /blog/42?limit=5, le contrôleur reçoit des valeurs qui viennent de trois endroits différents : la Request elle-même, l&#x27;identifiant 42 du chemin et la limite 5 de la query string. Ce cours répond à une seule question : d&#x27;où vient chaque valeur, et qui la fournit à mon code ?</p><p>Quelle donnée entre, quelle responsabilité agit et quelle condition change le résultat ? Pour chaque correction, vérifiez ces conditions dans <a href="course-CRS-ea3twt9jcan2.html#s-objectif">le passage enseigné</a>, sans supposer que toutes les branches du blog sont exécutées.</p></aside><h2 id="view-quiz-title">Quiz</h2><p class="quiz-size" lang="en">5 eligible learning questions · 5 per session. Repeating a question does not demonstrate mastery.</p><p id="course-quiz-status" role="status">Quiz interactif non chargé. Démarrez après chargement de la banque locale.</p><div id="course-quiz-controls" class="assessment-main" hidden><div id="course-quiz-assessment-controls" hidden><select id="course-quiz-assessment-mode" aria-label="Mode du quiz" hidden><option value="learning">Entraînement</option></select><p id="course-quiz-training-scope"></p><button id="course-quiz-start-assessment" type="button" lang="en">Start practice</button><button id="course-quiz-finish-assessment" type="button" lang="en" hidden>End session</button></div><p id="course-quiz-assessment-error" role="alert"></p><p id="course-quiz-assessment-timer" hidden></p><p id="course-quiz-session-progress" class="quiz-progress" role="status" lang="en"></p><div id="course-quiz-assessment-app" tabindex="-1"></div><nav id="course-quiz-session-navigation" aria-label="Questions du cours"></nav><div id="course-quiz-learning-overview" aria-live="polite"></div></div><div id="course-quiz-native"><p>Sans JavaScript ou si le chargement échoue : aucune tentative notée. Les <a href="#view-flashcards">flashcards du cours</a> restent disponibles.</p><details class="course-quiz-fallback" data-question-id="L-ea3twt9jcan2-base-v1"><summary lang="en">RADIO — Select one answer. How does a controller request the current Request object?</summary><p>Correction de consultation — non notée.</p><p>Le type déclenche le resolver. Dans un service durable, utiliser RequestStack.</p><ul><li><strong lang="en">Distractor: Read a global Request variable created by FrameworkBundle.</strong><p>Le resolver fournit l&#x27;argument typé ; aucune globale n&#x27;est nécessaire.</p></li><li><strong lang="en">Distractor: Type-hint Response to receive the incoming request.</strong><p>Request et Response représentent deux directions distinctes.</p></li><li><strong lang="en">Correct: Type-hint HttpFoundation Request on an action argument.</strong><p>Le type déclenche le resolver. Dans un service durable, utiliser RequestStack.</p></li></ul><a href="course-CRS-ea3twt9jcan2.html#out-OUT-gvjp79xbcjsb">Relire le passage exact</a><a href="course-CRS-ea3twt9jcan2.html#s-l-obtenir">Relire la correction précise</a></details></div></div></div></div><details class="transfer-panel"><summary>Sauvegarde et transfert de progression</summary><p id="reading-status" role="status">Sans JavaScript : lecture libre ; progression non enregistrée.</p><p><a href="assessment.html#overview-title">Lecture, réussites immédiates et différées</a></p><p>Transfert manuel — aucune synchronisation automatique</p><p id="persistence-status" role="status"></p><button type="button" class="secondary" id="export-progress">Exporter ma progression</button><label for="import-progress">Choisir un JSON pour fusionner ma progression (sans remplacement)</label><input type="file" id="import-progress" accept="application/json,.json"><p id="transfer-status" role="status"></p></details></main><footer class="site-footer"><a href="catalogue.html">Catalogue</a> <a href="sources.html">Sources et attribution</a> <a href="#contenu">Haut de page</a></footer></body></html>

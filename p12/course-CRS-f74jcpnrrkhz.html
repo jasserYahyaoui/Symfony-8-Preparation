@@ -1,0 +1,433 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; connect-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Framework interoperability and PSRs — Symfony 8 Preparation</title><link rel="stylesheet" href="styles.css"><link rel="stylesheet" href="reader.css"><script src="mermaid.min.js" defer></script><script src="mermaid-init.js" defer></script><link rel="stylesheet" href="assessment.css"><script src="fixed-exams-data.js" defer></script><script src="fixed-exams.js" defer></script><script src="learning-state.js" defer></script><script src="guide.js" defer></script><script src="reader-catalog.js" defer></script><script src="reader.js" defer></script><script src="site-state.js" defer></script><script src="assessment.js" defer></script><script src="course-views.js" defer></script><link rel="stylesheet" href="syntax-highlight.css"><script src="prism-syntax.js" defer></script><script src="syntax-highlight.js" defer></script></head><body data-course-id="CRS-f74jcpnrrkhz"><a class="skip" href="#contenu">Aller au contenu</a><header class="site-header"><a class="brand" href="index.html">S8 Preparation</a><nav aria-label="Navigation principale"><a href="index.html">Accueil</a> <a href="catalogue.html">Parcours</a> <a href="assessment.html?mode=review">Réviser</a> <a href="examens.html">Examens blancs</a> <a href="jour-j.html">Jour J</a></nav></header><main id="contenu" tabindex="-1" class="corpus-reader"><nav class="breadcrumb" aria-label="Fil d’Ariane"><a href="index.html">Accueil</a> <span aria-hidden="true">›</span> <a href="catalogue.html">Parcours</a> <span aria-hidden="true">›</span> <a href="lot-03.html">Module 03 — Architecture Symfony</a> <span aria-hidden="true">›</span> <span aria-current="page">Framework interoperability and PSRs</span></nav><h1>Framework interoperability and PSRs</h1><p class="muted">Symfony 8.0 · API PHP ≤ 8.4 · Twig ≤ 3.22. Préparation indépendante.</p><p class="revision-status">Rédaction narrative P11 : projection nouvelle, non couverte par les décisions historiques P10. Aucune approbation officielle ni garantie de réussite.</p><aside class="narrative-context" aria-label="Repères de lecture"><p><strong>Prérequis de lecture :</strong> <a href="course-CRS-tygmreqkkds3.html">HttpKernel component and FrameworkBundle</a></p><p><strong>Concepts voisins :</strong> <a href="course-CRS-p1694d5f7r8c.html">Service container</a> — Séparer assemblage de l’application et appel HTTP. <a href="lot-03.html">Comparer les responsabilités dans ce module</a> · <a href="carte-composants.html">Situer cette responsabilité dans le blog</a> · <a href="glossaire.html">Distinguer les termes voisins</a></p><p><a href="ordre-lecture.html">Retrouver les 163 cours dans le parcours recommandé</a>. Ce repère ne modifie ni votre historique ni votre progression.</p></aside><div class="course-layout"><details class="lot-course-menu"><summary>Cours du module · 15 cours</summary><nav aria-label="Cours du module"><a class="lot-context" href="lot-03.html">Module 03 — Architecture Symfony</a><ol><li><a href="course-CRS-epx8j3fhb38n.html">HttpFoundation component</a></li><li><a href="course-CRS-tyf3yfxjc3sa.html">Symfony Flex</a></li><li><a href="course-CRS-y84syktt20ww.html">License</a></li><li><a href="course-CRS-1bxqx6ks853z.html">Components and Bridges</a></li><li><a href="course-CRS-156khyjssm25.html">Code organization</a></li><li><a href="course-CRS-mpwjc4g3vmj7.html">Request handling</a></li><li><a href="course-CRS-kd67y4vnd0mm.html">Exception handling</a></li><li><a href="course-CRS-2hpcy2rscq7m.html">Event dispatcher and kernel events</a></li><li><a href="course-CRS-k2xvr11x936e.html">Official best practices</a></li><li><a href="course-CRS-21ec5kwrcmkm.html">Backward compatibility promise</a></li><li><a href="course-CRS-rkq1d437dw5d.html">Deprecations best practices</a></li><li><a href="course-CRS-f9s8mpaydnbx.html">Framework overloading</a></li><li><a href="course-CRS-6m32av3nr9eh.html">Release management and roadmap schedule</a></li><li><a href="course-CRS-f74jcpnrrkhz.html" aria-current="page">Framework interoperability and PSRs</a></li><li><a href="course-CRS-9g4qrgfs7nm4.html">Naming conventions</a></li></ol><a href="lot-03.html#view-quiz">Quiz du module</a></nav></details><aside class="course-section-menu" aria-label="Sommaire du cours"><nav class="course-actions" aria-label="Activités du cours"><a id="tab-course" href="#view-course">Cours</a><a id="tab-flashcards" href="#view-flashcards">Flashcards</a><a id="tab-quiz" href="#view-quiz">Quiz</a></nav><details class="course-section-disclosure"><summary id="course-sections">Sections du cours</summary><nav aria-label="Sections du cours"><ul><li><a href="#s-objectif">Objectif</a></li><li><a href="#s-l-essentiel">L&#x27;essentiel</a></li><li><a href="#s-le-schema">Le schéma</a></li><li><a href="#s-l-exemple-une-bibliotheque-qui-type-contre-une-psr">L&#x27;exemple : une bibliothèque qui type contre une PSR</a></li><li><a href="#s-les-psr-implementees">Les PSR implémentées</a></li><li><a href="#s-les-deux-autres-familles-de-provide">Les deux autres familles de `provide`</a></li><li><a href="#s-les-psr-suivies">Les PSR suivies</a></li><li><a href="#s-le-cas-psr-7">Le cas PSR-7</a></li><li><a href="#s-pieges-d-examen">Pièges d&#x27;examen</a></li><li><a href="#s-application">Application</a></li><li><a href="#s-fiche-express">Fiche express</a></li><li><a href="#s-sources-officielles">Sources officielles</a></li><li><a href="#reader-objectives">Objectifs d’apprentissage</a></li><li><a href="#course-recalls">Rappels et liens avec les autres cours</a></li></ul></nav><nav aria-label="Flashcards par section"><a href="#view-flashcards">Flashcards par section</a><ul><li><a href="#cards-s-l-essentiel-1">L&#x27;essentiel</a></li><li><a href="#cards-s-le-schema-2">Le schéma</a></li><li><a href="#cards-s-l-exemple-une-bibliotheque-qui-type-contre-une-psr-3">L&#x27;exemple : une bibliothèque qui type contre une PSR</a></li><li><a href="#cards-s-les-psr-implementees-4">Les PSR implémentées</a></li><li><a href="#cards-s-les-deux-autres-familles-de-provide-5">Les deux autres familles de `provide`</a></li><li><a href="#cards-s-les-psr-suivies-6">Les PSR suivies</a></li><li><a href="#cards-s-le-cas-psr-7-7">Le cas PSR-7</a></li><li><a href="#cards-s-pieges-d-examen-8">Pièges d&#x27;examen</a></li><li><a href="#cards-s-application-9">Application</a></li><li><a href="#cards-s-fiche-express-10">Fiche express</a></li><li><a href="#cards-previous">Module 03 — Architecture Symfony · Cours « Framework overloading » · Rappel : <span lang="en">What identifies an overridden translation catalogue?</span></a></li></ul></nav><nav aria-label="Retour au module"><a href="lot-03.html">Tous les cours du module</a></nav></details><p class="local-quiz-count">7 questions disponibles · 7 par session Quiz</p></aside><div class="course-content"><div id="view-course" data-course-panel role="region" aria-labelledby="view-course-title"><h2 id="view-course-title">Cours</h2><p class="course-introduction"><a href="#s-objectif">Introduction</a> · <a href="#course-sections">Sections du cours</a></p><h2 id="reader-objectives" tabindex="-1">Objectifs d’apprentissage</h2><ul><li><a href="course-CRS-f74jcpnrrkhz.html#out-OUT-t5v0mavn0je1">Citer les PSR implémentées par Symfony</a></li><li><a href="course-CRS-f74jcpnrrkhz.html#out-OUT-3we3dc646hxk">Distinguer une PSR implémentée d&#x27;une PSR suivie</a></li><li><a href="course-CRS-f74jcpnrrkhz.html#out-OUT-sqrkr5sjqqz1">Énoncer que PSR-7 et PSR-17 passent par un bridge</a></li><li><a href="course-CRS-f74jcpnrrkhz.html#out-OUT-tga0d0zxwpvv">Associer le container à PSR-11 et le dispatcher à PSR-14</a></li></ul><aside class="pedagogy-legend" aria-label="Repères pédagogiques"><p><strong>Repères pédagogiques</strong></p><p>Ces repères décrivent le rôle du bloc, pas une fréquence officielle à l’examen.</p><p class="teaching-label essential"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="brain" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5C12 1 6 1 6 5C2 5 1 10 4 12C1 15 3 19 6 19C6 23 12 23 12 19V5M12 5C12 1 18 1 18 5C22 5 23 10 20 12C23 15 21 19 18 19C18 23 12 23 12 19M6 5C6 8 8 9 9 9M4 12H7L9 14M6 19V16M18 5C18 8 16 9 15 9M20 12H17L15 14M18 19V16"></path></svg> <strong>À comprendre</strong></p><p class="teaching-label essential"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="book" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5C9 3 5 3 2 4V20C5 19 9 19 12 21C15 19 19 19 22 20V4C19 3 15 3 12 5V21M5 8H8M5 12H8M16 8H19M16 12H19"></path></svg> <strong>À mémoriser</strong></p><p class="teaching-label example"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="code" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6L2 12L8 18M16 6L22 12L16 18M14 3L10 21"></path></svg> <strong>Exemple concret</strong></p><p class="teaching-label pitfall"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="warning" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3L23 21H1L12 3ZM12 9V14M12 17V18"></path></svg> <strong>Piège à éviter</strong></p><p class="teaching-label nuance"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="balance" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3V21M7 21H17M3 7L21 5M5 7L1 15H9L5 7M19 6L15 14H23L19 6M1 15Q5 20 9 15M15 14Q19 19 23 14"></path></svg> <strong>Nuance à connaître</strong></p><p>Précision, exception ou condition d’application d’une règle.</p></aside><section class="teaching-section" data-section="s-objectif"><h2 id="s-objectif" tabindex="-1">Objectif</h2><p>Le blog veut réutiliser une bibliothèque sans lui imposer toutes les classes
+de Symfony. Elle peut demander un logger, un dispatcher ou un message HTTP
+selon un contrat commun. Nous devons vérifier si l'objet que nous possédons
+respecte ce contrat, ou si une adaptation est nécessaire.</p>
+<p>Le PHP-FIG publie des <em>PHP Standard Recommendations</em>, ou PSR,
+pour faciliter cette interopérabilité entre projets. Nous distinguons
+les contrats implémentés, les conventions suivies et la frontière entre
+HttpFoundation et les messages PSR-7, dans notre périmètre Symfony 8.0.</p>
+<p>Ce cours prolonge <a href="course-CRS-1bxqx6ks853z.html">Components et Bridges</a>
+(où vit le bridge PSR-7) et <a href="course-CRS-epx8j3fhb38n.html">HttpFoundation</a>
+(le modèle Request/Response qu'on adapte). La mise en œuvre de PSR-4 côté
+projet rejoint <a href="course-CRS-156khyjssm25.html">Code organization</a>.</p></section><section class="teaching-section" data-section="s-l-essentiel"><h2 id="s-l-essentiel" tabindex="-1">L&#x27;essentiel</h2><p class="teaching-label essential"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="brain" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5C12 1 6 1 6 5C2 5 1 10 4 12C1 15 3 19 6 19C6 23 12 23 12 19V5M12 5C12 1 18 1 18 5C22 5 23 10 20 12C23 15 21 19 18 19C18 23 12 23 12 19M6 5C6 8 8 9 9 9M4 12H7L9 14M6 19V16M18 5C18 8 16 9 15 9M20 12H17L15 14M18 19V16"></path></svg> <strong>À comprendre</strong></p><aside class="section-digest" id="s-l-essentiel-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>provide déclare des capacités virtuelles.</li><li>Une entrée n&#x27;est pas nécessairement une PSR.</li></ol></aside><p><strong>Ce que cette partie veut réellement vous apprendre.</strong></p>
+<ul>
+<li><em>Pourquoi ce sujet existe.</em> Deux bibliothèques écrites par des équipes
+  différentes ne peuvent collaborer que si elles se mettent d'accord sur des
+  <strong>interfaces</strong>. Les PSR sont ces accords. Sans eux, chaque bibliothèque
+  imposerait <em>son</em> logger, <em>son</em> cache, <em>son</em> client HTTP.</li>
+<li><em>Le piège de fond.</em> Trois choses sont confondues : une PSR <strong>implémentée</strong>
+  (un contrat fourni), une PSR <strong>suivie</strong> (une convention de code) et une PSR
+  <strong>à adapter</strong> (PSR-7 face à HttpFoundation).</li>
+<li><em>Ce que l'auteur veut que vous compreniez.</em> <code>provide</code> est une <strong>annonce de
+  capacité à Composer</strong>, pas une configuration de services ; les <strong>versions</strong>
+  déclarées comptent autant que le numéro de PSR.</li>
+<li><em>Pourquoi c'est à l'examen.</em> Les questions portent sur des chiffres exacts :
+  15 entrées (8 + 5 + 2), <code>1.1|2.0</code> pour le container, <code>2.0|3.0</code> pour PSR-6,
+  <code>*</code> pour HTTPlug, WebLink pour PSR-13.</li>
+</ul>
+<p>Une interface décrit les opérations attendues ; une implémentation fournit
+un objet qui les réalise. Une bibliothèque typée sur cette interface peut
+donc accepter plusieurs fournisseurs sans connaître leur organisation interne.
+Elle doit toutefois recevoir le bon objet et une version compatible du contrat.</p>
+<p>Le manifeste <code>composer.json</code> de <code>symfony/symfony</code> 8.0 déclare huit capacités
+PSR dans <code>provide</code>. Cette déclaration aide Composer à satisfaire des dépendances
+sur des packages virtuels, noms représentant une capacité plutôt qu'un package
+unique à télécharger. Elle ne configure pas à elle seule les services du blog
+et ne rend pas chaque class Symfony conforme à toutes ces interfaces.</p>
+<p>Deux conventions étudiées ici, PSR-4 et PSR-12, répondent à un autre besoin :
+charger et présenter le code de manière prévisible. Enfin, la Request
+HttpFoundation de <code>/blog/42</code> n'est pas directement un message PSR-7.
+L'adaptation concerne cette frontière précise, pas toutes les bibliothèques
+externes ni une nouvelle étape obligatoire du traitement HTTP.</p>
+<pre class="highlight" tabindex="0"><code class="language-text">TROIS RELATIONS AUX PSR
+ 1. IMPLÉMENTÉES  → Symfony fournit un objet conforme    (PSR-3, 6, 11, 13,
+                    annoncé dans « provide »              14, 16, 18, 20)
+ 2. SUIVIES       → conventions de code, pas de contrat   (PSR-4, PSR-12)
+                    absentes de « provide »
+ 3. À ADAPTER     → HttpFoundation ≠ PSR-7 : il faut un   (PSR-7 + PSR-17)
+                    bridge et des fabriques</code></pre></section><section class="teaching-section" data-section="s-le-schema"><h2 id="s-le-schema" tabindex="-1">Le schéma</h2><aside class="section-digest" id="s-le-schema-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Le service container satisfait PSR-11.</li><li>EventDispatcher satisfait PSR-14.</li></ol></aside><p><strong>Où en est-on ?</strong> On a distingué trois relations. Le schéma traite la
+troisième, la moins intuitive : pourquoi une Request HTTP n'est-elle pas
+« déjà » un message PSR-7 ? Parce que ce sont deux <strong>types PHP</strong> différents
+qui décrivent le même protocole.</p>
+<p>Imaginons qu'une bibliothèque destinataire exige
+<code>ServerRequestInterface</code>, interface PSR-7 représentant une Request reçue
+côté serveur. Notre Request HttpFoundation ne satisfait pas ce type.
+Le schéma existant montre conceptuellement la conversion nécessaire ;
+il ne décrit pas une installation ou une API d'adaptation à mettre en œuvre ici :</p>
+<figure class="diagram" aria-labelledby="CRS-f74jcpnrrkhz-3-diagram-0-title CRS-f74jcpnrrkhz-3-diagram-0-description"><figcaption id="CRS-f74jcpnrrkhz-3-diagram-0-title">Adapter une Request n&#x27;est pas changer son interface</figcaption><p id="CRS-f74jcpnrrkhz-3-diagram-0-description">Une Request HttpFoundation est donnée à PsrHttpFactory. Le bridge utilise des fabriques PSR-17 pour produire un message PSR-7. Un consommateur PSR-7 reçoit ce nouveau message ; la Request initiale ne devient pas une implémentation PSR-7.</p><div class="mermaid" hidden>---
+title: Convertir HttpFoundation vers un message PSR-7
+---
+flowchart TD
+  accTitle: Adapter une Request n&#x27;est pas changer son interface
+  accDescr: Une Request HttpFoundation est donnée à PsrHttpFactory. Le bridge utilise des fabriques PSR-17 pour produire un message PSR-7. Un consommateur PSR-7 reçoit ce nouveau message ; la Request initiale ne devient pas une implémentation PSR-7.
+  H[&quot;Request HttpFoundation&quot;] --&gt;|&quot;createRequest&quot;| B[&quot;PsrHttpFactory : bridge&quot;]
+  F[&quot;fabriques PSR-17&quot;] -. &quot;dépendances injectées&quot; .-&gt; B
+  B --&gt;|&quot;construit le message&quot;| P[&quot;ServerRequestInterface PSR-7&quot;]
+  P --&gt;|&quot;fourni au consommateur&quot;| C([&quot;bibliothèque PSR-7&quot;])
+  classDef runtime fill:#e0f2fe,stroke:#0369a1,color:#0c4a6e
+  classDef contract fill:#fef3c7,stroke:#b45309,color:#78350f
+  classDef result fill:#dcfce7,stroke:#15803d,color:#14532d
+  class H,B,P runtime
+  class F contract
+  class C result</div></figure>
+<p>Une <em>fabrique</em> construit les objets conformes au contrat demandé.
+PSR-17 définit les interfaces de ces fabriques ; une implémentation concrète
+reste nécessaire pour produire des messages PSR-7.
+Le bridge représente l'adaptation entre modèles : sa présence ne transforme
+pas l'objet HttpFoundation initial en implémentation de l'interface attendue.</p>
+<p>Bleu : conversion ; orange : dépendances de construction ; vert : consommateur.
+L'entrée et le résultat sont deux représentations qu'il faut transmettre
+explicitement au bon destinataire. Ce schéma ne promet pas que tous les objets
+métier éventuellement stockés dans la Request deviendront portables entre
+bibliothèques.</p>
+<p>Un middleware est un élément d'une chaîne de traitement.
+Convertir un message ne construit ni n'exécute automatiquement une chaîne
+PSR-15 ; cette intégration constitue une responsabilité distincte.
+Nous restons ici à la compréhension de la frontière, sans installer
+ni enseigner un package d'adaptation externe.</p></section><section class="teaching-section" data-section="s-l-exemple-une-bibliotheque-qui-type-contre-une-psr"><h2 id="s-l-exemple-une-bibliotheque-qui-type-contre-une-psr" tabindex="-1">L&#x27;exemple : une bibliothèque qui type contre une PSR</h2><p class="teaching-label example"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="code" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6L2 12L8 18M16 6L22 12L16 18M14 3L10 21"></path></svg> <strong>Exemple concret</strong></p><p><strong>Où en est-on ?</strong> Le schéma montrait un cas qui <em>demande</em> une conversion ;
+voici le cas inverse, qui n'en demande <strong>aucune</strong>. Pourquoi les opposer ?
+Parce que le contraste est le cœur du cours : Symfony <em>implémente</em> PSR-11 et
+PSR-14, mais <em>adapte</em> PSR-7.</p>
+<p>La situation est plus directe pour le container et le dispatcher.
+Le <code>Plugin</code> du laboratoire demande les contrats PSR-11 et PSR-14 ;
+les objets Symfony correspondants peuvent être fournis sans adaptateur.
+Ce script suppose PHP 8.4, DependencyInjection et EventDispatcher 8.0,
+les interfaces PSR compatibles et l'autoload du projet chargé :</p>
+<pre class="highlight" tabindex="0"><code class="language-php">&lt;?php
+require __DIR__.'/vendor/autoload.php';
+
+use Psr\Container\ContainerInterface;
+use Psr\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\DependencyInjection\Container;
+use Symfony\Component\EventDispatcher\EventDispatcher;
+
+final class Plugin
+{
+    public function __construct(
+        private ContainerInterface $container,          // le container de Symfony convient
+        private EventDispatcherInterface $dispatcher,   // le dispatcher aussi, sans adapter
+    ) {}
+}
+
+function containsService(ContainerInterface $container, string $id): bool
+{
+    return $container-&gt;has($id);
+}
+
+$container = new Container();
+$dispatcher = new EventDispatcher();
+$plugin = new Plugin($container, $dispatcher);
+
+var_dump($container instanceof ContainerInterface);
+var_dump($dispatcher instanceof EventDispatcherInterface);
+var_dump(containsService($container, 'article.catalog'));</code></pre>
+<p>Résultat attendu : <code>bool(true)</code>, <code>bool(true)</code>, puis <code>bool(false)</code>.
+Les deux objets satisfont les contrats du constructeur, mais ce container
+de laboratoire ne contient pas notre catalogue : aucun service
+<code>article.catalog</code> n'y a été enregistré. La fonction <code>containsService()</code>
+lit une capacité du contrat PSR-11 sans imposer de class concrète Symfony.</p>
+<p>Construire le <code>Plugin</code> n'enregistre aucun listener et ne charge pas
+l'article 42. Dans l'application complète, le container compilé possède
+les services réellement configurés. La compatibilité PSR-11 ne conseille
+pas d'injecter ce container entier dans tous les services métier :
+recevoir directement <code>ArticleCatalog</code> reste préférable quand c'est
+la seule dépendance nécessaire.</p></section><section class="teaching-section" data-section="s-les-psr-implementees"><span class="outcome-anchor" id="out-OUT-t5v0mavn0je1" tabindex="-1"></span><span class="outcome-anchor" id="out-OUT-tga0d0zxwpvv" tabindex="-1"></span><h2 id="s-les-psr-implementees" tabindex="-1">Les PSR implémentées</h2><p><strong>Où en est-on ?</strong> Relation n° 1 sur 3 : les contrats que Symfony
+<strong>fournit</strong>. Pourquoi une table ? Parce que l'examen demande de relier trois
+informations : le numéro de PSR, le component qui la porte, et les versions
+déclarées. Les apprendre ensemble évite de les confondre.</p>
+<p>La table est un instantané des déclarations du package <code>symfony/symfony</code>
+8.0. Les nombres de sa dernière colonne sont des versions déclarées
+pour les capacités Composer, pas les numéros des PSR, de PHP ou de Symfony :</p>
+<table>
+<thead>
+<tr>
+<th>PSR</th>
+<th>Object</th>
+<th>Component Symfony</th>
+<th>Versions déclarées</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>PSR-3</strong></td>
+<td>Logger</td>
+<td>notamment le logger d'HttpKernel</td>
+<td><code>1.0</code>, <code>2.0</code>, <code>3.0</code></td>
+</tr>
+<tr>
+<td><strong>PSR-6</strong></td>
+<td>Cache</td>
+<td>Cache</td>
+<td><code>2.0</code>, <code>3.0</code> — pas <code>1.0</code></td>
+</tr>
+<tr>
+<td><strong>PSR-11</strong></td>
+<td>Container</td>
+<td>DependencyInjection</td>
+<td><code>1.1</code>, <code>2.0</code> — pas <code>1.0</code></td>
+</tr>
+<tr>
+<td><strong>PSR-13</strong></td>
+<td>Link</td>
+<td>WebLink</td>
+<td><code>1.0</code>, <code>2.0</code></td>
+</tr>
+<tr>
+<td><strong>PSR-14</strong></td>
+<td>Event Dispatcher</td>
+<td>EventDispatcher</td>
+<td><code>1.0</code></td>
+</tr>
+<tr>
+<td><strong>PSR-16</strong></td>
+<td>Simple Cache</td>
+<td>Cache</td>
+<td><code>1.0</code>, <code>2.0</code>, <code>3.0</code></td>
+</tr>
+<tr>
+<td><strong>PSR-18</strong></td>
+<td>HTTP Client</td>
+<td>HttpClient</td>
+<td><code>1.0</code></td>
+</tr>
+<tr>
+<td><strong>PSR-20</strong></td>
+<td>Clock</td>
+<td>Clock</td>
+<td><code>1.0</code></td>
+</tr>
+</tbody>
+</table>
+<p>Pour l'import, <strong>PSR-3</strong> définit le contrat de journalisation :
+la bibliothèque signale une étape ou une erreur sans choisir notre destination
+de logs. <strong>PSR-6</strong> organise le cache autour de pools et d'objets représentant
+des entrées ; <strong>PSR-16</strong> propose une interface plus directe de clés et valeurs.
+Ces contrats de stockage ne décident pas si la Response publique de l'article
+est cacheable selon HTTP (voir le Module 17 — Cache HTTP).</p>
+<p><strong>PSR-11</strong> permet notamment <code>get()</code> et <code>has()</code> sur un container ;
+<strong>PSR-14</strong> définit la distribution d'événements. Notre laboratoire vient
+de vérifier les objets fournis pour ces deux rôles. Cela ne garantit pas
+la présence d'un service particulier ou d'un listener métier.</p>
+<p><strong>PSR-13</strong> concerne les liens hypermédia, relations entre ressources ;
+WebLink porte ce rôle. Ce n'est pas la même chose que générer le chemin
+de <code>blog_show</code> avec Routing. <strong>PSR-18</strong> définit le contrat d'un client HTTP :
+HttpClient fournit l'intégration adaptée, notamment <code>Psr18Client</code>.
+L'API Contracts obtenue avec <code>HttpClient::create()</code> n'est pas, par simple
+ressemblance, l'interface PSR-18. Il faut fournir l'objet approprié et
+les dépendances de messages qu'il demande.</p>
+<p>Enfin, <strong>PSR-20</strong> définit une horloge : une bibliothèque peut demander
+l'heure courante sans imposer une source concrète. Cela permet de rendre
+un test dépendant du temps plus maîtrisable, sans modifier l'horloge
+de toute la machine.</p>
+<p>Une entrée <code>psr/&lt;nom&gt;-implementation</code> dans <code>provide</code> annonce donc une
+capacité pour les versions déclarées. Son absence ne prouve pas qu'aucune
+class ou aucun autre package de l'écosystème ne puisse réaliser un contrat.
+Il faut lire le manifeste du package réellement utilisé, puis vérifier
+l'objet fourni. Une application installant seulement quelques composants
+ne possède pas automatiquement toutes les capacités du package complet.</p>
+<p>Pourquoi les versions comptent : un package virtuel s'écrit
+<code>psr/container-implementation</code> avec une contrainte de version. Une
+bibliothèque qui exige <code>1.0</code> n'est <strong>pas</strong> satisfaite par <code>1.1|2.0</code> ; Composer
+refuse alors l'installation.</p>
+<pre class="highlight" tabindex="0"><code class="language-text"> bibliothèque exige               symfony/symfony 8.0 déclare      résultat
+ psr/container-implementation 1.0   1.1 | 2.0                     NON satisfait
+ psr/container-implementation ^2.0  1.1 | 2.0                     satisfait
+ psr/cache-implementation 1.0       2.0 | 3.0                     NON satisfait
+ php-http/client-implementation     *                             satisfait</code></pre>
+<div class="admonition info">
+<p class="admonition-title">🌍 In Real Life</p>
+<p><strong>La situation</strong> : une prise conforme doit correspondre au format demandé ; le catalogue du fabricant ne prouve pas qu'un appareil particulier est déjà branché.</p>
+<p><strong>L’équivalent dans Symfony</strong> : format → interface et version ; capacité annoncée → <code>provide</code> ; appareil branché → objet effectivement fourni au consommateur.</p>
+<p><strong>Retour à la réalité technique</strong> : compatibilité PSR-11 ne garantit aucun service particulier ; PSR-14 n'enregistre aucun listener. PSR-6/16 concernent le stockage applicatif, pas la réutilisation HTTP d'une Response.</p>
+<p><strong>🧠 Comment le mémoriser</strong> : « Vérifier le contrat et l'objet livré. » Image mentale : prise comparée à sa fiche technique. Question-réflexe : quel type et quelle version sont réellement attendus ?</p>
+<p><strong>⚠️ À ne pas confondre</strong> : conventions PSR-4/12 et capacités d'implémentation déclarées.</p>
+</div><aside class="enrichment" aria-label="Autre explication"><p>Les points d'attache standardisés d'une caisse permettent à plusieurs grues de la manipuler. Une interface PSR joue ce rôle : le client dépend de la forme du contrat, pas du nom de la class concrète.</p></aside><div class="retained-answer-context">
+<p><strong>Repère — Les deux autres familles de <code>provide</code> :</strong></p>
+<p lang="en"><strong>Question:</strong> Does Composer provide list only PSR implementations?</p>
+<p lang="en"><strong>Answer:</strong> No. Symfony contracts and HTTP-client interoperability contracts also appear.</p>
+<p>provide déclare des capacités virtuelles. Une entrée n'est pas nécessairement une PSR.</p>
+</div></section><section class="teaching-section" data-section="s-les-deux-autres-familles-de-provide"><h2 id="s-les-deux-autres-familles-de-provide" tabindex="-1">Les deux autres familles de `provide`</h2><p><strong>Où en est-on ?</strong> Suite de la relation n° 1 : la table ne montrait que 8
+des 15 entrées. Pourquoi les 7 autres ? Parce que la question « combien
+d'entrées ? » tombe à l'examen, et parce qu'elles montrent d'autres types de
+contrats que les PSR.</p>
+<p>Notre bibliothèque peut choisir une abstraction propre aux Contracts Symfony
+plutôt qu'une PSR. Le manifeste déclare cinq capacités correspondantes :
+<code>symfony/cache-implementation</code>, <code>symfony/event-dispatcher-implementation</code>,
+<code>symfony/http-client-implementation</code>, <code>symfony/service-implementation</code>
+et <code>symfony/translation-implementation</code>.</p>
+<p>Les contrats sont publiés séparément du framework complet. Une bibliothèque
+peut dépendre de ces abstractions sans exiger toute l'application Symfony ;
+elle conserve bien une dépendance aux contrats choisis.
+Le fournisseur concret et son assemblage restent nécessaires.
+Une interface de traduction ne crée pas à elle seule les catalogues
+de l'inscription.</p>
+<p>Les deux autres entrées sont
+<code>php-http/client-implementation</code> et <code>php-http/async-client-implementation</code>,
+issues de l'abstraction HTTPlug, antérieure à PSR-18.
+Elles sont déclarées à <code>*</code> dans ce manifeste.
+Cela signifie que cette déclaration n'impose pas de version particulière
+de la capacité virtuelle ; ce n'est pas une promesse que toute configuration,
+toute dépendance ou tout objet retourné possède automatiquement la même API.</p>
+<p>Nous comptons ainsi <strong>quinze entrées</strong> : huit PSR, cinq Contracts Symfony
+et deux HTTPlug. Ce compte décrit le manifeste étudié, pas une constante
+universelle de toutes les versions futures.</p>
+<table>
+<thead>
+<tr>
+<th>Famille</th>
+<th>Nombre</th>
+<th>Entrées</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>PSR</td>
+<td>8</td>
+<td><code>psr/log</code>, <code>cache</code>, <code>container</code>, <code>link</code>, <code>event-dispatcher</code>, <code>simple-cache</code>, <code>http-client</code>, <code>clock</code> (suffixe <code>-implementation</code>)</td>
+</tr>
+<tr>
+<td>Contracts Symfony</td>
+<td>5</td>
+<td><code>symfony/cache</code>, <code>event-dispatcher</code>, <code>http-client</code>, <code>service</code>, <code>translation</code> (suffixe <code>-implementation</code>)</td>
+</tr>
+<tr>
+<td>HTTPlug</td>
+<td>2</td>
+<td><code>php-http/client-implementation</code>, <code>php-http/async-client-implementation</code> (version <code>*</code>)</td>
+</tr>
+<tr>
+<td><strong>Total</strong></td>
+<td><strong>15</strong></td>
+<td></td>
+</tr>
+</tbody>
+</table></section><section class="teaching-section" data-section="s-les-psr-suivies"><span class="outcome-anchor" id="out-OUT-3we3dc646hxk" tabindex="-1"></span><h2 id="s-les-psr-suivies" tabindex="-1">Les PSR suivies</h2><aside class="section-digest" id="s-les-psr-suivies-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>PSR-4 concerne l&#x27;autoloading.</li><li>PSR-12 concerne les conventions de code.</li></ol></aside><p><strong>Où en est-on ?</strong> Relation n° 2 sur 3 : les PSR qui ne sont <strong>pas</strong> des
+contrats à fournir mais des <strong>conventions</strong> à respecter. Pourquoi les
+séparer ? Parce qu'elles n'apparaissent jamais dans <code>provide</code>, ce qui trompe
+les candidats.</p>
+<p>Une autre difficulté apparaît avant même l'appel d'un service :
+PHP doit trouver sa class. PSR-4 décrit une correspondance entre préfixes
+de namespaces et directories. <code>App\</code> vers <code>src/</code> est la configuration
+habituelle de l'application, pas un chemin imposé par la PSR elle-même.
+Voici le fragment à intégrer au manifeste Composer existant, sans écraser
+ses autres clés :</p>
+<pre class="highlight" tabindex="0"><code class="language-json">{
+  "autoload": {
+    "psr-4": {
+      "App\\": "src/"
+    }
+  }
+}</code></pre>
+<p>Avec cette correspondance, <code>App\Catalog\ArticleCatalog</code> est recherché
+dans <code>src/Catalog/ArticleCatalog.php</code>. Le nom déclaré, le chemin et leur casse
+doivent correspondre. Le fragment ne crée pas ce fichier et ne déclare
+pas automatiquement un service dans le container.</p>
+<pre class="highlight" tabindex="0"><code class="language-text"> App\Catalog\ArticleCatalog
+ └┬─┘ └──┬──┘ └─────┬─────┘
+  │      │          └─ nom du fichier : ArticleCatalog.php
+  │      └──────────── sous-dossier : Catalog/
+  └─────────────────── préfixe « App\ » → dossier « src/ »
+ ⇒ src/Catalog/ArticleCatalog.php</code></pre>
+<p>Après une modification de la configuration d'autoload, Composer 2
+peut régénérer ses fichiers avec :</p>
+<pre class="highlight" tabindex="0"><code class="language-bash">composer dump-autoload</code></pre>
+<p>Résultat attendu si la commande réussit : les fichiers d'autoload reflètent
+la configuration du projet. Elle ne répare pas une class mal nommée
+et ne déplace pas les sources. Aucune commande n'est exécutée ici.</p>
+<p>PSR-12 concerne la présentation du code ; les standards Symfony s'y appuient
+avec leurs choix propres. Suivre une convention de style ou d'autoload
+ne se déclare pas comme une capacité <code>psr/*-implementation</code> dans <code>provide</code>.
+Leur absence de cette clé n'indique donc pas qu'elles seraient ignorées.
+Les conventions de nommage propres à Symfony sont détaillées dans
+<a href="course-CRS-9g4qrgfs7nm4.html">Naming conventions</a>.</p></section><section class="teaching-section" data-section="s-le-cas-psr-7"><span class="outcome-anchor" id="out-OUT-sqrkr5sjqqz1" tabindex="-1"></span><h2 id="s-le-cas-psr-7" tabindex="-1">Le cas PSR-7</h2><aside class="section-digest" id="s-le-cas-psr-7-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>HttpFoundation ne fournit pas directement PSR-7.</li><li>Un contrat de messages immuables diffère de son modèle mutable.</li></ol></aside><p><strong>Où en est-on ?</strong> Relation n° 3 sur 3 : celle du schéma. Pourquoi la
+reprendre maintenant ? Parce que les deux autres relations donnent le contraste
+nécessaire pour comprendre qu'ici, <strong>rien n'est fourni tel quel</strong>.</p>
+<p>Revenons à la bibliothèque qui attend le message du GET <code>/blog/42</code>.
+HttpFoundation possède son propre modèle <code>Request</code>/<code>Response</code>,
+antérieur à PSR-7. Passer directement sa Request à un argument
+<code>Psr\Http\Message\ServerRequestInterface</code> ne devient pas valide
+parce que les deux objets représentent du HTTP.</p>
+<p>La frontière étudiée est la suivante :</p>
+<pre class="highlight" tabindex="0"><code class="language-text">Application : HttpFoundation Request
+Frontière : bridge et fabriques adaptées
+Destinataire : message conforme à ServerRequestInterface, PSR-7
+Retour éventuel : conversion vers HttpFoundation Response</code></pre>
+<p>Dans le sens HttpFoundation vers PSR-7, il faut une implémentation concrète
+des messages et les fabriques PSR-17 nécessaires à leur construction.
+Un bridge convertit les représentations ; il ne remplace pas ces objets.
+Nous n'enseignons pas ici leur installation ou leur configuration.
+La règle porte sur cette frontière, pas sur l'affirmation excessive
+qu'aucune class Symfony ne pourrait implémenter une interface de fabrique.</p>
+<p>La mutation diffère également. Plusieurs opérations HttpFoundation changent
+l'objet existant ; les méthodes de modification <code>with...()</code> des messages
+PSR-7 retournent un message avec la modification, dont il faut conserver
+le résultat. Cette immutabilité du message ne promet pas une copie profonde
+de tout objet contenu ni l'immutabilité du flux représentant le body.</p>
+<pre class="highlight" tabindex="0"><code class="language-text">HttpFoundation (mutable)            PSR-7 (immuable)
+  $request-&gt;setLocale('fr');          $psr = $psr-&gt;withHeader('X-A', '1');
+  modifie l'objet existant            retourne un NOUVEAU message ;
+                                      oublier d'affecter = modification perdue</code></pre>
+<p>L'adaptation doit donc être explicite au point d'intégration.
+Elle ne change pas notre <code>ArticleCatalog</code> en bibliothèque PSR-7
+et n'insère pas automatiquement un middleware dans HttpKernel.</p>
+<div class="admonition info">
+<p class="admonition-title">🌍 In Real Life</p>
+<p><strong>La situation</strong> : le même contenu doit être transcrit sur un formulaire différent pour être accepté par un autre guichet.</p>
+<p><strong>L’équivalent dans Symfony</strong> : formulaire initial → Request HttpFoundation ; transcription → bridge ; formulaire reçu → message PSR-7 construit avec les fabriques adaptées.</p>
+<p><strong>Retour à la réalité technique</strong> : l'objet initial ne change pas d'interface. Les méthodes PSR-7 <code>with...()</code> retournent le message modifié à conserver ; cela ne promet pas l'immutabilité profonde du flux. La conversion ne lance aucune chaîne PSR-15.</p>
+<p><strong>🧠 Comment le mémoriser</strong> : « Même sujet, contrat différent. » Image mentale : deux formulaires côte à côte. Question-réflexe : ai-je fourni la représentation attendue et conservé le résultat ?</p>
+<p><strong>⚠️ À ne pas confondre</strong> : adaptation de messages et orchestration HTTP.</p>
+</div></section><section class="teaching-section" data-section="s-pieges-d-examen"><h2 id="s-pieges-d-examen" tabindex="-1">Pièges d&#x27;examen</h2><p class="teaching-label pitfall"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="warning" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3L23 21H1L12 3ZM12 9V14M12 17V18"></path></svg> <strong>Piège à éviter</strong></p><ul class="pitfall-list"><li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : HTTP commun ne signifie pas type PHP commun.</summary><p><strong>HTTP commun ne signifie pas type PHP commun.</strong>
+La Request HttpFoundation n'est pas <code>ServerRequestInterface</code>.
+La conversion demande des objets concrets ; un bridge seul n'est pas
+une implémentation complète de messages, et la conversion n'exécute
+pas une chaîne de middleware.
+<em>Pourquoi on se trompe : les deux objets s'appellent « Request » et décrivent
+le même protocole ; on les croit interchangeables.</em></p></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : Une convention suivie n&#x27;est pas un service disponible.</summary><p><strong>Une convention suivie n'est pas un service disponible.</strong>
+PSR-4 explique comment trouver <code>ArticleCatalog.php</code> ; PSR-12 aide à lire
+son code. Aucune entrée <code>provide</code> ne remplace la configuration d'autoload
+ou le contenu du fichier.</p></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : Une interface satisfaite ne promet pas toutes les dépendances métier.</summary><p><strong>Une interface satisfaite ne promet pas toutes les dépendances métier.</strong>
+Le container et le dispatcher de notre laboratoire satisfont PSR-11
+et PSR-14 sans adaptateur, mais le catalogue y est absent et aucun listener
+n'a été enregistré. L'injection directe reste adaptée au service métier.</p></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : Le compte de quinze est un instantané, pas quinze PSR.</summary><p><strong>Le compte de quinze est un instantané, pas quinze PSR.</strong>
+Les cinq capacités Contracts et les deux HTTPlug ont d'autres noms
+et contrats. Un package virtuel ne se confond pas avec un service actif.
+<em>Pourquoi on se trompe : la clé <code>provide</code> est souvent présentée comme « les
+PSR de Symfony » ; le suffixe <code>-implementation</code> est commun aux trois familles.</em></p></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : Lire les versions autant que le numéro de PSR.</summary><p><strong>Lire les versions autant que le numéro de PSR.</strong>
+La capacité PSR-6 est déclarée en <code>2.0|3.0</code>, celle du container
+en <code>1.1|2.0</code>. Une exigence exactement <code>1.0</code> ne devient pas satisfaite
+parce que le numéro « PSR-11 » apparaît dans une présentation générale.
+Les autres lignes ont leurs propres ensembles de versions.
+<em>Pourquoi on se trompe : « Symfony implémente PSR-11 » est vrai, ce qui fait
+oublier de vérifier <strong>quelle version</strong> du paquet virtuel.</em></p></details></li></ul></section><section class="teaching-section" data-section="s-application"><h2 id="s-application" tabindex="-1">Application</h2><aside class="section-digest" id="s-application-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>PSR-4 concerne l&#x27;autoloading.</li><li>PSR-12 concerne les conventions de code.</li><li>Le service container satisfait PSR-11.</li><li>EventDispatcher satisfait PSR-14.</li></ol></aside>
+
+
+
+</section><section class="teaching-section" data-section="s-fiche-express"><h2 id="s-fiche-express" tabindex="-1">Fiche express</h2><p class="teaching-label essential"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="book" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5C9 3 5 3 2 4V20C5 19 9 19 12 21C15 19 19 19 22 20V4C19 3 15 3 12 5V21M5 8H8M5 12H8M16 8H19M16 12H19"></path></svg> <strong>À mémoriser</strong></p><p><strong>🧠 À retenir pour la certification :</strong></p>
+<p>Avant de fournir un objet à la bibliothèque du blog :</p>
+<ol>
+<li>Identifier son contrat : les capacités PSR déclarées ici concernent
+   <strong>3, 6, 11, 13, 14, 16, 18 et 20</strong>.</li>
+<li>Vérifier la version demandée et l'objet concret, pas seulement le package
+   installé : notamment <code>2.0|3.0</code> pour le cache PSR-6 et <code>1.1|2.0</code> pour le container.</li>
+<li>Distinguer PSR-4, correspondance d'autoload, et PSR-12, conventions de code,
+   des capacités listées dans <code>provide</code>.</li>
+<li>Fournir directement les objets compatibles PSR-11/PSR-14 quand ils
+   conviennent, sans en déduire qu'un container entier est la bonne dépendance métier.</li>
+<li>Pour PSR-7, reconnaître la frontière avec HttpFoundation et les objets
+   de message/fabrique nécessaires, sans supposer de conversion automatique.</li>
+<li>Lire les quinze entrées du manifeste dans leurs trois familles :
+   huit PSR, cinq Contracts Symfony, deux HTTPlug.</li>
+</ol>
+<p>Le bon test vérifie ce que reçoit effectivement le consommateur.
+Un nom de standard dans une dépendance ne charge pas l'article 42,
+ne remplit pas le cache et ne configure pas l'intégration à notre place.</p>
+<p><strong>Phrase de mémorisation : « Quinze annonces — 8 PSR, 5 Contracts, 2 HTTPlug ; PSR-4 et 12 se suivent, PSR-7 s'adapte ; et la version compte autant que le numéro. »</strong></p></section><section class="teaching-section" data-section="s-sources-officielles"><h2 id="s-sources-officielles" tabindex="-1">Sources officielles</h2><ul>
+<li><a>composer.json de symfony/symfony, key <code>provide</code></a></li>
+<li><a href="https://symfony.com/doc/8.0/components/psr7.html">The PSR-7 Bridge</a></li>
+</ul></section><section id="course-recalls" aria-labelledby="course-recalls-title" tabindex="-1"><h2 id="course-recalls-title">Rappels et liens avec les autres cours</h2><div data-recall-group="current"><h3>Rappels du cours actuel</h3><ul><li data-recall-course="CRS-f74jcpnrrkhz" data-recall-kind="digest_reference"><p class="recall-provenance">Module 03 — Architecture Symfony · Cours « Framework interoperability and PSRs »</p><p class="digest-reference"><a href="#s-le-schema-digest">Revoir la règle : Le service container satisfait PSR-11.</a></p></li><li data-recall-course="CRS-f74jcpnrrkhz" data-recall-kind="digest_reference"><p class="recall-provenance">Module 03 — Architecture Symfony · Cours « Framework interoperability and PSRs »</p><p class="digest-reference"><a href="#s-l-essentiel-digest">Revoir la règle : provide déclare des capacités virtuelles.</a></p></li><li><nav aria-label="Flashcards de l’application"><ul><li data-recall-course="CRS-f74jcpnrrkhz" data-recall-kind="application"><p class="recall-provenance">Module 03 — Architecture Symfony · Cours « Framework interoperability and PSRs »</p><a href="#A-f74jcpnrrkhz-5d7dd8d1aa-03">Flashcard : PSR-4 concerne l&#x27;autoloading. PSR-12 concerne les conventions de code.</a></li><li data-recall-course="CRS-f74jcpnrrkhz" data-recall-kind="application"><p class="recall-provenance">Module 03 — Architecture Symfony · Cours « Framework interoperability and PSRs »</p><a href="#A-f74jcpnrrkhz-6e0103f6cc-01">Flashcard : Le service container satisfait PSR-11. EventDispatcher satisfait PSR-14.</a></li></ul></nav></li></ul></div><div data-recall-group="other"><h3>Rappels des cours précédents / autres modules</h3><ul><li data-recall-course="CRS-f9s8mpaydnbx" data-recall-kind="previous_course"><p class="recall-provenance">Module 03 — Architecture Symfony · Cours « Framework overloading »</p><p>La surcharge suit le domain. Le nom d&#x27;un bundle dans un catalogue peut n&#x27;être qu&#x27;un nom de domain.</p><p><a href="#cards-previous">Rappel : <span lang="en">What identifies an overridden translation catalogue?</span></a></p></li></ul></div></section><nav class="course-sequence" aria-label="Ordre de lecture"><a rel="prev" href="course-CRS-6m32av3nr9eh.html" aria-label="Précédent : Release management and roadmap schedule — Module 03 — Architecture Symfony">Précédent : Release management and roadmap schedule</a> <a href="lot-03.html">Sommaire : Module 03 — Architecture Symfony</a> <a rel="next" href="course-CRS-9g4qrgfs7nm4.html" aria-label="Suivant : Naming conventions — Module 03 — Architecture Symfony">Suivant : Naming conventions</a></nav><p class="course-practice-entry"><a class="button" href="#view-quiz">Fin du cours — s’entraîner avec le Quiz</a></p></div><div id="view-flashcards" data-course-panel role="region" aria-labelledby="view-flashcards-title"><h2 id="view-flashcards-title">Flashcards</h2><p lang="en">Answer before revealing each card.</p><p>Ces cartes ne mesurent pas une maîtrise notée.</p><div id="cards-s-l-essentiel-1" data-card-section="s-l-essentiel"><h3><a href="#s-l-essentiel">Revoir : L&#x27;essentiel</a></h3><div class="reader-cards"><details class="reader-card" id="A-f74jcpnrrkhz-65c42c80d9-02"><summary lang="en">Does Composer provide list only PSR implementations?</summary><p lang="en">No. Symfony contracts and HTTP-client interoperability contracts also appear.</p><p lang="fr">provide déclare des capacités virtuelles. Une entrée n&#x27;est pas nécessairement une PSR.</p><a href="course-CRS-f74jcpnrrkhz.html#out-OUT-t5v0mavn0je1">Revoir le passage précis</a></details></div></div><div id="cards-s-le-schema-2" data-card-section="s-le-schema"><h3><a href="#s-le-schema">Revoir : Le schéma</a></h3><div class="reader-cards"><details class="reader-card" id="A-f74jcpnrrkhz-6e0103f6cc-01"><summary lang="en">Which PSRs describe the container and event dispatcher contracts?</summary><p lang="en">PSR-11 and PSR-14.</p><p lang="fr">Le service container satisfait PSR-11. EventDispatcher satisfait PSR-14.</p><a href="course-CRS-f74jcpnrrkhz.html#out-OUT-t5v0mavn0je1">Revoir le passage précis</a></details></div></div><div id="cards-s-l-exemple-une-bibliotheque-qui-type-contre-une-psr-3" data-card-section="s-l-exemple-une-bibliotheque-qui-type-contre-une-psr"><h3><a href="#s-l-exemple-une-bibliotheque-qui-type-contre-une-psr">Revoir : L&#x27;exemple : une bibliothèque qui type contre une PSR</a></h3><div class="reader-cards"><p class="reader-card-reference" id="A-f74jcpnrrkhz-be5a984dc7-01">Rappel déjà proposé : <a lang="en" href="#A-f74jcpnrrkhz-6e0103f6cc-01">Which PSRs describe the container and event dispatcher contracts?</a> · <a href="course-CRS-f74jcpnrrkhz.html#out-OUT-t5v0mavn0je1">Passage canonique</a></p></div></div><div id="cards-s-les-psr-implementees-4" data-card-section="s-les-psr-implementees"><h3><a href="#s-les-psr-implementees">Revoir : Les PSR implémentées</a></h3><div class="reader-cards"><p class="reader-card-reference" id="A-f74jcpnrrkhz-b87976f601-01">Rappel déjà proposé : <a lang="en" href="#A-f74jcpnrrkhz-6e0103f6cc-01">Which PSRs describe the container and event dispatcher contracts?</a> · <a href="course-CRS-f74jcpnrrkhz.html#out-OUT-t5v0mavn0je1">Passage canonique</a></p></div></div><div id="cards-s-les-deux-autres-familles-de-provide-5" data-card-section="s-les-deux-autres-familles-de-provide"><h3><a href="#s-les-deux-autres-familles-de-provide">Revoir : Les deux autres familles de `provide`</a></h3><div class="reader-cards"><p class="reader-card-reference" id="A-f74jcpnrrkhz-d2e0f328a8-02">Rappel déjà proposé : <a lang="en" href="#A-f74jcpnrrkhz-65c42c80d9-02">Does Composer provide list only PSR implementations?</a> · <a href="course-CRS-f74jcpnrrkhz.html#out-OUT-t5v0mavn0je1">Passage canonique</a></p></div></div><div id="cards-s-les-psr-suivies-6" data-card-section="s-les-psr-suivies"><h3><a href="#s-les-psr-suivies">Revoir : Les PSR suivies</a></h3><div class="reader-cards"><details class="reader-card" id="A-f74jcpnrrkhz-5d7dd8d1aa-03"><summary lang="en">Why are PSR-4 and PSR-12 not implementation packages in provide?</summary><p lang="en">They describe autoloading and coding conventions rather than runtime service implementations.</p><p lang="fr">PSR-4 concerne l&#x27;autoloading. PSR-12 concerne les conventions de code.</p><a href="course-CRS-f74jcpnrrkhz.html#out-OUT-3we3dc646hxk">Revoir le passage précis</a></details></div></div><div id="cards-s-le-cas-psr-7-7" data-card-section="s-le-cas-psr-7"><h3><a href="#s-le-cas-psr-7">Revoir : Le cas PSR-7</a></h3><div class="reader-cards"><details class="reader-card" id="A-f74jcpnrrkhz-6b3db9b45c-04"><summary lang="en">Does HttpFoundation directly implement PSR-7 messages?</summary><p lang="en">No. It uses its own mutable Request and Response model.</p><p lang="fr">HttpFoundation ne fournit pas directement PSR-7. Un contrat de messages immuables diffère de son modèle mutable.</p><a href="course-CRS-f74jcpnrrkhz.html#out-OUT-sqrkr5sjqqz1">Revoir le passage précis</a></details></div></div><div id="cards-s-pieges-d-examen-8" data-card-section="s-pieges-d-examen"><h3><a href="#s-pieges-d-examen">Revoir : Pièges d&#x27;examen</a></h3><div class="reader-cards"><p class="reader-card-reference" id="A-f74jcpnrrkhz-596d5af532-01">Rappel déjà proposé : <a lang="en" href="#A-f74jcpnrrkhz-6e0103f6cc-01">Which PSRs describe the container and event dispatcher contracts?</a> · <a href="course-CRS-f74jcpnrrkhz.html#out-OUT-t5v0mavn0je1">Passage canonique</a></p></div></div><div id="cards-s-application-9" data-card-section="s-application"><h3><a href="#s-application">Revoir : Application</a></h3><div class="reader-cards"><p class="reader-card-reference" id="A-f74jcpnrrkhz-e7ad522ea3-03">Rappel déjà proposé : <a lang="en" href="#A-f74jcpnrrkhz-5d7dd8d1aa-03">Why are PSR-4 and PSR-12 not implementation packages in provide?</a> · <a href="course-CRS-f74jcpnrrkhz.html#out-OUT-3we3dc646hxk">Passage canonique</a></p><p class="reader-card-reference" id="A-f74jcpnrrkhz-e7ad522ea3-01">Rappel déjà proposé : <a lang="en" href="#A-f74jcpnrrkhz-6e0103f6cc-01">Which PSRs describe the container and event dispatcher contracts?</a> · <a href="course-CRS-f74jcpnrrkhz.html#out-OUT-t5v0mavn0je1">Passage canonique</a></p></div></div><div id="cards-s-fiche-express-10" data-card-section="s-fiche-express"><h3><a href="#s-fiche-express">Revoir : Fiche express</a></h3><div class="reader-cards"><p class="reader-card-reference" id="A-f74jcpnrrkhz-b11e58e15e-01">Rappel déjà proposé : <a lang="en" href="#A-f74jcpnrrkhz-6e0103f6cc-01">Which PSRs describe the container and event dispatcher contracts?</a> · <a href="course-CRS-f74jcpnrrkhz.html#out-OUT-t5v0mavn0je1">Passage canonique</a></p></div></div><div id="cards-previous"><p class="recall-provenance">Module 03 — Architecture Symfony · Cours « Framework overloading »</p><aside class="checkpoint"><h2>Rappel d’un cours antérieur</h2><p>Avant de poursuivre : Framework overloading.</p><details class="corpus-correction"><summary lang="en">What identifies an overridden translation catalogue?</summary><p lang="en">Its translation domain and locale, not a special bundle relationship.</p><p>La surcharge suit le domain. Le nom d&#x27;un bundle dans un catalogue peut n&#x27;être qu&#x27;un nom de domain.</p><a href="course-CRS-f9s8mpaydnbx.html#out-OUT-2r6g1ds91vvw">Relire la correction dans le cours antérieur</a></details></aside></div></div><div id="view-quiz" data-course-panel role="region" aria-labelledby="view-quiz-title"><aside class="revision-context"><p><strong>Avant le quiz :</strong> Le blog veut réutiliser une bibliothèque sans lui imposer toutes les classes de Symfony. Elle peut demander un logger, un dispatcher ou un message HTTP selon un contrat commun. Nous devons vérifier si l&#x27;objet que nous possédons respecte ce contrat, ou si une adaptation est nécessaire.</p><p>Quelle donnée entre, quelle responsabilité agit et quelle condition change le résultat ? Pour chaque correction, vérifiez ces conditions dans <a href="course-CRS-f74jcpnrrkhz.html#s-objectif">le passage enseigné</a>, sans supposer que toutes les branches du blog sont exécutées.</p></aside><h2 id="view-quiz-title">Quiz</h2><p class="quiz-size" lang="en">7 eligible learning questions · 7 per session. Repeating a question does not demonstrate mastery.</p><p id="course-quiz-status" role="status">Quiz interactif non chargé. Démarrez après chargement de la banque locale.</p><div id="course-quiz-controls" class="assessment-main" hidden><div id="course-quiz-assessment-controls" hidden><select id="course-quiz-assessment-mode" aria-label="Mode du quiz" hidden><option value="learning">Entraînement</option></select><p id="course-quiz-training-scope"></p><button id="course-quiz-start-assessment" type="button" lang="en">Start practice</button><button id="course-quiz-finish-assessment" type="button" lang="en" hidden>End session</button></div><p id="course-quiz-assessment-error" role="alert"></p><p id="course-quiz-assessment-timer" hidden></p><p id="course-quiz-session-progress" class="quiz-progress" role="status" lang="en"></p><div id="course-quiz-assessment-app" tabindex="-1"></div><nav id="course-quiz-session-navigation" aria-label="Questions du cours"></nav><div id="course-quiz-learning-overview" aria-live="polite"></div></div><div id="course-quiz-native"><p>Sans JavaScript ou si le chargement échoue : aucune tentative notée. Les <a href="#view-flashcards">flashcards du cours</a> restent disponibles.</p><details class="course-quiz-fallback" data-question-id="L-f74jcpnrrkhz-base-v1"><summary lang="en">Does Composer provide list only PSR implementations? Select one answer (radio).</summary><p>Correction de consultation — non notée.</p><p>provide déclare des capacités virtuelles. Une entrée n&#x27;est pas nécessairement une PSR.</p><ul><li><strong lang="en">Distractor: No; provide lists concrete service instances in the container.</strong><p>provide est une déclaration Composer de capacités virtuelles.</p></li><li><strong lang="en">Correct: No; virtual capabilities include non-PSR contracts too.</strong><p>provide déclare des capacités virtuelles. Une entrée n&#x27;est pas nécessairement une PSR.</p></li><li><strong lang="en">Distractor: Yes; every provided package is a numbered PSR implementation.</strong><p>provide peut désigner des contracts Symfony ou d&#x27;interopérabilité.</p></li></ul><a href="course-CRS-f74jcpnrrkhz.html#out-OUT-t5v0mavn0je1">Relire le passage exact</a></details></div></div></div></div><details class="transfer-panel"><summary>Sauvegarde et transfert de progression</summary><p id="reading-status" role="status">Sans JavaScript : lecture libre ; progression non enregistrée.</p><p><a href="assessment.html#overview-title">Lecture, réussites immédiates et différées</a></p><p>Transfert manuel — aucune synchronisation automatique</p><p id="persistence-status" role="status"></p><button type="button" class="secondary" id="export-progress">Exporter ma progression</button><label for="import-progress">Choisir un JSON pour fusionner ma progression (sans remplacement)</label><input type="file" id="import-progress" accept="application/json,.json"><p id="transfer-status" role="status"></p></details></main><footer class="site-footer"><a href="catalogue.html">Catalogue</a> <a href="sources.html">Sources et attribution</a> <a href="#contenu">Haut de page</a></footer></body></html>

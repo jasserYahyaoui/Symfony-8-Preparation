@@ -1,0 +1,386 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; connect-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Framework overloading — Symfony 8 Preparation</title><link rel="stylesheet" href="styles.css"><link rel="stylesheet" href="reader.css"><script src="mermaid.min.js" defer></script><script src="mermaid-init.js" defer></script><link rel="stylesheet" href="assessment.css"><script src="fixed-exams-data.js" defer></script><script src="fixed-exams.js" defer></script><script src="learning-state.js" defer></script><script src="guide.js" defer></script><script src="reader-catalog.js" defer></script><script src="reader.js" defer></script><script src="site-state.js" defer></script><script src="assessment.js" defer></script><script src="course-views.js" defer></script><link rel="stylesheet" href="syntax-highlight.css"><script src="prism-syntax.js" defer></script><script src="syntax-highlight.js" defer></script></head><body data-course-id="CRS-f9s8mpaydnbx"><a class="skip" href="#contenu">Aller au contenu</a><header class="site-header"><a class="brand" href="index.html">S8 Preparation</a><nav aria-label="Navigation principale"><a href="index.html">Accueil</a> <a href="catalogue.html">Parcours</a> <a href="assessment.html?mode=review">Réviser</a> <a href="examens.html">Examens blancs</a> <a href="jour-j.html">Jour J</a></nav></header><main id="contenu" tabindex="-1" class="corpus-reader"><nav class="breadcrumb" aria-label="Fil d’Ariane"><a href="index.html">Accueil</a> <span aria-hidden="true">›</span> <a href="catalogue.html">Parcours</a> <span aria-hidden="true">›</span> <a href="lot-03.html">Module 03 — Architecture Symfony</a> <span aria-hidden="true">›</span> <span aria-current="page">Framework overloading</span></nav><h1>Framework overloading</h1><p class="muted">Symfony 8.0 · API PHP ≤ 8.4 · Twig ≤ 3.22. Préparation indépendante.</p><p class="revision-status">Rédaction narrative P11 : projection nouvelle, non couverte par les décisions historiques P10. Aucune approbation officielle ni garantie de réussite.</p><aside class="narrative-context" aria-label="Repères de lecture"><p><strong>Prérequis de lecture :</strong> <a href="course-CRS-tygmreqkkds3.html">HttpKernel component and FrameworkBundle</a></p><p><strong>Concepts voisins :</strong> <a href="course-CRS-p1694d5f7r8c.html">Service container</a> — Séparer assemblage de l’application et appel HTTP. <a href="lot-03.html">Comparer les responsabilités dans ce module</a> · <a href="carte-composants.html">Situer cette responsabilité dans le blog</a> · <a href="glossaire.html">Distinguer les termes voisins</a></p><p><a href="ordre-lecture.html">Retrouver les 163 cours dans le parcours recommandé</a>. Ce repère ne modifie ni votre historique ni votre progression.</p></aside><div class="course-layout"><details class="lot-course-menu"><summary>Cours du module · 15 cours</summary><nav aria-label="Cours du module"><a class="lot-context" href="lot-03.html">Module 03 — Architecture Symfony</a><ol><li><a href="course-CRS-epx8j3fhb38n.html">HttpFoundation component</a></li><li><a href="course-CRS-tyf3yfxjc3sa.html">Symfony Flex</a></li><li><a href="course-CRS-y84syktt20ww.html">License</a></li><li><a href="course-CRS-1bxqx6ks853z.html">Components and Bridges</a></li><li><a href="course-CRS-156khyjssm25.html">Code organization</a></li><li><a href="course-CRS-mpwjc4g3vmj7.html">Request handling</a></li><li><a href="course-CRS-kd67y4vnd0mm.html">Exception handling</a></li><li><a href="course-CRS-2hpcy2rscq7m.html">Event dispatcher and kernel events</a></li><li><a href="course-CRS-k2xvr11x936e.html">Official best practices</a></li><li><a href="course-CRS-21ec5kwrcmkm.html">Backward compatibility promise</a></li><li><a href="course-CRS-rkq1d437dw5d.html">Deprecations best practices</a></li><li><a href="course-CRS-f9s8mpaydnbx.html" aria-current="page">Framework overloading</a></li><li><a href="course-CRS-6m32av3nr9eh.html">Release management and roadmap schedule</a></li><li><a href="course-CRS-f74jcpnrrkhz.html">Framework interoperability and PSRs</a></li><li><a href="course-CRS-9g4qrgfs7nm4.html">Naming conventions</a></li></ol><a href="lot-03.html#view-quiz">Quiz du module</a></nav></details><aside class="course-section-menu" aria-label="Sommaire du cours"><nav class="course-actions" aria-label="Activités du cours"><a id="tab-course" href="#view-course">Cours</a><a id="tab-flashcards" href="#view-flashcards">Flashcards</a><a id="tab-quiz" href="#view-quiz">Quiz</a></nav><details class="course-section-disclosure"><summary id="course-sections">Sections du cours</summary><nav aria-label="Sections du cours"><ul><li><a href="#s-objectif">Objectif</a></li><li><a href="#s-l-essentiel">L&#x27;essentiel</a></li><li><a href="#s-le-schema">Le schéma</a></li><li><a href="#s-l-exemple-etendre-le-template-que-l-on-surcharge">L&#x27;exemple : étendre le template que l&#x27;on surcharge</a></li><li><a href="#s-vue-d-ensemble">Vue d&#x27;ensemble</a></li><li><a href="#s-les-templates">Les templates</a></li><li><a href="#s-le-controller-a-deux-cas">Le controller a deux cas</a></li><li><a href="#s-les-translations-ne-dependent-pas-des-bundles">Les translations ne dépendent pas des bundles</a></li><li><a href="#s-la-validation-ne-se-surcharge-pas">La validation ne se surcharge pas</a></li><li><a href="#s-pieges-d-examen">Pièges d&#x27;examen</a></li><li><a href="#s-application">Application</a></li><li><a href="#s-fiche-express">Fiche express</a></li><li><a href="#s-sources-officielles">Sources officielles</a></li><li><a href="#reader-objectives">Objectifs d’apprentissage</a></li><li><a href="#course-recalls">Rappels et liens avec les autres cours</a></li></ul></nav><nav aria-label="Flashcards par section"><a href="#view-flashcards">Flashcards par section</a><ul><li><a href="#cards-s-l-essentiel-1">L&#x27;essentiel</a></li><li><a href="#cards-s-le-schema-2">Le schéma</a></li><li><a href="#cards-s-l-exemple-etendre-le-template-que-l-on-surcharge-3">L&#x27;exemple : étendre le template que l&#x27;on surcharge</a></li><li><a href="#cards-s-vue-d-ensemble-4">Vue d&#x27;ensemble</a></li><li><a href="#cards-s-les-templates-5">Les templates</a></li><li><a href="#cards-s-le-controller-a-deux-cas-6">Le controller a deux cas</a></li><li><a href="#cards-s-les-translations-ne-dependent-pas-des-bundles-7">Les translations ne dépendent pas des bundles</a></li><li><a href="#cards-s-la-validation-ne-se-surcharge-pas-8">La validation ne se surcharge pas</a></li><li><a href="#cards-s-pieges-d-examen-9">Pièges d&#x27;examen</a></li><li><a href="#cards-s-application-10">Application</a></li><li><a href="#cards-s-fiche-express-11">Fiche express</a></li><li><a href="#cards-previous">Module 03 — Architecture Symfony · Cours « Backward compatibility promise » · Rappel : <span lang="en">Are newly added members in a Symfony subclass guaranteed against future name collisions?</span></a></li></ul></nav><nav aria-label="Retour au module"><a href="lot-03.html">Tous les cours du module</a></nav></details><p class="local-quiz-count">6 questions disponibles · 6 par session Quiz</p></aside><div class="course-content"><div id="view-course" data-course-panel role="region" aria-labelledby="view-course-title"><h2 id="view-course-title">Cours</h2><p class="course-introduction"><a href="#s-objectif">Introduction</a> · <a href="#course-sections">Sections du cours</a></p><h2 id="reader-objectives" tabindex="-1">Objectifs d’apprentissage</h2><ul><li><a href="course-CRS-f9s8mpaydnbx.html#out-OUT-w0kft9548h99">Associer chaque partie surchargeable à son mécanisme</a></li><li><a href="course-CRS-f9s8mpaydnbx.html#out-OUT-2r6g1ds91vvw">Localiser un template de surcharge</a></li><li><a href="course-CRS-f9s8mpaydnbx.html#out-OUT-s8kw5gsv7y2e">Justifier l&#x27;emploi du préfixe @!</a></li><li><a href="course-CRS-f9s8mpaydnbx.html#out-OUT-97dtctsck41f">Énoncer que les constraints de validation s&#x27;ajoutent sans se remplacer</a></li></ul><aside class="pedagogy-legend" aria-label="Repères pédagogiques"><p><strong>Repères pédagogiques</strong></p><p>Ces repères décrivent le rôle du bloc, pas une fréquence officielle à l’examen.</p><p class="teaching-label essential"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="brain" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5C12 1 6 1 6 5C2 5 1 10 4 12C1 15 3 19 6 19C6 23 12 23 12 19V5M12 5C12 1 18 1 18 5C22 5 23 10 20 12C23 15 21 19 18 19C18 23 12 23 12 19M6 5C6 8 8 9 9 9M4 12H7L9 14M6 19V16M18 5C18 8 16 9 15 9M20 12H17L15 14M18 19V16"></path></svg> <strong>À comprendre</strong></p><p class="teaching-label essential"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="book" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5C9 3 5 3 2 4V20C5 19 9 19 12 21C15 19 19 19 22 20V4C19 3 15 3 12 5V21M5 8H8M5 12H8M16 8H19M16 12H19"></path></svg> <strong>À mémoriser</strong></p><p class="teaching-label example"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="code" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6L2 12L8 18M16 6L22 12L16 18M14 3L10 21"></path></svg> <strong>Exemple concret</strong></p><p class="teaching-label pitfall"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="warning" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3L23 21H1L12 3ZM12 9V14M12 17V18"></path></svg> <strong>Piège à éviter</strong></p><p class="teaching-label nuance"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="balance" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3V21M7 21H17M3 7L21 5M5 7L1 15H9L5 7M19 6L15 14H23L19 6M1 15Q5 20 9 15M15 14Q19 19 23 14"></path></svg> <strong>Nuance à connaître</strong></p><p>Précision, exception ou condition d’application d’une règle.</p></aside><section class="teaching-section" data-section="s-objectif"><h2 id="s-objectif" tabindex="-1">Objectif</h2><p>Le lecteur a consulté <code>/blog/42</code> et choisit maintenant de s'inscrire.
+Supposons que cette branche utilise un bundle tiers fictif, <code>AcmeUserBundle</code>,
+qui fournit un écran de confirmation, des traductions et un form.
+Nous voulons adapter cet écran sans modifier les fichiers installés du bundle.</p>
+<p>La difficulté est de choisir le bon mécanisme : un template se résout par
+priorité de chemin, un service peut être décoré et les contraintes de validation
+s'additionnent. Nous suivons ces différences avec Symfony 8.0 et Twig 3.22 ;
+le bundle fictif est un laboratoire, pas une dépendance imposée au blog.</p>
+<p>Ce cours s'appuie sur la notion de bundle vue dans
+<a href="course-CRS-156khyjssm25.html">Code organization</a> et sur le fait que le
+framework est un assemblage de components
+(<a href="course-CRS-1bxqx6ks853z.html">Components et Bridges</a>). La promesse de
+compatibilité qui encadre ce qu'on peut surcharger sans casser est décrite
+dans <a href="course-CRS-21ec5kwrcmkm.html">Backward compatibility promise</a>.</p></section><section class="teaching-section" data-section="s-l-essentiel"><h2 id="s-l-essentiel" tabindex="-1">L&#x27;essentiel</h2><p class="teaching-label essential"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="brain" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5C12 1 6 1 6 5C2 5 1 10 4 12C1 15 3 19 6 19C6 23 12 23 12 19V5M12 5C12 1 18 1 18 5C22 5 23 10 20 12C23 15 21 19 18 19C18 23 12 23 12 19M6 5C6 8 8 9 9 9M4 12H7L9 14M6 19V16M18 5C18 8 16 9 15 9M20 12H17L15 14M18 19V16"></path></svg> <strong>À comprendre</strong></p><aside class="section-digest" id="s-l-essentiel-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>La surcharge suit le domain.</li><li>Le nom d&#x27;un bundle dans un catalogue peut n&#x27;être qu&#x27;un nom de domain.</li></ol></aside><p><strong>Ce que cette partie veut réellement vous apprendre.</strong></p>
+<ul>
+<li><em>Pourquoi ce sujet existe.</em> Modifier <code>vendor/</code> serait perdu à la prochaine
+  mise à jour ; copier tout un bundle fige ses défauts. Symfony offre donc des
+  <strong>points de personnalisation</strong> par type de ressource.</li>
+<li><em>Le piège de fond.</em> Il n'existe <strong>pas un</strong> mécanisme de surcharge, mais
+  plusieurs, aux <strong>modèles différents</strong> : priorité de chemin (templates,
+  traductions), enveloppe (décoration), ordre de matching (routes),
+  <strong>cumul</strong> (validation).</li>
+<li><em>Ce que l'auteur veut que vous compreniez.</em> Avant d'agir : <em>quelle ressource
+  est réellement consommée ?</em> (nom Twig, id de service, route, domain, métadonnées
+  de validation). Cette question choisit le mécanisme.</li>
+<li><em>Pourquoi c'est à l'examen.</em> Les questions testent le bon mécanisme pour un
+  besoin donné : controller-service → décoration ; route non importée ;
+  <em>mapped superclass</em> ; cache vidé même en debug.</li>
+</ul>
+<p>« Surcharger » signifie ici personnaliser une fonctionnalité fournie,
+pas appliquer une unique instruction du framework. Avant de modifier quoi
+que ce soit, identifions la ressource réellement consommée : nom Twig,
+identifiant de service, route, domain de traduction ou métadonnées de validation.</p>
+<p>Pour la confirmation d'inscription, remplacer un bloc de template suffit
+si seul le texte change. Si l'action doit faire autre chose, changer le template
+ne modifiera pas son comportement. Et si l'on veut assouplir une validation,
+déclarer une contrainte moins stricte ne supprimera pas celle du bundle.</p>
+<p>Cette analyse évite de copier tout un bundle ou de modifier <code>vendor/</code>.
+Elle prépare aussi les mises à jour : plus nous personnalisons un point
+public précis, moins nous dépendons des détails internes du fournisseur.
+Il faut néanmoins tester que le point d'extension existe toujours.</p>
+<pre class="highlight" tabindex="0"><code class="language-text">QUELLE RESSOURCE ?              →  MODÈLE DE PERSONNALISATION
+ template / traduction          →  PRIORITÉ de chemin (le fichier appli gagne)
+ service (dont controller)      →  ENVELOPPE (décoration)
+ route                          →  ORDRE (premier match) ou RETRAIT de l'import
+ contrainte de validation       →  CUMUL (on ajoute, on ne remplace pas)
+ définitions du container       →  COMPILER PASS</code></pre></section><section class="teaching-section" data-section="s-le-schema"><h2 id="s-le-schema" tabindex="-1">Le schéma</h2><aside class="section-digest" id="s-le-schema-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Un controller-service relève de la décoration.</li><li>Ne pas confondre cette approche avec la priorité de routes.</li></ol></aside><p><strong>Où en est-on ?</strong> On a un tableau de modèles. Le schéma illustre le cas le
+plus local — un template — et son piège : <em>comment étendre l'original sans
+tomber sur sa propre surcharge ?</em> Pourquoi ce cas en premier ? Parce que c'est
+la personnalisation la plus fréquente et celle où une boucle infinie guette.</p>
+<p>Commençons par le cas le plus local : garder la structure d'une page
+du bundle et remplacer l'un de ses blocs. Le nom normal doit sélectionner
+notre surcharge ; le nom du parent doit au contraire atteindre l'original.
+Le schéma utilise les noms abrégés <code>Acme</code> et <code>AcmeBundle</code> :</p>
+<figure class="diagram" aria-labelledby="CRS-f9s8mpaydnbx-3-diagram-0-title CRS-f9s8mpaydnbx-3-diagram-0-description"><figcaption id="CRS-f9s8mpaydnbx-3-diagram-0-title">Étendre l&#x27;original sans retomber dans sa propre surcharge</figcaption><p id="CRS-f9s8mpaydnbx-3-diagram-0-description">Le nom Twig normal du bundle résout d&#x27;abord le template applicatif de surcharge. Dans ce template, extends avec le préfixe @! désigne l&#x27;original du bundle. Réutiliser le nom normal peut sélectionner à nouveau la surcharge et provoquer une récursion.</p><div class="mermaid" hidden>---
+title: Étendre le template original depuis une surcharge
+---
+flowchart TD
+  accTitle: Étendre l&#x27;original sans retomber dans sa propre surcharge
+  accDescr: Le nom Twig normal du bundle résout d&#x27;abord le template applicatif de surcharge. Dans ce template, extends avec le préfixe @! désigne l&#x27;original du bundle. Réutiliser le nom normal peut sélectionner à nouveau la surcharge et provoquer une récursion.
+  N[&quot;rendre @Acme/page.html.twig&quot;] --&gt;|&quot;priorité applicative&quot;| A[&quot;templates/bundles/&lt;br/&gt;AcmeBundle/page.html.twig&quot;]
+  A --&gt;|&quot;extends @!Acme/page.html.twig&quot;| O[&quot;template original du bundle&quot;]
+  O --&gt;|&quot;blocs spécialisés par la surcharge&quot;| R([&quot;page personnalisée&quot;])
+  classDef runtime fill:#e0f2fe,stroke:#0369a1,color:#0c4a6e
+  classDef override fill:#fef3c7,stroke:#b45309,color:#78350f
+  classDef result fill:#dcfce7,stroke:#15803d,color:#14532d
+  class N,O runtime
+  class A override
+  class R result</div></figure>
+<p>Le premier choix privilégie le fichier applicatif.
+Si ce même fichier étendait encore <code>@Acme/page.html.twig</code>, le loader,
+responsable de trouver les templates, pourrait le sélectionner à nouveau :
+la recherche du parent reviendrait sur la surcharge elle-même.
+<code>@!Acme/page.html.twig</code> désigne l'original du namespace dans cette intégration.</p>
+<p>Bleu : résolution ; orange : surcharge ; vert : page assemblée.
+Le <code>!</code> ne désigne ni un autre bundle ni un ordre de priorité de route.
+Il permet seulement de choisir le bon parent Twig. Le résultat suppose
+encore que l'original expose les blocs que nous personnalisons.</p></section><section class="teaching-section" data-section="s-l-exemple-etendre-le-template-que-l-on-surcharge"><h2 id="s-l-exemple-etendre-le-template-que-l-on-surcharge" tabindex="-1">L&#x27;exemple : étendre le template que l&#x27;on surcharge</h2><p class="teaching-label example"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="code" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6L2 12L8 18M16 6L22 12L16 18M14 3L10 21"></path></svg> <strong>Exemple concret</strong></p><aside class="section-digest" id="s-l-exemple-etendre-le-template-que-l-on-surcharge-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Le template de surcharge doit pouvoir retrouver l&#x27;original.</li><li>Le préfixe @! évite de réétendre la surcharge elle-même.</li></ol></aside><p><strong>Où en est-on ?</strong> Du schéma au fichier concret. Pourquoi
+<code>AcmeUserBundle</code> d'un côté et <code>AcmeUser</code> de l'autre ? Parce que le dossier de
+surcharge porte le nom <strong>complet</strong> du bundle, alors que le namespace Twig
+retire le suffixe <code>Bundle</code>.</p>
+<p>Revenons à l'inscription. Le bundle fictif doit être activé, son intégration
+Twig chargée, et son template original doit exposer un bloc <code>content</code>.
+Nous plaçons le fichier suivant dans le chemin applicatif indiqué :</p>
+<pre class="highlight" tabindex="0"><code class="language-twig">{# templates/bundles/AcmeUserBundle/registration/confirmed.html.twig #}
+{% extends "@!AcmeUser/registration/confirmed.html.twig" %}
+
+{% block content %}Bienvenue !{% endblock %}</code></pre>
+<p>Lorsque l'application rend
+<code>@AcmeUser/registration/confirmed.html.twig</code>, elle sélectionne cette surcharge.
+Son parent reste l'original grâce à <code>@!AcmeUser</code>. Résultat attendu :
+la structure de l'original demeure, tandis que son bloc <code>content</code> affiche
+<code>Bienvenue !</code>.</p>
+<p>Le nom complet <code>AcmeUserBundle</code> sert au directory de surcharge ; le namespace
+Twig de cet exemple est <code>AcmeUser</code>, sans le suffixe <code>Bundle</code>. Il faut vérifier
+le namespace réellement fourni par un bundle, pas deviner tout nom à partir
+d'un filename. Cet exemple ne valide pas l'inscription, n'enregistre aucun
+utilisateur et ne crée pas une route de confirmation : il personnalise seulement
+le rendu une fois cette page appelée.</p>
+<pre class="highlight" tabindex="0"><code class="language-text"> ce que l'application demande  : @AcmeUser/registration/confirmed.html.twig
+ ce que Twig trouve en premier : templates/bundles/AcmeUserBundle/
+                                   registration/confirmed.html.twig
+ ce que la surcharge étend     : @!AcmeUser/registration/confirmed.html.twig
+                                   (le fichier ORIGINAL dans vendor/)</code></pre></section><section class="teaching-section" data-section="s-vue-d-ensemble"><span class="outcome-anchor" id="out-OUT-w0kft9548h99" tabindex="-1"></span><h2 id="s-vue-d-ensemble" tabindex="-1">Vue d&#x27;ensemble</h2><aside class="section-digest" id="s-vue-d-ensemble-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Une route externe n&#x27;entre pas automatiquement dans l&#x27;application.</li><li>Contrôler l&#x27;import permet de choisir les routes exposées.</li></ol></aside><p><strong>Où en est-on ?</strong> Après le cas local, la carte complète. Pourquoi huit
+familles ? C'est le découpage du document officiel : chaque ligne du tableau
+ci-dessous est un <strong>besoin</strong> relié à un <strong>mécanisme</strong>. Lire le besoin d'abord,
+le mécanisme ensuite.</p>
+<p>Le document officiel présente <strong>huit familles</strong> de personnalisation.
+Nous développons ici celles du périmètre retenu, sans réintroduire
+les intégrations de persistance exclues. Une même famille peut demander
+plusieurs décisions : les controllers ont deux cas, et les services
+distinguent décoration et manipulation de définitions.</p>
+<table>
+<thead>
+<tr>
+<th>Besoin dans la branche d'inscription</th>
+<th>Mécanisme à examiner</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Garder la page avec un autre bloc</td>
+<td>Surcharge de template, parent <code>@!</code></td>
+</tr>
+<tr>
+<td>Ne pas exposer certaines routes du bundle</td>
+<td>Retirer leur import, ou importer une copie adaptée</td>
+</tr>
+<tr>
+<td>Personnaliser un controller enregistré comme service</td>
+<td>Décoration du service et préservation de son contrat callable</td>
+</tr>
+<tr>
+<td>Remplacer l'action d'un controller non enregistré comme service</td>
+<td>Route prioritaire vers une nouvelle action</td>
+</tr>
+<tr>
+<td>Ajouter un comportement autour d'un autre service</td>
+<td>Décoration</td>
+</tr>
+<tr>
+<td>Transformer ou supprimer des définitions après leur chargement</td>
+<td>Compiler pass adapté</td>
+</tr>
+<tr>
+<td>Adapter un type de form existant</td>
+<td>Extension du form type</td>
+</tr>
+<tr>
+<td>Ajouter des exigences de validation</td>
+<td>Contraintes supplémentaires ; groupes configurables pour choisir un autre ensemble</td>
+</tr>
+<tr>
+<td>Changer un message traduit</td>
+<td>Même domain, même locale et même key dans les traductions applicatives</td>
+</tr>
+</tbody>
+</table>
+<p>Une <em>décoration</em> enveloppe un service existant et délègue éventuellement
+à celui-ci. Un <em>compiler pass</em> travaille sur les définitions de services
+pendant la compilation du container, pas sur une inscription en cours.
+Une extension de form type adapte un type existant quand les forms sont construits ;
+elle n'est pas une copie de tous les forms du bundle.</p>
+<p>Pour les routes, activer le bundle n'importe pas universellement ses ressources.
+L'import peut venir de notre configuration, du kernel ou d'une recette Flex
+(voir <a href="course-CRS-tyf3yfxjc3sa.html">Symfony Flex</a>).
+Si nous ne voulons pas les routes proposées, nous retirons l'import effectif.
+Si nous copions leur fichier pour le modifier, nous importons cette copie
+et suivons ensuite ses éventuelles divergences avec le fournisseur.
+Supprimer un import ne neutralise pas une autre source qui charge les mêmes routes.</p><div class="retained-answer-context">
+<p><strong>Repère — Le controller a deux cas :</strong></p>
+<p lang="en"><strong>Question:</strong> What is the documented first approach for replacing a controller registered as a service?</p>
+<p lang="en"><strong>Answer:</strong> Service decoration.</p>
+<p>Un controller-service relève de la décoration. Ne pas confondre cette approche avec la priorité de routes.</p>
+</div></section><section class="teaching-section" data-section="s-les-templates"><span class="outcome-anchor" id="out-OUT-2r6g1ds91vvw" tabindex="-1"></span><span class="outcome-anchor" id="out-OUT-s8kw5gsv7y2e" tabindex="-1"></span><h2 id="s-les-templates" tabindex="-1">Les templates</h2><aside class="section-digest" id="s-les-templates-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Le nom ordinaire peut résoudre vers la surcharge elle-même.</li><li>@! désigne l&#x27;original et évite la récursion.</li></ol></aside><p><strong>Où en est-on ?</strong> On détaille la première ligne du tableau. Pourquoi la
+correspondance de chemin est-elle « exacte » ? Parce que Twig cherche le
+<strong>même chemin relatif</strong> dans le dossier de surcharge : un nom voisin ne
+suffit pas, c'est une recherche, pas une devinette.</p>
+<p>La correspondance de chemin est exacte : le template
+<code>registration/confirmed.html.twig</code> du bundle est remplacé par le même
+chemin relatif sous <code>templates/bundles/AcmeUserBundle/</code>.
+Un fichier voisin nommé <code>confirmation.html.twig</code> ne remplace pas
+automatiquement la ressource que le controller demande.</p>
+<p>Nous pouvons remplacer tout le template, ou conserver son architecture
+avec <code>extends</code> et quelques blocs. Dans le second cas, <code>@!</code> évite
+la récursion vers notre propre surcharge. Déclarer un bloc inexistant
+ne suffit pas à modifier une zone que l'original n'affiche jamais.
+Le nom du bloc fait donc partie du contrat à inspecter.</p>
+<p>Pour une confirmation plus explicite, le même fichier peut remplacer
+seulement le contenu du bloc par <code>&lt;p&gt;Votre inscription est confirmée.&lt;/p&gt;</code>.
+L'entrée reste le nom Twig normal ; le résultat conserve le cadre
+de l'original et affiche ce paragraphe. Ce changement de vue ne prouve
+toujours pas qu'une inscription a effectivement réussi.</p>
+<p>Si un template ajouté à un nouvel emplacement n'est pas détecté, le document
+recommande d'envisager de vider le cache <strong>même en debug</strong>, après avoir vérifié
+chemin, namespace et intégration. Avec Symfony Console 8.0 :</p>
+<pre class="highlight" tabindex="0"><code class="language-bash">php bin/console cache:clear</code></pre>
+<p>Résultat attendu si la commande réussit : le cache de l'environment
+sélectionné est vidé puis réchauffé selon la configuration de la commande.
+Cela ne corrige pas un nom de bloc erroné et ne vise pas le cache du navigateur.
+Cette commande est documentaire, pas exécutée ici.
+La même technique de surcharge s'applique aux templates d'erreur de TwigBundle
+dans leur contexte de rendu approprié.</p>
+<div class="admonition info">
+<p class="admonition-title">🌍 In Real Life</p>
+<p><strong>La situation</strong> : une fiche personnalisée remplace la fiche du fournisseur, mais doit consulter l'original pour conserver son cadre.</p>
+<p><strong>L’équivalent dans Symfony</strong> : fiche prioritaire → template applicatif ; original explicitement demandé → parent <code>@!</code> ; zone adaptée → bloc existant.</p>
+<p><strong>Retour à la réalité technique</strong> : étendre le nom normal peut revenir à la surcharge elle-même. Chemin, namespace et bloc doivent correspondre ; vider le cache ne répare pas un mauvais nom.</p>
+<p><strong>🧠 Comment le mémoriser</strong> : « Remplacer l'entrée, viser l'original comme parent. » Image mentale : deux fiches, une flèche sans boucle. Question-réflexe : vers quel fichier mon <code>extends</code> résout-il ?</p>
+<p><strong>⚠️ À ne pas confondre</strong> : personnalisation du rendu et changement de l'action.</p>
+</div><aside class="enrichment" aria-label="Autre explication"><p>Personnaliser un appartement meublé ne consiste pas à détruire les meubles : la surcharge utilise un emplacement prévu, sans modifier vendor/. @! permet de reprendre le meuble original sous la personnalisation.</p></aside><div class="retained-answer-context">
+<p><strong>Repère — Les translations ne dépendent pas des bundles :</strong></p>
+<p lang="en"><strong>Question:</strong> What identifies an overridden translation catalogue?</p>
+<p lang="en"><strong>Answer:</strong> Its translation domain and locale, not a special bundle relationship.</p>
+<p>La surcharge suit le domain. Le nom d'un bundle dans un catalogue peut n'être qu'un nom de domain.</p>
+</div>
+
+<div class="retained-answer-context">
+<p><strong>Repère de l’exemple :</strong></p>
+<p lang="en"><strong>Question:</strong> Why does an overriding template extend a name beginning with @!?</p>
+<p lang="en"><strong>Answer:</strong> The exclamation mark selects the original bundle template instead of recursively loading the override.</p>
+<p>Le template de surcharge doit pouvoir retrouver l'original. Le préfixe @! évite de réétendre la surcharge elle-même.</p>
+</div></section><section class="teaching-section" data-section="s-le-controller-a-deux-cas"><h2 id="s-le-controller-a-deux-cas" tabindex="-1">Le controller a deux cas</h2><p><strong>Où en est-on ?</strong> Le rendu est personnalisé ; si on veut changer ce que
+l'action <strong>fait</strong>, un template ne suffit plus. Pourquoi deux cas ? Parce que la
+bonne technique dépend de la façon dont le controller est obtenu : par le
+container (service) ou non.</p>
+<p>Après le rendu, imaginons que le comportement de la confirmation doive changer.
+Il faut d'abord savoir comment le controller est obtenu.
+S'il est enregistré comme <strong>service</strong>, le document renvoie à la décoration :
+le container fournit le décorateur sous l'identité attendue.
+Celui-ci doit préserver le point d'entrée callable, c'est-à-dire invocable,
+et les contrats nécessaires ; entourer arbitrairement l'objet ne crée pas
+une action utilisable.</p>
+<p>Dans la branche <strong>controller non-service</strong>, le document propose une nouvelle
+route de même path vers notre propre controller, chargée avant celle du bundle.
+Elle doit aussi correspondre aux autres conditions pertinentes, notamment
+la méthode HTTP et l'hôte. Le premier matching approprié sélectionne alors
+la nouvelle action.</p>
+<p>Une route prioritaire peut également sélectionner un autre controller
+lorsque l'ancien est un service. Ce n'est simplement pas la même opération :
+elle ne remplace ni ne décore sa définition dans le container.
+Les controllers modernes de notre application étant généralement des services,
+distinguons donc « changer le fournisseur de l'objet » de « choisir
+une autre action pour cette URL ». La réponse d'examen suit la branche
+explicitement posée par le document.</p>
+<table>
+<thead>
+<tr>
+<th>Cas du controller</th>
+<th>Technique du document</th>
+<th>Ce que la technique change</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>enregistré comme <strong>service</strong></td>
+<td>décoration (contrat callable préservé)</td>
+<td>l'<strong>objet</strong> fourni par le container</td>
+</tr>
+<tr>
+<td><strong>non-service</strong></td>
+<td>route de même path, chargée avant</td>
+<td>l'<strong>action</strong> sélectionnée par le matching</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition info">
+<p class="admonition-title">🌍 In Real Life</p>
+<p><strong>La situation</strong> : on peut changer le poste auquel une demande est dirigée, ou entourer le poste habituel d'un intermédiaire.</p>
+<p><strong>L’équivalent dans Symfony</strong> : nouvelle destination → autre route/action ; intermédiaire → décoration du controller-service.</p>
+<p><strong>Retour à la réalité technique</strong> : le routage sélectionne un callable selon toutes ses conditions ; la décoration change l'objet fourni et doit préserver son contrat callable. Une route différente ne décore aucune définition.</p>
+<p><strong>🧠 Comment le mémoriser</strong> : « Autre destination ou autre fournisseur ? » Image mentale : flèche de direction face à un guichet ajouté. Question-réflexe : veut-on changer le matching ou l'objet obtenu ?</p>
+<p><strong>⚠️ À ne pas confondre</strong> : cas recommandé par le document et impossibilité technique d'une autre route vers un controller-service.</p>
+</div></section><section class="teaching-section" data-section="s-les-translations-ne-dependent-pas-des-bundles"><h2 id="s-les-translations-ne-dependent-pas-des-bundles" tabindex="-1">Les translations ne dépendent pas des bundles</h2><p><strong>Où en est-on ?</strong> Retour au rendu : le texte espagnol. Pourquoi le titre dit
+« ne dépendent pas des bundles » ? Parce qu'une traduction est trouvée par un
+triplet <strong>key + domain + locale</strong>, pas par le bundle qui l'a déclarée : notre
+fichier applicatif peut donc la remplacer.</p>
+<p>La confirmation est maintenant personnalisée ; sa version espagnole
+doit encore employer notre formulation. Une traduction est recherchée
+par <strong>key</strong>, <strong>domain</strong> et <strong>locale</strong>. Le domain regroupe des messages ;
+ce n'est pas une référence obligatoire à un bundle.</p>
+<p>Dans le laboratoire, le fournisseur utilise le domain <code>AcmeUserBundle</code>
+et la locale <code>es</code>. Avec les traductions applicatives chargées à leur emplacement
+standard, ce fichier remplace la valeur de la même key pour ce couple :</p>
+<pre class="highlight" tabindex="0"><code class="language-yaml"># translations/AcmeUserBundle.es.yaml
+registration.confirmed: 'Tu inscripción está confirmada.'</code></pre>
+<p>Si le code demande <code>registration.confirmed</code> dans le domain <code>AcmeUserBundle</code>
+en espagnol, le résultat attendu est cette phrase. La key doit correspondre
+à celle réellement utilisée par le bundle ; ici elle fait partie de
+notre exemple fictif.</p>
+<p>Mettre la même key dans <code>messages.es.yaml</code> ne remplace pas un appel
+qui demande explicitement <code>AcmeUserBundle</code>. De même, ce fichier ne sélectionne
+pas la langue du visiteur et ne traduit pas un texte codé directement
+dans le template. La résolution des messages et celle des templates
+restent deux mécanismes distincts.</p></section><section class="teaching-section" data-section="s-la-validation-ne-se-surcharge-pas"><span class="outcome-anchor" id="out-OUT-97dtctsck41f" tabindex="-1"></span><h2 id="s-la-validation-ne-se-surcharge-pas" tabindex="-1">La validation ne se surcharge pas</h2><aside class="section-digest" id="s-la-validation-ne-se-surcharge-pas-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>La configuration ajoute des constraints.</li><li>Les groups permettent une sélection prévue par le modèle.</li></ol></aside><p><strong>Où en est-on ?</strong> Dernier besoin : assouplir une règle. Pourquoi ce titre
+négatif ? Parce que c'est le seul des mécanismes vus où <strong>la priorité ne
+joue pas</strong> : le Validator <strong>combine</strong> les métadonnées, il ne choisit pas un
+gagnant.</p>
+<p>Le dernier besoin paraît similaire : adapter une règle du form d'inscription.
+Pourtant, la priorité de fichier utilisée par Twig ne s'applique pas ici.
+Le Validator combine les métadonnées de validation chargées ; déclarer
+une nouvelle contrainte sur une property ne retire pas l'ancienne.</p>
+<p>Ce laboratoire porte sur la longueur d'un libellé, pas sur une recommandation
+de sécurité de mot de passe :</p>
+<pre class="highlight" tabindex="0"><code class="language-text">Bundle : longueur minimale 8 dans le groupe Default
+Application : longueur minimale 4 ajoutée dans le même groupe
+Validation Default : les deux règles s'appliquent ; 6 caractères restent invalides</code></pre>
+<p>Avec six caractères, la contrainte de longueur quatre est satisfaite,
+mais celle de longueur huit échoue encore. Ajouter une exigence peut
+renforcer la validation ; cela ne l'assouplit pas par remplacement.
+Le mot « surcharge » donnerait ici le mauvais modèle.</p>
+<p>Un <em>validation group</em> sélectionne un ensemble de contraintes à exécuter.
+Pour choisir un contrat alternatif sans évaluer la règle d'origine,
+le bundle doit fournir le point de configuration adapté aux groupes.
+Déclarer nos contraintes dans un nouveau groupe ne suffit pas : le traitement
+du form doit effectivement sélectionner ce groupe plutôt que celui qui
+porte la règle initiale, sans réactiver celle-ci par une autre sélection.</p>
+<p>Cette technique ne supprime pas les métadonnées d'origine.
+Sans point d'extension prévu, une simple déclaration supplémentaire
+ne peut pas promettre l'assouplissement souhaité. Nous devons vérifier
+les groupes réellement évalués, puis tester une valeur telle que nos six
+caractères pour observer le résultat.</p>
+<pre class="highlight" tabindex="0"><code class="language-text">Même groupe (Default) :    min 8  ET  min 4   →  "abcdef" (6)  REFUSÉ  (min 8)
+Groupe alternatif prévu :  min 4 seulement    →  "abcdef" (6)  accepté
+      …mais seulement si le traitement du form SÉLECTIONNE ce groupe.</code></pre>
+<div class="admonition info">
+<p class="admonition-title">🌍 In Real Life</p>
+<p><strong>La situation</strong> : ajouter un contrôle moins strict à un dossier n'efface pas le contrôle strict déjà obligatoire.</p>
+<p><strong>L’équivalent dans Symfony</strong> : contrôles cumulés → contraintes chargées ; liste des contrôles exécutés → groupes sélectionnés.</p>
+<p><strong>Retour à la réalité technique</strong> : minimum huit plus minimum quatre refusent toujours six caractères dans le même groupe. Un groupe alternatif doit être prévu puis effectivement sélectionné ; il ne supprime pas les métadonnées initiales.</p>
+<p><strong>🧠 Comment le mémoriser</strong> : « Ajouter n'est pas remplacer. » Image mentale : deux cases de contrôle restant cochables séparément. Question-réflexe : quelles contraintes sont réellement exécutées ?</p>
+<p><strong>⚠️ À ne pas confondre</strong> : cumul de validation et priorité de recherche des templates ou traductions.</p>
+</div></section><section class="teaching-section" data-section="s-pieges-d-examen"><h2 id="s-pieges-d-examen" tabindex="-1">Pièges d&#x27;examen</h2><p class="teaching-label pitfall"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="warning" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3L23 21H1L12 3ZM12 9V14M12 17V18"></path></svg> <strong>Piège à éviter</strong></p><ul class="pitfall-list"><li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : Le nom normal peut revenir sur le fichier courant.</summary><p><strong>Le nom normal peut revenir sur le fichier courant.</strong> Depuis la surcharge,
+étendre ce même nom crée la récursion ; <code>@!</code> vise l'original.
+Cela ne dispense pas de choisir le bloc réellement exposé par le parent.
+<em>Pourquoi on se trompe : le nom normal « marche » pour rendre la page, on le
+réutilise donc naturellement comme parent.</em></p></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : Une deuxième contrainte ne remplace pas la première.</summary><p><strong>Une deuxième contrainte ne remplace pas la première.</strong> Notre libellé
+de six caractères reste refusé par le minimum huit du même groupe.
+La sélection d'un autre groupe doit être prévue et réellement utilisée
+par le bundle ; elle ne supprime pas les métadonnées.
+<em>Pourquoi on se trompe : templates et traductions se remplacent, on projette
+ce modèle sur la validation.</em></p></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : Un objet décoré n&#x27;est pas une définition compilée.</summary><p><strong>Un objet décoré n'est pas une définition compilée.</strong>
+La décoration organise une délégation entre services ; le compiler pass
+transforme les définitions avant leur utilisation, notamment pour
+des manipulations avancées ou des suppressions. Il ne faut pas conclure
+que toute modification ordinaire de configuration exige un compiler pass.</p></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : Changer la route n&#x27;est pas remplacer le service controller.</summary><p><strong>Changer la route n'est pas remplacer le service controller.</strong>
+La première opération choisit l'action d'une Request ; la seconde agit
+sur l'objet fourni par le container. Les deux peuvent concerner la même URL,
+mais la question d'examen précise le cas visé.
+<em>Pourquoi on se trompe : les deux produisent le même effet visible (une autre
+action répond), ce qui masque la différence de mécanisme.</em></p></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : Le nom du fichier de traduction exprime un domain et une locale.</summary><p><strong>Le nom du fichier de traduction exprime un domain et une locale.</strong>
+<code>AcmeUserBundle.es.yaml</code> est pertinent parce que l'appel demande ce domain
+et cette langue. L'activer comme bundle n'est pas un mécanisme de sélection
+des traductions ; la key doit aussi correspondre.</p></details></li></ul></section><section class="teaching-section" data-section="s-application"><h2 id="s-application" tabindex="-1">Application</h2><aside class="section-digest" id="s-application-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>La surcharge suit le domain.</li><li>Le nom d&#x27;un bundle dans un catalogue peut n&#x27;être qu&#x27;un nom de domain.</li><li>Un controller-service relève de la décoration.</li><li>Ne pas confondre cette approche avec la priorité de routes.</li></ol></aside>
+
+
+
+</section><section class="teaching-section" data-section="s-fiche-express"><h2 id="s-fiche-express" tabindex="-1">Fiche express</h2><p class="teaching-label essential"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="book" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5C9 3 5 3 2 4V20C5 19 9 19 12 21C15 19 19 19 22 20V4C19 3 15 3 12 5V21M5 8H8M5 12H8M16 8H19M16 12H19"></path></svg> <strong>À mémoriser</strong></p><p><strong>🧠 À retenir pour la certification :</strong></p>
+<p>La personnalisation de l'inscription se relit par responsabilité :</p>
+<ol>
+<li>Le template demandé correspond au même chemin relatif sous
+   <code>templates/bundles/&lt;NomDuBundle&gt;/</code>.</li>
+<li>Son parent <code>@!</code> vise l'original ; le bloc existe et le cache de
+   l'environment permet de détecter le nouvel emplacement.</li>
+<li>Le service décoré garde le contrat attendu ; une transformation
+   avancée des définitions relève d'un compiler pass approprié.</li>
+<li>Le form type peut recevoir une extension, mais une contrainte ajoutée
+   ne remplace pas une contrainte déjà chargée.</li>
+<li>Le groupe de validation alternatif doit être sélectionné au traitement,
+   pas seulement nommé dans un fichier.</li>
+<li>La traduction reprend domain, locale et key réellement demandés.</li>
+<li>Les imports de routes contrôlent leur chargement ; sélectionner
+   un autre controller par une route ne décore pas son ancien service.</li>
+</ol>
+<p>Nous avons changé les points nécessaires sans copier tout le fournisseur.
+Le prochain contrôle consiste à rejouer la confirmation, sa traduction
+et les entrées valides ou invalides, pas seulement à vérifier que les nouveaux
+fichiers existent.</p>
+<p><strong>Phrase de mémorisation : « Templates et traductions : le fichier de l'appli gagne ; services : on enveloppe ; routes : on n'importe pas ; validation : on cumule, on ne remplace jamais. »</strong></p></section><section class="teaching-section" data-section="s-sources-officielles"><h2 id="s-sources-officielles" tabindex="-1">Sources officielles</h2><ul>
+<li><a href="https://symfony.com/doc/8.0/bundles/override.html">How to Override any Part of a Bundle</a></li>
+</ul></section><section id="course-recalls" aria-labelledby="course-recalls-title" tabindex="-1"><h2 id="course-recalls-title">Rappels et liens avec les autres cours</h2><div data-recall-group="current"><h3>Rappels du cours actuel</h3><ul><li data-recall-course="CRS-f9s8mpaydnbx" data-recall-kind="digest_reference"><p class="recall-provenance">Module 03 — Architecture Symfony · Cours « Framework overloading »</p><p class="digest-reference"><a href="#s-le-schema-digest">Revoir la règle : Un controller-service relève de la décoration.</a></p></li><li data-recall-course="CRS-f9s8mpaydnbx" data-recall-kind="digest_reference"><p class="recall-provenance">Module 03 — Architecture Symfony · Cours « Framework overloading »</p><p class="digest-reference"><a href="#s-l-essentiel-digest">Revoir la règle : La surcharge suit le domain.</a></p></li><li><nav aria-label="Flashcards de l’application"><ul><li data-recall-course="CRS-f9s8mpaydnbx" data-recall-kind="application"><p class="recall-provenance">Module 03 — Architecture Symfony · Cours « Framework overloading »</p><a href="#A-f9s8mpaydnbx-65c42c80d9-04">Flashcard : La surcharge suit le domain. Le nom d&#x27;un bundle dans un catalogue peut n&#x27;être qu&#x27;un nom de domain.</a></li><li data-recall-course="CRS-f9s8mpaydnbx" data-recall-kind="application"><p class="recall-provenance">Module 03 — Architecture Symfony · Cours « Framework overloading »</p><a href="#A-f9s8mpaydnbx-6e0103f6cc-03">Flashcard : Un controller-service relève de la décoration. Ne pas confondre cette approche avec la priorité de routes.</a></li></ul></nav></li></ul></div><div data-recall-group="other"><h3>Rappels des cours précédents / autres modules</h3><ul><li data-recall-course="CRS-21ec5kwrcmkm" data-recall-kind="previous_course"><p class="recall-provenance">Module 03 — Architecture Symfony · Cours « Backward compatibility promise »</p><p>Utiliser une API n&#x27;est pas la même chose que l&#x27;étendre. Un nouveau membre Symfony peut entrer en collision avec un membre ajouté.</p><p><a href="#cards-previous">Rappel : <span lang="en">Are newly added members in a Symfony subclass guaranteed against future name collisions?</span></a></p></li></ul></div></section><nav class="course-sequence" aria-label="Ordre de lecture"><a rel="prev" href="course-CRS-rkq1d437dw5d.html" aria-label="Précédent : Deprecations best practices — Module 03 — Architecture Symfony">Précédent : Deprecations best practices</a> <a href="lot-03.html">Sommaire : Module 03 — Architecture Symfony</a> <a rel="next" href="course-CRS-6m32av3nr9eh.html" aria-label="Suivant : Release management and roadmap schedule — Module 03 — Architecture Symfony">Suivant : Release management and roadmap schedule</a></nav><p class="course-practice-entry"><a class="button" href="#view-quiz">Fin du cours — s’entraîner avec le Quiz</a></p></div><div id="view-flashcards" data-course-panel role="region" aria-labelledby="view-flashcards-title"><h2 id="view-flashcards-title">Flashcards</h2><p lang="en">Answer before revealing each card.</p><p>Ces cartes ne mesurent pas une maîtrise notée.</p><div id="cards-s-l-essentiel-1" data-card-section="s-l-essentiel"><h3><a href="#s-l-essentiel">Revoir : L&#x27;essentiel</a></h3><div class="reader-cards"><details class="reader-card" id="A-f9s8mpaydnbx-65c42c80d9-04"><summary lang="en">What identifies an overridden translation catalogue?</summary><p lang="en">Its translation domain and locale, not a special bundle relationship.</p><p lang="fr">La surcharge suit le domain. Le nom d&#x27;un bundle dans un catalogue peut n&#x27;être qu&#x27;un nom de domain.</p><a href="course-CRS-f9s8mpaydnbx.html#out-OUT-2r6g1ds91vvw">Revoir le passage précis</a></details></div></div><div id="cards-s-le-schema-2" data-card-section="s-le-schema"><h3><a href="#s-le-schema">Revoir : Le schéma</a></h3><div class="reader-cards"><details class="reader-card" id="A-f9s8mpaydnbx-6e0103f6cc-03"><summary lang="en">What is the documented first approach for replacing a controller registered as a service?</summary><p lang="en">Service decoration.</p><p lang="fr">Un controller-service relève de la décoration. Ne pas confondre cette approche avec la priorité de routes.</p><a href="course-CRS-f9s8mpaydnbx.html#out-OUT-w0kft9548h99">Revoir le passage précis</a></details></div></div><div id="cards-s-l-exemple-etendre-le-template-que-l-on-surcharge-3" data-card-section="s-l-exemple-etendre-le-template-que-l-on-surcharge"><h3><a href="#s-l-exemple-etendre-le-template-que-l-on-surcharge">Revoir : L&#x27;exemple : étendre le template que l&#x27;on surcharge</a></h3><div class="reader-cards"><details class="reader-card" id="A-f9s8mpaydnbx-f5cec7f927-01"><summary lang="en">Why does an overriding template extend a name beginning with @!?</summary><p lang="en">The exclamation mark selects the original bundle template instead of recursively loading the override.</p><p lang="fr">Le template de surcharge doit pouvoir retrouver l&#x27;original. Le préfixe @! évite de réétendre la surcharge elle-même.</p><a href="course-CRS-f9s8mpaydnbx.html#out-OUT-2r6g1ds91vvw">Revoir le passage précis</a></details></div></div><div id="cards-s-vue-d-ensemble-4" data-card-section="s-vue-d-ensemble"><h3><a href="#s-vue-d-ensemble">Revoir : Vue d&#x27;ensemble</a></h3><div class="reader-cards"><details class="reader-card" id="A-f9s8mpaydnbx-9217c182b4-01"><summary lang="en">Are bundle routes automatically imported by Symfony?</summary><p lang="en">No. Route imports are explicit.</p><p lang="fr">Une route externe n&#x27;entre pas automatiquement dans l&#x27;application. Contrôler l&#x27;import permet de choisir les routes exposées.</p><a href="course-CRS-f9s8mpaydnbx.html#out-OUT-w0kft9548h99">Revoir le passage précis</a></details></div></div><div id="cards-s-les-templates-5" data-card-section="s-les-templates"><h3><a href="#s-les-templates">Revoir : Les templates</a></h3><div class="reader-cards"><details class="reader-card" id="A-f9s8mpaydnbx-92ca02ed28-02"><summary lang="en">How do you extend the original template from an overriding template?</summary><p lang="en">Use the @! namespace form to bypass the override.</p><p lang="fr">Le nom ordinaire peut résoudre vers la surcharge elle-même. @! désigne l&#x27;original et évite la récursion.</p><a href="course-CRS-f9s8mpaydnbx.html#out-OUT-2r6g1ds91vvw">Revoir le passage précis</a></details></div></div><div id="cards-s-le-controller-a-deux-cas-6" data-card-section="s-le-controller-a-deux-cas"><h3><a href="#s-le-controller-a-deux-cas">Revoir : Le controller a deux cas</a></h3><div class="reader-cards"><p class="reader-card-reference" id="A-f9s8mpaydnbx-9f0b0382ea-03">Rappel déjà proposé : <a lang="en" href="#A-f9s8mpaydnbx-6e0103f6cc-03">What is the documented first approach for replacing a controller registered as a service?</a> · <a href="course-CRS-f9s8mpaydnbx.html#out-OUT-w0kft9548h99">Passage canonique</a></p></div></div><div id="cards-s-les-translations-ne-dependent-pas-des-bundles-7" data-card-section="s-les-translations-ne-dependent-pas-des-bundles"><h3><a href="#s-les-translations-ne-dependent-pas-des-bundles">Revoir : Les translations ne dépendent pas des bundles</a></h3><div class="reader-cards"><p class="reader-card-reference" id="A-f9s8mpaydnbx-1aee97d7cc-04">Rappel déjà proposé : <a lang="en" href="#A-f9s8mpaydnbx-65c42c80d9-04">What identifies an overridden translation catalogue?</a> · <a href="course-CRS-f9s8mpaydnbx.html#out-OUT-2r6g1ds91vvw">Passage canonique</a></p></div></div><div id="cards-s-la-validation-ne-se-surcharge-pas-8" data-card-section="s-la-validation-ne-se-surcharge-pas"><h3><a href="#s-la-validation-ne-se-surcharge-pas">Revoir : La validation ne se surcharge pas</a></h3><div class="reader-cards"><details class="reader-card" id="A-f9s8mpaydnbx-19cde33dec-05"><summary lang="en">Can application validation configuration simply remove an inherited constraint?</summary><p lang="en">No. Validation metadata is merged; suitable validation groups can select applicable constraints.</p><p lang="fr">La configuration ajoute des constraints. Les groups permettent une sélection prévue par le modèle.</p><a href="course-CRS-f9s8mpaydnbx.html#out-OUT-97dtctsck41f">Revoir le passage précis</a></details></div></div><div id="cards-s-pieges-d-examen-9" data-card-section="s-pieges-d-examen"><h3><a href="#s-pieges-d-examen">Revoir : Pièges d&#x27;examen</a></h3><div class="reader-cards"><p class="reader-card-reference" id="A-f9s8mpaydnbx-596d5af532-04">Rappel déjà proposé : <a lang="en" href="#A-f9s8mpaydnbx-65c42c80d9-04">What identifies an overridden translation catalogue?</a> · <a href="course-CRS-f9s8mpaydnbx.html#out-OUT-2r6g1ds91vvw">Passage canonique</a></p></div></div><div id="cards-s-application-10" data-card-section="s-application"><h3><a href="#s-application">Revoir : Application</a></h3><div class="reader-cards"><p class="reader-card-reference" id="A-f9s8mpaydnbx-e7ad522ea3-04">Rappel déjà proposé : <a lang="en" href="#A-f9s8mpaydnbx-65c42c80d9-04">What identifies an overridden translation catalogue?</a> · <a href="course-CRS-f9s8mpaydnbx.html#out-OUT-2r6g1ds91vvw">Passage canonique</a></p><p class="reader-card-reference" id="A-f9s8mpaydnbx-e7ad522ea3-03">Rappel déjà proposé : <a lang="en" href="#A-f9s8mpaydnbx-6e0103f6cc-03">What is the documented first approach for replacing a controller registered as a service?</a> · <a href="course-CRS-f9s8mpaydnbx.html#out-OUT-w0kft9548h99">Passage canonique</a></p></div></div><div id="cards-s-fiche-express-11" data-card-section="s-fiche-express"><h3><a href="#s-fiche-express">Revoir : Fiche express</a></h3><div class="reader-cards"><p class="reader-card-reference" id="A-f9s8mpaydnbx-b11e58e15e-03">Rappel déjà proposé : <a lang="en" href="#A-f9s8mpaydnbx-6e0103f6cc-03">What is the documented first approach for replacing a controller registered as a service?</a> · <a href="course-CRS-f9s8mpaydnbx.html#out-OUT-w0kft9548h99">Passage canonique</a></p></div></div><div id="cards-previous"><p class="recall-provenance">Module 03 — Architecture Symfony · Cours « Backward compatibility promise »</p><aside class="checkpoint"><h2>Rappel d’un cours antérieur</h2><p>Avant de poursuivre : Backward compatibility promise.</p><details class="corpus-correction"><summary lang="en">Are newly added members in a Symfony subclass guaranteed against future name collisions?</summary><p lang="en">No. Adding methods or properties to a subclass is outside that collision guarantee.</p><p>Utiliser une API n&#x27;est pas la même chose que l&#x27;étendre. Un nouveau membre Symfony peut entrer en collision avec un membre ajouté.</p><a href="course-CRS-21ec5kwrcmkm.html#out-OUT-bmtapjwv4je4">Relire la correction dans le cours antérieur</a></details></aside></div></div><div id="view-quiz" data-course-panel role="region" aria-labelledby="view-quiz-title"><aside class="revision-context"><p><strong>Avant le quiz :</strong> Le lecteur a consulté /blog/42 et choisit maintenant de s&#x27;inscrire. Supposons que cette branche utilise un bundle tiers fictif, AcmeUserBundle, qui fournit un écran de confirmation, des traductions et un form. Nous voulons adapter cet écran sans modifier les fichiers installés du bundle.</p><p>Quelle donnée entre, quelle responsabilité agit et quelle condition change le résultat ? Pour chaque correction, vérifiez ces conditions dans <a href="course-CRS-f9s8mpaydnbx.html#s-objectif">le passage enseigné</a>, sans supposer que toutes les branches du blog sont exécutées.</p></aside><h2 id="view-quiz-title">Quiz</h2><p class="quiz-size" lang="en">6 eligible learning questions · 6 per session. Repeating a question does not demonstrate mastery.</p><p id="course-quiz-status" role="status">Quiz interactif non chargé. Démarrez après chargement de la banque locale.</p><div id="course-quiz-controls" class="assessment-main" hidden><div id="course-quiz-assessment-controls" hidden><select id="course-quiz-assessment-mode" aria-label="Mode du quiz" hidden><option value="learning">Entraînement</option></select><p id="course-quiz-training-scope"></p><button id="course-quiz-start-assessment" type="button" lang="en">Start practice</button><button id="course-quiz-finish-assessment" type="button" lang="en" hidden>End session</button></div><p id="course-quiz-assessment-error" role="alert"></p><p id="course-quiz-assessment-timer" hidden></p><p id="course-quiz-session-progress" class="quiz-progress" role="status" lang="en"></p><div id="course-quiz-assessment-app" tabindex="-1"></div><nav id="course-quiz-session-navigation" aria-label="Questions du cours"></nav><div id="course-quiz-learning-overview" aria-live="polite"></div></div><div id="course-quiz-native"><p>Sans JavaScript ou si le chargement échoue : aucune tentative notée. Les <a href="#view-flashcards">flashcards du cours</a> restent disponibles.</p><details class="course-quiz-fallback" data-question-id="L-f9s8mpaydnbx-base-v1"><summary lang="en">What identifies an overridden translation catalogue? Select one answer (radio).</summary><p>Correction de consultation — non notée.</p><p>La surcharge suit le domain. Le nom d&#x27;un bundle dans un catalogue peut n&#x27;être qu&#x27;un nom de domain.</p><ul><li><strong lang="en">Correct: The catalogue&#x27;s translation domain and locale.</strong><p>La surcharge suit le domain. Le nom d&#x27;un bundle dans un catalogue peut n&#x27;être qu&#x27;un nom de domain.</p></li><li><strong lang="en">Distractor: The controller class that requested the translation.</strong><p>La surcharge est résolue par domain et locale, pas par controller.</p></li><li><strong lang="en">Distractor: A mandatory parent-child relationship between bundles.</strong><p>Un nom de bundle dans le catalogue peut n&#x27;être qu&#x27;un nom de domain.</p></li></ul><a href="course-CRS-f9s8mpaydnbx.html#out-OUT-2r6g1ds91vvw">Relire le passage exact</a></details></div></div></div></div><details class="transfer-panel"><summary>Sauvegarde et transfert de progression</summary><p id="reading-status" role="status">Sans JavaScript : lecture libre ; progression non enregistrée.</p><p><a href="assessment.html#overview-title">Lecture, réussites immédiates et différées</a></p><p>Transfert manuel — aucune synchronisation automatique</p><p id="persistence-status" role="status"></p><button type="button" class="secondary" id="export-progress">Exporter ma progression</button><label for="import-progress">Choisir un JSON pour fusionner ma progression (sans remplacement)</label><input type="file" id="import-progress" accept="application/json,.json"><p id="transfer-status" role="status"></p></details></main><footer class="site-footer"><a href="catalogue.html">Catalogue</a> <a href="sources.html">Sources et attribution</a> <a href="#contenu">Haut de page</a></footer></body></html>

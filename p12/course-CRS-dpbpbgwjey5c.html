@@ -1,0 +1,431 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; connect-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'"><meta name="viewport" content="width=device-width, initial-scale=1"><title>URLs generation — Symfony 8 Preparation</title><link rel="stylesheet" href="styles.css"><link rel="stylesheet" href="reader.css"><script src="mermaid.min.js" defer></script><script src="mermaid-init.js" defer></script><link rel="stylesheet" href="assessment.css"><script src="fixed-exams-data.js" defer></script><script src="fixed-exams.js" defer></script><script src="learning-state.js" defer></script><script src="guide.js" defer></script><script src="reader-catalog.js" defer></script><script src="reader.js" defer></script><script src="site-state.js" defer></script><script src="assessment.js" defer></script><script src="course-views.js" defer></script><link rel="stylesheet" href="syntax-highlight.css"><script src="prism-syntax.js" defer></script><script src="syntax-highlight.js" defer></script></head><body data-course-id="CRS-dpbpbgwjey5c"><a class="skip" href="#contenu">Aller au contenu</a><header class="site-header"><a class="brand" href="index.html">S8 Preparation</a><nav aria-label="Navigation principale"><a href="index.html">Accueil</a> <a href="catalogue.html">Parcours</a> <a href="assessment.html?mode=review">Réviser</a> <a href="examens.html">Examens blancs</a> <a href="jour-j.html">Jour J</a></nav></header><main id="contenu" tabindex="-1" class="corpus-reader"><nav class="breadcrumb" aria-label="Fil d’Ariane"><a href="index.html">Accueil</a> <span aria-hidden="true">›</span> <a href="catalogue.html">Parcours</a> <span aria-hidden="true">›</span> <a href="lot-06.html">Module 06 — Templates avec Twig</a> <span aria-hidden="true">›</span> <span aria-current="page">URLs generation</span></nav><h1>URLs generation</h1><p class="muted">Symfony 8.0 · API PHP ≤ 8.4 · Twig ≤ 3.22. Préparation indépendante.</p><p class="revision-status">Rédaction narrative P11 : projection nouvelle, non couverte par les décisions historiques P10. Aucune approbation officielle ni garantie de réussite.</p><aside class="narrative-context" aria-label="Repères de lecture"><p><strong>Prérequis de lecture :</strong> <a href="course-CRS-x2f8reencvcs.html">Twig syntax up to 3.22 version</a></p><p><strong>Concepts voisins :</strong> <a href="course-CRS-a669jpap5zf2.html">The response</a> — Le contenu rendu doit encore devenir une Response. <a href="lot-06.html">Comparer les responsabilités dans ce module</a> · <a href="carte-composants.html">Situer cette responsabilité dans le blog</a> · <a href="glossaire.html">Distinguer les termes voisins</a></p><p><a href="ordre-lecture.html">Retrouver les 163 cours dans le parcours recommandé</a>. Ce repère ne modifie ni votre historique ni votre progression.</p></aside><div class="course-layout"><details class="lot-course-menu"><summary>Cours du module · 14 cours</summary><nav aria-label="Cours du module"><a class="lot-context" href="lot-06.html">Module 06 — Templates avec Twig</a><ol><li><a href="course-CRS-2bj91rj9kvj0.html">TwigBundle</a></li><li><a href="course-CRS-x2f8reencvcs.html">Twig syntax up to 3.22 version</a></li><li><a href="course-CRS-w82wtddwhexg.html">Auto escaping</a></li><li><a href="course-CRS-k3v3wrt0hmtx.html">Template inheritance</a></li><li><a href="course-CRS-r56yzzb4pye2.html">Global variables</a></li><li><a href="course-CRS-306ppg4454wj.html">Filters and functions</a></li><li><a href="course-CRS-w83y6pfa5edn.html">Template includes</a></li><li><a href="course-CRS-zbnzvqkhjknh.html">Loops and conditions</a></li><li><a href="course-CRS-dpbpbgwjey5c.html" aria-current="page">URLs generation</a></li><li><a href="course-CRS-yw6c5hq2mbax.html">Controller rendering</a></li><li><a href="course-CRS-q18xc1k4yvb9.html">Translations and pluralization</a></li><li><a href="course-CRS-dfyab4kpcapw.html">String interpolation</a></li><li><a href="course-CRS-ym86ptkhfgap.html">Assets management</a></li><li><a href="course-CRS-vx5kvfhs0p0s.html">Debugging variables</a></li></ol><a href="lot-06.html#view-quiz">Quiz du module</a></nav></details><aside class="course-section-menu" aria-label="Sommaire du cours"><nav class="course-actions" aria-label="Activités du cours"><a id="tab-course" href="#view-course">Cours</a><a id="tab-flashcards" href="#view-flashcards">Flashcards</a><a id="tab-quiz" href="#view-quiz">Quiz</a></nav><details class="course-section-disclosure"><summary id="course-sections">Sections du cours</summary><nav aria-label="Sections du cours"><ul><li><a href="#s-objectif">Objectif</a></li><li><a href="#s-l-essentiel">L&#x27;essentiel</a></li><li><a href="#s-le-schema">Le schéma</a></li><li><a href="#s-deux-functions">Deux functions</a></li><li><a href="#s-ce-que-le-generator-decide-seul">Ce que le generator décide seul</a></li><li><a href="#s-deux-functions-voisines-sans-route">Deux functions voisines, sans route</a></li><li><a href="#s-l-escaping">L&#x27;escaping</a></li><li><a href="#s-jamais-d-url-ecrite-a-la-main">Jamais d&#x27;URL écrite à la main</a></li><li><a href="#s-pieges-d-examen">Pièges d&#x27;examen</a></li><li><a href="#s-application">Application</a></li><li><a href="#s-fiche-express">Fiche express</a></li><li><a href="#s-sources-officielles">Sources officielles</a></li><li><a href="#reader-objectives">Objectifs d’apprentissage</a></li><li><a href="#course-recalls">Rappels et liens avec les autres cours</a></li></ul></nav><nav aria-label="Flashcards par section"><a href="#view-flashcards">Flashcards par section</a><ul><li><a href="#cards-s-l-essentiel-1">L&#x27;essentiel</a></li><li><a href="#cards-s-le-schema-2">Le schéma</a></li><li><a href="#cards-s-deux-functions-3">Deux functions</a></li><li><a href="#cards-s-ce-que-le-generator-decide-seul-4">Ce que le generator décide seul</a></li><li><a href="#cards-s-deux-functions-voisines-sans-route-5">Deux functions voisines, sans route</a></li><li><a href="#cards-s-l-escaping-6">L&#x27;escaping</a></li><li><a href="#cards-s-jamais-d-url-ecrite-a-la-main-7">Jamais d&#x27;URL écrite à la main</a></li><li><a href="#cards-s-pieges-d-examen-8">Pièges d&#x27;examen</a></li><li><a href="#cards-s-application-9">Application</a></li><li><a href="#cards-s-fiche-express-10">Fiche express</a></li><li><a href="#cards-previous">Module 06 — Templates avec Twig · Cours « Template includes » · Rappel : <span lang="en">When is embed useful instead of include?</span></a></li></ul></nav><nav aria-label="Retour au module"><a href="lot-06.html">Tous les cours du module</a></nav></details><p class="local-quiz-count">4 questions disponibles · 4 par session Quiz</p></aside><div class="course-content"><div id="view-course" data-course-panel role="region" aria-labelledby="view-course-title"><h2 id="view-course-title">Cours</h2><p class="course-introduction"><a href="#s-objectif">Introduction</a> · <a href="#course-sections">Sections du cours</a></p><h2 id="reader-objectives" tabindex="-1">Objectifs d’apprentissage</h2><ul><li><a href="course-CRS-dpbpbgwjey5c.html#out-OUT-eqkt5vg15zqf">Distinguer path() de url()</a></li><li><a href="course-CRS-dpbpbgwjey5c.html#out-OUT-5g7zrabez2b4">Générer une URL avec des parameters de route</a></li><li><a href="course-CRS-dpbpbgwjey5c.html#out-OUT-b6ffjb05rkmr">Énoncer qu&#x27;une URL ne s&#x27;écrit jamais à la main</a></li></ul><aside class="pedagogy-legend" aria-label="Repères pédagogiques"><p><strong>Repères pédagogiques</strong></p><p>Ces repères décrivent le rôle du bloc, pas une fréquence officielle à l’examen.</p><p class="teaching-label essential"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="brain" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5C12 1 6 1 6 5C2 5 1 10 4 12C1 15 3 19 6 19C6 23 12 23 12 19V5M12 5C12 1 18 1 18 5C22 5 23 10 20 12C23 15 21 19 18 19C18 23 12 23 12 19M6 5C6 8 8 9 9 9M4 12H7L9 14M6 19V16M18 5C18 8 16 9 15 9M20 12H17L15 14M18 19V16"></path></svg> <strong>À comprendre</strong></p><p class="teaching-label essential"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="book" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5C9 3 5 3 2 4V20C5 19 9 19 12 21C15 19 19 19 22 20V4C19 3 15 3 12 5V21M5 8H8M5 12H8M16 8H19M16 12H19"></path></svg> <strong>À mémoriser</strong></p><p class="teaching-label example"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="code" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6L2 12L8 18M16 6L22 12L16 18M14 3L10 21"></path></svg> <strong>Exemple concret</strong></p><p class="teaching-label pitfall"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="warning" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3L23 21H1L12 3ZM12 9V14M12 17V18"></path></svg> <strong>Piège à éviter</strong></p><p class="teaching-label nuance"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="balance" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3V21M7 21H17M3 7L21 5M5 7L1 15H9L5 7M19 6L15 14H23L19 6M1 15Q5 20 9 15M15 14Q19 19 23 14"></path></svg> <strong>Nuance à connaître</strong></p><p>Précision, exception ou condition d’application d’une règle.</p></aside><section class="teaching-section" data-section="s-objectif"><h2 id="s-objectif" tabindex="-1">Objectif</h2><p>Sur la page d'accueil du blog, chaque carte d'article doit contenir un lien vers
+<code>/blog/42</code>. Plutôt que d'écrire <code>/blog/42</code> dans le HTML, on demande à Symfony de
+<strong>fabriquer</strong> cette adresse à partir du nom de la route. Ce cours explique qui
+fabrique l'URL, ce que le générateur décide seul, et pourquoi on n'écrit jamais
+une URL à la main.</p>
+<p>Il s'agit de générer une URL depuis un template. Le generator lui-même et ses
+quatre types de référence sont traités dans le Module 05 — Routage.</p></section><section class="teaching-section" data-section="s-l-essentiel"><h2 id="s-l-essentiel" tabindex="-1">L&#x27;essentiel</h2><p class="teaching-label essential"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="brain" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5C12 1 6 1 6 5C2 5 1 10 4 12C1 15 3 19 6 19C6 23 12 23 12 19V5M12 5C12 1 18 1 18 5C22 5 23 10 20 12C23 15 21 19 18 19C18 23 12 23 12 19M6 5C6 8 8 9 9 9M4 12H7L9 14M6 19V16M18 5C18 8 16 9 15 9M20 12H17L15 14M18 19V16"></path></svg> <strong>À comprendre</strong></p><aside class="section-digest" id="s-l-essentiel-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>path() et url() génèrent depuis une route.</li><li>absolute_url() complète un path.</li></ol></aside><p><strong>Ce que cette partie veut réellement vous apprendre.</strong></p>
+<ul>
+<li><em>Pourquoi ce sujet existe.</em> Une URL écrite à la main casse dès que le chemin
+  d'une route change. Le nom de route, lui, reste stable : le template le cite,
+  le routeur retrouve le chemin.</li>
+<li><em>Le piège de fond.</em> Quatre functions se ressemblent mais n'ont pas la même
+  entrée : <code>path()</code> et <code>url()</code> prennent un <strong>nom de route</strong>, <code>absolute_url()</code>
+  et <code>relative_path()</code> prennent un <strong>path</strong>.</li>
+<li><em>Ce que l'auteur veut que vous compreniez.</em> Le troisième argument <code>true</code> n'a
+  pas le même sens pour <code>path()</code> et <code>url()</code>, et le générateur peut <strong>élargir</strong>
+  la référence demandée (schéma ou host différent).</li>
+<li><em>Pourquoi c'est à l'examen.</em> Les QCM portent sur les quatre types de
+  référence, le cas <code>//host/…</code>, <code>localhost</code> sans Request, <code>&amp;amp;</code> dans la
+  source HTML et le comportement de <code>relative_path()</code>.</li>
+</ul>
+<p>Deux functions prennent un <strong>route name</strong> — <code>path()</code> pour un path, <code>url()</code> pour
+une URL complète — et deux autres prennent un <strong>path</strong> — <code>absolute_url()</code> et
+<code>relative_path()</code>. Le generator peut élargir la référence demandée, et une URL
+ne s'écrit jamais à la main.</p></section><section class="teaching-section" data-section="s-le-schema"><h2 id="s-le-schema" tabindex="-1">Le schéma</h2><p><strong>Où en est-on ?</strong> Vue d'ensemble, en quatre étapes : les deux functions de
+route (1), ce que le générateur décide seul (2), les deux functions de path (3),
+puis l'échappement (4) et la règle d'or (5). Le schéma Mermaid ci-dessous
+rassemble les trois premières ; on y reviendra section par section.</p>
+<pre class="highlight" tabindex="0"><code class="language-text">Un lien dans un template
+   ├─ J'ai un NOM de route  → path(nom, params)  /  url(nom, params)
+   │        └─ le générateur applique les contraintes de la route
+   │           (schéma ? host ? paramètres en trop ?)
+   └─ J'ai un PATH          → absolute_url('/x')  /  relative_path('/x')</code></pre>
+<figure class="diagram" aria-labelledby="CRS-dpbpbgwjey5c-3-diagram-0-title CRS-dpbpbgwjey5c-3-diagram-0-description"><figcaption id="CRS-dpbpbgwjey5c-3-diagram-0-title">Les functions de génération d&#x27;URL du Twig Bridge et ce que le generator décide</figcaption><p id="CRS-dpbpbgwjey5c-3-diagram-0-description">path et url demandent un type de référence au générateur. Un changement de schéma peut imposer une URL absolue ; un changement de host peut élargir un path en référence réseau si aucune URL absolue n&#x27;est déjà demandée ou imposée. absolute_url et relative_path travaillent sur des paths, pas des noms de route.</p><div class="mermaid" hidden>---
+title: Générer une URL depuis un template Twig
+---
+flowchart TD
+  accTitle: Les functions de génération d&#x27;URL du Twig Bridge et ce que le generator décide
+  accDescr: path et url demandent un type de référence au générateur. Un changement de schéma peut imposer une URL absolue ; un changement de host peut élargir un path en référence réseau si aucune URL absolue n&#x27;est déjà demandée ou imposée. absolute_url et relative_path travaillent sur des paths, pas des noms de route.
+  START{&quot;tu as un route name ?&quot;} --&gt;|&quot;oui&quot;| WHICH{&quot;path() ou url() ?&quot;}
+  WHICH --&gt;|&quot;path()&quot;| P[&quot;/blog/x — ou ../blog/x avec true&quot;]
+  WHICH --&gt;|&quot;url()&quot;| U[&quot;http://host/blog/x — ou //host/blog/x avec true&quot;]
+  P --&gt;|&quot;appliquer les contraintes de route&quot;| GEN{&quot;Autre schéma ou host ?&quot;}
+  U --&gt;|&quot;appliquer les contraintes de route&quot;| GEN
+  GEN --&gt;|&quot;schéma&quot;| ABS([&quot;URL absolue, même par path()&quot;])
+  GEN --&gt;|&quot;host différent, sans absolue déjà demandée ou imposée&quot;| NET([&quot;//autre-host/…&quot;])
+  GEN --&gt;|&quot;non&quot;| OK([&quot;la référence demandée&quot;])
+  START --&gt;|&quot;non : un path&quot;| PATHFN{&quot;absolute_url() ou relative_path() ?&quot;}
+  PATHFN --&gt;|&quot;absolute_url()&quot;| AU([&quot;schéma + host + path&quot;])
+  PATHFN --&gt;|&quot;relative_path()&quot;| RP{&quot;path ou URL complète ?&quot;}
+  RP --&gt;|&quot;/human.txt&quot;| REL([&quot;../human.txt&quot;])
+  RP --&gt;|&quot;http://…&quot;| SAME([&quot;rendue telle quelle&quot;])
+  classDef choice fill:#fef3c7,stroke:#b45309,color:#78350f
+  classDef value fill:#e0f2fe,stroke:#0369a1,color:#0c4a6e
+  class START,WHICH,GEN,PATHFN,RP choice
+  class P,U,ABS,NET,OK,AU,REL,SAME value</div></figure>
+<p>Ambre = choix de référence ; bleu = résultat. Les chemins relatifs illustrés
+supposent la page <code>/products/hover-board</code>. Un changement de host ne raccourcit
+jamais une URL déjà absolue : <code>url()</code> reste absolue. Ne pas appliquer <code>raw</code>
+pour retirer les <code>&amp;amp;</code> nécessaires au source HTML d'un lien.</p></section><section class="teaching-section" data-section="s-deux-functions"><span class="outcome-anchor" id="out-OUT-eqkt5vg15zqf" tabindex="-1"></span><span class="outcome-anchor" id="out-OUT-5g7zrabez2b4" tabindex="-1"></span><h2 id="s-deux-functions" tabindex="-1">Deux functions</h2><aside class="section-digest" id="s-deux-functions-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Les deux functions partagent nom et parameters.</li><li>Leur troisième argument ne signifie pas la même chose.</li></ol></aside><p><strong>Où en est-on ?</strong> Étape 1 sur 5 : on part d'un <strong>nom de route</strong> et on veut une
+adresse. Deux functions du Twig Bridge s'en chargent : <code>path()</code> et <code>url()</code>.</p>
+<p>La carte de l'article42 reçoit son identifiant ; le bridge transmet
+<code>blog_show</code> et <code>id</code> au générateur. Le navigateur n'atteindra l'action qu'après
+une navigation. Les exemples à slug et <code>/post/…</code> conservés ici décrivent
+une autre déclaration de route : dans le fil principal, les deux appels
+emploient <code>{id: article.id}</code>.</p>
+<pre class="highlight" tabindex="0"><code class="language-html">&lt;a href="{{ path('blog_show', {slug: post.slug}) }}"&gt;Lire&lt;/a&gt;
+&lt;link rel="canonical" href="{{ url('blog_show', {slug: post.slug}) }}"&gt;</code></pre>
+<table>
+<thead>
+<tr>
+<th>Appel</th>
+<th>Type de référence</th>
+<th>Depuis <code>/products/hover-board</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>path(nom, params)</code></td>
+<td><code>ABSOLUTE_PATH</code></td>
+<td><code>/post/mon-article</code></td>
+</tr>
+<tr>
+<td><code>path(nom, params, true)</code></td>
+<td><code>RELATIVE_PATH</code></td>
+<td><code>../post/mon-article</code></td>
+</tr>
+<tr>
+<td><code>url(nom, params)</code></td>
+<td><code>ABSOLUTE_URL</code></td>
+<td><code>http://example.com/post/mon-article</code></td>
+</tr>
+<tr>
+<td><code>url(nom, params, true)</code></td>
+<td><code>NETWORK_PATH</code></td>
+<td><code>//example.com/post/mon-article</code></td>
+</tr>
+</tbody>
+</table>
+<p>Les deux premiers arguments sont communs ; le <strong>troisième diffère</strong> :
+<code>relative</code> pour <code>path()</code>, <code>schemeRelative</code> pour <code>url()</code>.</p>
+<p>Pourquoi le troisième argument n'a-t-il pas le même sens ? Regardons ce que
+fait le bridge (<code>RoutingExtension</code>) :</p>
+<pre class="highlight" tabindex="0"><code class="language-text">path($nom, $params, $relative = false)
+   └─ $relative ? RELATIVE_PATH  : ABSOLUTE_PATH
+
+url($nom, $params, $schemeRelative = false)
+   └─ $schemeRelative ? NETWORK_PATH : ABSOLUTE_URL</code></pre>
+<p>Chemin d'exécution de <code>path('blog_show', {id: 42})</code> :</p>
+<pre class="highlight" tabindex="0"><code class="language-text">Twig rencontre path('blog_show', {id: 42})
+   ▼
+RoutingExtension::getPath()
+   ▼
+UrlGenerator::generate('blog_show', ['id' =&gt; 42], ABSOLUTE_PATH)
+   ▼
+"/blog/42"  → écrit dans le HTML ; aucun contrôleur n'est exécuté</code></pre>
+<p>Les quatre types de référence, côte à côte :</p>
+<pre class="highlight" tabindex="0"><code class="language-text">┌──────────────┬──────────────┬──────────────┬─────────────────────────────┐
+│ path()       │ path(…, true)│ url()        │ url(…, true)                │
+├──────────────┼──────────────┼──────────────┼─────────────────────────────┤
+│ ABSOLUTE_PATH│RELATIVE_PATH │ ABSOLUTE_URL │ NETWORK_PATH                │
+├──────────────┼──────────────┼──────────────┼─────────────────────────────┤
+│ /post/x      │ ../post/x    │ http://h/p/x │ //h/post/x                  │
+└──────────────┴──────────────┴──────────────┴─────────────────────────────┘</code></pre>
+<p>Pourquoi la mauvaise réponse est plausible : <code>true</code> paraît toujours signifier
+« version plus courte/relative ». Pour <code>url()</code>, il signifie « sans schéma », ce
+qui reste une référence réseau, pas un chemin relatif.</p>
+<div class="admonition info">
+<p class="admonition-title">🌍 In Real Life</p>
+<p><strong>La situation</strong> : l'accueil du restaurant imprime une indication pour rejoindre une destination connue : un chemin local pour le visiteur sur place, ou une adresse complète pour une invitation envoyée ailleurs.</p>
+<p><strong>L’équivalent dans Symfony</strong> : <code>path()</code> et <code>url()</code> transmettent un nom de route et des paramètres au générateur. Pour le fil <code>/blog/42</code>, <code>blog_show</code> et <code>id: 42</code> désignent le contrat de destination, pas un appel de l'action.</p>
+<p><strong>Retour à la réalité technique</strong> : les fonctions demandent respectivement un chemin absolu et une URL absolue. Le troisième argument <code>true</code> demande un chemin relatif pour <code>path()</code>, mais une référence réseau sans schéma pour <code>url()</code>. Ce sont des demandes soumises aux contraintes de route et au contexte.</p>
+<p><strong>🧠 Comment le mémoriser</strong> : « Imprimer l'adresse n'effectue pas la visite. » Image mentale : invitation prête, visiteur encore immobile. Question-réflexe : quel type de référence ai-je demandé, et que signifie ici le troisième argument ?</p>
+<p><strong>⚠️ À ne pas confondre</strong> : génération, navigation HTTP et exécution du contrôleur.</p>
+</div><aside class="enrichment" aria-label="Autre explication"><p>Un numéro de salle suffit souvent à quelqu'un déjà dans le bâtiment ; une adresse complète convient à un destinataire extérieur. Pour un lien d'email, url() exprime cette adresse complète plutôt qu'un simple path.</p></aside><div class="retained-answer-context">
+<p><strong>Repère — Ce que le generator décide seul :</strong></p>
+<p lang="en"><strong>Question:</strong> Can path() return more than an absolute path?</p>
+<p lang="en"><strong>Answer:</strong> Yes. A different host or scheme can require a network-path or absolute URL.</p>
+<p>Le generator respecte host et schemes. Le nom path() n'interdit pas ces formes nécessaires.</p>
+</div>
+
+<div class="retained-answer-context">
+<p><strong>Repère — Deux functions voisines, sans route :</strong></p>
+<p lang="en"><strong>Question:</strong> Does absolute_url() accept a route name?</p>
+<p lang="en"><strong>Answer:</strong> No. It accepts a path.</p>
+<p>path() et url() génèrent depuis une route. absolute_url() complète un path.</p>
+</div>
+
+<div class="retained-answer-context">
+<p><strong>Repère — L'escaping :</strong></p>
+<p lang="en"><strong>Question:</strong> Is an ampersand escaped as &amp;amp; in an HTML link a broken query string?</p>
+<p lang="en"><strong>Answer:</strong> No. That is the correct HTML representation.</p>
+<p>Le contexte HTML impose son escaping. Ne pas utiliser raw pour corriger un ampersand correctement échappé.</p>
+</div></section><section class="teaching-section" data-section="s-ce-que-le-generator-decide-seul"><h2 id="s-ce-que-le-generator-decide-seul" tabindex="-1">Ce que le generator décide seul</h2><aside class="section-digest" id="s-ce-que-le-generator-decide-seul-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Le generator respecte host et schemes.</li><li>Le nom path() n&#x27;interdit pas ces formes nécessaires.</li></ol></aside><p><strong>Où en est-on ?</strong> Étape 2 sur 5 : on a demandé un type de référence, mais la
+<strong>route</strong> impose parfois ses propres règles (schéma, host). Le générateur
+adapte alors le résultat. Cette partie liste ces cas.</p>
+<p>Depuis la page HTML du blog, la forme demandée reste soumise à la
+destination configurée. Un simple path ne peut pas envoyer le lecteur
+sur un autre host ; le générateur l'élargit. Dans une newsletter, configure
+le contexte explicitement : le rendu console ne connaît ni le domaine
+public par intuition ni la future Request du lecteur.</p>
+<ul>
+<li>Une route qui exige un autre <strong>schéma</strong> que la Request rend une URL absolue,
+  même par <code>path()</code> : <code>https://example.com/sec</code>.</li>
+<li>Avec <code>path()</code>, un autre <strong>host</strong>, sans changement de schéma imposé,
+  produit <code>//api.example.com/o</code> ; <code>url()</code> conserve son URL absolue.</li>
+<li>Un paramètre supplémentaire ordinaire, non utilisé par les variables de
+  route et non égal à un défaut, peut alimenter la <strong>query string</strong> :
+  <code>/post/x?ref=nl</code>. Les clés spéciales, comme <code>_fragment</code>, ont un autre rôle.</li>
+<li>Une route inconnue lève <code>RouteNotFoundException</code>, que le template reçoit dans
+  une <code>RuntimeError</code>.</li>
+<li>Sans Request — une command qui envoie un email —, <code>url()</code> prend le host du
+  contexte du router, <code>localhost</code> par défaut : <code>http://localhost/post/z</code>.
+  <code>framework.router.default_uri</code> le corrige.</li>
+</ul>
+<p>Pourquoi un simple path ne peut-il pas aller sur un autre host ? Un chemin
+<code>/status</code> n'a de sens que sur le <strong>site courant</strong>. Si la route est liée à
+<code>api.example.com</code>, il faut dire où : le générateur écrit <code>//api.example.com/status</code>.</p>
+<pre class="highlight" tabindex="0"><code class="language-text">Page servie sur example.com, route "status" liée à api.example.com :
+
+path('status')   →  //api.example.com/status       (élargi : référence réseau)
+url('status')    →  http://api.example.com/status  (déjà absolue : inchangée)
+
+Route "sec" exigeant https, page servie en http :
+
+path('sec')      →  https://example.com/sec        (schéma différent → absolue)</code></pre>
+<p>Pourquoi <code>/post/x?ref=nl</code> ? <code>ref</code> n'est pas une variable de la route
+<code>/post/{slug}</code> : le générateur le range en query string. Mais si une variable
+<strong>obligatoire</strong> reste sans valeur (faute de nom : <code>idd: 42</code> au lieu de <code>id</code>),
+il lève <code>MissingMandatoryParametersException</code> — rien n'est silencieux.</p>
+<table>
+<thead>
+<tr>
+<th>Cas</th>
+<th>Résultat</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>paramètre en trop (<code>ref: 'nl'</code>)</td>
+<td><code>?ref=nl</code></td>
+</tr>
+<tr>
+<td>paramètre en trop égal à un défaut</td>
+<td>omis</td>
+</tr>
+<tr>
+<td><code>_fragment: 'top'</code></td>
+<td>ancre <code>#top</code>, pas un paramètre de query</td>
+</tr>
+<tr>
+<td>variable obligatoire manquante</td>
+<td><code>MissingMandatoryParametersException</code></td>
+</tr>
+<tr>
+<td>route inconnue</td>
+<td><code>RouteNotFoundException</code> (dans une <code>RuntimeError</code> côté template)</td>
+</tr>
+<tr>
+<td>pas de Request (console)</td>
+<td>host du contexte : <code>localhost</code> sans <code>default_uri</code></td>
+</tr>
+</tbody>
+</table>
+<div class="admonition info">
+<p class="admonition-title">🌍 In Real Life</p>
+<p><strong>La situation</strong> : une indication « porte suivante » ne suffit plus lorsque la destination appartient à un autre établissement. Le service d'adressage ajoute les coordonnées nécessaires ; il ne devine pas une adresse publique absente de son carnet.</p>
+<p><strong>L’équivalent dans Symfony</strong> : un changement de host peut imposer <code>//host/…</code>, un changement de schéma une URL absolue. Hors Request, le générateur utilise son contexte configuré, notamment <code>framework.router.default_uri</code>.</p>
+<p><strong>Retour à la réalité technique</strong> : une URL déjà absolue n'est pas raccourcie par le changement de host. Les paramètres supplémentaires ordinaires peuvent devenir une query string ; les paramètres spéciaux, comme <code>_fragment</code>, ont leur traitement propre. Une faute de nom qui laisse un paramètre obligatoire sans valeur peut néanmoins faire échouer la génération. Une route inexistante échoue aussi, sans recherche de contenu métier.</p>
+<p><strong>🧠 Comment le mémoriser</strong> : « La destination impose les coordonnées utiles. » Image mentale : indication locale complétée par l'adresse de l'autre établissement. Question-réflexe : quels host, schéma et paramètres le contexte et la route exigent-ils ?</p>
+<p><strong>⚠️ À ne pas confondre</strong> : paramètre supplémentaire, paramètre requis manquant et route inconnue.</p>
+</div></section><section class="teaching-section" data-section="s-deux-functions-voisines-sans-route"><h2 id="s-deux-functions-voisines-sans-route" tabindex="-1">Deux functions voisines, sans route</h2><p><strong>Où en est-on ?</strong> Étape 3 sur 5 : parfois on n'a <strong>pas de nom de route</strong>, juste
+un chemin déjà connu (un logo, un fichier statique). Deux autres functions,
+fournies par <code>HttpFoundationExtension</code>, travaillent alors sur ce chemin.</p>
+<p>Pour rendre absolu le chemin du logo déjà obtenu, <code>absolute_url()</code> convient.
+Pour l'article, pars en revanche du nom de route avec <code>url()</code>. Confondre
+les deux entrées produirait un chemin basé sur le texte <code>blog_show</code>,
+pas une résolution de ses paramètres.</p>
+<p><code>HttpFoundationExtension</code> ajoute deux functions qui prennent un <strong>path</strong> :</p>
+<ul>
+<li><code>absolute_url('/images/logo.png')</code> → <code>http://example.com/images/logo.png</code>,
+  souvent combinée à <code>asset()</code> ;</li>
+<li><code>relative_path('/human.txt')</code> → <code>../human.txt</code> depuis <code>/products/hover-board</code>.</li>
+</ul>
+<p><code>relative_path()</code> rend <strong>inchangée</strong> une URL complète : avec
+<code>'http://example.com/human.txt'</code>, le résultat est l'URL elle-même — contrairement
+à l'exemple de la documentation de référence ; le code 8.0 tranche.</p>
+<p>Pourquoi <code>relative_path()</code> laisse-t-il une URL complète inchangée ? Dans
+<code>UrlHelper::getRelativePath()</code>, un argument qui contient <code>://</code> (ou commence par
+<code>//</code>) est rendu tel quel : on ne peut pas exprimer « relativement » une adresse
+qui désigne déjà un autre endroit.</p>
+<pre class="highlight" tabindex="0"><code class="language-text">Depuis la page /products/hover-board :
+
+relative_path('/human.txt')                   → ../human.txt
+relative_path('http://example.com/human.txt') → http://example.com/human.txt
+absolute_url('/images/logo.png')              → http://example.com/images/logo.png
+absolute_url('blog_show')                     → chemin basé sur le texte blog_show</code></pre>
+<p>Comparaison des deux familles :</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th><code>path()</code> / <code>url()</code></th>
+<th><code>absolute_url()</code> / <code>relative_path()</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Entrée</td>
+<td><strong>nom de route</strong> + paramètres</td>
+<td>un <strong>path</strong></td>
+</tr>
+<tr>
+<td>Qui travaille</td>
+<td><code>RoutingExtension</code> → <code>UrlGenerator</code></td>
+<td><code>HttpFoundationExtension</code> → <code>UrlHelper</code></td>
+</tr>
+<tr>
+<td>Applique les contraintes de route</td>
+<td>oui</td>
+<td>non</td>
+</tr>
+<tr>
+<td>Cas d'usage</td>
+<td>liens vers l'application</td>
+<td>logo, fichier statique</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition info">
+<p class="admonition-title">🌍 In Real Life</p>
+<p><strong>La situation</strong> : compléter une adresse déjà écrite avec sa ville n'est pas rechercher dans l'annuaire le lieu nommé « accueil ». Le premier travail transforme une adresse ; le second résout un nom.</p>
+<p><strong>L’équivalent dans Symfony</strong> : <code>absolute_url()</code> et <code>relative_path()</code> travaillent sur des chemins via HttpFoundation, contrairement à <code>url()</code> et <code>path()</code> qui consultent les routes nommées.</p>
+<p><strong>Retour à la réalité technique</strong> : <code>relative_path()</code> laisse une URL complète inchangée dans le comportement Symfony8.0 décrit ici. <code>absolute_url('blog_show')</code> n'applique ni les placeholders ni la définition de cette route. Aucun de ces helpers ne vérifie que la ressource distante existe ou que sa destination est autorisée.</p>
+<p><strong>🧠 Comment le mémoriser</strong> : « Transformer une adresse, ce n'est pas consulter l'annuaire. » Image mentale : adresse déjà écrite face à une fiche portant seulement un nom. Question-réflexe : mon entrée est-elle un chemin ou un nom de route ?</p>
+<p><strong>⚠️ À ne pas confondre</strong> : transformation de chemin, génération par route et validation de destination.</p>
+</div></section><section class="teaching-section" data-section="s-l-escaping"><h2 id="s-l-escaping" tabindex="-1">L&#x27;escaping</h2><aside class="section-digest" id="s-l-escaping-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Le contexte HTML impose son escaping.</li><li>Ne pas utiliser raw pour corriger un ampersand correctement échappé.</li></ol></aside><p><strong>Où en est-on ?</strong> Étape 4 sur 5 : l'URL est générée ; il faut maintenant
+l'<strong>insérer</strong> dans le HTML. C'est une étape distincte de la génération, avec un
+effet visible : le <code>&amp;amp;</code> dans le source.</p>
+<p>Le lien de suivi peut contenir deux paramètres séparés par <code>&amp;</code>. Dans
+l'attribut HTML, <code>&amp;amp;</code> représente correctement ce séparateur : le
+navigateur le décodera. Ce résultat n'est pas une URL cassée à « réparer »
+avec <code>raw</code> ; encodage URL et échappement du contexte HTML se complètent.</p>
+<p><code>path()</code> et <code>url()</code> déclarent un <code>is_safe_callback</code> : leur output n'échappe pas
+sans parameters, ou avec un seul parameter littéral. Sinon il est échappé : le
+<code>&amp;</code> d'une query string devient <code>&amp;amp;</code>, ce qui est correct dans un attribute
+HTML.</p>
+<p>Pourquoi cette règle ? Le générateur encode en pourcentage tout caractère non
+alphanumérique : une URL générée ne contient donc rien de dangereux, sauf un
+caractère qui doit être échappé en HTML : le <code>&amp;</code> qui sépare les paramètres de
+query. Twig ne peut le savoir à la compilation que s'il n'y a pas de paramètres
+ou un seul paramètre constant ; dans les autres cas, il laisse l'autoescape agir.</p>
+<pre class="highlight" tabindex="0"><code class="language-text">path('post', {slug: 'x'})                         → un seul paramètre constant
+   → déclaré sûr : aucun échappement ajouté
+path('post', {slug: 'x', ref: 'nl', utm: 'a'})    → plusieurs paramètres
+   → échappé : source HTML  /post/x?ref=nl&amp;amp;utm=a
+   → le navigateur décode  &amp;amp;  en  &amp;  : l'URL suivie est /post/x?ref=nl&amp;utm=a</code></pre>
+<div class="admonition info">
+<p class="admonition-title">🌍 In Real Life</p>
+<p><strong>La situation</strong> : l'adresse d'une invitation doit être transcrite selon les règles de l'imprimeur. Les signes employés dans le document ne sont pas forcément ceux que le lecteur manipulera après lecture.</p>
+<p><strong>L’équivalent dans Symfony</strong> : l'encodage du générateur prépare l'URL ; l'échappement Twig prépare son insertion HTML. Dans un attribut entre guillemets, <code>&amp;amp;</code> représente le <code>&amp;</code> que le navigateur interprétera dans l'URL.</p>
+<p><strong>Retour à la réalité technique</strong> : le callback de sûreté de <code>path()</code>/<code>url()</code> permet certaines optimisations d'échappement HTML selon les arguments connus à la compilation. Ce n'est pas une garantie pour tous les contextes, notamment JavaScript, ni une validation d'URL arbitraire. Ne supprime pas l'échappement avec <code>raw</code> pour modifier l'apparence du source HTML.</p>
+<p><strong>🧠 Comment le mémoriser</strong> : « Adresse correcte, transcription correcte : deux étapes. » Image mentale : adresse puis version imprimable dans le document. Question-réflexe : suis-je en train d'encoder une URL ou de l'insérer dans un contexte de sortie ?</p>
+<p><strong>⚠️ À ne pas confondre</strong> : encodage URL, échappement HTML et autorisation d'une destination.</p>
+</div></section><section class="teaching-section" data-section="s-jamais-d-url-ecrite-a-la-main"><span class="outcome-anchor" id="out-OUT-b6ffjb05rkmr" tabindex="-1"></span><h2 id="s-jamais-d-url-ecrite-a-la-main" tabindex="-1">Jamais d&#x27;URL écrite à la main</h2><aside class="section-digest" id="s-jamais-d-url-ecrite-a-la-main-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Le route name constitue le point de référence.</li><li>Le generator encode et applique les contraintes de destination.</li></ol></aside><p><strong>Où en est-on ?</strong> Étape 5 sur 5 : la règle qui justifie tout le reste. Après
+avoir vu comment générer, voyons <strong>pourquoi</strong> on ne tape jamais <code>/blog/42</code>
+directement dans un template.</p>
+<p>Pour les routes de l'application, génère les liens par leur nom : changer
+le path ne doit pas obliger à rechercher chaque occurrence dans les templates.
+Des tests peuvent détecter des liens cassés, mais ne remplacent pas ce contrat.
+Une URL externe connue n'est pas pour autant un nom de route interne. Le
+generator applique aussi le schéma et le host exigés, retire un parameter égal à
+sa default value et encode les valeurs.</p>
+<p>Avant / après, quand la route passe de <code>/blog/{id}</code> à <code>/articles/{id}</code> :</p>
+<pre class="highlight" tabindex="0"><code class="language-text">URL écrite à la main  : &lt;a href="/blog/42"&gt;   → 404 : à corriger partout
+Nom de route          : path('blog_show', …)  → /articles/42 : rien à changer</code></pre>
+<p>Ce que le générateur fait <strong>à votre place</strong> :</p>
+<table>
+<thead>
+<tr>
+<th>Tâche</th>
+<th>Écrit à la main</th>
+<th>Via <code>path()</code> / <code>url()</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Suivre un changement de chemin</td>
+<td>oublis possibles</td>
+<td>automatique</td>
+</tr>
+<tr>
+<td>Schéma / host exigés par la route</td>
+<td>à gérer soi-même</td>
+<td>appliqués</td>
+</tr>
+<tr>
+<td>Paramètre égal à sa valeur par défaut</td>
+<td>présent</td>
+<td>retiré</td>
+</tr>
+<tr>
+<td>Encodage des valeurs</td>
+<td>à faire soi-même</td>
+<td>fait</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition info">
+<p class="admonition-title">🌍 In Real Life</p>
+<p><strong>La situation</strong> : le restaurant change l'emplacement de son accueil. Les invitations qui consultent le nom stable « accueil » prennent la nouvelle adresse ; celles qui recopient l'ancien chemin deviennent obsolètes.</p>
+<p><strong>L’équivalent dans Symfony</strong> : référencer le nom de route centralise la définition du chemin, des paramètres, du host et du schéma. Les templates n'ont pas à recopier la forme physique de chaque URL interne.</p>
+<p><strong>Retour à la réalité technique</strong> : le nom et les paramètres constituent tout de même un contrat à maintenir. L'omission des valeurs par défaut dépend des règles de génération, de la position des segments optionnels et d'une éventuelle inclusion forcée. Une URL externe connue n'est pas transformée en route interne par cette recommandation.</p>
+<p><strong>🧠 Comment le mémoriser</strong> : « Garder le nom, centraliser l'adresse. » Image mentale : plusieurs invitations consultant une même fiche de destination. Question-réflexe : si le chemin change, combien de templates devront être corrigés ?</p>
+<p><strong>⚠️ À ne pas confondre</strong> : nom de route stable, chemin actuel et URL externe.</p>
+</div></section><section class="teaching-section" data-section="s-pieges-d-examen"><h2 id="s-pieges-d-examen" tabindex="-1">Pièges d&#x27;examen</h2><p class="teaching-label pitfall"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="warning" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3L23 21H1L12 3ZM12 9V14M12 17V18"></path></svg> <strong>Piège à éviter</strong></p><ul class="pitfall-list"><li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : Le troisième argument n&#x27;a pas le même sens dans les deux functions</summary><p><strong>Le troisième argument n'a pas le même sens dans les deux functions</strong> : path
+relatif pour l'une, URL sans schéma pour l'autre. <em>Pourquoi on se trompe : les
+deux signatures ont un booléen en troisième position, on suppose donc qu'il
+fait la même chose.</em></p></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : La function de path peut retourner une URL absolue</summary><p><strong>La function de path peut retourner une URL absolue</strong>, quand la route exige
+un autre schéma — ou une référence <code>//hôte/…</code> quand elle est liée à un autre
+host. <em>Pourquoi on se trompe : le nom <code>path()</code> suggère « toujours un chemin ».</em></p></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : Un paramètre supplémentaire ordinaire peut alimenter la query string, mais une faute de nom n&#x27;est pas forcément silencieuse.</summary><p><strong>Un paramètre supplémentaire ordinaire peut alimenter la query string,
+mais une faute de nom n'est pas forcément silencieuse.</strong> Si <code>idd: 42</code>
+laisse le <code>{id}</code> obligatoire sans valeur dans les paramètres, les défauts
+et le contexte, le générateur lève <code>MissingMandatoryParametersException</code>.
+Les clés spéciales ne suivent pas la règle ordinaire : <code>_fragment</code> fournit
+l'ancre, pas un paramètre de query. <em>Pourquoi on se trompe : « les paramètres
+en trop vont dans la query » fait croire qu'une faute de frappe passe toujours
+sans erreur.</em></p></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : absolute_url() prend un path, pas un route name.</summary><p><strong><code>absolute_url()</code> prend un path, pas un route name.</strong> <em>Pourquoi on se trompe :
+elle ressemble à <code>url()</code>, qui, elle, prend un nom de route.</em></p></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : relative_path() laisse une URL complète inchangée</summary><p><strong><code>relative_path()</code> laisse une URL complète inchangée</strong> : seul un path,
+<code>/human.txt</code>, devient relatif — contrairement à l'exemple de la documentation
+de référence. <em>Pourquoi on se trompe : la doc de référence montre un résultat
+relatif ; le code 8.0 renvoie l'URL telle quelle.</em></p></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : &amp;amp; dans le source n&#x27;est pas un bug.</summary><p><strong><code>&amp;amp;</code> dans le source n'est pas un bug.</strong> C'est l'échappement HTML correct
+d'un séparateur de query. <em>Pourquoi on se trompe : on lit le source brut et on
+oublie que le navigateur décode l'attribut.</em></p></details></li></ul></section><section class="teaching-section" data-section="s-application"><h2 id="s-application" tabindex="-1">Application</h2><aside class="section-digest" id="s-application-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>path() et url() génèrent depuis une route.</li><li>absolute_url() complète un path.</li><li>Les deux functions partagent nom et parameters.</li><li>Leur troisième argument ne signifie pas la même chose.</li></ol></aside>
+
+
+
+</section><section class="teaching-section" data-section="s-fiche-express"><h2 id="s-fiche-express" tabindex="-1">Fiche express</h2><p class="teaching-label essential"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="book" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5C9 3 5 3 2 4V20C5 19 9 19 12 21C15 19 19 19 22 20V4C19 3 15 3 12 5V21M5 8H8M5 12H8M16 8H19M16 12H19"></path></svg> <strong>À mémoriser</strong></p><p><strong>🧠 À retenir pour la certification :</strong></p>
+<ul>
+<li><strong><code>path()</code></strong> : path absolu ; <strong><code>url()</code></strong> : URL complète.</li>
+<li><strong><code>true</code></strong> en troisième argument : relatif pour <code>path()</code>, sans schéma pour
+  <code>url()</code>.</li>
+<li><strong>Autre schéma</strong> → URL absolue ; <strong>autre host</strong> → au moins <code>//host/…</code>,
+  sans raccourcir une URL déjà absolue.</li>
+<li>Paramètre supplémentaire ordinaire → <strong>query string</strong> sauf valeur égale
+  à un défaut ; variable obligatoire sans valeur → <strong>erreur</strong> ;
+  <code>_fragment</code> → <strong>ancre</strong>.</li>
+<li>Plus d'un parameter → output <strong>échappé</strong> (<code>&amp;amp;</code>).</li>
+<li><strong><code>absolute_url()</code> / <code>relative_path()</code></strong> : un path ; une URL complète reste
+  <strong>inchangée</strong>.</li>
+<li>Hors Request, <strong><code>url()</code></strong> rend <strong><code>http://localhost/…</code></strong> sans <code>default_uri</code>.</li>
+</ul>
+<p>Moyen mnémotechnique : <strong>« path pour la page, url pour l'extérieur, et
+jamais à la main »</strong>.</p>
+<pre class="highlight" tabindex="0"><code class="language-text">path = /x, url = http://host/x ; true = relatif / sans schéma ;
+schéma ≠ → absolue ; host ≠ → au moins //host ;
+extra ordinaire → query (hors défaut identique) ; requis manquant → erreur ;
+_fragment → ancre ; &gt;1 param → &amp;amp; ;
+absolute_url/relative_path sur un path, URL complète inchangée</code></pre></section><section class="teaching-section" data-section="s-sources-officielles"><h2 id="s-sources-officielles" tabindex="-1">Sources officielles</h2><ul>
+<li><a href="https://symfony.com/doc/8.0/reference/twig_reference.html">Symfony Twig Reference, <code>path</code>, <code>url</code>, <code>absolute_url</code>, <code>relative_path</code></a></li>
+<li><a>Twig Bridge 8.0, <code>RoutingExtension</code></a> et <a><code>HttpFoundationExtension</code></a></li>
+<li><a href="https://symfony.com/doc/8.0/routing.html">Symfony Routing, générer des URL dans une command</a></li>
+<li><a href="https://symfony.com/doc/8.0/components/http_foundation.html">HttpFoundation 8.0, <code>UrlHelper</code></a></li>
+<li><a href="https://symfony.com/doc/8.0/routing.html">Routing 8.0, <code>UrlGenerator</code></a></li>
+</ul></section><section id="course-recalls" aria-labelledby="course-recalls-title" tabindex="-1"><h2 id="course-recalls-title">Rappels et liens avec les autres cours</h2><div data-recall-group="current"><h3>Rappels du cours actuel</h3><ul><li data-recall-course="CRS-dpbpbgwjey5c" data-recall-kind="digest_reference"><p class="recall-provenance">Module 06 — Templates avec Twig · Cours « URLs generation »</p><p class="digest-reference"><a href="#s-l-essentiel-digest">Revoir la règle : path() et url() génèrent depuis une route.</a></p></li><li><nav aria-label="Flashcards de l’application"><ul><li data-recall-course="CRS-dpbpbgwjey5c" data-recall-kind="application"><p class="recall-provenance">Module 06 — Templates avec Twig · Cours « URLs generation »</p><a href="#A-dpbpbgwjey5c-65c42c80d9-03">Flashcard : path() et url() génèrent depuis une route. absolute_url() complète un path.</a></li><li data-recall-course="CRS-dpbpbgwjey5c" data-recall-kind="application"><p class="recall-provenance">Module 06 — Templates avec Twig · Cours « URLs generation »</p><a href="#A-dpbpbgwjey5c-f90e9feb30-01">Flashcard : Les deux functions partagent nom et parameters. Leur troisième argument ne signifie pas la même chose.</a></li></ul></nav></li></ul></div><div data-recall-group="other"><h3>Rappels des cours précédents / autres modules</h3><ul><li data-recall-course="CRS-w83y6pfa5edn" data-recall-kind="previous_course"><p class="recall-provenance">Module 06 — Templates avec Twig · Cours « Template includes »</p><p>include réutilise un fragment tel quel. embed combine inclusion et personnalisation des blocks.</p><p><a href="#cards-previous">Rappel : <span lang="en">When is embed useful instead of include?</span></a></p></li></ul></div></section><nav class="course-sequence" aria-label="Ordre de lecture"><a rel="prev" href="course-CRS-zbnzvqkhjknh.html" aria-label="Précédent : Loops and conditions — Module 06 — Templates avec Twig">Précédent : Loops and conditions</a> <a href="lot-06.html">Sommaire : Module 06 — Templates avec Twig</a> <a rel="next" href="course-CRS-yw6c5hq2mbax.html" aria-label="Suivant : Controller rendering — Module 06 — Templates avec Twig">Suivant : Controller rendering</a></nav><p class="course-practice-entry"><a class="button" href="#view-quiz">Fin du cours — s’entraîner avec le Quiz</a></p></div><div id="view-flashcards" data-course-panel role="region" aria-labelledby="view-flashcards-title"><h2 id="view-flashcards-title">Flashcards</h2><p lang="en">Answer before revealing each card.</p><p>Ces cartes ne mesurent pas une maîtrise notée.</p><div id="cards-s-l-essentiel-1" data-card-section="s-l-essentiel"><h3><a href="#s-l-essentiel">Revoir : L&#x27;essentiel</a></h3><div class="reader-cards"><details class="reader-card" id="A-dpbpbgwjey5c-65c42c80d9-03"><summary lang="en">Does absolute_url() accept a route name?</summary><p lang="en">No. It accepts a path.</p><p lang="fr">path() et url() génèrent depuis une route. absolute_url() complète un path.</p><a href="course-CRS-dpbpbgwjey5c.html#out-OUT-5g7zrabez2b4">Revoir le passage précis</a></details></div></div><div id="cards-s-le-schema-2" data-card-section="s-le-schema"><h3><a href="#s-le-schema">Revoir : Le schéma</a></h3><div class="reader-cards"><p class="reader-card-reference" id="A-dpbpbgwjey5c-6e0103f6cc-03">Rappel déjà proposé : <a lang="en" href="#A-dpbpbgwjey5c-65c42c80d9-03">Does absolute_url() accept a route name?</a> · <a href="course-CRS-dpbpbgwjey5c.html#out-OUT-5g7zrabez2b4">Passage canonique</a></p></div></div><div id="cards-s-deux-functions-3" data-card-section="s-deux-functions"><h3><a href="#s-deux-functions">Revoir : Deux functions</a></h3><div class="reader-cards"><details class="reader-card" id="A-dpbpbgwjey5c-f90e9feb30-01"><summary lang="en">What does the third true argument mean for path() and url()?</summary><p lang="en">For path() it requests a relative path; for url() a scheme-relative URL.</p><p lang="fr">Les deux functions partagent nom et parameters. Leur troisième argument ne signifie pas la même chose.</p><a href="course-CRS-dpbpbgwjey5c.html#out-OUT-eqkt5vg15zqf">Revoir le passage précis</a></details></div></div><div id="cards-s-ce-que-le-generator-decide-seul-4" data-card-section="s-ce-que-le-generator-decide-seul"><h3><a href="#s-ce-que-le-generator-decide-seul">Revoir : Ce que le generator décide seul</a></h3><div class="reader-cards"><details class="reader-card" id="A-dpbpbgwjey5c-8211440c7f-02"><summary lang="en">Can path() return more than an absolute path?</summary><p lang="en">Yes. A different host or scheme can require a network-path or absolute URL.</p><p lang="fr">Le generator respecte host et schemes. Le nom path() n&#x27;interdit pas ces formes nécessaires.</p><a href="course-CRS-dpbpbgwjey5c.html#out-OUT-eqkt5vg15zqf">Revoir le passage précis</a></details></div></div><div id="cards-s-deux-functions-voisines-sans-route-5" data-card-section="s-deux-functions-voisines-sans-route"><h3><a href="#s-deux-functions-voisines-sans-route">Revoir : Deux functions voisines, sans route</a></h3><div class="reader-cards"><p class="reader-card-reference" id="A-dpbpbgwjey5c-5e8999268a-03">Rappel déjà proposé : <a lang="en" href="#A-dpbpbgwjey5c-65c42c80d9-03">Does absolute_url() accept a route name?</a> · <a href="course-CRS-dpbpbgwjey5c.html#out-OUT-5g7zrabez2b4">Passage canonique</a></p></div></div><div id="cards-s-l-escaping-6" data-card-section="s-l-escaping"><h3><a href="#s-l-escaping">Revoir : L&#x27;escaping</a></h3><div class="reader-cards"><details class="reader-card" id="A-dpbpbgwjey5c-0060fad71a-04"><summary lang="en">Is an ampersand escaped as &amp;amp; in an HTML link a broken query string?</summary><p lang="en">No. That is the correct HTML representation.</p><p lang="fr">Le contexte HTML impose son escaping. Ne pas utiliser raw pour corriger un ampersand correctement échappé.</p><a href="course-CRS-dpbpbgwjey5c.html#out-OUT-eqkt5vg15zqf">Revoir le passage précis</a></details></div></div><div id="cards-s-jamais-d-url-ecrite-a-la-main-7" data-card-section="s-jamais-d-url-ecrite-a-la-main"><h3><a href="#s-jamais-d-url-ecrite-a-la-main">Revoir : Jamais d&#x27;URL écrite à la main</a></h3><div class="reader-cards"><details class="reader-card" id="A-dpbpbgwjey5c-43d9751702-05"><summary lang="en">Why generate application links from route names?</summary><p lang="en">Path changes then propagate through the URL generator.</p><p lang="fr">Le route name constitue le point de référence. Le generator encode et applique les contraintes de destination.</p><a href="course-CRS-dpbpbgwjey5c.html#out-OUT-b6ffjb05rkmr">Revoir le passage précis</a></details></div></div><div id="cards-s-pieges-d-examen-8" data-card-section="s-pieges-d-examen"><h3><a href="#s-pieges-d-examen">Revoir : Pièges d&#x27;examen</a></h3><div class="reader-cards"><p class="reader-card-reference" id="A-dpbpbgwjey5c-596d5af532-03">Rappel déjà proposé : <a lang="en" href="#A-dpbpbgwjey5c-65c42c80d9-03">Does absolute_url() accept a route name?</a> · <a href="course-CRS-dpbpbgwjey5c.html#out-OUT-5g7zrabez2b4">Passage canonique</a></p></div></div><div id="cards-s-application-9" data-card-section="s-application"><h3><a href="#s-application">Revoir : Application</a></h3><div class="reader-cards"><p class="reader-card-reference" id="A-dpbpbgwjey5c-e7ad522ea3-03">Rappel déjà proposé : <a lang="en" href="#A-dpbpbgwjey5c-65c42c80d9-03">Does absolute_url() accept a route name?</a> · <a href="course-CRS-dpbpbgwjey5c.html#out-OUT-5g7zrabez2b4">Passage canonique</a></p><p class="reader-card-reference" id="A-dpbpbgwjey5c-e7ad522ea3-01">Rappel déjà proposé : <a lang="en" href="#A-dpbpbgwjey5c-f90e9feb30-01">What does the third true argument mean for path() and url()?</a> · <a href="course-CRS-dpbpbgwjey5c.html#out-OUT-eqkt5vg15zqf">Passage canonique</a></p></div></div><div id="cards-s-fiche-express-10" data-card-section="s-fiche-express"><h3><a href="#s-fiche-express">Revoir : Fiche express</a></h3><div class="reader-cards"><p class="reader-card-reference" id="A-dpbpbgwjey5c-b11e58e15e-03">Rappel déjà proposé : <a lang="en" href="#A-dpbpbgwjey5c-65c42c80d9-03">Does absolute_url() accept a route name?</a> · <a href="course-CRS-dpbpbgwjey5c.html#out-OUT-5g7zrabez2b4">Passage canonique</a></p></div></div><div id="cards-previous"><p class="recall-provenance">Module 06 — Templates avec Twig · Cours « Template includes »</p><aside class="checkpoint"><h2>Rappel d’un cours antérieur</h2><p>Avant de poursuivre : Template includes.</p><details class="corpus-correction"><summary lang="en">When is embed useful instead of include?</summary><p lang="en">When including a fragment while overriding some of its blocks.</p><p>include réutilise un fragment tel quel. embed combine inclusion et personnalisation des blocks.</p><a href="course-CRS-w83y6pfa5edn.html#out-OUT-kb1neg7efnfp">Relire la correction dans le cours antérieur</a></details></aside></div></div><div id="view-quiz" data-course-panel role="region" aria-labelledby="view-quiz-title"><aside class="revision-context"><p><strong>Avant le quiz :</strong> Sur la page d&#x27;accueil du blog, chaque carte d&#x27;article doit contenir un lien vers /blog/42. Plutôt que d&#x27;écrire /blog/42 dans le HTML, on demande à Symfony de fabriquer cette adresse à partir du nom de la route. Ce cours explique qui fabrique l&#x27;URL, ce que le générateur décide seul, et pourquoi on n&#x27;écrit jamais une URL à la main.</p><p>Quelle donnée entre, quelle responsabilité agit et quelle condition change le résultat ? Pour chaque correction, vérifiez ces conditions dans <a href="course-CRS-dpbpbgwjey5c.html#s-objectif">le passage enseigné</a>, sans supposer que toutes les branches du blog sont exécutées.</p></aside><h2 id="view-quiz-title">Quiz</h2><p class="quiz-size" lang="en">4 eligible learning questions · 4 per session. Repeating a question does not demonstrate mastery.</p><p id="course-quiz-status" role="status">Quiz interactif non chargé. Démarrez après chargement de la banque locale.</p><div id="course-quiz-controls" class="assessment-main" hidden><div id="course-quiz-assessment-controls" hidden><select id="course-quiz-assessment-mode" aria-label="Mode du quiz" hidden><option value="learning">Entraînement</option></select><p id="course-quiz-training-scope"></p><button id="course-quiz-start-assessment" type="button" lang="en">Start practice</button><button id="course-quiz-finish-assessment" type="button" lang="en" hidden>End session</button></div><p id="course-quiz-assessment-error" role="alert"></p><p id="course-quiz-assessment-timer" hidden></p><p id="course-quiz-session-progress" class="quiz-progress" role="status" lang="en"></p><div id="course-quiz-assessment-app" tabindex="-1"></div><nav id="course-quiz-session-navigation" aria-label="Questions du cours"></nav><div id="course-quiz-learning-overview" aria-live="polite"></div></div><div id="course-quiz-native"><p>Sans JavaScript ou si le chargement échoue : aucune tentative notée. Les <a href="#view-flashcards">flashcards du cours</a> restent disponibles.</p><details class="course-quiz-fallback" data-question-id="L-dpbpbgwjey5c-base-v1"><summary lang="en">RADIO — Select one answer. Does absolute_url() accept a route name?</summary><p>Correction de consultation — non notée.</p><p>path() et url() génèrent depuis une route. absolute_url() complète un path.</p><ul><li><strong lang="en">Distractor: Yes; it resolves the route name and its parameters.</strong><p>path() ou url() résout une route ; absolute_url() complète un path.</p></li><li><strong lang="en">Distractor: No; it accepts only a pre-existing absolute URL.</strong><p>Un path est bien l&#x27;entrée attendue pour créer une URL absolue.</p></li><li><strong lang="en">Correct: No; absolute_url() takes a path.</strong><p>path() et url() génèrent depuis une route. absolute_url() complète un path.</p></li></ul><a href="course-CRS-dpbpbgwjey5c.html#out-OUT-5g7zrabez2b4">Relire le passage exact</a><a href="course-CRS-dpbpbgwjey5c.html#s-deux-functions">Relire la correction précise</a></details></div></div></div></div><details class="transfer-panel"><summary>Sauvegarde et transfert de progression</summary><p id="reading-status" role="status">Sans JavaScript : lecture libre ; progression non enregistrée.</p><p><a href="assessment.html#overview-title">Lecture, réussites immédiates et différées</a></p><p>Transfert manuel — aucune synchronisation automatique</p><p id="persistence-status" role="status"></p><button type="button" class="secondary" id="export-progress">Exporter ma progression</button><label for="import-progress">Choisir un JSON pour fusionner ma progression (sans remplacement)</label><input type="file" id="import-progress" accept="application/json,.json"><p id="transfer-status" role="status"></p></details></main><footer class="site-footer"><a href="catalogue.html">Catalogue</a> <a href="sources.html">Sources et attribution</a> <a href="#contenu">Haut de page</a></footer></body></html>

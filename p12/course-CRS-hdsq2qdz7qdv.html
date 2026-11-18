@@ -1,0 +1,399 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; connect-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'"><meta name="viewport" content="width=device-width, initial-scale=1"><title>HTTP response — Symfony 8 Preparation</title><link rel="stylesheet" href="styles.css"><link rel="stylesheet" href="reader.css"><script src="mermaid.min.js" defer></script><script src="mermaid-init.js" defer></script><link rel="stylesheet" href="assessment.css"><script src="fixed-exams-data.js" defer></script><script src="fixed-exams.js" defer></script><script src="learning-state.js" defer></script><script src="guide.js" defer></script><script src="reader-catalog.js" defer></script><script src="reader.js" defer></script><script src="site-state.js" defer></script><script src="assessment.js" defer></script><script src="course-views.js" defer></script><link rel="stylesheet" href="syntax-highlight.css"><script src="prism-syntax.js" defer></script><script src="syntax-highlight.js" defer></script></head><body data-course-id="CRS-hdsq2qdz7qdv"><a class="skip" href="#contenu">Aller au contenu</a><header class="site-header"><a class="brand" href="index.html">S8 Preparation</a><nav aria-label="Navigation principale"><a href="index.html">Accueil</a> <a href="catalogue.html">Parcours</a> <a href="assessment.html?mode=review">Réviser</a> <a href="examens.html">Examens blancs</a> <a href="jour-j.html">Jour J</a></nav></header><main id="contenu" tabindex="-1" class="corpus-reader"><nav class="breadcrumb" aria-label="Fil d’Ariane"><a href="index.html">Accueil</a> <span aria-hidden="true">›</span> <a href="catalogue.html">Parcours</a> <span aria-hidden="true">›</span> <a href="lot-02.html">Module 02 — Fondamentaux HTTP</a> <span aria-hidden="true">›</span> <span aria-current="page">HTTP response</span></nav><h1>HTTP response</h1><p class="muted">Symfony 8.0 · API PHP ≤ 8.4 · Twig ≤ 3.22. Préparation indépendante.</p><p class="revision-status">Rédaction narrative P11 : projection nouvelle, non couverte par les décisions historiques P10. Aucune approbation officielle ni garantie de réussite.</p><aside class="narrative-context" aria-label="Repères de lecture"><p><strong>Prérequis de lecture :</strong> <a href="course-CRS-erfvgqsx1z2p.html">HTTP methods</a></p><p><strong>Concepts voisins :</strong> <a href="course-CRS-epx8j3fhb38n.html">HttpFoundation component</a> — Relier le message HTTP à ses objets PHP. <a href="lot-02.html">Comparer les responsabilités dans ce module</a> · <a href="carte-composants.html">Situer cette responsabilité dans le blog</a> · <a href="glossaire.html">Distinguer les termes voisins</a></p><p><a href="ordre-lecture.html">Retrouver les 163 cours dans le parcours recommandé</a>. Ce repère ne modifie ni votre historique ni votre progression.</p></aside><div class="course-layout"><details class="lot-course-menu"><summary>Cours du module · 10 cours</summary><nav aria-label="Cours du module"><a class="lot-context" href="lot-02.html">Module 02 — Fondamentaux HTTP</a><ol><li><a href="course-CRS-depbnbc0g82x.html">HTTP Specification (RFC 9110)</a></li><li><a href="cours-http.html">Status codes</a></li><li><a href="course-CRS-222wq64mqxye.html">HTTP request</a></li><li><a href="course-CRS-hdsq2qdz7qdv.html" aria-current="page">HTTP response</a></li><li><a href="course-CRS-erfvgqsx1z2p.html">HTTP methods</a></li><li><a href="course-CRS-7fa2behkxmf9.html">Cookies</a></li><li><a href="course-CRS-e3j0d3a8ndrf.html">Caching</a></li><li><a href="course-CRS-dab7evz3fe29.html">Content negotiation</a></li><li><a href="course-CRS-qa0x33akw264.html">Language detection</a></li><li><a href="course-CRS-ez2qmqfk902e.html">Symfony HttpClient component</a></li></ol><a href="lot-02.html#view-quiz">Quiz du module</a></nav></details><aside class="course-section-menu" aria-label="Sommaire du cours"><nav class="course-actions" aria-label="Activités du cours"><a id="tab-course" href="#view-course">Cours</a><a id="tab-flashcards" href="#view-flashcards">Flashcards</a><a id="tab-quiz" href="#view-quiz">Quiz</a></nav><details class="course-section-disclosure"><summary id="course-sections">Sections du cours</summary><nav aria-label="Sections du cours"><ul><li><a href="#s-objectif">Objectif</a></li><li><a href="#s-l-essentiel">L&#x27;essentiel</a></li><li><a href="#s-le-schema">Le schéma</a></li><li><a href="#s-l-exemple-la-bonne-sous-classe">L&#x27;exemple : la bonne sous-classe</a></li><li><a href="#s-la-class-de-base">La class de base</a></li><li><a href="#s-isredirect-contre-isredirection">`isRedirect()` contre `isRedirection()`</a></li><li><a href="#s-autres-methods-de-test">Autres methods de test</a></li><li><a href="#s-l-emission-send-et-qui-l-appelle">L&#x27;émission : `send()`, et qui l&#x27;appelle</a></li><li><a href="#s-pieges-d-examen">Pièges d&#x27;examen</a></li><li><a href="#s-application">Application</a></li><li><a href="#s-fiche-express">Fiche express</a></li><li><a href="#s-sources-officielles">Sources officielles</a></li><li><a href="#reader-objectives">Objectifs d’apprentissage</a></li><li><a href="#course-recalls">Rappels et liens avec les autres cours</a></li></ul></nav><nav aria-label="Flashcards par section"><a href="#view-flashcards">Flashcards par section</a><ul><li><a href="#cards-s-l-essentiel-1">L&#x27;essentiel</a></li><li><a href="#cards-s-le-schema-2">Le schéma</a></li><li><a href="#cards-s-l-exemple-la-bonne-sous-classe-3">L&#x27;exemple : la bonne sous-classe</a></li><li><a href="#cards-s-la-class-de-base-4">La class de base</a></li><li><a href="#cards-s-isredirect-contre-isredirection-5">`isRedirect()` contre `isRedirection()`</a></li><li><a href="#cards-s-autres-methods-de-test-6">Autres methods de test</a></li><li><a href="#cards-s-l-emission-send-et-qui-l-appelle-7">L&#x27;émission : `send()`, et qui l&#x27;appelle</a></li><li><a href="#cards-s-pieges-d-examen-8">Pièges d&#x27;examen</a></li><li><a href="#cards-s-application-9">Application</a></li><li><a href="#cards-s-fiche-express-10">Fiche express</a></li><li><a href="#cards-previous">Module 02 — Fondamentaux HTTP · Cours « HTTP request » · Rappel : <span lang="en">How should an array-valued query parameter be read?</span></a></li></ul></nav><nav aria-label="Retour au module"><a href="lot-02.html">Tous les cours du module</a></nav></details><p class="local-quiz-count">5 questions disponibles · 5 par session Quiz</p></aside><div class="course-content"><div id="view-course" data-course-panel role="region" aria-labelledby="view-course-title"><h2 id="view-course-title">Cours</h2><p class="course-introduction"><a href="#s-objectif">Introduction</a> · <a href="#course-sections">Sections du cours</a></p><h2 id="reader-objectives" tabindex="-1">Objectifs d’apprentissage</h2><ul><li><a href="course-CRS-hdsq2qdz7qdv.html#out-OUT-yq2nzprwr82v">Choisir la sous-classe de Response adaptée au cas</a></li><li><a href="course-CRS-hdsq2qdz7qdv.html#out-OUT-2ekazygpee7h">Distinguer isRedirect() de isRedirection() sur des statuts précis</a></li><li><a href="course-CRS-hdsq2qdz7qdv.html#out-OUT-p5kb8nhzd8hm">Distinguer isOk() de isSuccessful()</a></li><li><a href="course-CRS-hdsq2qdz7qdv.html#out-OUT-gkcvmpt5dwz6">Expliquer pourquoi kernel.terminate s&#x27;exécute après la Response</a></li></ul><aside class="pedagogy-legend" aria-label="Repères pédagogiques"><p><strong>Repères pédagogiques</strong></p><p>Ces repères décrivent le rôle du bloc, pas une fréquence officielle à l’examen.</p><p class="teaching-label essential"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="brain" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5C12 1 6 1 6 5C2 5 1 10 4 12C1 15 3 19 6 19C6 23 12 23 12 19V5M12 5C12 1 18 1 18 5C22 5 23 10 20 12C23 15 21 19 18 19C18 23 12 23 12 19M6 5C6 8 8 9 9 9M4 12H7L9 14M6 19V16M18 5C18 8 16 9 15 9M20 12H17L15 14M18 19V16"></path></svg> <strong>À comprendre</strong></p><p class="teaching-label essential"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="book" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5C9 3 5 3 2 4V20C5 19 9 19 12 21C15 19 19 19 22 20V4C19 3 15 3 12 5V21M5 8H8M5 12H8M16 8H19M16 12H19"></path></svg> <strong>À mémoriser</strong></p><p class="teaching-label example"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="code" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6L2 12L8 18M16 6L22 12L16 18M14 3L10 21"></path></svg> <strong>Exemple concret</strong></p><p class="teaching-label pitfall"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="warning" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3L23 21H1L12 3ZM12 9V14M12 17V18"></path></svg> <strong>Piège à éviter</strong></p><p class="teaching-label nuance"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="balance" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3V21M7 21H17M3 7L21 5M5 7L1 15H9L5 7M19 6L15 14H23L19 6M1 15Q5 20 9 15M15 14Q19 19 23 14"></path></svg> <strong>Nuance à connaître</strong></p><p>Précision, exception ou condition d’application d’une règle.</p></aside><section class="teaching-section" data-section="s-objectif"><h2 id="s-objectif" tabindex="-1">Objectif</h2><p><code>BlogController::show</code> a retrouvé l'article 42 et préparé sa représentation.
+Il lui reste à décrire le résultat HTTP : contenu, status code et headers.
+La <code>Response</code> rassemble ces éléments sans les envoyer au moment où
+on la construit.</p>
+<p>Nous allons choisir la forme adaptée à une page, au JSON ou à une redirection,
+inspecter ce résultat, puis suivre son émission. Cette séparation permet
+aussi de comprendre pourquoi deux méthodes de test aux noms proches
+ne répondent pas à la même question.</p></section><section class="teaching-section" data-section="s-l-essentiel"><h2 id="s-l-essentiel" tabindex="-1">L&#x27;essentiel</h2><p class="teaching-label essential"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="brain" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5C12 1 6 1 6 5C2 5 1 10 4 12C1 15 3 19 6 19C6 23 12 23 12 19V5M12 5C12 1 18 1 18 5C22 5 23 10 20 12C23 15 21 19 18 19C18 23 12 23 12 19M6 5C6 8 8 9 9 9M4 12H7L9 14M6 19V16M18 5C18 8 16 9 15 9M20 12H17L15 14M18 19V16"></path></svg> <strong>À comprendre</strong></p><aside class="section-digest" id="s-l-essentiel-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>isRedirection() teste la class 3xx.</li><li>isRedirect() suit une liste distincte de statuts.</li></ol></aside><p><strong>Ce que cette partie veut réellement vous apprendre.</strong></p>
+<ul>
+<li><em>Pourquoi ce sujet existe.</em> Un contrôleur doit <strong>décrire</strong> un résultat HTTP
+  (contenu, status code, headers) sans parler au réseau. <code>Response</code> est cette
+  description : un simple objet PHP, construit puis rendu à quelqu'un d'autre
+  qui l'enverra.</li>
+<li><em>Le piège de fond.</em> <strong>Construire, retourner, émettre et terminer</strong> sont
+  quatre moments différents. Beaucoup de questions jouent sur cet ordre.</li>
+<li><em>Ce que l'auteur veut que vous compreniez.</em> Qui envoie réellement la
+  réponse (le runner, pas le contrôleur), et pourquoi des méthodes de test
+  aux noms proches (<code>isRedirect()</code> / <code>isRedirection()</code>, <code>isOk()</code> /
+  <code>isSuccessful()</code>) répondent à des questions différentes.</li>
+<li><em>Pourquoi c'est à l'examen.</em> Détails d'API vérifiables : la liste exacte de
+  <code>isRedirect()</code>, le <code>302</code> par défaut, <code>HTTP/1.0</code> initial, <code>getContent()</code> de
+  <code>StreamedResponse</code>, <code>send(false)</code>.</li>
+</ul>
+<p>Dans le trajet habituel de notre page, le controller <strong>retourne</strong> une
+<code>Response</code>, éventuellement spécialisée. Le kernel poursuit son traitement
+avant de rendre cet object au code chargé de l'émission. Avec le Runtime
+HTTP standard étudié ici, ce rôle revient à <code>HttpKernelRunner</code>.
+Ce n'est pas une règle universelle imposant Runtime à tout usage d'HttpFoundation.</p>
+<p>Avant l'envoi, l'object peut être inspecté : le GET réussi annonce <code>200</code>,
+l'absence de 999 peut être traduite en <code>404</code>, et une inscription réussie
+peut demander une confirmation par <code>303</code>. Construire l'object ne prouve
+pas que l'opération métier a eu lieu : le code doit choisir un résultat
+conforme à ce qui s'est réellement passé.</p>
+<p>Un <em>prédicat</em> retourne vrai ou faux sur une propriété de cet object.
+<code>isRedirection()</code> reconnaît la famille 3xx ; <code>isRedirect()</code> utilise une
+liste Symfony particulière incluant 201 et excluant 304. Nous allons
+observer cette différence sans la confondre avec une nouvelle définition
+des status codes HTTP.</p>
+<p>Le fil du cours, en quatre étapes :</p>
+<pre class="highlight" tabindex="0"><code class="language-text">Controller construit une Response
+   ├─ 1. La class de base      → quelle sous-classe pour quel besoin ?
+   ├─ 2. isRedirect / isRedirection → classer le status code
+   ├─ 3. Autres methods de test     → isOk, isSuccessful, isNotFound...
+   └─ 4. L'émission                 → qui appelle send(), et quand ?</code></pre></section><section class="teaching-section" data-section="s-le-schema"><h2 id="s-le-schema" tabindex="-1">Le schéma</h2><aside class="section-digest" id="s-le-schema-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Le controller retourne une Response.</li><li>Le runner appelle send(false), finalise selon disponibilité/debug puis appelle terminate() si TerminableInterface ; la réception complète par le client n&#x27;est pas garantie.</li></ol></aside><p><strong>Où en est-on ?</strong> On vient de dire que construire ≠ envoyer. Ce schéma
+montre la fin du chemin : ce qui arrive à la Response <strong>après</strong> que le
+kernel l'a retournée. Il anticipe l'étape 4 du cours (« L'émission »).</p>
+<p>La représentation est prête, mais aucun octet n'a nécessairement quitté
+PHP. Le diagramme commence <strong>après</strong> le traitement par <code>handle()</code> et suit
+le runner Runtime dans le chemin sans exception :</p>
+<figure class="diagram" aria-labelledby="CRS-hdsq2qdz7qdv-3-diagram-0-title CRS-hdsq2qdz7qdv-3-diagram-0-description"><figcaption id="CRS-hdsq2qdz7qdv-3-diagram-0-title">Le runner émet la Response retournée par le kernel</figcaption><p id="CRS-hdsq2qdz7qdv-3-diagram-0-description">Après handle, HttpKernelRunner appelle send(false). Hors debug, une fonction de fin FastCGI ou LiteSpeed disponible termine l&#x27;échange ; sinon le runner vide les buffers. Il appelle ensuite terminate seulement si le kernel implémente TerminableInterface.</p><div class="mermaid" hidden>---
+title: Émission puis terminaison dans le runner Runtime
+---
+flowchart TD
+  accTitle: Le runner émet la Response retournée par le kernel
+  accDescr: Après handle, HttpKernelRunner appelle send(false). Hors debug, une fonction de fin FastCGI ou LiteSpeed disponible termine l&#x27;échange ; sinon le runner vide les buffers. Il appelle ensuite terminate seulement si le kernel implémente TerminableInterface.
+  C[&quot;kernel.handle&quot;] --&gt;|&quot;retourne Response&quot;| RU[&quot;runner : send(false)&quot;]
+  RU --&gt;|&quot;headers et contenu émis&quot;| F{&quot;fonction de fin disponible&lt;br/&gt;et hors debug ?&quot;}
+  F --&gt;|&quot;oui&quot;| FF[&quot;FastCGI ou LiteSpeed : finir&quot;]
+  F --&gt;|&quot;non&quot;| B[&quot;fermer buffers puis flush&quot;]
+  FF --&gt;|&quot;ensuite&quot;| K{&quot;kernel terminable ?&quot;}
+  B --&gt;|&quot;ensuite&quot;| K
+  K --&gt;|&quot;oui : terminate&quot;| T([&quot;kernel.terminate&quot;])
+  K --&gt;|&quot;non&quot;| E([&quot;fin du runner&quot;])
+  classDef runtime fill:#e0f2fe,stroke:#0369a1,color:#0c4a6e
+  classDef decision fill:#fef3c7,stroke:#b45309,color:#78350f
+  classDef result fill:#dcfce7,stroke:#15803d,color:#14532d
+  class C,RU,FF,B runtime
+  class F,K decision
+  class T,E result</div></figure>
+<p>Bleu : appels ; losanges orange : conditions ; capsules vertes : issues.
+Les conditions portent sur l'environnement d'exécution et sur le contrat
+du kernel, pas sur l'existence de l'article. <code>send(false)</code> émet headers
+et contenu, puis laisse la finalisation au runner. Celui-ci n'appelle
+<code>terminate()</code> que pour un kernel implémentant <code>TerminableInterface</code>.</p>
+<p>Retourner, émettre et terminer sont donc trois opérations distinctes.
+Un test peut s'arrêter à l'inspection de l'object sans envoyer de headers ;
+un travail de terminaison n'est pas pour autant une tâche durable
+exécutée par un autre processus.</p></section><section class="teaching-section" data-section="s-l-exemple-la-bonne-sous-classe"><h2 id="s-l-exemple-la-bonne-sous-classe" tabindex="-1">L&#x27;exemple : la bonne sous-classe</h2><p class="teaching-label example"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="code" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6L2 12L8 18M16 6L22 12L16 18M14 3L10 21"></path></svg> <strong>Exemple concret</strong></p><aside class="section-digest" id="s-l-exemple-la-bonne-sous-classe-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>JsonResponse encode des données PHP.</li><li>fromJsonString() accepte un document JSON déjà encodé.</li></ol></aside><p><strong>Où en est-on ?</strong> Retour au début du fil : le contrôleur doit <strong>choisir</strong>
+quel objet retourner. Code minimal d'abord, mécanisme ensuite.</p>
+<p>La lecture HTML de 42 peut utiliser <code>Response</code>. Les branches voisines
+ont d'autres besoins : données JSON après une création effective,
+navigation vers une confirmation ou téléchargement d'un rapport existant.
+Avec PHP 8.4 et HttpFoundation 8.0 chargés par l'autoloader, les fragments
+suivants supposent ces imports :</p>
+<pre class="highlight" tabindex="0"><code class="language-php">use Symfony\Component\HttpFoundation\BinaryFileResponse;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Response;
+
+$alreadyEncoded = '{"id":42}';</code></pre>
+<p>Choisis ensuite <strong>une seule</strong> ligne dans une action ; les chemins
+<code>/orders/42</code> et <code>/var/exports/report.pdf</code> restent des exemples isolés,
+pas des routes ou fichiers créés par ce cours :</p>
+<pre class="highlight" tabindex="0"><code class="language-php">// Alternatives indépendantes : choisir une seule ligne par action.
+return new JsonResponse(['id' =&gt; 42], Response::HTTP_CREATED);
+return new RedirectResponse('/orders/42');           // 302 par défaut
+return JsonResponse::fromJsonString($alreadyEncoded);
+return new BinaryFileResponse('/var/exports/report.pdf');</code></pre>
+<p>La première alternative produit le JSON <code>{"id":42}</code> avec <code>201</code> :
+elle suppose que la création est déjà accomplie, et ne convient pas
+au simple GET de notre article existant. La deuxième construit un
+<code>302</code> avec <code>Location: /orders/42</code> et une petite page HTML de redirection ;
+elle n'exécute pas cette destination.</p>
+<p>La troisième réutilise la string JSON fournie, sans l'encoder une seconde
+fois ; sa validité reste à la charge de l'appelant. La quatrième suppose
+un fichier existant et lisible. Elle ne génère ni le rapport ni
+l'autorisation de le consulter. Ces choix préparent chacun une réponse,
+pas quatre émissions successives.</p>
+<p>Ce que le contrôleur fait (et ne fait pas) :</p>
+<pre class="highlight" tabindex="0"><code class="language-text">contrôleur ──new JsonResponse(...)──▶ objet PHP en mémoire
+                                       │ status, headers, contenu décrits
+                                       ▼
+                    return $response   (rien n'est envoyé au navigateur)</code></pre></section><section class="teaching-section" data-section="s-la-class-de-base"><span class="outcome-anchor" id="out-OUT-yq2nzprwr82v" tabindex="-1"></span><h2 id="s-la-class-de-base" tabindex="-1">La class de base</h2><p><strong>Où en est-on ?</strong> Étape 1 sur 4 : la famille <code>Response</code>. <em>Pourquoi des
+sous-classes ?</em> Parce que préparer un contenu JSON, une redirection ou un
+fichier demande chaque fois des headers et un mode de production différents.</p>
+<p><code>Response</code> reçoit contenu, status code et headers. Son sac public
+<code>$response-&gt;headers</code> est un <code>ResponseHeaderBag</code>, qui gère aussi les cookies.
+La classe représente un résultat HTTP ; ses sous-classes spécialisent
+la préparation ou la production du contenu :</p>
+<table>
+<thead>
+<tr>
+<th>Class</th>
+<th>Usage</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>JsonResponse</code></td>
+<td>encode en JSON, pose le <code>Content-Type</code> ; <code>fromJsonString()</code> n'encode pas deux fois</td>
+</tr>
+<tr>
+<td><code>RedirectResponse</code></td>
+<td>pose <code>Location</code>, statut 302 par défaut</td>
+</tr>
+<tr>
+<td><code>BinaryFileResponse</code></td>
+<td>sert un file, Requests de plage comprises</td>
+</tr>
+<tr>
+<td><code>StreamedResponse</code></td>
+<td>body produit par un callable, sans tout charger</td>
+</tr>
+<tr>
+<td><code>StreamedJsonResponse</code></td>
+<td>JSON diffusé à partir d'un itérable</td>
+</tr>
+</tbody>
+</table>
+<p>Pour l'export d'un long import, <code>StreamedResponse</code> peut produire le
+contenu au moment de <code>sendContent()</code> au moyen d'un callable, code appelable.
+<code>getContent()</code> retourne <code>false</code>, même après cette émission : la classe
+ne mémorise pas automatiquement toute la sortie. Le streaming réduit
+la mémoire seulement si le producteur ne charge pas lui-même toutes
+les données ; les buffers peuvent aussi retarder leur arrivée au client.</p>
+<p>Avant l'émission, <code>prepare($request)</code> adapte la réponse à la demande.
+Une Response <strong>neuve</strong>, dont la version initiale est <code>HTTP/1.0</code>, reste
+à 1.0 si <code>SERVER_PROTOCOL</code> vaut <code>HTTP/1.0</code> et passe à 1.1 sinon.
+La méthode ne négocie pas elle-même une connexion HTTP/2 avec le navigateur.
+Elle ajuste notamment <code>Content-Type</code>, retire le contenu pour HEAD et
+pour les status codes sans contenu, et traite certains headers associés.
+Pour HEAD, un <code>Content-Length</code> déjà présent peut être conservé alors
+que le contenu est retiré.</p>
+<p>Dans le cycle Symfony standard, <code>ResponseListener</code>, abonné à
+<code>kernel.response</code>, appelle cette préparation pour la Request principale.
+Ne prête pas cette configuration à un HttpKernel isolé sans ce listener.
+Construire une Response seule ne la prépare pas, et <code>send()</code> n'appelle
+pas automatiquement <code>prepare()</code> à sa place.</p>
+<pre class="highlight" tabindex="0"><code class="language-text">new Response('x')           prepare($request)          send()
+ version 1.0   ─────────────▶ version 1.1 (sauf    ───▶ headers + contenu
+ pas de Content-Type ajusté   SERVER_PROTOCOL=1.0)       partent au client
+                              Content-Type ajusté
+                              contenu retiré (HEAD, 204...)
+ ▲ construit                  ▲ ResponseListener         ▲ runner (send(false))
+                                (kernel.response)</code></pre>
+<p><code>JsonResponse</code> utilise <code>json_encode()</code> avec, par défaut, quatre options
+d'échappement supplémentaires pour certains caractères HTML. Le texte
+peut donc différer d'un encodage PHP sans options tout en représentant
+les mêmes données. Pour tester ces données, compare leur forme décodée ;
+si le contrat porte réellement sur les octets, vérifie aussi l'encodage
+choisi au lieu de déclarer toute comparaison textuelle interdite.</p>
+<p>Sans argument, <code>new JsonResponse()</code> encode un object vide, <code>{}</code> :
+le constructor remplace <code>null</code> par un <code>ArrayObject</code> vide. Ce n'est
+ni une liste <code>[]</code> ni une réponse sans contenu.</p>
+<p>Exemple autonome avec l'autoload HttpFoundation chargé : le premier appel
+encode les données ; le second reçoit du JSON déjà encodé, sans le doubler.</p>
+<pre class="highlight" tabindex="0"><code class="language-php">&lt;?php
+use Symfony\Component\HttpFoundation\JsonResponse;
+$response = new JsonResponse(['id' =&gt; 42], 201);
+$alreadyEncoded = JsonResponse::fromJsonString('{"id":42}', 201);
+echo $response-&gt;getStatusCode(), "\n";
+echo $alreadyEncoded-&gt;getContent(), "\n";</code></pre>
+<p>Les sorties sont <code>201</code> et <code>{"id":42}</code>. Cette expérience indépendante
+inspecte le résultat et l'affiche avec <code>echo</code> ; elle n'appelle pas
+<code>Response::send()</code>. Le <code>201</code> est choisi explicitement et ne crée
+aucune ressource à lui seul.</p>
+<div class="admonition info">
+<p class="admonition-title">🌍 In Real Life</p>
+<p><strong>La situation</strong> : un restaurant peut préparer un plateau complet ou servir progressivement une préparation ; le mode de service ne décide pas à lui seul de l'accès du client.</p>
+<p><strong>L’équivalent dans Symfony</strong> : contenu préparé → Response ordinaire ; production pendant l'émission → callable de StreamedResponse ; adaptation à la demande → <code>prepare()</code>.</p>
+<p><strong>Retour à la réalité technique</strong> : le streaming ne réduit la mémoire que si le producteur ne charge pas tout ; <code>getContent()</code> reste <code>false</code>, même après émission. ResponseListener prépare la Request principale dans le cycle configuré ; <code>send()</code> ne le remplace pas.</p>
+<p><strong>🧠 Comment le mémoriser</strong> : « Préparer, produire, transmettre : trois décisions. » Image mentale : plateau prêt face à un service progressif. Question-réflexe : quand le contenu est-il produit et où est-il conservé ?</p>
+<p><strong>⚠️ À ne pas confondre</strong> : sous-classe de Response, autorisation métier et preuve de livraison.</p>
+</div><aside class="enrichment" aria-label="Autre explication"><p>La Response rassemble l'enveloppe de retour : status code, headers et body. prepare() adapte cette enveloppe à la Request avant que l'émission ait lieu ; construire son contenu ne signifie pas l'avoir déjà envoyé.</p></aside></section><section class="teaching-section" data-section="s-isredirect-contre-isredirection"><span class="outcome-anchor" id="out-OUT-2ekazygpee7h" tabindex="-1"></span><h2 id="s-isredirect-contre-isredirection" tabindex="-1">`isRedirect()` contre `isRedirection()`</h2><p><strong>Où en est-on ?</strong> Étape 2 sur 4 : on a une Response, on veut la <strong>classer</strong>.
+<em>Pourquoi deux méthodes aux noms presque identiques ?</em> Parce qu'elles
+répondent à deux questions : « quelle famille de status ? » et « Symfony
+reconnaît-il un statut de redirection ? ».</p>
+<p>Après l'inscription, nous voulons vérifier la confirmation annoncée.
+« Est-ce un 3xx ? » et « cette aide Symfony reconnaît-elle une destination ? »
+ne sont pas le même test.</p>
+<p><code>isRedirection()</code> compare le nombre à l'intervalle <strong>300–399</strong>.
+<code>isRedirect()</code> reconnaît exactement <strong>201, 301, 302, 303, 307 et 308</strong>.
+Sans argument, il ne vérifie même pas la présence de <code>Location</code>.
+Avec une URL passée en argument, il compare aussi la valeur de ce header.
+Voici un laboratoire qui n'envoie aucune Response :</p>
+<pre class="highlight" tabindex="0"><code class="language-php">use Symfony\Component\HttpFoundation\Response;
+
+foreach ([201, 300, 304, 307] as $status) {
+    $response = new Response('', $status);
+    printf("%d: redirect=%d redirection=%d\n", $status,
+        $response-&gt;isRedirect(), $response-&gt;isRedirection());
+}</code></pre>
+<p>Les couples affichés sont <code>1/0</code>, <code>0/1</code>, <code>0/1</code>, puis <code>1/1</code>.
+Aucun des deux ensembles n'englobe l'autre. Le <code>304</code> de revalidation
+d'une copie est bien 3xx, mais n'ordonne pas une navigation ;
+le <code>201</code> reconnu par <code>isRedirect()</code> reste un succès de création.</p>
+<pre class="highlight" tabindex="0"><code class="language-text">Status :     201   300   301 302 303 304   307 308
+isRedirection()  ✘    ✔     ✔   ✔   ✔   ✔     ✔   ✔     (300–399)
+isRedirect()     ✔    ✘     ✔   ✔   ✔   ✘     ✔   ✔     (liste fixe)</code></pre>
+<p>Le constructor de <code>RedirectResponse</code> utilise cette même liste :
+<code>new RedirectResponse($url, 304)</code> lève une <code>InvalidArgumentException</code>,
+alors que <code>new RedirectResponse($url, 201)</code> est accepté pour une
+destination non vide. C'est un comportement d'API à connaître,
+pas une recommandation de transformer chaque création en redirection.</p>
+<div class="admonition info">
+<p class="admonition-title">🌍 In Real Life</p>
+<p><strong>La situation</strong> : deux listes de contrôle ont des noms voisins, mais leurs critères ne sélectionnent pas les mêmes dossiers.</p>
+<p><strong>L’équivalent dans Symfony</strong> : classement numérique → <code>isRedirection()</code> pour 300–399 ; liste particulière → <code>isRedirect()</code> pour 201, 301, 302, 303, 307, 308.</p>
+<p><strong>Retour à la réalité technique</strong> : sans URL, <code>isRedirect()</code> ne vérifie pas Location. Son acceptation de 201 ne transforme pas ce succès en 3xx. Avec une URL, il compare aussi la destination.</p>
+<p><strong>🧠 Comment le mémoriser</strong> : « Lire le critère, pas seulement le nom. » Image mentale : deux listes partiellement superposées. Question-réflexe : cherche-t-on une famille, une liste ou une destination précise ?</p>
+<p><strong>⚠️ À ne pas confondre</strong> : prédicat vrai et redirection réellement suivie par un client.</p>
+</div></section><section class="teaching-section" data-section="s-autres-methods-de-test"><span class="outcome-anchor" id="out-OUT-p5kb8nhzd8hm" tabindex="-1"></span><h2 id="s-autres-methods-de-test" tabindex="-1">Autres methods de test</h2><aside class="section-digest" id="s-autres-methods-de-test-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>isOk() vérifie 200 précisément.</li><li>isSuccessful() vérifie toute la class 2xx.</li></ol></aside><p><strong>Où en est-on ?</strong> Étape 3 sur 4 : les autres prédicats de classification.
+Même principe : chacun <strong>classe un nombre</strong>, aucun ne vérifie le contenu.</p>
+<p>Pour la page 42, un test exigeant exactement <code>200</code> utilise <code>isOk()</code>.
+Un contrat acceptant n'importe quel succès utilise <code>isSuccessful()</code>,
+qui couvre les 2xx. La différence devient visible avec une réponse
+volontairement sans contenu :</p>
+<pre class="highlight" tabindex="0"><code class="language-php">use Symfony\Component\HttpFoundation\Response;
+
+$response = new Response('', Response::HTTP_NO_CONTENT);
+var_export($response-&gt;isOk());
+echo "\n";
+var_export($response-&gt;isSuccessful());</code></pre>
+<p>La sortie est <code>false</code>, puis <code>true</code> : <code>204</code> est un succès, pas <code>200</code>.
+Ne rends pas un test de création artificiellement permissif pour qu'il
+« survive » au changement de code si le contrat exige précisément <code>201</code>
+et un header donné. Le choix du prédicat suit le contrat de l'action.</p>
+<p>De même, <code>isClientError()</code> couvre les 4xx tandis que <code>isNotFound()</code>
+vise <strong>404 exactement</strong>, utile pour la branche article 999 absent.
+<code>isServerError()</code> couvre les 5xx. Ces méthodes classent un nombre :
+elles ne vérifient ni la cohérence du contenu, ni l'existence de
+l'article, ni la réussite réelle d'une opération.</p>
+<table>
+<thead>
+<tr>
+<th>Prédicat</th>
+<th>Ce qu'il teste</th>
+<th>Exemple</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>isOk()</code></td>
+<td>exactement 200</td>
+<td>GET réussi</td>
+</tr>
+<tr>
+<td><code>isSuccessful()</code></td>
+<td>toute la famille 2xx</td>
+<td>200, 201, 204</td>
+</tr>
+<tr>
+<td><code>isClientError()</code></td>
+<td>famille 4xx</td>
+<td>400, 404, 422</td>
+</tr>
+<tr>
+<td><code>isNotFound()</code></td>
+<td>exactement 404</td>
+<td>article 999 absent</td>
+</tr>
+<tr>
+<td><code>isServerError()</code></td>
+<td>famille 5xx</td>
+<td>500, 503</td>
+</tr>
+</tbody>
+</table></section><section class="teaching-section" data-section="s-l-emission-send-et-qui-l-appelle"><span class="outcome-anchor" id="out-OUT-gkcvmpt5dwz6" tabindex="-1"></span><h2 id="s-l-emission-send-et-qui-l-appelle" tabindex="-1">L&#x27;émission : `send()`, et qui l&#x27;appelle</h2><p><strong>Où en est-on ?</strong> Étape 4 sur 4, la dernière : on revient au schéma du
+début. <em>Qui envoie réellement la Response, et que change <code>send(false)</code> ?</em>
+On suit le chemin de l'objet jusqu'au navigateur.</p>
+<p>Nous avons choisi et inspecté le résultat. Dans le trajet Runtime standard,
+le controller le retourne au kernel, puis le runner récupère la Response
+issue de <code>handle()</code>. Appeler <code>send()</code> dans l'action interromprait cette
+séparation et risquerait une émission prématurée avant les modifications
+attendues des listeners.</p>
+<p><code>send()</code> appelle <code>sendHeaders()</code>, puis <code>sendContent()</code>. Son paramètre
+<code>$flush=false</code> ne signifie donc pas « ne rien envoyer » : il saute la
+finalisation effectuée ensuite par cette méthode. Avec sa valeur par
+défaut <code>true</code>, elle utilise <code>fastcgi_finish_request()</code> si disponible,
+sinon l'alternative LiteSpeed, sinon ferme les buffers et appelle
+<code>flush()</code> hors des environnements <code>cli</code>, <code>phpdbg</code> et <code>embed</code>.
+Un <em>buffer</em> retient temporairement une sortie avant sa transmission.</p>
+<p><code>HttpKernelRunner::run()</code> choisit justement <code>send(false)</code> pour gérer
+lui-même cette étape : fonction de fin FastCGI ou LiteSpeed disponible
+et hors debug, sinon traitement des buffers ; <strong>puis</strong> <code>terminate()</code>
+si le kernel est terminable. Ce dernier appel peut déclencher
+<code>kernel.terminate</code> dans le kernel Symfony. Il ne fait pas partie
+de <code>Response::send()</code> et ne découle pas de la simple construction
+de l'object.</p>
+<pre class="highlight" tabindex="0"><code class="language-text">send()          = sendHeaders() + sendContent() + finalisation (si $flush=true)
+send(false)     = sendHeaders() + sendContent()          (le runner finalise)
+terminate()     = appelé APRÈS, seulement si le kernel est TerminableInterface</code></pre>
+<p>Sans prise en charge serveur adaptée, le client peut encore attendre.
+Même lorsque l'échange est finalisé côté serveur, cela ne prouve pas
+que tous les octets ont atteint le navigateur. Un email lent avec
+reprise sur échec demande un mécanisme asynchrone persistant distinct :
+le travail de terminaison occupe toujours le processus PHP courant.</p>
+<p>Supposons maintenant qu'une sortie de diagnostic ait été émise trop tôt.
+Si <code>headers_sent()</code> est vrai, <code>sendHeaders()</code> ne parcourt plus les headers.
+Hors des SAPIs <code>cli</code>, <code>phpdbg</code> et <code>embed</code>, elle tente encore la ligne de statut :
+PHP peut alors signaler <em>Cannot modify header information</em>, sans pouvoir
+remplacer le statut déjà transmis. Un <code>echo</code> encore retenu dans un buffer ne
+suffit pas à établir que les headers sont partis. Distinguer cette émission
+effective d'un simple contrôle en ligne de commande : une sortie
+observée en CLI ne reproduit pas toutes les contraintes du serveur HTTP.
+La bonne correction consiste à préparer le résultat avant l'émission,
+pas à espérer qu'un changement tardif de l'object réécrive le passé.</p>
+<div class="admonition info">
+<p class="admonition-title">🌍 In Real Life</p>
+<p><strong>La situation</strong> : le cuisinier remet le plateau au service ; une fois parti, corriger la fiche en cuisine ne rappelle pas ce qui a déjà été remis.</p>
+<p><strong>L’équivalent dans Symfony</strong> : plateau retourné → Response issue de <code>handle()</code> ; service chargé de l'émission → HttpKernelRunner ; rangement ultérieur éventuel → <code>terminate()</code>.</p>
+<p><strong>Retour à la réalité technique</strong> : le runner appelle <code>send(false)</code>, finalise selon l'environnement, puis termine seulement un kernel terminable. <code>false</code> n'interdit pas l'émission. Des headers déjà transmis ne sont pas réparés en modifiant l'objet ; les buffers compliquent l'observation.</p>
+<p><strong>🧠 Comment le mémoriser</strong> : « Retourner n'est pas envoyer. » Image mentale : plateau passant de la cuisine au service. Question-réflexe : qui détient encore la réponse et quels octets sont déjà partis ?</p>
+<p><strong>⚠️ À ne pas confondre</strong> : terminaison locale, tâche asynchrone durable et réception garantie par le navigateur.</p>
+</div></section><section class="teaching-section" data-section="s-pieges-d-examen"><h2 id="s-pieges-d-examen" tabindex="-1">Pièges d&#x27;examen</h2><p class="teaching-label pitfall"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="warning" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3L23 21H1L12 3ZM12 9V14M12 17V18"></path></svg> <strong>Piège à éviter</strong></p><ul class="pitfall-list"><li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : Où en est-on ?</summary><p><strong>Où en est-on ?</strong> Bilan : les erreurs de QCM les plus probables, avec la
+raison pour laquelle la mauvaise réponse semble juste.</p></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : isRedirect() n&#x27;est pas « le statut est 3xx ».</summary><p><strong><code>isRedirect()</code> n'est pas « le statut est 3xx ».</strong> Retenir 201 inclus, 304
+exclu. Pour la confirmation d'inscription, vérifie aussi la destination
+attendue ; pour <code>304</code>, raisonne en revalidation, pas en navigation.
+<em>Pourquoi on se trompe : le nom évoque « redirection », donc la famille 3xx.</em></p></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : send() n&#x27;appartient pas au controller.</summary><p><strong><code>send()</code> n'appartient pas au controller.</strong> Un controller retourne une
+<code>Response</code> ; il ne l'envoie pas. Et le runner l'appelle avec <code>false</code>, pas avec
+le défaut. Cette précision vise le runner Runtime décrit plus haut :
+une entrée manuelle doit organiser elle-même préparation, émission
+et éventuelle terminaison. <em>Pourquoi on se trompe : en PHP « nu », on
+écrit <code>header()</code> et <code>echo</code> soi-même ; ici l'objet est seulement une description.</em></p></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : isOk() n&#x27;est pas isSuccessful()</summary><p><strong><code>isOk()</code> n'est pas <code>isSuccessful()</code></strong> : le premier teste 200 exactement, le
+second toute la class 2xx. Leur résultat ne dispense pas de vérifier
+le contenu promis par l'action. <em>Pourquoi on se trompe : « OK » se lit
+comme « ça a marché », donc comme tout 2xx.</em></p></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : Un RedirectResponse renvoie 302 par défaut</summary><p><strong>Un <code>RedirectResponse</code> renvoie 302 par défaut</strong> ; un permanent demande
+<code>new RedirectResponse($url, 301)</code>. Si le contrat exige en plus de conserver
+la méthode lors du suivi automatique, <code>308</code> exprime cette autre nuance ;
+la permanence seule ne répond pas à la question de la méthode.</p></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : Son constructor valide le statut avec isRedirect()</summary><p><strong>Son constructor valide le statut avec <code>isRedirect()</code></strong> et lève une
+<code>\InvalidArgumentException</code> sinon. Conséquence directe de la liste ci-dessus :
+<code>new RedirectResponse($url, 304)</code> <strong>échoue</strong>, alors que
+<code>new RedirectResponse($url, 201)</code> est <strong>accepté</strong>. Ne déduis pas de cette
+acceptation que <code>201</code> appartient à la famille 3xx : le
+<a href="course-CRS-984c2bv3wh09.html">sens HTTP du status code</a> reste distinct du prédicat Symfony.
+<em>Pourquoi on se trompe : on croit que 304 est « plus redirection » que 201
+parce qu'il est 3xx ; le constructor ne regarde que la liste.</em></p></details></li></ul></section><section class="teaching-section" data-section="s-application"><h2 id="s-application" tabindex="-1">Application</h2><aside class="section-digest" id="s-application-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>isOk() vérifie 200 précisément.</li><li>isSuccessful() vérifie toute la class 2xx.</li><li>Le controller retourne une Response.</li><li>Le runner appelle send(false), finalise selon disponibilité/debug puis appelle terminate() si TerminableInterface ; la réception complète par le client n&#x27;est pas garantie.</li></ol></aside>
+
+
+
+</section><section class="teaching-section" data-section="s-fiche-express"><h2 id="s-fiche-express" tabindex="-1">Fiche express</h2><p class="teaching-label essential"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="book" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5C9 3 5 3 2 4V20C5 19 9 19 12 21C15 19 19 19 22 20V4C19 3 15 3 12 5V21M5 8H8M5 12H8M16 8H19M16 12H19"></path></svg> <strong>À mémoriser</strong></p><p><strong>🧠 À retenir pour la certification :</strong></p>
+<ul>
+<li>Le controller <strong>rend</strong>, le runner Runtime HTTP décrit <strong>émet</strong> —
+  avec <code>send(false)</code>, puis gère la finalisation.</li>
+<li><code>isRedirection()</code> = <strong>3xx</strong> ; <code>isRedirect()</code> = <strong>201, 301, 302, 303, 307,
+  308</strong>.</li>
+<li><code>RedirectResponse</code> : <strong>302</strong> par défaut ; refuse 304, accepte 201.</li>
+<li><code>isOk()</code> = 200 pile ; <strong><code>isSuccessful()</code></strong> = 2xx.</li>
+<li>Response neuve en <strong><code>HTTP/1.0</code></strong> ; <code>prepare()</code> conserve 1.0 pour une
+  Request HTTP/1.0, passe en 1.1 sinon.</li>
+<li><code>JsonResponse</code> ajoute par défaut des options d'échappement ;
+  <code>fromJsonString()</code> reprend le JSON fourni sans le réencoder ni le valider.</li>
+<li>Headers déjà partis : statut transmis non réparable ; avertissement possible
+  hors <code>cli</code>, <code>phpdbg</code> et <code>embed</code>. Un buffer peut retarder l'émission.</li>
+</ul>
+<p>Moyen mnémotechnique pour <code>isRedirect()</code> :
+<strong>« 201 dedans, 304 dehors »</strong>. Ce repère décrit la liste du prédicat,
+pas une obligation de navigation ni une preuve d'émission réseau.</p>
+<p>Phrase de mémorisation : <strong>« Le contrôleur construit et retourne, le runner
+envoie avec <code>send(false)</code> puis termine ; et chaque prédicat classe un nombre,
+rien de plus. »</strong></p></section><section class="teaching-section" data-section="s-sources-officielles"><h2 id="s-sources-officielles" tabindex="-1">Sources officielles</h2><ul>
+<li><a href="https://symfony.com/doc/8.0/components/http_foundation.html">Symfony 8.0 — HttpFoundation</a></li>
+</ul></section><section id="course-recalls" aria-labelledby="course-recalls-title" tabindex="-1"><h2 id="course-recalls-title">Rappels et liens avec les autres cours</h2><div data-recall-group="current"><h3>Rappels du cours actuel</h3><ul><li data-recall-course="CRS-hdsq2qdz7qdv" data-recall-kind="digest_reference"><p class="recall-provenance">Module 02 — Fondamentaux HTTP · Cours « HTTP response »</p><p class="digest-reference"><a href="#s-l-exemple-la-bonne-sous-classe-digest">Revoir la règle : JsonResponse encode des données PHP.</a></p></li><li data-recall-course="CRS-hdsq2qdz7qdv" data-recall-kind="digest_reference"><p class="recall-provenance">Module 02 — Fondamentaux HTTP · Cours « HTTP response »</p><p class="digest-reference"><a href="#s-l-essentiel-digest">Revoir la règle : isRedirection() teste la class 3xx.</a></p></li><li data-recall-course="CRS-hdsq2qdz7qdv" data-recall-kind="digest_reference"><p class="recall-provenance">Module 02 — Fondamentaux HTTP · Cours « HTTP response »</p><p class="digest-reference"><a href="#s-le-schema-digest">Revoir la règle : Le controller retourne une Response.</a></p></li><li><nav aria-label="Flashcards de l’application"><ul><li data-recall-course="CRS-hdsq2qdz7qdv" data-recall-kind="application"><p class="recall-provenance">Module 02 — Fondamentaux HTTP · Cours « HTTP response »</p><a href="#A-hdsq2qdz7qdv-1440f25d56-03">Flashcard : isOk() vérifie 200 précisément. isSuccessful() vérifie toute la class 2xx.</a></li><li data-recall-course="CRS-hdsq2qdz7qdv" data-recall-kind="application"><p class="recall-provenance">Module 02 — Fondamentaux HTTP · Cours « HTTP response »</p><a href="#A-hdsq2qdz7qdv-6e0103f6cc-04">Flashcard : Le controller retourne une Response. Le runner appelle send(false), finalise selon disponibilité/debug puis appelle terminate() si TerminableInterface ; la réception complète par le client n&#x27;est pas garantie.</a></li></ul></nav></li></ul></div><div data-recall-group="other"><h3>Rappels des cours précédents / autres modules</h3><ul><li data-recall-course="CRS-222wq64mqxye" data-recall-kind="previous_course"><p class="recall-provenance">Module 02 — Fondamentaux HTTP · Cours « HTTP request »</p><p>InputBag::get() refuse un array. all($key) attend un array et rend [] si la key est absente.</p><p><a href="#cards-previous">Rappel : <span lang="en">How should an array-valued query parameter be read?</span></a></p></li></ul></div></section><nav class="course-sequence" aria-label="Ordre de lecture"><a rel="prev" href="course-CRS-erfvgqsx1z2p.html" aria-label="Précédent : HTTP methods — Module 02 — Fondamentaux HTTP">Précédent : HTTP methods</a> <a href="lot-02.html">Sommaire : Module 02 — Fondamentaux HTTP</a> <a rel="next" href="cours-http.html" aria-label="Suivant : Status codes — Module 02 — Fondamentaux HTTP">Suivant : Status codes</a></nav><p class="course-practice-entry"><a class="button" href="#view-quiz">Fin du cours — s’entraîner avec le Quiz</a></p></div><div id="view-flashcards" data-course-panel role="region" aria-labelledby="view-flashcards-title"><h2 id="view-flashcards-title">Flashcards</h2><p lang="en">Answer before revealing each card.</p><p>Ces cartes ne mesurent pas une maîtrise notée.</p><div id="cards-s-l-essentiel-1" data-card-section="s-l-essentiel"><h3><a href="#s-l-essentiel">Revoir : L&#x27;essentiel</a></h3><div class="reader-cards"><details class="reader-card" id="A-hdsq2qdz7qdv-65c42c80d9-02"><summary lang="en">Do isRedirect() and isRedirection() accept the same status codes?</summary><p lang="en">No. isRedirection() tests 3xx; isRedirect() includes 201 and excludes 300 and 304.</p><p lang="fr">isRedirection() teste la class 3xx. isRedirect() suit une liste distincte de statuts.</p><a href="course-CRS-hdsq2qdz7qdv.html#out-OUT-2ekazygpee7h">Revoir le passage précis</a></details></div></div><div id="cards-s-le-schema-2" data-card-section="s-le-schema"><h3><a href="#s-le-schema">Revoir : Le schéma</a></h3><div class="reader-cards"><details class="reader-card" id="A-hdsq2qdz7qdv-6e0103f6cc-04"><summary lang="en">Should a controller send its Response directly?</summary><p lang="en">No. It returns the Response; the runtime runner sends it.</p><p lang="fr">Le controller retourne une Response. Le runner appelle send(false), finalise selon disponibilité/debug puis appelle terminate() si TerminableInterface ; la réception complète par le client n&#x27;est pas garantie.</p><a href="course-CRS-hdsq2qdz7qdv.html#out-OUT-gkcvmpt5dwz6">Revoir le passage précis</a></details></div></div><div id="cards-s-l-exemple-la-bonne-sous-classe-3" data-card-section="s-l-exemple-la-bonne-sous-classe"><h3><a href="#s-l-exemple-la-bonne-sous-classe">Revoir : L&#x27;exemple : la bonne sous-classe</a></h3><div class="reader-cards"><details class="reader-card" id="A-hdsq2qdz7qdv-e2871129e0-01"><summary lang="en">How should already encoded JSON be put in a JsonResponse?</summary><p lang="en">Use JsonResponse::fromJsonString() to avoid encoding it twice.</p><p lang="fr">JsonResponse encode des données PHP. fromJsonString() accepte un document JSON déjà encodé.</p><a href="course-CRS-hdsq2qdz7qdv.html#out-OUT-yq2nzprwr82v">Revoir le passage précis</a></details></div></div><div id="cards-s-la-class-de-base-4" data-card-section="s-la-class-de-base"><h3><a href="#s-la-class-de-base">Revoir : La class de base</a></h3><div class="reader-cards"><p class="reader-card-reference" id="A-hdsq2qdz7qdv-7503ec35b3-01">Rappel déjà proposé : <a lang="en" href="#A-hdsq2qdz7qdv-e2871129e0-01">How should already encoded JSON be put in a JsonResponse?</a> · <a href="course-CRS-hdsq2qdz7qdv.html#out-OUT-yq2nzprwr82v">Passage canonique</a></p></div></div><div id="cards-s-isredirect-contre-isredirection-5" data-card-section="s-isredirect-contre-isredirection"><h3><a href="#s-isredirect-contre-isredirection">Revoir : `isRedirect()` contre `isRedirection()`</a></h3><div class="reader-cards"><p class="reader-card-reference" id="A-hdsq2qdz7qdv-a1f050eedf-02">Rappel déjà proposé : <a lang="en" href="#A-hdsq2qdz7qdv-65c42c80d9-02">Do isRedirect() and isRedirection() accept the same status codes?</a> · <a href="course-CRS-hdsq2qdz7qdv.html#out-OUT-2ekazygpee7h">Passage canonique</a></p></div></div><div id="cards-s-autres-methods-de-test-6" data-card-section="s-autres-methods-de-test"><h3><a href="#s-autres-methods-de-test">Revoir : Autres methods de test</a></h3><div class="reader-cards"><details class="reader-card" id="A-hdsq2qdz7qdv-1440f25d56-03"><summary lang="en">Does isOk() accept every successful response?</summary><p lang="en">No. It accepts exactly 200; isSuccessful() accepts the 2xx class.</p><p lang="fr">isOk() vérifie 200 précisément. isSuccessful() vérifie toute la class 2xx.</p><a href="course-CRS-hdsq2qdz7qdv.html#out-OUT-p5kb8nhzd8hm">Revoir le passage précis</a></details></div></div><div id="cards-s-l-emission-send-et-qui-l-appelle-7" data-card-section="s-l-emission-send-et-qui-l-appelle"><h3><a href="#s-l-emission-send-et-qui-l-appelle">Revoir : L&#x27;émission : `send()`, et qui l&#x27;appelle</a></h3><div class="reader-cards"><p class="reader-card-reference" id="A-hdsq2qdz7qdv-e89f5b99e5-04">Rappel déjà proposé : <a lang="en" href="#A-hdsq2qdz7qdv-6e0103f6cc-04">Should a controller send its Response directly?</a> · <a href="course-CRS-hdsq2qdz7qdv.html#out-OUT-gkcvmpt5dwz6">Passage canonique</a></p></div></div><div id="cards-s-pieges-d-examen-8" data-card-section="s-pieges-d-examen"><h3><a href="#s-pieges-d-examen">Revoir : Pièges d&#x27;examen</a></h3><div class="reader-cards"><p class="reader-card-reference" id="A-hdsq2qdz7qdv-596d5af532-02">Rappel déjà proposé : <a lang="en" href="#A-hdsq2qdz7qdv-65c42c80d9-02">Do isRedirect() and isRedirection() accept the same status codes?</a> · <a href="course-CRS-hdsq2qdz7qdv.html#out-OUT-2ekazygpee7h">Passage canonique</a></p></div></div><div id="cards-s-application-9" data-card-section="s-application"><h3><a href="#s-application">Revoir : Application</a></h3><div class="reader-cards"><p class="reader-card-reference" id="A-hdsq2qdz7qdv-e7ad522ea3-03">Rappel déjà proposé : <a lang="en" href="#A-hdsq2qdz7qdv-1440f25d56-03">Does isOk() accept every successful response?</a> · <a href="course-CRS-hdsq2qdz7qdv.html#out-OUT-p5kb8nhzd8hm">Passage canonique</a></p><p class="reader-card-reference" id="A-hdsq2qdz7qdv-e7ad522ea3-04">Rappel déjà proposé : <a lang="en" href="#A-hdsq2qdz7qdv-6e0103f6cc-04">Should a controller send its Response directly?</a> · <a href="course-CRS-hdsq2qdz7qdv.html#out-OUT-gkcvmpt5dwz6">Passage canonique</a></p></div></div><div id="cards-s-fiche-express-10" data-card-section="s-fiche-express"><h3><a href="#s-fiche-express">Revoir : Fiche express</a></h3><div class="reader-cards"><p class="reader-card-reference" id="A-hdsq2qdz7qdv-b11e58e15e-04">Rappel déjà proposé : <a lang="en" href="#A-hdsq2qdz7qdv-6e0103f6cc-04">Should a controller send its Response directly?</a> · <a href="course-CRS-hdsq2qdz7qdv.html#out-OUT-gkcvmpt5dwz6">Passage canonique</a></p></div></div><div id="cards-previous"><p class="recall-provenance">Module 02 — Fondamentaux HTTP · Cours « HTTP request »</p><aside class="checkpoint"><h2>Rappel d’un cours antérieur</h2><p>Avant de poursuivre : HTTP request.</p><details class="corpus-correction"><summary lang="en">How should an array-valued query parameter be read?</summary><p lang="en">Use query-&gt;all(&#x27;name&#x27;); get(&#x27;name&#x27;) rejects array values.</p><p>InputBag::get() refuse un array. all($key) attend un array et rend [] si la key est absente.</p><a href="course-CRS-222wq64mqxye.html#out-OUT-8beznche62fc">Relire la correction dans le cours antérieur</a></details></aside></div></div><div id="view-quiz" data-course-panel role="region" aria-labelledby="view-quiz-title"><aside class="revision-context"><p><strong>Avant le quiz :</strong> BlogController::show a retrouvé l&#x27;article 42 et préparé sa représentation. Il lui reste à décrire le résultat HTTP : contenu, status code et headers. La Response rassemble ces éléments sans les envoyer au moment où on la construit.</p><p>Quelle donnée entre, quelle responsabilité agit et quelle condition change le résultat ? Pour chaque correction, vérifiez ces conditions dans <a href="course-CRS-hdsq2qdz7qdv.html#s-objectif">le passage enseigné</a>, sans supposer que toutes les branches du blog sont exécutées.</p></aside><h2 id="view-quiz-title">Quiz</h2><p class="quiz-size" lang="en">5 eligible learning questions · 5 per session. Repeating a question does not demonstrate mastery.</p><p id="course-quiz-status" role="status">Quiz interactif non chargé. Démarrez après chargement de la banque locale.</p><div id="course-quiz-controls" class="assessment-main" hidden><div id="course-quiz-assessment-controls" hidden><select id="course-quiz-assessment-mode" aria-label="Mode du quiz" hidden><option value="learning">Entraînement</option></select><p id="course-quiz-training-scope"></p><button id="course-quiz-start-assessment" type="button" lang="en">Start practice</button><button id="course-quiz-finish-assessment" type="button" lang="en" hidden>End session</button></div><p id="course-quiz-assessment-error" role="alert"></p><p id="course-quiz-assessment-timer" hidden></p><p id="course-quiz-session-progress" class="quiz-progress" role="status" lang="en"></p><div id="course-quiz-assessment-app" tabindex="-1"></div><nav id="course-quiz-session-navigation" aria-label="Questions du cours"></nav><div id="course-quiz-learning-overview" aria-live="polite"></div></div><div id="course-quiz-native"><p>Sans JavaScript ou si le chargement échoue : aucune tentative notée. Les <a href="#view-flashcards">flashcards du cours</a> restent disponibles.</p><details class="course-quiz-fallback" data-question-id="L-hdsq2qdz7qdv-base-v1"><summary lang="en">Do isRedirect() and isRedirection() accept the same status codes? Select one answer (radio).</summary><p>Correction de consultation — non notée.</p><p>isRedirection() teste la class 3xx. isRedirect() suit une liste distincte de statuts.</p><ul><li><strong lang="en">Correct: No; isRedirect() includes 201 but excludes 300 and 304.</strong><p>isRedirection() teste la class 3xx. isRedirect() suit une liste distincte de statuts.</p></li><li><strong lang="en">Distractor: Yes; both methods return true for every 3xx code.</strong><p>isRedirection() teste la famille ; isRedirect() teste une liste différente.</p></li><li><strong lang="en">Distractor: No; isRedirect() accepts only 301 and 302.</strong><p>La liste de isRedirect() ne se limite pas à ces deux statuts.</p></li></ul><a href="course-CRS-hdsq2qdz7qdv.html#out-OUT-2ekazygpee7h">Relire le passage exact</a></details></div></div></div></div><details class="transfer-panel"><summary>Sauvegarde et transfert de progression</summary><p id="reading-status" role="status">Sans JavaScript : lecture libre ; progression non enregistrée.</p><p><a href="assessment.html#overview-title">Lecture, réussites immédiates et différées</a></p><p>Transfert manuel — aucune synchronisation automatique</p><p id="persistence-status" role="status"></p><button type="button" class="secondary" id="export-progress">Exporter ma progression</button><label for="import-progress">Choisir un JSON pour fusionner ma progression (sans remplacement)</label><input type="file" id="import-progress" accept="application/json,.json"><p id="transfer-status" role="status"></p></details></main><footer class="site-footer"><a href="catalogue.html">Catalogue</a> <a href="sources.html">Sources et attribution</a> <a href="#contenu">Haut de page</a></footer></body></html>

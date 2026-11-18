@@ -1,0 +1,394 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; connect-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Event — Symfony 8 Preparation</title><link rel="stylesheet" href="styles.css"><link rel="stylesheet" href="reader.css"><script src="mermaid.min.js" defer></script><script src="mermaid-init.js" defer></script><link rel="stylesheet" href="assessment.css"><script src="fixed-exams-data.js" defer></script><script src="fixed-exams.js" defer></script><script src="learning-state.js" defer></script><script src="guide.js" defer></script><script src="reader-catalog.js" defer></script><script src="reader.js" defer></script><script src="site-state.js" defer></script><script src="assessment.js" defer></script><script src="course-views.js" defer></script><link rel="stylesheet" href="syntax-highlight.css"><script src="prism-syntax.js" defer></script><script src="syntax-highlight.js" defer></script></head><body data-course-id="CRS-fhb1cbhnyaxx"><a class="skip" href="#contenu">Aller au contenu</a><header class="site-header"><a class="brand" href="index.html">S8 Preparation</a><nav aria-label="Navigation principale"><a href="index.html">Accueil</a> <a href="catalogue.html">Parcours</a> <a href="assessment.html?mode=review">Réviser</a> <a href="examens.html">Examens blancs</a> <a href="jour-j.html">Jour J</a></nav></header><main id="contenu" tabindex="-1" class="corpus-reader"><nav class="breadcrumb" aria-label="Fil d’Ariane"><a href="index.html">Accueil</a> <span aria-hidden="true">›</span> <a href="catalogue.html">Parcours</a> <span aria-hidden="true">›</span> <a href="lot-20.html">Module 20 — Événements et EventDispatcher</a> <span aria-hidden="true">›</span> <span aria-current="page">Event</span></nav><h1>Event</h1><p class="muted">Symfony 8.0 · API PHP ≤ 8.4 · Twig ≤ 3.22. Préparation indépendante.</p><p class="revision-status">Rédaction narrative P11 : projection nouvelle, non couverte par les décisions historiques P10. Aucune approbation officielle ni garantie de réussite.</p><aside class="narrative-context" aria-label="Repères de lecture"><p><strong>Prérequis de lecture :</strong> <a href="course-CRS-p1694d5f7r8c.html">Service container</a> · <a href="course-CRS-mpwjc4g3vmj7.html">Request handling</a></p><p><strong>Concepts voisins :</strong> <a href="course-CRS-mpwjc4g3vmj7.html">Request handling</a> — Raccorder une capacité au blog sans en faire une étape HTTP obligatoire. <a href="lot-20.html">Comparer les responsabilités dans ce module</a> · <a href="carte-composants.html">Situer cette responsabilité dans le blog</a> · <a href="glossaire.html">Distinguer les termes voisins</a></p><p><a href="ordre-lecture.html">Retrouver les 163 cours dans le parcours recommandé</a>. Ce repère ne modifie ni votre historique ni votre progression.</p></aside><div class="course-layout"><details class="lot-course-menu"><summary>Cours du module · 2 cours</summary><nav aria-label="Cours du module"><a class="lot-context" href="lot-20.html">Module 20 — Événements et EventDispatcher</a><ol><li><a href="course-CRS-wbgw87za3w5n.html">EventDispatcher</a></li><li><a href="course-CRS-fhb1cbhnyaxx.html" aria-current="page">Event</a></li></ol><a href="lot-20.html#view-quiz">Quiz du module</a></nav></details><aside class="course-section-menu" aria-label="Sommaire du cours"><nav class="course-actions" aria-label="Activités du cours"><a id="tab-course" href="#view-course">Cours</a><a id="tab-flashcards" href="#view-flashcards">Flashcards</a><a id="tab-quiz" href="#view-quiz">Quiz</a></nav><details class="course-section-disclosure"><summary id="course-sections">Sections du cours</summary><nav aria-label="Sections du cours"><ul><li><a href="#s-objectif">Objectif</a></li><li><a href="#s-l-essentiel">L&#x27;essentiel</a><ul><li><a href="#s-l-essentiel-nested-trois-facons-de-definir-ce-qui-voyage">Trois façons de définir ce qui voyage</a></li></ul></li><li><a href="#s-le-schema">Le schéma</a></li><li><a href="#s-l-exemple-un-achat-valide">L&#x27;exemple : un achat validé</a></li><li><a href="#s-une-class-de-base-deliberement-pauvre">Une class de base délibérément pauvre</a><ul><li><a href="#s-une-class-de-base-deliberement-pauvre-nested-a-ne-pas-confondre-event-de-base-et-evenement-metier">⚠️ À ne pas confondre : Event de base et événement métier</a></li></ul></li><li><a href="#s-arreter-la-propagation">Arrêter la propagation</a><ul><li><a href="#s-arreter-la-propagation-nested-a-ne-pas-confondre-arret-return-exception-rollback">⚠️ À ne pas confondre : arrêt, return, exception, rollback</a></li></ul></li><li><a href="#s-genericevent-quand-une-sous-classe-ne-se-justifie-pas">`GenericEvent`, quand une sous-classe ne se justifie pas</a><ul><li><a href="#s-genericevent-quand-une-sous-classe-ne-se-justifie-pas-nested-a-ne-pas-confondre-lire-le-sujet-lire-un-argument">⚠️ À ne pas confondre : lire le sujet, lire un argument</a></li></ul></li><li><a href="#s-pieges-d-examen">Pièges d&#x27;examen</a></li><li><a href="#s-fiche-express">Fiche express</a><ul><li><a href="#s-fiche-express-nested-a-retenir-pour-la-certification">🧠 À retenir pour la certification</a></li></ul></li><li><a href="#reader-objectives">Objectifs d’apprentissage</a></li><li><a href="#reader-sources">Sources officielles et compléments</a></li><li><a href="#course-recalls">Rappels et liens avec les autres cours</a></li></ul></nav><nav aria-label="Flashcards par section"><a href="#view-flashcards">Flashcards par section</a><ul><li><a href="#cards-s-l-essentiel-1">L&#x27;essentiel</a></li><li><a href="#cards-s-le-schema-2">Le schéma</a></li><li><a href="#cards-s-l-exemple-un-achat-valide-3">L&#x27;exemple : un achat validé</a></li><li><a href="#cards-s-une-class-de-base-deliberement-pauvre-4">Une class de base délibérément pauvre</a></li><li><a href="#cards-s-arreter-la-propagation-5">Arrêter la propagation</a></li><li><a href="#cards-s-genericevent-quand-une-sous-classe-ne-se-justifie-pas-6">`GenericEvent`, quand une sous-classe ne se justifie pas</a></li><li><a href="#cards-s-pieges-d-examen-7">Pièges d&#x27;examen</a></li><li><a href="#cards-s-fiche-express-8">Fiche express</a></li><li><a href="#cards-previous">Module 21 — Filesystem et Finder · Cours « Filesystem » · Rappel : <span lang="en">How do Filesystem and Path differ?</span></a></li></ul></nav><nav aria-label="Retour au module"><a href="lot-20.html">Tous les cours du module</a></nav></details><p class="local-quiz-count">4 questions disponibles · 4 par session Quiz</p></aside><div class="course-content"><div id="view-course" data-course-panel role="region" aria-labelledby="view-course-title"><h2 id="view-course-title">Cours</h2><p class="course-introduction"><a href="#s-objectif">Introduction</a> · <a href="#course-sections">Sections du cours</a></p><h2 id="reader-objectives" tabindex="-1">Objectifs d’apprentissage</h2><ul><li><a href="course-CRS-fhb1cbhnyaxx.html#out-OUT-90fn81pm7q7x">Expliquer pourquoi une sous-classe d&#x27;event est la norme</a></li><li><a href="course-CRS-fhb1cbhnyaxx.html#out-OUT-ck4dc8hb0b3j">Décrire l&#x27;effet exact de stopPropagation() et le lire ensuite</a></li><li><a href="course-CRS-fhb1cbhnyaxx.html#out-OUT-2e82py415svq">Situer GenericEvent et son compromis</a></li></ul><aside class="pedagogy-legend" aria-label="Repères pédagogiques"><p><strong>Repères pédagogiques</strong></p><p>Ces repères décrivent le rôle du bloc, pas une fréquence officielle à l’examen.</p><p class="teaching-label essential"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="brain" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5C12 1 6 1 6 5C2 5 1 10 4 12C1 15 3 19 6 19C6 23 12 23 12 19V5M12 5C12 1 18 1 18 5C22 5 23 10 20 12C23 15 21 19 18 19C18 23 12 23 12 19M6 5C6 8 8 9 9 9M4 12H7L9 14M6 19V16M18 5C18 8 16 9 15 9M20 12H17L15 14M18 19V16"></path></svg> <strong>À comprendre</strong></p><p class="teaching-label essential"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="book" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5C9 3 5 3 2 4V20C5 19 9 19 12 21C15 19 19 19 22 20V4C19 3 15 3 12 5V21M5 8H8M5 12H8M16 8H19M16 12H19"></path></svg> <strong>À mémoriser</strong></p><p class="teaching-label example"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="code" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6L2 12L8 18M16 6L22 12L16 18M14 3L10 21"></path></svg> <strong>Exemple concret</strong></p><p class="teaching-label pitfall"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="warning" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3L23 21H1L12 3ZM12 9V14M12 17V18"></path></svg> <strong>Piège à éviter</strong></p><p class="teaching-label nuance"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="balance" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3V21M7 21H17M3 7L21 5M5 7L1 15H9L5 7M19 6L15 14H23L19 6M1 15Q5 20 9 15M15 14Q19 19 23 14"></path></svg> <strong>Nuance à connaître</strong></p><p>Précision, exception ou condition d’application d’une règle.</p></aside><section class="teaching-section" data-section="s-objectif"><h2 id="s-objectif" tabindex="-1">Objectif</h2><p>Le dispatcher sait choisir les listeners de l'import. Il reste à définir
+ce qu'ils reçoivent : seulement l'identifiant de l'article 42, un objet
+consultable, ou une valeur qu'ils peuvent remplacer ? L'objet événement
+constitue ce contrat. Son éventuel contrôle de propagation décide aussi
+si les listeners suivants seront appelés.</p>
+<p>Ce cours répond à trois questions : <strong>que contient la base <code>Event</code> (et que ne
+contient-elle pas) ?</strong>, <strong>que fait vraiment <code>stopPropagation()</code> ?</strong>, <strong>quand
+choisir <code>GenericEvent</code> plutôt qu'une classe dédiée ?</strong></p></section><section class="teaching-section" data-section="s-l-essentiel"><h2 id="s-l-essentiel" tabindex="-1">L&#x27;essentiel</h2><p class="teaching-label essential"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="brain" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5C12 1 6 1 6 5C2 5 1 10 4 12C1 15 3 19 6 19C6 23 12 23 12 19V5M12 5C12 1 18 1 18 5C22 5 23 10 20 12C23 15 21 19 18 19C18 23 12 23 12 19M6 5C6 8 8 9 9 9M4 12H7L9 14M6 19V16M18 5C18 8 16 9 15 9M20 12H17L15 14M18 19V16"></path></svg> <strong>À comprendre</strong></p><aside class="section-digest" id="s-l-essentiel-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>La class de base reste minimale.</li><li>Les données métier nécessitent un modèle supplémentaire.</li></ol></aside><p><strong>Ce que cette partie veut réellement vous apprendre.</strong></p>
+<ul>
+<li><em>Pourquoi ce sujet existe.</em> Le cours EventDispatcher a montré <strong>qui</strong> est
+  appelé et <strong>dans quel ordre</strong>. Il reste le « quoi » : l'objet qui voyage
+  entre l'émetteur et les listeners. Sans contrat clair, chaque listener
+  devine ce qu'il peut lire ou modifier.</li>
+<li><em>Le piège de fond.</em> On croit que <code>Event</code> transporte quelque chose, ou que
+  <code>stopPropagation()</code> « annule » un traitement. Ni l'un ni l'autre : la base
+  ne sait <strong>que</strong> couper la suite.</li>
+<li><em>Ce que l'auteur veut que vous compreniez.</em> C'est la <strong>sous-classe</strong> (ou
+  <code>GenericEvent</code>) qui définit les données et les opérations permises ; le
+  drapeau d'arrêt borne seulement la diffusion en cours.</li>
+<li><em>Pourquoi c'est à l'examen.</em> Les QCM portent sur <code>GenericEvent</code> (<code>ArrayAccess</code>
+  sur les arguments, pas sur le sujet), sur <code>hasArgument()</code> contre
+  <code>getArgument()</code>, et sur l'effet réel de <code>stopPropagation()</code> selon les
+  priorities.</li>
+</ul>
+<p>L'object event circule entre le code qui déclenche et les listeners. La class
+de base, <code>Event</code>, est <strong>volontairement pauvre</strong> : elle sait seulement arrêter
+la propagation. Pour transporter une donnée, on écrit une sous-classe, ou l'on
+prend <code>GenericEvent</code> — un sujet et des arguments, au prix du typage.</p>
+<p>L'héritage n'est pas obligatoire : <code>dispatch()</code> accepte un objet ordinaire.
+Étendre <code>Symfony\Contracts\EventDispatcher\Event</code> est un choix pour
+réutiliser son drapeau d'arrêt. Le dispatcher respecte le contrat
+<code>Psr\EventDispatcher\StoppableEventInterface</code>, pas une convention de nom
+de méthode sur n'importe quel objet.</p>
+<h3 tabindex="-1" id="s-l-essentiel-nested-trois-facons-de-definir-ce-qui-voyage">Trois façons de définir ce qui voyage</h3>
+<pre class="highlight" tabindex="0"><code class="language-text">┌───────────────────┬───────────────────┬─────────────────────────────┐
+│ Objet ordinaire   │ Sous-classe Event │ GenericEvent                │
+├───────────────────┼───────────────────┼─────────────────────────────┤
+│ aucun héritage    │ extends Event     │ sujet + tableau d'arguments │
+│ pas de drapeau    │ drapeau d'arrêt   │ drapeau d'arrêt             │
+│ données typées    │ données typées    │ données lues par clé        │
+│ à vous            │ à vous            │ non typées                  │
+└───────────────────┴───────────────────┴─────────────────────────────┘</code></pre></section><section class="teaching-section" data-section="s-le-schema"><h2 id="s-le-schema" tabindex="-1">Le schéma</h2><aside class="section-digest" id="s-le-schema-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>L&#x27;arrêt concerne la suite.</li><li>Les listeners déjà exécutés ne sont pas annulés.</li></ol></aside><p><strong>Où en est-on ?</strong> Le cours EventDispatcher a fixé l'ordre d'appel (priority
+haute d'abord). Ici nous ne changeons pas cet ordre : nous suivons l'<strong>état
+d'un même événement</strong> pendant qu'il le traverse.</p>
+<p>L'ordre vient du cours EventDispatcher. Ici, nous suivons l'état du
+même événement pendant cet ordre : le listener 5 pose un drapeau,
+puis le dispatcher le lit avant d'appeler le listener 0 :</p>
+<figure class="diagram" aria-labelledby="CRS-fhb1cbhnyaxx-3-diagram-0-title CRS-fhb1cbhnyaxx-3-diagram-0-description"><figcaption id="CRS-fhb1cbhnyaxx-3-diagram-0-title">Arrêter les prochains listeners sans annuler les précédents</figcaption><p id="CRS-fhb1cbhnyaxx-3-diagram-0-description">Le dispatcher appelle les listeners 10 puis 5. Le second marque l&#x27;event arrêté. Avant le suivant, le dispatcher lit ce drapeau et retourne le même event ; les listeners 0 et moins 5 ne tournent pas.</p><div class="mermaid" hidden>---
+title: Ce que porte un event, et l&#x27;arrêt de la propagation
+---
+flowchart TD
+  accTitle: Arrêter les prochains listeners sans annuler les précédents
+  accDescr: Le dispatcher appelle les listeners 10 puis 5. Le second marque l&#x27;event arrêté. Avant le suivant, le dispatcher lit ce drapeau et retourne le même event ; les listeners 0 et moins 5 ne tournent pas.
+  P10[&quot;Listener priorité 10&quot;] --&gt;|&quot;retour au dispatcher&quot;| P5[&quot;Listener priorité 5&quot;]
+  P5 --&gt;|&quot;stopPropagation puis retour&quot;| Q{&quot;Propagation arrêtée ?&quot;}
+  Q --&gt;|&quot;oui : saute 0 et moins 5&quot;| DONE([&quot;Retour du même event&quot;])
+  Q --&gt;|&quot;non&quot;| P0[&quot;Listener priorité 0 puis moins 5&quot;]
+  classDef action fill:#e0f2fe,stroke:#075985,color:#0c4a6e
+  classDef decision fill:#fef3c7,stroke:#92400e,color:#78350f
+  classDef result fill:#dcfce7,stroke:#166534,color:#14532d
+  class P10,P5,P0 action
+  class Q decision
+  class DONE result</div></figure>
+<p>Bleu : appels ; ambre : lecture du drapeau ; vert : retour. Un listener qui
+appelle <code>stopPropagation()</code> continue son propre code : ce n'est pas <code>return</code>
+ni une annulation de transaction. La base Contracts <code>Event</code> implémente
+<code>StoppableEventInterface</code> ; un objet ordinaire peut être dispatché sans hériter
+d'elle, mais ne bénéficie pas automatiquement de ce mécanisme.</p>
+<p>Même scène vue dans le temps, qui appelle qui :</p>
+<figure class="diagram" aria-labelledby="CRS-fhb1cbhnyaxx-3-diagram-1-title CRS-fhb1cbhnyaxx-3-diagram-1-description"><figcaption id="CRS-fhb1cbhnyaxx-3-diagram-1-title">Le dispatcher lit le drapeau de propagation entre deux listeners</figcaption><p id="CRS-fhb1cbhnyaxx-3-diagram-1-description">Le service appelle dispatch. Le dispatcher appelle le listener 10 puis le listener 5. Ce dernier appelle stopPropagation sur l&#x27;event. Le dispatcher interroge isPropagationStopped, constate vrai, saute les listeners 0 et moins 5 et rend le même event au service.</p><div class="mermaid" hidden>---
+title: Qui lit le drapeau, et quand
+---
+sequenceDiagram
+  accTitle: Le dispatcher lit le drapeau de propagation entre deux listeners
+  accDescr: Le service appelle dispatch. Le dispatcher appelle le listener 10 puis le listener 5. Ce dernier appelle stopPropagation sur l&#x27;event. Le dispatcher interroge isPropagationStopped, constate vrai, saute les listeners 0 et moins 5 et rend le même event au service.
+  autonumber
+  participant S as Service émetteur
+  participant D as Dispatcher
+  participant L10 as Listener 10
+  participant L5 as Listener 5
+  participant E as Event
+  S-&gt;&gt;D: dispatch(event, nom)
+  D-&gt;&gt;L10: appel
+  L10--&gt;&gt;D: retour
+  D-&gt;&gt;L5: appel
+  L5-&gt;&gt;E: stopPropagation()
+  L5--&gt;&gt;D: retour (son code a continué)
+  D-&gt;&gt;E: isPropagationStopped() ?
+  E--&gt;&gt;D: vrai
+  Note over D: listeners 0 et -5 jamais appelés
+  D--&gt;&gt;S: même event</div></figure></section><section class="teaching-section" data-section="s-l-exemple-un-achat-valide"><h2 id="s-l-exemple-un-achat-valide" tabindex="-1">L&#x27;exemple : un achat validé</h2><p class="teaching-label example"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="code" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6L2 12L8 18M16 6L22 12L16 18M14 3L10 21"></path></svg> <strong>Exemple concret</strong></p><aside class="section-digest" id="s-l-exemple-un-achat-valide-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Une class dédiée documente le contrat.</li><li>Elle évite les keys non typées.</li></ol></aside><p><strong>Où en est-on ?</strong> Nous passons du schéma à un contrat concret : une
+sous-classe de <code>Event</code> qui porte une donnée, et le code émetteur qui relit
+l'état après le dispatch.</p>
+<p>Conservons la variante d'achat du cours précédent pour montrer un contrat
+typé. <code>Order</code> est votre classe métier déjà chargée ; <code>$order</code> est son instance
+et <code>$dispatcher</code> le dispatcher configuré. Aucun achat ni paiement n'est
+réalisé par ce fragment :</p>
+<pre class="highlight" tabindex="0"><code class="language-php">use Symfony\Contracts\EventDispatcher\Event;
+
+final class OrderPlacedEvent extends Event
+{
+    public function __construct(private Order $order) {}
+
+    public function getOrder(): Order
+    {
+        return $this-&gt;order;
+    }
+}
+
+$event = $dispatcher-&gt;dispatch(new OrderPlacedEvent($order));
+if ($event-&gt;isPropagationStopped()) {
+    // un listener a coupé la suite
+}</code></pre>
+<p>Ce que Symfony et vous voyez ici :</p>
+<table>
+<thead>
+<tr>
+<th>Élément</th>
+<th>Qui le fournit</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>stopPropagation()</code>, <code>isPropagationStopped()</code></td>
+<td>la base <code>Event</code> (héritée)</td>
+</tr>
+<tr>
+<td><code>getOrder()</code> et le type <code>Order</code></td>
+<td><strong>vous</strong> : c'est le contrat métier</td>
+</tr>
+<tr>
+<td>nom de l'événement (ici la classe)</td>
+<td>le dispatcher, faute de nom explicite</td>
+</tr>
+</tbody>
+</table>
+<p>Le getter impose ce que le listener reçoit. Un événement <code>ArticleImported</code>
+pourrait exposer un <code>int $articleId</code> plutôt qu'un <code>Order</code> ; il ne chargerait
+pas automatiquement <code>ArticleView</code> depuis cet identifiant. Le listener
+doit connaître le contrat choisi, notamment identifiant ou instantané.</p>
+<p>Le retour de <code>dispatch()</code> permet de lire le même état après les callbacks.
+Si un callback lève, il n'y a pas de retour normal à cette instruction :
+arrêt de propagation et exception sont deux issues différentes.</p></section><section class="teaching-section" data-section="s-une-class-de-base-deliberement-pauvre"><span class="outcome-anchor" id="out-OUT-90fn81pm7q7x" tabindex="-1"></span><h2 id="s-une-class-de-base-deliberement-pauvre" tabindex="-1">Une class de base délibérément pauvre</h2><aside class="section-digest" id="s-une-class-de-base-deliberement-pauvre-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Event porte l&#x27;arrêt de propagation.</li><li>GenericEvent ajoute un conteneur de données générique.</li></ol></aside><p><strong>Où en est-on ?</strong> Première des trois notions : ce que la base <code>Event</code> offre
+(presque rien) et qui définit le reste (la classe concrète).</p>
+<div class="admonition info">
+<p class="admonition-title">🌍 In Real Life</p>
+<p><strong>La situation</strong> : au restaurant, le responsable relit le plateau prévu pour la table. Pour changer le plat, le collègue remplace ce qui est indiqué sur la fiche commune, pas sur un billet qu'il garde.</p>
+<p><strong>L’équivalent dans Symfony</strong> : fiche commune → <code>ResponseEvent</code> ; remplacement prévu → <code>setResponse()</code> ; relecture par le responsable → HttpKernel récupérant la Response.</p>
+<p><strong>Retour à la réalité technique</strong> : dans le trajet de <code>GET /blog/42</code>, la classe concrète de l'événement autorise certaines mutations. Une Response simplement retournée par le listener n'est pas le canal de remplacement.</p>
+<p><strong>🧠 Comment le mémoriser</strong> : « Modifier ce qui sera relu. » Image mentale : une fiche centrale corrigée. Question-réflexe : quelle API porte le résultat attendu ?</p>
+<p><strong>⚠️ À ne pas confondre</strong> : retour d'un listener et retour du contrôleur.</p>
+</div>
+<p><code>Symfony\Contracts\EventDispatcher\Event</code> n'offre guère que l'arrêt de
+propagation, pour laisser chaque API définir son object. Le framework fait de
+même : <code>ResponseEvent</code> expose de quoi <strong>lire et remplacer</strong> la Response
+(<code>getResponse()</code>, <code>setResponse()</code>).</p>
+<p><strong>Pourquoi un listener ne peut-il pas simplement « retourner » une Response ?</strong>
+Parce que le dispatcher ne rassemble pas les retours des listeners : il
+rend l'<strong>event</strong>. L'émetteur (ici HttpKernel) relit ensuite cet objet. Le
+canal de communication est donc la <strong>mutation de l'event</strong>, pas la valeur de
+retour.</p>
+<pre class="highlight" tabindex="0"><code class="language-text">Listener ──setResponse($r)──▶ ResponseEvent ◀──getResponse()── HttpKernel
+   │                          (objet partagé)
+   └─ return $r ──▶ dispatcher : ignoré, rien n'est collecté</code></pre>
+<p>Lors de <code>GET /blog/42</code>, remplacer la Response via <code>ResponseEvent</code> modifie
+donc un objet que HttpKernel relit ; retourner une Response depuis le
+listener ne suffit pas à la substituer. Le dispatcher ignore ce retour
+individuel. La classe concrète définit les opérations permises, pas
+la base <code>Event</code>.</p>
+<p><code>ResponseEvent::setResponse()</code> n'arrête pas lui-même la propagation :
+remplacer une donnée et couper les listeners suivants sont des mécanismes
+distincts. Ne pas généraliser à partir du comportement d'un autre événement
+du kernel dont un setter peut aussi poser ce drapeau.</p>
+<h3 tabindex="-1" id="s-une-class-de-base-deliberement-pauvre-nested-a-ne-pas-confondre-event-de-base-et-evenement-metier">⚠️ À ne pas confondre : <code>Event</code> de base et événement métier</h3>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Base <code>Event</code></th>
+<th>Votre sous-classe</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Données</td>
+<td>aucune</td>
+<td>celles que vous exposez (getters)</td>
+</tr>
+<tr>
+<td>Mutations</td>
+<td>aucune</td>
+<td>celles que vous autorisez (setters)</td>
+</tr>
+<tr>
+<td>Arrêt</td>
+<td><code>stopPropagation()</code></td>
+<td>hérité tel quel</td>
+</tr>
+</tbody>
+</table>
+<p><em>Plausible car</em> : le mot « Event » évoque un objet « plein » (date, payload…),
+comme dans d'autres bibliothèques. Ici, la base est un simple drapeau.</p></section><section class="teaching-section" data-section="s-arreter-la-propagation"><span class="outcome-anchor" id="out-OUT-ck4dc8hb0b3j" tabindex="-1"></span><h2 id="s-arreter-la-propagation" tabindex="-1">Arrêter la propagation</h2><aside class="section-digest" id="s-arreter-la-propagation-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>La priority détermine quels effets précèdent l&#x27;arrêt.</li><li>L&#x27;arrêt ne fait pas de rollback.</li></ol></aside><p><strong>Où en est-on ?</strong> Deuxième notion : le drapeau d'arrêt de la base <code>Event</code>.
+C'est la seule capacité qu'elle fournit ; il faut en connaître la portée
+exacte.</p>
+<div class="admonition info">
+<p class="admonition-title">🌍 In Real Life</p>
+<p><strong>La situation</strong> : le dossier d'import du blog passe de bureau en bureau. Un agent pose « ne plus transmettre » après avoir écrit sa note.</p>
+<p><strong>L’équivalent dans Symfony</strong> : mention d'arrêt → <code>stopPropagation()</code> ; bureaux suivants → listeners non encore appelés ; notes déjà écrites → effets conservés.</p>
+<p><strong>Retour à la réalité technique</strong> : le dispatcher consulte le drapeau avant les callbacks suivants. Il ne défait pas les précédents et ne sort pas magiquement de la méthode du listener courant.</p>
+<p><strong>🧠 Comment le mémoriser</strong> : « Stop devant, pas effacement derrière. » Image mentale : une barrière après deux bureaux annotés. Question-réflexe : qui a déjà agi avant l'arrêt ?</p>
+<p><strong>⚠️ À ne pas confondre</strong> : arrêt de propagation et rollback métier.</p>
+</div>
+<p>Supposons qu'une vérification ait déjà pris en charge un événement et que
+les autres vérifications ne doivent plus intervenir. L'arrêt ne remet pas
+l'import dans son état initial ; il borne la diffusion en cours :</p>
+<ul>
+<li><code>$event-&gt;stopPropagation()</code> : les listeners <strong>pas encore appelés</strong> ne le
+  seront pas ; ceux qui ont tourné ne sont pas défaits.</li>
+<li>Listeners de priorities <code>10</code>, <code>5</code> (qui arrête), <code>0</code>, <code>-5</code> : seuls <code>10</code> et <code>5</code>
+  tournent. L'effet dépend donc de l'ordre, c'est-à-dire des priorities.</li>
+<li>Côté déclencheur, <code>isPropagationStopped()</code> se lit après le <code>dispatch()</code>.</li>
+</ul>
+<p>Avant / après, sur quatre listeners dont le deuxième arrête :</p>
+<pre class="highlight" tabindex="0"><code class="language-text">priority   10     5 (stop)    0        -5
+appelé ?   oui    oui         NON      NON
+effets     gardés gardés      jamais   jamais
+                  └─ son code se termine normalement</code></pre>
+<p>Avec EventDispatcher 8.0 chargé, voici un arrêt observable sans dépendance
+à une classe métier :</p>
+<pre class="highlight" tabindex="0"><code class="language-php">&lt;?php
+use Symfony\Component\EventDispatcher\EventDispatcher;
+use Symfony\Contracts\EventDispatcher\Event;
+
+$dispatcher = new EventDispatcher();
+$dispatcher-&gt;addListener('blog.import.checked', static function (Event $event): void {
+    $event-&gt;stopPropagation();
+}, 10);
+$dispatcher-&gt;addListener('blog.import.checked', static function (): void {
+    throw new \LogicException('Ce listener ne doit pas être atteint.');
+});
+$event = $dispatcher-&gt;dispatch(new Event(), 'blog.import.checked');
+var_dump($event-&gt;isPropagationStopped());</code></pre>
+<p>Résultat attendu : <code>bool(true)</code>, sans l'exception du second listener.
+Si le <strong>dernier</strong> listener pose le drapeau, il vaut également vrai,
+mais personne n'a été sauté. Le drapeau ne prouve donc pas à lui seul
+qu'un traitement a été évité.</p>
+<p>La base Event ne réinitialise pas ce drapeau au dispatch suivant.
+Redistribuer le même événement déjà arrêté peut empêcher tous les callbacks
+de ce nouveau dispatch. Créer un nouvel objet pour un nouveau fait plutôt
+que réutiliser un état de diffusion précédent. Aucun arrêt ne reprend
+un courriel envoyé ni une écriture déjà réalisée.</p>
+<h3 tabindex="-1" id="s-arreter-la-propagation-nested-a-ne-pas-confondre-arret-return-exception-rollback">⚠️ À ne pas confondre : arrêt, <code>return</code>, exception, rollback</h3>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Listeners déjà appelés</th>
+<th>Suite du listener courant</th>
+<th>Listeners suivants</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>stopPropagation()</code></td>
+<td>gardés</td>
+<td>continue</td>
+<td><strong>sautés</strong></td>
+</tr>
+<tr>
+<td><code>return</code></td>
+<td>gardés</td>
+<td>termine</td>
+<td>appelés</td>
+</tr>
+<tr>
+<td>exception</td>
+<td>gardés</td>
+<td>interrompue</td>
+<td>non appelés ; elle remonte au caller</td>
+</tr>
+</tbody>
+</table>
+<p><em>Plausible car</em> : le mot « stop » fait penser à <code>return</code> ou à un rollback.
+En réalité, c'est un drapeau lu <strong>par le dispatcher entre deux appels</strong>.</p></section><section class="teaching-section" data-section="s-genericevent-quand-une-sous-classe-ne-se-justifie-pas"><span class="outcome-anchor" id="out-OUT-2e82py415svq" tabindex="-1"></span><h2 id="s-genericevent-quand-une-sous-classe-ne-se-justifie-pas" tabindex="-1">`GenericEvent`, quand une sous-classe ne se justifie pas</h2><aside class="section-digest" id="s-genericevent-quand-une-sous-classe-ne-se-justifie-pas-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Le sujet possède son accès séparé.</li><li>Les keys décrivent les arguments.</li></ol></aside><p><strong>Où en est-on ?</strong> Troisième notion : le cas où l'on ne veut pas écrire de
+classe. <code>GenericEvent</code> fournit un sujet et un sac d'arguments, en échange du
+typage.</p>
+<p>Pour une extension locale dont le contrat reste très petit, le sujet
+peut être l'article consulté et les arguments quelques informations
+supplémentaires. Dans ce fragment, <code>$subject</code> et <code>$dispatcher</code> existent déjà ;
+<code>foo</code> est un nom explicite à utiliser aussi lors de l'inscription :</p>
+<pre class="highlight" tabindex="0"><code class="language-php">use Symfony\Component\EventDispatcher\GenericEvent;
+
+$event = new GenericEvent($subject, ['key' =&gt; 'value']);
+$dispatcher-&gt;dispatch($event, 'foo');
+$event-&gt;getSubject();
+$event-&gt;getArgument('key');      // ou $event['key']
+$event-&gt;hasArgument('key');</code></pre>
+<p><code>setArgument()</code>, <code>setArguments()</code>, <code>getArguments()</code> complètent l'ensemble.
+<code>ArrayAccess</code> et <code>IteratorAggregate</code> portent sur les <strong>arguments</strong>, pas sur le
+sujet. Le compromis : pas de class à écrire, mais une donnée non typée lue par
+key.</p>
+<p>Où va chaque morceau du constructeur :</p>
+<pre class="highlight" tabindex="0"><code class="language-text">new GenericEvent($subject, ['key' =&gt; 'value'])
+                    │              │
+                    │              └─ arguments : $event['key'], getArgument()
+                    └──────────────── sujet : getSubject() uniquement</code></pre>
+<p>Ici, <code>getArgument('key')</code> rend <code>'value'</code> et <code>hasArgument('key')</code> rend <code>true</code>.
+<code>getSubject()</code> rend l'objet ou la valeur fourni séparément.
+<code>$event['subject']</code> ne lit pas ce sujet : en l'absence d'un <strong>argument</strong>
+nommé <code>subject</code>, cet accès lève <code>InvalidArgumentException</code>.</p>
+<p><code>hasArgument('missing')</code> rend <code>false</code>, tandis que <code>getArgument('missing')</code>
+lève. La présence utilise <code>array_key_exists()</code> : un argument présent
+avec la valeur <code>null</code> existe encore. L'itération ne parcourt que le tableau
+d'arguments. Une API destinée à plusieurs services gagne souvent à devenir
+une classe dédiée, avec des accesseurs et des types explicites.</p>
+<h3 tabindex="-1" id="s-genericevent-quand-une-sous-classe-ne-se-justifie-pas-nested-a-ne-pas-confondre-lire-le-sujet-lire-un-argument">⚠️ À ne pas confondre : lire le sujet, lire un argument</h3>
+<table>
+<thead>
+<tr>
+<th>Appel</th>
+<th>Lit</th>
+<th>Clé absente</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>getSubject()</code></td>
+<td>le sujet</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>getArgument('k')</code> / <code>$event['k']</code></td>
+<td>un argument</td>
+<td>lève <code>InvalidArgumentException</code></td>
+</tr>
+<tr>
+<td><code>hasArgument('k')</code></td>
+<td>la présence (<code>array_key_exists()</code>)</td>
+<td>rend <code>false</code></td>
+</tr>
+<tr>
+<td><code>foreach ($event as …)</code></td>
+<td>les arguments seulement</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<p><em>Plausible car</em> : <code>$event['subject']</code> ressemble à une clé « naturelle » du
+sac. Le sujet est stocké à part ; seuls les arguments sont dans le tableau.</p></section><section class="teaching-section" data-section="s-pieges-d-examen"><h2 id="s-pieges-d-examen" tabindex="-1">Pièges d&#x27;examen</h2><p class="teaching-label pitfall"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="warning" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3L23 21H1L12 3ZM12 9V14M12 17V18"></path></svg> <strong>Piège à éviter</strong></p><aside class="section-digest" id="s-pieges-d-examen-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Le résultat reste sur le même event.</li><li>Le publisher peut adapter sa suite.</li></ol></aside><ul class="pitfall-list"><li class="pitfall-item"><details class="pitfall-explanation"><summary>Priorités, mutations et arrêt de propagation</summary><p>Pour prévoir le résultat, suivre d'abord les priorités, puis les mutations
+et le drapeau. Ne pas déduire une annulation métier du mot « stop » :</p></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : La base Event ne transporte aucune donnée métier</summary><p><strong>La base Event ne transporte aucune donnée métier</strong> — définir son propre
+objet, hériter pour réutiliser l'arrêt, ou utiliser <code>GenericEvent</code>.</p></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : stopPropagation() n&#x27;annule rien</summary><p><strong><code>stopPropagation()</code> n'annule rien</strong> : elle empêche seulement les listeners
+suivants d'être appelés.</p></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : L&#x27;effet de l&#x27;arrêt dépend des priorities</summary><p><strong>L'effet de l'arrêt dépend des priorities</strong>, puisqu'il dépend de l'ordre.</p></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : isPropagationStopped() se lit après le dispatch()</summary><p><strong><code>isPropagationStopped()</code> se lit après le <code>dispatch()</code></strong>, côté déclencheur.</p></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : GenericEvent implémente ArrayAccess</summary><p><strong><code>GenericEvent</code> implémente <code>ArrayAccess</code></strong> sur ses arguments, pas sur son sujet —
+et <code>IteratorAggregate</code>, sur les mêmes arguments.
+Pourquoi on se trompe : chacun de ces pièges exploite une intuition venue
+d'ailleurs (un événement « plein » de données, « stop » = annuler, un tableau
+qui contiendrait aussi le sujet). Se demander à chaque fois : <em>qui définit
+la donnée ? qui lit le drapeau, et quand ?</em></p></details></li></ul></section><section class="teaching-section" data-section="s-fiche-express"><h2 id="s-fiche-express" tabindex="-1">Fiche express</h2><p class="teaching-label essential"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="book" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5C9 3 5 3 2 4V20C5 19 9 19 12 21C15 19 19 19 22 20V4C19 3 15 3 12 5V21M5 8H8M5 12H8M16 8H19M16 12H19"></path></svg> <strong>À mémoriser</strong></p><aside class="section-digest" id="s-fiche-express-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>La flexibilité repose sur des keys.</li><li>Une class dédiée rend les attentes plus visibles.</li></ol></aside><p>Le contrat d'événement décide ce qui est lisible, modifiable et arrêtable.
+Le dispatcher ne fournit ni persistance, ni transaction, ni contrat métier
+par défaut. Cette séparation vaut aussi pour les événements HTTP et CLI.</p>
+<p><strong>Si tu dois retenir seulement 5 choses :</strong></p>
+<ul>
+<li><code>Event</code> : <strong>arrêt de propagation</strong>, rien d'autre.</li>
+<li>Donnée à transporter : <strong>objet dédié</strong>, éventuellement sous-classe de <code>Event</code>.</li>
+<li><code>stopPropagation()</code> saute la suite, <strong>n'annule rien</strong>.</li>
+<li><code>isPropagationStopped()</code> <strong>après</strong> le <code>dispatch()</code>.</li>
+<li><code>GenericEvent</code> : sujet + arguments ; <strong><code>ArrayAccess</code> sur les arguments</strong>.</li>
+</ul>
+<p>Moyen mnémotechnique : <strong>« Porter, arrêter, ou tout mettre dans un sac »</strong>.</p>
+<h3 tabindex="-1" id="s-fiche-express-nested-a-retenir-pour-la-certification">🧠 À retenir pour la certification</h3>
+<ul>
+<li>La base <code>Event</code> (Contracts) = drapeau d'arrêt uniquement ; elle implémente
+  <code>StoppableEventInterface</code>, mais <code>dispatch()</code> accepte aussi un objet ordinaire.</li>
+<li>Les données et mutations permises viennent de la <strong>sous-classe</strong> (ex. <code>ResponseEvent</code>
+  avec <code>getResponse()</code> / <code>setResponse()</code>).</li>
+<li>Un retour de listener n'est pas collecté : on communique en <strong>mutant l'event</strong>.</li>
+<li><code>stopPropagation()</code> : listeners non appelés sautés, aucun effet défait ; dépend des priorities.</li>
+<li>Le drapeau n'est pas réinitialisé : nouvel objet pour un nouveau fait.</li>
+<li><code>GenericEvent</code> : <code>getSubject()</code> ; arguments via <code>getArgument()</code>, <code>$event['k']</code>, itération.</li>
+<li><code>hasArgument()</code> rend <code>false</code> ; <code>getArgument()</code> / <code>$event['k']</code> lèvent sur clé absente.</li>
+</ul>
+<p><strong>Phrase de mémorisation</strong> : « L'event est une fiche commune : la base ne sait
+que poser une barrière devant les suivants, tout le reste — données et
+droits de modification — vient de la classe qu'on écrit, ou du sac
+<code>GenericEvent</code> où seuls les arguments s'indexent. »</p>
+<p>Revenir aux <a href="course-CRS-y0zc67f3e5zk.html">événements Console</a> pour voir
+des objets portant une décision de sortie. Pour une tâche durable et
+éventuellement asynchrone après l'import, comparer ensuite
+<a href="course-CRS-ckdp50w2dmy4.html">Messages et handlers</a>.</p></section><section class="official-sources"><h2 id="reader-sources" tabindex="-1">Sources officielles et compléments</h2><ul><li><a href="https://symfony.com/doc/8.0/components/event_dispatcher.html">Symfony 8.0 — EventDispatcher</a></li><li><a href="https://symfony.com/doc/8.0/components/event_dispatcher/generic_event.html">Symfony 8.0 — components / event dispatcher / generic event</a></li></ul></section><section id="course-recalls" aria-labelledby="course-recalls-title" tabindex="-1"><h2 id="course-recalls-title">Rappels et liens avec les autres cours</h2><div data-recall-group="other"><h3>Rappels des cours précédents / autres modules</h3><ul><li data-recall-course="CRS-h9nryezt8wnb" data-recall-kind="previous_course"><p class="recall-provenance">Module 21 — Filesystem et Finder · Cours « Filesystem »</p><p>Une opération de path n&#x27;implique pas une lecture disque. Choisir la class selon l&#x27;effet recherché.</p><p><a href="#cards-previous">Rappel : <span lang="en">How do Filesystem and Path differ?</span></a></p></li></ul></div></section><nav class="course-sequence" aria-label="Ordre de lecture"><a rel="prev" href="course-CRS-jwhqec35jczn.html" aria-label="Précédent : Finder — Module 21 — Filesystem et Finder">Précédent : Finder</a> <a href="lot-20.html">Sommaire : Module 20 — Événements et EventDispatcher</a> <a rel="next" href="course-CRS-h304h6ht87kc.html" aria-label="Suivant : Mailer — Module 22 — Mailer et Mime">Suivant : Mailer</a></nav><p class="course-practice-entry"><a class="button" href="#view-quiz">Fin du cours — s’entraîner avec le Quiz</a></p></div><div id="view-flashcards" data-course-panel role="region" aria-labelledby="view-flashcards-title"><h2 id="view-flashcards-title">Flashcards</h2><p lang="en">Answer before revealing each card.</p><p>Ces cartes ne mesurent pas une maîtrise notée.</p><div id="cards-s-l-essentiel-1" data-card-section="s-l-essentiel"><h3><a href="#s-l-essentiel">Revoir : L&#x27;essentiel</a></h3><div class="reader-cards"><details class="reader-card" id="B-fhb1cbhnyaxx-01"><summary lang="en">What responsibility does the base Contracts Event provide?</summary><p lang="en">Stopping and checking propagation.</p><p lang="fr">La class de base reste minimale. Les données métier nécessitent un modèle supplémentaire.</p><a href="course-CRS-fhb1cbhnyaxx.html#out-OUT-90fn81pm7q7x">Revoir le passage précis</a></details></div></div><div id="cards-s-le-schema-2" data-card-section="s-le-schema"><h3><a href="#s-le-schema">Revoir : Le schéma</a></h3><div class="reader-cards"><details class="reader-card" id="B-fhb1cbhnyaxx-02"><summary lang="en">What happens to listeners after stopPropagation() is called?</summary><p lang="en">Listeners not yet invoked are skipped.</p><p lang="fr">L&#x27;arrêt concerne la suite. Les listeners déjà exécutés ne sont pas annulés.</p><a href="course-CRS-fhb1cbhnyaxx.html#out-OUT-ck4dc8hb0b3j">Revoir le passage précis</a></details></div></div><div id="cards-s-l-exemple-un-achat-valide-3" data-card-section="s-l-exemple-un-achat-valide"><h3><a href="#s-l-exemple-un-achat-valide">Revoir : L&#x27;exemple : un achat validé</a></h3><div class="reader-cards"><details class="reader-card" id="B-fhb1cbhnyaxx-03"><summary lang="en">How should a strongly typed order identifier be carried in an event?</summary><p lang="en">In a dedicated event class with an appropriate typed property or accessor.</p><p lang="fr">Une class dédiée documente le contrat. Elle évite les keys non typées.</p><a href="course-CRS-fhb1cbhnyaxx.html#out-OUT-90fn81pm7q7x">Revoir le passage précis</a></details></div></div><div id="cards-s-une-class-de-base-deliberement-pauvre-4" data-card-section="s-une-class-de-base-deliberement-pauvre"><h3><a href="#s-une-class-de-base-deliberement-pauvre">Revoir : Une class de base délibérément pauvre</a></h3><div class="reader-cards"><details class="reader-card" id="B-fhb1cbhnyaxx-04"><summary lang="en">Does the base Event automatically carry a subject and an arguments array?</summary><p lang="en">No. GenericEvent provides those features.</p><p lang="fr">Event porte l&#x27;arrêt de propagation. GenericEvent ajoute un conteneur de données générique.</p><a href="course-CRS-fhb1cbhnyaxx.html#out-OUT-90fn81pm7q7x">Revoir le passage précis</a></details></div></div><div id="cards-s-arreter-la-propagation-5" data-card-section="s-arreter-la-propagation"><h3><a href="#s-arreter-la-propagation">Revoir : Arrêter la propagation</a></h3><div class="reader-cards"><details class="reader-card" id="B-fhb1cbhnyaxx-05"><summary lang="en">If priority 5 stops propagation after priority 10 ran, will priority 0 run?</summary><p lang="en">No. Only the already invoked listeners keep their effects.</p><p lang="fr">La priority détermine quels effets précèdent l&#x27;arrêt. L&#x27;arrêt ne fait pas de rollback.</p><a href="course-CRS-fhb1cbhnyaxx.html#out-OUT-ck4dc8hb0b3j">Revoir le passage précis</a></details></div></div><div id="cards-s-genericevent-quand-une-sous-classe-ne-se-justifie-pas-6" data-card-section="s-genericevent-quand-une-sous-classe-ne-se-justifie-pas"><h3><a href="#s-genericevent-quand-une-sous-classe-ne-se-justifie-pas">Revoir : `GenericEvent`, quand une sous-classe ne se justifie pas</a></h3><div class="reader-cards"><details class="reader-card" id="B-fhb1cbhnyaxx-06"><summary lang="en">What does GenericEvent&#x27;s ArrayAccess interface address?</summary><p lang="en">Its arguments, not its subject.</p><p lang="fr">Le sujet possède son accès séparé. Les keys décrivent les arguments.</p><a href="course-CRS-fhb1cbhnyaxx.html#out-OUT-2e82py415svq">Revoir le passage précis</a></details></div></div><div id="cards-s-pieges-d-examen-7" data-card-section="s-pieges-d-examen"><h3><a href="#s-pieges-d-examen">Revoir : Pièges d&#x27;examen</a></h3><div class="reader-cards"><details class="reader-card" id="B-fhb1cbhnyaxx-07"><summary lang="en">Where can the publisher check whether propagation was stopped?</summary><p lang="en">On the event after dispatch(), using isPropagationStopped().</p><p lang="fr">Le résultat reste sur le même event. Le publisher peut adapter sa suite.</p><a href="course-CRS-fhb1cbhnyaxx.html#out-OUT-90fn81pm7q7x">Revoir le passage précis</a></details></div></div><div id="cards-s-fiche-express-8" data-card-section="s-fiche-express"><h3><a href="#s-fiche-express">Revoir : Fiche express</a></h3><div class="reader-cards"><details class="reader-card" id="B-fhb1cbhnyaxx-08"><summary lang="en">What is the main trade-off of GenericEvent over a dedicated event class?</summary><p lang="en">Less class definition work but weaker typed, explicit data contracts.</p><p lang="fr">La flexibilité repose sur des keys. Une class dédiée rend les attentes plus visibles.</p><a href="course-CRS-fhb1cbhnyaxx.html#out-OUT-90fn81pm7q7x">Revoir le passage précis</a></details></div></div><div id="cards-previous"><p class="recall-provenance">Module 21 — Filesystem et Finder · Cours « Filesystem »</p><aside class="checkpoint"><h2>Rappel d’un cours antérieur</h2><p>Avant de poursuivre : Filesystem.</p><details class="corpus-correction"><summary lang="en">How do Filesystem and Path differ?</summary><p lang="en">Filesystem performs disk operations; Path computes path strings without accessing the disk.</p><p>Une opération de path n&#x27;implique pas une lecture disque. Choisir la class selon l&#x27;effet recherché.</p><a href="course-CRS-h9nryezt8wnb.html#out-OUT-0mnzvybywnv8">Relire la correction dans le cours antérieur</a></details></aside></div></div><div id="view-quiz" data-course-panel role="region" aria-labelledby="view-quiz-title"><aside class="revision-context"><p><strong>Avant le quiz :</strong> Le dispatcher sait choisir les listeners de l&#x27;import. Il reste à définir ce qu&#x27;ils reçoivent : seulement l&#x27;identifiant de l&#x27;article 42, un objet consultable, ou une valeur qu&#x27;ils peuvent remplacer ? L&#x27;objet événement constitue ce contrat. Son éventuel contrôle de propagation décide aussi si les listeners suivants seront appelés.</p><p>Quelle donnée entre, quelle responsabilité agit et quelle condition change le résultat ? Pour chaque correction, vérifiez ces conditions dans <a href="course-CRS-fhb1cbhnyaxx.html#s-objectif">le passage enseigné</a>, sans supposer que toutes les branches du blog sont exécutées.</p></aside><h2 id="view-quiz-title">Quiz</h2><p class="quiz-size" lang="en">4 eligible learning questions · 4 per session. Repeating a question does not demonstrate mastery.</p><p id="course-quiz-status" role="status">Quiz interactif non chargé. Démarrez après chargement de la banque locale.</p><div id="course-quiz-controls" class="assessment-main" hidden><div id="course-quiz-assessment-controls" hidden><select id="course-quiz-assessment-mode" aria-label="Mode du quiz" hidden><option value="learning">Entraînement</option></select><p id="course-quiz-training-scope"></p><button id="course-quiz-start-assessment" type="button" lang="en">Start practice</button><button id="course-quiz-finish-assessment" type="button" lang="en" hidden>End session</button></div><p id="course-quiz-assessment-error" role="alert"></p><p id="course-quiz-assessment-timer" hidden></p><p id="course-quiz-session-progress" class="quiz-progress" role="status" lang="en"></p><div id="course-quiz-assessment-app" tabindex="-1"></div><nav id="course-quiz-session-navigation" aria-label="Questions du cours"></nav><div id="course-quiz-learning-overview" aria-live="polite"></div></div><div id="course-quiz-native"><p>Sans JavaScript ou si le chargement échoue : aucune tentative notée. Les <a href="#view-flashcards">flashcards du cours</a> restent disponibles.</p><details class="course-quiz-fallback" data-question-id="L-fhb1cbhnyaxx-base-v1"><summary lang="en">What responsibility does the base Contracts Event provide?</summary><p>Correction de consultation — non notée.</p><p>La class de base reste minimale. Les données métier nécessitent un modèle supplémentaire.</p><ul><li><strong lang="en">Correct: Stopping and checking propagation.</strong><p>La class de base reste minimale. Les données métier nécessitent un modèle supplémentaire.</p></li><li><strong lang="en">Distractor: Persisting every dispatched event automatically.</strong><p>La class Event ne fournit pas cette persistance.</p></li><li><strong lang="en">Distractor: Defining all business payload fields for subclasses.</strong><p>Les données métier doivent être définies par le modèle d&#x27;event.</p></li></ul><a href="course-CRS-fhb1cbhnyaxx.html#out-OUT-90fn81pm7q7x">Relire le passage exact</a></details></div></div></div></div><details class="transfer-panel"><summary>Sauvegarde et transfert de progression</summary><p id="reading-status" role="status">Sans JavaScript : lecture libre ; progression non enregistrée.</p><p><a href="assessment.html#overview-title">Lecture, réussites immédiates et différées</a></p><p>Transfert manuel — aucune synchronisation automatique</p><p id="persistence-status" role="status"></p><button type="button" class="secondary" id="export-progress">Exporter ma progression</button><label for="import-progress">Choisir un JSON pour fusionner ma progression (sans remplacement)</label><input type="file" id="import-progress" accept="application/json,.json"><p id="transfer-status" role="status"></p></details></main><footer class="site-footer"><a href="catalogue.html">Catalogue</a> <a href="sources.html">Sources et attribution</a> <a href="#contenu">Haut de page</a></footer></body></html>

@@ -1,0 +1,688 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; connect-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Symfony HttpClient component — Symfony 8 Preparation</title><link rel="stylesheet" href="styles.css"><link rel="stylesheet" href="reader.css"><script src="mermaid.min.js" defer></script><script src="mermaid-init.js" defer></script><link rel="stylesheet" href="assessment.css"><script src="fixed-exams-data.js" defer></script><script src="fixed-exams.js" defer></script><script src="learning-state.js" defer></script><script src="guide.js" defer></script><script src="reader-catalog.js" defer></script><script src="reader.js" defer></script><script src="site-state.js" defer></script><script src="assessment.js" defer></script><script src="course-views.js" defer></script><link rel="stylesheet" href="syntax-highlight.css"><script src="prism-syntax.js" defer></script><script src="syntax-highlight.js" defer></script></head><body data-course-id="CRS-ez2qmqfk902e"><a class="skip" href="#contenu">Aller au contenu</a><header class="site-header"><a class="brand" href="index.html">S8 Preparation</a><nav aria-label="Navigation principale"><a href="index.html">Accueil</a> <a href="catalogue.html">Parcours</a> <a href="assessment.html?mode=review">Réviser</a> <a href="examens.html">Examens blancs</a> <a href="jour-j.html">Jour J</a></nav></header><main id="contenu" tabindex="-1" class="corpus-reader"><nav class="breadcrumb" aria-label="Fil d’Ariane"><a href="index.html">Accueil</a> <span aria-hidden="true">›</span> <a href="catalogue.html">Parcours</a> <span aria-hidden="true">›</span> <a href="lot-02.html">Module 02 — Fondamentaux HTTP</a> <span aria-hidden="true">›</span> <span aria-current="page">Symfony HttpClient component</span></nav><h1>Symfony HttpClient component</h1><p class="muted">Symfony 8.0 · API PHP ≤ 8.4 · Twig ≤ 3.22. Préparation indépendante.</p><p class="revision-status">Rédaction narrative P11 : projection nouvelle, non couverte par les décisions historiques P10. Aucune approbation officielle ni garantie de réussite.</p><aside class="narrative-context" aria-label="Repères de lecture"><p><strong>Prérequis de lecture :</strong> <a href="course-CRS-epx8j3fhb38n.html">HttpFoundation component</a></p><p><strong>Concepts voisins :</strong> <a href="course-CRS-epx8j3fhb38n.html">HttpFoundation component</a> — Relier le message HTTP à ses objets PHP. <a href="lot-02.html">Comparer les responsabilités dans ce module</a> · <a href="carte-composants.html">Situer cette responsabilité dans le blog</a> · <a href="glossaire.html">Distinguer les termes voisins</a></p><p><a href="ordre-lecture.html">Retrouver les 163 cours dans le parcours recommandé</a>. Ce repère ne modifie ni votre historique ni votre progression.</p></aside><div class="course-layout"><details class="lot-course-menu"><summary>Cours du module · 10 cours</summary><nav aria-label="Cours du module"><a class="lot-context" href="lot-02.html">Module 02 — Fondamentaux HTTP</a><ol><li><a href="course-CRS-depbnbc0g82x.html">HTTP Specification (RFC 9110)</a></li><li><a href="cours-http.html">Status codes</a></li><li><a href="course-CRS-222wq64mqxye.html">HTTP request</a></li><li><a href="course-CRS-hdsq2qdz7qdv.html">HTTP response</a></li><li><a href="course-CRS-erfvgqsx1z2p.html">HTTP methods</a></li><li><a href="course-CRS-7fa2behkxmf9.html">Cookies</a></li><li><a href="course-CRS-e3j0d3a8ndrf.html">Caching</a></li><li><a href="course-CRS-dab7evz3fe29.html">Content negotiation</a></li><li><a href="course-CRS-qa0x33akw264.html">Language detection</a></li><li><a href="course-CRS-ez2qmqfk902e.html" aria-current="page">Symfony HttpClient component</a></li></ol><a href="lot-02.html#view-quiz">Quiz du module</a></nav></details><aside class="course-section-menu" aria-label="Sommaire du cours"><nav class="course-actions" aria-label="Activités du cours"><a id="tab-course" href="#view-course">Cours</a><a id="tab-flashcards" href="#view-flashcards">Flashcards</a><a id="tab-quiz" href="#view-quiz">Quiz</a></nav><details class="course-section-disclosure"><summary id="course-sections">Sections du cours</summary><nav aria-label="Sections du cours"><ul><li><a href="#s-objectif">Objectif</a></li><li><a href="#s-l-essentiel">L&#x27;essentiel</a></li><li><a href="#s-le-schema">Le schéma</a></li><li><a href="#s-l-exemple-des-requests-en-parallele">L&#x27;exemple : des Requests en parallèle</a></li><li><a href="#s-l-interface">L&#x27;interface</a></li><li><a href="#s-le-point-central-les-responses-sont-lazy">Le point central : les Responses sont lazy</a></li><li><a href="#s-la-response">La Response</a></li><li><a href="#s-la-hierarchie-d-exceptions">La hiérarchie d&#x27;exceptions</a></li><li><a href="#s-une-response-jamais-lue-leve-quand-meme">Une Response jamais lue lève quand même</a></li><li><a href="#s-rejouer-les-echecs-retryablehttpclient">Rejouer les échecs : RetryableHttpClient</a></li><li><a href="#s-un-stream-dont-une-response-echoue">Un stream dont une Response échoue</a></li><li><a href="#s-pieges-d-examen">Pièges d&#x27;examen</a></li><li><a href="#s-application">Application</a></li><li><a href="#s-fiche-express">Fiche express</a></li><li><a href="#s-sources-officielles">Sources officielles</a></li><li><a href="#reader-objectives">Objectifs d’apprentissage</a></li><li><a href="#course-recalls">Rappels et liens avec les autres cours</a></li></ul></nav><nav aria-label="Flashcards par section"><a href="#view-flashcards">Flashcards par section</a><ul><li><a href="#cards-s-l-essentiel-1">L&#x27;essentiel</a></li><li><a href="#cards-s-le-schema-2">Le schéma</a></li><li><a href="#cards-s-l-exemple-des-requests-en-parallele-3">L&#x27;exemple : des Requests en parallèle</a></li><li><a href="#cards-s-l-interface-4">L&#x27;interface</a></li><li><a href="#cards-s-le-point-central-les-responses-sont-lazy-5">Le point central : les Responses sont lazy</a></li><li><a href="#cards-s-la-response-6">La Response</a></li><li><a href="#cards-s-la-hierarchie-d-exceptions-7">La hiérarchie d&#x27;exceptions</a></li><li><a href="#cards-s-une-response-jamais-lue-leve-quand-meme-8">Une Response jamais lue lève quand même</a></li><li><a href="#cards-s-rejouer-les-echecs-retryablehttpclient-9">Rejouer les échecs : RetryableHttpClient</a></li><li><a href="#cards-s-un-stream-dont-une-response-echoue-10">Un stream dont une Response échoue</a></li><li><a href="#cards-s-pieges-d-examen-11">Pièges d&#x27;examen</a></li><li><a href="#cards-s-application-12">Application</a></li><li><a href="#cards-s-fiche-express-13">Fiche express</a></li><li><a href="#cards-previous">Module 02 — Fondamentaux HTTP · Cours « Caching » · Rappel : <span lang="en">Does no-cache forbid storing a response?</span></a></li></ul></nav><nav aria-label="Retour au module"><a href="lot-02.html">Tous les cours du module</a></nav></details><p class="local-quiz-count">13 questions disponibles · 13 par session Quiz</p></aside><div class="course-content"><div id="view-course" data-course-panel role="region" aria-labelledby="view-course-title"><h2 id="view-course-title">Cours</h2><p class="course-introduction"><a href="#s-objectif">Introduction</a> · <a href="#course-sections">Sections du cours</a></p><h2 id="reader-objectives" tabindex="-1">Objectifs d’apprentissage</h2><ul><li><a href="course-CRS-ez2qmqfk902e.html#out-OUT-9vyq57j7gj6b">Émettre une Request sortante via HttpClientInterface</a></li><li><a href="course-CRS-ez2qmqfk902e.html#out-OUT-81pzmq0sf6k9">Identifier le moment où la Response est réellement attendue</a></li><li><a href="course-CRS-ez2qmqfk902e.html#out-OUT-t602yfbqy21b">Obtenir du parallélisme en émettant avant de lire</a></li><li><a href="course-CRS-ez2qmqfk902e.html#out-OUT-9bcphcvp1dp0">Inspecter une Response d&#x27;erreur sans exception</a></li><li><a href="course-CRS-ez2qmqfk902e.html#out-OUT-a0z9e1zqpyxy">Choisir l&#x27;interface d&#x27;exception correspondant à la nature de l&#x27;échec</a></li><li><a href="course-CRS-ez2qmqfk902e.html#out-OUT-bhzv4dsk1jbr">Prévoir l&#x27;exception levée à la destruction d&#x27;une Response dont le statut n&#x27;est jamais lu</a></li><li><a href="course-CRS-ez2qmqfk902e.html#out-OUT-5rm06598zbw5">Prévoir quelles Requests RetryableHttpClient rejoue, et combien de fois</a></li><li><a href="course-CRS-ez2qmqfk902e.html#out-OUT-67xk171zj659">Isoler l&#x27;échec d&#x27;une Response dans une loop stream()</a></li></ul><aside class="pedagogy-legend" aria-label="Repères pédagogiques"><p><strong>Repères pédagogiques</strong></p><p>Ces repères décrivent le rôle du bloc, pas une fréquence officielle à l’examen.</p><p class="teaching-label essential"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="brain" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5C12 1 6 1 6 5C2 5 1 10 4 12C1 15 3 19 6 19C6 23 12 23 12 19V5M12 5C12 1 18 1 18 5C22 5 23 10 20 12C23 15 21 19 18 19C18 23 12 23 12 19M6 5C6 8 8 9 9 9M4 12H7L9 14M6 19V16M18 5C18 8 16 9 15 9M20 12H17L15 14M18 19V16"></path></svg> <strong>À comprendre</strong></p><p class="teaching-label essential"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="book" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5C9 3 5 3 2 4V20C5 19 9 19 12 21C15 19 19 19 22 20V4C19 3 15 3 12 5V21M5 8H8M5 12H8M16 8H19M16 12H19"></path></svg> <strong>À mémoriser</strong></p><p class="teaching-label example"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="code" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6L2 12L8 18M16 6L22 12L16 18M14 3L10 21"></path></svg> <strong>Exemple concret</strong></p><p class="teaching-label pitfall"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="warning" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3L23 21H1L12 3ZM12 9V14M12 17V18"></path></svg> <strong>Piège à éviter</strong></p><p class="teaching-label nuance"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="balance" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3V21M7 21H17M3 7L21 5M5 7L1 15H9L5 7M19 6L15 14H23L19 6M1 15Q5 20 9 15M15 14Q19 19 23 14"></path></svg> <strong>Nuance à connaître</strong></p><p>Précision, exception ou condition d’application d’une règle.</p></aside><section class="teaching-section" data-section="s-objectif"><h2 id="s-objectif" tabindex="-1">Objectif</h2><p><code>GET /blog/42</code> sait déjà afficher l'article fourni par notre <code>ArticleCatalog</code>
+en mémoire. Un autre travail apparaît : une commande d'import doit consulter
+deux services externes avant de préparer des données. Ce travail est une branche
+du projet, pas une étape obligatoire de chaque consultation du blog.</p>
+<p>Ici, notre application devient <strong>cliente HTTP</strong>. Nous allons lancer les appels,
+attendre les données au bon moment et distinguer une absence annoncée par le
+serveur d'une connexion interrompue. Les laboratoires utilisent Symfony 8.0,
+PHP 8.4 et des réponses simulées ; ils ne changent pas le catalogue principal.</p></section><section class="teaching-section" data-section="s-l-essentiel"><h2 id="s-l-essentiel" tabindex="-1">L&#x27;essentiel</h2><p class="teaching-label essential"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="brain" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5C12 1 6 1 6 5C2 5 1 10 4 12C1 15 3 19 6 19C6 23 12 23 12 19V5M12 5C12 1 18 1 18 5C22 5 23 10 20 12C23 15 21 19 18 19C18 23 12 23 12 19M6 5C6 8 8 9 9 9M4 12H7L9 14M6 19V16M18 5C18 8 16 9 15 9M20 12H17L15 14M18 19V16"></path></svg> <strong>À comprendre</strong></p><aside class="section-digest" id="s-l-essentiel-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>request() rend une Response lazy.</li><li>Lire immédiatement chaque Response rend la boucle séquentielle.</li></ol></aside><p><strong>Ce que cette partie veut réellement vous apprendre.</strong></p>
+<ul>
+<li><em>Pourquoi ce sujet existe.</em> Jusqu'ici, Symfony <strong>reçoit</strong> des Requests et
+  <strong>rend</strong> des Responses. Ici, c'est l'inverse : notre code <strong>envoie</strong> une
+  Request à un autre service et <strong>reçoit</strong> sa réponse. Le component
+  HttpClient standardise cet échange.</li>
+<li><em>Le piège de fond.</em> Une réponse HttpClient est <strong>lazy</strong> : <code>request()</code>
+  rend la main avant d'avoir les données. Savoir <em>quand</em> on attend, et <em>quelle
+  exception</em> signale <em>quel</em> échec, est tout le sujet.</li>
+<li><em>Ce que l'auteur veut que vous compreniez.</em> Lancer d'abord, lire ensuite
+  (concurrence) ; trois familles d'échecs (HTTP, transport, décodage) ; une
+  Response oubliée peut quand même lever à sa destruction ; une retry n'est
+  pas une garantie d'unicité.</li>
+<li><em>Pourquoi c'est à l'examen.</em> Valeurs par défaut (<code>max_redirects</code> = 20,
+  <code>max_retries</code> = 3), <code>timeout</code> ≠ <code>max_duration</code>, rôle de <code>$throw</code>,
+  <code>withOptions()</code> qui retourne une nouvelle instance, liste des retries.</li>
+</ul>
+<p>Si la commande attend intégralement le premier service avant d'appeler le
+second, leurs attentes s'additionnent. <code>request()</code> retourne une <strong>Response
+lazy</strong>, dont on diffère la lecture : nous conservons d'abord les deux objets,
+puis demandons leurs données. Le transport peut alors faire progresser plusieurs
+échanges pendant la même période.</p>
+<p>Ce chevauchement n'est ni un nouveau processus PHP ni une garantie de durée.
+<code>request()</code> peut lui-même prendre du temps ou échouer ; les ressources du
+transport et ses limites de connexions comptent. Lire les headers ou le body
+attend les données nécessaires si elles ne sont pas encore disponibles.</p>
+<p>Cette lecture est aussi un point de contrôle. Un statut 404, un JSON illisible
+et une panne de transport ne signifient pas la même chose pour l'import.
+Même une Response oubliée peut signaler son statut 3xx–5xx à sa destruction :
+ne pas lire n'est pas une politique de gestion des erreurs.</p>
+<p>Le fil du cours (sens inverse du reste du module) :</p>
+<pre class="highlight" tabindex="0"><code class="language-text">Cours précédents :  navigateur ──Request──▶ NOTRE app ──Response──▶ navigateur
+Ce cours         :  NOTRE app ──Request──▶ service distant ──Response──▶ NOTRE app
+                    (HttpClientInterface)                    (ResponseInterface)</code></pre></section><section class="teaching-section" data-section="s-le-schema"><h2 id="s-le-schema" tabindex="-1">Le schéma</h2><aside class="section-digest" id="s-le-schema-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Une erreur HTTP dispose d&#x27;une Response.</li><li>Une TransportExceptionInterface peut survenir sans Response.</li></ol></aside><p><strong>Où en est-on ?</strong> Deux schémas ouvrent le cours. Le premier répond à
+<em>« quand attend-on ? »</em> (concurrence) ; le second à <em>« qu'est-ce qui peut
+échouer, et sous quelle forme ? »</em> (exceptions). Les sections suivantes les
+détaillent dans cet ordre.</p>
+<p>La commande dispose des adresses A et B, indépendantes l'une de l'autre. Le
+premier dessin montre pourquoi nous conservons les deux Responses avant de
+demander le contenu de A. Il représente un chemin réussi, avec un transport
+permettant le chevauchement ; il ne promet pas que B finira après A.</p>
+<figure class="diagram" aria-labelledby="CRS-ez2qmqfk902e-3-diagram-0-title CRS-ez2qmqfk902e-3-diagram-0-description"><figcaption id="CRS-ez2qmqfk902e-3-diagram-0-title">Lancer les requêtes avant d&#x27;attendre leurs résultats</figcaption><p id="CRS-ez2qmqfk902e-3-diagram-0-description">Le programme conserve les Responses A et B de deux appels request, puis lit A et B. La lecture attend les données nécessaires si elles ne sont pas encore arrivées. Lire A avant de lancer B empêche ce chevauchement.</p><div class="mermaid" hidden>---
+title: Quand une Response HttpClient bloque
+---
+flowchart TD
+  accTitle: Lancer les requêtes avant d&#x27;attendre leurs résultats
+  accDescr: Le programme conserve les Responses A et B de deux appels request, puis lit A et B. La lecture attend les données nécessaires si elles ne sont pas encore arrivées. Lire A avant de lancer B empêche ce chevauchement.
+  A[&quot;request A : conserver Response&quot;] --&gt;|&quot;sans lire son contenu&quot;| B[&quot;request B : conserver Response&quot;]
+  B --&gt;|&quot;ensuite lire A&quot;| RA[&quot;getContent A&lt;br/&gt;attend si nécessaire&quot;]
+  RA --&gt;|&quot;puis lire B&quot;| RB[&quot;getContent B&lt;br/&gt;attend si nécessaire&quot;]
+  RB --&gt;|&quot;lectures réussies&quot;| R([&quot;deux contenus&quot;])
+  classDef runtime fill:#e0f2fe,stroke:#0369a1,color:#0c4a6e
+  classDef wait fill:#fef3c7,stroke:#b45309,color:#78350f
+  classDef result fill:#dcfce7,stroke:#15803d,color:#14532d
+  class A,B runtime
+  class RA,RB wait
+  class R result</div></figure>
+<p>Bleu : lancement ; orange : points d'attente possibles ; vert : résultat.
+Si B est déjà arrivée lorsque nous la lisons, cette lecture n'attend pas le
+réseau. À l'inverse, lire A avant d'appeler B supprime ce chevauchement.
+Conserver les Responses évite également leur destruction immédiate entre les
+deux lancements. Nous verrons ensuite comment <code>stream()</code> permet de traiter
+les morceaux disponibles sans imposer l'ordre de lecture A puis B.</p>
+<pre class="highlight" tabindex="0"><code class="language-text">SÉQUENTIEL (lire A avant de lancer B)      CONCURRENT (lancer A et B, puis lire)
+
+ request A ──── attente A ────┐             request A ─┐
+                              ▼             request B ─┤ le transport fait
+                  request B ── attente B               │ avancer les deux
+                                                       ▼
+ durée ≈ attente A + attente B              lire A, lire B (déjà arrivées ?)
+                                            durée ≈ la plus longue des deux</code></pre>
+<p>Avant cela, il faut nommer les échecs possibles. Le deuxième dessin est une
+carte de <strong>contrats d'exceptions</strong>, et non la suite du chronomètre précédent.</p>
+<figure class="diagram" aria-labelledby="CRS-ez2qmqfk902e-3-diagram-1-title CRS-ez2qmqfk902e-3-diagram-1-description"><figcaption id="CRS-ez2qmqfk902e-3-diagram-1-title">L&#x27;arbre des exceptions de HttpClient</figcaption><p id="CRS-ez2qmqfk902e-3-diagram-1-description">TransportExceptionInterface, HttpExceptionInterface et DecodingExceptionInterface étendent ExceptionInterface. TimeoutExceptionInterface étend TransportExceptionInterface. Seul le contrat HttpExceptionInterface garantit getResponse ; une erreur de transport ne prouve pas que le serveur n&#x27;a rien reçu.</p><div class="mermaid" hidden>---
+title: Ce que HttpClient lève
+---
+flowchart TD
+  accTitle: L&#x27;arbre des exceptions de HttpClient
+  accDescr: TransportExceptionInterface, HttpExceptionInterface et DecodingExceptionInterface étendent ExceptionInterface. TimeoutExceptionInterface étend TransportExceptionInterface. Seul le contrat HttpExceptionInterface garantit getResponse ; une erreur de transport ne prouve pas que le serveur n&#x27;a rien reçu.
+  TR[&quot;TransportExceptionInterface&quot;] -. &quot;étend&quot; .-&gt; EI([&quot;ExceptionInterface&quot;])
+  TO[&quot;TimeoutExceptionInterface&quot;] -. &quot;étend&quot; .-&gt; TR
+  HT[&quot;HttpExceptionInterface&lt;br/&gt;garantit getResponse&quot;] -. &quot;étend&quot; .-&gt; EI
+  DE[&quot;DecodingExceptionInterface&quot;] -. &quot;étend&quot; .-&gt; EI
+  classDef contract fill:#fef3c7,stroke:#b45309,color:#78350f
+  class EI,TR,TO,HT,DE contract</div></figure>
+<p>Les pointillés orange indiquent exclusivement l'héritage d'interfaces.
+Une exception HTTP permet de retrouver la Response reçue ; une exception de
+transport n'offre pas cette garantie. En particulier, un <em>timeout</em> — un délai
+d'attente dépassé — peut survenir après le traitement distant. Pour une future
+publication par POST, le rejouer sans mécanisme de déduplication pourrait donc
+répéter l'effet. Recevoir une erreur localement ne prouve pas l'absence d'effet
+à distance.</p></section><section class="teaching-section" data-section="s-l-exemple-des-requests-en-parallele"><h2 id="s-l-exemple-des-requests-en-parallele" tabindex="-1">L&#x27;exemple : des Requests en parallèle</h2><p class="teaching-label example"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="code" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6L2 12L8 18M16 6L22 12L16 18M14 3L10 21"></path></svg> <strong>Exemple concret</strong></p><aside class="section-digest" id="s-l-exemple-des-requests-en-parallele-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Lancer toutes les Requests avant de lire les Responses permet la concurrence.</li><li>stream() observe ensuite les chunks ; isLast() indique la fin d&#x27;une Response.</li></ol></aside><p><strong>Où en est-on ?</strong> Premier code, premier schéma mis en pratique : lancer deux
+appels puis les consommer avec <code>stream()</code>. <em>Pourquoi un <code>MockHttpClient</code> ?</em>
+Pour apprendre le mécanisme sans réseau ni dépendance externe.</p>
+<p>Notre premier essai observe uniquement la fin de deux lectures, sans encore
+importer leurs données. Après chargement de l'autoloader du projet, cette
+préparation fournit <code>$client</code> et <code>$urls</code> au fragment suivant :</p>
+<pre class="highlight" tabindex="0"><code class="language-php">use Symfony\Component\HttpClient\MockHttpClient;
+use Symfony\Component\HttpClient\Response\MockResponse;
+
+$client = new MockHttpClient([
+    new MockResponse('{"id":42}'),
+    new MockResponse('{"images":[]}'),
+]);
+$urls = [
+    'https://example.test/articles/42',
+    'https://example.test/articles/42/images',
+];</code></pre>
+<p><code>MockHttpClient</code> remplace le réseau par les deux Responses préparées. Les
+adresses désignent ici des ressources du fournisseur fictif, pas des routes
+ajoutées à notre blog. Nous conservons le schéma de lancement puis de lecture :</p>
+<pre class="highlight" tabindex="0"><code class="language-php">$responses = [];
+foreach ($urls as $url) {
+    $responses[] = $client-&gt;request('GET', $url);   // toutes lancées
+}
+
+foreach ($client-&gt;stream($responses) as $response =&gt; $chunk) {
+    if ($chunk-&gt;isLast()) {
+        // cette Response est complète
+    }
+}</code></pre>
+<p>Le fragment ne produit aucun affichage : pour ces deux réponses réussies, il
+atteint deux fois la branche <code>isLast()</code>. Un <em>chunk</em> est un morceau du flux ;
+le dernier marque la fin de la Response, pas la validation métier de son JSON.
+« Toutes lancées » signifie ici toutes confiées au client avant leur lecture,
+non toutes transmises physiquement au même instant.</p>
+<p>Ce laboratoire vérifie la structure de consommation, pas un gain de temps
+réseau. Avec un transport réel, l'ordre d'arrivée dépend des services et des
+connexions. La version tolérante aux erreurs arrivera après l'explication des
+statuts : ce premier fragment suppose volontairement deux succès.</p>
+<p>Ce que voit Symfony dans ce code :</p>
+<table>
+<thead>
+<tr>
+<th>Ligne</th>
+<th>Ce qui se passe réellement</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>$client-&gt;request('GET', $url)</code></td>
+<td>démarre l'échange, rend un objet Response <strong>sans bloquer</strong> sur le corps</td>
+</tr>
+<tr>
+<td><code>$responses[] = ...</code></td>
+<td>on <strong>garde</strong> l'objet (sinon il serait détruit, voir plus bas)</td>
+</tr>
+<tr>
+<td><code>$client-&gt;stream($responses)</code></td>
+<td>itère sur les morceaux dès qu'ils arrivent, tous échanges confondus</td>
+</tr>
+<tr>
+<td><code>$chunk-&gt;isLast()</code></td>
+<td>ce morceau termine cette Response</td>
+</tr>
+</tbody>
+</table></section><section class="teaching-section" data-section="s-l-interface"><span class="outcome-anchor" id="out-OUT-9vyq57j7gj6b" tabindex="-1"></span><h2 id="s-l-interface" tabindex="-1">L&#x27;interface</h2><aside class="section-digest" id="s-l-interface-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>HttpClientInterface expose request(), stream() et withOptions().</li><li>withOptions() produit une nouvelle instance.</li></ol></aside><p><strong>Où en est-on ?</strong> Étape 1 sur 7 (L'interface → lazy → La Response →
+exceptions → Response jamais lue → retries → stream) : le contrat. <em>Pourquoi
+dépendre d'une interface ?</em> Pour que la commande fonctionne avec le réseau en
+production et un mock en test, sans réécriture.</p>
+<p>La commande doit pouvoir utiliser soit le réseau, soit une simulation sans
+réécrire sa logique. Elle reçoit donc
+<code>Symfony\Contracts\HttpClient\HttpClientInterface</code>, un contrat séparé des
+implémentations du component. Dans une application configurée pour cela,
+l'autowiring fournit le service correspondant ; déclarer le type ne crée pas
+magiquement un service dans n'importe quel programme PHP.</p>
+<p>Les trois methods suivent notre besoin : <code>request($method, $url, $options)</code>
+démarre un échange ; <code>stream($responses, $timeout)</code> expose les Responses par
+morceaux ; <code>withOptions($options)</code> retourne une <strong>nouvelle instance</strong> avec
+d'autres options par défaut. Pour dériver un client d'import, il faut conserver
+ce retour. Appeler seulement <code>withOptions()</code> puis continuer avec l'ancien objet
+ne revient pas à utiliser le nouveau client.</p>
+<table>
+<thead>
+<tr>
+<th>Méthode</th>
+<th>Rôle</th>
+<th>Retour</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>request($method, $url, $options)</code></td>
+<td>démarre un échange</td>
+<td>une <code>ResponseInterface</code> (lazy)</td>
+</tr>
+<tr>
+<td><code>stream($responses, $timeout)</code></td>
+<td>itère les morceaux</td>
+<td>un <code>ResponseStreamInterface</code></td>
+</tr>
+<tr>
+<td><code>withOptions($options)</code></td>
+<td>change les options par défaut</td>
+<td><strong>nouvelle instance</strong> du client</td>
+</tr>
+</tbody>
+</table>
+<p>Avant le lot de données, isolons un contrôle de disponibilité. Ce laboratoire
+indépendant utilise toujours l'autoloader du projet :</p>
+<pre class="highlight" tabindex="0"><code class="language-php">use Symfony\Component\HttpClient\MockHttpClient;
+use Symfony\Component\HttpClient\Response\MockResponse;
+use Symfony\Contracts\HttpClient\HttpClientInterface;
+
+function readStatus(HttpClientInterface $client): int
+{
+    return $client-&gt;request('GET', 'https://example.test/health')-&gt;getStatusCode();
+}
+
+$client = new MockHttpClient(new MockResponse('', ['http_code' =&gt; 204]));
+echo readStatus($client), "\n";</code></pre>
+<p>Résultat attendu : <code>204</code>. La fonction dépend de l'interface, pas du mock ;
+<code>HttpClient::create()</code> peut fournir une implémentation réelle adaptée aux
+transports disponibles. Cette substitution ne teste toutefois ni la
+connectivité ni la configuration TLS de production. Elle montre seulement que
+notre code sait lire le statut fourni.</p></section><section class="teaching-section" data-section="s-le-point-central-les-responses-sont-lazy"><span class="outcome-anchor" id="out-OUT-81pzmq0sf6k9" tabindex="-1"></span><span class="outcome-anchor" id="out-OUT-t602yfbqy21b" tabindex="-1"></span><h2 id="s-le-point-central-les-responses-sont-lazy" tabindex="-1">Le point central : les Responses sont lazy</h2><p><strong>Où en est-on ?</strong> Étape 2 sur 7 : le cœur du cours. <em>Pourquoi <code>request()</code> ne
+bloque-t-il pas ?</em> Parce qu'il démarre l'échange et rend un objet qui
+représente « la réponse à venir » ; c'est la <strong>lecture</strong> qui attend.</p>
+<p>Le contrôle de disponibilité lit immédiatement son unique résultat : c'est
+cohérent pour un appel isolé. Copier cette forme dans la boucle des dix sources
+d'import aurait un autre effet. Chaque <code>getContent()</code> ou <code>toArray()</code> attendrait
+son body avant le lancement suivant : le programme fonctionnerait, mais les
+lectures seraient séquentielles.</p>
+<p>Le fonctionnement asynchrone par défaut permet de séparer lancement et
+consommation. <code>getStatusCode()</code> attend les headers nécessaires ; <code>getContent()</code>
+attend le contenu complet ; <code>toArray()</code> attend ce contenu puis le décode. Ce sont
+des besoins différents, pas trois syntaxes équivalentes. Différer la lecture
+n'implique pas que le transfert ne commencera qu'à cette lecture.</p>
+<table>
+<thead>
+<tr>
+<th>Lecture</th>
+<th>Elle attend…</th>
+<th>Puis elle…</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>getStatusCode()</code></td>
+<td>les headers</td>
+<td>rend le code</td>
+</tr>
+<tr>
+<td><code>getContent()</code></td>
+<td>le contenu complet</td>
+<td>rend le texte</td>
+</tr>
+<tr>
+<td><code>toArray()</code></td>
+<td>le contenu complet</td>
+<td>le décode en tableau</td>
+</tr>
+</tbody>
+</table>
+<p>Pour notre lot indépendant, nous gardons donc les objets de retour, puis les
+consommons. Pour une seconde URL calculée à partir du premier JSON, cette
+indépendance n'existe plus : il faut d'abord obtenir la donnée nécessaire.
+La certification attend cette distinction entre possibilité de concurrence
+et dépendance réelle du programme, pas la promesse « lazy = jamais bloquant ».</p>
+<div class="admonition info">
+<p class="admonition-title">🌍 In Real Life</p>
+<p><strong>La situation</strong> : la commande d'approvisionnement contacte deux fournisseurs indépendants avant d'attendre leurs colis ; attendre le premier avant de contacter le second supprime ce chevauchement.</p>
+<p><strong>L’équivalent dans Symfony</strong> : demandes lancées → <code>request()</code> ; reçus conservés → Responses lazy ; attente du résultat nécessaire → lecture du statut ou du contenu.</p>
+<p><strong>Retour à la réalité technique</strong> : le transport et ses limites déterminent la concurrence possible. Lazy ne signifie ni jamais bloquant ni processus détaché. Une seconde URL dépendant du premier résultat doit attendre cette donnée.</p>
+<p><strong>🧠 Comment le mémoriser</strong> : « Lancer les indépendants avant de consommer. » Image mentale : deux reçus conservés côte à côte. Question-réflexe : ai-je introduit une attente inutile avant le second lancement ?</p>
+<p><strong>⚠️ À ne pas confondre</strong> : Response HttpClient reçue d'un fournisseur et Response HttpFoundation retournée au navigateur.</p>
+</div><aside class="enrichment" aria-label="Autre explication"><p>Envoyer une pile de courriers puis ouvrir les retours permet leur progression simultanée. Envoyer un courrier et attendre sa lecture avant le suivant transforme le même client lazy en usage séquentiel.</p></aside><div class="retained-answer-context">
+<p><strong>Repère de l’exemple :</strong></p>
+<p lang="en"><strong>Question:</strong> How does the example allow several HTTP requests to progress concurrently?</p>
+<p lang="en"><strong>Answer:</strong> It creates all responses first, then consumes them with stream().</p>
+<p>Lancer toutes les Requests avant de lire les Responses permet la concurrence. stream() observe ensuite les chunks ; isLast() indique la fin d'une Response.</p>
+</div></section><section class="teaching-section" data-section="s-la-response"><span class="outcome-anchor" id="out-OUT-9bcphcvp1dp0" tabindex="-1"></span><h2 id="s-la-response" tabindex="-1">La Response</h2><aside class="section-digest" id="s-la-response-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>false désactive les exceptions liées au status code.</li><li>Un JSON invalide peut toujours lever DecodingExceptionInterface.</li></ol></aside><p><strong>Où en est-on ?</strong> Étape 3 sur 7 : on a l'objet, que contient-il et que
+se passe-t-il quand le serveur distant répond <strong>404</strong> ? <em>Pourquoi
+<code>getStatusCode()</code> ne lève-t-il pas alors que <code>getContent()</code> le fait ?</em> Parce
+que le premier sert justement à décider quoi faire du statut.</p>
+<p>Le service distant répond maintenant 404 pour une référence à importer.
+L'objet reçu implémente <code>Symfony\Contracts\HttpClient\ResponseInterface</code> :
+ce n'est pas la <code>HttpFoundation\Response</code> que notre controller retournerait au
+navigateur. Le lire ne transmet aucune Response à l'utilisateur du blog.</p>
+<p><code>getStatusCode()</code> permet de choisir une branche sur 404 sans lever <strong>à cause
+de ce statut</strong> ; une erreur de transport reste possible. En revanche,
+<code>getHeaders()</code>, <code>getContent()</code> et <code>toArray()</code> lèvent par défaut sur les statuts
+300 à 599 de la Response obtenue. Leur argument <code>$throw = false</code> désactive ce
+contrôle HTTP pour l'appel concerné, pas toutes les autres erreurs.</p>
+<p>Nous voulons conserver le détail JSON de l'absence. Voici une simulation
+indépendante avec les mêmes prérequis que précédemment :</p>
+<pre class="highlight" tabindex="0"><code class="language-php">use Symfony\Component\HttpClient\MockHttpClient;
+use Symfony\Component\HttpClient\Response\MockResponse;
+
+$client = new MockHttpClient(new MockResponse(
+    '{"error":"missing"}',
+    ['http_code' =&gt; 404],
+));
+$response = $client-&gt;request('GET', 'https://example.test/items/42');
+$status = $response-&gt;getStatusCode();
+$data = $response-&gt;toArray(false);
+echo $status, ': ', $data['error'], "\n";</code></pre>
+<p>Résultat attendu : <code>404: missing</code>. Le chemin historique <code>/items/42</code> appartient
+à ce laboratoire distant ; il ne signifie pas que notre article local 42 a
+disparu. <code>getContent(false)</code> fournirait le texte JSON sans le décoder.
+<code>toArray(false)</code> peut encore lever une <code>DecodingExceptionInterface</code> : un body
+vide, un JSON invalide ou le JSON scalaire <code>42</code> ne satisfont pas son contrat de
+tableau. Même un tableau décodé doit ensuite respecter le format métier attendu
+par l'import ; le mock ci-dessus garantit seul la clé <code>error</code>.</p>
+<pre class="highlight" tabindex="0"><code class="language-text">Statut reçu : 404
+   getStatusCode()      → 404                 (ne lève pas pour ce statut)
+   getContent()         → ClientException     ($throw = true par défaut)
+   getContent(false)    → '{"error":"missing"}'   (texte, non décodé)
+   toArray(false)       → ['error' =&gt; 'missing']  (décodé)</code></pre>
+<p>La lecture ne corrige pas non plus une mauvaise configuration d'émission.
+Ces options se donnent à <code>request()</code> ou comme valeurs par défaut du client :</p>
+<table>
+<thead>
+<tr>
+<th>Option</th>
+<th>Sens</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>json</code></td>
+<td>encode la valeur et ajoute <code>Content-Type: application/json</code> si absent ; ne pas fournir aussi un <code>body</code> non vide</td>
+</tr>
+<tr>
+<td><code>timeout</code></td>
+<td>délai <strong>d'inactivité</strong>, pas la durée totale</td>
+</tr>
+<tr>
+<td><code>max_duration</code></td>
+<td>durée totale ; <code>0</code> = illimitée (défaut)</td>
+</tr>
+<tr>
+<td><code>max_redirects</code></td>
+<td><code>20</code> par défaut ; <code>0</code> = aucun redirect suivi</td>
+</tr>
+</tbody>
+</table>
+<p>Pour l'import, <code>timeout = 10</code> tolère dix secondes d'inactivité : un transfert
+qui continue à recevoir des données peut durer davantage. <code>max_duration = 10</code>
+borne la durée totale de l'échange. Deux zéros ont donc des sens différents :
+<code>max_duration = 0</code> n'impose pas de limite totale, tandis que <code>max_redirects = 0</code>
+interdit de suivre une redirection. Un 3xx alors exposé reste soumis au contrôle
+HTTP des methods de lecture.</p>
+<p>Enfin, l'option <code>json</code> concerne le <strong>body envoyé</strong>, alors que <code>toArray()</code>
+concerne le <strong>body reçu</strong>. Envoyer du JSON ne garantit pas que le fournisseur
+répondra avec un JSON valide. C'est précisément pour séparer ces situations que
+le client expose plusieurs familles d'exceptions.</p></section><section class="teaching-section" data-section="s-la-hierarchie-d-exceptions"><span class="outcome-anchor" id="out-OUT-a0z9e1zqpyxy" tabindex="-1"></span><h2 id="s-la-hierarchie-d-exceptions" tabindex="-1">La hiérarchie d&#x27;exceptions</h2><p><strong>Où en est-on ?</strong> Étape 4 sur 7 : on reprend la carte des exceptions vue
+dans le schéma. <em>Pourquoi trois familles ?</em> Parce que trois choses différentes
+peuvent mal tourner, et la réaction de la commande n'est pas la même.</p>
+<p>Reprenons les trois résultats possibles d'une source d'import. Un 404 reçu
+puis lu avec le contrôle HTTP actif relève de <code>ClientExceptionInterface</code> ;
+un 503 relève de <code>ServerExceptionInterface</code>. Ces contrats HTTP, comme
+<code>RedirectionExceptionInterface</code> pour un 3xx exposé, héritent de
+<code>HttpExceptionInterface</code>, qui garantit <code>getResponse()</code>. Nous pouvons donc
+inspecter la Response associée, en choisissant explicitement si sa lecture doit
+à nouveau contrôler le statut.</p>
+<p>À l'inverse, une connexion interrompue relève de <code>TransportExceptionInterface</code>.
+<code>TimeoutExceptionInterface</code> en est un sous-contrat. Il n'y a pas de garantie
+générale de <code>getResponse()</code> à ce niveau, ni de preuve que le serveur n'a rien
+reçu. La commande doit enregistrer un échec de transport, pas inventer un 404.</p>
+<p>Enfin, recevoir un 200 contenant un JSON illisible est un échec de décodage,
+<code>DecodingExceptionInterface</code>, pas un échec HTTP 4xx. Ces trois branches
+rejoignent le contrat commun <code>ExceptionInterface</code>, mais les confondre ferait
+perdre la raison utile au diagnostic.</p>
+<table>
+<thead>
+<tr>
+<th>Ce qui arrive</th>
+<th>Interface</th>
+<th><code>getResponse()</code> garanti ?</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>4xx lu avec contrôle HTTP</td>
+<td><code>ClientExceptionInterface</code> (⊂ <code>HttpExceptionInterface</code>)</td>
+<td>oui</td>
+</tr>
+<tr>
+<td>5xx lu avec contrôle HTTP</td>
+<td><code>ServerExceptionInterface</code> (⊂ <code>HttpExceptionInterface</code>)</td>
+<td>oui</td>
+</tr>
+<tr>
+<td>3xx exposé</td>
+<td><code>RedirectionExceptionInterface</code> (⊂ <code>HttpExceptionInterface</code>)</td>
+<td>oui</td>
+</tr>
+<tr>
+<td>connexion coupée, DNS, TLS</td>
+<td><code>TransportExceptionInterface</code></td>
+<td>non</td>
+</tr>
+<tr>
+<td>délai dépassé</td>
+<td><code>TimeoutExceptionInterface</code> (⊂ transport)</td>
+<td>non</td>
+</tr>
+<tr>
+<td>200 mais JSON illisible</td>
+<td><code>DecodingExceptionInterface</code></td>
+<td>non</td>
+</tr>
+</tbody>
+</table>
+<p>Le cas 3xx mérite une dernière précision : suivre une redirection peut conduire
+à un succès final. <code>RedirectionExceptionInterface</code> concerne le 3xx que rencontre
+une lecture avec contrôle HTTP, notamment lorsque le suivi est désactivé ou sa
+limite atteinte ; chaque redirection intermédiaire n'est pas nécessairement
+une exception remise à notre code.</p>
+<div class="admonition info">
+<p class="admonition-title">🌍 In Real Life</p>
+<p><strong>La situation</strong> : le fournisseur peut répondre « indisponible », la liaison peut tomber, ou le document reçu peut être illisible.</p>
+<p><strong>L’équivalent dans Symfony</strong> : résultat HTTP contrôlé → HttpExceptionInterface ; liaison interrompue → TransportExceptionInterface ; contenu indécodable → DecodingExceptionInterface.</p>
+<p><strong>Retour à la réalité technique</strong> : seul le contrat HTTP présenté garantit <code>getResponse()</code>. <code>$throw=false</code> supprime le contrôle de statut pour la lecture, pas les erreurs de transport/décodage. Une panne de liaison ne prouve pas l'absence d'effet distant.</p>
+<p><strong>🧠 Comment le mémoriser</strong> : « Réponse négative, liaison perdue, document illisible. » Image mentale : trois dossiers d'incident distincts. Question-réflexe : quelle information ai-je réellement reçue ?</p>
+<p><strong>⚠️ À ne pas confondre</strong> : HttpClient HttpExceptionInterface et contrat homonyme d'HttpKernel.</p>
+</div></section><section class="teaching-section" data-section="s-une-response-jamais-lue-leve-quand-meme"><span class="outcome-anchor" id="out-OUT-bhzv4dsk1jbr" tabindex="-1"></span><h2 id="s-une-response-jamais-lue-leve-quand-meme" tabindex="-1">Une Response jamais lue lève quand même</h2><aside class="section-digest" id="s-une-response-jamais-lue-leve-quand-meme-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Le destructor constitue un filet d&#x27;erreur.</li><li>getInfo() ne remplace pas getStatusCode() pour ce contrôle.</li></ol></aside><p><strong>Où en est-on ?</strong> Étape 5 sur 7 : et si on <strong>n'écoute pas</strong> la réponse ?
+<em>Pourquoi une réponse ignorée peut-elle quand même lever ?</em> Parce que Symfony
+ne veut pas qu'un échec passe inaperçu : le destructor sert de filet.</p>
+<p>Supposons que la commande lance une notification puis abandonne immédiatement
+l'objet retourné. Cela ne transforme pas l'appel en travail durable exécuté
+ailleurs. Le <strong>destructor</strong>, appelé à la destruction de l'objet, attend les
+headers et contrôle un statut non pris en charge. Un appel non assigné tel
+que <code>$client-&gt;request('POST', $url);</code> peut donc attendre et lever sur un 500
+avant que la commande poursuive.</p>
+<p>Pour maîtriser le point d'échec, nous conservons la Response et lisons
+explicitement son statut dans la zone de traitement prévue. <code>getStatusCode()</code>
+désarme ce contrôle HTTP automatique à la destruction ; cela n'empêche pas un
+appel ultérieur à <code>getContent()</code> ou <code>toArray()</code> de contrôler à nouveau le statut.
+<code>getInfo('http_code')</code> est une consultation d'information et <strong>ne remplace pas</strong>
+cette prise en charge.</p>
+<pre class="highlight" tabindex="0"><code class="language-text">$client-&gt;request('POST', $url);     ← objet non assigné
+        │ détruit aussitôt
+        ▼
+destructor : attend les headers ─▶ statut 3xx–5xx non pris en charge ?
+                                      └─ oui : lève l'exception HTTP
+Désarmé par : getStatusCode(), getHeaders(false), cancel()
+Pas désarmé par : getInfo('http_code')</code></pre>
+<p>Dans le laboratoire précédent, la branche 404 est donc connue avant de décoder
+le message. Si l'on ne veut plus du transfert, <code>cancel()</code> sert à l'annuler,
+non à annuler un éventuel effet déjà produit par le serveur. Le filet du
+destructor évite un oubli silencieux de statut ; il ne dispense pas de choisir
+une politique explicite de lecture, d'erreur ou d'annulation.</p>
+<div class="admonition info">
+<p class="admonition-title">🌍 In Real Life</p>
+<p><strong>La situation</strong> : jeter un reçu de commande ne délègue pas son suivi à un employé ; un contrôle restant peut encore se déclencher au rangement.</p>
+<p><strong>L’équivalent dans Symfony</strong> : reçu abandonné → Response détruite ; contrôle restant → attente des headers et contrôle HTTP du destructor ; prise en charge explicite → <code>getStatusCode()</code>.</p>
+<p><strong>Retour à la réalité technique</strong> : <code>getInfo()</code> ne désarme pas ce contrôle. Lire le statut n'empêche pas une lecture ultérieure de contrôler à nouveau le code. <code>cancel()</code> n'annule pas un effet déjà accompli au serveur.</p>
+<p><strong>🧠 Comment le mémoriser</strong> : « Oublier n'est pas détacher. » Image mentale : reçu non traité revenant au rangement. Question-réflexe : où ai-je explicitement décidé du statut ou de l'annulation ?</p>
+<p><strong>⚠️ À ne pas confondre</strong> : cycle de vie d'objet et tâche durable en arrière-plan.</p>
+</div></section><section class="teaching-section" data-section="s-rejouer-les-echecs-retryablehttpclient"><span class="outcome-anchor" id="out-OUT-5rm06598zbw5" tabindex="-1"></span><h2 id="s-rejouer-les-echecs-retryablehttpclient" tabindex="-1">Rejouer les échecs : RetryableHttpClient</h2><aside class="section-digest" id="s-rejouer-les-echecs-retryablehttpclient-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Le statut et la method déterminent le retry.</li><li>Trois retries signifient au plus quatre tentatives.</li></ol></aside><p><strong>Où en est-on ?</strong> Étape 6 sur 7 : certains échecs sont passagers (503).
+<em>Qui décide de réessayer, combien de fois, et après quelle attente ?</em> Un
+décorateur, <code>RetryableHttpClient</code>, avec une stratégie.</p>
+<p>Une source peut répondre 503 puis redevenir disponible. Une <em>retry</em> est une
+nouvelle tentative, pas la reprise automatique d'une opération métier au point
+exact où elle s'était arrêtée. <code>RetryableHttpClient</code> décore un client : il
+ajoute une politique de décision et d'attente sans changer le contrat reçu
+par la commande. Dans une application Symfony configurée, <code>retry_failed</code>
+permet de régler cette fonction.</p>
+<p>La table suivante décrit les décisions de <code>GenericRetryStrategy</code> par défaut,
+pas une règle imposée à toutes les stratégies personnalisées :</p>
+<table>
+<thead>
+<tr>
+<th>Échec</th>
+<th>Rejoué</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>423, 425, 429, 502, 503</td>
+<td>pour toute method</td>
+</tr>
+<tr>
+<td>500, 504, 507, 510</td>
+<td>methods idempotentes de la stratégie seulement</td>
+</tr>
+<tr>
+<td>erreur de transport examinée par la stratégie</td>
+<td>methods idempotentes de la stratégie seulement</td>
+</tr>
+<tr>
+<td>autre statut, dont 404</td>
+<td>jamais</td>
+</tr>
+</tbody>
+</table>
+<p>Cette liste de methods est <code>GET</code>, <code>HEAD</code>, <code>PUT</code>, <code>DELETE</code>, <code>OPTIONS</code>, <code>TRACE</code>,
+<code>QUERY</code>. Elle ne doit pas être déduite d'un autre prédicat Symfony :
+<code>Request::isMethodIdempotent()</code> connaît aussi <code>PURGE</code>, absent de cette liste.
+Le décorateur possède en outre un cas distinct avant consultation de la
+stratégie : en cas d'erreur de transport avec <code>primary_ip</code> vide, il prévoit une
+nouvelle tentative dans le budget disponible, notamment pour l'échec de
+résolution DNS. « Toute erreur de transport exige une method idempotente »
+serait donc trop général pour décrire l'implémentation complète.</p>
+<p>Le budget par défaut est de trois retries, donc quatre tentatives au plus,
+hors échanges supplémentaires liés aux redirections. Le délai de base est de
+1 seconde, doublé à chaque retry ; le <em>jitter</em>, une variation aléatoire de 10 %
+par défaut, empêche d'annoncer exactement 1, 2 puis 4 secondes. Un <code>Retry-After</code>
+interprétable prend priorité sur le délai de la stratégie. Cet espacement évite
+de répéter immédiatement un appel vers un service déjà indisponible.</p>
+<pre class="highlight" tabindex="0"><code class="language-text">tentative 1 ── échec 503 ──▶ attente ≈ 1 s  (1000 ms × 2⁰, ± jitter)
+tentative 2 ── échec 503 ──▶ attente ≈ 2 s  (1000 ms × 2¹)
+tentative 3 ── échec 503 ──▶ attente ≈ 4 s  (1000 ms × 2²)
+tentative 4 ── échec 503 ──▶ budget épuisé : le dernier résultat est rendu
+(Retry-After lisible → remplace le délai calculé)</code></pre>
+<p>Pour observer la décision sans attendre ni contacter un serveur, ce laboratoire
+indépendant simule 503 puis 200 et autorise une seule retry :</p>
+<pre class="highlight" tabindex="0"><code class="language-php">use Symfony\Component\HttpClient\MockHttpClient;
+use Symfony\Component\HttpClient\Response\MockResponse;
+use Symfony\Component\HttpClient\Retry\GenericRetryStrategy;
+use Symfony\Component\HttpClient\RetryableHttpClient;
+
+$mock = new MockHttpClient([
+    new MockResponse('', ['http_code' =&gt; 503]),
+    new MockResponse('{"ok":true}', ['http_code' =&gt; 200]),
+]);
+$client = new RetryableHttpClient($mock, new GenericRetryStrategy(delayMs: 0), 1);
+$data = $client-&gt;request('GET', 'https://example.test/health')-&gt;toArray();
+var_export($data['ok']);</code></pre>
+<p>Résultat attendu : <code>true</code>, après une nouvelle tentative. Le délai nul appartient
+au laboratoire, pas à une recommandation pour le service réel. Si le budget
+s'épuise, le décorateur laisse passer le dernier résultat : il ne transforme
+pas un 503 en succès, et <code>toArray()</code> peut alors lever l'exception HTTP.
+Un dernier échec de transport reste lui aussi un échec.</p>
+<p>Le GET de lecture se prête à une nouvelle tentative ; pour un POST de
+publication, il faut examiner les effets métier. La politique par défaut
+rejoue POST sur 503, mais pas sur 500. Elle ne fournit pas à elle seule une
+garantie d'unicité de publication.</p>
+<div class="admonition info">
+<p class="admonition-title">🌍 In Real Life</p>
+<p><strong>La situation</strong> : rappeler un fournisseur après un incident demande un budget d'essais et une attente ; cela ne prouve pas que la commande précédente n'a rien produit.</p>
+<p><strong>L’équivalent dans Symfony</strong> : rappels autorisés → budget de retries ; décision → stratégie et cas du décorateur ; espacement → délai, jitter ou Retry-After.</p>
+<p><strong>Retour à la réalité technique</strong> : la stratégie par défaut distingue POST en 503 et en 500 ; le cas de transport sans primary_ip se traite aussi dans le décorateur. Timeout d'inactivité et durée totale ne sont pas la même borne. Aucune retry n'assure l'unicité métier.</p>
+<p><strong>🧠 Comment le mémoriser</strong> : « Réessayer n'est pas reprendre sans doublon. » Image mentale : compteur d'essais à côté du bon initial. Question-réflexe : quel effet distant pourrait déjà exister ?</p>
+<p><strong>⚠️ À ne pas confondre</strong> : liste idempotente de la stratégie et prédicat Request incluant PURGE.</p>
+</div></section><section class="teaching-section" data-section="s-un-stream-dont-une-response-echoue"><span class="outcome-anchor" id="out-OUT-67xk171zj659" tabindex="-1"></span><h2 id="s-un-stream-dont-une-response-echoue" tabindex="-1">Un stream dont une Response échoue</h2><aside class="section-digest" id="s-un-stream-dont-une-response-echoue-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Un échec de chunk ne doit pas abandonner les autres Responses.</li><li>Lire le statut au premier chunk et traiter isTimeout().</li></ol></aside><p><strong>Où en est-on ?</strong> Étape 7 sur 7, la dernière : on referme la boucle avec
+<code>stream()</code>. <em>Comment garder le résultat de A si B échoue ?</em> En plaçant le
+<code>try</code>/<code>catch</code> <strong>dans</strong> la boucle, autour de chaque chunk.</p>
+<p>Revenons aux sources indépendantes : A répond correctement, B échoue.
+Abandonner toute la boucle ferait perdre le résultat de A. Nous plaçons donc le
+<code>try</code>/<code>catch</code> autour de la lecture de <strong>chaque chunk</strong>, dans la boucle, afin
+d'enregistrer l'échec associé à sa Response puis de poursuivre les autres.</p>
+<p>Trois signaux guident cette lecture. <code>isTimeout()</code> signale une attente de
+stream dépassée ; nous choisissons ici d'annuler la Response, plutôt que
+d'attendre à nouveau. <code>isFirst()</code> annonce les premiers headers : c'est le
+moment de lire <code>getStatusCode()</code> et d'appliquer notre politique HTTP.
+<code>isLast()</code> marque la fin. Les morceaux intermédiaires portent le contenu.
+Les methods du chunk peuvent lever une <code>TransportExceptionInterface</code>, y
+compris <code>isTimeout()</code> lorsqu'il s'agit d'une véritable erreur de transport.</p>
+<pre class="highlight" tabindex="0"><code class="language-text">Vie d'une Response dans stream() :
+
+ isFirst() ──▶ headers arrivés : lire getStatusCode(), appliquer la politique
+     │
+ chunks intermédiaires ──▶ getContent() = un morceau du body
+     │
+ isLast() ──▶ Response complète
+
+ isTimeout() ──▶ aucun morceau avant $timeout : décider (cancel() ici)
+ exception de chunk ──▶ échec de transport : le catch de la boucle l'isole</code></pre>
+<p>Ce laboratoire indépendant reprend le cas A/B avec une erreur simulée :</p>
+<pre class="highlight" tabindex="0"><code class="language-php">use Symfony\Component\HttpClient\MockHttpClient;
+use Symfony\Component\HttpClient\Response\MockResponse;
+use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
+
+$client = new MockHttpClient([
+    new MockResponse('OK'),
+    new MockResponse('', ['error' =&gt; 'Connexion simulée indisponible']),
+]);
+$responses = [];
+foreach (['a', 'b'] as $id) {
+    $responses[] = $client-&gt;request('GET', 'https://example.test/'.$id, ['user_data' =&gt; $id]);
+}
+
+$results = [];
+foreach ($client-&gt;stream($responses, 1.0) as $response =&gt; $chunk) {
+    $id = $response-&gt;getInfo('user_data');
+    try {
+        if ($chunk-&gt;isTimeout()) {
+            $response-&gt;cancel();
+            $results[$id] = 'Délai dépassé';
+        } elseif ($chunk-&gt;isFirst()) {
+            $status = $response-&gt;getStatusCode();
+            if (200 !== $status) {
+                $response-&gt;cancel();
+                $results[$id] = 'Statut inattendu : '.$status;
+            }
+        } elseif ($chunk-&gt;isLast()) {
+            $results[$id] = 'Terminé';
+        } else {
+            $chunk-&gt;getContent();
+        }
+    } catch (TransportExceptionInterface $error) {
+        $response-&gt;cancel();
+        $results[$id] = 'Échec de transport : '.$error-&gt;getMessage();
+    }
+}
+var_export($results);</code></pre>
+<p>Le tableau attendu associe <code>a</code> à <code>Terminé</code> et <code>b</code> à un message d'échec de
+transport, sans dépendre de l'ordre d'arrivée. <code>user_data</code> conserve notre
+identifiant local avec la Response. Le contenu <code>OK</code> est consommé puis ignoré :
+ce programme contrôle les fins de transfert, pas un import complet.</p>
+<p>Deux limites protègent cette lecture. D'abord, exiger exactement 200 est la
+politique de ce laboratoire, pas une définition de tous les succès HTTP.
+Ensuite, un <code>catch</code> interne ne récupère pas magiquement toute erreur de
+l'itérateur : si nous négligeons le statut au premier chunk, le stream peut
+lui-même déclencher le contrôle HTTP en reprenant son exécution. Lire le
+statut dès <code>isFirst()</code> et traiter les chunks d'erreur évite de laisser ces
+contrôles implicites décider à notre place.</p>
+<p>La commande peut maintenant rendre un bilan partiel fiable. Si elle doit
+ensuite importer des articles, il reste à décoder et valider les données
+réussies ; « transfert terminé » n'autorise pas encore leur publication.</p>
+<div class="admonition info">
+<p class="admonition-title">🌍 In Real Life</p>
+<p><strong>La situation</strong> : plusieurs livraisons arrivent par morceaux ; un colis abîmé est associé à son fournisseur sans jeter automatiquement les colis corrects des autres.</p>
+<p><strong>L’équivalent dans Symfony</strong> : morceaux → chunks ; première information → <code>isFirst()</code> et lecture du statut ; fin → <code>isLast()</code> ; incident localisé → traitement de lecture dans la boucle.</p>
+<p><strong>Retour à la réalité technique</strong> : les méthodes du chunk peuvent lever. Le catch interne ne capture pas toute erreur de l'itérateur ; lire le statut au premier chunk évite un contrôle HTTP laissé implicite. Fin de transfert ne signifie pas données validées.</p>
+<p><strong>🧠 Comment le mémoriser</strong> : « Associer chaque morceau à son résultat. » Image mentale : colis répartis par fournisseur. Question-réflexe : ai-je traité le statut et gardé un bilan explicite par Response ?</p>
+<p><strong>⚠️ À ne pas confondre</strong> : timeout du stream, succès HTTP et validité métier.</p>
+</div></section><section class="teaching-section" data-section="s-pieges-d-examen"><h2 id="s-pieges-d-examen" tabindex="-1">Pièges d&#x27;examen</h2><p class="teaching-label pitfall"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="warning" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3L23 21H1L12 3ZM12 9V14M12 17V18"></path></svg> <strong>Piège à éviter</strong></p><ul class="pitfall-list"><li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : Où en est-on ?</summary><p><strong>Où en est-on ?</strong> Bilan des sept étapes : les confusions attendues en QCM,
+avec la raison pour laquelle la mauvaise réponse paraît plausible.</p></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : Un JSON invalide n&#x27;est pas un statut 4xx.</summary><p><strong>Un JSON invalide n'est pas un statut 4xx.</strong> Notre fournisseur peut répondre
+200 avec un body invalide : <code>toArray()</code> lève alors une
+<code>DecodingExceptionInterface</code>, pas une <code>ClientExceptionInterface</code>. Passer
+<code>false</code> ne désactive que le contrôle HTTP, pas le décodage ni le transport.
+Même le JSON valide <code>42</code> ne devient pas un tableau accepté par cette method.
+<em>Pourquoi on se trompe : « réponse mauvaise » évoque une erreur HTTP ; ici le
+serveur a bien répondu 200, c'est le contenu qui est inexploitable.</em></p></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : Une retry dépend de la politique, pas seulement du mot POST.</summary><p><strong>Une retry dépend de la politique, pas seulement du mot POST.</strong> Avec la
+stratégie par défaut et un budget disponible, POST en 500 n'est pas rejoué,
+POST en 503 l'est. Le cas de résolution DNS traité par le décorateur ne se
+résume pas non plus à la table des statuts. Vérifier la décision technique ne
+prouve jamais à elle seule l'absence de doublon métier.
+<em>Pourquoi on se trompe : on retient « POST n'est pas idempotent, donc jamais
+rejoué » ; la table distingue les statuts avant de regarder la méthode.</em></p></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : Une Response ignorée n&#x27;est pas une tâche détachée.</summary><p><strong>Une Response ignorée n'est pas une tâche détachée.</strong> Son destructor peut
+attendre et lever ; <code>getInfo()</code> ne vaut pas prise en charge du statut.
+Conserver les Responses puis les consommer explicitement sert à la fois la
+concurrence et la maîtrise des points d'échec.
+<em>Pourquoi on se trompe : on croit qu'un appel « tiré et oublié » (fire and
+forget) est sans conséquence ; l'objet détruit déclenche encore un contrôle.</em></p></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : timeout n&#x27;est pas max_duration.</summary><p><strong><code>timeout</code> n'est pas <code>max_duration</code>.</strong> Le premier mesure l'inactivité, le
+second la durée totale. <em>Pourquoi on se trompe : en français, « timeout »
+évoque une durée maximale globale.</em></p></details></li></ul></section><section class="teaching-section" data-section="s-application"><h2 id="s-application" tabindex="-1">Application</h2><aside class="section-digest" id="s-application-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>HttpClientInterface expose request(), stream() et withOptions().</li><li>withOptions() produit une nouvelle instance.</li><li>Le destructor constitue un filet d&#x27;erreur.</li><li>getInfo() ne remplace pas getStatusCode() pour ce contrôle.</li></ol></aside>
+
+
+
+</section><section class="teaching-section" data-section="s-fiche-express"><h2 id="s-fiche-express" tabindex="-1">Fiche express</h2><p class="teaching-label essential"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="book" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5C9 3 5 3 2 4V20C5 19 9 19 12 21C15 19 19 19 22 20V4C19 3 15 3 12 5V21M5 8H8M5 12H8M16 8H19M16 12H19"></path></svg> <strong>À mémoriser</strong></p><p><strong>🧠 À retenir pour la certification</strong> — relisez le bilan de la commande
+d'import dans l'ordre de ses décisions :</p>
+<ol>
+<li>Recevoir <code>HttpClientInterface</code> permet de substituer un mock au réseau.
+   Une Request sortante n'est pas la Request entrante de <code>GET /blog/42</code>.</li>
+<li>Conserver les Responses <strong>lazy</strong>, puis lire, permet le chevauchement des
+   échanges indépendants si le transport le permet ; aucune durée n'est promise.</li>
+<li>Lire <code>getStatusCode()</code> permet de traiter 404 sans exception de statut.
+   <code>getHeaders()</code>, <code>getContent()</code> et <code>toArray()</code> contrôlent les 3xx–5xx par
+   défaut ; <code>false</code> ne supprime pas les erreurs de transport ou de décodage.</li>
+<li>Prendre en charge le statut évite de le laisser au <strong>destructor</strong>.
+   <code>getInfo()</code> ne désarme pas ce contrôle ; abandonner l'objet n'est pas
+   détacher un travail durable.</li>
+<li>Distinguer les exceptions conserve le diagnostic. Parmi les contrats
+   présentés, <code>HttpExceptionInterface</code> garantit <code>getResponse()</code> ; un timeout
+   ne prouve pas que le serveur n'a rien traité.</li>
+<li>Borner l'attente exige de distinguer <code>timeout</code> et <code>max_duration</code>.
+   Le suivi autorise 20 redirections par défaut ; <code>max_redirects = 0</code> le coupe.
+   Les retries ont leur budget, leurs délais et leur politique : 503 et 500
+   ne sont pas interchangeables pour POST.</li>
+<li>Consommer le stream exige le statut au premier chunk et la gestion des
+   erreurs de chunk <strong>dans</strong> la boucle. Un résultat partiel doit signaler les
+   échecs, puis valider les données réussies avant leur utilisation.</li>
+</ol>
+<p>« Lancer, conserver, lire, décider » résume cette branche. Le trajet principal
+du blog peut continuer à lire son catalogue en mémoire : ajouter HttpClient
+n'impose aucun appel distant à chaque affichage.</p>
+<p>Phrase de mémorisation : <strong>« Je lance sans lire, je garde mes reçus, je lis le
+statut avant de décider, et je range chaque échec dans sa bonne famille :
+HTTP, transport ou décodage. »</strong></p></section><section class="teaching-section" data-section="s-sources-officielles"><h2 id="s-sources-officielles" tabindex="-1">Sources officielles</h2><ul>
+<li><a href="https://symfony.com/doc/8.0/http_client.html">Symfony 8.0 — HttpClient</a></li>
+</ul></section><section id="course-recalls" aria-labelledby="course-recalls-title" tabindex="-1"><h2 id="course-recalls-title">Rappels et liens avec les autres cours</h2><div data-recall-group="current"><h3>Rappels du cours actuel</h3><ul><li data-recall-course="CRS-ez2qmqfk902e" data-recall-kind="digest_reference"><p class="recall-provenance">Module 02 — Fondamentaux HTTP · Cours « Symfony HttpClient component »</p><p class="digest-reference"><a href="#s-l-essentiel-digest">Revoir la règle : request() rend une Response lazy.</a></p></li><li data-recall-course="CRS-ez2qmqfk902e" data-recall-kind="digest_reference"><p class="recall-provenance">Module 02 — Fondamentaux HTTP · Cours « Symfony HttpClient component »</p><p class="digest-reference"><a href="#s-le-schema-digest">Revoir la règle : Une erreur HTTP dispose d&#x27;une Response.</a></p></li><li data-recall-course="CRS-ez2qmqfk902e" data-recall-kind="digest_reference"><p class="recall-provenance">Module 02 — Fondamentaux HTTP · Cours « Symfony HttpClient component »</p><p class="digest-reference"><a href="#s-la-response-digest">Revoir la règle : false désactive les exceptions liées au status code.</a></p></li><li><nav aria-label="Flashcards de l’application"><ul><li data-recall-course="CRS-ez2qmqfk902e" data-recall-kind="application"><p class="recall-provenance">Module 02 — Fondamentaux HTTP · Cours « Symfony HttpClient component »</p><a href="#A-ez2qmqfk902e-14813e3569-01">Flashcard : HttpClientInterface expose request(), stream() et withOptions(). withOptions() produit une nouvelle instance.</a></li><li data-recall-course="CRS-ez2qmqfk902e" data-recall-kind="application"><p class="recall-provenance">Module 02 — Fondamentaux HTTP · Cours « Symfony HttpClient component »</p><a href="#A-ez2qmqfk902e-2b4a40b441-05">Flashcard : Le destructor constitue un filet d&#x27;erreur. getInfo() ne remplace pas getStatusCode() pour ce contrôle.</a></li></ul></nav></li><li data-recall-course="CRS-ez2qmqfk902e" data-recall-kind="digest_reference"><p class="recall-provenance">Module 02 — Fondamentaux HTTP · Cours « Symfony HttpClient component »</p><p class="digest-reference"><a href="#s-un-stream-dont-une-response-echoue-digest">Revoir la règle : Un échec de chunk ne doit pas abandonner les autres Responses.</a></p></li></ul></div><div data-recall-group="other"><h3>Rappels des cours précédents / autres modules</h3><ul><li data-recall-course="CRS-e3j0d3a8ndrf" data-recall-kind="previous_course"><p class="recall-provenance">Module 02 — Fondamentaux HTTP · Cours « Caching »</p><p>no-cache impose une revalidation. no-store interdit le stockage.</p><p><a href="#cards-previous">Rappel : <span lang="en">Does no-cache forbid storing a response?</span></a></p></li></ul></div></section><nav class="course-sequence" aria-label="Ordre de lecture"><a rel="prev" href="course-CRS-qa0x33akw264.html" aria-label="Précédent : Language detection — Module 02 — Fondamentaux HTTP">Précédent : Language detection</a> <a href="lot-02.html">Sommaire : Module 02 — Fondamentaux HTTP</a> <a rel="next" href="course-CRS-tyf3yfxjc3sa.html" aria-label="Suivant : Symfony Flex — Module 03 — Architecture Symfony">Suivant : Symfony Flex</a></nav><p class="course-practice-entry"><a class="button" href="#view-quiz">Fin du cours — s’entraîner avec le Quiz</a></p></div><div id="view-flashcards" data-course-panel role="region" aria-labelledby="view-flashcards-title"><h2 id="view-flashcards-title">Flashcards</h2><p lang="en">Answer before revealing each card.</p><p>Ces cartes ne mesurent pas une maîtrise notée.</p><div id="cards-s-l-essentiel-1" data-card-section="s-l-essentiel"><h3><a href="#s-l-essentiel">Revoir : L&#x27;essentiel</a></h3><div class="reader-cards"><details class="reader-card" id="A-ez2qmqfk902e-65c42c80d9-02"><summary lang="en">How do you avoid accidentally serialising independent HttpClient requests?</summary><p lang="en">Issue the requests first, then consume their lazy responses.</p><p lang="fr">request() rend une Response lazy. Lire immédiatement chaque Response rend la boucle séquentielle.</p><a href="course-CRS-ez2qmqfk902e.html#out-OUT-81pzmq0sf6k9">Revoir le passage précis</a></details></div></div><div id="cards-s-le-schema-2" data-card-section="s-le-schema"><h3><a href="#s-le-schema">Revoir : Le schéma</a></h3><div class="reader-cards"><details class="reader-card" id="A-ez2qmqfk902e-6e0103f6cc-04"><summary lang="en">Which HttpClient exception interface exposes getResponse()?</summary><p lang="en">HttpExceptionInterface, not transport exceptions generally.</p><p lang="fr">Une erreur HTTP dispose d&#x27;une Response. Une TransportExceptionInterface peut survenir sans Response.</p><a href="course-CRS-ez2qmqfk902e.html#out-OUT-a0z9e1zqpyxy">Revoir le passage précis</a></details></div></div><div id="cards-s-l-exemple-des-requests-en-parallele-3" data-card-section="s-l-exemple-des-requests-en-parallele"><h3><a href="#s-l-exemple-des-requests-en-parallele">Revoir : L&#x27;exemple : des Requests en parallèle</a></h3><div class="reader-cards"><details class="reader-card" id="A-ez2qmqfk902e-48ff8fb2e0-07"><summary lang="en">How does the example allow several HTTP requests to progress concurrently?</summary><p lang="en">It creates all responses first, then consumes them with stream().</p><p lang="fr">Lancer toutes les Requests avant de lire les Responses permet la concurrence. stream() observe ensuite les chunks ; isLast() indique la fin d&#x27;une Response.</p><a href="course-CRS-ez2qmqfk902e.html#out-OUT-81pzmq0sf6k9">Revoir le passage précis</a></details></div></div><div id="cards-s-l-interface-4" data-card-section="s-l-interface"><h3><a href="#s-l-interface">Revoir : L&#x27;interface</a></h3><div class="reader-cards"><details class="reader-card" id="A-ez2qmqfk902e-14813e3569-01"><summary lang="en">Does withOptions() mutate the existing HttpClient instance?</summary><p lang="en">No. It returns a new client with the supplied defaults.</p><p lang="fr">HttpClientInterface expose request(), stream() et withOptions(). withOptions() produit une nouvelle instance.</p><a href="course-CRS-ez2qmqfk902e.html#out-OUT-9vyq57j7gj6b">Revoir le passage précis</a></details></div></div><div id="cards-s-le-point-central-les-responses-sont-lazy-5" data-card-section="s-le-point-central-les-responses-sont-lazy"><h3><a href="#s-le-point-central-les-responses-sont-lazy">Revoir : Le point central : les Responses sont lazy</a></h3><div class="reader-cards"><p class="reader-card-reference" id="A-ez2qmqfk902e-b5fc664e29-02">Rappel déjà proposé : <a lang="en" href="#A-ez2qmqfk902e-65c42c80d9-02">How do you avoid accidentally serialising independent HttpClient requests?</a> · <a href="course-CRS-ez2qmqfk902e.html#out-OUT-81pzmq0sf6k9">Passage canonique</a></p></div></div><div id="cards-s-la-response-6" data-card-section="s-la-response"><h3><a href="#s-la-response">Revoir : La Response</a></h3><div class="reader-cards"><details class="reader-card" id="A-ez2qmqfk902e-8fcbb7c6e3-03"><summary lang="en">Does toArray(false) suppress JSON decoding errors?</summary><p lang="en">No. It suppresses HTTP-status exceptions, not decoding failures.</p><p lang="fr">false désactive les exceptions liées au status code. Un JSON invalide peut toujours lever DecodingExceptionInterface.</p><a href="course-CRS-ez2qmqfk902e.html#out-OUT-9bcphcvp1dp0">Revoir le passage précis</a></details></div></div><div id="cards-s-la-hierarchie-d-exceptions-7" data-card-section="s-la-hierarchie-d-exceptions"><h3><a href="#s-la-hierarchie-d-exceptions">Revoir : La hiérarchie d&#x27;exceptions</a></h3><div class="reader-cards"><p class="reader-card-reference" id="A-ez2qmqfk902e-cd2b717f6d-04">Rappel déjà proposé : <a lang="en" href="#A-ez2qmqfk902e-6e0103f6cc-04">Which HttpClient exception interface exposes getResponse()?</a> · <a href="course-CRS-ez2qmqfk902e.html#out-OUT-a0z9e1zqpyxy">Passage canonique</a></p></div></div><div id="cards-s-une-response-jamais-lue-leve-quand-meme-8" data-card-section="s-une-response-jamais-lue-leve-quand-meme"><h3><a href="#s-une-response-jamais-lue-leve-quand-meme">Revoir : Une Response jamais lue lève quand même</a></h3><div class="reader-cards"><details class="reader-card" id="A-ez2qmqfk902e-2b4a40b441-05"><summary lang="en">Can ignoring an HttpClient response hide an HTTP error safely?</summary><p lang="en">No. The destructor can throw if its status was never checked.</p><p lang="fr">Le destructor constitue un filet d&#x27;erreur. getInfo() ne remplace pas getStatusCode() pour ce contrôle.</p><a href="course-CRS-ez2qmqfk902e.html#out-OUT-bhzv4dsk1jbr">Revoir le passage précis</a></details></div></div><div id="cards-s-rejouer-les-echecs-retryablehttpclient-9" data-card-section="s-rejouer-les-echecs-retryablehttpclient"><h3><a href="#s-rejouer-les-echecs-retryablehttpclient">Revoir : Rejouer les échecs : RetryableHttpClient</a></h3><div class="reader-cards"><details class="reader-card" id="A-ez2qmqfk902e-1a54b772c0-06"><summary lang="en">Does the default retry strategy retry POST on 500 and 503 equally?</summary><p lang="en">No. 503 is retried for any method; 500 is retried only for idempotent methods.</p><p lang="fr">Le statut et la method déterminent le retry. Trois retries signifient au plus quatre tentatives.</p><a href="course-CRS-ez2qmqfk902e.html#out-OUT-5rm06598zbw5">Revoir le passage précis</a></details></div></div><div id="cards-s-un-stream-dont-une-response-echoue-10" data-card-section="s-un-stream-dont-une-response-echoue"><h3><a href="#s-un-stream-dont-une-response-echoue">Revoir : Un stream dont une Response échoue</a></h3><div class="reader-cards"><details class="reader-card" id="A-ez2qmqfk902e-4d8fe96274-07"><summary lang="en">Where should per-response transport failures be caught when streaming several responses?</summary><p lang="en">Inside the iteration, around access to each chunk.</p><p lang="fr">Un échec de chunk ne doit pas abandonner les autres Responses. Lire le statut au premier chunk et traiter isTimeout().</p><a href="course-CRS-ez2qmqfk902e.html#out-OUT-67xk171zj659">Revoir le passage précis</a></details></div></div><div id="cards-s-pieges-d-examen-11" data-card-section="s-pieges-d-examen"><h3><a href="#s-pieges-d-examen">Revoir : Pièges d&#x27;examen</a></h3><div class="reader-cards"><p class="reader-card-reference" id="A-ez2qmqfk902e-596d5af532-03">Rappel déjà proposé : <a lang="en" href="#A-ez2qmqfk902e-8fcbb7c6e3-03">Does toArray(false) suppress JSON decoding errors?</a> · <a href="course-CRS-ez2qmqfk902e.html#out-OUT-9bcphcvp1dp0">Passage canonique</a></p></div></div><div id="cards-s-application-12" data-card-section="s-application"><h3><a href="#s-application">Revoir : Application</a></h3><div class="reader-cards"><p class="reader-card-reference" id="A-ez2qmqfk902e-e7ad522ea3-01">Rappel déjà proposé : <a lang="en" href="#A-ez2qmqfk902e-14813e3569-01">Does withOptions() mutate the existing HttpClient instance?</a> · <a href="course-CRS-ez2qmqfk902e.html#out-OUT-9vyq57j7gj6b">Passage canonique</a></p><p class="reader-card-reference" id="A-ez2qmqfk902e-e7ad522ea3-05">Rappel déjà proposé : <a lang="en" href="#A-ez2qmqfk902e-2b4a40b441-05">Can ignoring an HttpClient response hide an HTTP error safely?</a> · <a href="course-CRS-ez2qmqfk902e.html#out-OUT-bhzv4dsk1jbr">Passage canonique</a></p></div></div><div id="cards-s-fiche-express-13" data-card-section="s-fiche-express"><h3><a href="#s-fiche-express">Revoir : Fiche express</a></h3><div class="reader-cards"><p class="reader-card-reference" id="A-ez2qmqfk902e-b11e58e15e-07">Rappel déjà proposé : <a lang="en" href="#A-ez2qmqfk902e-4d8fe96274-07">Where should per-response transport failures be caught when streaming several responses?</a> · <a href="course-CRS-ez2qmqfk902e.html#out-OUT-67xk171zj659">Passage canonique</a></p></div></div><div id="cards-previous"><p class="recall-provenance">Module 02 — Fondamentaux HTTP · Cours « Caching »</p><aside class="checkpoint"><h2>Rappel d’un cours antérieur</h2><p>Avant de poursuivre : Caching.</p><details class="corpus-correction"><summary lang="en">Does no-cache forbid storing a response?</summary><p lang="en">No. It requires validation before reuse; no-store forbids storage.</p><p>no-cache impose une revalidation. no-store interdit le stockage.</p><a href="course-CRS-e3j0d3a8ndrf.html#out-OUT-c5rwk67m9qxc">Relire la correction dans le cours antérieur</a></details></aside></div></div><div id="view-quiz" data-course-panel role="region" aria-labelledby="view-quiz-title"><aside class="revision-context"><p><strong>Avant le quiz :</strong> GET /blog/42 sait déjà afficher l&#x27;article fourni par notre ArticleCatalog en mémoire. Un autre travail apparaît : une commande d&#x27;import doit consulter deux services externes avant de préparer des données. Ce travail est une branche du projet, pas une étape obligatoire de chaque consultation du blog.</p><p>Quelle donnée entre, quelle responsabilité agit et quelle condition change le résultat ? Pour chaque correction, vérifiez ces conditions dans <a href="course-CRS-ez2qmqfk902e.html#s-objectif">le passage enseigné</a>, sans supposer que toutes les branches du blog sont exécutées.</p></aside><h2 id="view-quiz-title">Quiz</h2><p class="quiz-size" lang="en">13 eligible learning questions · 13 per session. Repeating a question does not demonstrate mastery.</p><p id="course-quiz-status" role="status">Quiz interactif non chargé. Démarrez après chargement de la banque locale.</p><div id="course-quiz-controls" class="assessment-main" hidden><div id="course-quiz-assessment-controls" hidden><select id="course-quiz-assessment-mode" aria-label="Mode du quiz" hidden><option value="learning">Entraînement</option></select><p id="course-quiz-training-scope"></p><button id="course-quiz-start-assessment" type="button" lang="en">Start practice</button><button id="course-quiz-finish-assessment" type="button" lang="en" hidden>End session</button></div><p id="course-quiz-assessment-error" role="alert"></p><p id="course-quiz-assessment-timer" hidden></p><p id="course-quiz-session-progress" class="quiz-progress" role="status" lang="en"></p><div id="course-quiz-assessment-app" tabindex="-1"></div><nav id="course-quiz-session-navigation" aria-label="Questions du cours"></nav><div id="course-quiz-learning-overview" aria-live="polite"></div></div><div id="course-quiz-native"><p>Sans JavaScript ou si le chargement échoue : aucune tentative notée. Les <a href="#view-flashcards">flashcards du cours</a> restent disponibles.</p><details class="course-quiz-fallback" data-question-id="L-ez2qmqfk902e-base-v1"><summary lang="en">How do you avoid accidentally serialising independent HttpClient requests? Select one answer (radio).</summary><p>Correction de consultation — non notée.</p><p>request() rend une Response lazy. Lire immédiatement chaque Response rend la boucle séquentielle.</p><ul><li><strong lang="en">Distractor: Consume each response immediately before issuing the next.</strong><p>Cette boucle attend chaque Response et sérialise les appels.</p></li><li><strong lang="en">Distractor: Call getContent() first to make every response asynchronous.</strong><p>getContent() consomme la Response ; ce n&#x27;est pas le démarrage de la concurrence.</p></li><li><strong lang="en">Correct: Issue requests first; consume their lazy responses afterward.</strong><p>request() rend une Response lazy. Lire immédiatement chaque Response rend la boucle séquentielle.</p></li></ul><a href="course-CRS-ez2qmqfk902e.html#out-OUT-81pzmq0sf6k9">Relire le passage exact</a><a href="course-CRS-ez2qmqfk902e.html#out-OUT-t602yfbqy21b">Relire la correction précise</a></details></div></div></div></div><details class="transfer-panel"><summary>Sauvegarde et transfert de progression</summary><p id="reading-status" role="status">Sans JavaScript : lecture libre ; progression non enregistrée.</p><p><a href="assessment.html#overview-title">Lecture, réussites immédiates et différées</a></p><p>Transfert manuel — aucune synchronisation automatique</p><p id="persistence-status" role="status"></p><button type="button" class="secondary" id="export-progress">Exporter ma progression</button><label for="import-progress">Choisir un JSON pour fusionner ma progression (sans remplacement)</label><input type="file" id="import-progress" accept="application/json,.json"><p id="transfer-status" role="status"></p></details></main><footer class="site-footer"><a href="catalogue.html">Catalogue</a> <a href="sources.html">Sources et attribution</a> <a href="#contenu">Haut de page</a></footer></body></html>

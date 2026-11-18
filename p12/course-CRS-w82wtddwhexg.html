@@ -1,0 +1,351 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; connect-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Auto escaping — Symfony 8 Preparation</title><link rel="stylesheet" href="styles.css"><link rel="stylesheet" href="reader.css"><script src="mermaid.min.js" defer></script><script src="mermaid-init.js" defer></script><link rel="stylesheet" href="assessment.css"><script src="fixed-exams-data.js" defer></script><script src="fixed-exams.js" defer></script><script src="learning-state.js" defer></script><script src="guide.js" defer></script><script src="reader-catalog.js" defer></script><script src="reader.js" defer></script><script src="site-state.js" defer></script><script src="assessment.js" defer></script><script src="course-views.js" defer></script><link rel="stylesheet" href="syntax-highlight.css"><script src="prism-syntax.js" defer></script><script src="syntax-highlight.js" defer></script></head><body data-course-id="CRS-w82wtddwhexg"><a class="skip" href="#contenu">Aller au contenu</a><header class="site-header"><a class="brand" href="index.html">S8 Preparation</a><nav aria-label="Navigation principale"><a href="index.html">Accueil</a> <a href="catalogue.html">Parcours</a> <a href="assessment.html?mode=review">Réviser</a> <a href="examens.html">Examens blancs</a> <a href="jour-j.html">Jour J</a></nav></header><main id="contenu" tabindex="-1" class="corpus-reader"><nav class="breadcrumb" aria-label="Fil d’Ariane"><a href="index.html">Accueil</a> <span aria-hidden="true">›</span> <a href="catalogue.html">Parcours</a> <span aria-hidden="true">›</span> <a href="lot-06.html">Module 06 — Templates avec Twig</a> <span aria-hidden="true">›</span> <span aria-current="page">Auto escaping</span></nav><h1>Auto escaping</h1><p class="muted">Symfony 8.0 · API PHP ≤ 8.4 · Twig ≤ 3.22. Préparation indépendante.</p><p class="revision-status">Rédaction narrative P11 : projection nouvelle, non couverte par les décisions historiques P10. Aucune approbation officielle ni garantie de réussite.</p><aside class="narrative-context" aria-label="Repères de lecture"><p><strong>Prérequis de lecture :</strong> <a href="course-CRS-x2f8reencvcs.html">Twig syntax up to 3.22 version</a></p><p><strong>Concepts voisins :</strong> <a href="course-CRS-a669jpap5zf2.html">The response</a> — Le contenu rendu doit encore devenir une Response. <a href="lot-06.html">Comparer les responsabilités dans ce module</a> · <a href="carte-composants.html">Situer cette responsabilité dans le blog</a> · <a href="glossaire.html">Distinguer les termes voisins</a></p><p><a href="ordre-lecture.html">Retrouver les 163 cours dans le parcours recommandé</a>. Ce repère ne modifie ni votre historique ni votre progression.</p></aside><div class="course-layout"><details class="lot-course-menu"><summary>Cours du module · 14 cours</summary><nav aria-label="Cours du module"><a class="lot-context" href="lot-06.html">Module 06 — Templates avec Twig</a><ol><li><a href="course-CRS-2bj91rj9kvj0.html">TwigBundle</a></li><li><a href="course-CRS-x2f8reencvcs.html">Twig syntax up to 3.22 version</a></li><li><a href="course-CRS-w82wtddwhexg.html" aria-current="page">Auto escaping</a></li><li><a href="course-CRS-k3v3wrt0hmtx.html">Template inheritance</a></li><li><a href="course-CRS-r56yzzb4pye2.html">Global variables</a></li><li><a href="course-CRS-306ppg4454wj.html">Filters and functions</a></li><li><a href="course-CRS-w83y6pfa5edn.html">Template includes</a></li><li><a href="course-CRS-zbnzvqkhjknh.html">Loops and conditions</a></li><li><a href="course-CRS-dpbpbgwjey5c.html">URLs generation</a></li><li><a href="course-CRS-yw6c5hq2mbax.html">Controller rendering</a></li><li><a href="course-CRS-q18xc1k4yvb9.html">Translations and pluralization</a></li><li><a href="course-CRS-dfyab4kpcapw.html">String interpolation</a></li><li><a href="course-CRS-ym86ptkhfgap.html">Assets management</a></li><li><a href="course-CRS-vx5kvfhs0p0s.html">Debugging variables</a></li></ol><a href="lot-06.html#view-quiz">Quiz du module</a></nav></details><aside class="course-section-menu" aria-label="Sommaire du cours"><nav class="course-actions" aria-label="Activités du cours"><a id="tab-course" href="#view-course">Cours</a><a id="tab-flashcards" href="#view-flashcards">Flashcards</a><a id="tab-quiz" href="#view-quiz">Quiz</a></nav><details class="course-section-disclosure"><summary id="course-sections">Sections du cours</summary><nav aria-label="Sections du cours"><ul><li><a href="#s-objectif">Objectif</a></li><li><a href="#s-l-essentiel">L&#x27;essentiel</a></li><li><a href="#s-le-schema">Le schéma</a></li><li><a href="#s-l-exemple">L&#x27;exemple</a></li><li><a href="#s-le-defaut-la-strategy-depend-du-nom-du-template">Le défaut : la strategy dépend du nom du template</a></li><li><a href="#s-les-cinq-strategies">Les cinq strategies</a></li><li><a href="#s-desactiver-avec-parcimonie">Désactiver, avec parcimonie</a></li><li><a href="#s-pieges-d-examen">Pièges d&#x27;examen</a></li><li><a href="#s-application">Application</a></li><li><a href="#s-fiche-express">Fiche express</a></li><li><a href="#s-sources-officielles">Sources officielles</a></li><li><a href="#reader-objectives">Objectifs d’apprentissage</a></li><li><a href="#course-recalls">Rappels et liens avec les autres cours</a></li></ul></nav><nav aria-label="Flashcards par section"><a href="#view-flashcards">Flashcards par section</a><ul><li><a href="#cards-s-l-essentiel-1">L&#x27;essentiel</a></li><li><a href="#cards-s-le-schema-2">Le schéma</a></li><li><a href="#cards-s-l-exemple-3">L&#x27;exemple</a></li><li><a href="#cards-s-le-defaut-la-strategy-depend-du-nom-du-template-4">Le défaut : la strategy dépend du nom du template</a></li><li><a href="#cards-s-les-cinq-strategies-5">Les cinq strategies</a></li><li><a href="#cards-s-desactiver-avec-parcimonie-6">Désactiver, avec parcimonie</a></li><li><a href="#cards-s-pieges-d-examen-7">Pièges d&#x27;examen</a></li><li><a href="#cards-s-application-8">Application</a></li><li><a href="#cards-s-fiche-express-9">Fiche express</a></li><li><a href="#cards-previous">Module 06 — Templates avec Twig · Cours « TwigBundle » · Rappel : <span lang="en">Which package configures Twig services in Symfony?</span></a></li></ul></nav><nav aria-label="Retour au module"><a href="lot-06.html">Tous les cours du module</a></nav></details><p class="local-quiz-count">5 questions disponibles · 5 par session Quiz</p></aside><div class="course-content"><div id="view-course" data-course-panel role="region" aria-labelledby="view-course-title"><h2 id="view-course-title">Cours</h2><p class="course-introduction"><a href="#s-objectif">Introduction</a> · <a href="#course-sections">Sections du cours</a></p><h2 id="reader-objectives" tabindex="-1">Objectifs d’apprentissage</h2><ul><li><a href="course-CRS-w82wtddwhexg.html#out-OUT-43tnheqyaw2v">Énoncer la strategy active par défaut et le moment de son application</a></li><li><a href="course-CRS-w82wtddwhexg.html#out-OUT-mhbzxr5470xc">Associer chaque strategy au contexte qu&#x27;elle protège</a></li><li><a href="course-CRS-w82wtddwhexg.html#out-OUT-ss6r3pwx0fjy">Distinguer html de html_attr sur un attribute sans guillemets</a></li><li><a href="course-CRS-w82wtddwhexg.html#out-OUT-947gftrjzm6w">Employer raw et le tag autoescape à bon escient</a></li></ul><aside class="pedagogy-legend" aria-label="Repères pédagogiques"><p><strong>Repères pédagogiques</strong></p><p>Ces repères décrivent le rôle du bloc, pas une fréquence officielle à l’examen.</p><p class="teaching-label essential"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="brain" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5C12 1 6 1 6 5C2 5 1 10 4 12C1 15 3 19 6 19C6 23 12 23 12 19V5M12 5C12 1 18 1 18 5C22 5 23 10 20 12C23 15 21 19 18 19C18 23 12 23 12 19M6 5C6 8 8 9 9 9M4 12H7L9 14M6 19V16M18 5C18 8 16 9 15 9M20 12H17L15 14M18 19V16"></path></svg> <strong>À comprendre</strong></p><p class="teaching-label essential"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="book" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5C9 3 5 3 2 4V20C5 19 9 19 12 21C15 19 19 19 22 20V4C19 3 15 3 12 5V21M5 8H8M5 12H8M16 8H19M16 12H19"></path></svg> <strong>À mémoriser</strong></p><p class="teaching-label example"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="code" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6L2 12L8 18M16 6L22 12L16 18M14 3L10 21"></path></svg> <strong>Exemple concret</strong></p><p class="teaching-label pitfall"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="warning" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3L23 21H1L12 3ZM12 9V14M12 17V18"></path></svg> <strong>Piège à éviter</strong></p><p class="teaching-label nuance"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="balance" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3V21M7 21H17M3 7L21 5M5 7L1 15H9L5 7M19 6L15 14H23L19 6M1 15Q5 20 9 15M15 14Q19 19 23 14"></path></svg> <strong>Nuance à connaître</strong></p><p>Précision, exception ou condition d’application d’une règle.</p></aside><section class="teaching-section" data-section="s-objectif"><h2 id="s-objectif" tabindex="-1">Objectif</h2><p>Un visiteur crée un article dont le titre est <code>&lt;script&gt;vol()&lt;/script&gt;</code>. Si
+Twig écrit ce titre tel quel dans la page, le navigateur <strong>exécute</strong> le script.
+L'auto escaping existe pour que la donnée reste de la donnée. Ce cours explique
+ce que Twig fait par défaut, comment il choisit son mode, et ce que le
+développeur doit encore décider lui-même.</p>
+<p>Le contrôleur de <code>/blog/42</code> a transmis un <code>ArticleView</code> à
+<code>blog/show.html.twig</code>. Son titre est une donnée : même s'il contient des
+caractères de balisage, nous voulons l'afficher comme texte dans <code>&lt;h1&gt;</code>.
+L'échappement intervient au rendu, avant que ce contenu entre dans la Response ;
+ce n'est ni une validation de l'article ni un contrôle d'accès.</p>
+<p>Savoir ce que Twig échappe par défaut, avec quelle strategy, et comment
+choisir la bonne selon l'endroit du document.</p></section><section class="teaching-section" data-section="s-l-essentiel"><h2 id="s-l-essentiel" tabindex="-1">L&#x27;essentiel</h2><p class="teaching-label essential"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="brain" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5C12 1 6 1 6 5C2 5 1 10 4 12C1 15 3 19 6 19C6 23 12 23 12 19V5M12 5C12 1 18 1 18 5C22 5 23 10 20 12C23 15 21 19 18 19C18 23 12 23 12 19M6 5C6 8 8 9 9 9M4 12H7L9 14M6 19V16M18 5C18 8 16 9 15 9M20 12H17L15 14M18 19V16"></path></svg> <strong>À comprendre</strong></p><aside class="section-digest" id="s-l-essentiel-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>L&#x27;affectation conserve la valeur.</li><li>La strategy par nom dépend de l&#x27;extension du template.</li></ol></aside><p><strong>Ce que cette partie veut réellement vous apprendre.</strong></p>
+<ul>
+<li><em>Pourquoi ce sujet existe.</em> Empêcher qu'une donnée devienne du code (XSS).</li>
+<li><em>Le piège de fond.</em> L'échappement automatique choisit <strong>un seul</strong> mode
+  d'après le <strong>nom du fichier</strong> ; il ne regarde pas l'endroit où la variable
+  est insérée (script, CSS, URL…).</li>
+<li><em>Ce que l'auteur veut que vous compreniez.</em> <code>raw</code> n'est pas un nettoyage :
+  c'est le retrait d'une protection.</li>
+<li><em>Pourquoi c'est à l'examen.</em> Les QCM testent l'extension <code>.xml</code>, la
+  concaténation statique/variable, <code>json_encode</code>, et <code>autoescape</code> sans argument.</li>
+</ul>
+<p>Une variable affichée sans escaping peut injecter du script : c'est une faille
+XSS (<em>cross-site scripting</em>). L'échappement représente les caractères de la
+donnée sans les laisser devenir la syntaxe du document. TwigBundle choisit
+une stratégie par défaut d'après <strong>le nom du template</strong> : il ne détecte pas
+automatiquement qu'une expression se trouve dans du JavaScript, du CSS ou
+une URL à l'intérieur d'une page HTML. Le développeur choisit donc le bon
+échappement pour cet emplacement. <code>raw</code> ne nettoie rien : il retire une protection.</p>
+<pre class="highlight" tabindex="0"><code class="language-text">donnée :  &lt;b&gt;Ada&lt;/b&gt;
+sans échappement →  le navigateur lit une balise → texte en gras (ou script !)
+html échappé     →  &amp;lt;b&amp;gt;Ada&amp;lt;/b&amp;gt;  → le navigateur AFFICHE &lt;b&gt;Ada&lt;/b&gt;</code></pre></section><section class="teaching-section" data-section="s-le-schema"><h2 id="s-le-schema" tabindex="-1">Le schéma</h2><p><strong>Où en est-on ?</strong> Vue d'ensemble en deux décisions : (1) le nom du template
+fixe la stratégie par défaut ; (2) à l'affichage, Twig décide d'échapper ou
+non selon que l'échappement est actif et que l'expression est sûre.</p>
+<pre class="highlight" tabindex="0"><code class="language-text">Décision 1 (compilation) : nom du template, sans « .twig »
+   js | json → js     css → css     txt → AUCUN     autre → html
+
+Décision 2 (chaque {{ expr }}) :
+   échappement actif ?  ── non ─▶ affichage brut
+        │ oui
+        ▼
+   expression sûre pour cette stratégie ?  ── oui ─▶ affichage brut
+        │ non
+        ▼
+   échapper, puis afficher</code></pre>
+<figure class="diagram" aria-labelledby="CRS-w82wtddwhexg-3-diagram-0-title CRS-w82wtddwhexg-3-diagram-0-description"><figcaption id="CRS-w82wtddwhexg-3-diagram-0-title">Le nom du template détermine la stratégie par défaut</figcaption><p id="CRS-w82wtddwhexg-3-diagram-0-description">Avec autoescape name, Twig retire le suffixe twig puis examine l&#x27;extension. js et json donnent js, css donne css, txt désactive l&#x27;échappement et les autres extensions donnent html. Cette décision ne détecte pas les sous-contextes du document.</p><div class="mermaid" hidden>---
+title: Une expression affichée est-elle échappée, et comment
+---
+flowchart TD
+  accTitle: Le nom du template détermine la stratégie par défaut
+  accDescr: Avec autoescape name, Twig retire le suffixe twig puis examine l&#x27;extension. js et json donnent js, css donne css, txt désactive l&#x27;échappement et les autres extensions donnent html. Cette décision ne détecte pas les sous-contextes du document.
+  N{&quot;Extension sans .twig ?&quot;} --&gt;|&quot;js ou json&quot;| J([&quot;js&quot;])
+  N --&gt;|&quot;css&quot;| C([&quot;css&quot;])
+  N --&gt;|&quot;txt&quot;| T([&quot;Pas d&#x27;échappement&quot;])
+  N --&gt;|&quot;autre&quot;| H([&quot;html&quot;])
+  classDef decision fill:#fef3c7,stroke:#b45309,color:#78350f
+  classDef strategy fill:#e0f2fe,stroke:#0369a1,color:#0c4a6e
+  classDef disabled fill:#fee2e2,stroke:#b91c1c,color:#7f1d1d
+  class N decision
+  class J,C,H strategy
+  class T disabled</div></figure>
+<figure class="diagram" aria-labelledby="CRS-w82wtddwhexg-3-diagram-1-title CRS-w82wtddwhexg-3-diagram-1-description"><figcaption id="CRS-w82wtddwhexg-3-diagram-1-title">La stratégie active et la sûreté de l&#x27;expression décident du traitement</figcaption><p id="CRS-w82wtddwhexg-3-diagram-1-description">Le bloc autoescape peut remplacer la stratégie par défaut. Si l&#x27;échappement est désactivé, aucune conversion n&#x27;est ajoutée. Sinon, une expression reconnue sûre pour la stratégie active n&#x27;est pas rééchappée ; les autres sont échappées à l&#x27;affichage.</p><div class="mermaid" hidden>---
+title: Appliquer l&#x27;échappement à l&#x27;affichage
+---
+flowchart TD
+  accTitle: La stratégie active et la sûreté de l&#x27;expression décident du traitement
+  accDescr: Le bloc autoescape peut remplacer la stratégie par défaut. Si l&#x27;échappement est désactivé, aucune conversion n&#x27;est ajoutée. Sinon, une expression reconnue sûre pour la stratégie active n&#x27;est pas rééchappée ; les autres sont échappées à l&#x27;affichage.
+  S{&quot;Échappement actif ?&quot;} --&gt;|&quot;non&quot;| O([&quot;Affichage sans conversion&quot;])
+  S --&gt;|&quot;oui&quot;| Q{&quot;Expression sûre&lt;br/&gt;pour cette stratégie ?&quot;}
+  Q --&gt;|&quot;oui&quot;| O
+  Q --&gt;|&quot;non&quot;| E([&quot;Échapper puis afficher&quot;])
+  classDef decision fill:#fef3c7,stroke:#b45309,color:#78350f
+  classDef operation fill:#e0f2fe,stroke:#0369a1,color:#0c4a6e
+  class S,Q decision
+  class O,E operation</div></figure>
+<p>Losange ambre = décision ; sortie bleue = stratégie ou opération ; rouge =
+échappement désactivé. Les flèches représentent des décisions de compilation
+et leurs effets au rendu, pas des appels entre services.</p></section><section class="teaching-section" data-section="s-l-exemple"><h2 id="s-l-exemple" tabindex="-1">L&#x27;exemple</h2><p class="teaching-label example"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="code" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6L2 12L8 18M16 6L22 12L16 18M14 3L10 21"></path></svg> <strong>Exemple concret</strong></p><aside class="section-digest" id="s-l-exemple-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Choisir la strategy selon le contexte de sortie.</li><li>html, js, css, url et html_attr ne sont pas interchangeables.</li></ol></aside><p><strong>Où en est-on ?</strong> Avant la théorie des stratégies : un template réel avec
+<strong>quatre emplacements</strong> différents pour la même donnée. C'est le point de
+départ des sections suivantes.</p>
+<p>Le profil ci-dessous illustre plusieurs emplacements que l'on retrouve dans
+la page du blog : texte visible, attribut cité, paramètre de recherche et
+chaîne JavaScript. Le résultat attendu dépend de l'emplacement, pas de
+l'origine commune de la donnée. Pour un titre d'article, commence par
+<code>&lt;h1&gt;{{ article.title }}&lt;/h1&gt;</code> plutôt que par une désactivation globale.</p>
+<pre class="highlight" tabindex="0"><code class="language-twig">{# templates/user/profile.html.twig #}
+&lt;h1&gt;{{ user.name }}&lt;/h1&gt;
+&lt;div data-role="{{ user.role }}"&gt;&lt;/div&gt;
+&lt;a href="/search?q={{ user.city|e('url') }}"&gt;Voisins&lt;/a&gt;
+&lt;script&gt;const name = "{{ user.name|e('js') }}";&lt;/script&gt;</code></pre>
+<p>Le nom et l'attribut <strong>entre guillemets</strong> utilisent l'échappement HTML.
+Préférer cette forme à un attribut non cité, qui exigerait <code>html_attr</code>.
+Le paramètre d'URL et la chaîne JavaScript demandent leur stratégie propre.
+Avec <code>user.name = '&lt;b&gt;Ada&lt;/b&gt;'</code>, le titre affiche ces caractères comme texte,
+pas comme une balise en gras. L'échappement ne remplace pas la validation
+d'une URL complète ou d'un nom d'attribut fourni par l'utilisateur.</p>
+<pre class="highlight" tabindex="0"><code class="language-text">ligne 1 : corps HTML              → défaut html (automatique)
+ligne 2 : attribut ENTRE guillemets → html (automatique)
+ligne 3 : sous-composant d'URL    → |e('url') à écrire soi-même
+ligne 4 : chaîne JavaScript       → |e('js') à écrire soi-même</code></pre>
+<div class="admonition info">
+<p class="admonition-title">🌍 In Real Life</p>
+<p><strong>La situation</strong> : sur la carte du restaurant, un client propose un nom de plat contenant des signes de mise en page. L'imprimeur doit reproduire ce nom, pas lui laisser commander la composition de la carte.</p>
+<p><strong>L’équivalent dans Symfony</strong> : le nom proposé correspond au titre de l'article 42 ; le cadre imprimé correspond au HTML du template. L'échappement de <code>{{ article.title }}</code> permet au navigateur d'afficher les caractères comme du texte plutôt que de les interpréter comme des balises.</p>
+<p><strong>Retour à la réalité technique</strong> : Twig transforme la représentation de sortie selon une stratégie. Il ne modifie pas le titre stocké et ne vérifie ni sa pertinence métier ni le droit de consulter l'article.</p>
+<p><strong>🧠 Comment le mémoriser</strong> : « Le titre remplit la carte, il ne la compose pas. » Image mentale : un nom entre deux bordures fixes. Question-réflexe : cette donnée doit-elle être lue comme texte ou interprétée comme syntaxe ?</p>
+<p><strong>⚠️ À ne pas confondre</strong> : échapper au rendu n'est pas valider à l'entrée.</p>
+</div></section><section class="teaching-section" data-section="s-le-defaut-la-strategy-depend-du-nom-du-template"><span class="outcome-anchor" id="out-OUT-43tnheqyaw2v" tabindex="-1"></span><span class="outcome-anchor" id="out-OUT-mhbzxr5470xc" tabindex="-1"></span><h2 id="s-le-defaut-la-strategy-depend-du-nom-du-template" tabindex="-1">Le défaut : la strategy dépend du nom du template</h2><p><strong>Où en est-on ?</strong> Étape 1 sur 4 : qui choisit la stratégie par défaut, et
+sur quelle information ? Réponse : le <strong>nom du fichier</strong>, rien d'autre.</p>
+<p>Avec <code>blog/show.html.twig</code>, le choix par défaut est HTML. Déplacer la même
+donnée dans un script de cette page ne change pas le nom du template :
+Twig ne bascule donc pas automatiquement vers JavaScript. Avant de suivre
+le tableau, repère à la fois le fichier rendu et le sous-contexte réel
+où l'expression sera insérée.</p>
+<p>TwigBundle règle l'option <code>autoescape</code> sur <code>'name'</code> : la strategy dépend de
+l'<strong>extension</strong> du template, <code>.twig</code> retiré.</p>
+<table>
+<thead>
+<tr>
+<th>Template</th>
+<th>Strategy</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>page.html.twig</code>, et toute extension non listée (<code>.xml</code>, <code>.md</code>…)</td>
+<td><code>html</code></td>
+</tr>
+<tr>
+<td><code>data.js.twig</code>, <code>data.json.twig</code></td>
+<td><code>js</code></td>
+</tr>
+<tr>
+<td><code>style.css.twig</code></td>
+<td><code>css</code></td>
+</tr>
+<tr>
+<td><code>email.txt.twig</code></td>
+<td><strong>aucun escaping</strong></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>L'escaping a lieu <strong>à l'affichage</strong>, pas à l'affectation : <code>{% set x = y %}</code>
+  ne transforme rien.</li>
+<li>Les <strong>expressions statiques</strong> ne sont pas échappées : <code>{{ "&lt;strong&gt;x&lt;/strong&gt;" }}</code>
+  s'affiche en gras. Dès qu'une variable s'y mêle, <strong>tout</strong> est échappé :
+  <code>{{ "&lt;b&gt;" ~ v }}</code> échappe aussi le <code>&lt;b&gt;</code>.</li>
+<li>Les macros et <code>parent()</code> retournent un contenu considéré comme sûr.</li>
+</ul>
+<p>Mécanisme de choix, tel que le code le fait : on retire <code>.twig</code>, on lit
+l'extension restante, et on tranche.</p>
+<pre class="highlight" tabindex="0"><code class="language-text">blog/show.html.twig  → retire .twig → blog/show.html → extension « html » → html
+feed.xml.twig        → feed.xml     → extension « xml » (non listée)      → html
+data.json.twig       → data.json    → extension « json »                  → js
+email.txt.twig       → email.txt    → extension « txt »                   → aucune</code></pre>
+<p>Pourquoi <code>.xml</code> donne-t-il <code>html</code> ? Le choix par défaut est le plus sûr : tout
+ce qui n'est pas explicitement <code>js</code>, <code>css</code> ou <code>txt</code> est échappé en HTML. Pourquoi
+<code>.txt</code> ne donne-t-il rien ? Un e-mail texte n'est pas un document HTML : y
+écrire <code>&amp;lt;</code> serait faux.</p>
+<p>Pourquoi « statique » n'est pas échappé : un texte littéral écrit <strong>par le
+développeur</strong> est supposé sûr. Dès qu'une variable (donnée extérieure) entre
+dans l'expression, le résultat <strong>entier</strong> devient suspect.</p>
+<div class="admonition info">
+<p class="admonition-title">🌍 In Real Life</p>
+<p><strong>La situation</strong> : l'imprimeur choisit son réglage d'après l'étiquette « carte » ou « lettre » du dossier. Une note technique glissée dans la carte ne change pas cette étiquette.</p>
+<p><strong>L’équivalent dans Symfony</strong> : avec <code>autoescape: name</code>, l'extension du template choisit la stratégie par défaut. <code>blog/show.html.twig</code> sélectionne HTML ; une expression placée dans son script ne déclenche pas une reconnaissance automatique du contexte JavaScript.</p>
+<p><strong>Retour à la réalité technique</strong> : le nom fournit un défaut, que le développeur doit adapter au contexte d'insertion. L'échappement intervient à l'affichage, pas lors d'un <code>set</code>. La sûreté reconnue de certaines expressions influe aussi sur le traitement.</p>
+<p><strong>🧠 Comment le mémoriser</strong> : « L'étiquette règle la machine, pas chaque phrase. » Image mentale : un dossier HTML contenant une feuille JavaScript. Question-réflexe : le défaut du fichier convient-il à cet emplacement précis ?</p>
+<p><strong>⚠️ À ne pas confondre</strong> : stratégie par nom et analyse automatique du document.</p>
+</div></section><section class="teaching-section" data-section="s-les-cinq-strategies"><span class="outcome-anchor" id="out-OUT-ss6r3pwx0fjy" tabindex="-1"></span><h2 id="s-les-cinq-strategies" tabindex="-1">Les cinq strategies</h2><p><strong>Où en est-on ?</strong> Étape 2 sur 4 : le défaut ne suffit pas toujours. Quand la
+donnée entre dans un autre langage que HTML (JavaScript, CSS, URL), il faut la
+stratégie de <strong>ce</strong> langage. En voici cinq.</p>
+<p>Pour un lien de recherche sur le titre, encode le <strong>paramètre</strong> d'URL,
+pas l'URL entière ; pour afficher ce lien dans HTML, conserve aussi un
+attribut <code>href</code> cité et une destination autorisée. Ces protections répondent
+à des problèmes différents : préserver la syntaxe du document ne rend pas
+un protocole d'URL arbitraire acceptable.</p>
+<table>
+<thead>
+<tr>
+<th>Strategy</th>
+<th>Contexte visé</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>html</code></td>
+<td>corps HTML, ou valeur d'attribute <strong>entre guillemets</strong></td>
+</tr>
+<tr>
+<td><code>js</code></td>
+<td>contenu d'une chaîne JavaScript entre guillemets, pas sérialisation JSON</td>
+</tr>
+<tr>
+<td><code>css</code></td>
+<td>tout ce qui est inséré dans du CSS</td>
+</tr>
+<tr>
+<td><code>url</code></td>
+<td>un <strong>sous-composant</strong> d'URI ou un parameter, jamais une URI entière</td>
+</tr>
+<tr>
+<td><code>html_attr</code></td>
+<td>nom d'attribute, ou valeur d'attribute <strong>sans guillemets</strong></td>
+</tr>
+</tbody>
+</table>
+<p><code>html</code> utilise <code>htmlspecialchars</code>. On enregistre une strategy de plus avec
+<code>EscaperRuntime::setEscaper()</code> (Twig 3.10).</p>
+<pre class="highlight" tabindex="0"><code class="language-twig">{{ user.name|e }}          {# équivaut à |e('html') #}
+{{ user.name|escape('url') }}</code></pre>
+<p><code>e</code> est l'alias de <code>escape</code>. Twig évite le <strong>double escaping</strong> quand la strategy
+du filter, écrite en dur, est celle de l'auto-escaping ; <code>|escape(strategy)</code>
+avec une <strong>variable</strong> empêche cette détection statique : sous auto-escaping
+HTML, un échappement HTML choisi ainsi peut donc être appliqué deux fois.</p>
+<p><code>json_encode</code> <strong>sérialise</strong> une valeur en JSON ; <code>escape('js')</code> échappe le
+contenu d'une chaîne JavaScript, sans construire un document JSON.
+Le défaut <code>js</code> d'un fichier <code>.json.twig</code> ne garantit donc pas un JSON valide.
+Pour transmettre des données dans un attribut HTML <code>data-…</code> <strong>entre
+guillemets</strong>, conserve l'échappement HTML après <code>json_encode</code> : le navigateur
+décode les entités lors de la lecture de l'attribut, puis le JavaScript peut
+analyser la valeur avec <code>JSON.parse</code>. Ce choix vise un attribut, pas un bloc
+<code>&lt;script&gt;</code> : dans ce dernier, les entités HTML ne remplacent pas une
+sérialisation adaptée et il faut empêcher qu'une donnée ferme le bloc
+avec <code>&lt;/script&gt;</code>. Ajouter <code>raw</code> à une donnée arbitraire ne suffit pas.</p>
+<p>Deux filters à connaître : <code>json_encode</code> n'est pas déclaré sûr, donc échappé en
+HTML (<code>&amp;quot;</code>) ; <code>nl2br</code> demande le pré-échappement HTML d'une entrée qui
+n'est pas déjà déclarée sûre, puis ajoute des <code>&lt;br /&gt;</code> intacts. Un <code>raw</code>
+précédent peut éviter ce pré-échappement.</p>
+<p>Pourquoi une stratégie par langage ? Chaque langage a <strong>ses propres caractères
+dangereux</strong> : <code>&lt;</code> en HTML, <code>"</code> dans une chaîne JavaScript, <code>&amp;</code> et <code>#</code> dans une
+URL. Échapper pour le mauvais langage laisse passer les caractères dangereux
+du bon.</p>
+<table>
+<thead>
+<tr>
+<th>Langage cible</th>
+<th>Caractère qui « casse »</th>
+<th>Stratégie</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Corps HTML</td>
+<td><code>&lt;</code>, <code>&amp;</code></td>
+<td><code>html</code></td>
+</tr>
+<tr>
+<td>Chaîne JavaScript</td>
+<td><code>"</code>, <code>\</code>, <code>&lt;/script&gt;</code></td>
+<td><code>js</code></td>
+</tr>
+<tr>
+<td>Valeur d'URL</td>
+<td><code>&amp;</code>, <code>#</code>, <code>=</code></td>
+<td><code>url</code></td>
+</tr>
+<tr>
+<td>Attribut sans guillemets</td>
+<td>l'espace</td>
+<td><code>html_attr</code></td>
+</tr>
+</tbody>
+</table>
+<p>Pourquoi la variable dans <code>|escape(strategy)</code> pose-t-elle problème ? À la
+compilation, Twig compare la stratégie écrite avec celle de l'auto-escaping :
+si elles sont identiques, il n'ajoute pas un second échappement. Avec une
+variable, la valeur n'est connue qu'au rendu : la comparaison est impossible, et
+le double échappement peut survenir.</p>
+<div class="admonition info">
+<p class="admonition-title">🌍 In Real Life</p>
+<p><strong>La situation</strong> : une même adresse doit tenir sur une enveloppe, dans une case de formulaire ou dans un catalogue. Chaque support impose ses séparateurs ; recopier leur notation sans adaptation peut changer le sens.</p>
+<p><strong>L’équivalent dans Symfony</strong> : le support correspond au contexte de sortie. <code>html</code> protège le texte HTML et les valeurs d'attribut citées ; <code>js</code> vise une chaîne JavaScript ; <code>css</code> une insertion CSS ; <code>url</code> un composant d'URL ; <code>html_attr</code> les contextes d'attribut prévus par cette stratégie.</p>
+<p><strong>Retour à la réalité technique</strong> : aucun encodage ne choisit une destination autorisée ni une propriété CSS acceptable. Une stratégie explicite constante permet certaines analyses de sûreté ; une stratégie variable peut empêcher la détection du double échappement.</p>
+<p><strong>🧠 Comment le mémoriser</strong> : « Même donnée, autre support, autre écriture. » Image mentale : cinq cases aux séparateurs différents. Question-réflexe : dans quelle grammaire cette valeur va-t-elle entrer ?</p>
+<p><strong>⚠️ À ne pas confondre</strong> : encoder un paramètre d'URL et approuver une URL complète ; échapper une chaîne et sérialiser un document JSON.</p>
+</div><aside class="enrichment" aria-label="Autre explication"><p>Un filet n'est utile que sous le bon point de chute. L'auto-escaping HTML ne remplace pas une strategy JS dans une string JavaScript : choisir le contexte avant de se demander si raw serait nécessaire.</p></aside></section><section class="teaching-section" data-section="s-desactiver-avec-parcimonie"><span class="outcome-anchor" id="out-OUT-947gftrjzm6w" tabindex="-1"></span><h2 id="s-desactiver-avec-parcimonie" tabindex="-1">Désactiver, avec parcimonie</h2><aside class="section-digest" id="s-desactiver-avec-parcimonie-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>raw doit rester réservé à un contenu maîtrisé.</li><li>Un filter suivant peut retirer ce caractère sûr.</li></ol></aside><p><strong>Où en est-on ?</strong> Étape 3 sur 4 : et si on <strong>veut</strong> afficher du HTML ? <code>raw</code>
+et <code>autoescape</code> existent, mais leur nom est trompeur : ils ne rendent rien sûr.</p>
+<p>Supposons que le corps de l'article contienne du HTML éditorial. <code>raw</code>
+ne le rend pas fiable : il annonce à Twig que l'application assume déjà
+sa sûreté. Tant que cette garantie n'existe pas, affiche le corps comme
+texte échappé. Si du HTML est autorisé, son assainissement selon une politique
+explicite doit précéder le rendu ; le filtre ne le réalise pas.</p>
+<ul>
+<li><code>{{ trusted|raw }}</code> affiche sans échapper — <strong>si <code>raw</code> est le dernier
+  filter</strong> : <code>v|raw|upper</code> est de nouveau échappé.</li>
+<li><code>{% autoescape 'js' %}…{% endautoescape %}</code> change la strategy d'un block ;
+  sans argument, c'est <code>html</code> ; <code>{% autoescape false %}</code> la coupe.</li>
+</ul>
+<p>Pourquoi <code>v|raw|upper</code> est-il rééchappé ? <code>raw</code> marque la valeur « sûre », mais
+<code>upper</code> produit une <strong>nouvelle</strong> chaîne, non marquée : Twig l'échappe. Seul
+<code>raw</code> placé <strong>en dernier</strong> marque le résultat final.</p>
+<pre class="highlight" tabindex="0"><code class="language-text">{{ v|raw }}          → v marqué sûr           → affiché brut
+{{ v|raw|upper }}    → upper produit un nouveau texte non marqué → ÉCHAPPÉ
+{{ v|upper|raw }}    → raw en dernier         → affiché brut</code></pre>
+<div class="admonition info">
+<p class="admonition-title">🌍 In Real Life</p>
+<p><strong>La situation</strong> : l'imprimeur reçoit une composition éditoriale avec la mention « prête à imprimer ». Cette mention dispense de certaines opérations ; elle ne corrige aucune faute du document.</p>
+<p><strong>L’équivalent dans Symfony</strong> : <code>raw</code> joue le rôle de cette déclaration de confiance pour l'expression. Un assainissement HTML préalable, selon une politique choisie par l'application, serait le véritable contrôle du contenu autorisé.</p>
+<p><strong>Retour à la réalité technique</strong> : <code>raw</code> marque une expression sûre, sans retirer les éléments dangereux. <code>autoescape false</code> désactive l'échappement d'un bloc. Les filtres suivants peuvent modifier la sûreté reconnue : il faut examiner la chaîne entière, pas chercher simplement la présence de <code>raw</code>.</p>
+<p><strong>🧠 Comment le mémoriser</strong> : « Un tampon n'est pas une inspection. » Image mentale : le tampon « prêt » sur une page non relue. Question-réflexe : quelle opération a réellement rendu ce HTML acceptable avant le rendu ?</p>
+<p><strong>⚠️ À ne pas confondre</strong> : déclarer sûr et assainir ; confiance de rendu et autorisation d'accès.</p>
+</div></section><section class="teaching-section" data-section="s-pieges-d-examen"><h2 id="s-pieges-d-examen" tabindex="-1">Pièges d&#x27;examen</h2><p class="teaching-label pitfall"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="warning" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3L23 21H1L12 3ZM12 9V14M12 17V18"></path></svg> <strong>Piège à éviter</strong></p><ul class="pitfall-list"><li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : Où en est-on ?</summary><p><strong>Où en est-on ?</strong> Étape 4 sur 4 : les erreurs que les QCM exploitent.
+Pour expliquer une sortie inattendue du titre, suis toute l'expression :
+affectation, concaténation, filtres, puis affichage. Un filtre qui marque
+un résultat sûr peut changer ce que fera le suivant ; mémoriser uniquement
+le dernier nom ne suffit pas pour toutes les chaînes.</p></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : La strategy par défaut dépend de l&#x27;extension du template.</summary><p><strong>La strategy par défaut dépend de l'extension du template.</strong> <code>.html.twig</code>
+échappe en HTML, <code>.js.twig</code> en JavaScript, <code>.txt.twig</code> n'échappe pas.
+<em>Pourquoi on se trompe : on croit que Twig regarde où la variable est insérée.</em></p></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : L&#x27;escaping a lieu à l&#x27;affichage, pas à l&#x27;affectation.</summary><p><strong>L'escaping a lieu à l'affichage, pas à l'affectation.</strong> Ranger une valeur
+dans une variable ne la transforme pas. <em>Pourquoi on se trompe : on imagine
+qu'un <code>set</code> « nettoie » la donnée.</em></p></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : La strategy HTML ne suffit pas dans un attribute sans guillemets.</summary><p><strong>La strategy HTML ne suffit pas dans un attribute sans guillemets.</strong> C'est la
+strategy dédiée aux attributes qu'il faut ; le mauvais choix laisse une faille
+ouverte sans rien signaler. <em>Pourquoi on se trompe : « HTML » semble couvrir
+tous les attributs.</em></p></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : L&#x27;effet de raw dépend aussi du filter suivant.</summary><p><strong>L'effet de <code>raw</code> dépend aussi du filter suivant.</strong> En dernier, il marque le
+résultat final comme sûr. Mais <code>v|raw|nl2br</code> peut conserver les balises de <code>v</code>
+alors que <code>raw</code> n'est pas dernier ; <code>v|raw|upper</code> est au contraire rééchappé
+sous auto-escaping HTML. <code>raw</code> ne nettoie jamais une donnée non fiable.
+<em>Pourquoi on se trompe : on retient « raw = pas d'échappement » sans regarder
+la chaîne.</em></p></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : La strategy d&#x27;URL vise un sous-composant, pas une URI entière.</summary><p><strong>La strategy d'URL vise un sous-composant, pas une URI entière.</strong> L'appliquer
+à une adresse complète la détruit. <em>Pourquoi on se trompe : « url » évoque
+« une adresse complète ».</em></p></details></li></ul></section><section class="teaching-section" data-section="s-application"><h2 id="s-application" tabindex="-1">Application</h2><aside class="section-digest" id="s-application-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>L&#x27;affectation conserve la valeur.</li><li>La strategy par nom dépend de l&#x27;extension du template.</li><li>Choisir la strategy selon le contexte de sortie.</li><li>html, js, css, url et html_attr ne sont pas interchangeables.</li></ol></aside>
+
+
+
+</section><section class="teaching-section" data-section="s-fiche-express"><h2 id="s-fiche-express" tabindex="-1">Fiche express</h2><p class="teaching-label essential"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="book" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5C9 3 5 3 2 4V20C5 19 9 19 12 21C15 19 19 19 22 20V4C19 3 15 3 12 5V21M5 8H8M5 12H8M16 8H19M16 12H19"></path></svg> <strong>À mémoriser</strong></p><p><strong>🧠 À retenir pour la certification :</strong></p>
+<ul>
+<li>Escaping <strong>actif</strong> ; strategy choisie par l'<strong>extension</strong> du template.</li>
+<li><code>.html</code> et inconnu → <strong>html</strong> ; <code>.js</code>, <code>.json</code> → <strong>js</strong> ; <code>.css</code> → <strong>css</strong> ;
+  <code>.txt</code> → <strong>aucune</strong>.</li>
+<li>À l'<strong>affichage</strong> ; les <strong>statiques</strong> ne sont pas échappées, une
+  concaténation avec une variable l'est en entier.</li>
+<li>Cinq strategies : <strong><code>html</code></strong>, <strong><code>js</code></strong>, <strong><code>css</code></strong>, <strong><code>url</code></strong>, <strong><code>html_attr</code></strong>.</li>
+<li><strong><code>raw</code> en dernier</strong> marque le résultat final ; suivi d'un filter, son effet
+  dépend de la propagation de sûreté de ce filter (<code>nl2br</code> n'est pas <code>upper</code>).</li>
+<li>Sous auto-escaping HTML, <code>escape(variable)</code> avec la stratégie HTML ne
+  bénéficie pas de la détection statique du double échappement.</li>
+</ul>
+<p>Moyen mnémotechnique : <strong>« le nom choisit, l'affichage échappe, les filters
+déterminent la sûreté »</strong>.</p>
+<pre class="highlight" tabindex="0"><code class="language-text">autoescape 'name' : html (défaut), js, css, txt = rien ; à l'affichage ;
+statique non échappée ; html / js / css / url (sous-composant) /
+html_attr (sans guillemets) ; raw ne nettoie pas ; lire toute la chaîne de filters</code></pre></section><section class="teaching-section" data-section="s-sources-officielles"><h2 id="s-sources-officielles" tabindex="-1">Sources officielles</h2><ul>
+<li><a href="https://twig.symfony.com/doc/3.x/">Twig 3 — doc / 3.x</a></li>
+</ul></section><section id="course-recalls" aria-labelledby="course-recalls-title" tabindex="-1"><h2 id="course-recalls-title">Rappels et liens avec les autres cours</h2><div data-recall-group="current"><h3>Rappels du cours actuel</h3><ul><li data-recall-course="CRS-w82wtddwhexg" data-recall-kind="digest_reference"><p class="recall-provenance">Module 06 — Templates avec Twig · Cours « Auto escaping »</p><p class="digest-reference"><a href="#s-l-essentiel-digest">Revoir la règle : L&#x27;affectation conserve la valeur.</a></p></li><li data-recall-course="CRS-w82wtddwhexg" data-recall-kind="digest_reference"><p class="recall-provenance">Module 06 — Templates avec Twig · Cours « Auto escaping »</p><p class="digest-reference"><a href="#s-l-exemple-digest">Revoir la règle : Choisir la strategy selon le contexte de sortie.</a></p></li><li><nav aria-label="Flashcards de l’application"><ul><li data-recall-course="CRS-w82wtddwhexg" data-recall-kind="application"><p class="recall-provenance">Module 06 — Templates avec Twig · Cours « Auto escaping »</p><a href="#A-w82wtddwhexg-65c42c80d9-01">Flashcard : L&#x27;affectation conserve la valeur. La strategy par nom dépend de l&#x27;extension du template.</a></li><li data-recall-course="CRS-w82wtddwhexg" data-recall-kind="application"><p class="recall-provenance">Module 06 — Templates avec Twig · Cours « Auto escaping »</p><a href="#A-w82wtddwhexg-88b6fbd62c-02">Flashcard : Choisir la strategy selon le contexte de sortie. html, js, css, url et html_attr ne sont pas interchangeables.</a></li></ul></nav></li></ul></div><div data-recall-group="other"><h3>Rappels des cours précédents / autres modules</h3><ul><li data-recall-course="CRS-2bj91rj9kvj0" data-recall-kind="previous_course"><p class="recall-provenance">Module 06 — Templates avec Twig · Cours « TwigBundle »</p><p>Distinguer engine et intégration du framework. Le bundle expose paths, options et services.</p><p><a href="#cards-previous">Rappel : <span lang="en">Which package configures Twig services in Symfony?</span></a></p></li></ul></div></section><nav class="course-sequence" aria-label="Ordre de lecture"><a rel="prev" href="course-CRS-x2f8reencvcs.html" aria-label="Précédent : Twig syntax up to 3.22 version — Module 06 — Templates avec Twig">Précédent : Twig syntax up to 3.22 version</a> <a href="lot-06.html">Sommaire : Module 06 — Templates avec Twig</a> <a rel="next" href="course-CRS-sx61as7r7p0d.html" aria-label="Suivant : URLs generation — Module 05 — Routage">Suivant : URLs generation</a></nav><p class="course-practice-entry"><a class="button" href="#view-quiz">Fin du cours — s’entraîner avec le Quiz</a></p></div><div id="view-flashcards" data-course-panel role="region" aria-labelledby="view-flashcards-title"><h2 id="view-flashcards-title">Flashcards</h2><p lang="en">Answer before revealing each card.</p><p>Ces cartes ne mesurent pas une maîtrise notée.</p><div id="cards-s-l-essentiel-1" data-card-section="s-l-essentiel"><h3><a href="#s-l-essentiel">Revoir : L&#x27;essentiel</a></h3><div class="reader-cards"><details class="reader-card" id="A-w82wtddwhexg-65c42c80d9-01"><summary lang="en">Does assigning a Twig variable immediately escape it?</summary><p lang="en">No. Escaping occurs when output is rendered.</p><p lang="fr">L&#x27;affectation conserve la valeur. La strategy par nom dépend de l&#x27;extension du template.</p><a href="course-CRS-w82wtddwhexg.html#out-OUT-43tnheqyaw2v">Revoir le passage précis</a></details></div></div><div id="cards-s-le-schema-2" data-card-section="s-le-schema"><h3><a href="#s-le-schema">Revoir : Le schéma</a></h3><div class="reader-cards"><p class="reader-card-reference" id="A-w82wtddwhexg-6e0103f6cc-01">Rappel déjà proposé : <a lang="en" href="#A-w82wtddwhexg-65c42c80d9-01">Does assigning a Twig variable immediately escape it?</a> · <a href="course-CRS-w82wtddwhexg.html#out-OUT-43tnheqyaw2v">Passage canonique</a></p></div></div><div id="cards-s-l-exemple-3" data-card-section="s-l-exemple"><h3><a href="#s-l-exemple">Revoir : L&#x27;exemple</a></h3><div class="reader-cards"><details class="reader-card" id="A-w82wtddwhexg-88b6fbd62c-02"><summary lang="en">Should URL escaping be applied to a whole URL?</summary><p lang="en">No. It is for a URI component or parameter, not a complete URL.</p><p lang="fr">Choisir la strategy selon le contexte de sortie. html, js, css, url et html_attr ne sont pas interchangeables.</p><a href="course-CRS-w82wtddwhexg.html#out-OUT-ss6r3pwx0fjy">Revoir le passage précis</a></details></div></div><div id="cards-s-le-defaut-la-strategy-depend-du-nom-du-template-4" data-card-section="s-le-defaut-la-strategy-depend-du-nom-du-template"><h3><a href="#s-le-defaut-la-strategy-depend-du-nom-du-template">Revoir : Le défaut : la strategy dépend du nom du template</a></h3><div class="reader-cards"><p class="reader-card-reference" id="A-w82wtddwhexg-9fa7ab5117-01">Rappel déjà proposé : <a lang="en" href="#A-w82wtddwhexg-65c42c80d9-01">Does assigning a Twig variable immediately escape it?</a> · <a href="course-CRS-w82wtddwhexg.html#out-OUT-43tnheqyaw2v">Passage canonique</a></p><details class="reader-card" id="INT-041"><summary lang="en">Under TwigBundle&#x27;s name strategy, how do .html.twig, .js.twig, .css.twig and .txt.twig escape?</summary><p lang="en">They use html, js, css and no escaping respectively; .json.twig also uses js.</p><p lang="fr">La strategy dépend de l’extension après retrait de .twig ; un contexte différent exige une strategy adaptée.</p><a href="course-CRS-w82wtddwhexg.html#out-OUT-mhbzxr5470xc">Revoir le passage précis</a></details></div></div><div id="cards-s-les-cinq-strategies-5" data-card-section="s-les-cinq-strategies"><h3><a href="#s-les-cinq-strategies">Revoir : Les cinq strategies</a></h3><div class="reader-cards"><p class="reader-card-reference" id="A-w82wtddwhexg-bb276671a2-02">Rappel déjà proposé : <a lang="en" href="#A-w82wtddwhexg-88b6fbd62c-02">Should URL escaping be applied to a whole URL?</a> · <a href="course-CRS-w82wtddwhexg.html#out-OUT-ss6r3pwx0fjy">Passage canonique</a></p></div></div><div id="cards-s-desactiver-avec-parcimonie-6" data-card-section="s-desactiver-avec-parcimonie"><h3><a href="#s-desactiver-avec-parcimonie">Revoir : Désactiver, avec parcimonie</a></h3><div class="reader-cards"><details class="reader-card" id="A-w82wtddwhexg-99b1e2b7f1-03"><summary lang="en">When can raw bypass automatic escaping?</summary><p lang="en">When used as the last filter on trusted output.</p><p lang="fr">raw doit rester réservé à un contenu maîtrisé. Un filter suivant peut retirer ce caractère sûr.</p><a href="course-CRS-w82wtddwhexg.html#out-OUT-947gftrjzm6w">Revoir le passage précis</a></details></div></div><div id="cards-s-pieges-d-examen-7" data-card-section="s-pieges-d-examen"><h3><a href="#s-pieges-d-examen">Revoir : Pièges d&#x27;examen</a></h3><div class="reader-cards"><p class="reader-card-reference" id="A-w82wtddwhexg-596d5af532-01">Rappel déjà proposé : <a lang="en" href="#A-w82wtddwhexg-65c42c80d9-01">Does assigning a Twig variable immediately escape it?</a> · <a href="course-CRS-w82wtddwhexg.html#out-OUT-43tnheqyaw2v">Passage canonique</a></p></div></div><div id="cards-s-application-8" data-card-section="s-application"><h3><a href="#s-application">Revoir : Application</a></h3><div class="reader-cards"><p class="reader-card-reference" id="A-w82wtddwhexg-e7ad522ea3-01">Rappel déjà proposé : <a lang="en" href="#A-w82wtddwhexg-65c42c80d9-01">Does assigning a Twig variable immediately escape it?</a> · <a href="course-CRS-w82wtddwhexg.html#out-OUT-43tnheqyaw2v">Passage canonique</a></p><p class="reader-card-reference" id="A-w82wtddwhexg-e7ad522ea3-02">Rappel déjà proposé : <a lang="en" href="#A-w82wtddwhexg-88b6fbd62c-02">Should URL escaping be applied to a whole URL?</a> · <a href="course-CRS-w82wtddwhexg.html#out-OUT-ss6r3pwx0fjy">Passage canonique</a></p></div></div><div id="cards-s-fiche-express-9" data-card-section="s-fiche-express"><h3><a href="#s-fiche-express">Revoir : Fiche express</a></h3><div class="reader-cards"><p class="reader-card-reference" id="A-w82wtddwhexg-b11e58e15e-01">Rappel déjà proposé : <a lang="en" href="#A-w82wtddwhexg-65c42c80d9-01">Does assigning a Twig variable immediately escape it?</a> · <a href="course-CRS-w82wtddwhexg.html#out-OUT-43tnheqyaw2v">Passage canonique</a></p></div></div><div id="cards-previous"><p class="recall-provenance">Module 06 — Templates avec Twig · Cours « TwigBundle »</p><aside class="checkpoint"><h2>Rappel d’un cours antérieur</h2><p>Avant de poursuivre : TwigBundle.</p><details class="corpus-correction"><summary lang="en">Which package configures Twig services in Symfony?</summary><p lang="en">TwigBundle; twig/twig supplies the engine.</p><p>Distinguer engine et intégration du framework. Le bundle expose paths, options et services.</p><a href="course-CRS-2bj91rj9kvj0.html#out-OUT-xw5hbxewf5xf">Relire la correction dans le cours antérieur</a></details></aside></div></div><div id="view-quiz" data-course-panel role="region" aria-labelledby="view-quiz-title"><aside class="revision-context"><p><strong>Avant le quiz :</strong> Un visiteur crée un article dont le titre est &lt;script&gt;vol()&lt;/script&gt;. Si Twig écrit ce titre tel quel dans la page, le navigateur exécute le script. L&#x27;auto escaping existe pour que la donnée reste de la donnée. Ce cours explique ce que Twig fait par défaut, comment il choisit son mode, et ce que le développeur doit encore décider lui-même.</p><p>Quelle donnée entre, quelle responsabilité agit et quelle condition change le résultat ? Pour chaque correction, vérifiez ces conditions dans <a href="course-CRS-w82wtddwhexg.html#s-objectif">le passage enseigné</a>, sans supposer que toutes les branches du blog sont exécutées.</p></aside><h2 id="view-quiz-title">Quiz</h2><p class="quiz-size" lang="en">5 eligible learning questions · 5 per session. Repeating a question does not demonstrate mastery.</p><p id="course-quiz-status" role="status">Quiz interactif non chargé. Démarrez après chargement de la banque locale.</p><div id="course-quiz-controls" class="assessment-main" hidden><div id="course-quiz-assessment-controls" hidden><select id="course-quiz-assessment-mode" aria-label="Mode du quiz" hidden><option value="learning">Entraînement</option></select><p id="course-quiz-training-scope"></p><button id="course-quiz-start-assessment" type="button" lang="en">Start practice</button><button id="course-quiz-finish-assessment" type="button" lang="en" hidden>End session</button></div><p id="course-quiz-assessment-error" role="alert"></p><p id="course-quiz-assessment-timer" hidden></p><p id="course-quiz-session-progress" class="quiz-progress" role="status" lang="en"></p><div id="course-quiz-assessment-app" tabindex="-1"></div><nav id="course-quiz-session-navigation" aria-label="Questions du cours"></nav><div id="course-quiz-learning-overview" aria-live="polite"></div></div><div id="course-quiz-native"><p>Sans JavaScript ou si le chargement échoue : aucune tentative notée. Les <a href="#view-flashcards">flashcards du cours</a> restent disponibles.</p><details class="course-quiz-fallback" data-question-id="L-w82wtddwhexg-base-v1"><summary lang="en">RADIO — Select one answer. Does assigning a Twig variable immediately escape it?</summary><p>Correction de consultation — non notée.</p><p>L&#x27;affectation conserve la valeur. La strategy par nom dépend de l&#x27;extension du template.</p><ul><li><strong lang="en">Correct: No; escaping is applied when output is rendered.</strong><p>L&#x27;affectation conserve la valeur. La strategy par nom dépend de l&#x27;extension du template.</p></li><li><strong lang="en">Distractor: Yes; assignment permanently stores an HTML-escaped value.</strong><p>L&#x27;affectation conserve la valeur ; l&#x27;escaping intervient à l&#x27;affichage.</p></li><li><strong lang="en">Distractor: No; autoescaping applies only to variables from controllers.</strong><p>L&#x27;origine d&#x27;une variable ne supprime pas la strategy d&#x27;escaping.</p></li></ul><a href="course-CRS-w82wtddwhexg.html#out-OUT-43tnheqyaw2v">Relire le passage exact</a><a href="course-CRS-w82wtddwhexg.html#s-le-defaut-la-strategy-depend-du-nom-du-template">Relire la correction précise</a></details></div></div></div></div><details class="transfer-panel"><summary>Sauvegarde et transfert de progression</summary><p id="reading-status" role="status">Sans JavaScript : lecture libre ; progression non enregistrée.</p><p><a href="assessment.html#overview-title">Lecture, réussites immédiates et différées</a></p><p>Transfert manuel — aucune synchronisation automatique</p><p id="persistence-status" role="status"></p><button type="button" class="secondary" id="export-progress">Exporter ma progression</button><label for="import-progress">Choisir un JSON pour fusionner ma progression (sans remplacement)</label><input type="file" id="import-progress" accept="application/json,.json"><p id="transfer-status" role="status"></p></details></main><footer class="site-footer"><a href="catalogue.html">Catalogue</a> <a href="sources.html">Sources et attribution</a> <a href="#contenu">Haut de page</a></footer></body></html>

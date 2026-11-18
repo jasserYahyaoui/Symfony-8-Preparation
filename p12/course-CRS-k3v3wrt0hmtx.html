@@ -1,0 +1,388 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; connect-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Template inheritance — Symfony 8 Preparation</title><link rel="stylesheet" href="styles.css"><link rel="stylesheet" href="reader.css"><script src="mermaid.min.js" defer></script><script src="mermaid-init.js" defer></script><link rel="stylesheet" href="assessment.css"><script src="fixed-exams-data.js" defer></script><script src="fixed-exams.js" defer></script><script src="learning-state.js" defer></script><script src="guide.js" defer></script><script src="reader-catalog.js" defer></script><script src="reader.js" defer></script><script src="site-state.js" defer></script><script src="assessment.js" defer></script><script src="course-views.js" defer></script><link rel="stylesheet" href="syntax-highlight.css"><script src="prism-syntax.js" defer></script><script src="syntax-highlight.js" defer></script></head><body data-course-id="CRS-k3v3wrt0hmtx"><a class="skip" href="#contenu">Aller au contenu</a><header class="site-header"><a class="brand" href="index.html">S8 Preparation</a><nav aria-label="Navigation principale"><a href="index.html">Accueil</a> <a href="catalogue.html">Parcours</a> <a href="assessment.html?mode=review">Réviser</a> <a href="examens.html">Examens blancs</a> <a href="jour-j.html">Jour J</a></nav></header><main id="contenu" tabindex="-1" class="corpus-reader"><nav class="breadcrumb" aria-label="Fil d’Ariane"><a href="index.html">Accueil</a> <span aria-hidden="true">›</span> <a href="catalogue.html">Parcours</a> <span aria-hidden="true">›</span> <a href="lot-06.html">Module 06 — Templates avec Twig</a> <span aria-hidden="true">›</span> <span aria-current="page">Template inheritance</span></nav><h1>Template inheritance</h1><p class="muted">Symfony 8.0 · API PHP ≤ 8.4 · Twig ≤ 3.22. Préparation indépendante.</p><p class="revision-status">Rédaction narrative P11 : projection nouvelle, non couverte par les décisions historiques P10. Aucune approbation officielle ni garantie de réussite.</p><aside class="narrative-context" aria-label="Repères de lecture"><p><strong>Prérequis de lecture :</strong> <a href="course-CRS-x2f8reencvcs.html">Twig syntax up to 3.22 version</a></p><p><strong>Concepts voisins :</strong> <a href="course-CRS-a669jpap5zf2.html">The response</a> — Le contenu rendu doit encore devenir une Response. <a href="lot-06.html">Comparer les responsabilités dans ce module</a> · <a href="carte-composants.html">Situer cette responsabilité dans le blog</a> · <a href="glossaire.html">Distinguer les termes voisins</a></p><p><a href="ordre-lecture.html">Retrouver les 163 cours dans le parcours recommandé</a>. Ce repère ne modifie ni votre historique ni votre progression.</p></aside><div class="course-layout"><details class="lot-course-menu"><summary>Cours du module · 14 cours</summary><nav aria-label="Cours du module"><a class="lot-context" href="lot-06.html">Module 06 — Templates avec Twig</a><ol><li><a href="course-CRS-2bj91rj9kvj0.html">TwigBundle</a></li><li><a href="course-CRS-x2f8reencvcs.html">Twig syntax up to 3.22 version</a></li><li><a href="course-CRS-w82wtddwhexg.html">Auto escaping</a></li><li><a href="course-CRS-k3v3wrt0hmtx.html" aria-current="page">Template inheritance</a></li><li><a href="course-CRS-r56yzzb4pye2.html">Global variables</a></li><li><a href="course-CRS-306ppg4454wj.html">Filters and functions</a></li><li><a href="course-CRS-w83y6pfa5edn.html">Template includes</a></li><li><a href="course-CRS-zbnzvqkhjknh.html">Loops and conditions</a></li><li><a href="course-CRS-dpbpbgwjey5c.html">URLs generation</a></li><li><a href="course-CRS-yw6c5hq2mbax.html">Controller rendering</a></li><li><a href="course-CRS-q18xc1k4yvb9.html">Translations and pluralization</a></li><li><a href="course-CRS-dfyab4kpcapw.html">String interpolation</a></li><li><a href="course-CRS-ym86ptkhfgap.html">Assets management</a></li><li><a href="course-CRS-vx5kvfhs0p0s.html">Debugging variables</a></li></ol><a href="lot-06.html#view-quiz">Quiz du module</a></nav></details><aside class="course-section-menu" aria-label="Sommaire du cours"><nav class="course-actions" aria-label="Activités du cours"><a id="tab-course" href="#view-course">Cours</a><a id="tab-flashcards" href="#view-flashcards">Flashcards</a><a id="tab-quiz" href="#view-quiz">Quiz</a></nav><details class="course-section-disclosure"><summary id="course-sections">Sections du cours</summary><nav aria-label="Sections du cours"><ul><li><a href="#s-objectif">Objectif</a></li><li><a href="#s-l-essentiel">L&#x27;essentiel</a></li><li><a href="#s-le-schema">Le schéma</a></li><li><a href="#s-le-mecanisme">Le mécanisme</a></li><li><a href="#s-hors-d-un-block-une-erreur-pas-un-oubli-silencieux">Hors d&#x27;un block : une erreur, pas un oubli silencieux</a></li><li><a href="#s-les-regles-de-l-inheritance">Les règles de l&#x27;inheritance</a></li><li><a href="#s-reprendre-reafficher-tester-un-block">Reprendre, réafficher, tester un block</a></li><li><a href="#s-reutilisation-horizontale">Réutilisation horizontale</a></li><li><a href="#s-pieges-d-examen">Pièges d&#x27;examen</a></li><li><a href="#s-application">Application</a></li><li><a href="#s-fiche-express">Fiche express</a></li><li><a href="#s-sources-officielles">Sources officielles</a></li><li><a href="#reader-objectives">Objectifs d’apprentissage</a></li><li><a href="#course-recalls">Rappels et liens avec les autres cours</a></li></ul></nav><nav aria-label="Flashcards par section"><a href="#view-flashcards">Flashcards par section</a><ul><li><a href="#cards-s-l-essentiel-1">L&#x27;essentiel</a></li><li><a href="#cards-s-le-schema-2">Le schéma</a></li><li><a href="#cards-s-le-mecanisme-3">Le mécanisme</a></li><li><a href="#cards-s-hors-d-un-block-une-erreur-pas-un-oubli-silencieux-4">Hors d&#x27;un block : une erreur, pas un oubli silencieux</a></li><li><a href="#cards-s-les-regles-de-l-inheritance-5">Les règles de l&#x27;inheritance</a></li><li><a href="#cards-s-reprendre-reafficher-tester-un-block-6">Reprendre, réafficher, tester un block</a></li><li><a href="#cards-s-reutilisation-horizontale-7">Réutilisation horizontale</a></li><li><a href="#cards-s-pieges-d-examen-8">Pièges d&#x27;examen</a></li><li><a href="#cards-s-application-9">Application</a></li><li><a href="#cards-s-fiche-express-10">Fiche express</a></li><li><a href="#cards-previous">Module 05 — Routage · Cours « Conditional request matching » · Rappel : <span lang="en">When is a route condition evaluated?</span></a></li></ul></nav><nav aria-label="Retour au module"><a href="lot-06.html">Tous les cours du module</a></nav></details><p class="local-quiz-count">5 questions disponibles · 5 par session Quiz</p></aside><div class="course-content"><div id="view-course" data-course-panel role="region" aria-labelledby="view-course-title"><h2 id="view-course-title">Cours</h2><p class="course-introduction"><a href="#s-objectif">Introduction</a> · <a href="#course-sections">Sections du cours</a></p><h2 id="reader-objectives" tabindex="-1">Objectifs d’apprentissage</h2><ul><li><a href="course-CRS-k3v3wrt0hmtx.html#out-OUT-2m2fsf0992k6">Construire une hiérarchie extends / block</a></li><li><a href="course-CRS-k3v3wrt0hmtx.html#out-OUT-0b65p7477ebz">Énoncer ce qu&#x27;il advient du contenu écrit hors d&#x27;un block</a></li><li><a href="course-CRS-k3v3wrt0hmtx.html#out-OUT-5gpp6vwt10fk">Employer parent() pour compléter un block</a></li><li><a href="course-CRS-k3v3wrt0hmtx.html#out-OUT-qbyeeh719t3d">Distinguer l&#x27;inheritance de la réutilisation horizontale</a></li></ul><aside class="pedagogy-legend" aria-label="Repères pédagogiques"><p><strong>Repères pédagogiques</strong></p><p>Ces repères décrivent le rôle du bloc, pas une fréquence officielle à l’examen.</p><p class="teaching-label essential"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="brain" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5C12 1 6 1 6 5C2 5 1 10 4 12C1 15 3 19 6 19C6 23 12 23 12 19V5M12 5C12 1 18 1 18 5C22 5 23 10 20 12C23 15 21 19 18 19C18 23 12 23 12 19M6 5C6 8 8 9 9 9M4 12H7L9 14M6 19V16M18 5C18 8 16 9 15 9M20 12H17L15 14M18 19V16"></path></svg> <strong>À comprendre</strong></p><p class="teaching-label essential"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="book" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5C9 3 5 3 2 4V20C5 19 9 19 12 21C15 19 19 19 22 20V4C19 3 15 3 12 5V21M5 8H8M5 12H8M16 8H19M16 12H19"></path></svg> <strong>À mémoriser</strong></p><p class="teaching-label example"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="code" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6L2 12L8 18M16 6L22 12L16 18M14 3L10 21"></path></svg> <strong>Exemple concret</strong></p><p class="teaching-label pitfall"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="warning" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3L23 21H1L12 3ZM12 9V14M12 17V18"></path></svg> <strong>Piège à éviter</strong></p><p class="teaching-label nuance"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="balance" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3V21M7 21H17M3 7L21 5M5 7L1 15H9L5 7M19 6L15 14H23L19 6M1 15Q5 20 9 15M15 14Q19 19 23 14"></path></svg> <strong>Nuance à connaître</strong></p><p>Précision, exception ou condition d’application d’une règle.</p></aside><section class="teaching-section" data-section="s-objectif"><h2 id="s-objectif" tabindex="-1">Objectif</h2><p>Le blog a vingt pages. Toutes affichent le même en-tête, le même menu, le même
+pied de page. Copier ce squelette dans vingt templates serait une catastrophe de
+maintenance. Ce cours explique comment Twig <strong>écrit le squelette une seule fois</strong>
+et laisse chaque page ne fournir que ce qui change, puis ce que le compilateur
+refuse et comment partager des morceaux sans créer un deuxième parent.</p>
+<p>Il s'agit de construire une hiérarchie de templates, de savoir ce que
+l'inheritance autorise, et de distinguer l'inheritance de la réutilisation
+horizontale.</p></section><section class="teaching-section" data-section="s-l-essentiel"><h2 id="s-l-essentiel" tabindex="-1">L&#x27;essentiel</h2><p class="teaching-label essential"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="brain" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5C12 1 6 1 6 5C2 5 1 10 4 12C1 15 3 19 6 19C6 23 12 23 12 19V5M12 5C12 1 18 1 18 5C22 5 23 10 20 12C23 15 21 19 18 19C18 23 12 23 12 19M6 5C6 8 8 9 9 9M4 12H7L9 14M6 19V16M18 5C18 8 16 9 15 9M20 12H17L15 14M18 19V16"></path></svg> <strong>À comprendre</strong></p><aside class="section-digest" id="s-l-essentiel-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>extends choisit le parent.</li><li>Le child remplace seulement les blocks qu&#x27;il redéfinit.</li></ol></aside><p><strong>Ce que cette partie veut réellement vous apprendre.</strong></p>
+<ul>
+<li><em>Pourquoi ce sujet existe.</em> Éviter la duplication du layout : un <strong>parent</strong>
+  porte la structure, les <strong>enfants</strong> ne portent que les variations.</li>
+<li><em>Le piège de fond.</em> Un block <strong>défini</strong> n'est pas un block <strong>affiché</strong> : c'est
+  le layout qui décide de l'appeler, et Twig n'invente jamais l'emplacement.</li>
+<li><em>Ce que l'auteur veut que vous compreniez.</em> Le compilateur est strict : du
+  contenu hors block dans un enfant, deux <code>extends</code>, un block dans un <code>if</code> sont
+  des erreurs de syntaxe, pas des oublis silencieux.</li>
+<li><em>Pourquoi c'est à l'examen.</em> Les QCM testent <code>set</code> avant <code>extends</code>, la liste de
+  parents candidats, la priorité des blocks importés par <code>use</code>, et le fait que
+  <code>use</code> exige une string.</li>
+</ul>
+<p>Toutes les pages partagent un header, un menu, un pied de page. Un <strong>parent</strong>
+les déclare une fois et laisse des <strong>trous</strong> — les blocks ; chaque page
+<strong>enfant</strong> l'étend et remplit les trous qui l'intéressent. Le compiler refuse
+tout ce qui rendrait cette mécanique ambiguë.</p></section><section class="teaching-section" data-section="s-le-schema"><h2 id="s-le-schema" tabindex="-1">Le schéma</h2><aside class="section-digest" id="s-le-schema-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Un child place son contenu dans les blocks.</li><li>Un set sans output peut rester hors block.</li></ol></aside><p><strong>Où en est-on ?</strong> Vue d'ensemble, en cinq étapes : le mécanisme parent/enfant
+(1), l'interdiction du contenu hors block (2), les règles de l'inheritance (3),
+les trois gestes sur un block (4), la réutilisation horizontale (5). Le schéma
+ci-dessous répond à la question qui sous-tend tout le cours : <strong>quel contenu
+Twig rend-il quand le layout atteint un block ?</strong></p>
+<pre class="highlight" tabindex="0"><code class="language-text">Layout parent (base.html.twig)       Page enfant (article.html.twig)
+┌───────────────────────────┐        ┌───────────────────────────┐
+│ &lt;header&gt;…&lt;/header&gt;        │        │ {% extends 'base…' %}     │
+│ {% block title %}         │◄───────│ {% block title %}Articles │
+│ {% block body %}          │◄───────│ {% block body %}…         │
+│ &lt;footer&gt;…&lt;/footer&gt;        │        └───────────────────────────┘
+└───────────────────────────┘</code></pre>
+<figure class="diagram" aria-labelledby="CRS-k3v3wrt0hmtx-3-diagram-0-title CRS-k3v3wrt0hmtx-3-diagram-0-description"><figcaption id="CRS-k3v3wrt0hmtx-3-diagram-0-title">Le layout appelle les blocs, la page choisit leur contenu</figcaption><p id="CRS-k3v3wrt0hmtx-3-diagram-0-description">Une fois le template enfant compilé et son parent résolu, le layout est rendu. Lorsqu&#x27;il atteint un bloc, Twig utilise la redéfinition de l&#x27;enfant ou le bloc importé, sinon le contenu du parent. Définir un bloc ne force pas son affichage si le layout ne l&#x27;appelle pas.</p><div class="mermaid" hidden>---
+title: Ce que Twig vérifie et fait pour un template enfant
+---
+flowchart TD
+  accTitle: Le layout appelle les blocs, la page choisit leur contenu
+  accDescr: Une fois le template enfant compilé et son parent résolu, le layout est rendu. Lorsqu&#x27;il atteint un bloc, Twig utilise la redéfinition de l&#x27;enfant ou le bloc importé, sinon le contenu du parent. Définir un bloc ne force pas son affichage si le layout ne l&#x27;appelle pas.
+  P[&quot;Layout parent&quot;] --&gt;|&quot;atteint un block&quot;| Q{&quot;Redéfinition disponible ?&quot;}
+  Q --&gt;|&quot;oui : enfant ou use&quot;| C[&quot;Rendre la redéfinition&quot;]
+  Q --&gt;|&quot;non : conserver le défaut&quot;| D[&quot;Rendre le block parent&quot;]
+  C --&gt;|&quot;si parent() est appelé&quot;| D
+  classDef operation fill:#e0f2fe,stroke:#0369a1,color:#0c4a6e
+  classDef decision fill:#fef3c7,stroke:#b45309,color:#78350f
+  classDef result fill:#dcfce7,stroke:#15803d,color:#14532d
+  class P operation
+  class Q decision
+  class C,D result</div></figure>
+<p>Bleu = layout exécuté, ambre = choix de block, vert = contenu rendu. Les
+flèches montrent la sélection au rendu, pas un héritage PHP. Cette vue
+suppose un template valide et un parent trouvé : une syntaxe interdite échoue
+avant le rendu, un parent introuvable produit une <code>LoaderError</code>.</p></section><section class="teaching-section" data-section="s-le-mecanisme"><span class="outcome-anchor" id="out-OUT-2m2fsf0992k6" tabindex="-1"></span><h2 id="s-le-mecanisme" tabindex="-1">Le mécanisme</h2><p><strong>Où en est-on ?</strong> Étape 1 sur 5 : le principe parent / enfant. On part d'un
+exemple concret et on suit qui appelle qui.</p>
+<p>La page de l'article42 et celle du catalogue partagent navigation et pied
+de page. Leur parent définit cette structure ; chaque enfant fournit
+ses variations nommées. Le contrôleur rend l'enfant, puis Twig utilise
+le layout et les redéfinitions pour produire une seule représentation HTML.</p>
+<p>Un template parent déclare des <strong>blocks</strong> ; un template enfant <code>extends</code> le parent
+et redéfinit ceux qui l'intéressent.</p>
+<pre class="highlight" tabindex="0"><code class="language-html">{% extends 'base.html.twig' %}
+
+{% block title %}Articles{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    &lt;link rel="stylesheet" href="page.css"&gt;
+{% endblock %}</code></pre>
+<p>Un block non redéfini garde le contenu du parent. Le squelette affiché reste
+celui du parent, avec les redéfinitions de l'enfant aux endroits où les blocks
+sont appelés. Un block enfant jamais appelé par le layout ne s'affiche pas
+simplement parce qu'il est défini. On peut empiler les niveaux :
+<code>base</code> → layout de section → page.</p>
+<p>Que se passe-t-il quand le contrôleur écrit <code>$this-&gt;render('article.html.twig')</code> ?</p>
+<pre class="highlight" tabindex="0"><code class="language-text">render('article.html.twig')
+   ▼
+Twig compile l'enfant ; il voit {% extends 'base.html.twig' %}
+   ▼
+il charge et compile le parent base.html.twig
+   ▼
+il exécute le PARENT (c'est lui qui écrit le squelette)
+   ▼
+le parent atteint {% block title %} → Twig cherche la redéfinition la plus proche
+   ▼
+  l'enfant en a une → rendue                  ┐
+  sinon → le contenu par défaut du parent     ┘ → une seule page HTML</code></pre>
+<p>Piège central : le <strong>parent</strong> est exécuté, pas l'enfant. L'enfant ne sert qu'à
+fournir des définitions. D'où la règle : un block défini par l'enfant mais
+jamais appelé par le parent n'apparaît pas.</p>
+<p>Avant / après, avec un parent qui définit <code>title</code> et <code>body</code> et un enfant qui
+redéfinit seulement <code>title</code> :</p>
+<pre class="highlight" tabindex="0"><code class="language-text">Parent                         Enfant
+{% block title %}Site{% … %}   {% block title %}Articles{% endblock %}
+{% block body %}Accueil{% … %}   (rien pour body)
+
+Résultat : title = « Articles »  (redéfini)     body = « Accueil » (hérité)</code></pre>
+<div class="admonition info">
+<p class="admonition-title">🌍 In Real Life</p>
+<p><strong>La situation</strong> : le journal utilise une maquette commune avec des emplacements nommés « titre » et « article ». Chaque édition fournit ses variantes ; une rubrique préparée sans emplacement appelé ne s'imprime pas toute seule.</p>
+<p><strong>L’équivalent dans Symfony</strong> : <code>extends</code> sélectionne le layout et les <code>block</code> de l'enfant redéfinissent ses points d'extension. Lorsque le rendu atteint un appel de bloc, Twig utilise la définition applicable, sinon celle héritée.</p>
+<p><strong>Retour à la réalité technique</strong> : une définition n'est pas une garantie d'affichage ; le flux de rendu doit appeler le bloc. Plusieurs niveaux peuvent se succéder, mais ce mécanisme ne représente ni un héritage de contrôleurs ni plusieurs réponses HTTP assemblées.</p>
+<p><strong>🧠 Comment le mémoriser</strong> : « La maquette place, l'édition remplit. » Image mentale : rubriques étiquetées déposées dans les emplacements du journal. Question-réflexe : quel layout appelle le bloc que je redéfinis ?</p>
+<p><strong>⚠️ À ne pas confondre</strong> : définition d'un bloc, appel du bloc et rendu complet du template.</p>
+</div><div class="retained-answer-context">
+<p><strong>Repère — Les règles de l'inheritance :</strong></p>
+<p lang="en"><strong>Question:</strong> May one Twig template contain two extends tags?</p>
+<p lang="en"><strong>Answer:</strong> No. It has one parent, although that parent can be selected dynamically.</p>
+<p>Un seul extends est autorisé. Une expression peut choisir le parent.</p>
+</div></section><section class="teaching-section" data-section="s-hors-d-un-block-une-erreur-pas-un-oubli-silencieux"><span class="outcome-anchor" id="out-OUT-0b65p7477ebz" tabindex="-1"></span><h2 id="s-hors-d-un-block-une-erreur-pas-un-oubli-silencieux" tabindex="-1">Hors d&#x27;un block : une erreur, pas un oubli silencieux</h2><p><strong>Où en est-on ?</strong> Étape 2 sur 5 : un enfant ne remplit que des trous. Que
+devient du texte écrit <strong>à côté</strong> des trous ? Twig le refuse, et c'est une
+question d'examen classique.</p>
+<p>Ajouter <code>&lt;h1&gt;{{ article.title }}&lt;/h1&gt;</code> après <code>extends</code> ne précise pas
+où placer le titre dans le layout. Twig refuse ce contenu orphelin
+à la compilation. Place-le dans le block que le parent appelle ; un <code>set</code>
+extérieur reste possible puisqu'il prépare une donnée sans l'afficher.</p>
+<p>Dans un template qui étend un parent, du texte ou un <code>{{ … }}</code> écrit hors de tout
+block lève une <code>SyntaxError</code> : « A template that extends another one cannot
+include content outside Twig blocks ». Seuls les blancs et les tags qui
+n'affichent rien, comme <code>{% set %}</code>, sont tolérés ; la variable ainsi posée est
+lisible dans les blocks.</p>
+<p>Pourquoi cette règle ? Un enfant ne s'exécute pas comme une page : c'est le
+parent qui produit la sortie. Un <code>&lt;h1&gt;</code> hors block ne saurait pas <strong>où</strong> se
+placer dans le squelette du parent. Plutôt que de deviner, Twig refuse (le
+<code>Parser</code> vérifie le corps de l'enfant).</p>
+<pre class="highlight" tabindex="0"><code class="language-text">{% extends 'base.html.twig' %}
+&lt;h1&gt;{{ article.title }}&lt;/h1&gt;       ← où le mettre dans base ?  → SyntaxError
+{% set x = 1 %}                    ← n'affiche rien           → toléré
+{% block body %}{{ x }}{% endblock %}   ← OK</code></pre>
+<table>
+<thead>
+<tr>
+<th>Élément hors block</th>
+<th>Accepté ?</th>
+<th>Pourquoi</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>blancs, retours à la ligne</td>
+<td>oui</td>
+<td>rien à afficher</td>
+</tr>
+<tr>
+<td><code>{% set x = 1 %}</code></td>
+<td>oui</td>
+<td>prépare une donnée, n'affiche rien</td>
+</tr>
+<tr>
+<td><code>&lt;h1&gt;…&lt;/h1&gt;</code> ou <code>{{ x }}</code></td>
+<td><strong>non</strong> : <code>SyntaxError</code></td>
+<td>contenu sans emplacement</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition info">
+<p class="admonition-title">🌍 In Real Life</p>
+<p><strong>La situation</strong> : une édition remet un titre sans indiquer sa rubrique. L'atelier refuse cette instruction de placement ; une note de calcul interne, elle, peut rester hors des zones imprimées.</p>
+<p><strong>L’équivalent dans Symfony</strong> : un enfant qui étend un parent ne peut produire librement du texte ou une expression affichée hors des blocs. Twig signale une <code>SyntaxError</code> ; un <code>set</code> non affichant peut préparer une valeur utilisée ensuite.</p>
+<p><strong>Retour à la réalité technique</strong> : le contenu interdit n'est pas silencieusement perdu au rendu. Les blancs et les constructions non affichantes autorisées ne sont pas assimilables à du HTML libre ; envelopper arbitrairement une sortie dans une instruction ne résout pas la règle.</p>
+<p><strong>🧠 Comment le mémoriser</strong> : « Un titre sans rubrique est refusé, pas oublié. » Image mentale : titre retourné par l'atelier, note de calcul conservée. Question-réflexe : cette instruction prépare-t-elle une donnée ou produit-elle du contenu hors bloc ?</p>
+<p><strong>⚠️ À ne pas confondre</strong> : erreur de structure à la compilation et bloc valide jamais appelé.</p>
+</div></section><section class="teaching-section" data-section="s-les-regles-de-l-inheritance"><h2 id="s-les-regles-de-l-inheritance" tabindex="-1">Les règles de l&#x27;inheritance</h2><aside class="section-digest" id="s-les-regles-de-l-inheritance-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Un seul extends est autorisé.</li><li>Une expression peut choisir le parent.</li></ol></aside><p><strong>Où en est-on ?</strong> Étape 3 sur 5 : maintenant que l'on sait ce qui est interdit
+hors des blocks, on regarde les <strong>autres règles</strong> de la structure, et le choix
+du parent (qui peut être dynamique).</p>
+<p>Une variante imprimable de l'article peut choisir un layout minimal
+par une expression. Cela sélectionne un parent, sans assembler plusieurs
+parents concurrents. Une liste fournit des replis de chargement : elle
+ne concatène pas les templates trouvés et ne dispense pas de traiter
+l'absence de tous les candidats.</p>
+<table>
+<thead>
+<tr>
+<th>Template</th>
+<th>Résultat</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>deux <code>extends</code></td>
+<td><code>SyntaxError</code> : « Multiple extends tags are forbidden »</td>
+</tr>
+<tr>
+<td><code>extends</code> dans un block</td>
+<td><code>SyntaxError</code></td>
+</tr>
+<tr>
+<td>deux <code>{% block body %}</code></td>
+<td><code>SyntaxError</code> : un nom de block est unique</td>
+</tr>
+<tr>
+<td><code>{% set x = 1 %}</code> <strong>avant</strong> <code>extends</code></td>
+<td>accepté : « <code>extends</code> en tête » est une consigne de la documentation, pas un contrôle du parser</td>
+</tr>
+</tbody>
+</table>
+<p>Le parent peut être une <strong>expression</strong> :</p>
+<ul>
+<li><code>{% extends some_var %}</code> — une variable ;</li>
+<li><code>{% extends ['layout.html.twig', 'base.html.twig'] %}</code> — le <strong>premier
+  template qui existe</strong> ; si aucun n'existe, une <code>LoaderError</code> : « Unable to
+  find one of the following templates » ;</li>
+<li><code>{% extends standalone ? 'minimum.html.twig' : 'base.html.twig' %}</code>.</li>
+</ul>
+<p>Pourquoi un seul <code>extends</code> ? Un template qui aurait deux parents poserait la
+question : lequel exécuter ? Twig n'a pas d'héritage multiple ; la solution est
+<code>use</code> (étape 5).</p>
+<p>Chemin d'exécution de la liste de parents :</p>
+<pre class="highlight" tabindex="0"><code class="language-text">{% extends ['layout.html.twig', 'base.html.twig'] %}
+   ▼
+Twig essaie layout.html.twig → existe ? oui → c'est le parent
+                                       non → essaie base.html.twig
+   ▼
+aucun n'existe → LoaderError : Unable to find one of the following templates</code></pre>
+<p>Pourquoi la mauvaise réponse est plausible pour <code>set</code> avant <code>extends</code> : la
+documentation recommande de mettre <code>extends</code> en premier ; on en conclut que le
+parser refuse tout ce qui le précède. Mais c'est une <strong>consigne de style</strong> : seul
+le contenu qui affiche quelque chose hors block est refusé.</p>
+<div class="admonition info">
+<p class="admonition-title">🌍 In Real Life</p>
+<p><strong>La situation</strong> : pour l'édition imprimable, on choisit une maquette parmi plusieurs possibilités. Une liste de secours signifie « prendre la première disponible », pas empiler toutes les maquettes.</p>
+<p><strong>L’équivalent dans Symfony</strong> : un seul <code>extends</code> peut contenir une expression ou une liste de templates candidats. Twig choisit le parent applicable ; deux <code>extends</code>, un <code>extends</code> dans un bloc ou deux définitions locales de même nom sont interdits.</p>
+<p><strong>Retour à la réalité technique</strong> : l'absence de tous les candidats produit une <code>LoaderError</code>, pas un document vide garanti. Recommander <code>extends</code> en tête n'interdit pas au parser un <code>set</code> non affichant avant lui. Choix dynamique ne signifie pas héritage multiple.</p>
+<p><strong>🧠 Comment le mémoriser</strong> : « Plusieurs candidats, une seule maquette retenue. » Image mentale : pile de maquettes de secours dont une seule part à l'impression. Question-réflexe : ai-je sélectionné un parent ou tenté d'en déclarer plusieurs ?</p>
+<p><strong>⚠️ À ne pas confondre</strong> : erreur de syntaxe, échec de chargement et recommandation de style.</p>
+</div></section><section class="teaching-section" data-section="s-reprendre-reafficher-tester-un-block"><span class="outcome-anchor" id="out-OUT-5gpp6vwt10fk" tabindex="-1"></span><h2 id="s-reprendre-reafficher-tester-un-block" tabindex="-1">Reprendre, réafficher, tester un block</h2><aside class="section-digest" id="s-reprendre-reafficher-tester-un-block-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>parent() complète le contenu hérité.</li><li>block() réaffiche un block nommé.</li></ol></aside><p><strong>Où en est-on ?</strong> Étape 4 sur 5 : le parent et l'enfant sont en place. Trois
+gestes permettent de manipuler un block : <code>parent()</code> (reprendre), <code>block()</code>
+(réafficher) et <code>is defined</code> (tester).</p>
+<p>La feuille de style de l'article doit compléter celles du site : <code>parent()</code>
+reprend le contenu hérité dans le block redéfini. Réafficher le titre
+dans un second emplacement relève plutôt de <code>block('title')</code>. Dans les
+deux cas, les appels déterminent l'affichage ; définir un block n'assure
+pas qu'un emplacement l'appellera.</p>
+<ul>
+<li><code>{{ parent() }}</code> insère le contenu du block parent : on <strong>ajoute</strong> au lieu de
+  remplacer.</li>
+<li>Un block s'affiche chaque fois que le flux de rendu atteint son appel :
+  placé dans une boucle du parent, il peut donc s'afficher plusieurs fois.
+  La <strong>function</strong> <code>block('title')</code> permet un appel explicite supplémentaire,
+  y compris depuis un autre template :
+  <code>block('title', 'common.html.twig')</code>.</li>
+<li><code>block('footer') is defined</code> teste son existence.</li>
+<li><strong>Un block dans un <code>if</code> reste défini</strong> : seul son affichage suit la condition.
+  Dans un enfant, un block imbriqué sous un <code>if</code> est une <code>SyntaxError</code>.</li>
+</ul>
+<p>Comparaison des trois gestes :</p>
+<pre class="highlight" tabindex="0"><code class="language-text">┌────────────────────┐ ┌────────────────────┐ ┌────────────────────┐
+│     parent()       │ │   block('title')   │ │ block('x') is      │
+│                    │ │                    │ │ defined            │
+├────────────────────┤ ├────────────────────┤ ├────────────────────┤
+│ Où ?               │ │ Où ?               │ │ Où ?               │
+│ DANS un block      │ │ n'importe où       │ │ dans une condition │
+│ redéfini           │ │                    │ │                    │
+├────────────────────┤ ├────────────────────┤ ├────────────────────┤
+│ Rend               │ │ Rend               │ │ Rend               │
+│ le contenu du      │ │ le block (autre    │ │ un booléen         │
+│ block PARENT       │ │ template possible) │ │ (existence)        │
+└────────────────────┘ └────────────────────┘ └────────────────────┘</code></pre>
+<p>Pourquoi un block peut-il s'afficher plusieurs fois ? Parce qu'il est rendu à
+chaque fois que le <strong>flux atteint son appel</strong>. Si le parent le place dans une
+boucle, il est rendu à chaque tour.</p>
+<p>Pourquoi « un block dans un <code>if</code> reste défini » ? La <strong>définition</strong> d'un block
+est décidée à la compilation ; seul son <strong>affichage</strong> suit la condition. Et dans
+un enfant, un block sous un <code>if</code> est refusé : on ne peut pas définir
+conditionnellement.</p>
+<div class="admonition info">
+<p class="admonition-title">🌍 In Real Life</p>
+<p><strong>La situation</strong> : l'éditeur peut reprendre une rubrique de l'édition précédente, imprimer à nouveau le titre ou vérifier qu'une rubrique existe. Ces trois opérations ne font pas le même travail.</p>
+<p><strong>L’équivalent dans Symfony</strong> : <code>parent()</code> reprend le contenu hérité dans le bloc courant ; <code>block('title')</code> demande son rendu ; <code>block('footer') is defined</code> teste sa disponibilité. Le nombre d'affichages dépend des appels réellement atteints.</p>
+<p><strong>Retour à la réalité technique</strong> : un appel dans une boucle peut produire plusieurs rendus. Dans les structures autorisées, une condition autour d'un appel n'efface pas la définition ; déclarer un bloc sous un <code>if</code> dans un enfant qui étend un parent reste interdit. L'existence n'implique ni contenu non vide ni affichage.</p>
+<p><strong>🧠 Comment le mémoriser</strong> : « Reprendre, imprimer, vérifier : trois gestes. » Image mentale : rubrique héritée, titre réimprimé et case de contrôle d'existence. Question-réflexe : ai-je besoin du parent, d'un rendu ou seulement d'un test ?</p>
+<p><strong>⚠️ À ne pas confondre</strong> : définition disponible, contenu rendu et condition de passage dans le flux.</p>
+</div><aside class="enrichment" aria-label="Autre explication"><p>Le parent est un papier à en-tête dont les blocks sont les zones modifiables. parent() conserve ce qui était imprimé dans la zone, puis permet de compléter ; l'override seul le remplace.</p></aside></section><section class="teaching-section" data-section="s-reutilisation-horizontale"><span class="outcome-anchor" id="out-OUT-qbyeeh719t3d" tabindex="-1"></span><h2 id="s-reutilisation-horizontale" tabindex="-1">Réutilisation horizontale</h2><aside class="section-digest" id="s-reutilisation-horizontale-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>use importe des blocks sans rendu immédiat.</li><li>Les blocks locaux priment sur les imports.</li></ol></aside><p><strong>Où en est-on ?</strong> Étape 5 sur 5 : l'héritage est vertical (parent → enfant) et
+n'autorise qu'un parent. Comment partager des blocks entre deux pages <strong>sans</strong>
+leur donner un nouveau parent ? C'est le rôle de <code>use</code>.</p>
+<p>Deux pages peuvent partager une définition de sidebar sans partager un
+nouveau layout. <code>use</code> importe alors des blocks disponibles pour la résolution,
+sans rendre immédiatement un fragment. Un <code>include</code> répondrait à une autre
+demande : produire maintenant le contenu du template inclus.</p>
+<p><code>{% use 'blocks.html.twig' %}</code> <strong>importe les blocks</strong> d'un autre template sans
+l'étendre ni les afficher — la solution de Twig à l'inheritance multiple : un
+seul <code>extends</code>, plusieurs <code>use</code>.</p>
+<ul>
+<li>Un block importé compte comme un block de l'enfant : il <strong>remplace</strong> celui du
+  parent du même nom.</li>
+<li>Un block du template courant l'emporte sur un block importé.</li>
+<li><code>with sidebar as base_sidebar</code> renomme à l'import.</li>
+<li>La cible de <code>use</code> est une <strong>string</strong> : une variable est une <code>SyntaxError</code>.</li>
+</ul>
+<p>Le template importé doit être réutilisable comme trait : pas de parent
+<code>extends</code>, pas de macros, pas de contenu de corps hors blocs. Il peut lui-même
+utiliser <code>use</code>. Si deux imports fournissent le même block, le dernier import
+gagne ; une définition locale reste prioritaire.</p>
+<p>Pourquoi <code>use</code> n'est-il pas un héritage ? Il apporte des <strong>définitions de
+blocks</strong> (comme un trait PHP apporte des méthodes) ; il n'ajoute pas de parent à
+la chaîne. Il ne rend rien lui-même.</p>
+<p>Ordre de priorité quand plusieurs sources définissent le même block <code>sidebar</code> :</p>
+<pre class="highlight" tabindex="0"><code class="language-text">1. block défini dans le template COURANT       ← gagne toujours
+2. block importé par le DERNIER {% use %}
+3. block importé par un use précédent
+4. block du PARENT (extends)                   ← perd contre tout ce qui précède</code></pre>
+<p>Comparaison des trois mécanismes proches :</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th><code>extends</code></th>
+<th><code>use</code></th>
+<th><code>include</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Rôle</td>
+<td>choisir le parent</td>
+<td>importer des <strong>définitions</strong> de blocks</td>
+<td>produire un fragment <strong>maintenant</strong></td>
+</tr>
+<tr>
+<td>Nombre</td>
+<td>un seul</td>
+<td>plusieurs</td>
+<td>autant qu'on veut</td>
+</tr>
+<tr>
+<td>Affiche immédiatement ?</td>
+<td>non (le parent s'exécute)</td>
+<td>non</td>
+<td>oui</td>
+</tr>
+<tr>
+<td>Cible dynamique ?</td>
+<td>oui (variable, liste)</td>
+<td><strong>non</strong> : string</td>
+<td>oui</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition info">
+<p class="admonition-title">🌍 In Real Life</p>
+<p><strong>La situation</strong> : deux journaux empruntent un jeu de rubriques à un atelier commun sans adopter toute sa maquette. La rédaction peut renommer une rubrique ou fournir sa propre version.</p>
+<p><strong>L’équivalent dans Symfony</strong> : <code>use</code> importe des définitions de blocs, sans rendre immédiatement le template ni en faire un parent. Les blocs locaux priment ; entre imports concurrents de même nom, le dernier gagne ; un renommage évite la collision.</p>
+<p><strong>Retour à la réalité technique</strong> : la cible est une chaîne littérale et le template doit être utilisable comme trait : pas de parent, pas de macros ni de corps hors blocs incompatibles. Un <code>include</code> rend du contenu ; <code>use</code> apporte des définitions pour les appels ultérieurs.</p>
+<p><strong>🧠 Comment le mémoriser</strong> : « Emprunter les rubriques n'adopte pas la maquette. » Image mentale : fiches de rubriques communes transférées dans deux rédactions. Question-réflexe : veux-je importer des définitions ou produire un fragment maintenant ?</p>
+<p><strong>⚠️ À ne pas confondre</strong> : <code>use</code>, <code>extends</code> et <code>include</code>.</p>
+</div></section><section class="teaching-section" data-section="s-pieges-d-examen"><h2 id="s-pieges-d-examen" tabindex="-1">Pièges d&#x27;examen</h2><p class="teaching-label pitfall"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="warning" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3L23 21H1L12 3ZM12 9V14M12 17V18"></path></svg> <strong>Piège à éviter</strong></p><ul class="pitfall-list"><li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : Du contenu hors block dans un enfant est une erreur de syntaxe</summary><p><strong>Du contenu hors block dans un enfant est une erreur de syntaxe</strong>, pas un
+contenu ignoré. <em>Pourquoi on se trompe : en HTML, du texte « en trop » est
+simplement affiché ; on suppose que Twig l'ignore ou l'affiche.</em></p></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : Un seul parent</summary><p><strong>Un seul parent</strong>, mais un parent choisi dynamiquement : variable, liste dont
+le premier existant gagne, ou ternaire. <em>Pourquoi on se trompe : « liste »
+évoque « plusieurs parents » alors qu'un seul est retenu.</em></p></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : block() appelle un block ; parent() reprend son contenu hérité.</summary><p><strong><code>block()</code> appelle un block ; <code>parent()</code> reprend son contenu hérité.</strong>
+Le nombre d'affichages dépend des appels, notamment des boucles du layout,
+pas du nombre de définitions. <em>Pourquoi on se trompe : on compte les
+<code>{% block %}</code> écrits au lieu des appels atteints.</em></p></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : Un block dans un if reste défini.</summary><p><strong>Un block dans un <code>if</code> reste défini.</strong> Seul son rendu dépend de la condition.
+<em>Pourquoi on se trompe : en PHP, une déclaration dans un <code>if</code> n'existe que si la
+condition est vraie.</em></p></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : Importer les blocks d&#x27;un autre template n&#x27;est pas en hériter.</summary><p><strong>Importer les blocks d'un autre template n'est pas en hériter.</strong> <code>use</code> ne fait
+pas de parent ; sa cible est une string. <em>Pourquoi on se trompe : <code>use</code> et
+<code>extends</code> « apportent du contenu d'un autre template ».</em></p></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : set avant extends est accepté.</summary><p><strong><code>set</code> avant <code>extends</code> est accepté.</strong> « <code>extends</code> en tête » est une consigne,
+pas un contrôle du parser. <em>Pourquoi on se trompe : on prend une bonne pratique
+pour une règle de compilation.</em></p></details></li></ul></section><section class="teaching-section" data-section="s-application"><h2 id="s-application" tabindex="-1">Application</h2><aside class="section-digest" id="s-application-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>parent() complète le contenu hérité.</li><li>block() réaffiche un block nommé.</li><li>Un child place son contenu dans les blocks.</li><li>Un set sans output peut rester hors block.</li></ol></aside>
+
+
+
+</section><section class="teaching-section" data-section="s-fiche-express"><h2 id="s-fiche-express" tabindex="-1">Fiche express</h2><p class="teaching-label essential"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="book" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5C9 3 5 3 2 4V20C5 19 9 19 12 21C15 19 19 19 22 20V4C19 3 15 3 12 5V21M5 8H8M5 12H8M16 8H19M16 12H19"></path></svg> <strong>À mémoriser</strong></p><p><strong>🧠 À retenir pour la certification :</strong></p>
+<ul>
+<li><strong><code>extends</code></strong> + <strong><code>block</code></strong> ; un block non redéfini garde le parent ; le
+  <strong>parent</strong> est exécuté, l'enfant fournit des définitions.</li>
+<li>Hors block, dans un enfant : <strong>SyntaxError</strong>, sauf blancs et <strong><code>set</code></strong>.</li>
+<li><strong>Un seul parent</strong>, jamais dans un block ; <strong>un nom de block unique</strong>.</li>
+<li>Parent <strong>dynamique</strong> : liste (premier existant, sinon <code>LoaderError</code>), ternaire,
+  variable.</li>
+<li><strong><code>parent()</code></strong> ajoute, <strong><code>block()</code></strong> réaffiche, <strong><code>is defined</code></strong> teste.</li>
+<li>Un block sous un <strong><code>if</code></strong> reste défini (mais interdit dans un enfant).</li>
+<li><strong><code>use</code></strong> importe des blocks (cible = string), qui <strong>masquent</strong> ceux du parent.</li>
+</ul>
+<p>Moyen mnémotechnique : <strong>« un parent, des trous, rien hors des trous »</strong>.</p>
+<pre class="highlight" tabindex="0"><code class="language-text">enfant = extends (1 seul, expression permise) + blocks (noms uniques) ;
+hors block : SyntaxError sauf set/blancs ;
+parent() reprend, block() réaffiche, is defined teste ;
+use = blocks importés (masquent le parent), cible = string</code></pre></section><section class="teaching-section" data-section="s-sources-officielles"><h2 id="s-sources-officielles" tabindex="-1">Sources officielles</h2><ul>
+<li><a href="https://twig.symfony.com/doc/3.x/">Twig 3 — doc / 3.x</a></li>
+</ul></section><section id="course-recalls" aria-labelledby="course-recalls-title" tabindex="-1"><h2 id="course-recalls-title">Rappels et liens avec les autres cours</h2><div data-recall-group="current"><h3>Rappels du cours actuel</h3><ul><li data-recall-course="CRS-k3v3wrt0hmtx" data-recall-kind="digest_reference"><p class="recall-provenance">Module 06 — Templates avec Twig · Cours « Template inheritance »</p><p class="digest-reference"><a href="#s-l-essentiel-digest">Revoir la règle : extends choisit le parent.</a></p></li><li data-recall-course="CRS-k3v3wrt0hmtx" data-recall-kind="digest_reference"><p class="recall-provenance">Module 06 — Templates avec Twig · Cours « Template inheritance »</p><p class="digest-reference"><a href="#s-le-schema-digest">Revoir la règle : Un child place son contenu dans les blocks.</a></p></li><li data-recall-course="CRS-k3v3wrt0hmtx" data-recall-kind="digest_reference"><p class="recall-provenance">Module 06 — Templates avec Twig · Cours « Template inheritance »</p><p class="digest-reference"><a href="#s-reprendre-reafficher-tester-un-block-digest">Revoir la règle : parent() complète le contenu hérité.</a></p></li><li><nav aria-label="Flashcards de l’application"><ul><li data-recall-course="CRS-k3v3wrt0hmtx" data-recall-kind="application"><p class="recall-provenance">Module 06 — Templates avec Twig · Cours « Template inheritance »</p><a href="#A-k3v3wrt0hmtx-28afbecf9c-04">Flashcard : parent() complète le contenu hérité. block() réaffiche un block nommé.</a></li><li data-recall-course="CRS-k3v3wrt0hmtx" data-recall-kind="application"><p class="recall-provenance">Module 06 — Templates avec Twig · Cours « Template inheritance »</p><a href="#A-k3v3wrt0hmtx-6e0103f6cc-02">Flashcard : Un child place son contenu dans les blocks. Un set sans output peut rester hors block.</a></li></ul></nav></li></ul></div><div data-recall-group="other"><h3>Rappels des cours précédents / autres modules</h3><ul><li data-recall-course="CRS-f92d09x14ggx" data-recall-kind="previous_course"><p class="recall-provenance">Module 05 — Routage · Cours « Conditional request matching »</p><p>condition filtre l&#x27;entrée. L&#x27;expression peut être compilée dans le cache du matcher.</p><p><a href="#cards-previous">Rappel : <span lang="en">When is a route condition evaluated?</span></a></p></li></ul></div></section><nav class="course-sequence" aria-label="Ordre de lecture"><a rel="prev" href="course-CRS-evzcj63fgdb7.html" aria-label="Précédent : User&#x27;s locale guessing — Module 05 — Routage">Précédent : User&#x27;s locale guessing</a> <a href="lot-06.html">Sommaire : Module 06 — Templates avec Twig</a> <a rel="next" href="course-CRS-r56yzzb4pye2.html" aria-label="Suivant : Global variables — Module 06 — Templates avec Twig">Suivant : Global variables</a></nav><p class="course-practice-entry"><a class="button" href="#view-quiz">Fin du cours — s’entraîner avec le Quiz</a></p></div><div id="view-flashcards" data-course-panel role="region" aria-labelledby="view-flashcards-title"><h2 id="view-flashcards-title">Flashcards</h2><p lang="en">Answer before revealing each card.</p><p>Ces cartes ne mesurent pas une maîtrise notée.</p><div id="cards-s-l-essentiel-1" data-card-section="s-l-essentiel"><h3><a href="#s-l-essentiel">Revoir : L&#x27;essentiel</a></h3><div class="reader-cards"><details class="reader-card" id="A-k3v3wrt0hmtx-65c42c80d9-01"><summary lang="en">What happens to an inherited block the child does not override?</summary><p lang="en">The parent&#x27;s content remains.</p><p lang="fr">extends choisit le parent. Le child remplace seulement les blocks qu&#x27;il redéfinit.</p><a href="course-CRS-k3v3wrt0hmtx.html#out-OUT-2m2fsf0992k6">Revoir le passage précis</a></details></div></div><div id="cards-s-le-schema-2" data-card-section="s-le-schema"><h3><a href="#s-le-schema">Revoir : Le schéma</a></h3><div class="reader-cards"><details class="reader-card" id="A-k3v3wrt0hmtx-6e0103f6cc-02"><summary lang="en">Is output outside blocks silently ignored in an extending template?</summary><p lang="en">No. It causes a Twig SyntaxError.</p><p lang="fr">Un child place son contenu dans les blocks. Un set sans output peut rester hors block.</p><a href="course-CRS-k3v3wrt0hmtx.html#out-OUT-0b65p7477ebz">Revoir le passage précis</a></details></div></div><div id="cards-s-le-mecanisme-3" data-card-section="s-le-mecanisme"><h3><a href="#s-le-mecanisme">Revoir : Le mécanisme</a></h3><div class="reader-cards"><p class="reader-card-reference" id="A-k3v3wrt0hmtx-7d8caa5d0d-01">Rappel déjà proposé : <a lang="en" href="#A-k3v3wrt0hmtx-65c42c80d9-01">What happens to an inherited block the child does not override?</a> · <a href="course-CRS-k3v3wrt0hmtx.html#out-OUT-2m2fsf0992k6">Passage canonique</a></p></div></div><div id="cards-s-hors-d-un-block-une-erreur-pas-un-oubli-silencieux-4" data-card-section="s-hors-d-un-block-une-erreur-pas-un-oubli-silencieux"><h3><a href="#s-hors-d-un-block-une-erreur-pas-un-oubli-silencieux">Revoir : Hors d&#x27;un block : une erreur, pas un oubli silencieux</a></h3><div class="reader-cards"><p class="reader-card-reference" id="A-k3v3wrt0hmtx-fba79a0beb-02">Rappel déjà proposé : <a lang="en" href="#A-k3v3wrt0hmtx-6e0103f6cc-02">Is output outside blocks silently ignored in an extending template?</a> · <a href="course-CRS-k3v3wrt0hmtx.html#out-OUT-0b65p7477ebz">Passage canonique</a></p></div></div><div id="cards-s-les-regles-de-l-inheritance-5" data-card-section="s-les-regles-de-l-inheritance"><h3><a href="#s-les-regles-de-l-inheritance">Revoir : Les règles de l&#x27;inheritance</a></h3><div class="reader-cards"><details class="reader-card" id="A-k3v3wrt0hmtx-1437a5f8f6-03"><summary lang="en">May one Twig template contain two extends tags?</summary><p lang="en">No. It has one parent, although that parent can be selected dynamically.</p><p lang="fr">Un seul extends est autorisé. Une expression peut choisir le parent.</p><a href="course-CRS-k3v3wrt0hmtx.html#out-OUT-2m2fsf0992k6">Revoir le passage précis</a></details></div></div><div id="cards-s-reprendre-reafficher-tester-un-block-6" data-card-section="s-reprendre-reafficher-tester-un-block"><h3><a href="#s-reprendre-reafficher-tester-un-block">Revoir : Reprendre, réafficher, tester un block</a></h3><div class="reader-cards"><details class="reader-card" id="A-k3v3wrt0hmtx-28afbecf9c-04"><summary lang="en">How do parent() and block() differ?</summary><p lang="en">parent() includes the parent&#x27;s block content; block() renders a named block.</p><p lang="fr">parent() complète le contenu hérité. block() réaffiche un block nommé.</p><a href="course-CRS-k3v3wrt0hmtx.html#out-OUT-5gpp6vwt10fk">Revoir le passage précis</a></details></div></div><div id="cards-s-reutilisation-horizontale-7" data-card-section="s-reutilisation-horizontale"><h3><a href="#s-reutilisation-horizontale">Revoir : Réutilisation horizontale</a></h3><div class="reader-cards"><details class="reader-card" id="A-k3v3wrt0hmtx-09cb1bc7cf-05"><summary lang="en">Does use render the imported template?</summary><p lang="en">No. It imports blocks for horizontal reuse.</p><p lang="fr">use importe des blocks sans rendu immédiat. Les blocks locaux priment sur les imports.</p><a href="course-CRS-k3v3wrt0hmtx.html#out-OUT-qbyeeh719t3d">Revoir le passage précis</a></details></div></div><div id="cards-s-pieges-d-examen-8" data-card-section="s-pieges-d-examen"><h3><a href="#s-pieges-d-examen">Revoir : Pièges d&#x27;examen</a></h3><div class="reader-cards"><p class="reader-card-reference" id="A-k3v3wrt0hmtx-596d5af532-04">Rappel déjà proposé : <a lang="en" href="#A-k3v3wrt0hmtx-28afbecf9c-04">How do parent() and block() differ?</a> · <a href="course-CRS-k3v3wrt0hmtx.html#out-OUT-5gpp6vwt10fk">Passage canonique</a></p></div></div><div id="cards-s-application-9" data-card-section="s-application"><h3><a href="#s-application">Revoir : Application</a></h3><div class="reader-cards"><p class="reader-card-reference" id="A-k3v3wrt0hmtx-e7ad522ea3-04">Rappel déjà proposé : <a lang="en" href="#A-k3v3wrt0hmtx-28afbecf9c-04">How do parent() and block() differ?</a> · <a href="course-CRS-k3v3wrt0hmtx.html#out-OUT-5gpp6vwt10fk">Passage canonique</a></p><p class="reader-card-reference" id="A-k3v3wrt0hmtx-e7ad522ea3-02">Rappel déjà proposé : <a lang="en" href="#A-k3v3wrt0hmtx-6e0103f6cc-02">Is output outside blocks silently ignored in an extending template?</a> · <a href="course-CRS-k3v3wrt0hmtx.html#out-OUT-0b65p7477ebz">Passage canonique</a></p></div></div><div id="cards-s-fiche-express-10" data-card-section="s-fiche-express"><h3><a href="#s-fiche-express">Revoir : Fiche express</a></h3><div class="reader-cards"><p class="reader-card-reference" id="A-k3v3wrt0hmtx-b11e58e15e-04">Rappel déjà proposé : <a lang="en" href="#A-k3v3wrt0hmtx-28afbecf9c-04">How do parent() and block() differ?</a> · <a href="course-CRS-k3v3wrt0hmtx.html#out-OUT-5gpp6vwt10fk">Passage canonique</a></p></div></div><div id="cards-previous"><p class="recall-provenance">Module 05 — Routage · Cours « Conditional request matching »</p><aside class="checkpoint"><h2>Rappel d’un cours antérieur</h2><p>Avant de poursuivre : Conditional request matching.</p><details class="corpus-correction"><summary lang="en">When is a route condition evaluated?</summary><p lang="en">During matching; compiled routing caches contain its compiled PHP expression.</p><p>condition filtre l&#x27;entrée. L&#x27;expression peut être compilée dans le cache du matcher.</p><a href="course-CRS-f92d09x14ggx.html#out-OUT-s9bajh1gydjw">Relire la correction dans le cours antérieur</a></details></aside></div></div><div id="view-quiz" data-course-panel role="region" aria-labelledby="view-quiz-title"><aside class="revision-context"><p><strong>Avant le quiz :</strong> Le blog a vingt pages. Toutes affichent le même en-tête, le même menu, le même pied de page. Copier ce squelette dans vingt templates serait une catastrophe de maintenance. Ce cours explique comment Twig écrit le squelette une seule fois et laisse chaque page ne fournir que ce qui change, puis ce que le compilateur refuse et comment partager des morceaux sans créer un deuxième parent.</p><p>Quelle donnée entre, quelle responsabilité agit et quelle condition change le résultat ? Pour chaque correction, vérifiez ces conditions dans <a href="course-CRS-k3v3wrt0hmtx.html#s-objectif">le passage enseigné</a>, sans supposer que toutes les branches du blog sont exécutées.</p></aside><h2 id="view-quiz-title">Quiz</h2><p class="quiz-size" lang="en">5 eligible learning questions · 5 per session. Repeating a question does not demonstrate mastery.</p><p id="course-quiz-status" role="status">Quiz interactif non chargé. Démarrez après chargement de la banque locale.</p><div id="course-quiz-controls" class="assessment-main" hidden><div id="course-quiz-assessment-controls" hidden><select id="course-quiz-assessment-mode" aria-label="Mode du quiz" hidden><option value="learning">Entraînement</option></select><p id="course-quiz-training-scope"></p><button id="course-quiz-start-assessment" type="button" lang="en">Start practice</button><button id="course-quiz-finish-assessment" type="button" lang="en" hidden>End session</button></div><p id="course-quiz-assessment-error" role="alert"></p><p id="course-quiz-assessment-timer" hidden></p><p id="course-quiz-session-progress" class="quiz-progress" role="status" lang="en"></p><div id="course-quiz-assessment-app" tabindex="-1"></div><nav id="course-quiz-session-navigation" aria-label="Questions du cours"></nav><div id="course-quiz-learning-overview" aria-live="polite"></div></div><div id="course-quiz-native"><p>Sans JavaScript ou si le chargement échoue : aucune tentative notée. Les <a href="#view-flashcards">flashcards du cours</a> restent disponibles.</p><details class="course-quiz-fallback" data-question-id="L-k3v3wrt0hmtx-base-v1"><summary lang="en">RADIO — Select one answer. What happens to an inherited block the child does not override?</summary><p>Correction de consultation — non notée.</p><p>extends choisit le parent. Le child remplace seulement les blocks qu&#x27;il redéfinit.</p><ul><li><strong lang="en">Correct: The parent&#x27;s block content remains.</strong><p>extends choisit le parent. Le child remplace seulement les blocks qu&#x27;il redéfinit.</p></li><li><strong lang="en">Distractor: The block becomes empty unless parent() is called.</strong><p>parent() sert dans une redéfinition ; un block non redéfini est hérité.</p></li><li><strong lang="en">Distractor: The child fails to compile because every block is required.</strong><p>Le child n&#x27;est pas obligé de redéfinir tous les blocks.</p></li></ul><a href="course-CRS-k3v3wrt0hmtx.html#out-OUT-2m2fsf0992k6">Relire le passage exact</a><a href="course-CRS-k3v3wrt0hmtx.html#s-le-mecanisme">Relire la correction précise</a></details></div></div></div></div><details class="transfer-panel"><summary>Sauvegarde et transfert de progression</summary><p id="reading-status" role="status">Sans JavaScript : lecture libre ; progression non enregistrée.</p><p><a href="assessment.html#overview-title">Lecture, réussites immédiates et différées</a></p><p>Transfert manuel — aucune synchronisation automatique</p><p id="persistence-status" role="status"></p><button type="button" class="secondary" id="export-progress">Exporter ma progression</button><label for="import-progress">Choisir un JSON pour fusionner ma progression (sans remplacement)</label><input type="file" id="import-progress" accept="application/json,.json"><p id="transfer-status" role="status"></p></details></main><footer class="site-footer"><a href="catalogue.html">Catalogue</a> <a href="sources.html">Sources et attribution</a> <a href="#contenu">Haut de page</a></footer></body></html>

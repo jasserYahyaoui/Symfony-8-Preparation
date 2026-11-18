@@ -1,0 +1,623 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; connect-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Request handling — Symfony 8 Preparation</title><link rel="stylesheet" href="styles.css"><link rel="stylesheet" href="reader.css"><script src="mermaid.min.js" defer></script><script src="mermaid-init.js" defer></script><link rel="stylesheet" href="assessment.css"><script src="fixed-exams-data.js" defer></script><script src="fixed-exams.js" defer></script><script src="learning-state.js" defer></script><script src="guide.js" defer></script><script src="reader-catalog.js" defer></script><script src="reader.js" defer></script><script src="site-state.js" defer></script><script src="assessment.js" defer></script><script src="course-views.js" defer></script><link rel="stylesheet" href="syntax-highlight.css"><script src="prism-syntax.js" defer></script><script src="syntax-highlight.js" defer></script></head><body data-course-id="CRS-mpwjc4g3vmj7"><a class="skip" href="#contenu">Aller au contenu</a><header class="site-header"><a class="brand" href="index.html">S8 Preparation</a><nav aria-label="Navigation principale"><a href="index.html">Accueil</a> <a href="catalogue.html">Parcours</a> <a href="assessment.html?mode=review">Réviser</a> <a href="examens.html">Examens blancs</a> <a href="jour-j.html">Jour J</a></nav></header><main id="contenu" tabindex="-1" class="corpus-reader"><nav class="breadcrumb" aria-label="Fil d’Ariane"><a href="index.html">Accueil</a> <span aria-hidden="true">›</span> <a href="catalogue.html">Parcours</a> <span aria-hidden="true">›</span> <a href="lot-03.html">Module 03 — Architecture Symfony</a> <span aria-hidden="true">›</span> <span aria-current="page">Request handling</span></nav><h1>Request handling</h1><p class="muted">Symfony 8.0 · API PHP ≤ 8.4 · Twig ≤ 3.22. Préparation indépendante.</p><p class="revision-status">Rédaction narrative P11 : projection nouvelle, non couverte par les décisions historiques P10. Aucune approbation officielle ni garantie de réussite.</p><aside class="narrative-context" aria-label="Repères de lecture"><p><strong>Prérequis de lecture :</strong> <a href="course-CRS-tygmreqkkds3.html">HttpKernel component and FrameworkBundle</a></p><p><strong>Concepts voisins :</strong> <a href="course-CRS-p1694d5f7r8c.html">Service container</a> — Séparer assemblage de l’application et appel HTTP. <a href="lot-03.html">Comparer les responsabilités dans ce module</a> · <a href="carte-composants.html">Situer cette responsabilité dans le blog</a> · <a href="glossaire.html">Distinguer les termes voisins</a></p><p><a href="ordre-lecture.html">Retrouver les 163 cours dans le parcours recommandé</a>. Ce repère ne modifie ni votre historique ni votre progression.</p></aside><div class="course-layout"><details class="lot-course-menu"><summary>Cours du module · 15 cours</summary><nav aria-label="Cours du module"><a class="lot-context" href="lot-03.html">Module 03 — Architecture Symfony</a><ol><li><a href="course-CRS-epx8j3fhb38n.html">HttpFoundation component</a></li><li><a href="course-CRS-tyf3yfxjc3sa.html">Symfony Flex</a></li><li><a href="course-CRS-y84syktt20ww.html">License</a></li><li><a href="course-CRS-1bxqx6ks853z.html">Components and Bridges</a></li><li><a href="course-CRS-156khyjssm25.html">Code organization</a></li><li><a href="course-CRS-mpwjc4g3vmj7.html" aria-current="page">Request handling</a></li><li><a href="course-CRS-kd67y4vnd0mm.html">Exception handling</a></li><li><a href="course-CRS-2hpcy2rscq7m.html">Event dispatcher and kernel events</a></li><li><a href="course-CRS-k2xvr11x936e.html">Official best practices</a></li><li><a href="course-CRS-21ec5kwrcmkm.html">Backward compatibility promise</a></li><li><a href="course-CRS-rkq1d437dw5d.html">Deprecations best practices</a></li><li><a href="course-CRS-f9s8mpaydnbx.html">Framework overloading</a></li><li><a href="course-CRS-6m32av3nr9eh.html">Release management and roadmap schedule</a></li><li><a href="course-CRS-f74jcpnrrkhz.html">Framework interoperability and PSRs</a></li><li><a href="course-CRS-9g4qrgfs7nm4.html">Naming conventions</a></li></ol><a href="lot-03.html#view-quiz">Quiz du module</a></nav></details><aside class="course-section-menu" aria-label="Sommaire du cours"><nav class="course-actions" aria-label="Activités du cours"><a id="tab-course" href="#view-course">Cours</a><a id="tab-flashcards" href="#view-flashcards">Flashcards</a><a id="tab-quiz" href="#view-quiz">Quiz</a></nav><details class="course-section-disclosure"><summary id="course-sections">Sections du cours</summary><nav aria-label="Sections du cours"><ul><li><a href="#s-objectif">Objectif</a></li><li><a href="#s-l-essentiel">L&#x27;essentiel</a></li><li><a href="#s-le-cycle-en-schema">Le cycle en schéma</a></li><li><a href="#s-l-exemple-une-page-de-maintenance-qui-court-circuite">L&#x27;exemple : une page de maintenance qui court-circuite</a></li><li><a href="#s-le-contrat">Le contrat</a></li><li><a href="#s-le-trajet">Le trajet</a></li><li><a href="#s-la-pile-de-requests-poussee-et-depilee-par-handle">La pile de Requests, poussée et dépilée par `handle()`</a></li><li><a href="#s-la-branche-que-le-trajet-nominal-ne-montre-pas">La branche que le trajet nominal ne montre pas</a></li><li><a href="#s-trois-facons-d-echouer-trois-exceptions">Trois façons d&#x27;échouer, trois exceptions</a></li><li><a href="#s-pieges-d-examen">Pièges d&#x27;examen</a><ul><li><a href="#s-pieges-d-examen-nested-choisir-le-hook-sans-confondre-retour-emission-et-traitement-durable">Choisir le hook sans confondre retour, émission et traitement durable</a></li></ul></li><li><a href="#s-application">Application</a></li><li><a href="#s-fiche-express">Fiche express</a></li><li><a href="#s-sources-officielles">Sources officielles</a></li><li><a href="#reader-objectives">Objectifs d’apprentissage</a></li><li><a href="#course-recalls">Rappels et liens avec les autres cours</a></li></ul></nav><nav aria-label="Flashcards par section"><a href="#view-flashcards">Flashcards par section</a><ul><li><a href="#cards-s-l-essentiel-1">L&#x27;essentiel</a></li><li><a href="#cards-s-le-cycle-en-schema-2">Le cycle en schéma</a></li><li><a href="#cards-s-l-exemple-une-page-de-maintenance-qui-court-circuite-3">L&#x27;exemple : une page de maintenance qui court-circuite</a></li><li><a href="#cards-s-le-contrat-4">Le contrat</a></li><li><a href="#cards-s-le-trajet-5">Le trajet</a></li><li><a href="#cards-s-la-pile-de-requests-poussee-et-depilee-par-handle-6">La pile de Requests, poussée et dépilée par `handle()`</a></li><li><a href="#cards-s-la-branche-que-le-trajet-nominal-ne-montre-pas-7">La branche que le trajet nominal ne montre pas</a></li><li><a href="#cards-s-trois-facons-d-echouer-trois-exceptions-8">Trois façons d&#x27;échouer, trois exceptions</a></li><li><a href="#cards-s-pieges-d-examen-9">Pièges d&#x27;examen</a></li><li><a href="#cards-s-application-10">Application</a></li><li><a href="#cards-s-fiche-express-11">Fiche express</a></li><li><a href="#cards-previous">Module 03 — Architecture Symfony · Cours « Code organization » · Rappel : <span lang="en">Which application directory should the web server expose?</span></a></li></ul></nav><nav aria-label="Retour au module"><a href="lot-03.html">Tous les cours du module</a></nav></details><p class="local-quiz-count">7 questions disponibles · 7 par session Quiz</p></aside><div class="course-content"><div id="view-course" data-course-panel role="region" aria-labelledby="view-course-title"><h2 id="view-course-title">Cours</h2><p class="course-introduction"><a href="#s-objectif">Introduction</a> · <a href="#course-sections">Sections du cours</a></p><h2 id="reader-objectives" tabindex="-1">Objectifs d’apprentissage</h2><ul><li><a href="course-CRS-mpwjc4g3vmj7.html#out-OUT-ab41ar3ad6kf">Énoncer la signature de HttpKernelInterface::handle et le role de ses trois arguments</a></li><li><a href="course-CRS-mpwjc4g3vmj7.html#out-OUT-3p88arwajsx7">Ordonner les events du kernel pour une Request nominale</a></li><li><a href="course-CRS-mpwjc4g3vmj7.html#out-OUT-6adtz0h101zr">Nommer l&#x27;acteur de chaque étape : Runtime, Kernel, ControllerResolver</a></li><li><a href="course-CRS-mpwjc4g3vmj7.html#out-OUT-dy7bs7233e18">Expliquer pourquoi kernel.view peut ne pas être dispatché</a></li><li><a href="course-CRS-mpwjc4g3vmj7.html#out-OUT-wzt3s8mkhkj9">Situer kernel.terminate par rapport à l&#x27;envoi de la Response</a></li></ul><aside class="pedagogy-legend" aria-label="Repères pédagogiques"><p><strong>Repères pédagogiques</strong></p><p>Ces repères décrivent le rôle du bloc, pas une fréquence officielle à l’examen.</p><p class="teaching-label essential"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="brain" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5C12 1 6 1 6 5C2 5 1 10 4 12C1 15 3 19 6 19C6 23 12 23 12 19V5M12 5C12 1 18 1 18 5C22 5 23 10 20 12C23 15 21 19 18 19C18 23 12 23 12 19M6 5C6 8 8 9 9 9M4 12H7L9 14M6 19V16M18 5C18 8 16 9 15 9M20 12H17L15 14M18 19V16"></path></svg> <strong>À comprendre</strong></p><p class="teaching-label essential"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="book" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5C9 3 5 3 2 4V20C5 19 9 19 12 21C15 19 19 19 22 20V4C19 3 15 3 12 5V21M5 8H8M5 12H8M16 8H19M16 12H19"></path></svg> <strong>À mémoriser</strong></p><p class="teaching-label example"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="code" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6L2 12L8 18M16 6L22 12L16 18M14 3L10 21"></path></svg> <strong>Exemple concret</strong></p><p class="teaching-label pitfall"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="warning" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3L23 21H1L12 3ZM12 9V14M12 17V18"></path></svg> <strong>Piège à éviter</strong></p><p class="teaching-label nuance"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="balance" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3V21M7 21H17M3 7L21 5M5 7L1 15H9L5 7M19 6L15 14H23L19 6M1 15Q5 20 9 15M15 14Q19 19 23 14"></path></svg> <strong>Nuance à connaître</strong></p><p>Précision, exception ou condition d’application d’une règle.</p></aside><section class="teaching-section" data-section="s-objectif"><h2 id="s-objectif" tabindex="-1">Objectif</h2><p>Le navigateur demande <code>GET /blog/42</code>. Notre application possède une route
+<code>blog_show</code>, un <code>BlogController::show</code> enregistré et un service <code>ArticleCatalog</code>
+qui fournit en mémoire l'article 42 sous forme d'<code>ArticleView</code>. Il reste à
+relier cette demande à une réponse : qui prépare l'application, choisit la
+méthode, fournit ses arguments et envoie le résultat ?</p>
+<p>Suivons une requête principale dans Symfony 8.0, exécuté avec PHP 8.4.
+Nous partons de l'entrée Runtime HTTP standard, sans cache HTTP réutilisable
+ni interruption. Nous raccorderons ensuite maintenance, sous-requête et
+erreur à l'endroit où chacune change réellement le trajet.</p>
+<p>Ce cours est le <strong>pivot du module</strong> : il montre le fil complet qu'illustrent
+les autres cours. Les objets <code>Request</code>/<code>Response</code> viennent de
+<a href="course-CRS-epx8j3fhb38n.html">HttpFoundation</a>, les events de
+<a href="course-CRS-2hpcy2rscq7m.html">Event dispatcher et kernel events</a>, la branche
+d'erreur de <a href="course-CRS-kd67y4vnd0mm.html">Exception handling</a> ; Flex, qui
+installe le <code>public/index.php</code> et le Runtime, est vu dans
+<a href="course-CRS-tyf3yfxjc3sa.html">Symfony Flex</a>.</p></section><section class="teaching-section" data-section="s-l-essentiel"><h2 id="s-l-essentiel" tabindex="-1">L&#x27;essentiel</h2><p class="teaching-label essential"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="brain" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5C12 1 6 1 6 5C2 5 1 10 4 12C1 15 3 19 6 19C6 23 12 23 12 19V5M12 5C12 1 18 1 18 5C22 5 23 10 20 12C23 15 21 19 18 19C18 23 12 23 12 19M6 5C6 8 8 9 9 9M4 12H7L9 14M6 19V16M18 5C18 8 16 9 15 9M20 12H17L15 14M18 19V16"></path></svg> <strong>À comprendre</strong></p><aside class="section-digest" id="s-l-essentiel-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>kernel.view tente de convertir un résultat non-Response.</li><li>kernel.response intervient sur la Response obtenue.</li></ol></aside><p><strong>Ce que cette partie veut réellement vous apprendre.</strong></p>
+<ul>
+<li><em>Pourquoi ce sujet existe.</em> « Une URL arrive, une page sort » cache une
+  chaîne de responsabilités. Sans la connaître, on ne sait pas où brancher
+  une logique (listener, resolver, event).</li>
+<li><em>Le piège de fond.</em> Confondre <strong>trois choses</strong> : préparer l'application
+  (<code>Kernel</code>), orchestrer la requête (<code>HttpKernel</code>), et <strong>envoyer</strong> la réponse
+  (le runner). <code>handle()</code> retourne une Response ; il n'envoie rien.</li>
+<li><em>Ce que l'auteur veut que vous compreniez.</em> L'ordre exact des étapes et
+  ce qui le raccourcit : réponse anticipée, retour non-Response, exception.</li>
+<li><em>Pourquoi c'est à l'examen.</em> Les questions testent quels events ont lieu
+  dans un cas donné (TypeError, 404, flux, Request malformée).</li>
+</ul>
+<p>Une <code>Request</code> représente la demande ; une <code>Response</code> contient le contenu,
+le statut et les headers à retourner. HttpFoundation fournit ces objects.
+<code>HttpKernelInterface::handle()</code> décrit leur transformation, <strong>pas l'envoi</strong>.
+<code>App\Kernel</code> prépare l'application et son conteneur ; le service concret
+<code>HttpKernel</code> orchestre ensuite le traitement HTTP.</p>
+<p>Pour notre article, HttpKernel notifie des <em>events</em>, points d'extension
+auxquels des <em>listeners</em> enregistrés réagissent. Il demande séparément
+un callable au <code>ControllerResolver</code>, puis ses arguments à l'<code>ArgumentResolver</code>,
+avant de l'appeler. Le routage, la sélection du callable et la préparation
+des valeurs ne sont donc pas une seule opération.</p>
+<p>Si l'action retourne directement une <code>Response</code>, <code>kernel.view</code> ne se produit
+pas. Si la maintenance répond avant l'action, celle-ci est sautée, mais la
+réponse doit encore être traitée puis envoyée. Une erreur peut au contraire
+remonter sans réponse : nous distinguerons ce chemin de la fin normale.</p>
+<pre class="highlight" tabindex="0"><code class="language-text"> navigateur ─► public/index.php ─► Runtime ─► App\Kernel::handle()
+                                                   │ boot + conteneur
+                                                   ▼
+                                    HttpKernel::handle()  (orchestre)
+   request → controller → arguments → APPEL → [view] → response → finish
+                                                   │ retourne une Response
+                                                   ▼
+                       le RUNNER envoie, puis appelle terminate()</code></pre>
+<div class="admonition info">
+<p class="admonition-title">🌍 In Real Life</p>
+<p><strong>La situation</strong> : au restaurant, le client remet un bon ; le responsable coordonne sa préparation, puis un résultat prêt à servir lui revient.</p>
+<p><strong>L’équivalent dans Symfony</strong> :
+- Bon décrivant la demande → <code>Request</code> pour <code>GET /blog/42</code>.
+- Préparation de l'établissement → <code>Kernel</code> et son conteneur.
+- Coordination de cette commande → <code>HttpKernel</code>.
+- Résultat avec contenu et indications de service → <code>Response</code>, avec statut et headers.</p>
+<p><strong>Retour à la réalité technique</strong> : HttpFoundation fournit les objets HTTP ; HttpKernel coordonne leur traitement. Le conteneur ne reconstruit pas systématiquement tous les services pour chaque requête. Une Response retournée n'est pas encore un envoi réseau.</p>
+<p><strong>🧠 Comment le mémoriser</strong> : « Le bon décrit, le responsable coordonne. » Image mentale : le bon posé devant le responsable. Question-réflexe : est-ce un objet HTTP, la préparation de l'application ou son orchestration ?</p>
+<p><strong>⚠️ À ne pas confondre</strong> : <code>Kernel</code> prépare l'application ; <code>HttpKernel</code> traite la requête ; leurs interfaces fixent des contrats, elles ne sont pas des acteurs exécutables.</p>
+</div></section><section class="teaching-section" data-section="s-le-cycle-en-schema"><h2 id="s-le-cycle-en-schema" tabindex="-1">Le cycle en schéma</h2><aside class="section-digest" id="s-le-cycle-en-schema-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Le cycle prend une branche différente selon le type du retour controller.</li><li>kernel.response travaille ensuite sur la Response obtenue.</li></ol></aside><p><strong>Où en est-on ?</strong> On a vu les acteurs ; il faut maintenant les voir <em>dans
+l'ordre</em>. Pourquoi un schéma ? Parce que les questions d'examen demandent
+« quels events ont lieu ? » : la réponse se lit sur le diagramme.</p>
+<p>Lisons ce schéma à partir de <code>kernel.request</code>, donc <strong>après</strong> la préparation
+de l'application. Sur le trajet de l'article 42, l'action produit une
+<code>Response</code> et rejoint directement <code>kernel.response</code>. La branche orange
+n'existe que pour un autre type de retour ; elle n'est pas une étape
+obligatoire du rendu HTML.</p>
+<figure class="diagram" aria-labelledby="CRS-mpwjc4g3vmj7-3-diagram-0-title CRS-mpwjc4g3vmj7-3-diagram-0-description"><figcaption id="CRS-mpwjc4g3vmj7-3-diagram-0-title">Le trajet d&#x27;une main Request sans exception</figcaption><p id="CRS-mpwjc4g3vmj7-3-diagram-0-description">Dans le runner Runtime HTTP standard, sans erreur des listeners, kernel.request peut poser une Response et sauter le controller. Sinon HttpKernel résout le callable, notifie kernel.controller, résout les arguments et notifie kernel.controller_arguments avant l&#x27;appel. kernel.view intervient seulement pour un retour non-Response. Une Response obtenue passe par kernel.response puis kernel.finish_request. Après le retour de handle, le runner envoie et appelle terminate pour un noyau terminable.</p><div class="mermaid" hidden>---
+title: Le trajet sans exception
+---
+flowchart TD
+  accTitle: Le trajet d&#x27;une main Request sans exception
+  accDescr: Dans le runner Runtime HTTP standard, sans erreur des listeners, kernel.request peut poser une Response et sauter le controller. Sinon HttpKernel résout le callable, notifie kernel.controller, résout les arguments et notifie kernel.controller_arguments avant l&#x27;appel. kernel.view intervient seulement pour un retour non-Response. Une Response obtenue passe par kernel.response puis kernel.finish_request. Après le retour de handle, le runner envoie et appelle terminate pour un noyau terminable.
+  REQ[&quot;kernel.request&quot;] --&gt;|&quot;setResponse()&quot;| RESP
+  REQ --&gt;|&quot;pas de Response : résoudre le callable&quot;| CTRL[&quot;kernel.controller&quot;]
+  CTRL --&gt;|&quot;résoudre les arguments&quot;| ARGS[&quot;kernel.controller_arguments&quot;]
+  ARGS --&gt;|&quot;utiliser callable et arguments finaux&quot;| CALL[&quot;appel du controller&quot;]
+  CALL --&gt;|&quot;une Response&quot;| RESP[&quot;kernel.response&quot;]
+  CALL --&gt;|&quot;autre chose&quot;| VIEW[&quot;kernel.view&quot;]
+  VIEW --&gt;|&quot;setResponse()&quot;| RESP
+  VIEW --&gt;|&quot;aucune Response&quot;| ERR([&quot;exception&quot;])
+  RESP --&gt;|&quot;Response filtrée&quot;| FIN[&quot;kernel.finish_request&quot;]
+  FIN --&gt;|&quot;retour de handle au runner&quot;| SEND[&quot;envoi&quot;]
+  SEND --&gt;|&quot;runner appelle terminate&quot;| TERM[&quot;kernel.terminate&quot;]
+  classDef runtime fill:#e0f2fe,stroke:#0369a1,color:#0c4a6e
+  classDef conditional fill:#fef3c7,stroke:#b45309,color:#78350f
+  classDef result fill:#dcfce7,stroke:#15803d,color:#14532d
+  classDef error fill:#fee2e2,stroke:#b91c1c,color:#7f1d1d
+  class REQ,CTRL,ARGS,CALL,RESP,FIN runtime
+  class VIEW conditional
+  class SEND,TERM result
+  class ERR error</div></figure>
+<p>Bleu : étapes d'orchestration ; orange : conversion conditionnelle ; vert :
+émission et terminaison ; rouge : échec. Vue d'une requête principale dans le
+runner Runtime, sans exception des listeners. <code>handle()</code> ne fait pas lui-même
+l'envoi et une sous-requête n'entraîne pas automatiquement <code>terminate()</code>.</p>
+<table>
+<thead>
+<tr>
+<th>Event</th>
+<th>Ce qu'un listener peut y faire</th>
+<th>Toujours dispatché ?</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>kernel.request</code></td>
+<td>poser une Response, ajouter des attributes</td>
+<td>oui</td>
+</tr>
+<tr>
+<td><code>kernel.controller</code></td>
+<td>remplacer le callable</td>
+<td>non (sauté si Response anticipée)</td>
+</tr>
+<tr>
+<td><code>kernel.controller_arguments</code></td>
+<td>remplacer arguments <strong>et</strong> callable</td>
+<td>non (idem)</td>
+</tr>
+<tr>
+<td><code>kernel.view</code></td>
+<td>convertir un retour non-Response</td>
+<td>seulement si non-Response</td>
+</tr>
+<tr>
+<td><code>kernel.response</code></td>
+<td>modifier la Response</td>
+<td>oui, si une Response existe</td>
+</tr>
+<tr>
+<td><code>kernel.finish_request</code></td>
+<td>restaurer le contexte parent</td>
+<td>oui (sauf <code>\Error</code> non couverte)</td>
+</tr>
+<tr>
+<td><code>kernel.terminate</code></td>
+<td>travail bref après envoi</td>
+<td>à la charge du runner</td>
+</tr>
+</tbody>
+</table></section><section class="teaching-section" data-section="s-l-exemple-une-page-de-maintenance-qui-court-circuite"><h2 id="s-l-exemple-une-page-de-maintenance-qui-court-circuite" tabindex="-1">L&#x27;exemple : une page de maintenance qui court-circuite</h2><p class="teaching-label example"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="code" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6L2 12L8 18M16 6L22 12L16 18M14 3L10 21"></path></svg> <strong>Exemple concret</strong></p><aside class="section-digest" id="s-l-exemple-une-page-de-maintenance-qui-court-circuite-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Une Response posée sur RequestEvent court-circuite la résolution et l&#x27;exécution du controller.</li><li>Le cycle traite la Response ; terminate relève ensuite du runner après émission.</li></ol></aside><p><strong>Où en est-on ?</strong> On connaît le chemin nominal ; voyons comment une Response
+<em>anticipée</em> le raccourcit. Pourquoi la maintenance ? C'est le cas d'école d'un
+listener de <code>kernel.request</code> qui répond avant le controller.</p>
+<p>Supposons maintenant que le blog soit fermé pour maintenance. Nous voulons
+répondre <code>503</code> à <code>GET /blog/42</code> sans appeler <code>ArticleCatalog</code>. Un listener
+sur <code>kernel.request</code> peut fournir cette réponse avant la résolution du
+controller. Dans cet extrait, la class doit être enregistrée comme service
+avec l'autoconfiguration des listeners activée ; les imports rendent
+explicites les trois API utilisées.</p>
+<pre class="highlight" tabindex="0"><code class="language-php">use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Event\RequestEvent;
+
+#[AsEventListener(priority: 100)]
+final class MaintenanceListener
+{
+    public function __invoke(RequestEvent $event): void
+    {
+        $event-&gt;setResponse(new Response('Maintenance', 503));
+        // Le controller est sauté ; HttpKernel traite encore cette Response.
+    }
+}</code></pre>
+<p>Le <code>RequestEvent</code> reçu porte la demande courante. <code>setResponse()</code> y place
+le contenu <code>Maintenance</code>, statut <code>503</code>, et arrête la propagation de cet
+event. Avec la priorité <code>100</code>, ce listener précède notamment le
+<code>RouterListener</code> standard de priorité <code>32</code> s'ils sont tous deux enregistrés.
+Le callable de l'article n'est pas résolu.</p>
+<p>Cet exemple répond <strong>toujours</strong> et concerne aussi les sous-requêtes :
+il faudrait une condition de maintenance et, si nécessaire, un contrôle
+<code>isMainRequest()</code> pour un autre périmètre. Sans nouvelle erreur,
+<code>kernel.response</code> et <code>kernel.finish_request</code> ont encore lieu. L'envoi et
+<code>terminate()</code> restent à la charge du runner ; <code>setResponse()</code> ne les exécute
+pas. Voyons le contrat que cette sortie anticipée respecte.</p>
+<div class="admonition info">
+<p class="admonition-title">🌍 In Real Life</p>
+<p><strong>La situation</strong> : l'accueil remet une réponse « fermé pour maintenance » avant de transmettre le bon en cuisine.</p>
+<p><strong>L’équivalent dans Symfony</strong> : accueil prioritaire → listener de <code>kernel.request</code> ; avis de fermeture → <code>Response</code> 503 ; bon non transmis → résolution et appel du contrôleur sautés.</p>
+<p><strong>Retour à la réalité technique</strong> : <code>RequestEvent::setResponse()</code> arrête la propagation de cet événement. Ici, la priorité 100 précède le RouterListener standard à 32 : même le routage peut être évité. Sans nouvelle erreur, le filtrage de réponse et finish restent nécessaires ; l'envoi appartient au runner.</p>
+<p><strong>🧠 Comment le mémoriser</strong> : « Répondre tôt n'est pas envoyer tout de suite. » Image mentale : un avis encore sur le comptoir. Question-réflexe : quelles étapes cette Response évite-t-elle, et qui l'envoie ?</p>
+<p><strong>⚠️ À ne pas confondre</strong> : arrêter cet événement ne supprime pas tous les événements ultérieurs du traitement.</p>
+</div></section><section class="teaching-section" data-section="s-le-contrat"><span class="outcome-anchor" id="out-OUT-ab41ar3ad6kf" tabindex="-1"></span><h2 id="s-le-contrat" tabindex="-1">Le contrat</h2><aside class="section-digest" id="s-le-contrat-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Le contrat relie Request à Response.</li><li>MAIN_REQUEST vaut 1 et SUB_REQUEST vaut 2.</li></ol></aside><p><strong>Où en est-on ?</strong> On sait que <code>handle()</code> retourne une Response, que le chemin
+soit nominal ou anticipé. Pourquoi s'arrêter sur la signature ? Parce que les
+trois paramètres (<code>$request</code>, <code>$type</code>, <code>$catch</code>) décident de ce qui remonte
+à l'appelant.</p>
+<p>Que la réponse contienne l'article ou la maintenance, l'appelant attend
+le même résultat. Voici la signature de <code>HttpKernelInterface</code>, à lire
+dans son interface, et non comme une fonction autonome :</p>
+<pre class="highlight" tabindex="0"><code class="language-php">public function handle(Request $request, int $type = self::MAIN_REQUEST, bool $catch = true): Response;</code></pre>
+<p>Pour <code>GET /blog/42</code>, <code>$request</code> contient la demande et <code>$type</code> vaut par défaut
+<code>MAIN_REQUEST</code> (<strong>1</strong>). Un traitement HTTP imbriqué emploie <code>SUB_REQUEST</code>
+(<strong>2</strong>) ; il suit le même mécanisme, et les listeners doivent décider s'ils
+concernent aussi cette sous-requête.</p>
+<p><code>$catch = true</code> autorise la prise en charge des exceptions concernées ; il ne
+garantit pas qu'un listener fabriquera une page d'erreur. Avec <code>false</code>,
+l'appelant conserve la responsabilité de l'échec. Le traitement des <code>Error</code>
+dépend aussi de <code>handleAllThrowables</code>, détaillé plus bas. En cas de succès,
+le résultat est un object <code>Response</code> encore distinct de son émission réseau.
+Le contrat fixe cette frontière ; parcourons maintenant ses acteurs dans
+l'ordre réel.</p>
+<p>Pour observer cette frontière, l'exemple suivant reçoit un kernel <strong>déjà
+assemblé</strong> et une Request de l'appelant. Avec une Request visant
+<code>/blog/42</code>, il retourne la Response obtenue ; avec une exception concernée
+par <code>$catch</code>, il la laisse remonter au lieu de demander sa conversion.</p>
+<pre class="highlight" tabindex="0"><code class="language-php">&lt;?php
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\HttpKernelInterface;
+
+function handleWithoutErrorPage(HttpKernelInterface $kernel, Request $request): Response
+{
+    return $kernel-&gt;handle($request, HttpKernelInterface::MAIN_REQUEST, false);
+}</code></pre>
+<p>Cette fonction ne construit pas le kernel, ne configure pas les routes et
+n'émet aucun octet. Son résultat dépend donc de l'assemblage fourni.
+Elle rend visible le choix de l'appelant ; elle n'est pas un deuxième
+front controller à exécuter en plus du runner.</p>
+<table>
+<thead>
+<tr>
+<th>Paramètre</th>
+<th>Valeurs</th>
+<th>Effet</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>$type</code></td>
+<td><code>MAIN_REQUEST</code> (1) / <code>SUB_REQUEST</code> (2)</td>
+<td>qualifie le traitement, même mécanisme</td>
+</tr>
+<tr>
+<td><code>$catch</code></td>
+<td><code>true</code> (défaut)</td>
+<td>exceptions concernées → <code>kernel.exception</code></td>
+</tr>
+<tr>
+<td><code>$catch</code></td>
+<td><code>false</code></td>
+<td><code>kernel.finish_request</code> puis l'exception remonte</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition info">
+<p class="admonition-title">🌍 In Real Life</p>
+<p><strong>La situation</strong> : une fiche de poste promet de prendre un bon et de remettre un résultat ; elle ne prépare elle-même aucun plat.</p>
+<p><strong>L’équivalent dans Symfony</strong> : fiche de poste → <code>HttpKernelInterface</code> ; employé remplissant ce rôle → objet qui implémente le contrat ; résultat remis au responsable → valeur <code>Response</code> retournée par <code>handle()</code>.</p>
+<p><strong>Retour à la réalité technique</strong> : une interface décrit une signature. L'implémentation peut échouer au lieu de retourner normalement. <code>$catch = true</code> autorise le traitement des exceptions concernées, sans garantir leur conversion en Response ; ce contrat ne couvre pas l'émission.</p>
+<p><strong>🧠 Comment le mémoriser</strong> : « La promesse n'est pas l'employé. » Image mentale : la fiche à côté de la personne. Question-réflexe : décrit-on un contrat ou le code qui l'exécute ?</p>
+<p><strong>⚠️ À ne pas confondre</strong> : <code>MAIN_REQUEST</code> et <code>SUB_REQUEST</code> qualifient le traitement ; ce ne sont pas deux signatures ni deux navigateurs.</p>
+</div><div class="retained-answer-context">
+<p><strong>Repère — La pile de Requests, poussée et dépilée par <code>handle()</code> :</strong></p>
+<p lang="en"><strong>Question:</strong> How is the current request restored after a sub-request finishes?</p>
+<p lang="en"><strong>Answer:</strong> handle() pops the RequestStack in a finally block.</p>
+<p>handle() empile la Request à l'entrée. Le finally restaure la pile même en cas d'exception.</p>
+</div>
+
+<div class="retained-answer-context">
+<p><strong>Repère — La branche que le trajet nominal ne montre pas :</strong></p>
+<p lang="en"><strong>Question:</strong> Does catch=false dispatch kernel.exception?</p>
+<p lang="en"><strong>Answer:</strong> No. The exception propagates instead; covered exception paths still finish the request.</p>
+<p>catch=false désactive la conversion par kernel.exception. Distinguer cette option du traitement des Error par handleAllThrowables.</p>
+</div></section><section class="teaching-section" data-section="s-le-trajet"><span class="outcome-anchor" id="out-OUT-3p88arwajsx7" tabindex="-1"></span><span class="outcome-anchor" id="out-OUT-6adtz0h101zr" tabindex="-1"></span><span class="outcome-anchor" id="out-OUT-dy7bs7233e18" tabindex="-1"></span><span class="outcome-anchor" id="out-OUT-wzt3s8mkhkj9" tabindex="-1"></span><h2 id="s-le-trajet" tabindex="-1">Le trajet</h2><p><strong>Où en est-on ?</strong> Le schéma montrait les events, le contrat la signature ;
+voici maintenant le trajet <strong>complet, de <code>public/index.php</code> à
+<code>kernel.terminate</code></strong>, en neuf étapes. Pourquoi numéroter ? Parce que chaque
+étape a un responsable différent : c'est ce qui permet de savoir « qui appelle
+qui ».</p>
+<p>Reprenons le blog ouvert, route importée et controller enregistré. Voici
+le chemin de notre <strong>entrée Runtime HTTP standard</strong>, sans cache HTTP
+réutilisable ni réponse anticipée ; les listeners terminent sans erreur.</p>
+<ol>
+<li>Le serveur web transmet <code>GET /blog/42</code> à <code>public/index.php</code>, notre
+   <em>front controller</em>, point d'entrée HTTP. Le script charge
+   <code>vendor/autoload_runtime.php</code> et retourne un callable construisant
+   <code>App\Kernel</code>. L'amorçage l'appelle : nous avons un object Kernel,
+   pas encore une application démarrée.</li>
+<li><code>SymfonyRuntime::getRunner()</code> choisit le <em>runner</em>, chargé d'exécuter
+   l'application. Dans ce chemin standard, il crée la <code>Request</code> depuis
+   les superglobales après construction du Kernel. Le runner appelle
+   ensuite <code>handle()</code> ; il n'a encore rien envoyé.</li>
+<li><code>Kernel::handle()</code> prépare l'application : son chemin comporte
+   <code>preBoot()</code>, le cache HTTP optionnel, puis <code>boot()</code> avant délégation au
+   service <code>http_kernel</code>. Le conteneur compilé est chargé s'il est utilisable,
+   construit si nécessaire. Nous ne recompilons pas toute la configuration
+   pour chaque lecture d'article et ne construisons pas tous les services.</li>
+<li>Le concret <code>HttpKernel</code> empile la Request et dispatche <strong><code>kernel.request</code></strong>.
+   Si le routage est atteint, <code>RouterListener</code> fait correspondre l'URL à
+   <code>blog_show</code> et ajoute ici les attributes <code>_route = blog_show</code>,
+   <code>_controller = App\Controller\BlogController::show</code> et <code>id = '42'</code>.
+   Ce sont des attributes de Request, pas les paramètres de query ni les
+   attributes PHP <code>#[...]</code>. Le matching ne prouve pas l'existence de l'article.
+   Un listener peut encore répondre à ce stade, comme pour la maintenance.</li>
+<li>Sans réponse anticipée, <strong>HttpKernel appelle <code>ControllerResolver</code></strong>.
+   À partir de <code>_controller</code>, celui-ci fournit le callable, ici l'object
+   controller et sa method <code>show</code>. L'intégration au conteneur peut fournir
+   ce controller-service avec ses dépendances. <strong><code>kernel.controller</code></strong>
+   peut remplacer le callable ; l'action n'a pas encore été exécutée.</li>
+<li><strong>HttpKernel appelle <code>ArgumentResolver</code></strong>, qui consulte les <em>value resolvers</em>,
+   collaborateurs chargés de fournir les valeurs adaptées à la signature
+   finale. L'attribute <code>id</code> peut ainsi fournir la valeur de l'argument
+   correspondant. Ce travail est distinct de l'injection au constructeur.
+   <strong><code>kernel.controller_arguments</code></strong> peut encore modifier les arguments
+   <strong>et le callable</strong> ; HttpKernel récupère ces valeurs finales.</li>
+<li>HttpKernel appelle enfin le controller. <code>BlogController::show</code> peut
+   consulter notre <code>ArticleCatalog</code> en mémoire : 42 existe, 999 non.
+   Pour 42, l'action prépare le contenu de l'article et retourne une
+   <code>Response</code>. Aucun chargement de base de données, Validator ou Serializer
+   n'est imposé par ce GET. Pour 999, l'action doit choisir explicitement
+   une réponse ou exception 404. Si une variante retourne autre chose
+   qu'une Response, <strong><code>kernel.view</code></strong> donne aux listeners une occasion
+   d'en produire une ; un tableau ne devient pas automatiquement du JSON.</li>
+<li>Une Response obtenue passe par <strong><code>kernel.response</code></strong>, puis
+   <strong><code>kernel.finish_request</code></strong> si ce filtrage réussit. Les listeners de
+   finish peuvent restaurer un contexte parent. HttpKernel dépile la
+   Request dans son <code>finally</code> et rend la Response à l'appelant.</li>
+<li>Le runner <strong>envoie ensuite</strong> la Response et appelle <code>terminate()</code> si
+   le noyau implémente <code>TerminableInterface</code>, ce qui permet
+   <strong><code>kernel.terminate</code></strong>. Le processus PHP reste occupé pendant ces
+   traitements. La libération anticipée du client dépend du serveur :
+   ce hook n'est pas une tâche asynchrone persistante.</li>
+</ol>
+<pre class="highlight" tabindex="0"><code class="language-text"> étape  qui agit                  ce qui est produit
+   1    serveur + index.php       un objet Kernel (pas démarré)
+   2    SymfonyRuntime / runner   la Request (superglobales)
+   3    Kernel::handle()          boot + conteneur prêt
+   4    HttpKernel + Router       attributes _route, _controller, id
+   5    ControllerResolver        le callable (objet + show)
+   6    ArgumentResolver          les arguments (id = '42')
+   7    HttpKernel                la Response (ou autre chose → kernel.view)
+   8    HttpKernel                Response filtrée, pile dépilée
+   9    le runner                 envoi, puis terminate()</code></pre>
+<p><strong>Variante manuelle, à ne pas superposer à cette séquence.</strong> Sans Runtime,
+le point d'entrée prend explicitement en charge l'autoload et l'amorçage,
+la création de Request, <code>handle()</code>, l'envoi, puis la terminaison si disponible.
+Il n'y a pas une seconde Request ou un second envoi à ajouter au chemin
+Runtime. Un runner personnalisé peut aussi suivre un autre mode d'exécution.</p>
+<div class="admonition info">
+<p class="admonition-title">🌍 In Real Life</p>
+<p><strong>La situation</strong> : le responsable fait annoter le bon, choisit la personne chargée de la commande, puis lui prépare les informations nécessaires avant de lui demander d'agir.</p>
+<p><strong>L’équivalent dans Symfony</strong> :
+- Destination inscrite sur le bon → matching du routeur via <code>RouterListener</code>, pendant <code>kernel.request</code>.
+- Personne et geste identifiés → callable obtenu par <code>ControllerResolver</code>, à la demande de HttpKernel.
+- Informations adaptées à ce geste → arguments obtenus par <code>ArgumentResolver</code> et ses value resolvers, à la demande de HttpKernel.
+- Ordre de commencer → invocation finale du callable par HttpKernel.</p>
+<p><strong>Retour à la réalité technique</strong> : après le callable vient <code>kernel.controller</code>, puis la résolution des arguments, puis <code>kernel.controller_arguments</code>, puis l'appel. Les resolvers ne s'appellent pas entre eux. <code>_route</code>, <code>_controller</code> et <code>id</code> sont trois attributes de Request distincts. L'injection du constructeur n'est pas la résolution des paramètres de l'action ; lire l'article en mémoire dans l'action est ici un choix explicite.</p>
+<p><strong>🧠 Comment le mémoriser</strong> : « Destination, qui, avec quoi ; le responsable appelle. » Image mentale : trois réponses revenant au même bureau. Question-réflexe : qui appelle ce collaborateur et que reçoit-il en retour ?</p>
+<p><strong>⚠️ À ne pas confondre</strong> : les annotations de ce bon ne sont ni la query string ni les attributes PHP <code>#[...]</code>. Le matching ne prouve pas l'existence de l'article.</p>
+</div>
+<div class="admonition info">
+<p class="admonition-title">🌍 In Real Life</p>
+<p><strong>La situation</strong> : désigner un responsable sur le planning n'ouvre pas encore l'établissement ; il faut ensuite préparer le service.</p>
+<p><strong>L’équivalent dans Symfony</strong> : désignation → construction de <code>App\Kernel</code> ; préparation effective → amorçage de l'application ; bon pris en charge → Request fournie au traitement.</p>
+<p><strong>Retour à la réalité technique</strong> : dans l'entrée Runtime standard décrite, le callable construit Kernel avant que <code>SymfonyRuntime::getRunner()</code> crée la Request. Le runner appelle ensuite <code>handle()</code>, qui prépare l'application. Cette image distingue les responsabilités, sans faire de cet ordre une règle pour tous les runners. L'entrée manuelle est une alternative complète, pas un second passage.</p>
+<p><strong>🧠 Comment le mémoriser</strong> : « Nommé n'est pas démarré. » Image mentale : un nom sur le planning devant une salle encore fermée. Question-réflexe : parle-t-on de construction, de boot ou de traitement ?</p>
+<p><strong>⚠️ À ne pas confondre</strong> : charger un conteneur compilé utilisable et recompiler sa configuration.</p>
+</div><aside class="enrichment" aria-label="Autre explication"><p>Le cycle ressemble à un colis passant des points de contrôle : kernel.view emballe seulement un résultat qui n'est pas déjà une Response ; kernel.response inspecte la Response obtenue. Ce ne sont pas deux emballages systématiques.</p></aside><div class="retained-answer-context">
+<p><strong>Repère — Trois façons d'échouer, trois exceptions :</strong></p>
+<p lang="en"><strong>Question:</strong> When is ControllerDoesNotReturnResponseException raised?</p>
+<p lang="en"><strong>Answer:</strong> After a non-Response controller result remains unconverted by kernel.view.</p>
+<p>Le retour est contrôlé après kernel.view. Un listener peut produire la Response manquante.</p>
+</div>
+
+<div class="retained-answer-context">
+<p><strong>Repère — Le cycle en schéma :</strong></p>
+<p lang="en"><strong>Question:</strong> Does a controller result always need kernel.view conversion?</p>
+<p lang="en"><strong>Answer:</strong> No. A Response skips kernel.view; a different result must be converted to a Response.</p>
+<p>Le cycle prend une branche différente selon le type du retour controller. kernel.response travaille ensuite sur la Response obtenue.</p>
+</div>
+
+<div class="retained-answer-context">
+<p><strong>Repère de l’exemple :</strong></p>
+<p lang="en"><strong>Question:</strong> What does setting a Response during kernel.request do to controller execution?</p>
+<p lang="en"><strong>Answer:</strong> It short-circuits controller execution; response and finish-request processing still take place.</p>
+<p>Une Response posée sur RequestEvent court-circuite la résolution et l'exécution du controller. Le cycle traite la Response ; terminate relève ensuite du runner après émission.</p>
+</div></section><section class="teaching-section" data-section="s-la-pile-de-requests-poussee-et-depilee-par-handle"><h2 id="s-la-pile-de-requests-poussee-et-depilee-par-handle" tabindex="-1">La pile de Requests, poussée et dépilée par `handle()`</h2><aside class="section-digest" id="s-la-pile-de-requests-poussee-et-depilee-par-handle-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>handle() empile la Request à l&#x27;entrée.</li><li>Le finally restaure la pile même en cas d&#x27;exception.</li></ol></aside><p><strong>Où en est-on ?</strong> Le trajet a mentionné « empile » et « dépile » sans
+l'expliquer. Pourquoi une pile ? Parce que les sous-requêtes s'imbriquent :
+il faut retrouver la bonne Request courante à chaque niveau. Voir aussi
+<a href="course-CRS-epx8j3fhb38n.html">HttpFoundation</a> pour <code>RequestStack</code>.</p>
+<p>Pendant la préparation de la page, un fragment peut déclencher une
+sous-requête. Le code de ce fragment doit alors voir sa propre Request,
+puis le traitement de l'article doit retrouver la sienne. <code>RequestStack</code>
+est la pile qui conserve cet ordre : <code>HttpKernel::handle()</code> empile à l'entrée
+et dépile dans un <code>finally</code>, exception comprise. <code>getCurrentRequest()</code>
+retourne le sommet ; après le fragment, la Request de l'article redevient
+courante. <code>kernel.finish_request</code> est une notification, pas ce dépilement.</p>
+<p>Une <code>StreamedResponse</code> déplace une partie du travail au moment de l'envoi :
+son <em>callback</em>, fonction appelée pour produire le flux, s'exécute après
+le retour de <code>handle()</code>. HttpKernel le réenveloppe pour réempiler sa Request
+pendant le flux, puis la retirer. Un export lié au blog peut donc retrouver
+la demande qui l'a produit. Sans cette enveloppe, la pile d'une requête
+principale isolée serait déjà vide ; cela ne signifie pas que tout
+traitement différé conserve automatiquement son contexte HTTP.</p>
+<pre class="highlight" tabindex="0"><code class="language-text"> handle(article)   pile : [article]
+   └─ handle(fragment, SUB)   pile : [article, fragment]  ← sommet = présent
+   └─ retour du fragment      pile : [article]            ← redevenu courant
+ retour de handle(article)    pile : []  (finally)
+ envoi du flux : callback réenveloppé → pile : [article] le temps du flux</code></pre>
+<div class="admonition info">
+<p class="admonition-title">🌍 In Real Life</p>
+<p><strong>La situation</strong> : pour traiter un complément, le responsable pose un petit bon sur le bon principal, puis le retire pour reprendre la commande initiale.</p>
+<p><strong>L’équivalent dans Symfony</strong> : bon supérieur → Request courante ; bon dessous → Request parente ; ajout/retrait → opérations de <code>RequestStack</code> encadrées par <code>HttpKernel::handle()</code>.</p>
+<p><strong>Retour à la réalité technique</strong> : le dépilement se fait dans <code>finally</code>, même si une exception remonte. <code>kernel.finish_request</code> est une notification distincte. Pour le flux décrit ici, HttpKernel enveloppe le callback de <code>StreamedResponse</code> afin de réempiler temporairement sa Request pendant l'émission ; ce n'est pas une conservation universelle du contexte.</p>
+<p><strong>🧠 Comment le mémoriser</strong> : « Le dessus est le présent. » Image mentale : deux bons superposés. Question-réflexe : quelle Request est au sommet à cet instant ?</p>
+<p><strong>⚠️ À ne pas confondre</strong> : la pile représente des traitements imbriqués, pas une file de commandes à exécuter plus tard.</p>
+</div></section><section class="teaching-section" data-section="s-la-branche-que-le-trajet-nominal-ne-montre-pas"><h2 id="s-la-branche-que-le-trajet-nominal-ne-montre-pas" tabindex="-1">La branche que le trajet nominal ne montre pas</h2><aside class="section-digest" id="s-la-branche-que-le-trajet-nominal-ne-montre-pas-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>catch=false désactive la conversion par kernel.exception.</li><li>Distinguer cette option du traitement des Error par handleAllThrowables.</li></ol></aside><p><strong>Où en est-on ?</strong> Tout ce qui précède suppose que rien ne casse. Pourquoi
+une branche à part ? Parce que l'exception change quels events se produisent,
+et l'examen en fait ses questions les plus piégeuses. Le détail du statut HTTP
+est dans <a href="course-CRS-kd67y4vnd0mm.html">Exception handling</a>.</p>
+<p>Remplaçons 42 par 999. La route peut correspondre, mais notre catalogue
+ne contient pas cet article. Si l'action lève une exception HTTP 404,
+le trajet quitte l'appel du controller et rejoint la gestion d'erreur.
+Une panne inattendue suit aussi une branche d'erreur, mais ne doit pas être
+maquillée en absence d'article. Le diagramme distingue conversion en
+Response et remontée vers l'appelant.</p>
+<figure class="diagram" aria-labelledby="CRS-mpwjc4g3vmj7-8-diagram-0-title CRS-mpwjc4g3vmj7-8-diagram-0-description"><figcaption id="CRS-mpwjc4g3vmj7-8-diagram-0-title">Ce que handle() fait d&#x27;une exception</figcaption><p id="CRS-mpwjc4g3vmj7-8-diagram-0-description">Après l&#x27;échec, une Error que handleAllThrowables ne couvre pas est relancée sans kernel.exception ni kernel.finish_request ; les événements déjà exécutés avant l&#x27;échec ne sont pas annulés. Sinon, si catch vaut false, kernel.finish_request a lieu puis l&#x27;exception est relancée. Si catch vaut true, kernel.exception est dispatché. Si un listener pose une Response et que son filtrage réussit, kernel.response puis kernel.finish_request ont lieu. Sinon, sans Response, kernel.finish_request a lieu puis l&#x27;exception est relancée.</p><div class="mermaid" hidden>---
+title: Une exception pendant handle()
+---
+flowchart TD
+  accTitle: Ce que handle() fait d&#x27;une exception
+  accDescr: Après l&#x27;échec, une Error que handleAllThrowables ne couvre pas est relancée sans kernel.exception ni kernel.finish_request ; les événements déjà exécutés avant l&#x27;échec ne sont pas annulés. Sinon, si catch vaut false, kernel.finish_request a lieu puis l&#x27;exception est relancée. Si catch vaut true, kernel.exception est dispatché. Si un listener pose une Response et que son filtrage réussit, kernel.response puis kernel.finish_request ont lieu. Sinon, sans Response, kernel.finish_request a lieu puis l&#x27;exception est relancée.
+  ERR([&quot;exception levée&quot;]) --&gt;|&quot;examiner le throwable&quot;| E{&quot;Error non couverte ?&quot;}
+  E --&gt;|&quot;oui&quot;| RAW([&quot;relancée directement&quot;])
+  E --&gt;|&quot;non&quot;| C{&quot;catch ?&quot;}
+  C --&gt;|&quot;false&quot;| FIN2[&quot;kernel.finish_request&quot;]
+  C --&gt;|&quot;true&quot;| EXC[&quot;kernel.exception&quot;]
+  EXC --&gt;|&quot;setResponse()&quot;| RESP[&quot;kernel.response&quot;]
+  EXC --&gt;|&quot;aucune Response&quot;| FIN2
+  RESP --&gt;|&quot;filtrage réussi&quot;| FIN[&quot;kernel.finish_request&quot;]
+  FIN2 --&gt;|&quot;après notification&quot;| UP([&quot;relancée&quot;])
+  classDef runtime fill:#e0f2fe,stroke:#0369a1,color:#0c4a6e
+  classDef decision fill:#fef3c7,stroke:#b45309,color:#78350f
+  classDef error fill:#fee2e2,stroke:#b91c1c,color:#7f1d1d
+  class EXC,RESP,FIN,FIN2 runtime
+  class E,C decision
+  class ERR,RAW,UP error</div></figure>
+<p>Losanges orange : décisions ; bleu : events ; rouge : throwable entrant ou
+relancé. Ce second schéma suppose que les listeners de traitement d'erreur ne
+lèvent pas eux-mêmes une nouvelle exception. Le <code>finally</code> dépile la Request
+même sur la branche « relancée sans event ».</p>
+<p>Pour l'exception 404 concernée, <code>$catch = true</code> ouvre <strong><code>kernel.exception</code></strong>.
+Un listener peut produire la page d'erreur : si son filtrage réussit,
+<code>kernel.response</code> puis <code>kernel.finish_request</code> ont lieu. Sans Response,
+<code>kernel.finish_request</code> précède la remontée de l'exception. Avec
+<code>$catch = false</code>, HttpKernel saute <code>kernel.exception</code>, notifie finish
+puis laisse remonter l'échec. Ces chemins supposent que les listeners
+de gestion d'erreur ne provoquent pas eux-mêmes une nouvelle panne.</p>
+<p>Changeons maintenant la cause : le code de l'article déclenche une
+<code>\TypeError</code>, qui est une <code>\Error</code>. Elle n'entre dans ces branches que si
+<code>handleAllThrowables</code> est vrai. <code>framework.handle_all_throwables</code> l'active
+par défaut, contrairement au constructor d'<code>HttpKernel</code> autonome.
+Sans cette option, cette Error remonte directement sans ces notifications
+d'erreur ou de finish ; le <code>finally</code> dépile quand même. Les events déjà
+exécutés <strong>avant</strong> l'appel fautif — request, controller, controller_arguments —
+ne sont pas annulés. Pour diagnostiquer une panne, cherche donc son point
+d'apparition et la configuration concrète, pas seulement son statut final.</p>
+<table>
+<thead>
+<tr>
+<th>Cas</th>
+<th><code>kernel.exception</code></th>
+<th><code>kernel.finish_request</code></th>
+<th>Résultat</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Exception, <code>$catch = true</code>, listener pose une Response</td>
+<td>oui</td>
+<td>oui (après <code>kernel.response</code>)</td>
+<td>Response</td>
+</tr>
+<tr>
+<td>Exception, <code>$catch = true</code>, aucune Response</td>
+<td>oui</td>
+<td>oui</td>
+<td>exception relancée</td>
+</tr>
+<tr>
+<td>Exception, <code>$catch = false</code></td>
+<td>non</td>
+<td>oui</td>
+<td>exception relancée</td>
+</tr>
+<tr>
+<td><code>\Error</code>, <code>handleAllThrowables = false</code></td>
+<td>non</td>
+<td>non</td>
+<td><code>\Error</code> relancée</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition info">
+<p class="admonition-title">🌍 In Real Life</p>
+<p><strong>La situation</strong> : un incident en cuisine est signalé au responsable ; celui-ci peut préparer une explication pour le client, ou transmettre l'incident sans réponse prête.</p>
+<p><strong>L’équivalent dans Symfony</strong> : incident → exception ; possibilité de préparer une explication → listeners de <code>kernel.exception</code> ; explication prête → Response ; incident transmis → exception relancée.</p>
+<p><strong>Retour à la réalité technique</strong> : cette conversion dépend de <code>$catch</code>, du throwable concerné et des listeners. Sans Response, le chemin nominal de réponse n'est pas garanti. Une <code>Error</code> hors <code>handleAllThrowables</code> contourne les notifications décrites ; le <code>finally</code> dépile néanmoins la Request. Les événements déjà exécutés ne sont pas annulés.</p>
+<p><strong>🧠 Comment le mémoriser</strong> : « Signaler n'est pas résoudre. » Image mentale : un signalement à côté d'une réponse encore absente. Question-réflexe : une Response a-t-elle réellement été produite ?</p>
+<p><strong>⚠️ À ne pas confondre</strong> : article absent et panne technique ; l'une ne justifie pas de masquer l'autre sous une 404.</p>
+</div></section><section class="teaching-section" data-section="s-trois-facons-d-echouer-trois-exceptions"><h2 id="s-trois-facons-d-echouer-trois-exceptions" tabindex="-1">Trois façons d&#x27;échouer, trois exceptions</h2><aside class="section-digest" id="s-trois-facons-d-echouer-trois-exceptions-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Le retour est contrôlé après kernel.view.</li><li>Un listener peut produire la Response manquante.</li></ol></aside><p><strong>Où en est-on ?</strong> On sait <em>comment</em> une erreur est traitée ; reste à savoir
+<em>laquelle</em> on a sous les yeux. Pourquoi un tableau ? Parce que les trois
+messages se ressemblent et que l'on diagnostique d'abord la frontière.</p>
+<p>Nous savons maintenant comment une erreur peut être traitée. Encore faut-il
+identifier ce qui a échoué. Un article absent dans <code>ArticleCatalog</code> n'est
+pas un controller introuvable : dans le premier cas, l'action a été appelée ;
+dans le second, elle ne l'a jamais été. Ce tableau repère trois frontières
+techniques à examiner avant de conclure à une panne du catalogue.</p>
+<table>
+<thead>
+<tr>
+<th>Ce qui manque</th>
+<th>Ce qui est levé</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Le resolver ne trouve aucun controller</td>
+<td><code>NotFoundHttpException</code> — « the route is wrongly configured »</td>
+</tr>
+<tr>
+<td>Le controller ne rend pas une <code>Response</code>, et aucun listener de <code>kernel.view</code> n'en pose une</td>
+<td><code>ControllerDoesNotReturnResponseException</code></td>
+</tr>
+<tr>
+<td>La Request elle-même est malformée (<code>RequestExceptionInterface</code>)</td>
+<td>convertie en <code>BadRequestHttpException</code> avant la branche d'exception</td>
+</tr>
+</tbody>
+</table>
+<p>La deuxième — « Did you forget to add a return statement somewhere in your
+controller? » — n'est levée qu'<strong>après</strong> <code>kernel.view</code>. Si une variante de
+<code>show</code> retourne un tableau sans listener de conversion, le problème est
+donc le résultat de l'action, pas le matching de <code>/blog/42</code>. À l'inverse,
+un callable existant mais invalide ne doit pas être assimilé sans examen
+au cas précis où le resolver ne trouve aucun controller.</p>
+<div class="admonition info">
+<p class="admonition-title">🌍 In Real Life</p>
+<p><strong>La situation</strong> : personne n'est affecté à la commande, le résultat n'est pas prêt à servir, ou le bon est malformé : ce sont trois incidents différents.</p>
+<p><strong>L’équivalent dans Symfony</strong> : aucune cible trouvée par le resolver → <code>NotFoundHttpException</code> ; aucun résultat Response après <code>kernel.view</code> → <code>ControllerDoesNotReturnResponseException</code> ; erreur de Request concernée → conversion en <code>BadRequestHttpException</code>.</p>
+<p><strong>Retour à la réalité technique</strong> : ces correspondances repèrent les cas précis du tableau, pas toutes les erreurs possibles. Un callable invalide n'est pas nécessairement une cible absente. Un tableau retourné ne devient pas automatiquement du JSON : il faut une conversion configurée ou une Response explicite.</p>
+<p><strong>🧠 Comment le mémoriser</strong> : « Quel maillon manque ? » Image mentale : trois cases, cible, résultat, demande. Question-réflexe : à quelle frontière l'échec apparaît-il ?</p>
+<p><strong>⚠️ À ne pas confondre</strong> : contrôleur introuvable et article introuvable après exécution du contrôleur.</p>
+</div></section><section class="teaching-section" data-section="s-pieges-d-examen"><h2 id="s-pieges-d-examen" tabindex="-1">Pièges d&#x27;examen</h2><p class="teaching-label pitfall"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="warning" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3L23 21H1L12 3ZM12 9V14M12 17V18"></path></svg> <strong>Piège à éviter</strong></p><ul class="pitfall-list"><li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : Où en est-on ?</summary><p><strong>Où en est-on ?</strong> Dernier regard sur ce qui trompe le plus. Chaque piège
+ci-dessous vient d'une confusion entre deux moments voisins du trajet.
+<em>Pourquoi on se trompe : on récite la fin nominale sans vérifier qu'une
+Response existe.</em></p></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Conserver les conditions du trajet nominal</summary><p>Pour relire une trace de <code>GET /blog/42</code>, garde les conditions avec l'ordre :</p></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : saute kernel.view</summary><ul>
+<li>Une Response directement retournée par <code>show</code> <strong>saute <code>kernel.view</code></strong>.
+  <code>kernel.response</code> exige une Response obtenue, pas une exception remontée
+  sans conversion.</li>
+<li>Sur notre chemin géré avec Response, <code>kernel.finish_request</code> vient après
+  <code>kernel.response</code>. Mais pour une exception concernée qui remonte sans
+  Response, finish peut avoir lieu <strong>sans</strong> response. Une <code>\Error</code> hors
+  <code>handle_all_throwables</code> contourne ces notifications.</li>
+<li>Le runner appelle la terminaison <strong>après l'envoi</strong> ; ni le retour de
+  <code>handle()</code> ni <code>kernel.finish_request</code> ne signifient « le client a reçu
+  tous les octets ».</li>
+<li>La maintenance saute le controller mais rejoint le traitement de la
+  Response. Response et finish restent attendus sans nouvelle erreur ;
+  terminate dépend toujours du runner ou de l'appelant.</li>
+<li>Sur <code>kernel.request</code>, <code>_controller</code> peut encore manquer. <code>RouterListener</code>
+  intervient dans cet event, pas avant lui. Plus tard,
+  <code>kernel.controller_arguments</code> peut remplacer <strong>le callable aussi</strong>.</li>
+<li><code>public/index.php</code> est le front controller conventionnel de notre
+  application ; ce n'est pas une obligation pour tous les assemblages
+  Symfony, ni le chemin nécessaire de chaque fichier statique.</li>
+<li>Une sous-requête vaut <code>SUB_REQUEST</code> (<strong>2</strong>), la principale
+  <code>MAIN_REQUEST</code> (<strong>1</strong>) ; changer ce type ne crée pas un nouveau navigateur.</li>
+</ul></details></li></ul>
+<h3 tabindex="-1" id="s-pieges-d-examen-nested-choisir-le-hook-sans-confondre-retour-emission-et-traitement-durable">Choisir le hook sans confondre retour, émission et traitement durable</h3>
+<ul class="pitfall-list"><li class="pitfall-item"><details class="pitfall-explanation"><summary>Terminaison locale contre traitement durable</summary><p>Après émission de la page 42, un traitement bref peut utiliser
+<code>kernel.terminate</code> dans le runner décrit. Si le besoin devient « importer
+un long fichier même après la fin de ce processus », ce hook ne suffit pas :
+il faut un mécanisme durable distinct, avec traitement asynchrone configuré.
+Il ne faut pas transformer le GET en import obligatoire.</p></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Restaurer le contexte parent après une sous-requête</summary><p>À l'intérieur de la page, si un fragment a modifié la locale, un listener de
+<code>kernel.finish_request</code> peut restaurer le contexte parent. Ce travail répond
+au retour d'une sous-requête, pas à l'envoi réseau. Le cours sur
+<a href="course-CRS-2hpcy2rscq7m.html">les events du kernel</a> précise comment enregistrer
+ces réactions ; celui sur <a href="course-CRS-kd67y4vnd0mm.html">les exceptions</a>
+reprend la bifurcation 404/500.</p></details></li></ul>
+<div class="admonition info">
+<p class="admonition-title">🌍 In Real Life</p>
+<p><strong>La situation</strong> : une commande prête revient au comptoir ; le service la remet ensuite au client, puis range son poste.</p>
+<p><strong>L’équivalent dans Symfony</strong> : retour au comptoir → retour de <code>handle()</code> ; remise → émission par le runner ; rangement local → appel séparé à <code>terminate()</code> lorsque disponible.</p>
+<p><strong>Retour à la réalité technique</strong> : sur le chemin réussi, <code>kernel.response</code> puis <code>kernel.finish_request</code> précèdent le retour ; <code>finally</code> dépile avant que l'appelant reprenne. Le runner envoie ensuite et peut terminer. Contrairement à la remise physique imaginée, cela ne garantit pas la réception de tous les octets par le client. Le processus reste occupé pendant la terminaison.</p>
+<p><strong>🧠 Comment le mémoriser</strong> : « Prêt, envoyé, puis terminé. » Image mentale : trois emplacements distincts sur le comptoir. Question-réflexe : suis-je encore dans <code>handle()</code>, dans l'envoi ou dans la terminaison ?</p>
+<p><strong>⚠️ À ne pas confondre</strong> : rangement local et tâche durable confiée à un autre processus ; <code>kernel.terminate</code> n'est pas une file asynchrone persistante.</p>
+</div></section><section class="teaching-section" data-section="s-application"><h2 id="s-application" tabindex="-1">Application</h2><aside class="section-digest" id="s-application-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Le retour est contrôlé après kernel.view.</li><li>Un listener peut produire la Response manquante.</li><li>Le contrat relie Request à Response.</li><li>MAIN_REQUEST vaut 1 et SUB_REQUEST vaut 2.</li></ol></aside>
+
+
+
+</section><section class="teaching-section" data-section="s-fiche-express"><h2 id="s-fiche-express" tabindex="-1">Fiche express</h2><p class="teaching-label essential"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="book" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5C9 3 5 3 2 4V20C5 19 9 19 12 21C15 19 19 19 22 20V4C19 3 15 3 12 5V21M5 8H8M5 12H8M16 8H19M16 12H19"></path></svg> <strong>À mémoriser</strong></p><p><strong>🧠 À retenir pour la certification :</strong></p>
+<p><strong>Pour reconstruire la trace de l'article sans imposer toutes les branches :</strong></p>
+<ul>
+<li><code>handle(Request, $type, $catch): Response</code> ; <code>MAIN_REQUEST</code> = <strong>1</strong>,
+  <code>SUB_REQUEST</code> = <strong>2</strong>.</li>
+<li>Chemin avec controller, Response obtenue et listeners sans erreur :
+  request → controller → controller_arguments → <em>(appel)</em> → [view si nécessaire] →
+  response → finish_request → <em>(retour, puis envoi par le runner)</em> → terminate
+  si appelé sur un noyau terminable.</li>
+<li><code>kernel.view</code> n'est dispatché que si le controller ne rend pas une <code>Response</code>.</li>
+<li>Maintenance sur <code>kernel.request</code> : <strong>response, finish_request</strong> sans nouvelle
+  erreur ; <strong>terminate</strong> reste séparé, à la charge du runner.</li>
+<li><code>controller_arguments</code> peut encore <strong>remplacer le controller</strong>.</li>
+<li>Pile : empilée à l'entrée, dépilée dans un <strong><code>finally</code></strong>.</li>
+<li><code>finish_request</code> sur les trois paths — sauf <code>\Error</code> hors
+  <code>handle_all_throwables</code>.</li>
+<li>Aucun controller → 404 ; pas de Response → <code>ControllerDoesNotReturnResponseException</code>.</li>
+</ul>
+<p>Moyen mnémotechnique : <strong>« Traiter retourne ; envoyer émet ; terminer suit. »</strong>
+Si aucune Response n'a été produite, reviens à la branche d'exception
+au lieu de réciter la fin nominale.</p>
+<p><strong>Phrase de mémorisation : « handle() retourne, le runner envoie, terminate() suit — et sans Response, on relit la branche d'exception. »</strong></p></section><section class="teaching-section" data-section="s-sources-officielles"><h2 id="s-sources-officielles" tabindex="-1">Sources officielles</h2><ul>
+<li><a href="https://symfony.com/doc/8.0/components/http_kernel.html">Component HttpKernel, « The Request-Response Lifecycle »</a></li>
+<li><a href="https://symfony.com/doc/8.0/reference/events.html">Built-in Symfony Events, « Kernel Events »</a></li>
+<li><a href="https://symfony.com/doc/8.0/components/runtime.html">Component Runtime, section « Usage »</a></li>
+<li><a href="https://symfony.com/doc/8.0/components/http_kernel.html"><code>HttpKernel</code> (le code du cycle)</a></li>
+<li><a href="https://symfony.com/doc/8.0/components/http_kernel.html"><code>HttpKernelInterface</code></a></li>
+</ul></section><section id="course-recalls" aria-labelledby="course-recalls-title" tabindex="-1"><h2 id="course-recalls-title">Rappels et liens avec les autres cours</h2><div data-recall-group="current"><h3>Rappels du cours actuel</h3><ul><li data-recall-course="CRS-mpwjc4g3vmj7" data-recall-kind="digest_reference"><p class="recall-provenance">Module 03 — Architecture Symfony · Cours « Request handling »</p><p class="digest-reference"><a href="#s-l-essentiel-digest">Revoir la règle : kernel.view tente de convertir un résultat non-Response.</a></p></li><li data-recall-course="CRS-mpwjc4g3vmj7" data-recall-kind="digest_reference"><p class="recall-provenance">Module 03 — Architecture Symfony · Cours « Request handling »</p><p class="digest-reference"><a href="#s-le-contrat-digest">Revoir la règle : Le contrat relie Request à Response.</a></p></li><li><nav aria-label="Flashcards de l’application"><ul><li data-recall-course="CRS-mpwjc4g3vmj7" data-recall-kind="application"><p class="recall-provenance">Module 03 — Architecture Symfony · Cours « Request handling »</p><a href="#A-mpwjc4g3vmj7-e923cb28ca-05">Flashcard : Le retour est contrôlé après kernel.view. Un listener peut produire la Response manquante.</a></li><li data-recall-course="CRS-mpwjc4g3vmj7" data-recall-kind="application"><p class="recall-provenance">Module 03 — Architecture Symfony · Cours « Request handling »</p><a href="#A-mpwjc4g3vmj7-dd4629ecb9-01">Flashcard : Le contrat relie Request à Response. MAIN_REQUEST vaut 1 et SUB_REQUEST vaut 2.</a></li></ul></nav></li><li data-recall-course="CRS-mpwjc4g3vmj7" data-recall-kind="digest_reference"><p class="recall-provenance">Module 03 — Architecture Symfony · Cours « Request handling »</p><p class="digest-reference"><a href="#s-le-cycle-en-schema-digest">Revoir la règle : Le cycle prend une branche différente selon le type du retour controller.</a></p></li></ul></div><div data-recall-group="other"><h3>Rappels des cours précédents / autres modules</h3><ul><li data-recall-course="CRS-156khyjssm25" data-recall-kind="previous_course"><p class="recall-provenance">Module 03 — Architecture Symfony · Cours « Code organization »</p><p>public/ est le document root. src/, config/ et vendor/ ne sont pas des directories publics.</p><p><a href="#cards-previous">Rappel : <span lang="en">Which application directory should the web server expose?</span></a></p></li></ul></div></section><nav class="course-sequence" aria-label="Ordre de lecture"><a rel="prev" href="course-CRS-tygmreqkkds3.html" aria-label="Précédent : HttpKernel component and FrameworkBundle — Module 04 — Contrôleurs">Précédent : HttpKernel component and FrameworkBundle</a> <a href="lot-03.html">Sommaire : Module 03 — Architecture Symfony</a> <a rel="next" href="course-CRS-2hpcy2rscq7m.html" aria-label="Suivant : Event dispatcher and kernel events — Module 03 — Architecture Symfony">Suivant : Event dispatcher and kernel events</a></nav><p class="course-practice-entry"><a class="button" href="#view-quiz">Fin du cours — s’entraîner avec le Quiz</a></p></div><div id="view-flashcards" data-course-panel role="region" aria-labelledby="view-flashcards-title"><h2 id="view-flashcards-title">Flashcards</h2><p lang="en">Answer before revealing each card.</p><p>Ces cartes ne mesurent pas une maîtrise notée.</p><div id="cards-s-l-essentiel-1" data-card-section="s-l-essentiel"><h3><a href="#s-l-essentiel">Revoir : L&#x27;essentiel</a></h3><div class="reader-cards"><details class="reader-card" id="A-mpwjc4g3vmj7-65c42c80d9-02"><summary lang="en">When does kernel.view run?</summary><p lang="en">Only when the controller result is not already a Response.</p><p lang="fr">kernel.view tente de convertir un résultat non-Response. kernel.response intervient sur la Response obtenue.</p><a href="course-CRS-mpwjc4g3vmj7.html#out-OUT-3p88arwajsx7">Revoir le passage précis</a></details></div></div><div id="cards-s-le-cycle-en-schema-2" data-card-section="s-le-cycle-en-schema"><h3><a href="#s-le-cycle-en-schema">Revoir : Le cycle en schéma</a></h3><div class="reader-cards"><details class="reader-card" id="A-mpwjc4g3vmj7-83b1b8b195-06"><summary lang="en">Does a controller result always need kernel.view conversion?</summary><p lang="en">No. A Response skips kernel.view; a different result must be converted to a Response.</p><p lang="fr">Le cycle prend une branche différente selon le type du retour controller. kernel.response travaille ensuite sur la Response obtenue.</p><a href="course-CRS-mpwjc4g3vmj7.html#out-OUT-wzt3s8mkhkj9">Revoir le passage précis</a></details></div></div><div id="cards-s-l-exemple-une-page-de-maintenance-qui-court-circuite-3" data-card-section="s-l-exemple-une-page-de-maintenance-qui-court-circuite"><h3><a href="#s-l-exemple-une-page-de-maintenance-qui-court-circuite">Revoir : L&#x27;exemple : une page de maintenance qui court-circuite</a></h3><div class="reader-cards"><details class="reader-card" id="A-mpwjc4g3vmj7-74507b1ff2-05"><summary lang="en">What does setting a Response during kernel.request do to controller execution?</summary><p lang="en">It short-circuits controller execution; response and finish-request processing still take place.</p><p lang="fr">Une Response posée sur RequestEvent court-circuite la résolution et l&#x27;exécution du controller. Le cycle traite la Response ; terminate relève ensuite du runner après émission.</p><a href="course-CRS-mpwjc4g3vmj7.html#out-OUT-3p88arwajsx7">Revoir le passage précis</a></details></div></div><div id="cards-s-le-contrat-4" data-card-section="s-le-contrat"><h3><a href="#s-le-contrat">Revoir : Le contrat</a></h3><div class="reader-cards"><details class="reader-card" id="A-mpwjc4g3vmj7-dd4629ecb9-01"><summary lang="en">What does HttpKernelInterface::handle() return?</summary><p lang="en">A Response, for either a main request or a sub-request.</p><p lang="fr">Le contrat relie Request à Response. MAIN_REQUEST vaut 1 et SUB_REQUEST vaut 2.</p><a href="course-CRS-mpwjc4g3vmj7.html#out-OUT-ab41ar3ad6kf">Revoir le passage précis</a></details></div></div><div id="cards-s-le-trajet-5" data-card-section="s-le-trajet"><h3><a href="#s-le-trajet">Revoir : Le trajet</a></h3><div class="reader-cards"><p class="reader-card-reference" id="A-mpwjc4g3vmj7-c514a35be9-02">Rappel déjà proposé : <a lang="en" href="#A-mpwjc4g3vmj7-65c42c80d9-02">When does kernel.view run?</a> · <a href="course-CRS-mpwjc4g3vmj7.html#out-OUT-3p88arwajsx7">Passage canonique</a></p><details class="reader-card" id="INT-011"><summary lang="en">What do Runtime, Kernel and ControllerResolver do in the request path?</summary><p lang="en">Runtime creates the Request and drives handling/sending/termination; Kernel boots bundles and the container; ControllerResolver obtains the callable.</p><p lang="fr">Ces trois acteurs ont des responsabilités distinctes dans le trajet de la Request.</p><a href="course-CRS-mpwjc4g3vmj7.html#out-OUT-6adtz0h101zr">Revoir le passage précis</a></details></div></div><div id="cards-s-la-pile-de-requests-poussee-et-depilee-par-handle-6" data-card-section="s-la-pile-de-requests-poussee-et-depilee-par-handle"><h3><a href="#s-la-pile-de-requests-poussee-et-depilee-par-handle">Revoir : La pile de Requests, poussée et dépilée par `handle()`</a></h3><div class="reader-cards"><details class="reader-card" id="A-mpwjc4g3vmj7-bb1545b742-03"><summary lang="en">How is the current request restored after a sub-request finishes?</summary><p lang="en">handle() pops the RequestStack in a finally block.</p><p lang="fr">handle() empile la Request à l&#x27;entrée. Le finally restaure la pile même en cas d&#x27;exception.</p><a href="course-CRS-mpwjc4g3vmj7.html#out-OUT-ab41ar3ad6kf">Revoir le passage précis</a></details></div></div><div id="cards-s-la-branche-que-le-trajet-nominal-ne-montre-pas-7" data-card-section="s-la-branche-que-le-trajet-nominal-ne-montre-pas"><h3><a href="#s-la-branche-que-le-trajet-nominal-ne-montre-pas">Revoir : La branche que le trajet nominal ne montre pas</a></h3><div class="reader-cards"><details class="reader-card" id="A-mpwjc4g3vmj7-75648351a5-04"><summary lang="en">Does catch=false dispatch kernel.exception?</summary><p lang="en">No. The exception propagates instead; covered exception paths still finish the request.</p><p lang="fr">catch=false désactive la conversion par kernel.exception. Distinguer cette option du traitement des Error par handleAllThrowables.</p><a href="course-CRS-mpwjc4g3vmj7.html#out-OUT-ab41ar3ad6kf">Revoir le passage précis</a></details></div></div><div id="cards-s-trois-facons-d-echouer-trois-exceptions-8" data-card-section="s-trois-facons-d-echouer-trois-exceptions"><h3><a href="#s-trois-facons-d-echouer-trois-exceptions">Revoir : Trois façons d&#x27;échouer, trois exceptions</a></h3><div class="reader-cards"><details class="reader-card" id="A-mpwjc4g3vmj7-e923cb28ca-05"><summary lang="en">When is ControllerDoesNotReturnResponseException raised?</summary><p lang="en">After a non-Response controller result remains unconverted by kernel.view.</p><p lang="fr">Le retour est contrôlé après kernel.view. Un listener peut produire la Response manquante.</p><a href="course-CRS-mpwjc4g3vmj7.html#out-OUT-dy7bs7233e18">Revoir le passage précis</a></details></div></div><div id="cards-s-pieges-d-examen-9" data-card-section="s-pieges-d-examen"><h3><a href="#s-pieges-d-examen">Revoir : Pièges d&#x27;examen</a></h3><div class="reader-cards"><p class="reader-card-reference" id="A-mpwjc4g3vmj7-596d5af532-01">Rappel déjà proposé : <a lang="en" href="#A-mpwjc4g3vmj7-dd4629ecb9-01">What does HttpKernelInterface::handle() return?</a> · <a href="course-CRS-mpwjc4g3vmj7.html#out-OUT-ab41ar3ad6kf">Passage canonique</a></p></div></div><div id="cards-s-application-10" data-card-section="s-application"><h3><a href="#s-application">Revoir : Application</a></h3><div class="reader-cards"><p class="reader-card-reference" id="A-mpwjc4g3vmj7-e7ad522ea3-05">Rappel déjà proposé : <a lang="en" href="#A-mpwjc4g3vmj7-e923cb28ca-05">When is ControllerDoesNotReturnResponseException raised?</a> · <a href="course-CRS-mpwjc4g3vmj7.html#out-OUT-dy7bs7233e18">Passage canonique</a></p><p class="reader-card-reference" id="A-mpwjc4g3vmj7-e7ad522ea3-01">Rappel déjà proposé : <a lang="en" href="#A-mpwjc4g3vmj7-dd4629ecb9-01">What does HttpKernelInterface::handle() return?</a> · <a href="course-CRS-mpwjc4g3vmj7.html#out-OUT-ab41ar3ad6kf">Passage canonique</a></p></div></div><div id="cards-s-fiche-express-11" data-card-section="s-fiche-express"><h3><a href="#s-fiche-express">Revoir : Fiche express</a></h3><div class="reader-cards"><p class="reader-card-reference" id="A-mpwjc4g3vmj7-b11e58e15e-06">Rappel déjà proposé : <a lang="en" href="#A-mpwjc4g3vmj7-83b1b8b195-06">Does a controller result always need kernel.view conversion?</a> · <a href="course-CRS-mpwjc4g3vmj7.html#out-OUT-wzt3s8mkhkj9">Passage canonique</a></p></div></div><div id="cards-previous"><p class="recall-provenance">Module 03 — Architecture Symfony · Cours « Code organization »</p><aside class="checkpoint"><h2>Rappel d’un cours antérieur</h2><p>Avant de poursuivre : Code organization.</p><details class="corpus-correction"><summary lang="en">Which application directory should the web server expose?</summary><p lang="en">public/, containing the front controller.</p><p>public/ est le document root. src/, config/ et vendor/ ne sont pas des directories publics.</p><a href="course-CRS-156khyjssm25.html#out-OUT-gp7n5whkxyk0">Relire la correction dans le cours antérieur</a></details></aside></div></div><div id="view-quiz" data-course-panel role="region" aria-labelledby="view-quiz-title"><aside class="revision-context"><p><strong>Avant le quiz :</strong> Le navigateur demande GET /blog/42. Notre application possède une route blog_show, un BlogController::show enregistré et un service ArticleCatalog qui fournit en mémoire l&#x27;article 42 sous forme d&#x27;ArticleView. Il reste à relier cette demande à une réponse : qui prépare l&#x27;application, choisit la méthode, fournit ses arguments et envoie le résultat ?</p><p>Quelle donnée entre, quelle responsabilité agit et quelle condition change le résultat ? Pour chaque correction, vérifiez ces conditions dans <a href="course-CRS-mpwjc4g3vmj7.html#s-objectif">le passage enseigné</a>, sans supposer que toutes les branches du blog sont exécutées.</p></aside><h2 id="view-quiz-title">Quiz</h2><p class="quiz-size" lang="en">7 eligible learning questions · 7 per session. Repeating a question does not demonstrate mastery.</p><p id="course-quiz-status" role="status">Quiz interactif non chargé. Démarrez après chargement de la banque locale.</p><div id="course-quiz-controls" class="assessment-main" hidden><div id="course-quiz-assessment-controls" hidden><select id="course-quiz-assessment-mode" aria-label="Mode du quiz" hidden><option value="learning">Entraînement</option></select><p id="course-quiz-training-scope"></p><button id="course-quiz-start-assessment" type="button" lang="en">Start practice</button><button id="course-quiz-finish-assessment" type="button" lang="en" hidden>End session</button></div><p id="course-quiz-assessment-error" role="alert"></p><p id="course-quiz-assessment-timer" hidden></p><p id="course-quiz-session-progress" class="quiz-progress" role="status" lang="en"></p><div id="course-quiz-assessment-app" tabindex="-1"></div><nav id="course-quiz-session-navigation" aria-label="Questions du cours"></nav><div id="course-quiz-learning-overview" aria-live="polite"></div></div><div id="course-quiz-native"><p>Sans JavaScript ou si le chargement échoue : aucune tentative notée. Les <a href="#view-flashcards">flashcards du cours</a> restent disponibles.</p><details class="course-quiz-fallback" data-question-id="L-mpwjc4g3vmj7-base-v1"><summary lang="en">When does kernel.view run? Select one answer (radio).</summary><p>Correction de consultation — non notée.</p><p>kernel.view tente de convertir un résultat non-Response. kernel.response intervient sur la Response obtenue.</p><ul><li><strong lang="en">Correct: When the controller result is not already a Response.</strong><p>kernel.view tente de convertir un résultat non-Response. kernel.response intervient sur la Response obtenue.</p></li><li><strong lang="en">Distractor: After every controller, including those returning a Response.</strong><p>Une Response saute kernel.view et poursuit vers le traitement de Response.</p></li><li><strong lang="en">Distractor: Before the controller executes, to choose the template.</strong><p>kernel.view examine le résultat déjà produit par le controller.</p></li></ul><a href="course-CRS-mpwjc4g3vmj7.html#out-OUT-3p88arwajsx7">Relire le passage exact</a><a href="course-CRS-mpwjc4g3vmj7.html#out-OUT-dy7bs7233e18">Relire la correction précise</a></details></div></div></div></div><details class="transfer-panel"><summary>Sauvegarde et transfert de progression</summary><p id="reading-status" role="status">Sans JavaScript : lecture libre ; progression non enregistrée.</p><p><a href="assessment.html#overview-title">Lecture, réussites immédiates et différées</a></p><p>Transfert manuel — aucune synchronisation automatique</p><p id="persistence-status" role="status"></p><button type="button" class="secondary" id="export-progress">Exporter ma progression</button><label for="import-progress">Choisir un JSON pour fusionner ma progression (sans remplacement)</label><input type="file" id="import-progress" accept="application/json,.json"><p id="transfer-status" role="status"></p></details></main><footer class="site-footer"><a href="catalogue.html">Catalogue</a> <a href="sources.html">Sources et attribution</a> <a href="#contenu">Haut de page</a></footer></body></html>

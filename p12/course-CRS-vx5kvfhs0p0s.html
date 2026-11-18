@@ -1,0 +1,258 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; connect-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Debugging variables — Symfony 8 Preparation</title><link rel="stylesheet" href="styles.css"><link rel="stylesheet" href="reader.css"><script src="mermaid.min.js" defer></script><script src="mermaid-init.js" defer></script><link rel="stylesheet" href="assessment.css"><script src="fixed-exams-data.js" defer></script><script src="fixed-exams.js" defer></script><script src="learning-state.js" defer></script><script src="guide.js" defer></script><script src="reader-catalog.js" defer></script><script src="reader.js" defer></script><script src="site-state.js" defer></script><script src="assessment.js" defer></script><script src="course-views.js" defer></script><link rel="stylesheet" href="syntax-highlight.css"><script src="prism-syntax.js" defer></script><script src="syntax-highlight.js" defer></script></head><body data-course-id="CRS-vx5kvfhs0p0s"><a class="skip" href="#contenu">Aller au contenu</a><header class="site-header"><a class="brand" href="index.html">S8 Preparation</a><nav aria-label="Navigation principale"><a href="index.html">Accueil</a> <a href="catalogue.html">Parcours</a> <a href="assessment.html?mode=review">Réviser</a> <a href="examens.html">Examens blancs</a> <a href="jour-j.html">Jour J</a></nav></header><main id="contenu" tabindex="-1" class="corpus-reader"><nav class="breadcrumb" aria-label="Fil d’Ariane"><a href="index.html">Accueil</a> <span aria-hidden="true">›</span> <a href="catalogue.html">Parcours</a> <span aria-hidden="true">›</span> <a href="lot-06.html">Module 06 — Templates avec Twig</a> <span aria-hidden="true">›</span> <span aria-current="page">Debugging variables</span></nav><h1>Debugging variables</h1><p class="muted">Symfony 8.0 · API PHP ≤ 8.4 · Twig ≤ 3.22. Préparation indépendante.</p><p class="revision-status">Rédaction narrative P11 : projection nouvelle, non couverte par les décisions historiques P10. Aucune approbation officielle ni garantie de réussite.</p><aside class="narrative-context" aria-label="Repères de lecture"><p><strong>Prérequis de lecture :</strong> <a href="course-CRS-x2f8reencvcs.html">Twig syntax up to 3.22 version</a></p><p><strong>Concepts voisins :</strong> <a href="course-CRS-a669jpap5zf2.html">The response</a> — Le contenu rendu doit encore devenir une Response. <a href="lot-06.html">Comparer les responsabilités dans ce module</a> · <a href="carte-composants.html">Situer cette responsabilité dans le blog</a> · <a href="glossaire.html">Distinguer les termes voisins</a></p><p><a href="ordre-lecture.html">Retrouver les 163 cours dans le parcours recommandé</a>. Ce repère ne modifie ni votre historique ni votre progression.</p></aside><div class="course-layout"><details class="lot-course-menu"><summary>Cours du module · 14 cours</summary><nav aria-label="Cours du module"><a class="lot-context" href="lot-06.html">Module 06 — Templates avec Twig</a><ol><li><a href="course-CRS-2bj91rj9kvj0.html">TwigBundle</a></li><li><a href="course-CRS-x2f8reencvcs.html">Twig syntax up to 3.22 version</a></li><li><a href="course-CRS-w82wtddwhexg.html">Auto escaping</a></li><li><a href="course-CRS-k3v3wrt0hmtx.html">Template inheritance</a></li><li><a href="course-CRS-r56yzzb4pye2.html">Global variables</a></li><li><a href="course-CRS-306ppg4454wj.html">Filters and functions</a></li><li><a href="course-CRS-w83y6pfa5edn.html">Template includes</a></li><li><a href="course-CRS-zbnzvqkhjknh.html">Loops and conditions</a></li><li><a href="course-CRS-dpbpbgwjey5c.html">URLs generation</a></li><li><a href="course-CRS-yw6c5hq2mbax.html">Controller rendering</a></li><li><a href="course-CRS-q18xc1k4yvb9.html">Translations and pluralization</a></li><li><a href="course-CRS-dfyab4kpcapw.html">String interpolation</a></li><li><a href="course-CRS-ym86ptkhfgap.html">Assets management</a></li><li><a href="course-CRS-vx5kvfhs0p0s.html" aria-current="page">Debugging variables</a></li></ol><a href="lot-06.html#view-quiz">Quiz du module</a></nav></details><aside class="course-section-menu" aria-label="Sommaire du cours"><nav class="course-actions" aria-label="Activités du cours"><a id="tab-course" href="#view-course">Cours</a><a id="tab-flashcards" href="#view-flashcards">Flashcards</a><a id="tab-quiz" href="#view-quiz">Quiz</a></nav><details class="course-section-disclosure"><summary id="course-sections">Sections du cours</summary><nav aria-label="Sections du cours"><ul><li><a href="#s-objectif">Objectif</a></li><li><a href="#s-l-essentiel">L&#x27;essentiel</a></li><li><a href="#s-le-schema">Le schéma</a></li><li><a href="#s-deux-formes-deux-destinations">Deux formes, deux destinations</a></li><li><a href="#s-hors-du-developpement">Hors du développement</a></li><li><a href="#s-les-commands">Les commands</a></li><li><a href="#s-pieges-d-examen">Pièges d&#x27;examen</a></li><li><a href="#s-application">Application</a></li><li><a href="#s-fiche-express">Fiche express</a></li><li><a href="#s-sources-officielles">Sources officielles</a></li><li><a href="#reader-objectives">Objectifs d’apprentissage</a></li><li><a href="#course-recalls">Rappels et liens avec les autres cours</a></li></ul></nav><nav aria-label="Flashcards par section"><a href="#view-flashcards">Flashcards par section</a><ul><li><a href="#cards-s-l-essentiel-1">L&#x27;essentiel</a></li><li><a href="#cards-s-le-schema-2">Le schéma</a></li><li><a href="#cards-s-deux-formes-deux-destinations-3">Deux formes, deux destinations</a></li><li><a href="#cards-s-hors-du-developpement-4">Hors du développement</a></li><li><a href="#cards-s-les-commands-5">Les commands</a></li><li><a href="#cards-s-pieges-d-examen-6">Pièges d&#x27;examen</a></li><li><a href="#cards-s-application-7">Application</a></li><li><a href="#cards-s-fiche-express-8">Fiche express</a></li><li><a href="#cards-previous">Module 06 — Templates avec Twig · Cours « String interpolation » · Rappel : <span lang="en">Does Twig process newline escapes in single-quoted strings?</span></a></li></ul></nav><nav aria-label="Retour au module"><a href="lot-06.html">Tous les cours du module</a></nav></details><p class="local-quiz-count">3 questions disponibles · 3 par session Quiz</p></aside><div class="course-content"><div id="view-course" data-course-panel role="region" aria-labelledby="view-course-title"><h2 id="view-course-title">Cours</h2><p class="course-introduction"><a href="#s-objectif">Introduction</a> · <a href="#course-sections">Sections du cours</a></p><h2 id="reader-objectives" tabindex="-1">Objectifs d’apprentissage</h2><ul><li><a href="course-CRS-vx5kvfhs0p0s.html#out-OUT-e93qx0gj8t90">Distinguer le tag dump de la function dump</a></li><li><a href="course-CRS-vx5kvfhs0p0s.html#out-OUT-sbmhyzyq1vde">Énoncer la restriction aux environments dev et test</a></li><li><a href="course-CRS-vx5kvfhs0p0s.html#out-OUT-5qgcf97r7ze3">Citer debug:twig et lint:twig</a></li></ul><aside class="pedagogy-legend" aria-label="Repères pédagogiques"><p><strong>Repères pédagogiques</strong></p><p>Ces repères décrivent le rôle du bloc, pas une fréquence officielle à l’examen.</p><p class="teaching-label essential"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="brain" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5C12 1 6 1 6 5C2 5 1 10 4 12C1 15 3 19 6 19C6 23 12 23 12 19V5M12 5C12 1 18 1 18 5C22 5 23 10 20 12C23 15 21 19 18 19C18 23 12 23 12 19M6 5C6 8 8 9 9 9M4 12H7L9 14M6 19V16M18 5C18 8 16 9 15 9M20 12H17L15 14M18 19V16"></path></svg> <strong>À comprendre</strong></p><p class="teaching-label essential"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="book" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5C9 3 5 3 2 4V20C5 19 9 19 12 21C15 19 19 19 22 20V4C19 3 15 3 12 5V21M5 8H8M5 12H8M16 8H19M16 12H19"></path></svg> <strong>À mémoriser</strong></p><p class="teaching-label example"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="code" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6L2 12L8 18M16 6L22 12L16 18M14 3L10 21"></path></svg> <strong>Exemple concret</strong></p><p class="teaching-label pitfall"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="warning" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3L23 21H1L12 3ZM12 9V14M12 17V18"></path></svg> <strong>Piège à éviter</strong></p><p class="teaching-label nuance"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="balance" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3V21M7 21H17M3 7L21 5M5 7L1 15H9L5 7M19 6L15 14H23L19 6M1 15Q5 20 9 15M15 14Q19 19 23 14"></path></svg> <strong>Nuance à connaître</strong></p><p>Précision, exception ou condition d’application d’une règle.</p></aside><section class="teaching-section" data-section="s-objectif"><h2 id="s-objectif" tabindex="-1">Objectif</h2><p>Le template affiche un titre vide et vous ne savez pas pourquoi. Avant de
+deviner, vous voulez <strong>regarder</strong> ce que contient la variable. Ce cours montre
+comment l'afficher, où le résultat apparaît selon la forme choisie, pourquoi
+cet outil disparaît (ou casse tout) en production, et quelles commandes
+contrôlent un template sans le rendre.</p>
+<p>Inspecter le contenu d'une variable dans un template, savoir où le résultat
+apparaît, et ce qui se passe hors du développement.</p></section><section class="teaching-section" data-section="s-l-essentiel"><h2 id="s-l-essentiel" tabindex="-1">L&#x27;essentiel</h2><p class="teaching-label essential"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="brain" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5C12 1 6 1 6 5C2 5 1 10 4 12C1 15 3 19 6 19C6 23 12 23 12 19V5M12 5C12 1 18 1 18 5C22 5 23 10 20 12C23 15 21 19 18 19C18 23 12 23 12 19M6 5C6 8 8 9 9 9M4 12H7L9 14M6 19V16M18 5C18 8 16 9 15 9M20 12H17L15 14M18 19V16"></path></svg> <strong>À comprendre</strong></p><aside class="section-digest" id="s-l-essentiel-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>La disponibilité dépend des extensions et du mode debug.</li><li>Retirer les dumps avant publication.</li></ol></aside><p><strong>Ce que cette partie veut réellement vous apprendre.</strong></p>
+<ul>
+<li><em>Pourquoi ce sujet existe.</em> Voir une donnée sans passer par un débogueur PHP.</li>
+<li><em>Le piège de fond.</em> « dump » n'est pas une seule chose : une function et un
+  tag, deux destinations, et leur existence dépend des <strong>extensions chargées</strong>
+  plus que du nom de l'environnement.</li>
+<li><em>Ce que l'auteur veut que vous compreniez.</em> Un <code>dump()</code> oublié ne s'ignore
+  pas en production : la compilation échoue.</li>
+<li><em>Pourquoi c'est à l'examen.</em> Les QCM croisent DebugBundle × <code>kernel.debug</code>,
+  les named arguments refusés et le code de sortie de <code>lint:twig</code>.</li>
+</ul>
+<p><code>dump</code> existe en <strong>function</strong> et en <strong>tag</strong>, qui n'écrivent pas au même endroit.
+Les deux viennent de DebugBundle, actif en <code>dev</code> et <code>test</code> : un <code>dump()</code> oublié
+en production fait échouer la compilation. Deux commands inspectent les
+templates sans les rendre.</p>
+<pre class="highlight" tabindex="0"><code class="language-text">{{ dump(x) }}   function : écrit dans le HTML, à l'endroit de l'appel
+{% dump x %}    tag      : envoie à VarDumper (toolbar), page intacte</code></pre></section><section class="teaching-section" data-section="s-le-schema"><h2 id="s-le-schema" tabindex="-1">Le schéma</h2><aside class="section-digest" id="s-le-schema-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>La function modifie le contenu de la page.</li><li>Le tag utilise l&#x27;intégration de debug.</li></ol></aside><p><strong>Où en est-on ?</strong> Vue d'ensemble : deux questions décident de tout —
+« DebugBundle est-il chargé ? » puis « <code>kernel.debug</code> est-il actif ? ». Quatre
+combinaisons, quatre comportements ; les sections suivantes les détaillent.</p>
+<pre class="highlight" tabindex="0"><code class="language-text">DebugBundle chargé ?
+ ├─ oui ─ kernel.debug ?
+ │         ├─ oui : function = HTML dans la page ; tag = vers la toolbar
+ │         └─ non : function et tag ne font rien
+ └─ non ─ kernel.debug ?
+           ├─ oui : function Twig = var_dump dans la page ; tag inconnu
+           └─ non : compilation en erreur (dump inconnu)</code></pre>
+<figure class="diagram" aria-labelledby="CRS-vx5kvfhs0p0s-3-diagram-0-title CRS-vx5kvfhs0p0s-3-diagram-0-description"><figcaption id="CRS-vx5kvfhs0p0s-3-diagram-0-title">Le comportement de la function et du tag dump dans Symfony 8.0</figcaption><p id="CRS-vx5kvfhs0p0s-3-diagram-0-description">Avec DebugBundle, la function et le tag viennent de DumpExtension. En debug, la function rend un dump HTML dans la page et le tag envoie le dump à VarDumper, que DebugBundle collecte pour la debug toolbar, sans toucher la page. Hors debug, les deux ne font rien. Sans DebugBundle et en debug, TwigBundle enregistre la function dump de Twig, qui affiche un var_dump dans la page, et le tag n&#x27;existe pas. Sans DebugBundle et hors debug, la function et le tag sont inconnus et la compilation du template échoue.</p><div class="mermaid" hidden>---
+title: Ce que devient dump selon DebugBundle et kernel.debug
+---
+flowchart TD
+  accTitle: Le comportement de la function et du tag dump dans Symfony 8.0
+  accDescr: Avec DebugBundle, la function et le tag viennent de DumpExtension. En debug, la function rend un dump HTML dans la page et le tag envoie le dump à VarDumper, que DebugBundle collecte pour la debug toolbar, sans toucher la page. Hors debug, les deux ne font rien. Sans DebugBundle et en debug, TwigBundle enregistre la function dump de Twig, qui affiche un var_dump dans la page, et le tag n&#x27;existe pas. Sans DebugBundle et hors debug, la function et le tag sont inconnus et la compilation du template échoue.
+  D{&quot;DebugBundle chargé ?&quot;} --&gt;|&quot;oui&quot;| DB{&quot;kernel.debug ?&quot;}
+  DB --&gt;|&quot;oui&quot;| ON[&quot;function : HTML dans la page ; tag : vers la toolbar&quot;]
+  DB --&gt;|&quot;non&quot;| OFF([&quot;function et tag ne font rien&quot;])
+  D --&gt;|&quot;non&quot;| NB{&quot;kernel.debug ?&quot;}
+  NB --&gt;|&quot;oui&quot;| TW[&quot;function de Twig : var_dump dans la page ; tag inconnu&quot;]
+  NB --&gt;|&quot;non&quot;| ERR([&quot;Compilation : dump inconnu&quot;])
+  classDef choice fill:#fef3c7,stroke:#b45309,color:#78350f
+  classDef output fill:#e0f2fe,stroke:#0369a1,color:#0c4a6e
+  class D,DB,NB choice
+  class ON,OFF,TW,ERR output</div></figure>
+<p>Ambre = configuration ; bleu = destination ou absence de sortie. Cette vue
+conserve les quatre cas utiles, avec la configuration standard où <code>twig.debug</code>
+suit <code>kernel.debug</code>. Ce sont les extensions chargées et <code>Environment::isDebug()</code>,
+pas le nom <code>prod</code>, qui décident réellement du résultat.
+Le tag utilise VarDumper : la toolbar est la destination habituelle lorsque
+son collecteur est actif, pas une dépendance obligatoire du tag.</p></section><section class="teaching-section" data-section="s-deux-formes-deux-destinations"><span class="outcome-anchor" id="out-OUT-e93qx0gj8t90" tabindex="-1"></span><h2 id="s-deux-formes-deux-destinations" tabindex="-1">Deux formes, deux destinations</h2><p><strong>Où en est-on ?</strong> Étape 1 sur 3 : le cas normal (DebugBundle + debug). On
+compare la function et le tag, qui font le même travail avec une destination
+différente.</p>
+<p>Si le titre de l'article 42 manque, inspecte <code>article</code> dans un environnement
+local avec des données de test. La function écrit dans le HTML de la page ;
+le tag passe par VarDumper et son collecteur éventuel. Choisir le tag évite
+de modifier la structure HTML, mais ne rend pas les données collectées publiques
+ou sans risque : évite secrets et contexte complet.</p>
+<table>
+<thead>
+<tr>
+<th>Écriture</th>
+<th>Où va le résultat</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>{{ dump(article) }}</code></td>
+<td><strong>dans la page</strong>, à l'endroit de l'appel</td>
+</tr>
+<tr>
+<td><code>{% dump articles %}</code></td>
+<td>dans la <strong>debug toolbar</strong>, la page reste intacte</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>Sans argument, <code>{{ dump() }}</code> comme <code>{% dump %}</code> sortent <strong>tout le contexte</strong>
+  du template, macros exclues.</li>
+<li>Le tag nomme ce qu'il affiche : <code>{% dump articles, user %}</code>.</li>
+<li>La function n'accepte que des arguments <strong>positionnels</strong> : l'exemple de la
+  documentation <code>{{ dump(blog_posts: articles, user: app.user) }}</code> lève
+  <code>SyntaxError: Unknown arguments</code> avec Twig 3.22.</li>
+</ul>
+<p>Mécanisme : la function est une <code>TwigFunction</code> qui <strong>retourne</strong> du HTML ; Twig
+l'écrit à la place de <code>{{ … }}</code>. Le tag, lui, est compilé en un appel
+<code>VarDumper::dump(...)</code> qui <strong>ne retourne rien</strong> : il n'écrit pas dans la page.</p>
+<pre class="highlight" tabindex="0"><code class="language-text">{{ dump(article) }}
+   ▼
+DumpExtension::dump() → renvoie le HTML (sf-dump)  ▶ écrit dans la page
+
+{% dump article %}
+   ▼
+code compilé : if (isDebug()) { VarDumper::dump($article); }
+   ▼
+VarDumper → collecteur DebugBundle → debug toolbar        (page intacte)</code></pre>
+<p>Pourquoi choisir le tag dans un <code>&lt;table&gt;</code> ? Un <code>{{ dump() }}</code> insère du HTML au
+milieu du tableau et le déforme ; le tag laisse la page telle quelle.</p>
+<div class="admonition info">
+<p class="admonition-title">🌍 In Real Life</p>
+<p><strong>La situation</strong> : l'imprimeur peut inscrire sa note de contrôle directement sur l'épreuve ou l'envoyer au carnet de diagnostic de l'atelier. La première option modifie le document ; la seconde dépend du circuit de collecte installé.</p>
+<p><strong>L’équivalent dans Symfony</strong> : la fonction <code>dump()</code> produit une sortie à l'endroit affiché dans le template ; le tag transmet les données à VarDumper. La toolbar les présente lorsque le collecteur correspondant est actif.</p>
+<p><strong>Retour à la réalité technique</strong> : « hors du HTML » ne signifie pas « confidentiel par nature ». Inspecte localement des données de test minimales, pas les secrets ni tout le contexte. Dans l'intégration Symfony 8.0/Twig 3.22 décrite, ne transpose pas les arguments nommés d'autres fonctions à <code>dump()</code> ; le tag dispose de sa propre syntaxe de nomination.</p>
+<p><strong>🧠 Comment le mémoriser</strong> : « Note sur l'épreuve ou note au carnet. » Image mentale : document annoté face au carnet de contrôle séparé. Question-réflexe : où part ce diagnostic et qui peut le consulter ?</p>
+<p><strong>⚠️ À ne pas confondre</strong> : sortie du template, collecte VarDumper, affichage de toolbar et confidentialité.</p>
+</div><aside class="enrichment" aria-label="Autre explication"><p>La valise de diagnostic affiche les mêmes données soit sur le tableau de bord, soit sur une console d'atelier. De même, la function dump imprime dans la page, tandis que le tag utilise la destination de debug.</p></aside></section><section class="teaching-section" data-section="s-hors-du-developpement"><span class="outcome-anchor" id="out-OUT-sbmhyzyq1vde" tabindex="-1"></span><h2 id="s-hors-du-developpement" tabindex="-1">Hors du développement</h2><p><strong>Où en est-on ?</strong> Étape 2 sur 3 : que devient <code>dump</code> quand <code>kernel.debug</code> est
+éteint, ou quand DebugBundle n'est pas installé ? Quatre combinaisons à
+connaître par cœur.</p>
+<p>Le passage en production change normalement les extensions disponibles.
+Un template qui compilait avec <code>dump</code> peut alors échouer avant d'afficher
+le titre. Vérifie la configuration réelle plutôt que le seul nom de
+l'environnement et retire le diagnostic ; activer debug publiquement
+n'est pas une correction acceptable de ce défaut.</p>
+<p>DebugBundle enregistre l'extension (<code>twig.extension.dump</code>). Selon le cas :</p>
+<table>
+<thead>
+<tr>
+<th>DebugBundle</th>
+<th><code>kernel.debug</code></th>
+<th><code>{{ dump(x) }}</code></th>
+<th><code>{% dump x %}</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>oui</td>
+<td>oui</td>
+<td>dump HTML dans la page</td>
+<td>vers la toolbar</td>
+</tr>
+<tr>
+<td>oui</td>
+<td>non</td>
+<td>rien</td>
+<td>rien</td>
+</tr>
+<tr>
+<td>non</td>
+<td>oui</td>
+<td><code>var_dump</code> brut de Twig</td>
+<td>tag inconnu</td>
+</tr>
+<tr>
+<td>non</td>
+<td>non</td>
+<td>« Unknown function "dump" »</td>
+<td>tag inconnu</td>
+</tr>
+</tbody>
+</table>
+<p>La production standard correspond à la dernière ligne : un <code>dump()</code> oublié fait échouer la
+<strong>compilation</strong> du template — l'« erreur PHP » que décrit la documentation.
+C'est délibéré : un dump divulguerait l'état interne de l'application.</p>
+<p>Pourquoi « l'extension est absente » et « l'extension est muette » sont-ils
+deux cas distincts ? Dans le premier, le <strong>compilateur</strong> ne connaît pas le nom
+<code>dump</code> : il refuse le template entier, même si la branche n'est jamais rendue.
+Dans le second, l'extension existe, le template compile, et c'est au
+<strong>rendu</strong> que <code>isDebug()</code> coupe la sortie.</p>
+<pre class="highlight" tabindex="0"><code class="language-text">extension absente  → erreur à la COMPILATION (rien ne s'affiche, même le titre)
+extension présente,
+debug éteint       → compile, rend, mais dump ne produit RIEN</code></pre>
+<div class="admonition info">
+<p class="admonition-title">🌍 In Real Life</p>
+<p><strong>La situation</strong> : un atelier peut avoir un appareil de diagnostic installé mais éteint, ou ne pas posséder cet appareil du tout. Une consigne utilisant un outil absent n'est pas équivalente à une mesure volontairement silencieuse.</p>
+<p><strong>L’équivalent dans Symfony</strong> : les extensions chargées déterminent si fonction et tag sont connus ; le mode debug de Twig détermine ensuite leur activité dans les cas décrits. L'intégration native de Twig sans DebugBundle ne fournit pas nécessairement les mêmes opérations.</p>
+<p><strong>Retour à la réalité technique</strong> : « prod » n'est pas une règle magique du moteur. Une opération inconnue peut faire échouer la compilation même dans une branche qui ne serait jamais rendue ; une opération enregistrée mais inactive est un autre cas. Retire le diagnostic avant publication plutôt que d'activer debug publiquement pour faire disparaître l'erreur.</p>
+<p><strong>🧠 Comment le mémoriser</strong> : « Outil absent ou outil éteint : deux diagnostics. » Image mentale : emplacement vide à côté d'un appareil éteint. Question-réflexe : l'extension manque-t-elle ou son mode debug est-il désactivé ?</p>
+<p><strong>⚠️ À ne pas confondre</strong> : présence de l'extension, drapeau debug, nom d'environnement et absence de sortie.</p>
+</div></section><section class="teaching-section" data-section="s-les-commands"><span class="outcome-anchor" id="out-OUT-5qgcf97r7ze3" tabindex="-1"></span><h2 id="s-les-commands" tabindex="-1">Les commands</h2><aside class="section-digest" id="s-les-commands-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Le lint n&#x27;exécute pas les branches du template.</li><li>Un test de rendu reste nécessaire pour les données runtime.</li></ol></aside><p><strong>Où en est-on ?</strong> Étape 3 sur 3 : deux commandes qui répondent à d'autres
+questions que <code>dump</code>, sans rendre le template.</p>
+<p>Pour cette panne, <code>debug:twig</code> répond « l'opération est-elle enregistrée ? »
+et <code>lint:twig</code> « le template compile-t-il ? ». Aucun ne prouve que <code>show()</code>
+passe un ArticleView sous le bon nom. Cette dernière vérification exige
+un rendu avec des données représentatives, sans publier un dump au lecteur.</p>
+<ul>
+<li><code>php bin/console debug:twig</code> — filters, functions, tests, globales et paths
+  disponibles ; <code>--filter=date</code> restreint la liste.</li>
+<li><code>php bin/console lint:twig templates/</code> — vérifie la syntaxe <strong>sans rendre</strong> :
+  une variable indéfinie n'est pas détectée ; l'exit code vaut <code>1</code> en cas
+  d'erreur. <code>--show-deprecations</code> traite les deprecations comme des erreurs.</li>
+</ul>
+<p>Trois preuves, trois niveaux :</p>
+<table>
+<thead>
+<tr>
+<th>Question</th>
+<th>Outil</th>
+<th>Ce que ça prouve</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>L'opération existe-t-elle ?</td>
+<td><code>debug:twig</code></td>
+<td>inventaire des filters, functions, tests, globales</td>
+</tr>
+<tr>
+<td>Le template compile-t-il ?</td>
+<td><code>lint:twig</code></td>
+<td>syntaxe correcte (variables non vérifiées)</td>
+</tr>
+<tr>
+<td>La variable a-t-elle la bonne forme ?</td>
+<td>rendu réel / <code>dump</code></td>
+<td>contrat controller ↔ template</td>
+</tr>
+</tbody>
+</table>
+<p>Pourquoi <code>lint:twig</code> ne voit-il pas une variable indéfinie ? Il <strong>compile</strong>
+sans exécuter : une variable n'est lue qu'au rendu, avec un contexte réel qu'il
+n'a pas.</p>
+<div class="admonition info">
+<p class="admonition-title">🌍 In Real Life</p>
+<p><strong>La situation</strong> : avant un tirage, on vérifie l'inventaire des outils puis la lisibilité des consignes. Cela ne remplace pas un essai avec les vraies catégories de données à imprimer.</p>
+<p><strong>L’équivalent dans Symfony</strong> : <code>debug:twig</code> inventorie les opérations et ressources connues de l'environnement chargé ; <code>lint:twig</code> contrôle la compilation sans rendre le template. Un rendu représentatif vérifie ensuite le contrat entre contrôleur et template.</p>
+<p><strong>Retour à la réalité technique</strong> : un lint réussi ne prouve pas qu'<code>article</code> existe à l'exécution ni que sa propriété attendue est accessible. L'environnement vérifié doit correspondre à la cible de déploiement. Le code de sortie de la commande est un résultat de processus, pas un statut HTTP de la page.</p>
+<p><strong>🧠 Comment le mémoriser</strong> : « Inventaire, consignes, essai : trois preuves différentes. » Image mentale : liste d'outils, fiche relue, puis épreuve avec données. Question-réflexe : ai-je vérifié la disponibilité, la compilation ou réellement le rendu ?</p>
+<p><strong>⚠️ À ne pas confondre</strong> : introspection de configuration, lint syntaxique et test de rendu.</p>
+</div></section><section class="teaching-section" data-section="s-pieges-d-examen"><h2 id="s-pieges-d-examen" tabindex="-1">Pièges d&#x27;examen</h2><p class="teaching-label pitfall"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="warning" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3L23 21H1L12 3ZM12 9V14M12 17V18"></path></svg> <strong>Piège à éviter</strong></p><ul class="pitfall-list"><li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : La function et le tag n&#x27;écrivent pas au même endroit.</summary><p><strong>La function et le tag n'écrivent pas au même endroit.</strong> <em>Pourquoi on se
+trompe : les deux s'appellent « dump », on les croit interchangeables.</em></p></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : Sans extension de dump chargée, la function n&#x27;existe pas</summary><p><strong>Sans extension de dump chargée, la function n'existe pas</strong> : erreur à la compilation, pas un
+avertissement. <em>Pourquoi on se trompe : on croit qu'un outil de debug est
+simplement ignoré en production.</em></p></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : Sans argument, c&#x27;est tout le contexte qui sort.</summary><p><strong>Sans argument, c'est tout le contexte qui sort.</strong> <em>Pourquoi on se trompe : on
+imagine qu'un dump vide n'affiche rien.</em></p></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : Le tag indexe par nom de variable ; la function refuse les named arguments</summary><p><strong>Le tag indexe par nom de variable ; la function refuse les named arguments</strong> avec Twig 3.22, malgré l'exemple de la documentation. <em>Pourquoi on se trompe : on
+fait confiance à l'exemple de la doc, ou on généralise les named arguments
+d'autres functions.</em></p></details></li></ul></section><section class="teaching-section" data-section="s-application"><h2 id="s-application" tabindex="-1">Application</h2><aside class="section-digest" id="s-application-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>La function modifie le contenu de la page.</li><li>Le tag utilise l&#x27;intégration de debug.</li><li>Le lint n&#x27;exécute pas les branches du template.</li><li>Un test de rendu reste nécessaire pour les données runtime.</li></ol></aside>
+
+
+
+</section><section class="teaching-section" data-section="s-fiche-express"><h2 id="s-fiche-express" tabindex="-1">Fiche express</h2><p class="teaching-label essential"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="book" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5C9 3 5 3 2 4V20C5 19 9 19 12 21C15 19 19 19 22 20V4C19 3 15 3 12 5V21M5 8H8M5 12H8M16 8H19M16 12H19"></path></svg> <strong>À mémoriser</strong></p><p><strong>🧠 À retenir pour la certification :</strong></p>
+<ul>
+<li><strong>Function</strong> : dans la page ; <strong>tag</strong> : vers la toolbar.</li>
+<li>Sans argument : <strong>tout le contexte</strong>.</li>
+<li>Function : <strong>arguments positionnels</strong> seulement ; tag : chaque variable
+  nommée.</li>
+<li>DebugBundle hors <code>debug</code> : <strong>rien</strong>.</li>
+<li>Sans DebugBundle : <code>debug</code> → <strong><code>var_dump</code></strong> de Twig, tag inconnu ; sinon
+  <strong>Unknown function</strong>.</li>
+<li><strong><code>debug:twig --filter=…</code></strong> : ce que Twig connaît.</li>
+<li><strong><code>lint:twig</code></strong> : syntaxe seulement, exit code <code>1</code> en cas d'erreur.</li>
+</ul>
+<p>Moyen mnémotechnique : <strong>« accolades dans la page, tag dans la barre, prod
+sans bundle : erreur »</strong>.</p>
+<pre class="highlight" tabindex="0"><code class="language-text">{{ dump }} = page, {% dump %} = toolbar ; sans argument = tout le contexte ;
+function sans named arguments ; DebugBundle + debug = actif, sans debug = muet ;
+sans bundle : debug = var_dump de Twig, prod = Unknown function ; lint = syntaxe</code></pre></section><section class="teaching-section" data-section="s-sources-officielles"><h2 id="s-sources-officielles" tabindex="-1">Sources officielles</h2><ul>
+<li><a href="https://symfony.com/doc/8.0/templates.html">Symfony Templates, « The Dump Twig Utilities »</a></li>
+<li><a>Twig Bridge 8.0, <code>DumpExtension</code></a> et <a><code>DumpNode</code></a></li>
+<li><a>DebugBundle 8.0, <code>services.php</code></a></li>
+<li><a>TwigBundle 8.0, <code>ExtensionPass</code></a></li>
+<li><a>Twig 3.22, <code>CallableArgumentsExtractor</code></a></li>
+</ul></section><section id="course-recalls" aria-labelledby="course-recalls-title" tabindex="-1"><h2 id="course-recalls-title">Rappels et liens avec les autres cours</h2><div data-recall-group="current"><h3>Rappels du cours actuel</h3><ul><li data-recall-course="CRS-vx5kvfhs0p0s" data-recall-kind="digest_reference"><p class="recall-provenance">Module 06 — Templates avec Twig · Cours « Debugging variables »</p><p class="digest-reference"><a href="#s-le-schema-digest">Revoir la règle : La function modifie le contenu de la page.</a></p></li><li data-recall-course="CRS-vx5kvfhs0p0s" data-recall-kind="digest_reference"><p class="recall-provenance">Module 06 — Templates avec Twig · Cours « Debugging variables »</p><p class="digest-reference"><a href="#s-l-essentiel-digest">Revoir la règle : La disponibilité dépend des extensions et du mode debug.</a></p></li><li><nav aria-label="Flashcards de l’application"><ul><li data-recall-course="CRS-vx5kvfhs0p0s" data-recall-kind="application"><p class="recall-provenance">Module 06 — Templates avec Twig · Cours « Debugging variables »</p><a href="#A-vx5kvfhs0p0s-6e0103f6cc-01">Flashcard : La function modifie le contenu de la page. Le tag utilise l&#x27;intégration de debug.</a></li><li data-recall-course="CRS-vx5kvfhs0p0s" data-recall-kind="application"><p class="recall-provenance">Module 06 — Templates avec Twig · Cours « Debugging variables »</p><a href="#A-vx5kvfhs0p0s-dfa23f1835-03">Flashcard : Le lint n&#x27;exécute pas les branches du template. Un test de rendu reste nécessaire pour les données runtime.</a></li></ul></nav></li></ul></div><div data-recall-group="other"><h3>Rappels des cours précédents / autres modules</h3><ul><li data-recall-course="CRS-dfyab4kpcapw" data-recall-kind="previous_course"><p class="recall-provenance">Module 06 — Templates avec Twig · Cours « String interpolation »</p><p>Twig traite les séquences reconnues dans les deux formes de guillemets. Doubler les barres d&#x27;un path littéral.</p><p><a href="#cards-previous">Rappel : <span lang="en">Does Twig process newline escapes in single-quoted strings?</span></a></p></li></ul></div></section><nav class="course-sequence" aria-label="Ordre de lecture"><a rel="prev" href="course-CRS-ym86ptkhfgap.html" aria-label="Précédent : Assets management — Module 06 — Templates avec Twig">Précédent : Assets management</a> <a href="lot-06.html">Sommaire : Module 06 — Templates avec Twig</a> <a rel="next" href="course-CRS-f9pen0bdyrr9.html" aria-label="Suivant : Form types (built-in and custom) — Module 07 — Formulaires">Suivant : Form types (built-in and custom)</a></nav><p class="course-practice-entry"><a class="button" href="#view-quiz">Fin du cours — s’entraîner avec le Quiz</a></p></div><div id="view-flashcards" data-course-panel role="region" aria-labelledby="view-flashcards-title"><h2 id="view-flashcards-title">Flashcards</h2><p lang="en">Answer before revealing each card.</p><p>Ces cartes ne mesurent pas une maîtrise notée.</p><div id="cards-s-l-essentiel-1" data-card-section="s-l-essentiel"><h3><a href="#s-l-essentiel">Revoir : L&#x27;essentiel</a></h3><div class="reader-cards"><details class="reader-card" id="A-vx5kvfhs0p0s-65c42c80d9-02"><summary lang="en">Is leaving dump() in a production template safe because it always becomes a no-op?</summary><p lang="en">No. When the extension is absent, template compilation fails.</p><p lang="fr">La disponibilité dépend des extensions et du mode debug. Retirer les dumps avant publication.</p><a href="course-CRS-vx5kvfhs0p0s.html#out-OUT-sbmhyzyq1vde">Revoir le passage précis</a></details></div></div><div id="cards-s-le-schema-2" data-card-section="s-le-schema"><h3><a href="#s-le-schema">Revoir : Le schéma</a></h3><div class="reader-cards"><details class="reader-card" id="A-vx5kvfhs0p0s-6e0103f6cc-01"><summary lang="en">Where do the dump function and dump tag send output with debug integration?</summary><p lang="en">The function prints in the page; the tag sends it to the debug toolbar.</p><p lang="fr">La function modifie le contenu de la page. Le tag utilise l&#x27;intégration de debug.</p><a href="course-CRS-vx5kvfhs0p0s.html#out-OUT-e93qx0gj8t90">Revoir le passage précis</a></details></div></div><div id="cards-s-deux-formes-deux-destinations-3" data-card-section="s-deux-formes-deux-destinations"><h3><a href="#s-deux-formes-deux-destinations">Revoir : Deux formes, deux destinations</a></h3><div class="reader-cards"><p class="reader-card-reference" id="A-vx5kvfhs0p0s-81fba3a13c-01">Rappel déjà proposé : <a lang="en" href="#A-vx5kvfhs0p0s-6e0103f6cc-01">Where do the dump function and dump tag send output with debug integration?</a> · <a href="course-CRS-vx5kvfhs0p0s.html#out-OUT-e93qx0gj8t90">Passage canonique</a></p></div></div><div id="cards-s-hors-du-developpement-4" data-card-section="s-hors-du-developpement"><h3><a href="#s-hors-du-developpement">Revoir : Hors du développement</a></h3><div class="reader-cards"><p class="reader-card-reference" id="A-vx5kvfhs0p0s-a0a215f49e-02">Rappel déjà proposé : <a lang="en" href="#A-vx5kvfhs0p0s-65c42c80d9-02">Is leaving dump() in a production template safe because it always becomes a no-op?</a> · <a href="course-CRS-vx5kvfhs0p0s.html#out-OUT-sbmhyzyq1vde">Passage canonique</a></p></div></div><div id="cards-s-les-commands-5" data-card-section="s-les-commands"><h3><a href="#s-les-commands">Revoir : Les commands</a></h3><div class="reader-cards"><details class="reader-card" id="A-vx5kvfhs0p0s-dfa23f1835-03"><summary lang="en">Does lint:twig detect an undefined runtime variable?</summary><p lang="en">No. It checks syntax without rendering.</p><p lang="fr">Le lint n&#x27;exécute pas les branches du template. Un test de rendu reste nécessaire pour les données runtime.</p><a href="course-CRS-vx5kvfhs0p0s.html#out-OUT-5qgcf97r7ze3">Revoir le passage précis</a></details></div></div><div id="cards-s-pieges-d-examen-6" data-card-section="s-pieges-d-examen"><h3><a href="#s-pieges-d-examen">Revoir : Pièges d&#x27;examen</a></h3><div class="reader-cards"><p class="reader-card-reference" id="A-vx5kvfhs0p0s-596d5af532-01">Rappel déjà proposé : <a lang="en" href="#A-vx5kvfhs0p0s-6e0103f6cc-01">Where do the dump function and dump tag send output with debug integration?</a> · <a href="course-CRS-vx5kvfhs0p0s.html#out-OUT-e93qx0gj8t90">Passage canonique</a></p></div></div><div id="cards-s-application-7" data-card-section="s-application"><h3><a href="#s-application">Revoir : Application</a></h3><div class="reader-cards"><p class="reader-card-reference" id="A-vx5kvfhs0p0s-e7ad522ea3-01">Rappel déjà proposé : <a lang="en" href="#A-vx5kvfhs0p0s-6e0103f6cc-01">Where do the dump function and dump tag send output with debug integration?</a> · <a href="course-CRS-vx5kvfhs0p0s.html#out-OUT-e93qx0gj8t90">Passage canonique</a></p><p class="reader-card-reference" id="A-vx5kvfhs0p0s-e7ad522ea3-03">Rappel déjà proposé : <a lang="en" href="#A-vx5kvfhs0p0s-dfa23f1835-03">Does lint:twig detect an undefined runtime variable?</a> · <a href="course-CRS-vx5kvfhs0p0s.html#out-OUT-5qgcf97r7ze3">Passage canonique</a></p></div></div><div id="cards-s-fiche-express-8" data-card-section="s-fiche-express"><h3><a href="#s-fiche-express">Revoir : Fiche express</a></h3><div class="reader-cards"><p class="reader-card-reference" id="A-vx5kvfhs0p0s-b11e58e15e-01">Rappel déjà proposé : <a lang="en" href="#A-vx5kvfhs0p0s-6e0103f6cc-01">Where do the dump function and dump tag send output with debug integration?</a> · <a href="course-CRS-vx5kvfhs0p0s.html#out-OUT-e93qx0gj8t90">Passage canonique</a></p></div></div><div id="cards-previous"><p class="recall-provenance">Module 06 — Templates avec Twig · Cours « String interpolation »</p><aside class="checkpoint"><h2>Rappel d’un cours antérieur</h2><p>Avant de poursuivre : String interpolation.</p><details class="corpus-correction"><summary lang="en">Does Twig process newline escapes in single-quoted strings?</summary><p lang="en">Yes, unlike PHP single-quoted string behaviour.</p><p>Twig traite les séquences reconnues dans les deux formes de guillemets. Doubler les barres d&#x27;un path littéral.</p><a href="course-CRS-dfyab4kpcapw.html#out-OUT-w25h6r5rdb9c">Relire la correction dans le cours antérieur</a></details></aside></div></div><div id="view-quiz" data-course-panel role="region" aria-labelledby="view-quiz-title"><aside class="revision-context"><p><strong>Avant le quiz :</strong> Le template affiche un titre vide et vous ne savez pas pourquoi. Avant de deviner, vous voulez regarder ce que contient la variable. Ce cours montre comment l&#x27;afficher, où le résultat apparaît selon la forme choisie, pourquoi cet outil disparaît (ou casse tout) en production, et quelles commandes contrôlent un template sans le rendre.</p><p>Quelle donnée entre, quelle responsabilité agit et quelle condition change le résultat ? Pour chaque correction, vérifiez ces conditions dans <a href="course-CRS-vx5kvfhs0p0s.html#s-objectif">le passage enseigné</a>, sans supposer que toutes les branches du blog sont exécutées.</p></aside><h2 id="view-quiz-title">Quiz</h2><p class="quiz-size" lang="en">3 eligible learning questions · 3 per session. Repeating a question does not demonstrate mastery.</p><p id="course-quiz-status" role="status">Quiz interactif non chargé. Démarrez après chargement de la banque locale.</p><div id="course-quiz-controls" class="assessment-main" hidden><div id="course-quiz-assessment-controls" hidden><select id="course-quiz-assessment-mode" aria-label="Mode du quiz" hidden><option value="learning">Entraînement</option></select><p id="course-quiz-training-scope"></p><button id="course-quiz-start-assessment" type="button" lang="en">Start practice</button><button id="course-quiz-finish-assessment" type="button" lang="en" hidden>End session</button></div><p id="course-quiz-assessment-error" role="alert"></p><p id="course-quiz-assessment-timer" hidden></p><p id="course-quiz-session-progress" class="quiz-progress" role="status" lang="en"></p><div id="course-quiz-assessment-app" tabindex="-1"></div><nav id="course-quiz-session-navigation" aria-label="Questions du cours"></nav><div id="course-quiz-learning-overview" aria-live="polite"></div></div><div id="course-quiz-native"><p>Sans JavaScript ou si le chargement échoue : aucune tentative notée. Les <a href="#view-flashcards">flashcards du cours</a> restent disponibles.</p><details class="course-quiz-fallback" data-question-id="L-vx5kvfhs0p0s-base-v1"><summary lang="en">RADIO — Select one answer. Is leaving dump() in a production template safe because it always becomes a no-op?</summary><p>Correction de consultation — non notée.</p><p>La disponibilité dépend des extensions et du mode debug. Retirer les dumps avant publication.</p><ul><li><strong lang="en">Correct: No; a missing extension can make compilation fail.</strong><p>La disponibilité dépend des extensions et du mode debug. Retirer les dumps avant publication.</p></li><li><strong lang="en">Distractor: Yes; Twig silently removes all undefined debug functions.</strong><p>Une function non disponible n&#x27;est pas automatiquement supprimée.</p></li><li><strong lang="en">Distractor: Yes; dump() always becomes a harmless empty string.</strong><p>L&#x27;absence de l&#x27;extension peut empêcher la compilation du template.</p></li></ul><a href="course-CRS-vx5kvfhs0p0s.html#out-OUT-sbmhyzyq1vde">Relire le passage exact</a><a href="course-CRS-vx5kvfhs0p0s.html#s-hors-du-developpement">Relire la correction précise</a></details></div></div></div></div><details class="transfer-panel"><summary>Sauvegarde et transfert de progression</summary><p id="reading-status" role="status">Sans JavaScript : lecture libre ; progression non enregistrée.</p><p><a href="assessment.html#overview-title">Lecture, réussites immédiates et différées</a></p><p>Transfert manuel — aucune synchronisation automatique</p><p id="persistence-status" role="status"></p><button type="button" class="secondary" id="export-progress">Exporter ma progression</button><label for="import-progress">Choisir un JSON pour fusionner ma progression (sans remplacement)</label><input type="file" id="import-progress" accept="application/json,.json"><p id="transfer-status" role="status"></p></details></main><footer class="site-footer"><a href="catalogue.html">Catalogue</a> <a href="sources.html">Sources et attribution</a> <a href="#contenu">Haut de page</a></footer></body></html>

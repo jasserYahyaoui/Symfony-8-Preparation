@@ -1,0 +1,465 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; connect-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Form types (built-in and custom) — Symfony 8 Preparation</title><link rel="stylesheet" href="styles.css"><link rel="stylesheet" href="reader.css"><script src="mermaid.min.js" defer></script><script src="mermaid-init.js" defer></script><link rel="stylesheet" href="assessment.css"><script src="fixed-exams-data.js" defer></script><script src="fixed-exams.js" defer></script><script src="learning-state.js" defer></script><script src="guide.js" defer></script><script src="reader-catalog.js" defer></script><script src="reader.js" defer></script><script src="site-state.js" defer></script><script src="assessment.js" defer></script><script src="course-views.js" defer></script><link rel="stylesheet" href="syntax-highlight.css"><script src="prism-syntax.js" defer></script><script src="syntax-highlight.js" defer></script></head><body data-course-id="CRS-f9pen0bdyrr9"><a class="skip" href="#contenu">Aller au contenu</a><header class="site-header"><a class="brand" href="index.html">S8 Preparation</a><nav aria-label="Navigation principale"><a href="index.html">Accueil</a> <a href="catalogue.html">Parcours</a> <a href="assessment.html?mode=review">Réviser</a> <a href="examens.html">Examens blancs</a> <a href="jour-j.html">Jour J</a></nav></header><main id="contenu" tabindex="-1" class="corpus-reader"><nav class="breadcrumb" aria-label="Fil d’Ariane"><a href="index.html">Accueil</a> <span aria-hidden="true">›</span> <a href="catalogue.html">Parcours</a> <span aria-hidden="true">›</span> <a href="lot-07.html">Module 07 — Formulaires</a> <span aria-hidden="true">›</span> <span aria-current="page">Form types (built-in and custom)</span></nav><h1>Form types (built-in and custom)</h1><p class="muted">Symfony 8.0 · API PHP ≤ 8.4 · Twig ≤ 3.22. Préparation indépendante.</p><p class="revision-status">Rédaction narrative P11 : projection nouvelle, non couverte par les décisions historiques P10. Aucune approbation officielle ni garantie de réussite.</p><aside class="narrative-context" aria-label="Repères de lecture"><p><strong>Prérequis de lecture :</strong> <a href="course-CRS-nfkzx2s1n3r3.html">Forms handling</a></p><p><strong>Concepts voisins :</strong> <a href="course-CRS-ax2v94pgbk0g.html">PHP object validation</a> — Transformer une saisie n’est pas valider ses contraintes. <a href="lot-07.html">Comparer les responsabilités dans ce module</a> · <a href="carte-composants.html">Situer cette responsabilité dans le blog</a> · <a href="glossaire.html">Distinguer les termes voisins</a></p><p><a href="ordre-lecture.html">Retrouver les 163 cours dans le parcours recommandé</a>. Ce repère ne modifie ni votre historique ni votre progression.</p></aside><div class="course-layout"><details class="lot-course-menu"><summary>Cours du module · 13 cours</summary><nav aria-label="Cours du module"><a class="lot-context" href="lot-07.html">Module 07 — Formulaires</a><ol><li><a href="course-CRS-txp6tjhjtfy8.html">Form component</a></li><li><a href="course-CRS-8msvfwe13mpb.html">Forms creation</a></li><li><a href="course-CRS-nfkzx2s1n3r3.html">Forms handling</a></li><li><a href="course-CRS-f9pen0bdyrr9.html" aria-current="page">Form types (built-in and custom)</a></li><li><a href="course-CRS-b5nj93xzz10b.html">Forms rendering with Twig</a></li><li><a href="course-CRS-r3xywnpwrwh7.html">Forms theming</a></li><li><a href="course-CRS-0yhqc0b1q7hz.html">CSRF protection</a></li><li><a href="course-CRS-cpvcczhj7bzx.html">Handling file upload</a></li><li><a href="course-CRS-zsgx3tvpy1kn.html">Built-in form types</a></li><li><a href="course-CRS-cj36gys6vatx.html">Data transformers</a></li><li><a href="course-CRS-b2pn9zz55e4n.html">Form events</a></li><li><a href="course-CRS-k4ejsd624d1p.html">Form type extensions</a></li><li><a href="course-CRS-pchb259hnbh3.html">Form options (OptionsResolver component)</a></li></ol><a href="lot-07.html#view-quiz">Quiz du module</a></nav></details><aside class="course-section-menu" aria-label="Sommaire du cours"><nav class="course-actions" aria-label="Activités du cours"><a id="tab-course" href="#view-course">Cours</a><a id="tab-flashcards" href="#view-flashcards">Flashcards</a><a id="tab-quiz" href="#view-quiz">Quiz</a></nav><details class="course-section-disclosure"><summary id="course-sections">Sections du cours</summary><nav aria-label="Sections du cours"><ul><li><a href="#s-objectif">Objectif</a></li><li><a href="#s-l-essentiel">L&#x27;essentiel</a></li><li><a href="#s-le-schema">Le schéma</a></li><li><a href="#s-l-exemple-l-achat">L&#x27;exemple : l&#x27;achat</a></li><li><a href="#s-ce-qu-est-un-type">Ce qu&#x27;est un type</a></li><li><a href="#s-les-six-methods">Les six methods</a></li><li><a href="#s-getparent-specialiser-un-type-existant">`getParent()` : spécialiser un type existant</a></li><li><a href="#s-composer-plutot-qu-etendre">Composer plutôt qu&#x27;étendre</a></li><li><a href="#s-une-collection-de-types">Une collection de types</a></li><li><a href="#s-pieges-d-examen">Pièges d&#x27;examen</a></li><li><a href="#s-application">Application</a></li><li><a href="#s-fiche-express">Fiche express</a></li><li><a href="#s-sources-officielles">Sources officielles</a></li><li><a href="#reader-objectives">Objectifs d’apprentissage</a></li><li><a href="#course-recalls">Rappels et liens avec les autres cours</a></li></ul></nav><nav aria-label="Flashcards par section"><a href="#view-flashcards">Flashcards par section</a><ul><li><a href="#cards-s-l-essentiel-1">L&#x27;essentiel</a></li><li><a href="#cards-s-le-schema-2">Le schéma</a></li><li><a href="#cards-s-l-exemple-l-achat-3">L&#x27;exemple : l&#x27;achat</a></li><li><a href="#cards-s-ce-qu-est-un-type-4">Ce qu&#x27;est un type</a></li><li><a href="#cards-s-les-six-methods-5">Les six methods</a></li><li><a href="#cards-s-getparent-specialiser-un-type-existant-6">`getParent()` : spécialiser un type existant</a></li><li><a href="#cards-s-composer-plutot-qu-etendre-7">Composer plutôt qu&#x27;étendre</a></li><li><a href="#cards-s-une-collection-de-types-8">Une collection de types</a></li><li><a href="#cards-s-pieges-d-examen-9">Pièges d&#x27;examen</a></li><li><a href="#cards-s-application-10">Application</a></li><li><a href="#cards-s-fiche-express-11">Fiche express</a></li><li><a href="#cards-previous">Module 06 — Templates avec Twig · Cours « Assets management » · Rappel : <span lang="en">How does a leading slash affect asset() under an application base path?</span></a></li></ul></nav><nav aria-label="Retour au module"><a href="lot-07.html">Tous les cours du module</a></nav></details><p class="local-quiz-count">6 questions disponibles · 6 par session Quiz</p></aside><div class="course-content"><div id="view-course" data-course-panel role="region" aria-labelledby="view-course-title"><h2 id="view-course-title">Cours</h2><p class="course-introduction"><a href="#s-objectif">Introduction</a> · <a href="#course-sections">Sections du cours</a></p><h2 id="reader-objectives" tabindex="-1">Objectifs d’apprentissage</h2><ul><li><a href="course-CRS-f9pen0bdyrr9.html#out-OUT-kevx5cz60q4s">Énoncer qu&#x27;un form est lui-même un type</a></li><li><a href="course-CRS-f9pen0bdyrr9.html#out-OUT-0ztsd5vjbe72">Associer chaque method d&#x27;AbstractType à son role</a></li><li><a href="course-CRS-f9pen0bdyrr9.html#out-OUT-dstzcbzx0kt7">Employer getParent() et citer le parent implicite</a></li><li><a href="course-CRS-f9pen0bdyrr9.html#out-OUT-tq1etfz8r98x">Distinguer hériter d&#x27;un type et l&#x27;ajouter comme field</a></li><li><a href="course-CRS-f9pen0bdyrr9.html#out-OUT-q996f75mz363">Prévoir l&#x27;effet d&#x27;allow_add, allow_delete, du prototype et de by_reference sur une collection</a></li></ul><aside class="pedagogy-legend" aria-label="Repères pédagogiques"><p><strong>Repères pédagogiques</strong></p><p>Ces repères décrivent le rôle du bloc, pas une fréquence officielle à l’examen.</p><p class="teaching-label essential"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="brain" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5C12 1 6 1 6 5C2 5 1 10 4 12C1 15 3 19 6 19C6 23 12 23 12 19V5M12 5C12 1 18 1 18 5C22 5 23 10 20 12C23 15 21 19 18 19C18 23 12 23 12 19M6 5C6 8 8 9 9 9M4 12H7L9 14M6 19V16M18 5C18 8 16 9 15 9M20 12H17L15 14M18 19V16"></path></svg> <strong>À comprendre</strong></p><p class="teaching-label essential"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="book" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5C9 3 5 3 2 4V20C5 19 9 19 12 21C15 19 19 19 22 20V4C19 3 15 3 12 5V21M5 8H8M5 12H8M16 8H19M16 12H19"></path></svg> <strong>À mémoriser</strong></p><p class="teaching-label example"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="code" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6L2 12L8 18M16 6L22 12L16 18M14 3L10 21"></path></svg> <strong>Exemple concret</strong></p><p class="teaching-label pitfall"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="warning" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3L23 21H1L12 3ZM12 9V14M12 17V18"></path></svg> <strong>Piège à éviter</strong></p><p class="teaching-label nuance"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="balance" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3V21M7 21H17M3 7L21 5M5 7L1 15H9L5 7M19 6L15 14H23L19 6M1 15Q5 20 9 15M15 14Q19 19 23 14"></path></svg> <strong>Nuance à connaître</strong></p><p>Précision, exception ou condition d’application d’une règle.</p></aside><section class="teaching-section" data-section="s-objectif"><h2 id="s-objectif" tabindex="-1">Objectif</h2><p>Écrire un type de form, savoir quand le spécialiser par <code>getParent()</code> et quand
+l'ajouter comme field, et prévoir ce que fait une collection de types.</p>
+<p>Question centrale : <strong>quand je veux réutiliser une description de formulaire,
+dois-je l'hériter, l'imbriquer ou la répéter ?</strong></p></section><section class="teaching-section" data-section="s-l-essentiel"><h2 id="s-l-essentiel" tabindex="-1">L&#x27;essentiel</h2><p class="teaching-label essential"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="brain" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5C12 1 6 1 6 5C2 5 1 10 4 12C1 15 3 19 6 19C6 23 12 23 12 19V5M12 5C12 1 18 1 18 5C22 5 23 10 20 12C23 15 21 19 18 19C18 23 12 23 12 19M6 5C6 8 8 9 9 9M4 12H7L9 14M6 19V16M18 5C18 8 16 9 15 9M20 12H17L15 14M18 19V16"></path></svg> <strong>À comprendre</strong></p><aside class="section-digest" id="s-l-essentiel-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>add() imbrique des données.</li><li>getParent() reprend un comportement au même niveau.</li></ol></aside><p><strong>Ce que cette partie veut réellement vous apprendre.</strong></p>
+<ul>
+<li><em>Pourquoi ce sujet existe.</em> Un formulaire se compose de dizaines de champs
+  qui se ressemblent (un choix de livraison, une adresse, une liste de tags).
+  Sans notion de <strong>type</strong>, on recopierait la même configuration partout.</li>
+<li><em>Le piège de fond.</em> Le mot « type » désigne la <strong>description</strong>, pas
+  l'<strong>instance</strong> <code>Form</code> qui reçoit les données d'une soumission. Et « parent »
+  a ici deux sens : l'héritage PHP (<code>extends</code>) et le parent de <strong>form</strong>
+  (<code>getParent()</code>).</li>
+<li><em>Ce que l'auteur veut que vous compreniez.</em> Il y a trois relations entre
+  types : <strong>spécialiser</strong>, <strong>composer</strong>, <strong>répéter</strong>. Chacune a un mécanisme et
+  un effet différent sur les <strong>données</strong>.</li>
+<li><em>Pourquoi c'est à l'examen.</em> Questions fréquentes : parent par défaut,
+  <code>block_prefixes</code>, héritage des options, <code>allow_add</code> / <code>allow_delete</code>,
+  <code>by_reference</code>.</li>
+</ul>
+<p>Un form et ses fields <strong>sont construits à partir de types</strong>. Le type est une
+description réutilisable ; l'instance <code>Form</code> porte les données et l'état de
+soumission d'une occurrence. Pour réutiliser un type,
+trois voies : le <strong>spécialiser</strong> (<code>getParent()</code> : on hérite et on change
+quelques options), le <strong>composer</strong> (<code>add()</code> : il devient un field, ses
+données s'imbriquent), le <strong>répéter</strong> (<code>CollectionType</code>).</p></section><section class="teaching-section" data-section="s-le-schema"><h2 id="s-le-schema" tabindex="-1">Le schéma</h2><aside class="section-digest" id="s-le-schema-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Le parent de form est une composition de comportement.</li><li>Ses options sont héritées puis personnalisables.</li></ol></aside><p><strong>Où en est-on ?</strong> Début du cours. La carte ci-dessous donne les trois voies ;
+chaque section suivante en détaille une : les six méthodes (anatomie d'un type),
+<code>getParent()</code> (spécialiser), <code>add()</code> (composer), <code>CollectionType</code> (répéter).</p>
+<pre class="highlight" tabindex="0"><code class="language-text">                    ┌─ spécialiser ──► getParent() : « je suis un ChoiceType »
+ TYPE (description) ┼──────── composer ──────► add('address', AddressType::class)
+                    └──────── répéter ───────► CollectionType + entry_type</code></pre>
+<p>Le dessin suivant ajoute le choix de conception et l'ordre d'intervention de
+<code>ResolvedFormType</code>.</p>
+<figure class="diagram" aria-labelledby="CRS-f9pen0bdyrr9-3-diagram-0-title CRS-f9pen0bdyrr9-3-diagram-0-description"><figcaption id="CRS-f9pen0bdyrr9-3-diagram-0-title">Spécialiser, composer, répéter un form type</figcaption><p id="CRS-f9pen0bdyrr9-3-diagram-0-description">Un type décrit un form ou un field. La spécialisation réutilise le comportement du parent ; la composition ajoute un enfant ; CollectionType crée un enfant par entrée. Ces relations de configuration ne sont pas l&#x27;héritage PHP des classes.</p><div class="mermaid" hidden>---
+title: Trois façons de réutiliser un type
+---
+flowchart TD
+  accTitle: Spécialiser, composer, répéter un form type
+  accDescr: Un type décrit un form ou un field. La spécialisation réutilise le comportement du parent ; la composition ajoute un enfant ; CollectionType crée un enfant par entrée. Ces relations de configuration ne sont pas l&#x27;héritage PHP des classes.
+  T[&quot;Type : description réutilisable&quot;] --&gt;|&quot;choisir la relation&quot;| S{&quot;Quel besoin ?&quot;}
+  S --&gt;|&quot;spécialiser&quot;| P[&quot;getParent() : parent d&#x27;abord, options reprises&quot;]
+  S --&gt;|&quot;composer&quot;| A[&quot;add(&#x27;address&#x27;, AddressType::class) : données imbriquées&quot;]
+  S --&gt;|&quot;répéter&quot;| C[&quot;CollectionType : entry_type par élément&quot;]
+  P --&gt;|&quot;parent implicite d&#x27;AbstractType&quot;| D[&quot;FormType&quot;]
+  C --&gt;|&quot;régler les entrées et l&#x27;écriture&quot;| O[&quot;allow_add / allow_delete&lt;br/&gt;by_reference&quot;]
+  classDef choice fill:#fef3c7,stroke:#b45309,color:#78350f
+  classDef config fill:#e0f2fe,stroke:#0369a1,color:#0c4a6e
+  class S choice
+  class T,P,A,C,D,O config</div></figure><p>
+Ambre = choix de conception, bleu = configuration. <code>ShippingType</code> étend
+<code>AbstractType</code> en PHP mais désigne <code>ChoiceType</code> comme parent <strong>de form</strong>.
+<code>ResolvedFormType</code> orchestre les appels parent → type → extensions ; aucune
+flèche ne représente un appel direct du parent vers l'enfant.</p></section><section class="teaching-section" data-section="s-l-exemple-l-achat"><h2 id="s-l-exemple-l-achat" tabindex="-1">L&#x27;exemple : l&#x27;achat</h2><p class="teaching-label example"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="code" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6L2 12L8 18M16 6L22 12L16 18M14 3L10 21"></path></svg> <strong>Exemple concret</strong></p><p><strong>Où en est-on ?</strong> Avant le détail, un seul code qui montre les trois
+relations côte à côte. Repérez les trois lignes <code>add()</code> : chacune illustre une
+voie différente.</p>
+<p>L'inscription du lecteur peut réutiliser un choix spécialisé, regrouper
+une adresse ou répéter des préférences. L'achat ci-dessous illustre ces
+trois relations sans les imposer au GET de l'article. Il s'agit d'extraits
+de types : les imports et les modèles Order/Address doivent être définis
+dans l'application qui les emploie.</p>
+<pre class="highlight" tabindex="0"><code class="language-php">class ShippingType extends AbstractType       // spécialise un type existant
+{
+    public function configureOptions(OptionsResolver $resolver): void
+    {
+        $resolver-&gt;setDefaults([
+            'choices' =&gt; ['Standard' =&gt; 'standard', 'Express' =&gt; 'express'],
+            'expanded' =&gt; true,
+        ]);
+    }
+
+    public function getParent(): string
+    {
+        return ChoiceType::class;
+    }
+}
+
+// dans OrderType::buildForm()
+$builder
+    -&gt;add('shipping', ShippingType::class)                    // spécialisé
+    -&gt;add('address', AddressType::class)                      // composé
+    -&gt;add('tags', CollectionType::class, ['entry_type' =&gt; TextType::class]); // répété</code></pre>
+<p>Ce que Symfony voit :</p>
+<table>
+<thead>
+<tr>
+<th>Ligne</th>
+<th>Relation</th>
+<th>Effet sur les données</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ShippingType</code> + <code>getParent()</code></td>
+<td>spécialiser</td>
+<td>un champ <code>shipping</code> qui se comporte comme un <code>ChoiceType</code> aux choix fixés</td>
+</tr>
+<tr>
+<td><code>add('address', AddressType::class)</code></td>
+<td>composer</td>
+<td><code>$order-&gt;address-&gt;city</code>, <code>$order-&gt;address-&gt;street</code>…</td>
+</tr>
+<tr>
+<td><code>add('tags', CollectionType::class, …)</code></td>
+<td>répéter</td>
+<td>un enfant <code>TextType</code> par élément de <code>$order-&gt;tags</code></td>
+</tr>
+</tbody>
+</table></section><section class="teaching-section" data-section="s-ce-qu-est-un-type"><span class="outcome-anchor" id="out-OUT-kevx5cz60q4s" tabindex="-1"></span><h2 id="s-ce-qu-est-un-type" tabindex="-1">Ce qu&#x27;est un type</h2><aside class="section-digest" id="s-ce-qu-est-un-type-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Un FormType décrit un élément composable.</li><li>Un form peut donc devenir enfant d&#x27;un autre.</li></ol></aside><p><strong>Où en est-on ?</strong> Étape 1 sur 5 : avant d'écrire des types, comprendre ce
+qu'est un type. Question « Pourquoi ? » : pourquoi n'y a-t-il pas de différence
+entre un champ et un formulaire entier ?</p>
+<p>Un service de type peut recevoir un catalogue de choix par injection,
+mais il ne doit pas conserver la saisie propre à un lecteur dans son état.
+Cette saisie appartient à l'instance Form construite pour le traitement.
+La même description peut ainsi servir à plusieurs inscriptions sans
+confondre leurs valeurs ni leur état soumis.</p>
+<p>Un type décrit un field ou un form entier : la distinction n'existe pas. C'est
+ce qui permet d'imbriquer un form dans un autre. Un type étend <code>AbstractType</code>
+et c'est un service ordinaire, autoconfiguré : il peut recevoir des
+dependencies par son constructor.</p>
+<pre class="highlight" tabindex="0"><code class="language-text">┌─────────────── TYPE (classe, partagée) ───────────────┐
+│  décrit : enfants, options, parent, préfixe de bloc   │
+│  peut recevoir des services par son constructeur      │
+│  ne doit PAS garder la saisie d'un utilisateur        │
+└───────────────────────────┬───────────────────────────┘
+        factory : une instance par traitement
+                            ▼
+┌────────────── INSTANCE Form (une par requête) ────────┐
+│  porte : données, erreurs, état « soumis »            │
+└───────────────────────────────────────────────────────┘</code></pre>
+<p>Pourquoi un champ et un form sont-ils la même chose ? Parce que <code>TextType</code>
+est un Form à zéro enfant et <code>OrderType</code> un Form à plusieurs enfants : le
+système est récursif, ce qui permet à <code>OrderType</code> d'avoir <code>AddressType</code> comme
+enfant.</p>
+<div class="admonition info">
+<p class="admonition-title">🌍 In Real Life</p>
+<p><strong>La situation</strong> : un modèle administratif décrit aussi bien une fiche complète qu'un encadré réutilisable. Le bureau qui conserve ces modèles peut disposer d'un annuaire, mais ne range pas les réponses d'un candidat dans le modèle commun.</p>
+<p><strong>L’équivalent dans Symfony</strong> : un FormType décrit la construction d'une racine ou d'un enfant ; Form porte les données et l'état d'une occurrence. Un type enregistré comme service peut recevoir ses dépendances.</p>
+<p><strong>Retour à la réalité technique</strong> : découverte, autoconfiguration et injection supposent la configuration de services adaptée ; hériter d'AbstractType ne suffit pas à rendre une classe découverte partout. La réutilisation d'instances dépend du registre/container et de sa durée de vie. Garde les données propres au traitement dans Form, ses données ou ses options, pas dans un état mutable du service partagé.</p>
+<p><strong>🧠 Comment le mémoriser</strong> : « Le modèle reste commun, les réponses restent individuelles. » Image mentale : modèle au classeur, fiches remplies séparément. Question-réflexe : cette information décrit-elle le type ou seulement l'inscription en cours ?</p>
+<p><strong>⚠️ À ne pas confondre</strong> : type réutilisable, service injecté et instance Form soumise.</p>
+</div></section><section class="teaching-section" data-section="s-les-six-methods"><span class="outcome-anchor" id="out-OUT-0ztsd5vjbe72" tabindex="-1"></span><h2 id="s-les-six-methods" tabindex="-1">Les six methods</h2><aside class="section-digest" id="s-les-six-methods-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>buildView() prépare la vue du type.</li><li>finishView() intervient après les vues enfants.</li></ol></aside><p><strong>Où en est-on ?</strong> Étape 2 sur 5. On ouvre <code>AbstractType</code> : six méthodes,
+toutes avec un défaut. Question : <strong>à quel moment chacune intervient-elle, et
+pourquoi <code>buildView()</code> et <code>finishView()</code> existent-ils tous les deux ?</strong></p>
+<p>La factory résout d'abord les options utilisées pour bâtir les enfants.
+Quand on demandera une vue, <code>buildView()</code> préparera ses variables puis
+<code>finishView()</code> pourra consulter les vues enfants. Ajouter une classe CSS
+à un enfant déjà construit ne se place donc pas au même moment qu'ajouter
+ce champ à l'arbre Form.</p>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Role</th>
+<th>Défaut dans <code>AbstractType</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>buildForm()</code></td>
+<td>ajoute les fields enfants</td>
+<td>vide</td>
+</tr>
+<tr>
+<td><code>configureOptions()</code></td>
+<td>déclare les options et leurs défauts</td>
+<td>vide</td>
+</tr>
+<tr>
+<td><code>getParent()</code></td>
+<td>le type dont on hérite</td>
+<td><code>FormType::class</code></td>
+</tr>
+<tr>
+<td><code>getBlockPrefix()</code></td>
+<td>le préfixe des blocks Twig</td>
+<td>dérivé du nom de class</td>
+</tr>
+<tr>
+<td><code>buildView()</code></td>
+<td>passe des variables à la vue</td>
+<td>vide</td>
+</tr>
+<tr>
+<td><code>finishView()</code></td>
+<td>ajuste la vue une fois les enfants construits</td>
+<td>vide</td>
+</tr>
+</tbody>
+</table>
+<p>Relu par réflexion : aucune n'est abstraite. Dans <code>buildView()</code>, la vue n'a
+encore aucun enfant ; dans <code>finishView()</code>, elle les a.</p>
+<p>Chronologie pour un type donné :</p>
+<pre class="highlight" tabindex="0"><code class="language-text">CONSTRUCTION DU FORM (arbre de données)
+  1. configureOptions()   → options résolues (parent d'abord)
+  2. buildForm()          → ajoute les enfants avec add()
+
+CONSTRUCTION DE LA VUE (quand on appelle createView / render)
+  3. buildView()          → variables de vue ; les vues enfants n'existent PAS encore
+  4. (les enfants construisent leur propre vue)
+  5. finishView()         → les vues enfants existent : on peut modifier leurs attr
+
+getParent() / getBlockPrefix() : consultés pour la hiérarchie et le thème</code></pre>
+<p>Pourquoi deux méthodes pour la vue ? Parce qu'un parent ne peut pas modifier
+un enfant qui n'existe pas encore. <code>buildView()</code> prépare ce que le <strong>parent</strong>
+expose ; <code>finishView()</code> retouche ce que les <strong>enfants</strong> ont exposé.</p>
+<div class="admonition info">
+<p class="admonition-title">🌍 In Real Life</p>
+<p><strong>La situation</strong> : préparer une fiche demande plusieurs interventions : fixer les consignes, ajouter les cases, choisir leur famille, préparer leur présentation puis ajuster les encadrés une fois assemblés.</p>
+<p><strong>L’équivalent dans Symfony</strong> : <code>configureOptions()</code> définit les options, <code>buildForm()</code> configure l'arbre Form, <code>getParent()</code> sa lignée de type, <code>getBlockPrefix()</code> le préfixe de rendu. <code>buildView()</code> prépare les variables de vue ; <code>finishView()</code> intervient après construction des vues enfants.</p>
+<p><strong>Retour à la réalité technique</strong> : AbstractType fournit des implémentations par défaut ; aucune de ces six méthodes n'est à redéfinir systématiquement. Une variable de FormView ne crée pas un champ soumis, et un préfixe de bloc ne sélectionne pas une propriété métier. Le moment de construction de la vue diffère de celui du formulaire.</p>
+<p><strong>🧠 Comment le mémoriser</strong> : « Construire la fiche, puis préparer sa présentation. » Image mentale : arbre de cases avant épreuve mise en page. Question-réflexe : dois-je modifier la structure Form ou une vue dont les enfants doivent déjà exister ?</p>
+<p><strong>⚠️ À ne pas confondre</strong> : options de construction, enfants Form, variables FormView et blocs de thème.</p>
+</div></section><section class="teaching-section" data-section="s-getparent-specialiser-un-type-existant"><span class="outcome-anchor" id="out-OUT-dstzcbzx0kt7" tabindex="-1"></span><h2 id="s-getparent-specialiser-un-type-existant" tabindex="-1">`getParent()` : spécialiser un type existant</h2><p><strong>Où en est-on ?</strong> Étape 3 sur 5, première des trois relations : <strong>spécialiser</strong>.
+Question : comment <code>ShippingType</code> peut-il se comporter comme un <code>ChoiceType</code>
+sans que <code>ChoiceType</code> ne le sache ?</p>
+<p>ShippingType reprend la mécanique de ChoiceType tout en fixant ses choix.
+Ce n'est pas ChoiceType qui appelle directement la classe ShippingType :
+ResolvedFormType coordonne la hiérarchie. Les préfixes obtenus serviront
+ensuite au renderer pour trouver un block, pas au mapper pour choisir
+une propriété du modèle.</p>
+<ul>
+<li>Sans <code>getParent()</code>, le parent est <code>FormType</code>, la racine ; parmi les types du
+  cœur, seuls <code>FormType</code> et <code>ButtonType</code> rendent <code>null</code>.</li>
+<li><code>ResolvedFormType</code> enchaîne <strong>parent, puis type, puis extensions</strong>, et
+  <strong>clone</strong> le resolver du parent avant <code>configureOptions()</code> : un type hérite
+  des options de ses ancêtres et peut en changer les défauts.</li>
+<li><code>getBlockPrefix()</code> : nom de class sans <code>Type</code>, en <em>snake case</em> —
+  <code>DeliveryAddressType</code> → <code>delivery_address</code>. La vue reçoit toute la lignée
+  dans <code>block_prefixes</code>, du plus général au plus spécifique :
+  <code>["form", "choice", "shipping", "_order_shipping"]</code>.</li>
+</ul>
+<p>Mécanisme : <code>ResolvedFormType</code> est le chef d'orchestre. Pour construire
+<code>ShippingType</code>, il fait d'abord travailler son parent (<code>ChoiceType</code>, qui a
+lui-même <code>FormType</code> pour parent), puis le type, puis les extensions.</p>
+<pre class="highlight" tabindex="0"><code class="language-text">ResolvedFormType(ShippingType)
+   ├─ parent : ResolvedFormType(ChoiceType)
+   │     └─ parent : ResolvedFormType(FormType)   ← racine (parent = null)
+   ├─ type : ShippingType
+   └─ extensions de type
+
+buildForm()  : FormType → ChoiceType → ShippingType → extensions
+options      : resolver de ChoiceType CLONÉ, puis ShippingType::configureOptions()</code></pre>
+<p>Ce qui revient à ceci pour les options : si le parent déclare <code>color: 'red'</code>
+et <code>size: 1</code>, et que l'enfant redéclare seulement <code>color: 'blue'</code>, l'enfant
+reçoit <code>color = 'blue'</code> <strong>et</strong> <code>size = 1</code>.</p>
+<p>Les préfixes de blocs Twig pour un champ <code>shipping</code> du form <code>order</code> :</p>
+<pre class="highlight" tabindex="0"><code class="language-text">block_prefixes = ["form", "choice", "shipping", "_order_shipping"]
+                  racine   parent    ce type     ce champ précis
+                  ◄── du plus général au plus spécifique ──►</code></pre>
+<p>Pourquoi le préfixe perd-il <code>Type</code> ? <code>StringUtil::fqcnToBlockPrefix()</code> retire le
+suffixe <code>type</code> du nom de classe puis passe en snake case :
+<code>DeliveryAddressType</code> → <code>delivery_address</code>, <code>MoneyRangeType</code> → <code>money_range</code>.</p>
+<p>Comparaison de deux « parents » à ne pas confondre :</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Héritage PHP (<code>extends</code>)</th>
+<th>Parent de form (<code>getParent()</code>)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Où ?</td>
+<td>déclaration de la classe</td>
+<td>méthode <code>getParent()</code></td>
+</tr>
+<tr>
+<td>Sert à</td>
+<td>réutiliser du code PHP</td>
+<td>réutiliser le <strong>comportement de type</strong></td>
+</tr>
+<tr>
+<td><code>ShippingType</code></td>
+<td><code>extends AbstractType</code></td>
+<td><code>ChoiceType::class</code></td>
+</tr>
+<tr>
+<td>Défaut</td>
+<td>—</td>
+<td><code>FormType::class</code></td>
+</tr>
+</tbody>
+</table>
+<div class="admonition info">
+<p class="admonition-title">🌍 In Real Life</p>
+<p><strong>La situation</strong> : une fiche de livraison reprend le modèle général de choix, puis précise « Standard » ou « Express ». Le coordinateur applique le modèle de base avant les particularités, sans demander à la fiche générale de connaître toutes ses variantes.</p>
+<p><strong>L’équivalent dans Symfony</strong> : <code>getParent()</code> désigne ChoiceType comme parent de ShippingType dans le système Form. ResolvedFormType coordonne la hiérarchie, clone le resolver d'options parental puis applique les adaptations et extensions concernées.</p>
+<p><strong>Retour à la réalité technique</strong> : cela ne change pas l'héritage PHP <code>extends AbstractType</code>. FormType est le parent par défaut d'AbstractType ; ButtonType possède sa propre racine. Les <code>block_prefixes</code> préparent la recherche de rendu, avec un préfixe spécifique à l'occurrence, sans déplacer les données mappées.</p>
+<p><strong>🧠 Comment le mémoriser</strong> : « Reprendre la règle de base, préciser la variante. » Image mentale : modèle Choice annoté pour la livraison. Question-réflexe : quel comportement de type veux-je reprendre, indépendamment de ma classe parente PHP ?</p>
+<p><strong>⚠️ À ne pas confondre</strong> : héritage PHP, parent Form, parent dans l'arbre de champs et préfixe Twig.</p>
+</div><aside class="enrichment" aria-label="Autre explication"><p>Un modèle spécialisé ajoute seulement son écart au modèle parent. Le parent fournit d'abord options et comportement ; le type enfant peut ensuite en personnaliser les valeurs.</p></aside></section><section class="teaching-section" data-section="s-composer-plutot-qu-etendre"><span class="outcome-anchor" id="out-OUT-tq1etfz8r98x" tabindex="-1"></span><h2 id="s-composer-plutot-qu-etendre" tabindex="-1">Composer plutôt qu&#x27;étendre</h2><p><strong>Où en est-on ?</strong> Étape 4 sur 5, deuxième relation : <strong>composer</strong>. Question
+« Pourquoi ? » : si je peux réutiliser <code>AddressType</code> en le déclarant parent, pourquoi
+l'ajouter plutôt comme enfant ? Parce que la <strong>structure des données</strong> n'est
+pas la même.</p>
+<p>Si SignupData contient une adresse, ajouter AddressType sous <code>address</code>
+conserve cette frontière de données. Le déclarer comme parent de SignupType
+réutiliserait au contraire sa description au niveau courant. Choisis selon
+la structure du modèle avant de chercher à obtenir le même aspect HTML.</p>
+<table>
+<thead>
+<tr>
+<th>Écriture</th>
+<th>Résultat</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>-&gt;add('address', AddressType::class)</code></td>
+<td>les fields vont dans <code>$order-&gt;address-&gt;city</code></td>
+</tr>
+<tr>
+<td><code>OrderType::getParent()</code> rend <code>AddressType::class</code></td>
+<td><code>OrderType</code> <strong>devient</strong> une adresse : <code>city</code> au niveau de l'<code>Order</code></td>
+</tr>
+</tbody>
+</table>
+<p>Ajouter imbrique des données ; hériter reprend un comportement.</p>
+<p>Avant / après, pour le champ <code>city</code> :</p>
+<pre class="highlight" tabindex="0"><code class="language-text">COMPOSER  add('address', AddressType::class)
+  Order                                    
+   └─ address : Address                    
+        ├─ city                            
+        └─ street                          
+
+SPÉCIALISER  getParent() = AddressType
+  Order
+   ├─ city    ← au niveau de l'Order
+   └─ street  ← au niveau de l'Order</code></pre>
+<p>Le test de décision : mon modèle <strong>contient-il</strong> un sous-objet (composer) ou
+<strong>est-il</strong> une variante du même objet (spécialiser) ?</p>
+<div class="admonition info">
+<p class="admonition-title">🌍 In Real Life</p>
+<p><strong>La situation</strong> : une fiche d'achat peut contenir un sous-dossier d'adresse. C'est différent d'utiliser une fiche d'adresse comme modèle de base pour toute la fiche d'achat.</p>
+<p><strong>L’équivalent dans Symfony</strong> : <code>add('address', AddressType::class)</code> ajoute un enfant associé à la donnée d'adresse ; déclarer AddressType comme parent réutilise sa configuration au niveau du type courant.</p>
+<p><strong>Retour à la réalité technique</strong> : l'imbrication usuelle dépend du mapping et du modèle compatibles. <code>inherit_data</code> constitue une autre configuration où les données parentes sont partagées. Hériter d'un type qui impose une <code>data_class</code> incompatible ne transforme pas magiquement Order en Address : les options et données doivent rester cohérentes.</p>
+<p><strong>🧠 Comment le mémoriser</strong> : « Contenir une adresse n'est pas devenir une adresse. » Image mentale : sous-dossier Address dans Order, face à une fiche entièrement basée sur Address. Question-réflexe : ai-je un objet enfant à mapper ou un comportement de type à spécialiser ?</p>
+<p><strong>⚠️ À ne pas confondre</strong> : composition de champs, spécialisation de type et partage des données parentes.</p>
+</div></section><section class="teaching-section" data-section="s-une-collection-de-types"><span class="outcome-anchor" id="out-OUT-q996f75mz363" tabindex="-1"></span><h2 id="s-une-collection-de-types" tabindex="-1">Une collection de types</h2><aside class="section-digest" id="s-une-collection-de-types-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Les entrées supplémentaires sont refusées sans allow_add.</li><li>Une absence ne supprime pas automatiquement une entrée sans allow_delete.</li></ol></aside><p><strong>Où en est-on ?</strong> Étape 5 sur 5, troisième relation : <strong>répéter</strong>. Question :
+que se passe-t-il à la soumission quand le nombre d'éléments reçus diffère du
+nombre d'éléments initiaux ?</p>
+<p>Quand le lecteur ajoute une préférence, le navigateur peut transmettre
+une nouvelle clé, mais le serveur doit encore accepter l'ajout d'un enfant.
+<code>allow_add</code> pilote cette adaptation de l'arbre ; le prototype facilite
+l'interface, sans autoriser à lui seul la donnée. Le tableau suppose une
+soumission complète : un PATCH partiel et sa politique de champs manquants
+ne doivent pas être déduits de ces exemples.</p>
+<p>Pour une collection objet, le cas <code>by_reference: true</code> décrit ci-dessous
+suppose que la même instance est modifiée sur place. Si les méthodes
+d'ajout portent une règle métier, configure leur passage explicitement
+et vérifie le mapping ; rendre le formulaire valide n'appelle pas par
+magie une opération métier séparée.</p>
+<p>Tags <code>['a', 'b']</code>, <code>entry_type: TextType</code> :</p>
+<table>
+<thead>
+<tr>
+<th>Soumis</th>
+<th>Sans option</th>
+<th>Avec l'option</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>['a', 'b', 'c']</code></td>
+<td>ignoré, « This form should not contain extra fields. »</td>
+<td><code>allow_add</code> : ajouté, et un prototype <code>__name__</code></td>
+</tr>
+<tr>
+<td><code>['a']</code></td>
+<td><code>['a', null]</code></td>
+<td><code>allow_delete</code> : <code>['a']</code></td>
+</tr>
+<tr>
+<td><code>['a', '']</code></td>
+<td>avec <code>allow_delete</code> : <code>['a', null]</code></td>
+<td><code>delete_empty</code> en plus : <code>['a']</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong><code>by_reference</code></strong>, sur une collection object : avec <code>true</code> (le défaut),
+ni setter, ni adder, ni remover n'est appelé — l'instance change sur place ;
+avec <code>false</code>, <code>removeTag()</code> / <code>addTag()</code>, ou <code>setTags()</code> avec une nouvelle
+instance.</p>
+<p>Pourquoi « sans <code>allow_add</code>, un élément en trop est ignoré » ? Parce que
+<code>ResizeFormListener</code> (listener de <code>PRE_SUBMIT</code>) n'ajoute des lignes qu'avec
+<code>allow_add</code> et ne retire que celles absentes avec <code>allow_delete</code>. Sans ces
+options, le form refuse les champs supplémentaires (erreur « extra fields »).</p>
+<pre class="highlight" tabindex="0"><code class="language-text">Initial : ['a', 'b']         entry_type = TextType
+
+soumis ['a','b','c']  ─ allow_add ──────────► ['a','b','c']  (sinon : erreur)
+soumis ['a']          ─ allow_delete ───────► ['a']          (sinon : ['a', null])
+soumis ['a','']       ─ + delete_empty ──► ['a']
+                      (allow_delete seul : ['a', null])</code></pre>
+<p>Où va la collection modifiée ? C'est <code>by_reference</code> qui répond :</p>
+<table>
+<thead>
+<tr>
+<th><code>by_reference</code></th>
+<th>Ce que Symfony appelle sur <code>Post</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>true</code> (défaut)</td>
+<td>rien : la même collection est modifiée sur place</td>
+</tr>
+<tr>
+<td><code>false</code></td>
+<td><code>addTag()</code> / <code>removeTag()</code>, ou <code>setTags()</code> avec une nouvelle instance</td>
+</tr>
+</tbody>
+</table>
+<p>Le piège : si <code>addTag()</code> pose <code>$tag-&gt;post = $this</code> (côté propriétaire d'une
+relation), un <code>by_reference: true</code> ne l'appelle jamais ; il faut <code>false</code>.</p>
+<div class="admonition info">
+<p class="admonition-title">🌍 In Real Life</p>
+<p><strong>La situation</strong> : un dossier contient plusieurs fiches de préférence du même modèle. Ajouter une nouvelle fiche, retirer une fiche absente et éliminer une fiche vide sont trois décisions ; modifier directement le classeur peut aussi contourner le guichet chargé d'enregistrer chaque ajout.</p>
+<p><strong>L’équivalent dans Symfony</strong> : CollectionType répète <code>entry_type</code>. <code>allow_add</code>, <code>allow_delete</code> et <code>delete_empty</code> règlent des opérations différentes sur les entrées ; <code>by_reference</code> influence ensuite l'écriture vers le modèle et le passage éventuel par ses accessors.</p>
+<p><strong>Retour à la réalité technique</strong> : le prototype aide l'interface mais n'autorise pas les données. Les résultats du tableau supposent les TextType et la soumission complète indiqués ; ne généralise pas <code>null</code> à tout type ni à PATCH. <code>delete_empty</code> dépend de la valeur normalisée ou du callable configuré. Le contournement des adders avec <code>by_reference: true</code> vise la même collection modifiée sur place ; <code>false</code> nécessite encore des méthodes et un mapping compatibles, sans garantir persistance ni règles métier.</p>
+<p><strong>🧠 Comment le mémoriser</strong> : « Ajouter, retirer, vider ; puis choisir la porte d'écriture. » Image mentale : fiches répétées devant trois décisions, puis guichet du classeur. Question-réflexe : quelle entrée change, et quelle méthode doit réellement recevoir cette modification ?</p>
+<p><strong>⚠️ À ne pas confondre</strong> : arbre Form, prototype HTML, données normalisées, accessors métier et opérations de base de données.</p>
+</div></section><section class="teaching-section" data-section="s-pieges-d-examen"><h2 id="s-pieges-d-examen" tabindex="-1">Pièges d&#x27;examen</h2><p class="teaching-label pitfall"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="warning" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3L23 21H1L12 3ZM12 9V14M12 17V18"></path></svg> <strong>Piège à éviter</strong></p><ul class="pitfall-list"><li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : Le même système de types décrit racine et fields</summary><p><strong>Le même système de types décrit racine et fields</strong>, mais un type n'est
+pas l'instance <code>Form</code> qui reçoit la soumission. <em>Pourquoi on se trompe : on
+parle de « formulaire » pour les deux, alors que l'un est une classe partagée et
+l'autre un objet par requête.</em></p></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : Aucune des methods d&#x27;un type n&#x27;est obligatoire.</summary><p><strong>Aucune des methods d'un type n'est obligatoire.</strong> <em>Pourquoi on se trompe :
+<code>AbstractType</code> est abstraite en PHP, on suppose donc des méthodes à implémenter ;
+les six ont un défaut.</em></p></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : Sans parent déclaré, le parent est la racine de tous les types</summary><p><strong>Sans parent déclaré, le parent est la racine de tous les types</strong>, pas
+« aucun ». <em>Pourquoi on se trompe : « pas de <code>getParent()</code> » ressemble à « pas de
+parent » ; <code>AbstractType</code> renvoie <code>FormType::class</code>.</em></p></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : Le parent passe avant l&#x27;enfant</summary><p><strong>Le parent passe avant l'enfant</strong> : son <code>buildForm()</code> s'exécute d'abord, ses
+options sont reprises puis modifiables. <em>Pourquoi on se trompe : on imagine un
+héritage PHP où l'enfant appelle le parent s'il le veut.</em></p></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : Sans allow_add, un élément en trop n&#x27;est pas ajouté</summary><p><strong>Sans <code>allow_add</code>, un élément en trop n'est pas ajouté</strong> ; sans <code>allow_delete</code>,
+un élément absent devient <code>null</code> au lieu de disparaître. <em>Pourquoi on se
+trompe : le prototype HTML laisse croire que le serveur accepte tout ajout.</em></p></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : by_reference: true n&#x27;appelle jamais addTag()</summary><p><strong><code>by_reference: true</code> n'appelle jamais <code>addTag()</code></strong> sur une collection object.
+<em>Pourquoi on se trompe : le défaut est <code>true</code>, on croit que Form passe toujours
+par les adders.</em></p></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : Composer ≠ spécialiser.</summary><p><strong>Composer ≠ spécialiser.</strong> <code>add('address', AddressType::class)</code> imbrique les
+données ; <code>getParent()</code> reprend un comportement. Les deux « réutilisent » un
+type, mais n'ont pas la même structure de données.</p></details></li></ul></section><section class="teaching-section" data-section="s-application"><h2 id="s-application" tabindex="-1">Application</h2><aside class="section-digest" id="s-application-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Le parent de form est une composition de comportement.</li><li>Ses options sont héritées puis personnalisables.</li><li>Les entrées supplémentaires sont refusées sans allow_add.</li><li>Une absence ne supprime pas automatiquement une entrée sans allow_delete.</li></ol></aside>
+
+
+
+</section><section class="teaching-section" data-section="s-fiche-express"><h2 id="s-fiche-express" tabindex="-1">Fiche express</h2><p class="teaching-label essential"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="book" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5C9 3 5 3 2 4V20C5 19 9 19 12 21C15 19 19 19 22 20V4C19 3 15 3 12 5V21M5 8H8M5 12H8M16 8H19M16 12H19"></path></svg> <strong>À mémoriser</strong></p><p><strong>🧠 À retenir pour la certification :</strong></p>
+<ul>
+<li>Un type <strong>décrit</strong> un form ou un field ; les six methods ont des défauts.</li>
+<li>Sans <code>getParent()</code> : <strong><code>FormType</code></strong>.</li>
+<li>Parent <strong>d'abord</strong>, options <strong>clonées</strong> puis modifiables.</li>
+<li><strong>Spécialiser</strong> (<code>getParent()</code>) ≠ <strong>composer</strong> (<code>add()</code>, données imbriquées).</li>
+<li><code>CollectionType</code> : <strong><code>allow_add</code></strong>, <strong><code>allow_delete</code></strong>, <code>delete_empty</code>.</li>
+<li><strong><code>by_reference: false</code></strong> pour que l'adder soit appelé.</li>
+<li><code>buildView()</code> : pas d'enfants ; <code>finishView()</code> : enfants présents.</li>
+</ul>
+<p>Moyen mnémotechnique : <strong>« Spécialiser, composer, répéter »</strong>.</p>
+<p>Phrase de mémorisation : <strong>« Un type est un plan partagé : j'en hérite par
+<code>getParent()</code> pour reprendre un comportement, je l'ajoute par <code>add()</code> pour
+imbriquer des données, je le répète par <code>CollectionType</code> pour en avoir
+plusieurs. »</strong></p></section><section class="teaching-section" data-section="s-sources-officielles"><h2 id="s-sources-officielles" tabindex="-1">Sources officielles</h2><ul>
+<li><a href="https://symfony.com/doc/8.0/form/create_custom_field_type.html">How to Create a Custom Form Field Type</a></li>
+<li><a href="https://symfony.com/doc/8.0/reference/forms/types/collection.html">CollectionType</a> et <a><code>by_reference</code></a></li>
+<li><a href="https://symfony.com/doc/8.0/forms.html">Form 8.0, <code>AbstractType</code></a> et <a href="https://symfony.com/doc/8.0/forms.html"><code>ResolvedFormType</code></a></li>
+</ul></section><section id="course-recalls" aria-labelledby="course-recalls-title" tabindex="-1"><h2 id="course-recalls-title">Rappels et liens avec les autres cours</h2><div data-recall-group="current"><h3>Rappels du cours actuel</h3><ul><li data-recall-course="CRS-f9pen0bdyrr9" data-recall-kind="digest_reference"><p class="recall-provenance">Module 07 — Formulaires · Cours « Form types (built-in and custom) »</p><p class="digest-reference"><a href="#s-le-schema-digest">Revoir la règle : Le parent de form est une composition de comportement.</a></p></li><li data-recall-course="CRS-f9pen0bdyrr9" data-recall-kind="digest_reference"><p class="recall-provenance">Module 07 — Formulaires · Cours « Form types (built-in and custom) »</p><p class="digest-reference"><a href="#s-l-essentiel-digest">Revoir la règle : add() imbrique des données.</a></p></li><li data-recall-course="CRS-f9pen0bdyrr9" data-recall-kind="digest_reference"><p class="recall-provenance">Module 07 — Formulaires · Cours « Form types (built-in and custom) »</p><p class="digest-reference"><a href="#s-ce-qu-est-un-type-digest">Revoir la règle : Un FormType décrit un élément composable.</a></p></li><li><nav aria-label="Flashcards de l’application"><ul><li data-recall-course="CRS-f9pen0bdyrr9" data-recall-kind="application"><p class="recall-provenance">Module 07 — Formulaires · Cours « Form types (built-in and custom) »</p><a href="#A-f9pen0bdyrr9-6e0103f6cc-03">Flashcard : Le parent de form est une composition de comportement. Ses options sont héritées puis personnalisables.</a></li><li data-recall-course="CRS-f9pen0bdyrr9" data-recall-kind="application"><p class="recall-provenance">Module 07 — Formulaires · Cours « Form types (built-in and custom) »</p><a href="#A-f9pen0bdyrr9-39890c8638-05">Flashcard : Les entrées supplémentaires sont refusées sans allow_add. Une absence ne supprime pas automatiquement une entrée sans allow_delete.</a></li></ul></nav></li></ul></div><div data-recall-group="other"><h3>Rappels des cours précédents / autres modules</h3><ul><li data-recall-course="CRS-ym86ptkhfgap" data-recall-kind="previous_course"><p class="recall-provenance">Module 06 — Templates avec Twig · Cours « Assets management »</p><p>Un path relatif à public/ conserve le préfixe applicatif. Une URL absolue est laissée inchangée.</p><p><a href="#cards-previous">Rappel : <span lang="en">How does a leading slash affect asset() under an application base path?</span></a></p></li></ul></div></section><nav class="course-sequence" aria-label="Ordre de lecture"><a rel="prev" href="course-CRS-vx5kvfhs0p0s.html" aria-label="Précédent : Debugging variables — Module 06 — Templates avec Twig">Précédent : Debugging variables</a> <a href="lot-07.html">Sommaire : Module 07 — Formulaires</a> <a rel="next" href="course-CRS-r3xywnpwrwh7.html" aria-label="Suivant : Forms theming — Module 07 — Formulaires">Suivant : Forms theming</a></nav><p class="course-practice-entry"><a class="button" href="#view-quiz">Fin du cours — s’entraîner avec le Quiz</a></p></div><div id="view-flashcards" data-course-panel role="region" aria-labelledby="view-flashcards-title"><h2 id="view-flashcards-title">Flashcards</h2><p lang="en">Answer before revealing each card.</p><p>Ces cartes ne mesurent pas une maîtrise notée.</p><div id="cards-s-l-essentiel-1" data-card-section="s-l-essentiel"><h3><a href="#s-l-essentiel">Revoir : L&#x27;essentiel</a></h3><div class="reader-cards"><details class="reader-card" id="A-f9pen0bdyrr9-65c42c80d9-04"><summary lang="en">Does adding AddressType as a child have the same data structure as making it the parent type?</summary><p lang="en">No. Adding creates a nested field; parenting specialises the current type.</p><p lang="fr">add() imbrique des données. getParent() reprend un comportement au même niveau.</p><a href="course-CRS-f9pen0bdyrr9.html#out-OUT-tq1etfz8r98x">Revoir le passage précis</a></details></div></div><div id="cards-s-le-schema-2" data-card-section="s-le-schema"><h3><a href="#s-le-schema">Revoir : Le schéma</a></h3><div class="reader-cards"><details class="reader-card" id="A-f9pen0bdyrr9-6e0103f6cc-03"><summary lang="en">How should a custom type specialise ChoiceType?</summary><p lang="en">Extend AbstractType and return ChoiceType::class from getParent().</p><p lang="fr">Le parent de form est une composition de comportement. Ses options sont héritées puis personnalisables.</p><a href="course-CRS-f9pen0bdyrr9.html#out-OUT-dstzcbzx0kt7">Revoir le passage précis</a></details></div></div><div id="cards-s-l-exemple-l-achat-3" data-card-section="s-l-exemple-l-achat"><h3><a href="#s-l-exemple-l-achat">Revoir : L&#x27;exemple : l&#x27;achat</a></h3><div class="reader-cards"><p class="reader-card-reference" id="A-f9pen0bdyrr9-6f7cecd21c-03">Rappel déjà proposé : <a lang="en" href="#A-f9pen0bdyrr9-6e0103f6cc-03">How should a custom type specialise ChoiceType?</a> · <a href="course-CRS-f9pen0bdyrr9.html#out-OUT-dstzcbzx0kt7">Passage canonique</a></p></div></div><div id="cards-s-ce-qu-est-un-type-4" data-card-section="s-ce-qu-est-un-type"><h3><a href="#s-ce-qu-est-un-type">Revoir : Ce qu&#x27;est un type</a></h3><div class="reader-cards"><details class="reader-card" id="A-f9pen0bdyrr9-9c3fd4d79a-01"><summary lang="en">Can the same form-type abstraction describe a field and a compound form?</summary><p lang="en">Yes.</p><p lang="fr">Un FormType décrit un élément composable. Un form peut donc devenir enfant d&#x27;un autre.</p><a href="course-CRS-f9pen0bdyrr9.html#out-OUT-kevx5cz60q4s">Revoir le passage précis</a></details></div></div><div id="cards-s-les-six-methods-5" data-card-section="s-les-six-methods"><h3><a href="#s-les-six-methods">Revoir : Les six methods</a></h3><div class="reader-cards"><details class="reader-card" id="A-f9pen0bdyrr9-98c7968fb4-02"><summary lang="en">Which hook sees child views after they have been built?</summary><p lang="en">finishView(), unlike buildView().</p><p lang="fr">buildView() prépare la vue du type. finishView() intervient après les vues enfants.</p><a href="course-CRS-f9pen0bdyrr9.html#out-OUT-0ztsd5vjbe72">Revoir le passage précis</a></details></div></div><div id="cards-s-getparent-specialiser-un-type-existant-6" data-card-section="s-getparent-specialiser-un-type-existant"><h3><a href="#s-getparent-specialiser-un-type-existant">Revoir : `getParent()` : spécialiser un type existant</a></h3><div class="reader-cards"><p class="reader-card-reference" id="A-f9pen0bdyrr9-c3c16662f9-03">Rappel déjà proposé : <a lang="en" href="#A-f9pen0bdyrr9-6e0103f6cc-03">How should a custom type specialise ChoiceType?</a> · <a href="course-CRS-f9pen0bdyrr9.html#out-OUT-dstzcbzx0kt7">Passage canonique</a></p></div></div><div id="cards-s-composer-plutot-qu-etendre-7" data-card-section="s-composer-plutot-qu-etendre"><h3><a href="#s-composer-plutot-qu-etendre">Revoir : Composer plutôt qu&#x27;étendre</a></h3><div class="reader-cards"><p class="reader-card-reference" id="A-f9pen0bdyrr9-84f18626df-04">Rappel déjà proposé : <a lang="en" href="#A-f9pen0bdyrr9-65c42c80d9-04">Does adding AddressType as a child have the same data structure as making it the parent type?</a> · <a href="course-CRS-f9pen0bdyrr9.html#out-OUT-tq1etfz8r98x">Passage canonique</a></p></div></div><div id="cards-s-une-collection-de-types-8" data-card-section="s-une-collection-de-types"><h3><a href="#s-une-collection-de-types">Revoir : Une collection de types</a></h3><div class="reader-cards"><details class="reader-card" id="A-f9pen0bdyrr9-39890c8638-05"><summary lang="en">Which collection options allow new entries and removal of missing entries?</summary><p lang="en">allow_add and allow_delete respectively.</p><p lang="fr">Les entrées supplémentaires sont refusées sans allow_add. Une absence ne supprime pas automatiquement une entrée sans allow_delete.</p><a href="course-CRS-f9pen0bdyrr9.html#out-OUT-q996f75mz363">Revoir le passage précis</a></details></div></div><div id="cards-s-pieges-d-examen-9" data-card-section="s-pieges-d-examen"><h3><a href="#s-pieges-d-examen">Revoir : Pièges d&#x27;examen</a></h3><div class="reader-cards"><p class="reader-card-reference" id="A-f9pen0bdyrr9-596d5af532-01">Rappel déjà proposé : <a lang="en" href="#A-f9pen0bdyrr9-9c3fd4d79a-01">Can the same form-type abstraction describe a field and a compound form?</a> · <a href="course-CRS-f9pen0bdyrr9.html#out-OUT-kevx5cz60q4s">Passage canonique</a></p></div></div><div id="cards-s-application-10" data-card-section="s-application"><h3><a href="#s-application">Revoir : Application</a></h3><div class="reader-cards"><p class="reader-card-reference" id="A-f9pen0bdyrr9-e7ad522ea3-03">Rappel déjà proposé : <a lang="en" href="#A-f9pen0bdyrr9-6e0103f6cc-03">How should a custom type specialise ChoiceType?</a> · <a href="course-CRS-f9pen0bdyrr9.html#out-OUT-dstzcbzx0kt7">Passage canonique</a></p><p class="reader-card-reference" id="A-f9pen0bdyrr9-e7ad522ea3-05">Rappel déjà proposé : <a lang="en" href="#A-f9pen0bdyrr9-39890c8638-05">Which collection options allow new entries and removal of missing entries?</a> · <a href="course-CRS-f9pen0bdyrr9.html#out-OUT-q996f75mz363">Passage canonique</a></p></div></div><div id="cards-s-fiche-express-11" data-card-section="s-fiche-express"><h3><a href="#s-fiche-express">Revoir : Fiche express</a></h3><div class="reader-cards"><p class="reader-card-reference" id="A-f9pen0bdyrr9-b11e58e15e-03">Rappel déjà proposé : <a lang="en" href="#A-f9pen0bdyrr9-6e0103f6cc-03">How should a custom type specialise ChoiceType?</a> · <a href="course-CRS-f9pen0bdyrr9.html#out-OUT-dstzcbzx0kt7">Passage canonique</a></p></div></div><div id="cards-previous"><p class="recall-provenance">Module 06 — Templates avec Twig · Cours « Assets management »</p><aside class="checkpoint"><h2>Rappel d’un cours antérieur</h2><p>Avant de poursuivre : Assets management.</p><details class="corpus-correction"><summary lang="en">How does a leading slash affect asset() under an application base path?</summary><p lang="en">It bypasses the base-path prefix while retaining applicable versioning.</p><p>Un path relatif à public/ conserve le préfixe applicatif. Une URL absolue est laissée inchangée.</p><a href="course-CRS-ym86ptkhfgap.html#out-OUT-pw46yjz3zfeh">Relire la correction dans le cours antérieur</a></details></aside></div></div><div id="view-quiz" data-course-panel role="region" aria-labelledby="view-quiz-title"><aside class="revision-context"><p><strong>Avant le quiz :</strong> Écrire un type de form, savoir quand le spécialiser par getParent() et quand l&#x27;ajouter comme field, et prévoir ce que fait une collection de types.</p><p>Quelle donnée entre, quelle responsabilité agit et quelle condition change le résultat ? Pour chaque correction, vérifiez ces conditions dans <a href="course-CRS-f9pen0bdyrr9.html#s-objectif">le passage enseigné</a>, sans supposer que toutes les branches du blog sont exécutées.</p></aside><h2 id="view-quiz-title">Quiz</h2><p class="quiz-size" lang="en">6 eligible learning questions · 6 per session. Repeating a question does not demonstrate mastery.</p><p id="course-quiz-status" role="status">Quiz interactif non chargé. Démarrez après chargement de la banque locale.</p><div id="course-quiz-controls" class="assessment-main" hidden><div id="course-quiz-assessment-controls" hidden><select id="course-quiz-assessment-mode" aria-label="Mode du quiz" hidden><option value="learning">Entraînement</option></select><p id="course-quiz-training-scope"></p><button id="course-quiz-start-assessment" type="button" lang="en">Start practice</button><button id="course-quiz-finish-assessment" type="button" lang="en" hidden>End session</button></div><p id="course-quiz-assessment-error" role="alert"></p><p id="course-quiz-assessment-timer" hidden></p><p id="course-quiz-session-progress" class="quiz-progress" role="status" lang="en"></p><div id="course-quiz-assessment-app" tabindex="-1"></div><nav id="course-quiz-session-navigation" aria-label="Questions du cours"></nav><div id="course-quiz-learning-overview" aria-live="polite"></div></div><div id="course-quiz-native"><p>Sans JavaScript ou si le chargement échoue : aucune tentative notée. Les <a href="#view-flashcards">flashcards du cours</a> restent disponibles.</p><details class="course-quiz-fallback" data-question-id="L-f9pen0bdyrr9-base-v1"><summary lang="en">RADIO — Select one answer. Does adding AddressType as a child have the same data structure as making it the parent type?</summary><p>Correction de consultation — non notée.</p><p>add() imbrique des données. getParent() reprend un comportement au même niveau.</p><ul><li><strong lang="en">Distractor: Yes; both create an identical nested address child.</strong><p>getParent() ne crée pas un nouveau niveau de données.</p></li><li><strong lang="en">Distractor: No; getParent() nests a field, while add() changes the parent.</strong><p>Les rôles sont inversés : add() imbrique, getParent() spécialise.</p></li><li><strong lang="en">Correct: No; add() nests a field, while getParent() specializes the type.</strong><p>add() imbrique des données. getParent() reprend un comportement au même niveau.</p></li></ul><a href="course-CRS-f9pen0bdyrr9.html#out-OUT-tq1etfz8r98x">Relire le passage exact</a><a href="course-CRS-f9pen0bdyrr9.html#s-composer-plutot-qu-etendre">Relire la correction précise</a></details></div></div></div></div><details class="transfer-panel"><summary>Sauvegarde et transfert de progression</summary><p id="reading-status" role="status">Sans JavaScript : lecture libre ; progression non enregistrée.</p><p><a href="assessment.html#overview-title">Lecture, réussites immédiates et différées</a></p><p>Transfert manuel — aucune synchronisation automatique</p><p id="persistence-status" role="status"></p><button type="button" class="secondary" id="export-progress">Exporter ma progression</button><label for="import-progress">Choisir un JSON pour fusionner ma progression (sans remplacement)</label><input type="file" id="import-progress" accept="application/json,.json"><p id="transfer-status" role="status"></p></details></main><footer class="site-footer"><a href="catalogue.html">Catalogue</a> <a href="sources.html">Sources et attribution</a> <a href="#contenu">Haut de page</a></footer></body></html>
