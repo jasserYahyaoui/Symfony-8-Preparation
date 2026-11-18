@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; connect-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Glossaire du blog — Symfony 8 Preparation</title><link rel="stylesheet" href="styles.css"><link rel="stylesheet" href="reader.css"><script src="mermaid.min.js" defer></script><script src="mermaid-init.js" defer></script><script src="fixed-exams-data.js" defer></script><script src="fixed-exams.js" defer></script><script src="learning-state.js" defer></script><script src="guide.js" defer></script><script src="reader-catalog.js" defer></script><script src="reader.js" defer></script><script src="site-state.js" defer></script><link rel="stylesheet" href="syntax-highlight.css"><script src="prism-syntax.js" defer></script><script src="syntax-highlight.js" defer></script></head><body><a class="skip" href="#contenu">Aller au contenu</a><header class="site-header"><a class="brand" href="index.html">S8 Preparation</a><nav aria-label="Navigation principale"><a href="index.html">Accueil</a> <a href="catalogue.html">Parcours</a> <a href="assessment.html?mode=review">Réviser</a> <a href="examens.html">Examens blancs</a> <a href="jour-j.html">Jour J</a></nav></header><main id="contenu" tabindex="-1" class="corpus-reader"><nav class="breadcrumb" aria-label="Fil d’Ariane"><a href="index.html">Accueil</a> <span aria-hidden="true">›</span> <a href="catalogue.html">Parcours</a> <span aria-hidden="true">›</span> <span aria-current="page">Glossaire du blog</span></nav><h1>Glossaire du blog</h1><p class="muted">Symfony 8.0 · API PHP ≤ 8.4 · Twig ≤ 3.22. Préparation indépendante.</p><nav class="narrative-guides" aria-label="Guides de lecture"><a href="vue-ensemble.html">Comprendre Symfony à partir de /blog/42</a><a href="parcours-requete.html">De Request à Response</a><a href="carte-composants.html">Carte des responsabilités</a><a href="ordre-lecture.html">Ordre de lecture recommandé</a><a href="glossaire.html">Glossaire du blog</a></nav><nav aria-label="Sections du guide"><ul><li><a href="#s-application-composant-bundle-bridge">Application, composant, bundle, bridge</a></li><li><a href="#s-kernel-et-httpkernel">Kernel et HttpKernel</a></li><li><a href="#s-request-attribut-et-route">Request, attribut et route</a></li><li><a href="#s-callable-et-resolver">Callable et resolver</a></li><li><a href="#s-service-definition-alias-et-compilation">Service, définition, alias et compilation</a></li><li><a href="#s-autowiring-et-autoconfiguration">Autowiring et autoconfiguration</a></li><li><a href="#s-extension-et-compiler-pass">Extension et compiler pass</a></li><li><a href="#s-evenement-listener-et-subscriber">Événement, listener et subscriber</a></li><li><a href="#s-authentification-et-autorisation">Authentification et autorisation</a></li><li><a href="#s-dto-transformation-et-validation">DTO, transformation et validation</a></li><li><a href="#s-normalisation-et-encodage">Normalisation et encodage</a></li><li><a href="#s-message-transport-et-worker">Message, transport et worker</a></li><li><a href="#s-cache-http-et-cache-applicatif">Cache HTTP et cache applicatif</a></li><li><a href="#s-sous-requete-envoi-et-terminaison">Sous-requête, envoi et terminaison</a></li></ul></nav><h2 id="s-application-composant-bundle-bridge">Application, composant, bundle, bridge</h2><p><strong>Application</strong> : notre projet avec son Kernel, <code>BlogController</code> et
+<code>ArticleCatalog</code>. <strong>Composant</strong> : bibliothèque réutilisable avec un rôle défini.
+<strong>Bundle</strong> : intégration enregistrée par l’application. <strong>Bridge</strong> : adaptation
+d’une autre bibliothèque. Ne confondez pas installation d’un paquet, activation
+d’un bundle et invocation d’un service.</p>
+<div class="admonition info">
+<p class="admonition-title">🌍 In Real Life</p>
+<p><strong>La situation</strong> : un restaurant équipe sa cuisine avec des appareils et leurs raccords.</p>
+<p><strong>L’équivalent dans Symfony</strong> : établissement → application ; appareil spécialisé → composant ; installation intégrée → bundle ; adaptateur → bridge.</p>
+<p><strong>Retour à la réalité technique</strong> : bibliothèque, intégration et adaptation sont des rôles distincts. Acheter l’appareil ne le raccorde pas : installer Doctrine Bridge ne prouve ni ORM disponible ni résolution d’entité configurée.</p>
+<p><strong>🧠 Comment le mémoriser</strong> : « Posséder, raccorder, utiliser. » Image : appareil encore débranché. Réflexe : « Le paquet est-il seulement installé ou réellement intégré ? »</p>
+<p><strong>⚠️ À ne pas confondre</strong> : un bundle n’est pas le parent PHP obligatoire d’un contrôleur.</p>
+</div>
+<p><a href="course-CRS-1bxqx6ks853z.html">Composants et bridges</a>.</p><h2 id="s-kernel-et-httpkernel">Kernel et HttpKernel</h2><p><strong>Kernel</strong> : prépare l’application, ses bundles et son conteneur, puis délègue
+le traitement. <strong>HttpKernel</strong> : concret qui orchestre Request → Response.
+<code>HttpKernelInterface</code> définit un contrat ; <code>KernelInterface</code> l’étend.
+Une interface n’est pas l’algorithme exécuté.</p>
+<div class="admonition info">
+<p class="admonition-title">🌍 In Real Life</p>
+<p><strong>La situation</strong> : préparer l’établissement et coordonner une commande sont deux responsabilités.</p>
+<p><strong>L’équivalent dans Symfony</strong> : préparation de l’ensemble → Kernel ; coordination Request → Response → HttpKernel ; engagement sur les opérations disponibles → interface.</p>
+<p><strong>Retour à la réalité technique</strong> : <code>App\Kernel</code> étend Kernel, qui prépare bundles/conteneur et délègue. Le concret HttpKernel orchestre le traitement HTTP. Une interface décrit un contrat ; elle ne traite rien seule.</p>
+<p><strong>🧠 Comment le mémoriser</strong> : « L’établissement, puis la demande. » Image : plan d’ensemble face à un bon unique. Réflexe : « Parle-t-on du cycle applicatif ou du traitement HTTP ? »</p>
+<p><strong>⚠️ À ne pas confondre</strong> : construire le Kernel, le booter et compiler son conteneur.</p>
+</div>
+<p><a href="course-CRS-tygmreqkkds3.html">Kernel, interfaces et FrameworkBundle</a>.</p><h2 id="s-request-attribut-et-route">Request, attribut et route</h2><p><strong>Request</strong> : objet HttpFoundation représentant la demande, pas le moteur qui
+la traite. <strong>Attribut de Request</strong> : donnée dans <code>attributes</code>, comme <code>_controller</code>
+ou l’<code>id</code> capturé. <strong>Attribut PHP</strong> : métadonnée <code>#[Route]</code>.
+<strong>Route</strong> : règle de matching et de génération d’URL ; son nom <code>blog_show</code>
+n’est ni le chemin <code>/blog/42</code> ni le callable.</p>
+<div class="admonition info">
+<p class="admonition-title">🌍 In Real Life</p>
+<p><strong>La situation</strong> : l’accueil annote le bon 42 en consultant une règle de destination.</p>
+<p><strong>L’équivalent dans Symfony</strong> : bon → Request ; annotations internes → <code>attributes</code> ; règle de destination → route ; inscription de cette règle dans le code → attribut PHP <code>#[Route]</code>.</p>
+<p><strong>Retour à la réalité technique</strong> : RouterListener peut enrichir les attributes après matching. Une route sert aussi à générer des URL. Son nom identifie la règle, pas le callable ; les annotations ne sont pas les paramètres <code>query</code> du client.</p>
+<p><strong>🧠 Comment le mémoriser</strong> : « Règle, bon, annotation. » Image : registre séparé du bon. Réflexe : « Où cette donnée est-elle déclarée ou stockée ? »</p>
+<p><strong>⚠️ À ne pas confondre</strong> : attribut PHP et attribut de Request.</p>
+</div>
+<p><a href="course-CRS-ea3twt9jcan2.html">Request</a> · <a href="course-CRS-kqq96z5y9r2f.html">Routing</a>.</p><h2 id="s-callable-et-resolver">Callable et resolver</h2><p><strong>Callable</strong> : valeur PHP invocable. ControllerResolver détermine cette valeur ;
+ArgumentResolver prépare les arguments en interrogeant des value resolvers.
+Résoudre n’est pas appeler. Un résultat vide d’un value resolver signifie qu’il
+laisse la suite essayer, pas qu’il a nécessairement fourni <code>null</code>.</p>
+<div class="admonition info">
+<p class="admonition-title">🌍 In Real Life</p>
+<p><strong>La situation</strong> : le responsable choisit un poste puis rassemble sa fiche ; un aide sans réponse laisse le suivant chercher.</p>
+<p><strong>L’équivalent dans Symfony</strong> : poste choisi → callable du ControllerResolver ; fiche complète → arguments de l’ArgumentResolver ; aide spécialisé → value resolver.</p>
+<p><strong>Retour à la réalité technique</strong> : un callable est une valeur PHP invocable. HttpKernel obtient callable et arguments avant l’invocation. Un iterable vide laisse poursuivre la résolution ; produire <code>null</code> est fournir une valeur.</p>
+<p><strong>🧠 Comment le mémoriser</strong> : « Choisir n’est pas appeler. » Image : poste prêt, ordre encore retenu. Réflexe : « Le resolver s’abstient-il ou fournit-il une valeur ? »</p>
+<p><strong>⚠️ À ne pas confondre</strong> : le routeur détermine des paramètres, il n’invoque pas l’action.</p>
+</div>
+<p><a href="course-CRS-d5ffd8b704zs.html">Arguments du contrôleur</a>.</p><h2 id="s-service-definition-alias-et-compilation">Service, définition, alias et compilation</h2><p><strong>Service</strong> : objet auquel l’application confie une responsabilité.
+<strong>Définition</strong> : description de sa construction/configuration.
+<strong>Alias</strong> : référence alternative vers un service.
+<strong>Compilation</strong> : traitement du graphe des définitions, distinct de la
+construction de toutes les instances. Le conteneur fournit les services ;
+il n’est pas synonyme d’un service ni d’une nouvelle instance par requête.</p>
+<div class="admonition info">
+<p class="admonition-title">🌍 In Real Life</p>
+<p><strong>La situation</strong> : une cuisine tient ses fiches d’équipement et plusieurs noms peuvent désigner le même appareil.</p>
+<p><strong>L’équivalent dans Symfony</strong> : appareil utilisable → service ; fiche de montage → définition ; autre nom → alias ; plan vérifié → compilation ; fourniture selon le plan → conteneur.</p>
+<p><strong>Retour à la réalité technique</strong> : le service est un objet ; la définition décrit sa construction. Compiler traite les définitions, sans instancier tout le graphe. Un alias ne crée pas une copie de l’objet.</p>
+<p><strong>🧠 Comment le mémoriser</strong> : « La fiche n’est pas l’appareil. » Image : deux étiquettes, un équipement. Réflexe : « Est-ce une définition, une référence ou une instance ? »</p>
+<p><strong>⚠️ À ne pas confondre</strong> : partagé dans un conteneur et recréé par requête.</p>
+</div>
+<p><a href="course-CRS-p1694d5f7r8c.html">Conteneur</a>.</p><h2 id="s-autowiring-et-autoconfiguration">Autowiring et autoconfiguration</h2><p><strong>Autowiring</strong> : résolution des dépendances à partir notamment des types et
+alias configurés. <strong>Autoconfiguration</strong> : application de règles de configuration
+aux services reconnus, souvent des tags. L’une répond à « quelle dépendance ? »,
+l’autre à « quel rôle enregistré ? ». Aucune ne scanne magiquement toute classe
+non enregistrée.</p>
+<div class="admonition info">
+<p class="admonition-title">🌍 In Real Life</p>
+<p><strong>La situation</strong> : on fournit au poste l’équipement demandé et on lui attribue séparément un rôle dans l’organisation.</p>
+<p><strong>L’équivalent dans Symfony</strong> : raccord adapté au besoin déclaré → autowiring ; rôle reconnu et marqué → autoconfiguration, notamment tags.</p>
+<p><strong>Retour à la réalité technique</strong> : l’autowiring résout les dépendances à partir des types et alias ; l’autoconfiguration applique des règles aux services concernés. Ces mécanismes configurent des définitions, pas des employés qui choisissent librement à chaque commande.</p>
+<p><strong>🧠 Comment le mémoriser</strong> : « Avec quoi ? À quel rôle ? » Image : prise et badge distincts. Réflexe : « Manque-t-il une dépendance ou un enregistrement de rôle ? »</p>
+<p><strong>⚠️ À ne pas confondre</strong> : une classe présente sur disque et un service enregistré.</p>
+</div>
+<p><a href="course-CRS-w6yfxm6ad4zy.html">Autowiring</a> ·
+<a href="course-CRS-g8fteyd38nrt.html">Déclaration des services</a>.</p><h2 id="s-extension-et-compiler-pass">Extension et compiler pass</h2><p>Une <strong>extension de conteneur</strong> traite une configuration et alimente des
+définitions. Un <strong>compiler pass</strong> inspecte ou transforme les définitions pendant
+la compilation. Ils ne traitent pas le <code>GET /blog/42</code> comme des listeners
+<code>kernel.request</code>.</p>
+<div class="admonition info">
+<p class="admonition-title">🌍 In Real Life</p>
+<p><strong>La situation</strong> : l’installateur traduit les besoins en fiches, puis un coordinateur assemble les postes repérés sur le plan.</p>
+<p><strong>L’équivalent dans Symfony</strong> : besoins vers définitions → extension ; inspection et modification du plan → compiler pass, par exemple pour raccorder des services tagués.</p>
+<p><strong>Retour à la réalité technique</strong> : l’extension traite la configuration ; le pass opère sur le graphe pendant la compilation. Cette préparation ne signifie pas que les instances existent déjà ni qu’elle recommence pour chaque GET.</p>
+<p><strong>🧠 Comment le mémoriser</strong> : « Alimenter le plan, transformer le plan. » Image : fiches ajoutées puis reliées. Réflexe : « Quel travail porte sur les définitions ? »</p>
+<p><strong>⚠️ À ne pas confondre</strong> : compiler pass et listener HTTP.</p>
+</div>
+<p><a href="course-CRS-p1694d5f7r8c.html">Construction du conteneur</a>.</p><h2 id="s-evenement-listener-et-subscriber">Événement, listener et subscriber</h2><p>Un <strong>événement</strong> est dispatché à un point d’extension. Un <strong>listener</strong> est un
+callable enregistré. Un <strong>subscriber</strong> est une classe qui déclare ses
+abonnements ; il n’est pas un fichier de configuration. La priorité ordonne
+les appels effectivement atteints ; une interruption peut empêcher les suivants.</p>
+<div class="admonition info">
+<p class="admonition-title">🌍 In Real Life</p>
+<p><strong>La situation</strong> : à une annonce, certains intervenants réagissent ; l’un déclare lui-même les annonces et réactions dont il s’occupe.</p>
+<p><strong>L’équivalent dans Symfony</strong> : annonce → événement ; réaction enregistrée → listener ; intervenant avec déclaration et réactions → subscriber.</p>
+<p><strong>Retour à la réalité technique</strong> : le listener est un callable. Un subscriber est une classe implémentant <code>EventSubscriberInterface</code>, déclarant ses abonnements via <code>getSubscribedEvents()</code> ; ses méthodes assurent les réactions. L’enregistrement reste nécessaire ; priorité et propagation limitent les appels.</p>
+<p><strong>🧠 Comment le mémoriser</strong> : « L’abonné déclare et réagit. » Image : intervenant tenant sa liste d’annonces. Réflexe : « Qui déclare quels événements et quelles méthodes ? »</p>
+<p><strong>⚠️ À ne pas confondre</strong> : subscriber et simple fichier de procédure ; dispatch d’événement et file durable.</p>
+</div>
+<p><a href="course-CRS-2hpcy2rscq7m.html">Événements</a>.</p><h2 id="s-authentification-et-autorisation">Authentification et autorisation</h2><p>L’<strong>authentification</strong> établit une identité dans un contexte de sécurité.
+L’<strong>autorisation</strong> décide si une action est permise. Un utilisateur connu peut
+être refusé. Un voter participe à une décision ; il n’est pas un chargeur
+d’article ni une étape obligatoire après l’accès aux données.</p>
+<div class="admonition info">
+<p class="admonition-title">🌍 In Real Life</p>
+<p><strong>La situation</strong> : un employé reconnu à l’accueil n’a pas forcément le droit de modifier toutes les fiches du restaurant.</p>
+<p><strong>L’équivalent dans Symfony</strong> : identité établie → authentification ; permission sur une action/un article → autorisation ; avis sur cette permission → voter.</p>
+<p><strong>Retour à la réalité technique</strong> : Security établit un contexte puis évalue les droits aux points configurés. Des contrôles précoces peuvent interrompre le trajet ; un voter participe à une décision, sans charger automatiquement l’article.</p>
+<p><strong>🧠 Comment le mémoriser</strong> : « Connu ne veut pas dire autorisé. » Image : badge devant une porte fermée. Réflexe : « Qui est-il, puis peut-il faire ceci ? »</p>
+<p><strong>⚠️ À ne pas confondre</strong> : contrôle d’identité et permission sur l’objet concerné.</p>
+</div>
+<p><a href="course-CRS-rdzx4ka72saj.html">Authentification</a> ·
+<a href="course-CRS-8hwpzyk1hrq9.html">Autorisation</a>.</p><h2 id="s-dto-transformation-et-validation">DTO, transformation et validation</h2><p>Un <strong>DTO</strong> transporte des données comme <code>SignupData</code> ; le nom n’ajoute aucun
+comportement automatique. Une <strong>transformation</strong> change leur représentation.
+La <strong>validation</strong> applique des contraintes et produit des violations.
+Une donnée transformable n’est pas forcément acceptable ; valider ne sauvegarde
+pas et n’autorise pas.</p>
+<div class="admonition info">
+<p class="admonition-title">🌍 In Real Life</p>
+<p><strong>La situation</strong> : l’accueil transcrit une inscription dans une fiche, puis vérifie les règles avant de l’enregistrer.</p>
+<p><strong>L’équivalent dans Symfony</strong> : fiche de données → DTO <code>SignupData</code> ; transcription vers une représentation exploitable → transformation ; règles vérifiées → validation.</p>
+<p><strong>Retour à la réalité technique</strong> : DTO signifie objet de transfert de données. Transformer change la représentation ; valider applique des contraintes et retourne des violations. Aucune de ces opérations ne sauvegarde automatiquement ni ne garantit une autorisation.</p>
+<p><strong>🧠 Comment le mémoriser</strong> : « Transcrit n’est pas validé. » Image : fiche lisible avec une case encore refusée. Réflexe : « Ai-je changé la forme ou vérifié une règle ? »</p>
+<p><strong>⚠️ À ne pas confondre</strong> : type PHP accepté et contraintes métier satisfaites.</p>
+</div>
+<p><a href="course-CRS-txp6tjhjtfy8.html">Form</a> · <a href="course-CRS-way4aktj2d5m.html">Validator</a>.</p><h2 id="s-normalisation-et-encodage">Normalisation et encodage</h2><p>La <strong>normalisation</strong> transforme un objet en structure de données ; l’<strong>encodage</strong>
+produit une représentation, par exemple JSON. La sérialisation peut combiner
+les deux ; la désérialisation emprunte le trajet inverse.
+Une chaîne déjà JSON ne doit pas être encodée involontairement une seconde fois.</p>
+<div class="admonition info">
+<p class="admonition-title">🌍 In Real Life</p>
+<p><strong>La situation</strong> : le restaurant extrait les champs partageables d’une fiche puis les écrit dans un format convenu avec son partenaire.</p>
+<p><strong>L’équivalent dans Symfony</strong> : objet vers champs structurés → normalisation ; structure vers texte JSON → encodage ; lecture puis reconstruction → décodage et dénormalisation.</p>
+<p><strong>Retour à la réalité technique</strong> : Serializer peut composer ces opérations selon normalizers, encoders et contexte. La conversion ne valide pas les données et ne décide pas seule des droits d’accès.</p>
+<p><strong>🧠 Comment le mémoriser</strong> : « Structurer, puis écrire le format. » Image : tableau de champs puis document JSON. Réflexe : « Ai-je encore un objet, une structure ou déjà du JSON ? »</p>
+<p><strong>⚠️ À ne pas confondre</strong> : encodage initial et double encodage d’une chaîne déjà JSON.</p>
+</div>
+<p><a href="course-CRS-3z96cp2s1dka.html">Serializer</a>.</p><h2 id="s-message-transport-et-worker">Message, transport et worker</h2><p>Un <strong>message</strong> exprime une information ou une demande de travail.
+Un <strong>transport</strong> assure l’envoi/réception selon sa configuration.
+Un <strong>worker</strong> reçoit et traite les messages. Le bus et ses middleware peuvent
+aussi traiter immédiatement : <code>dispatch()</code> n’est pas une preuve d’asynchronisme.</p>
+<div class="admonition info">
+<p class="admonition-title">🌍 In Real Life</p>
+<p><strong>La situation</strong> : une consigne d’inventaire est exécutée sur place ou acheminée vers un poste qui la reprendra plus tard.</p>
+<p><strong>L’équivalent dans Symfony</strong> : consigne → message ; acheminement → transport ; reprise → worker ; travail effectué → handler.</p>
+<p><strong>Retour à la réalité technique</strong> : le bus traverse ses middleware. Sans sender routé et avec handler disponible, le traitement peut être immédiat ; <code>sync://</code> l’est aussi. Le différé exige une configuration appropriée ; le retour de dispatch ne certifie pas l’achèvement.</p>
+<p><strong>🧠 Comment le mémoriser</strong> : « La consigne ne fixe pas l’horaire. » Image : remise directe ou bac de tâches. Réflexe : « Où ce message est-il routé et qui le consomme ? »</p>
+<p><strong>⚠️ À ne pas confondre</strong> : envoi, réception et réussite du handler.</p>
+</div>
+<p><a href="course-CRS-5gezsra1sp01.html">Messenger</a> · <a href="course-CRS-e5astysks0ty.html">Workers</a>.</p><h2 id="s-cache-http-et-cache-applicatif">Cache HTTP et cache applicatif</h2><p>Le <strong>cache HTTP</strong> réutilise une réponse selon la sémantique HTTP ; un proxy peut
+répondre avant PHP. Le <strong>cache applicatif</strong> réutilise une donnée ou un calcul
+dans l’application. La présence d’une valeur n’exclut pas tout recalcul anticipé
+avec Cache Contracts. Le mot « cache » ne suffit donc pas à prédire quel code
+sera évité.</p>
+<div class="admonition info">
+<p class="admonition-title">🌍 In Real Life</p>
+<p><strong>La situation</strong> : l’accueil garde une copie d’une fiche publique ; un poste garde le résultat d’un calcul interne.</p>
+<p><strong>L’équivalent dans Symfony</strong> : réponse complète réutilisée → cache HTTP ; donnée/calcul réutilisé dans un service → cache applicatif.</p>
+<p><strong>Retour à la réalité technique</strong> : HTTP impose des règles de réutilisation, variation et revalidation ; un proxy peut éviter PHP. Le cache applicatif n’évite que le travail ciblé ; Cache Contracts peut recalculer par anticipation. Une copie numérique n’est pas une assiette périssable.</p>
+<p><strong>🧠 Comment le mémoriser</strong> : « Copie de réponse ou résultat de calcul ? » Image : accueil et poste interne. Réflexe : « À quelle couche répond ce cache ? »</p>
+<p><strong>⚠️ À ne pas confondre</strong> : valeur présente et absence garantie de recalcul.</p>
+</div>
+<p><a href="course-CRS-1k0ce9dvdr99.html">HTTP</a> · <a href="course-CRS-p6yhxmpxrzbs.html">Application</a>.</p><h2 id="s-sous-requete-envoi-et-terminaison">Sous-requête, envoi et terminaison</h2><p>Une <strong>sous-requête</strong> est un autre appel de traitement HTTP dans l’application,
+pas nécessairement un nouvel échange réseau. <strong>Envoyer</strong> une Response émet
+statut, headers et contenu ; <strong>terminer</strong> appelle un hook ultérieur si le noyau
+et l’appelant le prennent en charge. <code>handle()</code> seul ne fait pas les deux.
+Terminate n’offre pas les garanties d’un worker durable.</p>
+<div class="admonition info">
+<p class="admonition-title">🌍 In Real Life</p>
+<p><strong>La situation</strong> : un poste demande une préparation interne, assemble le résultat, le remet, puis effectue une opération locale de fin.</p>
+<p><strong>L’équivalent dans Symfony</strong> : demande interne → sous-requête ; résultat assemblé → Response ; remise → envoi ; opération ultérieure → <code>terminate()</code>.</p>
+<p><strong>Retour à la réalité technique</strong> : une sous-requête est un appel interne de traitement HTTP, sans échange réseau nécessaire. <code>handle()</code> retourne ; l’appelant envoie puis termine si pris en charge. La réception des octets dépend aussi du serveur ; terminate n’est pas un worker durable.</p>
+<p><strong>🧠 Comment le mémoriser</strong> : « Produire, envoyer, terminer. » Image : résultat au comptoir, puis remis. Réflexe : « Quel appel a réellement eu lieu ? »</p>
+<p><strong>⚠️ À ne pas confondre</strong> : <code>kernel.finish_request</code>, émission et garantie de travail en arrière-plan.</p>
+</div>
+<p><a href="course-CRS-mpwjc4g3vmj7.html">Traitement de requête</a>.</p><details class="transfer-panel"><summary>Sauvegarde et transfert de progression</summary><p id="reading-status" role="status">Sans JavaScript : lecture libre ; progression non enregistrée.</p><p><a href="assessment.html#overview-title">Lecture, réussites immédiates et différées</a></p><p>Transfert manuel — aucune synchronisation automatique</p><p id="persistence-status" role="status"></p><button type="button" class="secondary" id="export-progress">Exporter ma progression</button><label for="import-progress">Choisir un JSON pour fusionner ma progression (sans remplacement)</label><input type="file" id="import-progress" accept="application/json,.json"><p id="transfer-status" role="status"></p></details></main><footer class="site-footer"><a href="catalogue.html">Catalogue</a> <a href="sources.html">Sources et attribution</a> <a href="#contenu">Haut de page</a></footer></body></html>

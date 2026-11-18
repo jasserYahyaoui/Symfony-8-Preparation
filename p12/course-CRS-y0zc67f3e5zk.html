@@ -1,0 +1,384 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; connect-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Console events — Symfony 8 Preparation</title><link rel="stylesheet" href="styles.css"><link rel="stylesheet" href="reader.css"><script src="mermaid.min.js" defer></script><script src="mermaid-init.js" defer></script><link rel="stylesheet" href="assessment.css"><script src="fixed-exams-data.js" defer></script><script src="fixed-exams.js" defer></script><script src="learning-state.js" defer></script><script src="guide.js" defer></script><script src="reader-catalog.js" defer></script><script src="reader.js" defer></script><script src="site-state.js" defer></script><script src="assessment.js" defer></script><script src="course-views.js" defer></script><link rel="stylesheet" href="syntax-highlight.css"><script src="prism-syntax.js" defer></script><script src="syntax-highlight.js" defer></script></head><body data-course-id="CRS-y0zc67f3e5zk"><a class="skip" href="#contenu">Aller au contenu</a><header class="site-header"><a class="brand" href="index.html">S8 Preparation</a><nav aria-label="Navigation principale"><a href="index.html">Accueil</a> <a href="catalogue.html">Parcours</a> <a href="assessment.html?mode=review">Réviser</a> <a href="examens.html">Examens blancs</a> <a href="jour-j.html">Jour J</a></nav></header><main id="contenu" tabindex="-1" class="corpus-reader"><nav class="breadcrumb" aria-label="Fil d’Ariane"><a href="index.html">Accueil</a> <span aria-hidden="true">›</span> <a href="catalogue.html">Parcours</a> <span aria-hidden="true">›</span> <a href="lot-12.html">Module 12 — Console</a> <span aria-hidden="true">›</span> <span aria-current="page">Console events</span></nav><h1>Console events</h1><p class="muted">Symfony 8.0 · API PHP ≤ 8.4 · Twig ≤ 3.22. Préparation indépendante.</p><p class="revision-status">Rédaction narrative P11 : projection nouvelle, non couverte par les décisions historiques P10. Aucune approbation officielle ni garantie de réussite.</p><aside class="narrative-context" aria-label="Repères de lecture"><p><strong>Prérequis de lecture :</strong> <a href="course-CRS-brn6frfqpxxj.html">Console component</a></p><p><strong>Concepts voisins :</strong> <a href="course-CRS-5gezsra1sp01.html">Messenger component</a> — Comparer import immédiat et traitement différé configuré. <a href="lot-12.html">Comparer les responsabilités dans ce module</a> · <a href="carte-composants.html">Situer cette responsabilité dans le blog</a> · <a href="glossaire.html">Distinguer les termes voisins</a></p><p><a href="ordre-lecture.html">Retrouver les 163 cours dans le parcours recommandé</a>. Ce repère ne modifie ni votre historique ni votre progression.</p></aside><div class="course-layout"><details class="lot-course-menu"><summary>Cours du module · 9 cours</summary><nav aria-label="Cours du module"><a class="lot-context" href="lot-12.html">Module 12 — Console</a><ol><li><a href="course-CRS-brn6frfqpxxj.html">Console component</a></li><li><a href="course-CRS-rk0fkn1q5byc.html">Built-in commands</a></li><li><a href="course-CRS-cb51hcng9dh5.html">Custom commands</a></li><li><a href="course-CRS-sf3701ncg2va.html">Configuration</a></li><li><a href="course-CRS-q2dxjhx6d35k.html">Options and arguments (using PHP attributes)</a></li><li><a href="course-CRS-0ab7kpexq9w9.html">Input and Output objects</a></li><li><a href="course-CRS-3p9jdkw1nd3g.html">Built-in helpers</a></li><li><a href="course-CRS-y0zc67f3e5zk.html" aria-current="page">Console events</a></li><li><a href="course-CRS-96c85hjezj1r.html">Verbosity levels</a></li></ol><a href="lot-12.html#view-quiz">Quiz du module</a></nav></details><aside class="course-section-menu" aria-label="Sommaire du cours"><nav class="course-actions" aria-label="Activités du cours"><a id="tab-course" href="#view-course">Cours</a><a id="tab-flashcards" href="#view-flashcards">Flashcards</a><a id="tab-quiz" href="#view-quiz">Quiz</a></nav><details class="course-section-disclosure"><summary id="course-sections">Sections du cours</summary><nav aria-label="Sections du cours"><ul><li><a href="#s-objectif">Objectif</a></li><li><a href="#s-l-essentiel">L&#x27;essentiel</a></li><li><a href="#s-le-schema">Le schéma</a></li><li><a href="#s-l-exemple-journaliser-chaque-command">L&#x27;exemple : journaliser chaque command</a></li><li><a href="#s-quatre-constantes-cinq-events">Quatre constantes, cinq events</a></li><li><a href="#s-l-ordre-reel">L&#x27;ordre réel</a></li><li><a href="#s-error-rattraper">`ERROR` — rattraper</a></li><li><a href="#s-signal-pendant">`SIGNAL` — pendant</a></li><li><a href="#s-l-alarme">L&#x27;alarme</a></li><li><a href="#s-pieges-d-examen">Pièges d&#x27;examen</a></li><li><a href="#s-fiche-express">Fiche express</a></li><li><a href="#reader-objectives">Objectifs d’apprentissage</a></li><li><a href="#reader-sources">Sources officielles et compléments</a></li><li><a href="#course-recalls">Rappels et liens avec les autres cours</a></li></ul></nav><nav aria-label="Flashcards par section"><a href="#view-flashcards">Flashcards par section</a><ul><li><a href="#cards-s-l-essentiel-1">L&#x27;essentiel</a></li><li><a href="#cards-s-le-schema-2">Le schéma</a></li><li><a href="#cards-s-l-exemple-journaliser-chaque-command-3">L&#x27;exemple : journaliser chaque command</a></li><li><a href="#cards-s-quatre-constantes-cinq-events-4">Quatre constantes, cinq events</a></li><li><a href="#cards-s-l-ordre-reel-5">L&#x27;ordre réel</a></li><li><a href="#cards-s-error-rattraper-6">`ERROR` — rattraper</a></li><li><a href="#cards-s-signal-pendant-7">`SIGNAL` — pendant</a></li><li><a href="#cards-s-l-alarme-8">L&#x27;alarme</a></li><li><a href="#cards-s-pieges-d-examen-9">Pièges d&#x27;examen</a></li><li><a href="#cards-s-fiche-express-10">Fiche express</a></li><li><a href="#cards-previous">Module 12 — Console · Cours « Configuration » · Rappel : <span lang="en">What is the advantage of declaring a command description in AsCommand?</span></a></li></ul></nav><nav aria-label="Retour au module"><a href="lot-12.html">Tous les cours du module</a></nav></details><p class="local-quiz-count">8 questions disponibles · 8 par session Quiz</p></aside><div class="course-content"><div id="view-course" data-course-panel role="region" aria-labelledby="view-course-title"><h2 id="view-course-title">Cours</h2><p class="course-introduction"><a href="#s-objectif">Introduction</a> · <a href="#course-sections">Sections du cours</a></p><h2 id="reader-objectives" tabindex="-1">Objectifs d’apprentissage</h2><ul><li><a href="course-CRS-y0zc67f3e5zk.html#out-OUT-2e5yd7119yha">Nommer les quatre events de ConsoleEvents, et ConsoleAlarmEvent qui n&#x27;a pas de constante</a></li><li><a href="course-CRS-y0zc67f3e5zk.html#out-OUT-8v3ady0sf894">Établir leur ordre, erreur comprise</a></li><li><a href="course-CRS-y0zc67f3e5zk.html#out-OUT-rzgybvr9fa5g">Décrire l&#x27;effet de disableCommand() et de setExitCode() sur ERROR</a></li><li><a href="course-CRS-y0zc67f3e5zk.html#out-OUT-13gsk5cxzqt3">Prévoir l&#x27;exit code d&#x27;une command interrompue par un signal</a></li><li><a href="course-CRS-y0zc67f3e5zk.html#out-OUT-kh6qdz451gb2">Garder une command en vie à chaque alarme de setAlarmInterval()</a></li></ul><aside class="pedagogy-legend" aria-label="Repères pédagogiques"><p><strong>Repères pédagogiques</strong></p><p>Ces repères décrivent le rôle du bloc, pas une fréquence officielle à l’examen.</p><p class="teaching-label essential"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="brain" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5C12 1 6 1 6 5C2 5 1 10 4 12C1 15 3 19 6 19C6 23 12 23 12 19V5M12 5C12 1 18 1 18 5C22 5 23 10 20 12C23 15 21 19 18 19C18 23 12 23 12 19M6 5C6 8 8 9 9 9M4 12H7L9 14M6 19V16M18 5C18 8 16 9 15 9M20 12H17L15 14M18 19V16"></path></svg> <strong>À comprendre</strong></p><p class="teaching-label essential"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="book" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5C9 3 5 3 2 4V20C5 19 9 19 12 21C15 19 19 19 22 20V4C19 3 15 3 12 5V21M5 8H8M5 12H8M16 8H19M16 12H19"></path></svg> <strong>À mémoriser</strong></p><p class="teaching-label example"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="code" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6L2 12L8 18M16 6L22 12L16 18M14 3L10 21"></path></svg> <strong>Exemple concret</strong></p><p class="teaching-label pitfall"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="warning" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3L23 21H1L12 3ZM12 9V14M12 17V18"></path></svg> <strong>Piège à éviter</strong></p><p class="teaching-label nuance"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="balance" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3V21M7 21H17M3 7L21 5M5 7L1 15H9L5 7M19 6L15 14H23L19 6M1 15Q5 20 9 15M15 14Q19 19 23 14"></path></svg> <strong>Nuance à connaître</strong></p><p>Précision, exception ou condition d’application d’une règle.</p></aside><section class="teaching-section" data-section="s-objectif"><h2 id="s-objectif" tabindex="-1">Objectif</h2><p>Le bilan de l'import décrit les lignes traitées. L'exploitation demande
+maintenant une trace commune de toutes les commandes et veut parfois
+refuser <code>app:blog:import</code> avant son lancement. Ajouter cette logique dans
+chaque commande la dupliquerait. Les événements Console placent ces
+interventions autour du parcours orchestré par <code>Application</code>.</p></section><section class="teaching-section" data-section="s-l-essentiel"><h2 id="s-l-essentiel" tabindex="-1">L&#x27;essentiel</h2><p class="teaching-label essential"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="brain" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5C12 1 6 1 6 5C2 5 1 10 4 12C1 15 3 19 6 19C6 23 12 23 12 19V5M12 5C12 1 18 1 18 5C22 5 23 10 20 12C23 15 21 19 18 19C18 23 12 23 12 19M6 5C6 8 8 9 9 9M4 12H7L9 14M6 19V16M18 5C18 8 16 9 15 9M20 12H17L15 14M18 19V16"></path></svg> <strong>À comprendre</strong></p><aside class="section-digest" id="s-l-essentiel-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Le component autonome ne l&#x27;ajoute pas implicitement.</li><li>FrameworkBundle fournit cette intégration.</li></ol></aside><p><strong>Ce que cette partie veut réellement vous apprendre.</strong></p>
+<ul>
+<li><em>Pourquoi ce sujet existe.</em> Journaliser, refuser ou convertir une
+  erreur « pour toutes les commandes » ne doit pas se copier dans chaque
+  <code>execute()</code>. On accroche des listeners <strong>autour</strong> de la commande.</li>
+<li><em>Le piège de fond.</em> Un événement n'est pas une garantie : sans dispatcher,
+  rien n'est émis ; <code>TERMINATE</code> ne couvre pas un arrêt brutal ; un code 0
+  ne répare rien.</li>
+<li><em>Ce que l'auteur veut que vous compreniez.</em> Le <strong>code de retour est un état
+  modifiable</strong> que plusieurs listeners peuvent changer ; seul l'état final
+  compte.</li>
+<li><em>Pourquoi c'est à l'examen.</em> Quatre constantes / cinq events, 113, effet
+  de <code>setExitCode(0)</code> sur <code>ERROR</code>, signal intercepté = code 0, première alarme
+  qui termine.</li>
+</ul>
+<p><code>Application</code> orchestre l'exécution d'une commande. Si elle possède un
+dispatcher, elle lui confie des événements auxquels des listeners peuvent
+réagir : autoriser le lancement, journaliser le résultat ou traiter une erreur.
+La commande n'a pas besoin de connaître ces listeners.</p>
+<p><code>COMMAND</code> précède l'exécution ; <code>ERROR</code> signale une erreur interceptée ;
+<code>TERMINATE</code> termine les chemins gérés représentés ci-dessous. Ce dernier
+événement n'est <strong>pas une garantie de nettoyage après tout arrêt du processus</strong> :
+un arrêt brutal ou une sortie hors du parcours géré peut l'empêcher.</p>
+<p>Ces noms appartiennent au cycle CLI, pas au cycle HTTP de <code>GET /blog/42</code>.
+Ils ne sont pas non plus les événements de réception de Messenger :
+une commande qui envoie <code>ImportBlogFile</code> peut se terminer alors qu'un worker
+configuré doit encore traiter le message.</p>
+<pre class="highlight" tabindex="0"><code class="language-text"> avant            pendant                 en cas d'erreur      après
+┌─────────┐   ┌────────────────────┐   ┌────────────────┐   ┌───────────┐
+│ COMMAND │ → │ exécution          │ → │ ERROR          │ → │ TERMINATE │
+│ (peut   │   │ (SIGNAL / alarme   │   │ (peut avaler   │   │ (lit le   │
+│ refuser)│   │  si pcntl)         │   │  l'erreur)     │   │  code)    │
+└─────────┘   └────────────────────┘   └────────────────┘   └───────────┘
+        tout cela seulement si l'Application a un dispatcher</code></pre></section><section class="teaching-section" data-section="s-le-schema"><h2 id="s-le-schema" tabindex="-1">Le schéma</h2><aside class="section-digest" id="s-le-schema-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>L&#x27;erreur possède son event.</li><li>La fin du cycle peut ajuster l&#x27;exit code.</li></ol></aside><p><strong>Où en est-on ?</strong> Nous avons la vue d'ensemble « avant / pendant / après ».
+Deux schémas détaillent le mécanisme : le <strong>trajet normal ou refusé</strong>, puis
+le <strong>trajet d'erreur</strong>. Question guide : <em>qui décide du code final ?</em></p>
+<p>Partons d'une commande déjà trouvée. Dans ce parcours, <code>COMMAND</code> est
+diffusé avant <code>Command::run()</code> : un refus peut donc éviter initialization,
+interaction et traitement de cette commande. La décision est l'état final
+de l'événement après ses listeners, pas nécessairement celui du premier :</p>
+<figure class="diagram" aria-labelledby="CRS-y0zc67f3e5zk-3-diagram-0-title CRS-y0zc67f3e5zk-3-diagram-0-description"><figcaption id="CRS-y0zc67f3e5zk-3-diagram-0-title">Lancement normal ou commande désactivée, avec dispatcher</figcaption><p id="CRS-y0zc67f3e5zk-3-diagram-0-description">Avec un dispatcher, Application distribue console.command avant d&#x27;appeler la commande. Un listener peut désactiver son exécution, ce qui donne initialement le code 113. Sinon le code vient de Command run. Application distribue ensuite console.terminate sur ces chemins gérés et lit le code de cet événement.</p><div class="mermaid" hidden>---
+title: Application::doRunCommand()
+---
+flowchart TD
+  accTitle: Lancement normal ou commande désactivée, avec dispatcher
+  accDescr: Avec un dispatcher, Application distribue console.command avant d&#x27;appeler la commande. Un listener peut désactiver son exécution, ce qui donne initialement le code 113. Sinon le code vient de Command run. Application distribue ensuite console.terminate sur ces chemins gérés et lit le code de cet événement.
+  CMD[&quot;Application : console.command&quot;] --&gt;|&quot;listeners consultés&quot;| DIS{&quot;disableCommand ?&quot;}
+  DIS --&gt;|&quot;oui&quot;| C113[&quot;code 113, pas d&#x27;exécution&quot;]
+  DIS --&gt;|&quot;non : Command::run&quot;| RUN[&quot;Exécution de la commande&quot;]
+  RUN --&gt;|&quot;retour normal&quot;| TERM[&quot;Application : console.terminate&quot;]
+  C113 --&gt;|&quot;sans exécuter la commande&quot;| TERM
+  TERM --&gt;|&quot;lit le code de l&#x27;événement&quot;| CODE([&quot;Retour du cycle géré&quot;])
+  classDef action fill:#e0f2fe,stroke:#075985,color:#0c4a6e
+  classDef choice fill:#fef3c7,stroke:#92400e,color:#78350f
+  classDef result fill:#dcfce7,stroke:#166534,color:#14532d
+  class CMD,C113,RUN,TERM action
+  class DIS choice
+  class CODE result</div></figure>
+<p>Les rectangles bleus représentent des étapes exécutées par l'application,
+pas des classes d'événements qui s'exécuteraient seules. Le losange ambre
+est une décision ; la forme verte est un résultat. Sans dispatcher,
+<code>Application</code> appelle la commande sans distribuer ces événements.</p>
+<p><strong>Où en est-on ?</strong> Premier trajet compris. Reste le cas où l'exécution
+<strong>lève</strong> : ce second schéma montre comment <code>ERROR</code> peut changer le sort de
+l'exception.</p>
+<p>Si l'exécution lève, un autre trajet permet de modifier l'erreur ou de
+supprimer sa propagation. Ce n'est pas une nouvelle tentative de l'import :</p>
+<figure class="diagram" aria-labelledby="CRS-y0zc67f3e5zk-3-diagram-1-title CRS-y0zc67f3e5zk-3-diagram-1-description"><figcaption id="CRS-y0zc67f3e5zk-3-diagram-1-title">Une erreur interceptée peut être abandonnée ou relancée</figcaption><p id="CRS-y0zc67f3e5zk-3-diagram-1-description">Sur le chemin d&#x27;erreur géré par Application avec dispatcher, console.error permet de changer l&#x27;erreur et son code. Un code zéro abandonne l&#x27;erreur. Après console.terminate, une erreur restante est relancée ; sinon le cycle retourne son code. Cette vue ne garantit pas la récupération d&#x27;une erreur dans un listener lui-même.</p><div class="mermaid" hidden>flowchart TD
+  accTitle: Une erreur interceptée peut être abandonnée ou relancée
+  accDescr: Sur le chemin d&#x27;erreur géré par Application avec dispatcher, console.error permet de changer l&#x27;erreur et son code. Un code zéro abandonne l&#x27;erreur. Après console.terminate, une erreur restante est relancée ; sinon le cycle retourne son code. Cette vue ne garantit pas la récupération d&#x27;une erreur dans un listener lui-même.
+  E[&quot;Throwable intercepté&quot;] --&gt;|&quot;distribue&quot;| ERR[&quot;console.error&quot;]
+  ERR --&gt;|&quot;code zéro : abandonne l&#x27;erreur&quot;| T[&quot;console.terminate&quot;]
+  ERR --&gt;|&quot;code non nul : garde l&#x27;erreur&quot;| T
+  T --&gt;|&quot;vérifie l&#x27;erreur restante&quot;| Q{&quot;Erreur conservée ?&quot;}
+  Q --&gt;|&quot;oui&quot;| X([&quot;Relancer&quot;])
+  Q --&gt;|&quot;non&quot;| R([&quot;Retourner le code&quot;])
+  classDef action fill:#e0f2fe,stroke:#075985,color:#0c4a6e
+  classDef choice fill:#fef3c7,stroke:#92400e,color:#78350f
+  classDef result fill:#dcfce7,stroke:#166534,color:#14532d
+  class E,ERR,T action
+  class Q choice
+  class X,R result</div></figure>
+<p>Les deux vues omettent les signaux, détaillés plus bas, et supposent que les
+listeners terminent normalement. Par exemple, désactiver une commande
+produit le code 113 sans appeler son traitement ; c'est différent d'une
+commande exécutée qui retourne <code>Command::FAILURE</code>.</p>
+<p>La capture montrée n'englobe pas toute instruction possible du process.
+Une exception dans un listener <code>ERROR</code> ou <code>TERMINATE</code> peut interrompre ce
+trajet ; le diagramme ne promet pas une récursion de récupération infinie.</p></section><section class="teaching-section" data-section="s-l-exemple-journaliser-chaque-command"><h2 id="s-l-exemple-journaliser-chaque-command" tabindex="-1">L&#x27;exemple : journaliser chaque command</h2><p class="teaching-label example"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="code" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6L2 12L8 18M16 6L22 12L16 18M14 3L10 21"></path></svg> <strong>Exemple concret</strong></p><aside class="section-digest" id="s-l-exemple-journaliser-chaque-command-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>La mesure se termine après le traitement.</li><li>Le listener peut aussi lire l&#x27;exit code.</li></ol></aside><p><strong>Où en est-on ?</strong> Un cas d'usage typique : un subscriber qui journalise
+la fin de chaque commande. Retenez qu'il observe un code <strong>à son passage</strong>.</p>
+<div class="admonition info">
+<p class="admonition-title">🌍 In Real Life</p>
+<p><strong>La situation</strong> : un collègue du blog annonce les moments qu'il veut suivre et tient réellement le journal quand ils surviennent.</p>
+<p><strong>L’équivalent dans Symfony</strong> : déclaration des moments → <code>getSubscribedEvents()</code> ; collègue actif → instance du subscriber ; prise de note → méthode appelée par le dispatcher.</p>
+<p><strong>Retour à la réalité technique</strong> : le subscriber réunit déclaration et comportement. Il doit être enregistré ; les événements Console exigent le dispatcher et dépendent du chemin atteint.</p>
+<p><strong>🧠 Comment le mémoriser</strong> : « L'abonné écoute et agit. » Image mentale : une personne tenant sa liste et son stylo. Question-réflexe : l'objet est-il enregistré et cet événement est-il émis ?</p>
+<p><strong>⚠️ À ne pas confondre</strong> : subscriber et simple fichier de configuration.</p>
+</div>
+<p>Un <strong>subscriber</strong> est une classe qui déclare ses abonnements. Dans une
+application Symfony 8.0, enregistrer cette classe comme service autoconfiguré
+avec un <code>LoggerInterface</code> disponible. Elle conserve le journal des
+terminaisons gérées, pas de tous les arrêts du système :</p>
+<pre class="highlight" tabindex="0"><code class="language-php">&lt;?php
+namespace App\EventSubscriber;
+
+use Psr\Log\LoggerInterface;
+use Symfony\Component\Console\ConsoleEvents;
+use Symfony\Component\Console\Event\ConsoleTerminateEvent;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+
+final class CommandLogger implements EventSubscriberInterface
+{
+    public function __construct(private LoggerInterface $logger)
+    {
+    }
+
+    public static function getSubscribedEvents(): array
+    {
+        return [ConsoleEvents::TERMINATE =&gt; 'onTerminate'];
+    }
+
+    public function onTerminate(ConsoleTerminateEvent $event): void
+    {
+        $this-&gt;logger-&gt;info($event-&gt;getCommand()?-&gt;getName().' → '.$event-&gt;getExitCode());
+    }
+}</code></pre>
+<p>Pour un import retournant 0, le message transmis au logger contient
+<code>app:blog:import → 0</code>. Un refus initial produit <code>→ 113</code> si personne ne change
+ensuite le code. Ce listener observe la valeur <strong>à son passage</strong> : un autre
+listener de terminaison appelé après lui peut encore la modifier.
+L'enregistrement des abonnements se prépare avec le conteneur ; il ne se
+recompile pas pour chaque ligne importée.</p></section><section class="teaching-section" data-section="s-quatre-constantes-cinq-events"><span class="outcome-anchor" id="out-OUT-2e5yd7119yha" tabindex="-1"></span><h2 id="s-quatre-constantes-cinq-events" tabindex="-1">Quatre constantes, cinq events</h2><aside class="section-digest" id="s-quatre-constantes-cinq-events-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Les constantes usuelles ne couvrent pas tous les events.</li><li>L&#x27;alarme possède sa class.</li></ol></aside><p><strong>Où en est-on ?</strong> Le vocabulaire, maintenant que le mécanisme est clair :
+quels noms d'événements existent, et lequel n'a pas de constante.</p>
+<p>Le point d'abonnement identifie l'étape à observer. Les quatre constantes
+usuelles de nom d'événement sont distinctes de la table d'alias :</p>
+<table>
+<thead>
+<tr>
+<th>Constante</th>
+<th>Valeur</th>
+<th>Quand</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>COMMAND</code></td>
+<td><code>console.command</code></td>
+<td>avant l'exécution</td>
+</tr>
+<tr>
+<td><code>SIGNAL</code></td>
+<td><code>console.signal</code></td>
+<td>à la réception d'un signal POSIX</td>
+</tr>
+<tr>
+<td><code>ERROR</code></td>
+<td><code>console.error</code></td>
+<td>une exception ou une erreur est remontée</td>
+</tr>
+<tr>
+<td><code>TERMINATE</code></td>
+<td><code>console.terminate</code></td>
+<td>fin des chemins gérés avec dispatcher, sans garantie après arrêt brutal</td>
+</tr>
+</tbody>
+</table>
+<p><code>ConsoleEvents</code> déclare aussi une cinquième constante, <code>ALIASES</code>, qui associe
+chaque class d'event à son nom. Un cinquième event, <code>ConsoleAlarmEvent</code>, n'a pas de constante.
+FrameworkBundle donne un dispatcher à l'<code>Application</code> ; construite à la main,
+elle ne dispatche rien sans <code>setDispatcher()</code>.</p>
+<p>Déclarer un subscriber dans un autre objet dispatcher ne branche pas cet
+objet sur une <code>Application</code> autonome. Il faut relier les deux. L'alarme,
+elle, s'écoute par <code>ConsoleAlarmEvent::class</code>, sans inventer
+<code>ConsoleEvents::ALARM</code> ou un événement après <code>configure()</code>.</p></section><section class="teaching-section" data-section="s-l-ordre-reel"><span class="outcome-anchor" id="out-OUT-8v3ady0sf894" tabindex="-1"></span><h2 id="s-l-ordre-reel" tabindex="-1">L&#x27;ordre réel</h2><aside class="section-digest" id="s-l-ordre-reel-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Désactivé n&#x27;est ni succès ni échec ordinaire.</li><li>L&#x27;exécution de la command est sautée.</li><li>TERMINATE ne garantit aucun callback après un arrêt brutal non interceptable.</li></ol></aside><p><strong>Où en est-on ?</strong> Le tableau de vérité de l'examen : pour chaque scénario,
+quels événements et quel code final. Lisez-le en suivant la <strong>valeur du
+code</strong> à chaque étape.</p>
+<p>Suivons les valeurs de code, et non une notion vague de « fin ». Le tableau
+suppose une exception ordinaire de code 0, les réglages standards de capture,
+une commande normale qui réussit à 0, et aucun changement autre que celui
+mentionné. <code>TERMINATE:0</code> indique le code à l'entrée de cet événement :</p>
+<table>
+<thead>
+<tr>
+<th>Cas</th>
+<th>Events</th>
+<th>Code</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>succès</td>
+<td><code>COMMAND</code>, exécution, <code>TERMINATE:0</code></td>
+<td>0</td>
+</tr>
+<tr>
+<td><code>disableCommand()</code> sur <code>COMMAND</code></td>
+<td><code>COMMAND</code>, <strong><code>TERMINATE:113</code></strong> — pas d'exécution</td>
+<td>113</td>
+</tr>
+<tr>
+<td>exception</td>
+<td><code>COMMAND</code>, exécution, <code>ERROR</code>, <code>TERMINATE:1</code></td>
+<td>1</td>
+</tr>
+<tr>
+<td>exception, <code>setExitCode(0)</code> sur <code>ERROR</code></td>
+<td>… <code>ERROR</code>, <code>TERMINATE:0</code></td>
+<td>0</td>
+</tr>
+<tr>
+<td>succès, <code>setExitCode(1)</code> sur <code>TERMINATE</code></td>
+<td>… <code>TERMINATE:0</code></td>
+<td><strong>1</strong></td>
+</tr>
+<tr>
+<td>exception, <strong>sans</strong> dispatcher</td>
+<td>exécution seule</td>
+<td>1</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><code>ConsoleCommandEvent::RETURN_CODE_DISABLED</code> vaut <strong>113</strong> : « refusée », pas
+  « échouée ».</li>
+<li><code>TERMINATE</code> permet une mesure ou un nettoyage de fin de commande sur le
+  parcours géré. Il ne remplace pas une stratégie de libération des ressources
+  propre à leur durée de vie et ne peut pas garantir un callback après
+  un arrêt non interceptable.</li>
+</ul>
+<p><code>disableCommand()</code> change un drapeau lu après la diffusion de <code>COMMAND</code>.
+Un listener ultérieur peut appeler <code>enableCommand()</code> ; le cas à 113 suppose
+que le drapeau reste faux. De même, un <code>TERMINATE</code> ultérieur peut remplacer
+113 : il s'agit du code de refus initial, pas d'une valeur immuable.</p>
+<p>Le refus d'une commande d'import n'est pas un voter HTTP et ne fournit
+aucune identité utilisateur à un worker. Les règles d'exploitation CLI
+et l'autorisation métier doivent être pensées à leurs propres frontières.</p></section><section class="teaching-section" data-section="s-error-rattraper"><span class="outcome-anchor" id="out-OUT-rzgybvr9fa5g" tabindex="-1"></span><h2 id="s-error-rattraper" tabindex="-1">`ERROR` — rattraper</h2><aside class="section-digest" id="s-error-rattraper-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Le listener peut transformer le résultat.</li><li>Ce choix ne doit pas masquer un échec involontairement.</li></ol></aside><p><strong>Où en est-on ?</strong> Zoom sur le trajet d'erreur : ce que <code>ConsoleErrorEvent</code>
+permet de changer, et surtout ce qu'il ne répare pas.</p>
+<div class="admonition info">
+<p class="admonition-title">🌍 In Real Life</p>
+<p><strong>La situation</strong> : le responsable du blog peut modifier le compte rendu d'un import raté, sans pouvoir réparer les fichiers en changeant une case.</p>
+<p><strong>L’équivalent dans Symfony</strong> : incident → erreur ; compte rendu → <code>ConsoleErrorEvent</code> ; statut communiqué → code de sortie.</p>
+<p><strong>Retour à la réalité technique</strong> : les listeners peuvent modifier erreur et code. Un code final 0 dans le chemin géré peut empêcher la relance de l'erreur ; il ne réalise ni rollback ni retry ni réparation métier.</p>
+<p><strong>🧠 Comment le mémoriser</strong> : « Changer le rapport ne change pas les faits. » Image mentale : un tampon vert sur un dossier encore incomplet. Question-réflexe : le contrat métier justifie-t-il vraiment le succès ?</p>
+<p><strong>⚠️ À ne pas confondre</strong> : erreur absorbée et traitement accompli.</p>
+</div>
+<p>Si le parseur d'import lève une erreur attendue, <code>ConsoleErrorEvent</code> expose
+<code>getError()</code>, <code>setError()</code> et <code>setExitCode()</code>. Dans le bloc géré,
+<code>Application::doRunCommand()</code> lit l'erreur et le code après les listeners.
+Un code final 0 met l'erreur conservée à <code>null</code> : elle ne sera pas relancée.</p>
+<p>Cela ne répare pas le fichier, n'annule pas les articles déjà importés et
+ne planifie aucun retry. Réserver cette transformation aux situations dont
+le contrat métier admet réellement un succès. Pour une exception initiale
+de code 7, <code>setExitCode(3)</code> modifie aussi son champ <code>code</code> par réflexion :
+l'effet ne se limite pas à une décoration du journal.</p>
+<p>La capture de ce trajet porte sur <code>Throwable</code>. Une <code>TypeError</code> provenant
+du traitement peut donc déclencher <code>ERROR</code>, puis <code>TERMINATE</code>, puis être
+relancée si elle n'a pas été abandonnée. Cela ne contredit pas
+<code>Application::run()</code> qui, par défaut, ne convertit pas cette erreur en
+retour ordinaire : ce sont deux niveaux de capture.</p>
+<p>Modifier seulement le code de <code>TERMINATE</code> n'abandonne pas une erreur
+conservée : <code>doRunCommand()</code> la relance avant son retour normal.
+Pour tester ces listeners, utiliser <code>ApplicationTester</code> avec dispatcher
+et sortie automatique désactivée, pas seulement <code>CommandTester</code>.</p>
+<pre class="highlight" tabindex="0"><code class="language-text">exception de code 7
+  ERROR : setExitCode(3)  → code final 3, exception-&gt;code = 3
+  ERROR : setExitCode(0)  → erreur abandonnée (null), code 0
+  TERMINATE : setExitCode(0) seul → l'erreur conservée est quand même relancée</code></pre></section><section class="teaching-section" data-section="s-signal-pendant"><span class="outcome-anchor" id="out-OUT-13gsk5cxzqt3" tabindex="-1"></span><h2 id="s-signal-pendant" tabindex="-1">`SIGNAL` — pendant</h2><aside class="section-digest" id="s-signal-pendant-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Le signal peut être intercepté.</li><li>L&#x27;absence de sortie doit être demandée explicitement.</li></ol></aside><p><strong>Où en est-on ?</strong> Troisième moment du cycle : <em>pendant</em> l'exécution.
+Mécanisme : l'OS envoie un signal, <code>Application</code> le convertit en événement
+puis laisse une décision finale (sortir avec un entier, ou continuer avec
+<code>false</code>).</p>
+<p>Un import long peut recevoir un signal du système d'exploitation. Avec
+le support POSIX/<code>pcntl</code> disponible, un dispatcher et la liste standard
+des signaux, <code>Application</code> installe des handlers pour <code>SIGINT</code>, <code>SIGQUIT</code>,
+<code>SIGTERM</code>, <code>SIGUSR1</code>, <code>SIGUSR2</code> et <code>SIGALRM</code>. Ce parcours est conditionnel
+à la plateforme et à la configuration.</p>
+<p>Pour un signal de cette liste, elle diffuse <code>SIGNAL</code>, puis appelle
+<code>handleSignal($signal, $previousExitCode)</code> si la commande s'y est abonnée.
+Pour <code>SIGALRM</code>, l'événement d'alarme s'intercale comme expliqué ensuite.
+La décision finale est un entier pour sortir, ou <code>false</code> pour continuer :</p>
+<table>
+<thead>
+<tr>
+<th>Situation</th>
+<th>Résultat</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>SIGINT</code> intercepté, aucun listener ni handler ne change le code</td>
+<td>sortie en code <strong>0</strong>, <code>getInterruptingSignal()</code> = 2 sur la terminaison</td>
+</tr>
+<tr>
+<td>décision finale <code>false</code>, par <code>abortExit()</code> ou par <code>handleSignal()</code></td>
+<td>la commande continue</td>
+</tr>
+<tr>
+<td><code>setExitCode(3)</code> sur <code>SIGNAL</code>, sans changement ultérieur</td>
+<td>sortie en code 3</td>
+</tr>
+<tr>
+<td>aucun handler installé pour ce signal par ce parcours</td>
+<td>comportement du système/handlers déjà présents ; pas de garantie Console</td>
+</tr>
+</tbody>
+</table>
+<p>Si un listener demande <code>abortExit()</code> mais que le handler de commande
+retourne ensuite 3, la dernière décision l'emporte. Si la sortie est
+conservée, le parcours avec dispatcher diffuse <code>TERMINATE</code> puis appelle
+<code>exit()</code> avec son code. Ce <code>exit()</code> explicite n'est pas neutralisé par
+<code>setAutoExit(false)</code> : cette option vise la sortie normale d'<code>Application::run()</code>.
+Ne pas injecter de vrais signaux dans un test en supposant qu'elle protégera
+le process de test.</p>
+<pre class="highlight" tabindex="0"><code class="language-text">signal OS → SignalRegistry → console.signal (listeners)
+          → handleSignal() de la commande (si SignalableCommandInterface)
+          → décision : int  → TERMINATE puis exit(int)
+                       false → la commande continue</code></pre></section><section class="teaching-section" data-section="s-l-alarme"><span class="outcome-anchor" id="out-OUT-kh6qdz451gb2" tabindex="-1"></span><h2 id="s-l-alarme" tabindex="-1">L&#x27;alarme</h2><aside class="section-digest" id="s-l-alarme-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Les alarmes reposent sur les signaux POSIX.</li><li>Le comportement dépend de la plateforme disponible.</li></ol></aside><p><strong>Où en est-on ?</strong> Cas particulier de signal : <code>SIGALRM</code>, déclenché par
+<code>setAlarmInterval()</code>. Question guide : <em>qui décide de continuer après la
+sonnerie ?</em></p>
+<div class="admonition info">
+<p class="admonition-title">🌍 In Real Life</p>
+<p><strong>La situation</strong> : une minuterie rappelle à l'équipe du blog de vérifier l'import ; sa sonnerie exige une décision de poursuite.</p>
+<p><strong>L’équivalent dans Symfony</strong> : minuterie → intervalle d'alarme ; sonnerie système → <code>SIGALRM</code> ; notification spécialisée → <code>ConsoleAlarmEvent</code>.</p>
+<p><strong>Retour à la réalité technique</strong> : ce trajet exige le support <code>pcntl</code> et la configuration adaptée. L'alarme n'est pas un ordonnanceur durable ; sans décision de continuer, le parcours standard décrit peut terminer à la première sonnerie.</p>
+<p><strong>🧠 Comment le mémoriser</strong> : « Sonner n'est pas poursuivre. » Image mentale : une minuterie près d'un bouton continuer. Question-réflexe : qui décide du résultat après le signal ?</p>
+<p><strong>⚠️ À ne pas confondre</strong> : alarme du processus vivant et tâche planifiée indépendante.</p>
+</div>
+<p>Pour observer périodiquement l'import, <code>Application::setAlarmInterval(10)</code>
+programme une alarme via le registre de signaux. Il faut <code>pcntl</code> et ses
+fonctions disponibles. Sur le trajet standard avec dispatcher, <code>SIGALRM</code>
+diffuse <code>SIGNAL</code>, puis <code>ConsoleAlarmEvent</code> sous son nom de classe ; ce dernier
+reçoit la décision de sortie issue du premier.</p>
+<p>Le handler de commande éventuel peut encore modifier cette décision, puis
+l'application réarme l'alarme et examine le résultat. Si personne ne demande
+de continuer, la <strong>première alarme termine la commande</strong>, normalement à 0.
+Un listener d'observation doit donc appeler <code>abortExit()</code> au point approprié
+et ne pas être contredit ensuite.</p>
+<p>Il s'agit d'une observation périodique du process en cours, pas d'une
+planification durable du prochain import ni d'un compteur de lignes.
+Réarmer après le traitement du signal ne promet pas une cadence de travail
+métier exactement égale à dix secondes.</p></section><section class="teaching-section" data-section="s-pieges-d-examen"><h2 id="s-pieges-d-examen" tabindex="-1">Pièges d&#x27;examen</h2><p class="teaching-label pitfall"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="warning" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3L23 21H1L12 3ZM12 9V14M12 17V18"></path></svg> <strong>Piège à éviter</strong></p><aside class="section-digest" id="s-pieges-d-examen-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Le test direct contourne le cycle Application.</li><li>Adapter le test à la frontière vérifiée.</li></ol></aside><ul class="pitfall-list"><li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : Où en est-on ?</summary><p><strong>Où en est-on ?</strong> Les huit confusions qui reviennent à l'examen, chacune
+avec la raison pour laquelle la mauvaise réponse paraît plausible.</p></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : Quatre constantes, cinq events.</summary><p><strong>Quatre constantes, cinq events.</strong> <code>ConsoleAlarmEvent</code> n'a pas de constante ;
+il n'existe pas d'event « après <code>configure()</code> ».
+<em>Pourquoi on se trompe : on compte les constantes et on oublie l'alarme.</em></p></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : Un signal intercepté sort en code 0</summary><p><strong>Un signal intercepté sort en code 0</strong> si personne ne le change.
+<em>Pourquoi on se trompe : le shell affiche 130 pour Ctrl-C quand rien n'intercepte.</em></p></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : TERMINATE suit aussi une erreur traitée par le cycle avec dispatcher</summary><p><strong><code>TERMINATE</code> suit aussi une erreur traitée par le cycle avec dispatcher</strong>,
+pas nécessairement une sortie brutale ni une erreur dans un listener.</p></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : disableCommand() produit le code 113</summary><p><strong><code>disableCommand()</code> produit le code 113</strong>, pas 0 ni 1 — et <code>TERMINATE</code> est
+quand même dispatché. <em>Pourquoi on se trompe : « pas d'exécution » fait croire à « pas d'événement ».</em></p></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : setExitCode(0) sur ERROR avale l&#x27;exception</summary><p><strong><code>setExitCode(0)</code> sur <code>ERROR</code> avale l'exception</strong> au lieu de la laisser remonter.</p></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : Pas de dispatcher, pas d&#x27;events</summary><p><strong>Pas de dispatcher, pas d'events</strong> : une <code>Application</code> autonome est muette.
+<em>Pourquoi on se trompe : on suppose que le simple fait de déclarer un subscriber suffit.</em></p></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : Une erreur absorbée n&#x27;est pas un travail réparé.</summary><p><strong>Une erreur absorbée n'est pas un travail réparé.</strong> Zéro peut décrire
+une décision de sortie, pas l'intégralité des effets métier.</p></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : Un listener observe un état modifiable.</summary><p><strong>Un listener observe un état modifiable.</strong> Pour prévoir le code final,
+suivre aussi les listeners suivants et le handler de signal, pas seulement
+le premier appel à <code>setExitCode()</code>.</p></details></li></ul></section><section class="teaching-section" data-section="s-fiche-express"><h2 id="s-fiche-express" tabindex="-1">Fiche express</h2><p class="teaching-label essential"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="book" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5C9 3 5 3 2 4V20C5 19 9 19 12 21C15 19 19 19 22 20V4C19 3 15 3 12 5V21M5 8H8M5 12H8M16 8H19M16 12H19"></path></svg> <strong>À mémoriser</strong></p><aside class="section-digest" id="s-fiche-express-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>La command ne fixe pas toujours seule le code final.</li><li>Les listeners peuvent le modifier.</li></ol></aside><p>Pour l'import, trois observations restent distinctes : traitement autorisé,
+résultat du cycle CLI, puis éventuel traitement Messenger ultérieur.
+Les événements rendent ces transitions observables sans les fusionner.</p>
+<p><strong>🧠 À retenir pour la certification — si tu dois retenir seulement 7 choses :</strong></p>
+<ul>
+<li><strong>Quatre constantes</strong> (<code>COMMAND</code>, <code>SIGNAL</code>, <code>ERROR</code>, <code>TERMINATE</code>), <strong>cinq
+  events</strong> avec <code>ConsoleAlarmEvent</code>.</li>
+<li><strong>Pas de dispatcher, pas d'events.</strong></li>
+<li><code>TERMINATE</code> clôt les <strong>chemins gérés avec dispatcher</strong> ; aucun événement de
+  fin n'est garanti après un arrêt brutal.</li>
+<li><code>disableCommand()</code> → <strong>113</strong>.</li>
+<li><code>setExitCode(0)</code> sur <code>ERROR</code> <strong>avale</strong> l'exception.</li>
+<li>Un signal intercepté sort en <strong>0</strong>, sauf <code>abortExit()</code> ou un autre code.</li>
+<li><code>setAlarmInterval()</code> : la première alarme <strong>termine</strong>, sans <code>abortExit()</code>.</li>
+</ul>
+<p>Moyen mnémotechnique : <strong>« Avant, erreur, après — dans le parcours géré »</strong>.
+Phrase de mémorisation : <strong>« Pas de dispatcher, pas d'événements ; avec lui,
+le code de retour est un état que chaque listener peut changer, et seul l'état
+final compte. »</strong></p>
+<p>Le journal existe ; il reste à décider ce que le terminal doit montrer
+en usage normal ou en diagnostic. Continuer avec
+<a href="course-CRS-96c85hjezj1r.html">Verbosity levels</a>.</p></section><section class="official-sources"><h2 id="reader-sources" tabindex="-1">Sources officielles et compléments</h2><ul><li><a href="https://symfony.com/doc/8.0/components/console/events.html">Symfony 8.0 — components / console / events</a></li><li><a href="https://symfony.com/doc/8.0/console.html">Symfony 8.0 — Console</a></li></ul></section><section id="course-recalls" aria-labelledby="course-recalls-title" tabindex="-1"><h2 id="course-recalls-title">Rappels et liens avec les autres cours</h2><div data-recall-group="other"><h3>Rappels des cours précédents / autres modules</h3><ul><li data-recall-course="CRS-sf3701ncg2va" data-recall-kind="previous_course"><p class="recall-provenance">Module 12 — Console · Cours « Configuration »</p><p>La metadata permet une découverte lazy. Lister les commands évite une construction inutile.</p><p><a href="#cards-previous">Rappel : <span lang="en">What is the advantage of declaring a command description in AsCommand?</span></a></p></li></ul></div></section><nav class="course-sequence" aria-label="Ordre de lecture"><a rel="prev" href="course-CRS-3p9jdkw1nd3g.html" aria-label="Précédent : Built-in helpers — Module 12 — Console">Précédent : Built-in helpers</a> <a href="lot-12.html">Sommaire : Module 12 — Console</a> <a rel="next" href="course-CRS-96c85hjezj1r.html" aria-label="Suivant : Verbosity levels — Module 12 — Console">Suivant : Verbosity levels</a></nav><p class="course-practice-entry"><a class="button" href="#view-quiz">Fin du cours — s’entraîner avec le Quiz</a></p></div><div id="view-flashcards" data-course-panel role="region" aria-labelledby="view-flashcards-title"><h2 id="view-flashcards-title">Flashcards</h2><p lang="en">Answer before revealing each card.</p><p>Ces cartes ne mesurent pas une maîtrise notée.</p><div id="cards-s-l-essentiel-1" data-card-section="s-l-essentiel"><h3><a href="#s-l-essentiel">Revoir : L&#x27;essentiel</a></h3><div class="reader-cards"><details class="reader-card" id="B-y0zc67f3e5zk-01"><summary lang="en">What must a standalone Console Application have to dispatch Console events?</summary><p lang="en">An event dispatcher configured on it.</p><p lang="fr">Le component autonome ne l&#x27;ajoute pas implicitement. FrameworkBundle fournit cette intégration.</p><a href="course-CRS-y0zc67f3e5zk.html#out-OUT-2e5yd7119yha">Revoir le passage précis</a></details></div></div><div id="cards-s-le-schema-2" data-card-section="s-le-schema"><h3><a href="#s-le-schema">Revoir : Le schéma</a></h3><div class="reader-cards"><details class="reader-card" id="B-y0zc67f3e5zk-02"><summary lang="en">What is the ordinary event order when command execution throws?</summary><p lang="en">COMMAND, ERROR, then TERMINATE in the application&#x27;s managed execution flow.</p><p lang="fr">L&#x27;erreur possède son event. La fin du cycle peut ajuster l&#x27;exit code.</p><a href="course-CRS-y0zc67f3e5zk.html#out-OUT-13gsk5cxzqt3">Revoir le passage précis</a></details></div></div><div id="cards-s-l-exemple-journaliser-chaque-command-3" data-card-section="s-l-exemple-journaliser-chaque-command"><h3><a href="#s-l-exemple-journaliser-chaque-command">Revoir : L&#x27;exemple : journaliser chaque command</a></h3><div class="reader-cards"><details class="reader-card" id="B-y0zc67f3e5zk-03"><summary lang="en">Which event is suited to measuring the completion of a managed command run?</summary><p lang="en">ConsoleEvents::TERMINATE.</p><p lang="fr">La mesure se termine après le traitement. Le listener peut aussi lire l&#x27;exit code.</p><a href="course-CRS-y0zc67f3e5zk.html#out-OUT-13gsk5cxzqt3">Revoir le passage précis</a></details></div></div><div id="cards-s-quatre-constantes-cinq-events-4" data-card-section="s-quatre-constantes-cinq-events"><h3><a href="#s-quatre-constantes-cinq-events">Revoir : Quatre constantes, cinq events</a></h3><div class="reader-cards"><details class="reader-card" id="B-y0zc67f3e5zk-04"><summary lang="en">Does ConsoleAlarmEvent have a matching named constant like COMMAND?</summary><p lang="en">No. It is addressed by its event class.</p><p lang="fr">Les constantes usuelles ne couvrent pas tous les events. L&#x27;alarme possède sa class.</p><a href="course-CRS-y0zc67f3e5zk.html#out-OUT-2e5yd7119yha">Revoir le passage précis</a></details></div></div><div id="cards-s-l-ordre-reel-5" data-card-section="s-l-ordre-reel"><h3><a href="#s-l-ordre-reel">Revoir : L&#x27;ordre réel</a></h3><div class="reader-cards"><details class="reader-card" id="B-y0zc67f3e5zk-05"><summary lang="en">What exit code represents a command disabled by ConsoleCommandEvent?</summary><p lang="en">113, the RETURN_CODE_DISABLED value.</p><p lang="fr">Désactivé n&#x27;est ni succès ni échec ordinaire. L&#x27;exécution de la command est sautée.</p><a href="course-CRS-y0zc67f3e5zk.html#out-OUT-8v3ady0sf894">Revoir le passage précis</a></details></div></div><div id="cards-s-error-rattraper-6" data-card-section="s-error-rattraper"><h3><a href="#s-error-rattraper">Revoir : `ERROR` — rattraper</a></h3><div class="reader-cards"><details class="reader-card" id="B-y0zc67f3e5zk-06"><summary lang="en">What can setting exit code 0 on ConsoleErrorEvent do?</summary><p lang="en">Suppress propagation of the error in the managed application flow.</p><p lang="fr">Le listener peut transformer le résultat. Ce choix ne doit pas masquer un échec involontairement.</p><a href="course-CRS-y0zc67f3e5zk.html#out-OUT-rzgybvr9fa5g">Revoir le passage précis</a></details></div></div><div id="cards-s-signal-pendant-7" data-card-section="s-signal-pendant"><h3><a href="#s-signal-pendant">Revoir : `SIGNAL` — pendant</a></h3><div class="reader-cards"><details class="reader-card" id="B-y0zc67f3e5zk-07"><summary lang="en">How can a ConsoleSignalEvent listener request that execution continue?</summary><p lang="en">Call abortExit().</p><p lang="fr">Le signal peut être intercepté. L&#x27;absence de sortie doit être demandée explicitement.</p><a href="course-CRS-y0zc67f3e5zk.html#out-OUT-13gsk5cxzqt3">Revoir le passage précis</a></details></div></div><div id="cards-s-l-alarme-8" data-card-section="s-l-alarme"><h3><a href="#s-l-alarme">Revoir : L&#x27;alarme</a></h3><div class="reader-cards"><details class="reader-card" id="B-y0zc67f3e5zk-08"><summary lang="en">What PHP extension is required for periodic Console alarms?</summary><p lang="en">pcntl.</p><p lang="fr">Les alarmes reposent sur les signaux POSIX. Le comportement dépend de la plateforme disponible.</p><a href="course-CRS-y0zc67f3e5zk.html#out-OUT-kh6qdz451gb2">Revoir le passage précis</a></details></div></div><div id="cards-s-pieges-d-examen-9" data-card-section="s-pieges-d-examen"><h3><a href="#s-pieges-d-examen">Revoir : Pièges d&#x27;examen</a></h3><div class="reader-cards"><details class="reader-card" id="B-y0zc67f3e5zk-09"><summary lang="en">Does CommandTester exercise the Application&#x27;s Console event sequence?</summary><p lang="en">No. Use ApplicationTester with an event-enabled Application.</p><p lang="fr">Le test direct contourne le cycle Application. Adapter le test à la frontière vérifiée.</p><a href="course-CRS-y0zc67f3e5zk.html#out-OUT-2e5yd7119yha">Revoir le passage précis</a></details></div></div><div id="cards-s-fiche-express-10" data-card-section="s-fiche-express"><h3><a href="#s-fiche-express">Revoir : Fiche express</a></h3><div class="reader-cards"><details class="reader-card" id="B-y0zc67f3e5zk-10"><summary lang="en">Can a TERMINATE listener change the final exit code?</summary><p lang="en">Yes. The event&#x27;s final code determines the application&#x27;s result.</p><p lang="fr">La command ne fixe pas toujours seule le code final. Les listeners peuvent le modifier.</p><a href="course-CRS-y0zc67f3e5zk.html#out-OUT-13gsk5cxzqt3">Revoir le passage précis</a></details></div></div><div id="cards-previous"><p class="recall-provenance">Module 12 — Console · Cours « Configuration »</p><aside class="checkpoint"><h2>Rappel d’un cours antérieur</h2><p>Avant de poursuivre : Configuration.</p><details class="corpus-correction"><summary lang="en">What is the advantage of declaring a command description in AsCommand?</summary><p lang="en">It can be read without instantiating the command service.</p><p>La metadata permet une découverte lazy. Lister les commands évite une construction inutile.</p><a href="course-CRS-sf3701ncg2va.html#out-OUT-axs8gacjytk9">Relire la correction dans le cours antérieur</a></details></aside></div></div><div id="view-quiz" data-course-panel role="region" aria-labelledby="view-quiz-title"><aside class="revision-context"><p><strong>Avant le quiz :</strong> Le bilan de l&#x27;import décrit les lignes traitées. L&#x27;exploitation demande maintenant une trace commune de toutes les commandes et veut parfois refuser app:blog:import avant son lancement. Ajouter cette logique dans chaque commande la dupliquerait. Les événements Console placent ces interventions autour du parcours orchestré par Application.</p><p>Quelle donnée entre, quelle responsabilité agit et quelle condition change le résultat ? Pour chaque correction, vérifiez ces conditions dans <a href="course-CRS-y0zc67f3e5zk.html#s-objectif">le passage enseigné</a>, sans supposer que toutes les branches du blog sont exécutées.</p></aside><h2 id="view-quiz-title">Quiz</h2><p class="quiz-size" lang="en">8 eligible learning questions · 8 per session. Repeating a question does not demonstrate mastery.</p><p id="course-quiz-status" role="status">Quiz interactif non chargé. Démarrez après chargement de la banque locale.</p><div id="course-quiz-controls" class="assessment-main" hidden><div id="course-quiz-assessment-controls" hidden><select id="course-quiz-assessment-mode" aria-label="Mode du quiz" hidden><option value="learning">Entraînement</option></select><p id="course-quiz-training-scope"></p><button id="course-quiz-start-assessment" type="button" lang="en">Start practice</button><button id="course-quiz-finish-assessment" type="button" lang="en" hidden>End session</button></div><p id="course-quiz-assessment-error" role="alert"></p><p id="course-quiz-assessment-timer" hidden></p><p id="course-quiz-session-progress" class="quiz-progress" role="status" lang="en"></p><div id="course-quiz-assessment-app" tabindex="-1"></div><nav id="course-quiz-session-navigation" aria-label="Questions du cours"></nav><div id="course-quiz-learning-overview" aria-live="polite"></div></div><div id="course-quiz-native"><p>Sans JavaScript ou si le chargement échoue : aucune tentative notée. Les <a href="#view-flashcards">flashcards du cours</a> restent disponibles.</p><details class="course-quiz-fallback" data-question-id="L-y0zc67f3e5zk-base-v1"><summary lang="en">What must a standalone Console Application have to dispatch Console events?</summary><p>Correction de consultation — non notée.</p><p>Le component autonome ne l&#x27;ajoute pas implicitement. FrameworkBundle fournit cette intégration.</p><ul><li><strong lang="en">Distractor: Nothing; every standalone Application creates one automatically.</strong><p>L&#x27;intégration de FrameworkBundle n&#x27;est pas implicite dans le component autonome.</p></li><li><strong lang="en">Correct: An event dispatcher configured on the Application.</strong><p>Le component autonome ne l&#x27;ajoute pas implicitement. FrameworkBundle fournit cette intégration.</p></li><li><strong lang="en">Distractor: Only an AsCommand attribute on the command class.</strong><p>La metadata de command n&#x27;ajoute pas le dispatcher à l&#x27;Application autonome.</p></li></ul><a href="course-CRS-y0zc67f3e5zk.html#out-OUT-2e5yd7119yha">Relire le passage exact</a></details></div></div></div></div><details class="transfer-panel"><summary>Sauvegarde et transfert de progression</summary><p id="reading-status" role="status">Sans JavaScript : lecture libre ; progression non enregistrée.</p><p><a href="assessment.html#overview-title">Lecture, réussites immédiates et différées</a></p><p>Transfert manuel — aucune synchronisation automatique</p><p id="persistence-status" role="status"></p><button type="button" class="secondary" id="export-progress">Exporter ma progression</button><label for="import-progress">Choisir un JSON pour fusionner ma progression (sans remplacement)</label><input type="file" id="import-progress" accept="application/json,.json"><p id="transfer-status" role="status"></p></details></main><footer class="site-footer"><a href="catalogue.html">Catalogue</a> <a href="sources.html">Sources et attribution</a> <a href="#contenu">Haut de page</a></footer></body></html>

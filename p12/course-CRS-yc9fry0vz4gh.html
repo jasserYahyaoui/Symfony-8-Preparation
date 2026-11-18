@@ -1,0 +1,382 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; connect-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Exception and error handling — Symfony 8 Preparation</title><link rel="stylesheet" href="styles.css"><link rel="stylesheet" href="reader.css"><script src="mermaid.min.js" defer></script><script src="mermaid-init.js" defer></script><link rel="stylesheet" href="assessment.css"><script src="fixed-exams-data.js" defer></script><script src="fixed-exams.js" defer></script><script src="learning-state.js" defer></script><script src="guide.js" defer></script><script src="reader-catalog.js" defer></script><script src="reader.js" defer></script><script src="site-state.js" defer></script><script src="assessment.js" defer></script><script src="course-views.js" defer></script><link rel="stylesheet" href="syntax-highlight.css"><script src="prism-syntax.js" defer></script><script src="syntax-highlight.js" defer></script></head><body data-course-id="CRS-yc9fry0vz4gh"><a class="skip" href="#contenu">Aller au contenu</a><header class="site-header"><a class="brand" href="index.html">S8 Preparation</a><nav aria-label="Navigation principale"><a href="index.html">Accueil</a> <a href="catalogue.html">Parcours</a> <a href="assessment.html?mode=review">Réviser</a> <a href="examens.html">Examens blancs</a> <a href="jour-j.html">Jour J</a></nav></header><main id="contenu" tabindex="-1" class="corpus-reader"><nav class="breadcrumb" aria-label="Fil d’Ariane"><a href="index.html">Accueil</a> <span aria-hidden="true">›</span> <a href="catalogue.html">Parcours</a> <span aria-hidden="true">›</span> <a href="lot-01.html">Module 01 — PHP jusqu’à 8.4</a> <span aria-hidden="true">›</span> <span aria-current="page">Exception and error handling</span></nav><h1>Exception and error handling</h1><p class="muted">Symfony 8.0 · API PHP ≤ 8.4 · Twig ≤ 3.22. Préparation indépendante.</p><p class="revision-status">Rédaction narrative P11 : projection nouvelle, non couverte par les décisions historiques P10. Aucune approbation officielle ni garantie de réussite.</p><aside class="narrative-context" aria-label="Repères de lecture"><p><strong>Prérequis de lecture :</strong> <a href="course-CRS-tqcp2kn9r3b5.html">Attributes</a></p><p><strong>Concepts voisins :</strong> <a href="course-CRS-htvm3b1gas0d.html">Dependency Injection component</a> — Passer d’un constructeur PHP à une dépendance injectée. <a href="lot-01.html">Comparer les responsabilités dans ce module</a> · <a href="carte-composants.html">Situer cette responsabilité dans le blog</a> · <a href="glossaire.html">Distinguer les termes voisins</a></p><p><a href="ordre-lecture.html">Retrouver les 163 cours dans le parcours recommandé</a>. Ce repère ne modifie ni votre historique ni votre progression.</p></aside><div class="course-layout"><details class="lot-course-menu"><summary>Cours du module · 9 cours</summary><nav aria-label="Cours du module"><a class="lot-context" href="lot-01.html">Module 01 — PHP jusqu’à 8.4</a><ol><li><a href="course-CRS-722pscs6e2m0.html">PHP API up to PHP 8.4 version</a></li><li><a href="course-CRS-3424z948caan.html">Object Oriented Programming</a></li><li><a href="course-CRS-tqcp2kn9r3b5.html">Attributes</a></li><li><a href="course-CRS-e4y7gtn5k4f0.html">Interfaces</a></li><li><a href="course-CRS-e7m4xbcxegyc.html">Anonymous functions and closures</a></li><li><a href="course-CRS-0jtjh77tabt1.html">Abstract classes</a></li><li><a href="course-CRS-yc9fry0vz4gh.html" aria-current="page">Exception and error handling</a></li><li><a href="course-CRS-bshgpd44ykba.html">Traits</a></li><li><a href="course-CRS-3sggmeyd01x6.html">Enums</a></li></ol><a href="lot-01.html#view-quiz">Quiz du module</a></nav></details><aside class="course-section-menu" aria-label="Sommaire du cours"><nav class="course-actions" aria-label="Activités du cours"><a id="tab-course" href="#view-course">Cours</a><a id="tab-flashcards" href="#view-flashcards">Flashcards</a><a id="tab-quiz" href="#view-quiz">Quiz</a></nav><details class="course-section-disclosure"><summary id="course-sections">Sections du cours</summary><nav aria-label="Sections du cours"><ul><li><a href="#s-objectif">Objectif</a></li><li><a href="#s-l-essentiel">L&#x27;essentiel</a></li><li><a href="#s-le-schema">Le schéma</a></li><li><a href="#s-l-exemple">L&#x27;exemple</a></li><li><a href="#s-la-hierarchie">La hiérarchie</a></li><li><a href="#s-la-consequence-pratique">La conséquence pratique</a></li><li><a href="#s-ecrire-ses-propres-exceptions">Écrire ses propres exceptions</a></li><li><a href="#s-multi-catch-et-finally">Multi-catch et finally</a></li><li><a href="#s-pieges-d-examen">Pièges d&#x27;examen</a><ul><li><a href="#s-pieges-d-examen-nested-distinguer-une-entree-refusee-d-une-panne-inattendue">Distinguer une entrée refusée d&#x27;une panne inattendue</a></li></ul></li><li><a href="#s-application">Application</a></li><li><a href="#s-fiche-express">Fiche express</a></li><li><a href="#s-sources-officielles">Sources officielles</a></li><li><a href="#reader-objectives">Objectifs d’apprentissage</a></li><li><a href="#reader-sources">Sources officielles et compléments</a></li><li><a href="#course-recalls">Rappels et liens avec les autres cours</a></li></ul></nav><nav aria-label="Flashcards par section"><a href="#view-flashcards">Flashcards par section</a><ul><li><a href="#cards-s-l-essentiel-1">L&#x27;essentiel</a></li><li><a href="#cards-s-le-schema-2">Le schéma</a></li><li><a href="#cards-s-l-exemple-3">L&#x27;exemple</a></li><li><a href="#cards-s-la-hierarchie-4">La hiérarchie</a></li><li><a href="#cards-s-la-consequence-pratique-5">La conséquence pratique</a></li><li><a href="#cards-s-ecrire-ses-propres-exceptions-6">Écrire ses propres exceptions</a></li><li><a href="#cards-s-multi-catch-et-finally-7">Multi-catch et finally</a></li><li><a href="#cards-s-pieges-d-examen-8">Pièges d&#x27;examen</a></li><li><a href="#cards-s-application-9">Application</a></li><li><a href="#cards-s-fiche-express-10">Fiche express</a></li><li><a href="#cards-previous">Module 01 — PHP jusqu’à 8.4 · Cours « Interfaces » · Rappel : <span lang="en">Can a class override an interface constant in PHP 8.4?</span></a></li></ul></nav><nav aria-label="Retour au module"><a href="lot-01.html">Tous les cours du module</a></nav></details><p class="local-quiz-count">5 questions disponibles · 5 par session Quiz</p></aside><div class="course-content"><div id="view-course" data-course-panel role="region" aria-labelledby="view-course-title"><h2 id="view-course-title">Cours</h2><p class="course-introduction"><a href="#s-objectif">Introduction</a> · <a href="#course-sections">Sections du cours</a></p><h2 id="reader-objectives" tabindex="-1">Objectifs d’apprentissage</h2><ul><li><a href="course-CRS-yc9fry0vz4gh.html#out-OUT-xwdtmfm9hzsc">Situer Error, Exception et Throwable dans la hiérarchie</a></li><li><a href="course-CRS-yc9fry0vz4gh.html#out-OUT-c799q9ew2xxg">Choisir le type à rattraper selon la défaillance visée</a></li><li><a href="course-CRS-yc9fry0vz4gh.html#out-OUT-km64zadyg6pf">Définir un type throwable applicatif correctement</a></li><li><a href="course-CRS-yc9fry0vz4gh.html#out-OUT-xrckdfqa6x5n">Prédire le comportement de finally et l&#x27;ordre des catch</a></li></ul><aside class="pedagogy-legend" aria-label="Repères pédagogiques"><p><strong>Repères pédagogiques</strong></p><p>Ces repères décrivent le rôle du bloc, pas une fréquence officielle à l’examen.</p><p class="teaching-label essential"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="brain" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5C12 1 6 1 6 5C2 5 1 10 4 12C1 15 3 19 6 19C6 23 12 23 12 19V5M12 5C12 1 18 1 18 5C22 5 23 10 20 12C23 15 21 19 18 19C18 23 12 23 12 19M6 5C6 8 8 9 9 9M4 12H7L9 14M6 19V16M18 5C18 8 16 9 15 9M20 12H17L15 14M18 19V16"></path></svg> <strong>À comprendre</strong></p><p class="teaching-label essential"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="book" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5C9 3 5 3 2 4V20C5 19 9 19 12 21C15 19 19 19 22 20V4C19 3 15 3 12 5V21M5 8H8M5 12H8M16 8H19M16 12H19"></path></svg> <strong>À mémoriser</strong></p><p class="teaching-label example"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="code" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6L2 12L8 18M16 6L22 12L16 18M14 3L10 21"></path></svg> <strong>Exemple concret</strong></p><p class="teaching-label pitfall"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="warning" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3L23 21H1L12 3ZM12 9V14M12 17V18"></path></svg> <strong>Piège à éviter</strong></p><p class="teaching-label nuance"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="balance" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3V21M7 21H17M3 7L21 5M5 7L1 15H9L5 7M19 6L15 14H23L19 6M1 15Q5 20 9 15M15 14Q19 19 23 14"></path></svg> <strong>Nuance à connaître</strong></p><p>Précision, exception ou condition d’application d’une règle.</p></aside><section class="teaching-section" data-section="s-objectif"><h2 id="s-objectif" tabindex="-1">Objectif</h2><p>L'import du blog prépare ses lots lorsqu'un calcul échoue. Ailleurs,
+une opération métier peut être refusée sans que PHP lui-même soit en
+panne. Nous devons distinguer ces échecs, choisir où les traiter et
+remettre les ressources temporaires en état sans annoncer un faux succès.
+La hiérarchie <code>Throwable</code> nous aide à sélectionner le bon traitement ;
+elle ne définit pas encore la Response HTTP ni le résultat d'une commande.</p>
+<p>Le fil du cours, en quatre questions :</p>
+<ol>
+<li><strong>La hiérarchie</strong> : de quelle branche vient l'échec (<code>Error</code> ou <code>Exception</code>) ?</li>
+<li><strong>La conséquence pratique</strong> : quel <code>catch</code> PHP choisit-il, et que devient un échec non reconnu ?</li>
+<li><strong>Écrire ses propres exceptions</strong> : comment nommer un échec métier ?</li>
+<li><strong>Multi-catch et <code>finally</code></strong> : comment réunir deux types et nettoyer sans mentir ?</li>
+</ol></section><section class="teaching-section" data-section="s-l-essentiel"><h2 id="s-l-essentiel" tabindex="-1">L&#x27;essentiel</h2><p class="teaching-label essential"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="brain" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5C12 1 6 1 6 5C2 5 1 10 4 12C1 15 3 19 6 19C6 23 12 23 12 19V5M12 5C12 1 18 1 18 5C22 5 23 10 20 12C23 15 21 19 18 19C18 23 12 23 12 19M6 5C6 8 8 9 9 9M4 12H7L9 14M6 19V16M18 5C18 8 16 9 15 9M20 12H17L15 14M18 19V16"></path></svg> <strong>À comprendre</strong></p><aside class="section-digest" id="s-l-essentiel-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Throwable couvre les deux branches.</li><li>Placer les catch spécifiques avant le catch général.</li></ol></aside><p><strong>Ce que cette partie veut réellement vous apprendre.</strong></p>
+<ul>
+<li><em>Pourquoi ce sujet existe.</em> Quand une opération échoue, il faut <strong>interrompre</strong>
+  le trajet normal sans continuer avec des données fausses, et laisser le code
+  qui a le contexte décider de la suite. <code>throw</code> / <code>catch</code> est ce mécanisme de
+  transmission.</li>
+<li><em>Le piège de fond.</em> Depuis PHP 7, les erreurs du moteur sont des objets
+  <code>Error</code>, <strong>rattrapables</strong>, mais <strong>pas</strong> des <code>Exception</code>. Dire « exception » en
+  conversation ne dit pas quelle branche choisir.</li>
+<li><em>Pourquoi c'est à la certification.</em> Les QCM testent la parenté exacte
+  (<code>ErrorException</code>, <code>ArgumentCountError</code>…), le premier-<code>catch</code>-compatible,
+  la syntaxe PHP 8 (variable de <code>catch</code> facultative, multi-catch) et le
+  comportement de <code>finally</code>.</li>
+</ul>
+<p>Un <code>throw</code> interrompt le trajet normal et transmet un object lançable,
+un <code>Throwable</code>, jusqu'à un <code>catch</code> compatible. Cette interface commune
+couvre deux branches <strong>sœurs</strong> : <code>Error</code>, notamment pour des erreurs du
+moteur PHP, et <code>Exception</code>, notamment pour les conditions applicatives.
+Le mot « exception » dans une conversation ne suffit donc pas à choisir
+<code>catch (Exception)</code> : ce dernier laisse passer une <code>Error</code>.</p>
+<p>PHP choisit le <strong>premier</strong> <code>catch</code> compatible, pas automatiquement le plus
+précis. <code>finally</code> exécute ensuite le nettoyage lors du déroulement normal
+des blocs, y compris avant de quitter la function sur un <code>return</code>.
+Ces règles ne promettent pas de récupérer tous les incidents : un warning
+ordinaire n'est pas automatiquement un <code>Throwable</code>, et un arrêt abrupt
+du processus peut empêcher le nettoyage.</p>
+<p>La hiérarchie à garder en tête :</p>
+<pre class="highlight" tabindex="0"><code class="language-text">                    Throwable   (interface)
+                   ┌─────┴──────┐
+                 Error        Exception          ← deux branches SŒURS
+        ┌───────────┼─────────┐      │
+   TypeError   ValueError  ArithmeticError   ErrorException, RuntimeException…
+        │                        │
+ ArgumentCountError      DivisionByZeroError</code></pre></section><section class="teaching-section" data-section="s-le-schema"><h2 id="s-le-schema" tabindex="-1">Le schéma</h2><aside class="section-digest" id="s-le-schema-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Error et Exception sont deux branches sœurs.</li><li>ErrorException appartient à la branche Exception.</li></ol></aside><p><strong>Où en est-on ?</strong> Vue d'ensemble avant le code : on suit <strong>un objet levé</strong>
+(<code>DivisionByZeroError</code>) à travers une série de <code>catch</code>, puis jusqu'au
+<code>finally</code>. Les flèches montrent le parcours d'exécution, pas l'héritage.</p>
+<p>Isolons le défaut de calcul rencontré par l'import : une division entière
+avec un diviseur nul. Suivons l'object levé jusqu'au traitement qui accepte
+son type, puis jusqu'au nettoyage. L'ordre des blocs sera aussi important
+que leurs noms.</p>
+<figure class="diagram" aria-labelledby="CRS-yc9fry0vz4gh-3-diagram-0-title CRS-yc9fry0vz4gh-3-diagram-0-description"><figcaption id="CRS-yc9fry0vz4gh-3-diagram-0-title">Le premier catch compatible traite l&#x27;erreur</figcaption><p id="CRS-yc9fry0vz4gh-3-diagram-0-description">intdiv un zéro lève DivisionByZeroError. Le catch Exception ne correspond pas, car cette erreur descend de Error. Le catch DivisionByZeroError suivant correspond et s&#x27;exécute, puis finally assure le nettoyage.</p><div class="mermaid" hidden>---
+title: Suivre une DivisionByZeroError jusqu&#x27;au bon catch
+---
+flowchart TD
+  accTitle: Le premier catch compatible traite l&#x27;erreur
+  accDescr: intdiv un zéro lève DivisionByZeroError. Le catch Exception ne correspond pas, car cette erreur descend de Error. Le catch DivisionByZeroError suivant correspond et s&#x27;exécute, puis finally assure le nettoyage.
+  D[&quot;intdiv(1, 0)&quot;] --&gt;|&quot;lève DivisionByZeroError&quot;| X{&quot;catch Exception ?&quot;}
+  X --&gt;|&quot;non : branche Error&quot;| E{&quot;catch DivisionByZeroError ?&quot;}
+  E --&gt;|&quot;oui&quot;| H[&quot;traitement de cette erreur&quot;]
+  H --&gt;|&quot;ensuite&quot;| F([&quot;finally : nettoyage&quot;])
+  classDef runtime fill:#e0f2fe,stroke:#0369a1,color:#0c4a6e
+  classDef decision fill:#fef3c7,stroke:#b45309,color:#78350f
+  classDef result fill:#dcfce7,stroke:#15803d,color:#14532d
+  class D,H runtime
+  class X,E decision
+  class F result</div></figure>
+<p>Bleu : exécution ; orange : sélection du handler ; vert : nettoyage.
+Les flèches sont un parcours d'exécution, <strong>pas</strong> de l'héritage. On suppose
+aucun arrêt abrupt ni nouvelle exception dans le handler. <code>Throwable</code> couvre
+les objets lançables, pas tous les warnings PHP ni tous les arrêts du processus.
+<code>finally</code> convient au nettoyage, pas à un <code>return</code> qui masquerait l'échec initial.
+Le schéma ne choisit aucune politique métier : continuer l'import, arrêter
+le lot ou propager l'échec reste une décision de l'appelant. Le prochain
+bloc rend seulement visible la sélection des branches.</p></section><section class="teaching-section" data-section="s-l-exemple"><h2 id="s-l-exemple" tabindex="-1">L&#x27;exemple</h2><p class="teaching-label example"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="code" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6L2 12L8 18M16 6L22 12L16 18M14 3L10 21"></path></svg> <strong>Exemple concret</strong></p><p><strong>Où en est-on ?</strong> Le schéma en code minimal : une seule instruction qui
+échoue, deux <code>catch</code>, un <code>finally</code>. On cherche <strong>lequel</strong> s'exécute et
+pourquoi.</p>
+<p>Avec les entrées <code>1</code> et <code>0</code>, <code>intdiv()</code> ne peut fournir aucun quotient.
+Cet exemple autonome montre où le contrôle passe :</p>
+<pre class="highlight" tabindex="0"><code class="language-php">try {
+    $result = intdiv(1, 0);
+} catch (Exception $e) {
+    // JAMAIS atteint : DivisionByZeroError est une Error, pas une Exception
+} catch (DivisionByZeroError $e) {
+    // atteint
+} finally {
+    // exécuté sur ces chemins, hors exit() ou arrêt abrupt
+}</code></pre>
+<p>Le deuxième <code>catch</code> est atteint, puis <code>finally</code> ; le premier ne correspond
+pas au type levé. Le bloc n'affiche rien et l'affectation de <code>$result</code>
+n'aboutit pas. Les commentaires ne constituent pas une gestion d'import :
+dans le vrai traitement, il faut décider de la suite ou laisser remonter
+l'échec, plutôt que conserver des handlers vides qui le feraient disparaître.</p>
+<p>Pas à pas :</p>
+<pre class="highlight" tabindex="0"><code class="language-text">intdiv(1, 0)  → lève DivisionByZeroError
+catch (Exception)           ? DivisionByZeroError instanceof Exception → non
+catch (DivisionByZeroError) ? instanceof → oui → exécuté (les autres sont ignorés)
+finally                     → exécuté ensuite</code></pre></section><section class="teaching-section" data-section="s-la-hierarchie"><span class="outcome-anchor" id="out-OUT-xwdtmfm9hzsc" tabindex="-1"></span><h2 id="s-la-hierarchie" tabindex="-1">La hiérarchie</h2><p><strong>Où en est-on ?</strong> Étape 1 sur 4 : on répond à la question laissée ouverte
+par l'exemple : <em>pourquoi le premier <code>catch</code> n'a-t-il pas fonctionné ?</em></p>
+<p>Pourquoi le premier <code>catch</code> n'a-t-il pas fonctionné ? Depuis PHP 7, de
+nombreuses erreurs du moteur sont représentées par des objects <code>Error</code>
+<strong>rattrapables</strong>, sans devenir des sous-classes d'<code>Exception</code>.
+<code>DivisionByZeroError</code> descend d'<code>ArithmeticError</code>, elle-même une <code>Error</code>.
+<code>ArgumentCountError</code> descend de <code>TypeError</code>, également dans la branche
+<code>Error</code>. <code>ValueError</code> est une autre sous-class d'<code>Error</code> : un diviseur nul
+ne relève pas automatiquement d'elle parce que la valeur semble « mauvaise ».</p>
+<p>Vérifions la parenté au lieu de nous fier au nom :</p>
+<pre class="highlight" tabindex="0"><code class="language-php">try {
+    intdiv(1, 0);
+} catch (Throwable $failure) {
+    var_dump($failure instanceof Throwable);
+    var_dump($failure instanceof Error);
+    var_dump($failure instanceof Exception);
+}
+$convertedWarning = new ErrorException('Example warning');
+var_dump($convertedWarning instanceof Exception);</code></pre>
+<p>La sortie donne <code>bool(true)</code>, <code>bool(true)</code>, <code>bool(false)</code>, puis <code>bool(true)</code>.
+<code>ErrorException</code>, malgré son nom, appartient à la branche <code>Exception</code>.
+Sa construction est explicite ici : aucun warning n'a été converti
+automatiquement. Certaines erreurs de compilation peuvent par ailleurs
+empêcher le programme d'atteindre son <code>try</code>.</p>
+<p>(Parentés vérifiées sur PHP : <code>DivisionByZeroError &lt; ArithmeticError &lt; Error</code>,
+<code>ArgumentCountError &lt; TypeError &lt; Error</code>, <code>ValueError &lt; Error</code>,
+<code>ErrorException &lt; Exception</code>.)</p>
+<p>Dans Symfony 8.0, <code>ExceptionEvent::getThrowable()</code> peut exposer un object
+de l'une ou l'autre branche quand la gestion d'erreur du kernel s'applique.
+Le nom de l'événement et l'ErrorHandler ne changent pas la parenté PHP.
+Nous gardons donc cette hiérarchie, que l'appelant soit une commande
+d'import ou le traitement d'une page du blog.</p>
+<p>Comparaison des deux branches :</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th><code>Error</code></th>
+<th><code>Exception</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Usage typique</td>
+<td>erreurs du moteur PHP (type, arithmétique, nombre d'arguments…)</td>
+<td>conditions applicatives, échecs métier</td>
+</tr>
+<tr>
+<td>Attrapée par <code>catch (Exception)</code></td>
+<td><strong>non</strong></td>
+<td>oui</td>
+</tr>
+<tr>
+<td>Attrapée par <code>catch (Throwable)</code></td>
+<td>oui</td>
+<td>oui</td>
+</tr>
+<tr>
+<td>Exemples</td>
+<td><code>TypeError</code>, <code>ValueError</code>, <code>DivisionByZeroError</code></td>
+<td><code>RuntimeException</code>, <code>ErrorException</code></td>
+</tr>
+</tbody>
+</table></section><section class="teaching-section" data-section="s-la-consequence-pratique"><span class="outcome-anchor" id="out-OUT-c799q9ew2xxg" tabindex="-1"></span><h2 id="s-la-consequence-pratique" tabindex="-1">La conséquence pratique</h2><p><strong>Où en est-on ?</strong> Étape 2 sur 4 : on connaît les branches ; la question
+devient <strong>qui rattrape quoi</strong>, et dans quel ordre les <code>catch</code> sont essayés.</p>
+<p>À la frontière de l'import, nous pouvons vouloir reconnaître précisément
+une division impossible ; plus haut, l'appelant peut signaler tout échec
+lançable inattendu. <code>catch (Throwable)</code> couvre les deux branches, mais ne
+répare pas l'état du traitement. Il doit correspondre à une décision réelle,
+pas servir de filet silencieux autour de chaque méthode.</p>
+<p>Le premier essai ci-dessous choisit le handler précis ; le second laisse
+l'échec traverser un <code>catch</code> incompatible jusqu'au niveau extérieur :</p>
+<pre class="highlight" tabindex="0"><code class="language-php">try {
+    intdiv(1, 0);
+} catch (DivisionByZeroError) {
+    echo "specific\n";
+} catch (Throwable) {
+    echo "general\n";
+}
+
+try {
+    try {
+        intdiv(1, 0);
+    } catch (Exception) {
+        echo "exception branch\n";
+    }
+} catch (Throwable) {
+    echo "outer\n";
+}</code></pre>
+<p>La sortie est <code>specific</code>, puis <code>outer</code>. PHP ne compare pas tous les
+handlers pour élire le plus spécialisé : placer <code>Throwable</code> en premier
+dans la même série rendrait les suivants inatteignables. Et un échec
+non reconnu localement continue sa propagation ; cela permet au code
+qui possède le contexte nécessaire de choisir la suite.</p>
+<pre class="highlight" tabindex="0"><code class="language-text">try interne : catch (Exception)   ✗ ne correspond pas (c'est une Error)
+      │ l'échec continue de remonter (propagation)
+      ▼
+try externe : catch (Throwable)   ✓ → "outer"</code></pre>
+<div class="admonition info">
+<p class="admonition-title">🌍 In Real Life</p>
+<p><strong>La situation</strong> : un incident parcourt des postes de traitement dans leur ordre ; le premier poste compétent le prend, sans concours entre tous les spécialistes.</p>
+<p><strong>L’équivalent dans Symfony</strong> : catégorie de l'incident → type Throwable ; compétence du poste → type du catch ; premier poste compatible → handler exécuté.</p>
+<p><strong>Retour à la réalité technique</strong> : Error et Exception sont deux branches sœurs ; catch Exception ne couvre pas Error. Catch Throwable couvre les objets lançables, pas tous les warnings ni les arrêts abrupts. Attraper ne répare pas l'état.</p>
+<p><strong>🧠 Comment le mémoriser</strong> : « Le premier compatible prend la main. » Image mentale : incident passant devant des postes ordonnés. Question-réflexe : mon catch général masque-t-il le traitement précis ?</p>
+<p><strong>⚠️ À ne pas confondre</strong> : nom ErrorException et appartenance à la branche Error.</p>
+</div><aside class="enrichment" aria-label="Autre explication"><p>Pensez à deux circuits d'alarme reliés au même panneau Throwable : surveiller uniquement Exception laisse passer Error. Le panneau commun ne rend pas les deux branches interchangeables.</p></aside></section><section class="teaching-section" data-section="s-ecrire-ses-propres-exceptions"><span class="outcome-anchor" id="out-OUT-km64zadyg6pf" tabindex="-1"></span><h2 id="s-ecrire-ses-propres-exceptions" tabindex="-1">Écrire ses propres exceptions</h2><aside class="section-digest" id="s-ecrire-ses-propres-exceptions-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Une interface de marquage peut étendre Throwable.</li><li>La class d&#x27;exception doit hériter d&#x27;Exception ou d&#x27;Error.</li></ol></aside><p><strong>Où en est-on ?</strong> Étape 3 sur 4 : jusqu'ici on attrapait des types fournis
+par PHP. Comment <strong>créer</strong> les nôtres, et pourquoi plutôt que de comparer des
+messages ?</p>
+<p>Un échec métier mérite un type reconnaissable plutôt qu'une comparaison
+fragile de messages. Conservons l'exemple <code>PaymentDeclined</code> comme variante
+d'une opération refusée ; ce nom ne suppose pas que notre parcours de
+lecture de l'article effectue un paiement :</p>
+<pre class="highlight" tabindex="0"><code class="language-php">interface DomainFailure extends \Throwable {}
+final class PaymentDeclined extends \RuntimeException implements DomainFailure {}</code></pre>
+<p>Ces déclarations ne lèvent rien. <code>new PaymentDeclined('Refused')</code> créerait
+un object qui est à la fois <code>RuntimeException</code> et <code>DomainFailure</code> ;
+<code>throw</code> serait encore nécessaire pour lancer sa propagation.</p>
+<p><strong>Une class ne peut pas implémenter <code>Throwable</code> directement</strong> : elle doit
+hériter d'<code>Exception</code> ou d'<code>Error</code>, éventuellement par une sous-class.
+Pour une condition métier, la branche <code>Exception</code> est généralement adaptée.
+Une <em>interface de marquage</em> regroupe des types sans fournir leur comportement :
+elle peut étendre <code>Throwable</code>. <code>catch (DomainFailure $e)</code> reconnaît alors
+les exceptions qui la portent sans imposer une même sous-branche de la
+bibliothèque standard PHP, la SPL.</p>
+<p>(Vérifié : <code>class T implements Throwable {}</code> donne l'erreur fatale « Class T
+cannot implement interface Throwable, extend Exception or Error instead ».)</p>
+<p><strong>Pourquoi cette règle ?</strong> <code>Throwable</code> exige des méthodes (trace, message,
+code…) que seules <code>Exception</code> et <code>Error</code> fournissent ; PHP interdit donc de
+les réimplémenter à la main.</p>
+<pre class="highlight" tabindex="0"><code class="language-text">        Throwable (interface)  ◄── interface DomainFailure extends Throwable
+         ▲                            ▲
+   Exception                          │ implements
+     ▲                                │
+RuntimeException ◄── PaymentDeclined ─┘</code></pre>
+<p>La variante autonome suivante conserve deux échecs de livraison, par
+exemple pour un module qui transmet les résultats du blog. Ces noms sont
+locaux, pas des interfaces Symfony :</p>
+<pre class="highlight" tabindex="0"><code class="language-php">interface DeliveryFailure extends Throwable {}
+
+final class AddressUnavailable extends Exception implements DeliveryFailure {}
+final class ParcelRejected extends Exception implements DeliveryFailure {}
+
+try {
+    throw new AddressUnavailable('Destination unavailable');
+} catch (DeliveryFailure $failure) {
+    echo $failure::class, "\n";
+    echo $failure-&gt;getMessage(), "\n";
+    var_dump($failure instanceof Exception);
+}</code></pre>
+<p>La sortie est <code>AddressUnavailable</code>, <code>Destination unavailable</code>, puis
+<code>bool(true)</code>. Le handler reconnaît la catégorie sans analyser le texte.
+Il n'effectue aucune livraison et ne transforme pas le refus en succès.
+Dans l'application, nomme d'abord la condition, choisis sa base et son
+éventuel marqueur, puis traite-la là où une suite peut être décidée.
+Si elle traduit une autre exception, préserver cette cause dans <code>previous</code>
+garde le diagnostic ; le message ne doit contenir aucun secret.</p>
+<div class="admonition info">
+<p class="admonition-title">🌍 In Real Life</p>
+<p><strong>La situation</strong> : des incidents différents portent une étiquette commune « livraison », sans devoir avoir exactement le même dossier spécialisé.</p>
+<p><strong>L’équivalent dans Symfony</strong> : étiquette commune → interface de marquage ; dossier lançable → classe héritant d'Exception ou Error ; prise en charge commune → catch sur l'interface.</p>
+<p><strong>Retour à la réalité technique</strong> : une interface peut étendre Throwable, mais une classe ne l'implémente pas directement sans base autorisée. Construire l'exception ne la lance pas ; throw propage. Préserver previous conserve la cause lors d'une traduction.</p>
+<p><strong>🧠 Comment le mémoriser</strong> : « La famille nomme, la base rend lançable. » Image mentale : même étiquette sur plusieurs dossiers d'incident. Question-réflexe : quel type exprime la condition sans analyser son message ?</p>
+<p><strong>⚠️ À ne pas confondre</strong> : exception métier et statut HTTP automatiquement choisi.</p>
+</div></section><section class="teaching-section" data-section="s-multi-catch-et-finally"><span class="outcome-anchor" id="out-OUT-xrckdfqa6x5n" tabindex="-1"></span><h2 id="s-multi-catch-et-finally" tabindex="-1">Multi-catch et finally</h2><aside class="section-digest" id="s-multi-catch-et-finally-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>finally s&#x27;exécute après return.</li><li>exit() interrompt le script sans passer par finally.</li></ol></aside><p><strong>Où en est-on ?</strong> Étape 4 sur 4 : deux outils de confort, indépendants :
+réunir plusieurs types dans un même <code>catch</code>, et exécuter un nettoyage quoi
+qu'il arrive dans le déroulement normal.</p>
+<p>Deux types différents peuvent justifier le même traitement à une frontière
+bien choisie. <code>catch (TypeError | ValueError $e)</code> les réunit dans un
+<em>multi-catch</em>, sans absorber les autres sous-classes d'<code>Error</code>.
+Depuis PHP 8.0, la variable peut être omise si le handler n'utilise pas
+l'object ; ce n'est pas une permission réservée à <code>Throwable</code>.</p>
+<p>Indépendamment de cette sélection, le service peut devoir remettre un
+indicateur temporaire en état avant de rendre son résultat. <code>finally</code>
+sert à ce nettoyage. Observons le moment où il intervient :</p>
+<pre class="highlight" tabindex="0"><code class="language-php">try {
+    strlen([]);
+} catch (TypeError | ValueError) {
+    echo "invalid input\n";
+}
+
+function result(): string
+{
+    try {
+        return 'ready';
+    } finally {
+        echo "cleanup\n";
+    }
+}
+
+echo result(), "\n";</code></pre>
+<p>Le type array donné à <code>strlen()</code> déclenche <code>TypeError</code>, reconnu par le
+multi-catch. Ensuite <code>result()</code> prépare <code>ready</code>, mais exécute <code>finally</code>
+avant de rendre cette valeur à l'appelant. La sortie complète est donc
+<code>invalid input</code>, <code>cleanup</code>, puis <code>ready</code>. Ce script illustre deux mécanismes ;
+il ne valide pas les données d'un import réel.</p>
+<p>Un <code>return</code> dans <code>finally</code> remplacerait le retour précédent et pourrait
+masquer un échec en propagation : garde le nettoyage distinct de la
+décision de succès. <code>exit()</code> n'est pas un substitut à <code>return</code> ;
+il arrête le script sans passer par ce <code>finally</code>. Ce bloc PHP n'est pas
+non plus un événement de fin de Request ni une garantie contre l'arrêt
+brutal du processus.</p>
+<p>Chronologie de <code>result()</code> :</p>
+<pre class="highlight" tabindex="0"><code class="language-text">return 'ready'  → la valeur est préparée
+finally         → "cleanup" affiché
+retour effectif → l'appelant reçoit 'ready'   →  echo : ready
+(un return dans finally remplacerait 'ready', même si le try échouait)</code></pre>
+<p>(Vérifié sur PHP : sortie <code>cleanup</code> puis <code>ready</code> ; <code>try { throw … } finally { return "masked"; }</code>
+rend <code>masked</code> et fait disparaître l'exception ; <code>exit()</code> dans un <code>try</code> n'exécute pas le <code>finally</code>.)</p>
+<div class="admonition info">
+<p class="admonition-title">🌍 In Real Life</p>
+<p><strong>La situation</strong> : avant de rendre un dossier ou de transmettre son incident, on libère le matériel temporaire ; le rangement ne déclare pas le travail réussi.</p>
+<p><strong>L’équivalent dans Symfony</strong> : libération → finally ; résultat préparé → return du try ; incident encore transmis → Throwable en propagation.</p>
+<p><strong>Retour à la réalité technique</strong> : finally précède le retour effectif dans ces chemins. Y retourner une autre valeur peut masquer le résultat ou l'échec. Exit et arrêt brutal ne garantissent pas ce nettoyage.</p>
+<p><strong>🧠 Comment le mémoriser</strong> : « Nettoyer sans réécrire le verdict. » Image mentale : matériel rangé à côté d'un dossier toujours en échec. Question-réflexe : mon nettoyage conserve-t-il le résultat initial ?</p>
+<p><strong>⚠️ À ne pas confondre</strong> : finally PHP, kernel.finish_request et kernel.terminate.</p>
+</div></section><section class="teaching-section" data-section="s-pieges-d-examen"><h2 id="s-pieges-d-examen" tabindex="-1">Pièges d&#x27;examen</h2><p class="teaching-label pitfall"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="warning" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3L23 21H1L12 3ZM12 9V14M12 17V18"></path></svg> <strong>Piège à éviter</strong></p><ul class="pitfall-list"><li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : Où en est-on ?</summary><p><strong>Où en est-on ?</strong> Les erreurs de QCM les plus fréquentes, chacune avec la
+raison de sa plausibilité.</p></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : Error n&#x27;étend pas Exception.</summary><p><strong><code>Error</code> n'étend pas <code>Exception</code>.</strong> Les deux implémentent <code>Throwable</code>, et
+c'est leur point commun dans la hiérarchie. Pour le quotient impossible,
+un handler d'exception métier ne correspond donc pas ; vérifie le type
+réel au lieu d'élargir aveuglément tous les <code>catch</code>. <em>Pourquoi on se trompe :
+le mot « exception » est employé pour tout incident.</em></p></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : finally s&#x27;exécute même après un return</summary><p><strong><code>finally</code> s'exécute même après un <code>return</code></strong> dans le <code>try</code> — et un <code>return</code>
+dans le <code>finally</code> écrase celui du <code>try</code>. Pas après un <code>exit()</code>, en revanche :
+exécuté, le script s'arrête sans passer par le <code>finally</code>.
+Le résultat <code>ready</code> de l'exemple arrive bien après <code>cleanup</code>, mais ajouter
+un autre retour dans le nettoyage changerait ce résultat. Une préparation
+de rapport ne doit pas annoncer « terminé » simplement parce qu'elle a
+réinitialisé son état temporaire. <em>Pourquoi on se trompe : on croit que
+<code>return</code> quitte immédiatement la fonction.</em></p></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : L&#x27;ordre des catch compte</summary><p><strong>L'ordre des <code>catch</code> compte</strong> : le premier block compatible gagne. Placer
+<code>catch (Throwable)</code> en premier rend les suivants inatteignables.
+Le traitement précis de <code>DivisionByZeroError</code> doit précéder le traitement
+général si les deux sont dans la même série. Un handler compatible exécuté
+n'entraîne pas ensuite l'exécution des autres handlers de cette série.
+<em>Pourquoi on se trompe : on imagine que PHP choisit le plus spécifique, comme
+une surcharge.</em></p></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : ErrorException n&#x27;est pas une Error.</summary><p><strong><code>ErrorException</code> n'est pas une <code>Error</code>.</strong> Elle étend <code>Exception</code>. <em>Pourquoi
+on se trompe : son nom contient « Error ».</em></p></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : La variable du catch est facultative depuis PHP 8.0</summary><p><strong>La variable du <code>catch</code> est facultative depuis PHP 8.0</strong>, pour tout type
+(pas seulement <code>Throwable</code>).</p></details></li></ul>
+<h3 tabindex="-1" id="s-pieges-d-examen-nested-distinguer-une-entree-refusee-d-une-panne-inattendue">Distinguer une entrée refusée d'une panne inattendue</h3>
+<ul class="pitfall-list"><li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : Où en est-on ?</summary><p><strong>Où en est-on ?</strong> Retour au fil rouge du blog : que fait-on en pratique
+d'un échec connu et d'un échec inattendu ?</p></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Cibler la bonne famille d’erreurs PHP</summary><p>L'import peut prévenir un diviseur nul par validation ; s'il doit traiter
+l'erreur produite par <code>intdiv()</code>, le type pertinent est
+<code>DivisionByZeroError</code>, pas <code>Exception</code>. Pour plusieurs refus annoncés
+par une bibliothèque applicative, une interface de marquage étendant
+<code>Throwable</code> permet de viser la famille, tout en conservant une base
+d'exception valide pour chaque class.</p></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Ne pas masquer un bug en article absent</summary><p>Sur la branche HTTP, l'absence connue de l'article 999 et une panne
+inattendue du code ne méritent pas le même résultat. Un <code>catch (Throwable)</code>
+qui transforme tout en « article absent » cacherait les bugs. La politique
+de traduction vers une Response appartient à la couche qui connaît le
+contrat HTTP ; PHP fournit ici le mécanisme de propagation et de nettoyage.
+Le <a href="course-CRS-mpwjc4g3vmj7.html">traitement de la Request</a> montre ensuite
+quand HttpKernel intervient et pourquoi une capture activée ne garantit
+pas à elle seule une page d'erreur.</p></details></li></ul>
+<pre class="highlight" tabindex="0"><code class="language-text">article 999 absent  (échec CONNU)     → type précis → réponse « introuvable »
+bug inattendu       (échec INCONNU)   → on laisse remonter → page d'erreur / log
+                    catch (Throwable) qui répond « absent » = bug caché ✗</code></pre></section><section class="teaching-section" data-section="s-application"><h2 id="s-application" tabindex="-1">Application</h2><aside class="section-digest" id="s-application-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Throwable couvre les deux branches.</li><li>Placer les catch spécifiques avant le catch général.</li><li>Une interface de marquage peut étendre Throwable.</li><li>La class d&#x27;exception doit hériter d&#x27;Exception ou d&#x27;Error.</li></ol></aside>
+
+
+
+</section><section class="teaching-section" data-section="s-fiche-express"><h2 id="s-fiche-express" tabindex="-1">Fiche express</h2><p class="teaching-label essential"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="book" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5C9 3 5 3 2 4V20C5 19 9 19 12 21C15 19 19 19 22 20V4C19 3 15 3 12 5V21M5 8H8M5 12H8M16 8H19M16 12H19"></path></svg> <strong>À mémoriser</strong></p><p><strong>Avant de traiter un échec de l'import ou de la page, vérifie six repères :</strong></p>
+<ul>
+<li><code>Throwable</code> → <strong><code>Error</code></strong> et <strong><code>Exception</code></strong>, deux branches sœurs.</li>
+<li><code>catch (Exception)</code> laisse passer les <strong><code>Error</code></strong> ; <code>Throwable</code> couvre les
+  deux branches, pas les simples warnings ni les arrêts abrupts.</li>
+<li><code>ErrorException</code> est une <strong><code>Exception</code></strong>.</li>
+<li>Pas d'<code>implements Throwable</code> sur une class ; une <strong>interface</strong> peut l'étendre.</li>
+<li>Premier <code>catch</code> compatible <strong>gagne</strong>.</li>
+<li><code>finally</code> : après <code>return</code>, <strong>pas</strong> après <code>exit()</code> ; son <code>return</code> gagne.</li>
+</ul>
+<p><strong>🧠 À retenir pour la certification :</strong> <code>Error</code> et <code>Exception</code> sont sœurs sous
+<code>Throwable</code> ; le premier <code>catch</code> compatible est exécuté, les autres ignorés ;
+une classe lançable étend <code>Exception</code> ou <code>Error</code> (jamais <code>implements Throwable</code>
+seul) ; <code>finally</code> nettoie sans décider du succès.</p>
+<p>Moyen mnémotechnique : <strong>« Le type sélectionne, l'ordre départage,
+finally nettoie. »</strong> Le nom de la class ne remplace pas sa hiérarchie :
+<code>ErrorException</code> en est le contre-exemple.</p></section><section class="teaching-section" data-section="s-sources-officielles"><h2 id="s-sources-officielles" tabindex="-1">Sources officielles</h2><ul>
+<li>Manuel PHP — <em>Throwable</em>, <em>Predefined Exceptions</em></li>
+</ul></section><section class="official-sources"><h2 id="reader-sources" tabindex="-1">Sources officielles et compléments</h2><ul><li><a href="https://www.php.net/manual/en/class.throwable.php">PHP — Throwable : erreurs et exceptions</a></li></ul></section><section id="course-recalls" aria-labelledby="course-recalls-title" tabindex="-1"><h2 id="course-recalls-title">Rappels et liens avec les autres cours</h2><div data-recall-group="current"><h3>Rappels du cours actuel</h3><ul><li data-recall-course="CRS-yc9fry0vz4gh" data-recall-kind="digest_reference"><p class="recall-provenance">Module 01 — PHP jusqu’à 8.4 · Cours « Exception and error handling »</p><p class="digest-reference"><a href="#s-le-schema-digest">Revoir la règle : Error et Exception sont deux branches sœurs.</a></p></li><li data-recall-course="CRS-yc9fry0vz4gh" data-recall-kind="digest_reference"><p class="recall-provenance">Module 01 — PHP jusqu’à 8.4 · Cours « Exception and error handling »</p><p class="digest-reference"><a href="#s-l-essentiel-digest">Revoir la règle : Throwable couvre les deux branches.</a></p></li><li data-recall-course="CRS-yc9fry0vz4gh" data-recall-kind="digest_reference"><p class="recall-provenance">Module 01 — PHP jusqu’à 8.4 · Cours « Exception and error handling »</p><p class="digest-reference"><a href="#s-multi-catch-et-finally-digest">Revoir la règle : finally s&#x27;exécute après return.</a></p></li><li><nav aria-label="Flashcards de l’application"><ul><li data-recall-course="CRS-yc9fry0vz4gh" data-recall-kind="application"><p class="recall-provenance">Module 01 — PHP jusqu’à 8.4 · Cours « Exception and error handling »</p><a href="#A-yc9fry0vz4gh-65c42c80d9-02">Flashcard : Throwable couvre les deux branches. Placer les catch spécifiques avant le catch général.</a></li><li data-recall-course="CRS-yc9fry0vz4gh" data-recall-kind="application"><p class="recall-provenance">Module 01 — PHP jusqu’à 8.4 · Cours « Exception and error handling »</p><a href="#A-yc9fry0vz4gh-5201243115-03">Flashcard : Une interface de marquage peut étendre Throwable. La class d&#x27;exception doit hériter d&#x27;Exception ou d&#x27;Error.</a></li></ul></nav></li></ul></div><div data-recall-group="other"><h3>Rappels des cours précédents / autres modules</h3><ul><li data-recall-course="CRS-e4y7gtn5k4f0" data-recall-kind="previous_course"><p class="recall-provenance">Module 01 — PHP jusqu’à 8.4 · Cours « Interfaces »</p><p>Depuis PHP 8.1, une constant d&#x27;interface peut être redéfinie. final interdit cette redéfinition.</p><p><a href="#cards-previous">Rappel : <span lang="en">Can a class override an interface constant in PHP 8.4?</span></a></p></li></ul></div></section><nav class="course-sequence" aria-label="Ordre de lecture"><a rel="prev" href="course-CRS-tqcp2kn9r3b5.html" aria-label="Précédent : Attributes — Module 01 — PHP jusqu’à 8.4">Précédent : Attributes</a> <a href="lot-01.html">Sommaire : Module 01 — PHP jusqu’à 8.4</a> <a rel="next" href="course-CRS-depbnbc0g82x.html" aria-label="Suivant : HTTP Specification (RFC 9110) — Module 02 — Fondamentaux HTTP">Suivant : HTTP Specification (RFC 9110)</a></nav><p class="course-practice-entry"><a class="button" href="#view-quiz">Fin du cours — s’entraîner avec le Quiz</a></p></div><div id="view-flashcards" data-course-panel role="region" aria-labelledby="view-flashcards-title"><h2 id="view-flashcards-title">Flashcards</h2><p lang="en">Answer before revealing each card.</p><p>Ces cartes ne mesurent pas une maîtrise notée.</p><div id="cards-s-l-essentiel-1" data-card-section="s-l-essentiel"><h3><a href="#s-l-essentiel">Revoir : L&#x27;essentiel</a></h3><div class="reader-cards"><details class="reader-card" id="A-yc9fry0vz4gh-65c42c80d9-02"><summary lang="en">Which catch handles both Error and Exception?</summary><p lang="en">catch (Throwable); the first compatible catch wins.</p><p lang="fr">Throwable couvre les deux branches. Placer les catch spécifiques avant le catch général.</p><a href="course-CRS-yc9fry0vz4gh.html#out-OUT-c799q9ew2xxg">Revoir le passage précis</a></details></div></div><div id="cards-s-le-schema-2" data-card-section="s-le-schema"><h3><a href="#s-le-schema">Revoir : Le schéma</a></h3><div class="reader-cards"><details class="reader-card" id="A-yc9fry0vz4gh-6e0103f6cc-01"><summary lang="en">Is PHP Error a subclass of Exception?</summary><p lang="en">No. Error and Exception are separate branches implementing Throwable.</p><p lang="fr">Error et Exception sont deux branches sœurs. ErrorException appartient à la branche Exception.</p><a href="course-CRS-yc9fry0vz4gh.html#out-OUT-xwdtmfm9hzsc">Revoir le passage précis</a></details></div></div><div id="cards-s-l-exemple-3" data-card-section="s-l-exemple"><h3><a href="#s-l-exemple">Revoir : L&#x27;exemple</a></h3><div class="reader-cards"><p class="reader-card-reference" id="A-yc9fry0vz4gh-88b6fbd62c-01">Rappel déjà proposé : <a lang="en" href="#A-yc9fry0vz4gh-6e0103f6cc-01">Is PHP Error a subclass of Exception?</a> · <a href="course-CRS-yc9fry0vz4gh.html#out-OUT-xwdtmfm9hzsc">Passage canonique</a></p></div></div><div id="cards-s-la-hierarchie-4" data-card-section="s-la-hierarchie"><h3><a href="#s-la-hierarchie">Revoir : La hiérarchie</a></h3><div class="reader-cards"><p class="reader-card-reference" id="A-yc9fry0vz4gh-61548b22a0-01">Rappel déjà proposé : <a lang="en" href="#A-yc9fry0vz4gh-6e0103f6cc-01">Is PHP Error a subclass of Exception?</a> · <a href="course-CRS-yc9fry0vz4gh.html#out-OUT-xwdtmfm9hzsc">Passage canonique</a></p></div></div><div id="cards-s-la-consequence-pratique-5" data-card-section="s-la-consequence-pratique"><h3><a href="#s-la-consequence-pratique">Revoir : La conséquence pratique</a></h3><div class="reader-cards"><p class="reader-card-reference" id="A-yc9fry0vz4gh-981bc25bc7-02">Rappel déjà proposé : <a lang="en" href="#A-yc9fry0vz4gh-65c42c80d9-02">Which catch handles both Error and Exception?</a> · <a href="course-CRS-yc9fry0vz4gh.html#out-OUT-c799q9ew2xxg">Passage canonique</a></p></div></div><div id="cards-s-ecrire-ses-propres-exceptions-6" data-card-section="s-ecrire-ses-propres-exceptions"><h3><a href="#s-ecrire-ses-propres-exceptions">Revoir : Écrire ses propres exceptions</a></h3><div class="reader-cards"><details class="reader-card" id="A-yc9fry0vz4gh-5201243115-03"><summary lang="en">May a class implement Throwable without extending Error or Exception?</summary><p lang="en">No. A marker interface may extend Throwable, but a concrete exception must inherit an allowed base.</p><p lang="fr">Une interface de marquage peut étendre Throwable. La class d&#x27;exception doit hériter d&#x27;Exception ou d&#x27;Error.</p><a href="course-CRS-yc9fry0vz4gh.html#out-OUT-km64zadyg6pf">Revoir le passage précis</a></details></div></div><div id="cards-s-multi-catch-et-finally-7" data-card-section="s-multi-catch-et-finally"><h3><a href="#s-multi-catch-et-finally">Revoir : Multi-catch et finally</a></h3><div class="reader-cards"><details class="reader-card" id="A-yc9fry0vz4gh-ad25b376b6-04"><summary lang="en">Does finally run after return and after exit?</summary><p lang="en">It runs after return, but not after exit; a return in finally replaces the earlier return.</p><p lang="fr">finally s&#x27;exécute après return. exit() interrompt le script sans passer par finally.</p><a href="course-CRS-yc9fry0vz4gh.html#out-OUT-xrckdfqa6x5n">Revoir le passage précis</a></details></div></div><div id="cards-s-pieges-d-examen-8" data-card-section="s-pieges-d-examen"><h3><a href="#s-pieges-d-examen">Revoir : Pièges d&#x27;examen</a></h3><div class="reader-cards"><p class="reader-card-reference" id="A-yc9fry0vz4gh-596d5af532-04">Rappel déjà proposé : <a lang="en" href="#A-yc9fry0vz4gh-ad25b376b6-04">Does finally run after return and after exit?</a> · <a href="course-CRS-yc9fry0vz4gh.html#out-OUT-xrckdfqa6x5n">Passage canonique</a></p></div></div><div id="cards-s-application-9" data-card-section="s-application"><h3><a href="#s-application">Revoir : Application</a></h3><div class="reader-cards"><p class="reader-card-reference" id="A-yc9fry0vz4gh-e7ad522ea3-02">Rappel déjà proposé : <a lang="en" href="#A-yc9fry0vz4gh-65c42c80d9-02">Which catch handles both Error and Exception?</a> · <a href="course-CRS-yc9fry0vz4gh.html#out-OUT-c799q9ew2xxg">Passage canonique</a></p><p class="reader-card-reference" id="A-yc9fry0vz4gh-e7ad522ea3-03">Rappel déjà proposé : <a lang="en" href="#A-yc9fry0vz4gh-5201243115-03">May a class implement Throwable without extending Error or Exception?</a> · <a href="course-CRS-yc9fry0vz4gh.html#out-OUT-km64zadyg6pf">Passage canonique</a></p></div></div><div id="cards-s-fiche-express-10" data-card-section="s-fiche-express"><h3><a href="#s-fiche-express">Revoir : Fiche express</a></h3><div class="reader-cards"><p class="reader-card-reference" id="A-yc9fry0vz4gh-b11e58e15e-01">Rappel déjà proposé : <a lang="en" href="#A-yc9fry0vz4gh-6e0103f6cc-01">Is PHP Error a subclass of Exception?</a> · <a href="course-CRS-yc9fry0vz4gh.html#out-OUT-xwdtmfm9hzsc">Passage canonique</a></p></div></div><div id="cards-previous"><p class="recall-provenance">Module 01 — PHP jusqu’à 8.4 · Cours « Interfaces »</p><aside class="checkpoint"><h2>Rappel d’un cours antérieur</h2><p>Avant de poursuivre : Interfaces.</p><details class="corpus-correction"><summary lang="en">Can a class override an interface constant in PHP 8.4?</summary><p lang="en">Yes, unless that constant is final.</p><p>Depuis PHP 8.1, une constant d&#x27;interface peut être redéfinie. final interdit cette redéfinition.</p><a href="course-CRS-e4y7gtn5k4f0.html#out-OUT-7vt306wrfkb7">Relire la correction dans le cours antérieur</a></details></aside></div></div><div id="view-quiz" data-course-panel role="region" aria-labelledby="view-quiz-title"><aside class="revision-context"><p><strong>Avant le quiz :</strong> L&#x27;import du blog prépare ses lots lorsqu&#x27;un calcul échoue. Ailleurs, une opération métier peut être refusée sans que PHP lui-même soit en panne. Nous devons distinguer ces échecs, choisir où les traiter et remettre les ressources temporaires en état sans annoncer un faux succès. La hiérarchie Throwable nous aide à sélectionner le bon traitement ; elle ne définit pas encore la Response HTTP ni le résultat d&#x27;une commande.</p><p>Quelle donnée entre, quelle responsabilité agit et quelle condition change le résultat ? Pour chaque correction, vérifiez ces conditions dans <a href="course-CRS-yc9fry0vz4gh.html#s-objectif">le passage enseigné</a>, sans supposer que toutes les branches du blog sont exécutées.</p></aside><h2 id="view-quiz-title">Quiz</h2><p class="quiz-size" lang="en">5 eligible learning questions · 5 per session. Repeating a question does not demonstrate mastery.</p><p id="course-quiz-status" role="status">Quiz interactif non chargé. Démarrez après chargement de la banque locale.</p><div id="course-quiz-controls" class="assessment-main" hidden><div id="course-quiz-assessment-controls" hidden><select id="course-quiz-assessment-mode" aria-label="Mode du quiz" hidden><option value="learning">Entraînement</option></select><p id="course-quiz-training-scope"></p><button id="course-quiz-start-assessment" type="button" lang="en">Start practice</button><button id="course-quiz-finish-assessment" type="button" lang="en" hidden>End session</button></div><p id="course-quiz-assessment-error" role="alert"></p><p id="course-quiz-assessment-timer" hidden></p><p id="course-quiz-session-progress" class="quiz-progress" role="status" lang="en"></p><div id="course-quiz-assessment-app" tabindex="-1"></div><nav id="course-quiz-session-navigation" aria-label="Questions du cours"></nav><div id="course-quiz-learning-overview" aria-live="polite"></div></div><div id="course-quiz-native"><p>Sans JavaScript ou si le chargement échoue : aucune tentative notée. Les <a href="#view-flashcards">flashcards du cours</a> restent disponibles.</p><details class="course-quiz-fallback" data-question-id="L-yc9fry0vz4gh-base-v1"><summary lang="en">Which catch handles both Error and Exception? Select one answer (radio).</summary><p>Correction de consultation — non notée.</p><p>Throwable couvre les deux branches. Placer les catch spécifiques avant le catch général.</p><ul><li><strong lang="en">Correct: catch (Throwable), after more specific catch clauses.</strong><p>Throwable couvre les deux branches. Placer les catch spécifiques avant le catch général.</p></li><li><strong lang="en">Distractor: catch (Exception), after more specific catch clauses.</strong><p>Error n&#x27;hérite pas d&#x27;Exception ; les deux implémentent Throwable.</p></li><li><strong lang="en">Distractor: catch (Error), before all Exception catch clauses.</strong><p>Error ne couvre pas Exception ; le premier catch compatible gagne.</p></li></ul><a href="course-CRS-yc9fry0vz4gh.html#out-OUT-c799q9ew2xxg">Relire le passage exact</a></details></div></div></div></div><details class="transfer-panel"><summary>Sauvegarde et transfert de progression</summary><p id="reading-status" role="status">Sans JavaScript : lecture libre ; progression non enregistrée.</p><p><a href="assessment.html#overview-title">Lecture, réussites immédiates et différées</a></p><p>Transfert manuel — aucune synchronisation automatique</p><p id="persistence-status" role="status"></p><button type="button" class="secondary" id="export-progress">Exporter ma progression</button><label for="import-progress">Choisir un JSON pour fusionner ma progression (sans remplacement)</label><input type="file" id="import-progress" accept="application/json,.json"><p id="transfer-status" role="status"></p></details></main><footer class="site-footer"><a href="catalogue.html">Catalogue</a> <a href="sources.html">Sources et attribution</a> <a href="#contenu">Haut de page</a></footer></body></html>

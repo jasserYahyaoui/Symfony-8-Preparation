@@ -1,0 +1,45 @@
+{
+  "schema_version": 1,
+  "resources": [
+    {
+      "id": "youtube-V8NY-6No5DM-console",
+      "platform": "youtube",
+      "video_id": "V8NY-6No5DM",
+      "title": "Symfony 8.0 : les nouvelles fonctionnalités",
+      "creator": "Devscast Software",
+      "language": "fr",
+      "published_on": "2025-11-27",
+      "checked_on": "2026-11-11",
+      "version": "Symfony 8.0",
+      "scope_fr": "Deux extraits Console uniquement. La vidéo présente des nouveautés communes à Symfony 7.4 et 8.0 ; la vidéo entière n’est pas approuvée. Lecture ciblée de la transcription par le parent, recoupée avec la documentation 8.0 ; pas une revue audiovisuelle intégrale.",
+      "segments": [
+        {
+          "start_seconds": 472,
+          "end_seconds": 511,
+          "label_fr": "7:52–8:31 — invokable commands et arguments BackedEnum",
+          "url": "https://www.youtube.com/watch?v=V8NY-6No5DM&t=472s",
+          "course_ids": ["CRS-cb51hcng9dh5", "CRS-q2dxjhx6d35k"],
+          "scope_fr": "Arrêter à 8:31 : la discussion suivante sur les valeurs nullable est exclue.",
+          "official_sources": [
+            "https://symfony.com/doc/8.0/console.html#creating-a-command",
+            "https://symfony.com/doc/8.0/console/input.html#using-arguments-in-invokable-commands",
+            "https://symfony.com/doc/8.0/console/input.html#using-options-in-invokable-commands"
+          ]
+        },
+        {
+          "start_seconds": 519,
+          "end_seconds": 550,
+          "label_fr": "8:39–9:10 — regrouper arguments et options avec #[MapInput]",
+          "url": "https://www.youtube.com/watch?v=V8NY-6No5DM&t=519s",
+          "course_ids": ["CRS-q2dxjhx6d35k"],
+          "scope_fr": "MapInput regroupe les entrées dans un DTO ; arguments positionnels et options nommées. Arrêter à 9:10.",
+          "official_sources": [
+            "https://symfony.com/doc/8.0/console/input.html#mapping-input-to-objects",
+            "https://symfony.com/doc/8.0/console/input.html#using-command-arguments",
+            "https://symfony.com/doc/8.0/console/input.html#using-command-options"
+          ]
+        }
+      ]
+    }
+  ]
+}

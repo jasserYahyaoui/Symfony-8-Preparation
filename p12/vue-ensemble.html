@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; connect-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Comprendre Symfony à partir de /blog/42 — Symfony 8 Preparation</title><link rel="stylesheet" href="styles.css"><link rel="stylesheet" href="reader.css"><script src="mermaid.min.js" defer></script><script src="mermaid-init.js" defer></script><script src="fixed-exams-data.js" defer></script><script src="fixed-exams.js" defer></script><script src="learning-state.js" defer></script><script src="guide.js" defer></script><script src="reader-catalog.js" defer></script><script src="reader.js" defer></script><script src="site-state.js" defer></script><link rel="stylesheet" href="syntax-highlight.css"><script src="prism-syntax.js" defer></script><script src="syntax-highlight.js" defer></script></head><body><a class="skip" href="#contenu">Aller au contenu</a><header class="site-header"><a class="brand" href="index.html">S8 Preparation</a><nav aria-label="Navigation principale"><a href="index.html">Accueil</a> <a href="catalogue.html">Parcours</a> <a href="assessment.html?mode=review">Réviser</a> <a href="examens.html">Examens blancs</a> <a href="jour-j.html">Jour J</a></nav></header><main id="contenu" tabindex="-1" class="corpus-reader"><nav class="breadcrumb" aria-label="Fil d’Ariane"><a href="index.html">Accueil</a> <span aria-hidden="true">›</span> <a href="catalogue.html">Parcours</a> <span aria-hidden="true">›</span> <span aria-current="page">Comprendre Symfony à partir de /blog/42</span></nav><h1>Comprendre Symfony à partir de /blog/42</h1><p class="muted">Symfony 8.0 · API PHP ≤ 8.4 · Twig ≤ 3.22. Préparation indépendante.</p><nav class="narrative-guides" aria-label="Guides de lecture"><a href="vue-ensemble.html">Comprendre Symfony à partir de /blog/42</a><a href="parcours-requete.html">De Request à Response</a><a href="carte-composants.html">Carte des responsabilités</a><a href="ordre-lecture.html">Ordre de lecture recommandé</a><a href="glossaire.html">Glossaire du blog</a></nav><nav aria-label="Sections du guide"><ul><li><a href="#s-une-url-ne-suffit-pas">Une URL ne suffit pas</a></li><li><a href="#s-application-bundles-et-composants">Application, bundles et composants</a></li><li><a href="#s-ce-que-prepare-le-conteneur">Ce que prépare le conteneur</a></li><li><a href="#s-suivre-la-premiere-requete">Suivre la première requête</a></li></ul></nav><h2 id="s-une-url-ne-suffit-pas">Une URL ne suffit pas</h2><p>Vous savez lire du PHP orienté objet, mais vous ne voyez pas encore comment les
+classes Symfony coopèrent ? Ce parcours prépare <strong>Symfony 8.0</strong>, les API PHP
+jusqu’à <strong>8.4</strong> et Twig jusqu’à <strong>3.22</strong>. Symfony 8 exige PHP <strong>8.4 minimum</strong>
+pour s’exécuter : le périmètre d’examen n’est pas une compatibilité avec PHP 8.3.</p>
+<p>Notre navigateur demande <strong><code>GET /blog/42</code></strong>. L’application doit comprendre le
+message, choisir une action, lui fournir les bonnes données, lire l’article,
+puis construire et envoyer une réponse. Une URL ne construit ni un contrôleur
+ni son catalogue d’articles. Nous allons attribuer chaque décision à son vrai
+responsable, puis examiner ce qui change si l’article manque.</p>
+<p>Le blog pédagogique utilise <code>ArticleView</code> pour représenter un article et un
+service <code>ArticleCatalog</code> avec des données en mémoire : 42 existe, 999 manque.
+Ce n’est pas l’application qui sert ce site statique. Aucune base de données
+n’est nécessaire pour suivre le premier trajet.</p>
+<div class="admonition info">
+<p class="admonition-title">🌍 In Real Life</p>
+<p><strong>La situation</strong> : au restaurant, demander le numéro 42 ne dit pas encore qui préparera ni comment le résultat arrivera.</p>
+<p><strong>L’équivalent dans Symfony</strong> : client → navigateur ; demande consignée → <code>Request</code> ; consultation du catalogue → appel à <code>ArticleCatalog</code> ; résultat préparé → <code>Response</code>.</p>
+<p><strong>Retour à la réalité technique</strong> : Request et Response représentent des messages HTTP. L’application choisit et exécute les opérations entre les deux. Ici, les données sont en mémoire : ni base ni cuisine physique à reconstituer.</p>
+<p><strong>🧠 Comment le mémoriser</strong> : « Le numéro désigne, le code réalise. » Image : un bon 42 face à plusieurs postes. Réflexe : « Qui transforme cette entrée en résultat ? »</p>
+<p><strong>⚠️ À ne pas confondre</strong> : construire la Response ne l’envoie pas au navigateur.</p>
+</div><h2 id="s-application-bundles-et-composants">Application, bundles et composants</h2><p><code>BlogController</code> et <code>ArticleCatalog</code> appartiennent à notre application.
+HttpFoundation fournit les objets <code>Request</code> et <code>Response</code>. HttpKernel organise
+leur traitement ; Routing sait comparer un chemin aux routes déclarées.
+FrameworkBundle raccorde ces composants avec des services et de la configuration.
+Symfony Flex aide à installer/configurer des paquets ; il ne participe pas à
+chaque requête.</p>
+<figure class="diagram" aria-labelledby="guide-vue-ensemble-1-diagram-0-title guide-vue-ensemble-1-diagram-0-description"><figcaption id="guide-vue-ensemble-1-diagram-0-title">Les responsabilités de l&#x27;application et de ses bibliothèques</figcaption><p id="guide-vue-ensemble-1-diagram-0-description">Ce graphe représente des relations, pas une chronologie HTTP. L&#x27;application active des bundles. FrameworkBundle raccorde les composants et TwigBundle intègre Twig si présent.</p><div class="mermaid" hidden>flowchart TD
+  accTitle: Les responsabilités de l&#x27;application et de ses bibliothèques
+  accDescr: Ce graphe représente des relations, pas une chronologie HTTP. L&#x27;application active des bundles. FrameworkBundle raccorde les composants et TwigBundle intègre Twig si présent.
+  APP[&quot;Application : App Kernel et code du blog&quot;] --&gt;|&quot;active&quot;| B[&quot;Bundles&quot;]
+  APP --&gt;|&quot;son Kernel étend&quot;| K[&quot;Classe Kernel de HttpKernel&quot;]
+  B --&gt;|&quot;dont&quot;| FB[&quot;FrameworkBundle&quot;]
+  B --&gt;|&quot;si installé&quot;| TB[&quot;TwigBundle&quot;]
+  FB --&gt;|&quot;raccorde&quot;| HK[&quot;HttpKernel&quot;]
+  FB --&gt;|&quot;configure&quot;| R[&quot;Routing&quot;]
+  FB --&gt;|&quot;configure&quot;| DI[&quot;DependencyInjection&quot;]
+  HK --&gt;|&quot;manipule&quot;| HF[&quot;HttpFoundation&quot;]
+  TB --&gt;|&quot;intègre&quot;| T[&quot;Twig&quot;]
+  classDef operation fill:#e0f2fe,stroke:#0369a1,color:#0c4a6e
+  classDef integration fill:#fef3c7,stroke:#b45309,color:#78350f
+  class K,HK,R,DI,HF,T operation
+  class B,FB,TB integration</div></figure>
+<p>Les flèches ne signifient pas « exécuter ensuite ». Un composant peut être
+utilisé seul si vous assemblez ses dépendances. Un bundle est une intégration
+à l’application ; un bridge adapte une autre bibliothèque. Aucun de ces mots
+ne désigne automatiquement le parent PHP d’un contrôleur.</p>
+<div class="admonition info">
+<p class="admonition-title">🌍 In Real Life</p>
+<p><strong>La situation</strong> : un restaurant choisit ses équipements et les raccorde avant d’accueillir les commandes.</p>
+<p><strong>L’équivalent dans Symfony</strong> : établissement avec ses choix → application ; équipement spécialisé → composant ; installation intégrée → bundle ; adaptateur entre équipements → bridge ; raccordement commun → FrameworkBundle.</p>
+<p><strong>Retour à la réalité technique</strong> : un composant est une bibliothèque réutilisable ; un bundle l’intègre à l’application, un bridge adapte une autre bibliothèque. Ce sont des relations d’assemblage, pas des étapes successives de GET. Flex aide à installer/configurer les paquets, hors traitement de chaque demande.</p>
+<p><strong>🧠 Comment le mémoriser</strong> : « L’équipement n’est pas son installation. » Image : appareil, raccord et plan d’ensemble. Réflexe : « Est-ce une bibliothèque, une intégration ou une adaptation ? »</p>
+<p><strong>⚠️ À ne pas confondre</strong> : HttpFoundation fournit les objets HTTP ; HttpKernel orchestre leur traitement.</p>
+</div>
+<p>Approfondissez <a href="course-CRS-1bxqx6ks853z.html">composants et bridges</a> puis
+<a href="course-CRS-tygmreqkkds3.html">Kernel, HttpKernel et FrameworkBundle</a>.</p><h2 id="s-ce-que-prepare-le-conteneur">Ce que prépare le conteneur</h2><p>Le contrôleur veut consulter <code>ArticleCatalog</code>, pas choisir comment le construire.
+Une définition décrit sa construction. L’autowiring peut déduire une référence
+à partir d’un type ; l’autoconfiguration peut ajouter des métadonnées, comme des
+tags, selon les règles activées. L’une ne remplace pas l’autre.</p>
+<figure class="diagram" aria-labelledby="guide-vue-ensemble-2-diagram-0-title guide-vue-ensemble-2-diagram-0-description"><figcaption id="guide-vue-ensemble-2-diagram-0-title">Le plan de construction puis l&#x27;utilisation des services</figcaption><p id="guide-vue-ensemble-2-diagram-0-description">La configuration et les extensions alimentent les définitions. La compilation transforme et vérifie ce plan. Un conteneur compilé utilisable est chargé sans recompilation systématique. Obtenir un service peut réutiliser une instance partagée.</p><div class="mermaid" hidden>flowchart TD
+  accTitle: Le plan de construction puis l&#x27;utilisation des services
+  accDescr: La configuration et les extensions alimentent les définitions. La compilation transforme et vérifie ce plan. Un conteneur compilé utilisable est chargé sans recompilation systématique. Obtenir un service peut réutiliser une instance partagée.
+  C[&quot;Configuration et extensions&quot;] --&gt;|&quot;définissent&quot;| D[&quot;Définitions et références&quot;]
+  D --&gt;|&quot;si reconstruction nécessaire&quot;| P[&quot;Compilation et compiler passes&quot;]
+  P --&gt;|&quot;produit&quot;| CC[&quot;Conteneur compilé&quot;]
+  CC --&gt;|&quot;chargé pour utilisation&quot;| G[&quot;Demande de service&quot;]
+  G --&gt;|&quot;déjà partagé&quot;| S[&quot;Instance existante&quot;]
+  G --&gt;|&quot;sinon selon définition&quot;| N[&quot;Construction avec dépendances&quot;]
+  N --&gt;|&quot;fournit&quot;| BC[&quot;BlogController avec ArticleCatalog&quot;]
+  S --&gt;|&quot;fournit&quot;| BC
+  classDef operation fill:#e0f2fe,stroke:#0369a1,color:#0c4a6e
+  classDef result fill:#dcfce7,stroke:#15803d,color:#14532d
+  class C,D,P operation
+  class CC,S,N,BC result</div></figure>
+<p>Compiler le plan n’instancie pas tous les services. Le plan n’est pas recompilé
+à chaque GET ; une instance partagée n’est pas une promesse de nouvelle instance
+par requête, notamment dans un processus long. Les arguments du constructeur
+sont distincts des arguments de l’action, résolus pendant son traitement HTTP.</p>
+<div class="admonition info">
+<p class="admonition-title">🌍 In Real Life</p>
+<p><strong>La situation</strong> : le plan de cuisine indique les équipements nécessaires à chaque poste ; on ne refait pas ce plan à chaque commande.</p>
+<p><strong>L’équivalent dans Symfony</strong> : fiche de montage → définition ; raccord choisi selon le besoin → autowiring ; rôle marqué sur la fiche → autoconfiguration ; plan vérifié → compilation ; équipement fourni → instance de service.</p>
+<p><strong>Retour à la réalité technique</strong> : le conteneur fournit les services selon leurs définitions. Compiler transforme le graphe de définitions sans instancier tous les objets. Une instance partagée dépend de la durée de vie du conteneur, pas du nombre de clients.</p>
+<p><strong>🧠 Comment le mémoriser</strong> : « Préparer le plan, puis fournir l’objet. » Image : plan mural et poste équipé. Réflexe : « Suis-je à la compilation ou à l’exécution ? »</p>
+<p><strong>⚠️ À ne pas confondre</strong> : autowiring = dépendances ; autoconfiguration = règles de configuration, notamment tags.</p>
+</div>
+<p>Lire <a href="course-CRS-p1694d5f7r8c.html">le conteneur</a> et
+<a href="course-CRS-w6yfxm6ad4zy.html">l’autowiring</a>.</p><h2 id="s-suivre-la-premiere-requete">Suivre la première requête</h2><p>L’application est définie ; il reste à comprendre un appel concret.
+<a href="parcours-requete.html">Suivez le trajet complet de /blog/42</a>, puis
+<a href="ordre-lecture.html">l’ordre recommandé</a>. Il sépare un premier trajet lisible
+des approfondissements et des branches : inscription, JSON, erreurs, Console
+et Messenger. Les <a href="catalogue.html">163 cours du catalogue</a> restent disponibles
+dans leurs modules ; cette orientation ne transforme pas une lecture en réussite.</p>
+<p>Sources : <a href="https://symfony.com/doc/8.0/quick_tour/the_architecture.html">architecture</a>,
+<a href="https://symfony.com/doc/8.0/service_container.html">conteneur</a>.</p><details class="transfer-panel"><summary>Sauvegarde et transfert de progression</summary><p id="reading-status" role="status">Sans JavaScript : lecture libre ; progression non enregistrée.</p><p><a href="assessment.html#overview-title">Lecture, réussites immédiates et différées</a></p><p>Transfert manuel — aucune synchronisation automatique</p><p id="persistence-status" role="status"></p><button type="button" class="secondary" id="export-progress">Exporter ma progression</button><label for="import-progress">Choisir un JSON pour fusionner ma progression (sans remplacement)</label><input type="file" id="import-progress" accept="application/json,.json"><p id="transfer-status" role="status"></p></details></main><footer class="site-footer"><a href="catalogue.html">Catalogue</a> <a href="sources.html">Sources et attribution</a> <a href="#contenu">Haut de page</a></footer></body></html>

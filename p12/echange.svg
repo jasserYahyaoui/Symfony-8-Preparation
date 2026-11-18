@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="320" height="394" viewBox="0 0 320 394" role="img" aria-labelledby="title desc">
+  <title id="title">Du client au serveur, puis au résultat HTTP</title>
+  <desc id="desc">Le client envoie la Request GET /notes/7 au serveur. La Response contient le status code 200 OK, le header Content-Type application/json et un body JSON. Le status code donne le résultat, les headers le précisent et le body porte les données.</desc>
+  <defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0 L8 4 L0 8Z" fill="#165c50"/></marker></defs>
+  <rect x="10" y="12" width="300" height="58" rx="12" fill="#e7f2eb" stroke="#165c50"/>
+  <text x="160" y="47" text-anchor="middle" font-family="sans-serif" font-size="19" font-weight="700" fill="#172f32">Client</text>
+  <path d="M160 70V133" stroke="#165c50" stroke-width="2" marker-end="url(#arrow)"/>
+  <rect x="78" y="84" width="164" height="31" rx="5" fill="#fff"/>
+  <text x="160" y="105" text-anchor="middle" font-family="monospace" font-size="16" fill="#172f32">GET /notes/7</text>
+  <rect x="10" y="140" width="300" height="58" rx="12" fill="#172f32"/>
+  <text x="160" y="176" text-anchor="middle" font-family="sans-serif" font-size="19" font-weight="700" fill="#fff">Serveur</text>
+  <path d="M160 198V250" stroke="#165c50" stroke-width="2" marker-end="url(#arrow)"/>
+  <text x="174" y="229" font-family="sans-serif" font-size="16" fill="#165c50">Response</text>
+  <rect x="10" y="258" width="300" height="124" rx="12" fill="#e7f2eb" stroke="#165c50"/>
+  <text x="28" y="287" font-family="monospace" font-size="19" font-weight="700" fill="#172f32">200 OK</text>
+  <text x="28" y="314" font-family="monospace" font-size="16" fill="#172f32">Content-Type:</text>
+  <text x="28" y="339" font-family="monospace" font-size="16" fill="#172f32">application/json</text>
+  <text x="28" y="366" font-family="monospace" font-size="16" fill="#172f32">{"id": 7}</text>
+</svg>

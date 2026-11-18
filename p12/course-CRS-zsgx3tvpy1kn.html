@@ -1,0 +1,459 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; connect-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Built-in form types — Symfony 8 Preparation</title><link rel="stylesheet" href="styles.css"><link rel="stylesheet" href="reader.css"><script src="mermaid.min.js" defer></script><script src="mermaid-init.js" defer></script><link rel="stylesheet" href="assessment.css"><script src="fixed-exams-data.js" defer></script><script src="fixed-exams.js" defer></script><script src="learning-state.js" defer></script><script src="guide.js" defer></script><script src="reader-catalog.js" defer></script><script src="reader.js" defer></script><script src="site-state.js" defer></script><script src="assessment.js" defer></script><script src="course-views.js" defer></script><link rel="stylesheet" href="syntax-highlight.css"><script src="prism-syntax.js" defer></script><script src="syntax-highlight.js" defer></script></head><body data-course-id="CRS-zsgx3tvpy1kn"><a class="skip" href="#contenu">Aller au contenu</a><header class="site-header"><a class="brand" href="index.html">S8 Preparation</a><nav aria-label="Navigation principale"><a href="index.html">Accueil</a> <a href="catalogue.html">Parcours</a> <a href="assessment.html?mode=review">Réviser</a> <a href="examens.html">Examens blancs</a> <a href="jour-j.html">Jour J</a></nav></header><main id="contenu" tabindex="-1" class="corpus-reader"><nav class="breadcrumb" aria-label="Fil d’Ariane"><a href="index.html">Accueil</a> <span aria-hidden="true">›</span> <a href="catalogue.html">Parcours</a> <span aria-hidden="true">›</span> <a href="lot-07.html">Module 07 — Formulaires</a> <span aria-hidden="true">›</span> <span aria-current="page">Built-in form types</span></nav><h1>Built-in form types</h1><p class="muted">Symfony 8.0 · API PHP ≤ 8.4 · Twig ≤ 3.22. Préparation indépendante.</p><p class="revision-status">Rédaction narrative P11 : projection nouvelle, non couverte par les décisions historiques P10. Aucune approbation officielle ni garantie de réussite.</p><aside class="narrative-context" aria-label="Repères de lecture"><p><strong>Prérequis de lecture :</strong> <a href="course-CRS-nfkzx2s1n3r3.html">Forms handling</a></p><p><strong>Concepts voisins :</strong> <a href="course-CRS-ax2v94pgbk0g.html">PHP object validation</a> — Transformer une saisie n’est pas valider ses contraintes. <a href="lot-07.html">Comparer les responsabilités dans ce module</a> · <a href="carte-composants.html">Situer cette responsabilité dans le blog</a> · <a href="glossaire.html">Distinguer les termes voisins</a></p><p><a href="ordre-lecture.html">Retrouver les 163 cours dans le parcours recommandé</a>. Ce repère ne modifie ni votre historique ni votre progression.</p></aside><div class="course-layout"><details class="lot-course-menu"><summary>Cours du module · 13 cours</summary><nav aria-label="Cours du module"><a class="lot-context" href="lot-07.html">Module 07 — Formulaires</a><ol><li><a href="course-CRS-txp6tjhjtfy8.html">Form component</a></li><li><a href="course-CRS-8msvfwe13mpb.html">Forms creation</a></li><li><a href="course-CRS-nfkzx2s1n3r3.html">Forms handling</a></li><li><a href="course-CRS-f9pen0bdyrr9.html">Form types (built-in and custom)</a></li><li><a href="course-CRS-b5nj93xzz10b.html">Forms rendering with Twig</a></li><li><a href="course-CRS-r3xywnpwrwh7.html">Forms theming</a></li><li><a href="course-CRS-0yhqc0b1q7hz.html">CSRF protection</a></li><li><a href="course-CRS-cpvcczhj7bzx.html">Handling file upload</a></li><li><a href="course-CRS-zsgx3tvpy1kn.html" aria-current="page">Built-in form types</a></li><li><a href="course-CRS-cj36gys6vatx.html">Data transformers</a></li><li><a href="course-CRS-b2pn9zz55e4n.html">Form events</a></li><li><a href="course-CRS-k4ejsd624d1p.html">Form type extensions</a></li><li><a href="course-CRS-pchb259hnbh3.html">Form options (OptionsResolver component)</a></li></ol><a href="lot-07.html#view-quiz">Quiz du module</a></nav></details><aside class="course-section-menu" aria-label="Sommaire du cours"><nav class="course-actions" aria-label="Activités du cours"><a id="tab-course" href="#view-course">Cours</a><a id="tab-flashcards" href="#view-flashcards">Flashcards</a><a id="tab-quiz" href="#view-quiz">Quiz</a></nav><details class="course-section-disclosure"><summary id="course-sections">Sections du cours</summary><nav aria-label="Sections du cours"><ul><li><a href="#s-objectif">Objectif</a></li><li><a href="#s-l-essentiel">L&#x27;essentiel</a></li><li><a href="#s-le-schema">Le schéma</a></li><li><a href="#s-l-exemple-l-inscription">L&#x27;exemple : l&#x27;inscription</a></li><li><a href="#s-le-catalogue">Le catalogue</a></li><li><a href="#s-limites-de-perimetre">Limites de périmètre</a></li><li><a href="#s-une-famille-n-est-pas-une-lignee">Une famille n&#x27;est pas une lignée</a></li><li><a href="#s-la-famille-des-choix">La famille des choix</a></li><li><a href="#s-repeatedtype">`RepeatedType`</a></li><li><a href="#s-les-boutons">Les boutons</a></li><li><a href="#s-pieges-d-examen">Pièges d&#x27;examen</a></li><li><a href="#s-application">Application</a></li><li><a href="#s-fiche-express">Fiche express</a></li><li><a href="#s-sources-officielles">Sources officielles</a></li><li><a href="#reader-objectives">Objectifs d’apprentissage</a></li><li><a href="#course-recalls">Rappels et liens avec les autres cours</a></li></ul></nav><nav aria-label="Flashcards par section"><a href="#view-flashcards">Flashcards par section</a><ul><li><a href="#cards-s-l-essentiel-1">L&#x27;essentiel</a></li><li><a href="#cards-s-le-schema-2">Le schéma</a></li><li><a href="#cards-s-l-exemple-l-inscription-3">L&#x27;exemple : l&#x27;inscription</a></li><li><a href="#cards-s-le-catalogue-4">Le catalogue</a></li><li><a href="#cards-s-limites-de-perimetre-5">Limites de périmètre</a></li><li><a href="#cards-s-une-famille-n-est-pas-une-lignee-6">Une famille n&#x27;est pas une lignée</a></li><li><a href="#cards-s-la-famille-des-choix-7">La famille des choix</a></li><li><a href="#cards-s-repeatedtype-8">`RepeatedType`</a></li><li><a href="#cards-s-les-boutons-9">Les boutons</a></li><li><a href="#cards-s-pieges-d-examen-10">Pièges d&#x27;examen</a></li><li><a href="#cards-s-application-11">Application</a></li><li><a href="#cards-s-fiche-express-12">Fiche express</a></li><li><a href="#cards-previous">Module 07 — Formulaires · Cours « Forms theming » · Rappel : <span lang="en">How can selected fields share a custom theme block without a new form type?</span></a></li></ul></nav><nav aria-label="Retour au module"><a href="lot-07.html">Tous les cours du module</a></nav></details><p class="local-quiz-count">5 questions disponibles · 5 par session Quiz</p></aside><div class="course-content"><div id="view-course" data-course-panel role="region" aria-labelledby="view-course-title"><h2 id="view-course-title">Cours</h2><p class="course-introduction"><a href="#s-objectif">Introduction</a> · <a href="#course-sections">Sections du cours</a></p><h2 id="reader-objectives" tabindex="-1">Objectifs d’apprentissage</h2><ul><li><a href="course-CRS-zsgx3tvpy1kn.html#out-OUT-0a3jcmk5066b">Reconnaître les familles de types natifs</a></li><li><a href="course-CRS-zsgx3tvpy1kn.html#out-OUT-41xcqcjzrmm1">Situer ChoiceType comme parent de la famille des choix</a></li><li><a href="course-CRS-zsgx3tvpy1kn.html#out-OUT-zq43jp3a97gg">Associer multiple et expanded au rendu obtenu</a></li><li><a href="course-CRS-zsgx3tvpy1kn.html#out-OUT-pesfrvtg5qj0">Identifier les types hors périmètre d&#x27;examen</a></li></ul><aside class="pedagogy-legend" aria-label="Repères pédagogiques"><p><strong>Repères pédagogiques</strong></p><p>Ces repères décrivent le rôle du bloc, pas une fréquence officielle à l’examen.</p><p class="teaching-label essential"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="brain" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5C12 1 6 1 6 5C2 5 1 10 4 12C1 15 3 19 6 19C6 23 12 23 12 19V5M12 5C12 1 18 1 18 5C22 5 23 10 20 12C23 15 21 19 18 19C18 23 12 23 12 19M6 5C6 8 8 9 9 9M4 12H7L9 14M6 19V16M18 5C18 8 16 9 15 9M20 12H17L15 14M18 19V16"></path></svg> <strong>À comprendre</strong></p><p class="teaching-label essential"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="book" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5C9 3 5 3 2 4V20C5 19 9 19 12 21C15 19 19 19 22 20V4C19 3 15 3 12 5V21M5 8H8M5 12H8M16 8H19M16 12H19"></path></svg> <strong>À mémoriser</strong></p><p class="teaching-label example"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="code" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6L2 12L8 18M16 6L22 12L16 18M14 3L10 21"></path></svg> <strong>Exemple concret</strong></p><p class="teaching-label pitfall"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="warning" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3L23 21H1L12 3ZM12 9V14M12 17V18"></path></svg> <strong>Piège à éviter</strong></p><p class="teaching-label nuance"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="balance" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3V21M7 21H17M3 7L21 5M5 7L1 15H9L5 7M19 6L15 14H23L19 6M1 15Q5 20 9 15M15 14Q19 19 23 14"></path></svg> <strong>Nuance à connaître</strong></p><p>Précision, exception ou condition d’application d’une règle.</p></aside><section class="teaching-section" data-section="s-objectif"><h2 id="s-objectif" tabindex="-1">Objectif</h2><p>Reconnaître les types fournis par Symfony, choisir le bon, et savoir de qui
+chacun hérite — c'est la lignée, pas la famille, qui décide du rendu.</p>
+<p>Question centrale : <strong>comment choisir un type natif, et pourquoi le rangement
+de la documentation ne dit-il pas comment le type se comporte ?</strong></p></section><section class="teaching-section" data-section="s-l-essentiel"><h2 id="s-l-essentiel" tabindex="-1">L&#x27;essentiel</h2><p class="teaching-label essential"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="brain" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5C12 1 6 1 6 5C2 5 1 10 4 12C1 15 3 19 6 19C6 23 12 23 12 19V5M12 5C12 1 18 1 18 5C22 5 23 10 20 12C23 15 21 19 18 19C18 23 12 23 12 19M6 5C6 8 8 9 9 9M4 12H7L9 14M6 19V16M18 5C18 8 16 9 15 9M20 12H17L15 14M18 19V16"></path></svg> <strong>À comprendre</strong></p><aside class="section-digest" id="s-l-essentiel-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Une famille documentaire n&#x27;est pas une lignée.</li><li>Le parent détermine réellement options, extensions et blocks.</li></ol></aside><p><strong>Ce que cette partie veut réellement vous apprendre.</strong></p>
+<ul>
+<li><em>Pourquoi ce sujet existe.</em> Un formulaire a besoin de nombreuses sortes de
+  saisies (nombre, date, choix, case, fichier…). Symfony fournit des types
+  prêts à l'emploi pour ne pas réécrire conversion et rendu à chaque fois.</li>
+<li><em>Le piège de fond.</em> La documentation range les types par <strong>familles</strong> pour
+  qu'on les trouve. Mais le <strong>comportement</strong> (rendu, extensions, blocs Twig)
+  suit la <strong>lignée</strong> <code>getParent()</code>. Les deux classements ne coïncident pas.</li>
+<li><em>Ce que l'auteur veut que vous compreniez.</em> Savoir de qui un type hérite
+  explique pourquoi un thème ou une extension touche tel type et pas tel autre.</li>
+<li><em>Pourquoi c'est à l'examen.</em> Questions classiques : parent d'<code>IntegerType</code>,
+  types touchés par une extension de <code>FormType</code>, sens de <code>choices</code>,
+  <code>RepeatedType</code>, boutons.</li>
+</ul>
+<p>Symfony fournit une quarantaine de types, rangés par <strong>familles</strong> dans la
+documentation. Mais c'est la <strong>lignée</strong> — <code>getParent()</code> — qui décide du rendu
+et des extensions : les types numériques, rangés sous « texte », n'héritent
+pas de <code>TextType</code>, et les boutons ne descendent pas de <code>FormType</code>.</p></section><section class="teaching-section" data-section="s-le-schema"><h2 id="s-le-schema" tabindex="-1">Le schéma</h2><aside class="section-digest" id="s-le-schema-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>EmailType descend de TextType.</li><li>IntegerType est un autre enfant de FormType.</li></ol></aside><p><strong>Où en est-on ?</strong> Début du cours. On pose la carte des lignées avant le
+catalogue : c'est l'image à garder en tête pour toutes les sections.</p>
+<pre class="highlight" tabindex="0"><code class="language-text">FormType (racine)
+ ├─ TextType ──► Email, Password, Textarea, Search, Url, Tel, Color, Range
+ ├─ Integer, Number, Money, Percent        (directement sous FormType)
+ ├─ ChoiceType ─► Country, Language, Locale, Timezone, Currency, Enum
+ ├─ DateType ───► BirthdayType
+ ├─ CheckboxType ► RadioType
+ └─ Repeated, Collection, Hidden, File, DateTime, Time…
+
+ButtonType (autre racine, sans parent) ─► SubmitType, ResetType</code></pre>
+<p>Même carte en diagramme (les pointillés sont <code>getParent()</code>).</p>
+<figure class="diagram" aria-labelledby="CRS-zsgx3tvpy1kn-3-diagram-0-title CRS-zsgx3tvpy1kn-3-diagram-0-description"><figcaption id="CRS-zsgx3tvpy1kn-3-diagram-0-title">L&#x27;inheritance des types de form natifs de Symfony 8.0</figcaption><p id="CRS-zsgx3tvpy1kn-3-diagram-0-description">FormType est la racine de presque tous les types. TextType hérite de FormType, et huit types héritent de TextType, dont EmailType et PasswordType. Les types numériques comme IntegerType héritent directement de FormType. ChoiceType hérite de FormType et est le parent de CountryType, EnumType et des autres types de choix. DateType est le parent de BirthdayType, CheckboxType celui de RadioType. ButtonType n&#x27;a pas de parent et est celui de SubmitType et ResetType.</p><div class="mermaid" hidden>---
+title: Les lignées des types natifs
+---
+flowchart TD
+  accTitle: L&#x27;inheritance des types de form natifs de Symfony 8.0
+  accDescr: FormType est la racine de presque tous les types. TextType hérite de FormType, et huit types héritent de TextType, dont EmailType et PasswordType. Les types numériques comme IntegerType héritent directement de FormType. ChoiceType hérite de FormType et est le parent de CountryType, EnumType et des autres types de choix. DateType est le parent de BirthdayType, CheckboxType celui de RadioType. ButtonType n&#x27;a pas de parent et est celui de SubmitType et ResetType.
+  F[&quot;FormType&quot;] -.-&gt;|&quot;parent de&quot;| T[&quot;TextType&quot;]
+  T -.-&gt;|&quot;parent de&quot;| TE[&quot;EmailType / PasswordType&quot;]
+  F -.-&gt;|&quot;parent de&quot;| N[&quot;IntegerType / NumberType&quot;]
+  F -.-&gt;|&quot;parent de&quot;| C[&quot;ChoiceType&quot;]
+  C -.-&gt;|&quot;parent de&quot;| CC[&quot;CountryType / EnumType&quot;]
+  F -.-&gt;|&quot;parent de&quot;| D[&quot;DateType&quot;]
+  D -.-&gt;|&quot;parent de&quot;| B[&quot;BirthdayType&quot;]
+  F -.-&gt;|&quot;parent de&quot;| CB[&quot;CheckboxType&quot;]
+  CB -.-&gt;|&quot;parent de&quot;| R[&quot;RadioType&quot;]
+  BT[&quot;ButtonType&quot;] -.-&gt;|&quot;parent de&quot;| SB[&quot;SubmitType / ResetType&quot;]
+  classDef root fill:#fef3c7,stroke:#b45309,color:#78350f
+  classDef type fill:#e0f2fe,stroke:#0369a1,color:#0c4a6e
+  class F,BT root
+  class T,TE,N,C,CC,D,B,CB,R,SB type</div></figure><p>
+Ambre = racines ; bleu = types dérivés. Les pointillés désignent la relation
+<code>getParent()</code>, pas <code>extends</code> en PHP ni un appel d'exécution. La sélection du
+bloc Twig remonte cette lignée depuis le plus spécifique.</p></section><section class="teaching-section" data-section="s-l-exemple-l-inscription"><h2 id="s-l-exemple-l-inscription" tabindex="-1">L&#x27;exemple : l&#x27;inscription</h2><p class="teaching-label example"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="code" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6L2 12L8 18M16 6L22 12L16 18M14 3L10 21"></path></svg> <strong>Exemple concret</strong></p><aside class="section-digest" id="s-l-exemple-l-inscription-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Les boutons ne font pas partie des données du modèle.</li><li>isClicked() identifie le bouton utilisé.</li></ol></aside><p><strong>Où en est-on ?</strong> Un exemple concret avant le catalogue : quatre champs,
+quatre lignées différentes. Chaque commentaire donne déjà le parent.</p>
+<p>Cette variante de SignupType reçoit âge, pays et mot de passe à confirmer.
+L'extrait suppose un builder, les imports de types et des propriétés
+correspondantes dans SignupData. Les types organisent représentation et
+transformation ; les règles d'âge, de mot de passe et l'opération de création
+du compte restent des décisions explicites.</p>
+<pre class="highlight" tabindex="0"><code class="language-php">$builder
+    -&gt;add('age', IntegerType::class)                                           // parent : FormType
+    -&gt;add('country', CountryType::class)                                       // parent : ChoiceType
+    -&gt;add('plainPassword', RepeatedType::class, ['type' =&gt; PasswordType::class]) // deux enfants
+    -&gt;add('save', SubmitType::class);                                          // parent : ButtonType</code></pre>
+<p>Ce que Symfony voit :</p>
+<table>
+<thead>
+<tr>
+<th>Champ</th>
+<th>Type</th>
+<th>Mécanisme</th>
+<th>Pas fourni</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>age</code></td>
+<td><code>IntegerType</code></td>
+<td>texte <code>"42"</code> ↔ entier <code>42</code></td>
+<td>la règle « majeur »</td>
+</tr>
+<tr>
+<td><code>country</code></td>
+<td><code>CountryType</code></td>
+<td>liste de pays (choix)</td>
+<td>l'autorisation de s'inscrire depuis ce pays</td>
+</tr>
+<tr>
+<td><code>plainPassword</code></td>
+<td><code>RepeatedType</code></td>
+<td>deux champs, une donnée</td>
+<td>robustesse, hachage</td>
+</tr>
+<tr>
+<td><code>save</code></td>
+<td><code>SubmitType</code></td>
+<td>bouton, hors des données</td>
+<td>l'enregistrement du compte</td>
+</tr>
+</tbody>
+</table></section><section class="teaching-section" data-section="s-le-catalogue"><span class="outcome-anchor" id="out-OUT-0a3jcmk5066b" tabindex="-1"></span><h2 id="s-le-catalogue" tabindex="-1">Le catalogue</h2><p><strong>Où en est-on ?</strong> Étape 1 sur 5. Le catalogue sert à <strong>trouver</strong> un type selon
+la donnée attendue. Question : pourquoi ne pas se fier au rangement pour
+prédire le comportement ?</p>
+<p>Choisis d'abord selon la donnée attendue : un nombre n'a pas le même
+contrat qu'un texte libre et une liste de pays n'est pas une saisie arbitraire.
+Le classement ci-dessous aide à trouver un type ; sa position dans le
+tableau ne détermine ni ses extensions ni les blocks Twig à surcharger.</p>
+<table>
+<thead>
+<tr>
+<th>Famille (documentation)</th>
+<th>Types</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Texte</strong></td>
+<td><code>TextType</code>, <code>TextareaType</code>, <code>EmailType</code>, <code>IntegerType</code>, <code>MoneyType</code>, <code>NumberType</code>, <code>PasswordType</code>, <code>PercentType</code>, <code>SearchType</code>, <code>UrlType</code>, <code>RangeType</code>, <code>TelType</code>, <code>ColorType</code></td>
+</tr>
+<tr>
+<td><strong>Choix</strong></td>
+<td><code>ChoiceType</code>, <code>EnumType</code>, <code>CountryType</code>, <code>LanguageType</code>, <code>LocaleType</code>, <code>TimezoneType</code>, <code>CurrencyType</code></td>
+</tr>
+<tr>
+<td><strong>Date et heure</strong></td>
+<td><code>DateType</code>, <code>DateTimeType</code>, <code>TimeType</code>, <code>DateIntervalType</code>, <code>BirthdayType</code>, <code>WeekType</code></td>
+</tr>
+<tr>
+<td><strong>Autres</strong></td>
+<td><code>CheckboxType</code>, <code>RadioType</code>, <code>FileType</code></td>
+</tr>
+<tr>
+<td><strong>Groups</strong></td>
+<td><code>CollectionType</code>, <code>RepeatedType</code></td>
+</tr>
+<tr>
+<td><strong>Caché</strong></td>
+<td><code>HiddenType</code></td>
+</tr>
+<tr>
+<td><strong>Boutons</strong></td>
+<td><code>ButtonType</code>, <code>ResetType</code>, <code>SubmitType</code></td>
+</tr>
+<tr>
+<td><strong>Base</strong></td>
+<td><code>FormType</code></td>
+</tr>
+</tbody>
+</table>
+<p>Ces familles documentaires ne déterminent pas l'héritage de chaque type.</p>
+<p>Méthode de choix en deux questions : (1) quelle <strong>donnée</strong> mon application
+reçoit-elle (texte, entier, date, un choix parmi N) ? (2) quelle
+<strong>représentation</strong> le champ doit-il offrir (saisie libre, liste, cases) ?</p>
+<div class="admonition info">
+<p class="admonition-title">🌍 In Real Life</p>
+<p><strong>La situation</strong> : au rayon papeterie, on choisit une fiche selon ce qu'il faut recueillir : quantité, date, sélection ou texte libre. Le panneau du rayon aide à trouver la fiche, sans décrire sa fabrication.</p>
+<p><strong>L’équivalent dans Symfony</strong> : le catalogue des types aide à sélectionner représentation et transformation adaptées à la donnée. IntegerType pour un âge n'a pas le contrat d'un texte libre ; CountryType propose des choix plutôt qu'une saisie arbitraire.</p>
+<p><strong>Retour à la réalité technique</strong> : une famille documentaire ne définit pas la hiérarchie Form. Le type choisi ne remplace ni les contraintes métier ni la création du compte ; un entier n'est pas nécessairement un âge autorisé. Les options concrètes déterminent aussi les formes de données et de rendu.</p>
+<p><strong>🧠 Comment le mémoriser</strong> : « Choisir la fiche pour la donnée, pas pour le nom du rayon. » Image mentale : fiches quantité, date et choix dans un catalogue. Question-réflexe : quelle donnée mon application doit-elle réellement recevoir ?</p>
+<p><strong>⚠️ À ne pas confondre</strong> : catalogue documentaire, type Form, type PHP et règle métier.</p>
+</div><div class="retained-answer-context">
+<p><strong>Repère — Une famille n'est pas une lignée :</strong></p>
+<p lang="en"><strong>Question:</strong> Does an extension of TextType affect IntegerType?</p>
+<p lang="en"><strong>Answer:</strong> No. IntegerType inherits FormType directly.</p>
+<p>EmailType descend de TextType. IntegerType est un autre enfant de FormType.</p>
+</div>
+
+<div class="retained-answer-context">
+<p><strong>Repère — Les boutons :</strong></p>
+<p lang="en"><strong>Question:</strong> Does extending FormType also extend SubmitType?</p>
+<p lang="en"><strong>Answer:</strong> No. Buttons descend from ButtonType, a separate root.</p>
+<p>Les boutons ne font pas partie des données du modèle. isClicked() identifie le bouton utilisé.</p>
+</div></section><section class="teaching-section" data-section="s-limites-de-perimetre"><span class="outcome-anchor" id="out-OUT-pesfrvtg5qj0" tabindex="-1"></span><h2 id="s-limites-de-perimetre" tabindex="-1">Limites de périmètre</h2><aside class="section-digest" id="s-limites-de-perimetre-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Le catalogue publié est limité aux types admis.</li><li>Les intégrations externes ne constituent pas un prérequis.</li></ol></aside><p><code>EntityType</code>, qui relève de la base de données, et les fields Symfony UX
+sortent du périmètre de l'examen.</p>
+<p>Pourquoi ces exclusions ? <code>EntityType</code> dépend d'un accès à la base de données (accès à
+la base) et Symfony UX est un ensemble de composants front distinct : ni l'un ni
+l'autre ne fait partie des types natifs du component Form étudié ici.</p></section><section class="teaching-section" data-section="s-une-famille-n-est-pas-une-lignee"><h2 id="s-une-famille-n-est-pas-une-lignee" tabindex="-1">Une famille n&#x27;est pas une lignée</h2><p><strong>Où en est-on ?</strong> Étape 2 sur 5. Question « Pourquoi ? » : si un thème d'inscription
+modifie le rendu des champs texte, pourquoi le champ âge n'est-il pas touché ?
+Parce que <code>IntegerType</code> n'est pas un <code>TextType</code>.</p>
+<p>Si le thème d'inscription modifie les champs texte mais pas l'âge, ce
+n'est pas un oubli du builder. IntegerType ne passe pas par TextType.
+La relation <code>getParent()</code> gouverne les comportements hérités et les
+préfixes disponibles, indépendamment de la famille documentaire.</p>
+<table>
+<thead>
+<tr>
+<th>Parent</th>
+<th>Types</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>TextType</code></td>
+<td><code>EmailType</code>, <code>PasswordType</code>, <code>TextareaType</code>, <code>SearchType</code>, <code>UrlType</code>, <code>TelType</code>, <code>ColorType</code>, <code>RangeType</code></td>
+</tr>
+<tr>
+<td><code>FormType</code></td>
+<td><code>TextType</code>, <code>IntegerType</code>, <code>NumberType</code>, <code>MoneyType</code>, <code>PercentType</code>, <code>ChoiceType</code>, <code>DateType</code>, <code>CheckboxType</code>, <code>RepeatedType</code>…</td>
+</tr>
+<tr>
+<td><code>ChoiceType</code></td>
+<td><code>CountryType</code>, <code>LanguageType</code>, <code>LocaleType</code>, <code>TimezoneType</code>, <code>CurrencyType</code>, <code>EnumType</code></td>
+</tr>
+<tr>
+<td><code>DateType</code> / <code>CheckboxType</code></td>
+<td><code>BirthdayType</code> / <code>RadioType</code></td>
+</tr>
+<tr>
+<td><code>ButtonType</code></td>
+<td><code>SubmitType</code>, <code>ResetType</code></td>
+</tr>
+</tbody>
+</table>
+<p>Seuls <code>FormType</code> et <code>ButtonType</code> n'ont pas de parent. Un <code>text_widget</code>
+personnalisé laisse donc intact un <code>IntegerType</code>, rendu en
+<code>&lt;input type="number"&gt;</code>.</p>
+<p>Mécanisme : le rendu Twig cherche un bloc en remontant la lignée, du plus
+spécifique au plus général, via <code>block_prefixes</code>. Pour <code>EmailType</code> :</p>
+<pre class="highlight" tabindex="0"><code class="language-text">email_widget  →  text_widget  →  form_widget
+(spécifique)     (parent)         (racine)</code></pre>
+<p>Pour <code>IntegerType</code>, la lignée est plus courte, sans passage par <code>text</code> :</p>
+<pre class="highlight" tabindex="0"><code class="language-text">integer_widget  →  form_widget</code></pre>
+<p>Comparaison :</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th><code>EmailType</code></th>
+<th><code>IntegerType</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Famille (doc)</td>
+<td>texte</td>
+<td>texte</td>
+</tr>
+<tr>
+<td>Parent (<code>getParent()</code>)</td>
+<td><code>TextType</code></td>
+<td><code>FormType</code></td>
+</tr>
+<tr>
+<td>Touché par un thème <code>text_widget</code> ?</td>
+<td>oui</td>
+<td><strong>non</strong></td>
+</tr>
+<tr>
+<td>Touché par une extension de <code>TextType</code> ?</td>
+<td>oui</td>
+<td>non</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition info">
+<p class="admonition-title">🌍 In Real Life</p>
+<p><strong>La situation</strong> : deux fiches rangées dans le même rayon peuvent provenir de modèles de fabrication différents. Modifier le modèle texte ne change pas une fiche numérique qui ne le réutilise pas.</p>
+<p><strong>L’équivalent dans Symfony</strong> : <code>getParent()</code> établit la lignée Form utilisée pour les comportements, extensions et préfixes de rendu. IntegerType rejoint FormType directement, pas TextType.</p>
+<p><strong>Retour à la réalité technique</strong> : cette relation n'est ni <code>extends</code> PHP ni le parent d'un champ imbriqué. La lignée fournit des préfixes, mais le bloc effectivement rendu dépend aussi de la spécificité, des options et des thèmes disponibles. Les deux racines citées concernent les types natifs examinés, pas une interdiction de types personnalisés sans parent.</p>
+<p><strong>🧠 Comment le mémoriser</strong> : « Même rayon, pas forcément même modèle d'origine. » Image mentale : deux fiches voisines reliées à deux plans distincts. Question-réflexe : quel parent Form réel gouverne le champ que je veux modifier ?</p>
+<p><strong>⚠️ À ne pas confondre</strong> : famille, lignée Form, héritage PHP et arbre des champs.</p>
+</div></section><section class="teaching-section" data-section="s-la-famille-des-choix"><span class="outcome-anchor" id="out-OUT-41xcqcjzrmm1" tabindex="-1"></span><span class="outcome-anchor" id="out-OUT-zq43jp3a97gg" tabindex="-1"></span><h2 id="s-la-famille-des-choix" tabindex="-1">La famille des choix</h2><aside class="section-digest" id="s-la-famille-des-choix-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>expanded choisit le rendu développé.</li><li>multiple autorise plusieurs valeurs.</li></ol></aside><p><strong>Où en est-on ?</strong> Étape 3 sur 5. La famille des choix est la plus riche :
+tous ses types ont <code>ChoiceType</code> pour parent. Question : que veulent dire
+<code>multiple</code> et <code>expanded</code>, et pourquoi <code>France</code> est-il refusé ?</p>
+<p>Le lecteur voit « France », mais le formulaire doit retrouver la valeur
+<code>fr</code> dans la liste configurée. <code>expanded</code> modifie le widget, tandis que
+<code>multiple</code> modifie aussi la cardinalité attendue. Aucune présentation
+radio ou select ne suffit à faire accepter une valeur absente des choix.</p>
+<table>
+<thead>
+<tr>
+<th><code>multiple</code></th>
+<th><code>expanded</code></th>
+<th>Rendu</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>false</code></td>
+<td><code>false</code></td>
+<td><code>&lt;select&gt;</code></td>
+</tr>
+<tr>
+<td><code>false</code></td>
+<td><code>true</code></td>
+<td>radio buttons</td>
+</tr>
+<tr>
+<td><code>true</code></td>
+<td><code>false</code></td>
+<td><code>&lt;select multiple&gt;</code></td>
+</tr>
+<tr>
+<td><code>true</code></td>
+<td><code>true</code></td>
+<td>checkboxes</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>Dans <code>choices</code>, la <strong>key est le libellé</strong>, la <strong>valeur est la donnée</strong> :
+  avec <code>['France' =&gt; 'fr']</code>, soumettre <code>France</code> donne « The selected choice is
+  invalid. ».</li>
+<li><code>EnumType</code> exige l'option <code>class</code> : sans elle, <code>MissingOptionsException</code>.</li>
+</ul>
+<p>Mécanisme pas à pas pour <code>['France' =&gt; 'fr']</code> :</p>
+<pre class="highlight" tabindex="0"><code class="language-text">choices = ['France' =&gt; 'fr']
+   │
+   ├─ affichage  : &lt;option value="fr"&gt;France&lt;/option&gt;   (libellé visible)
+   ├─ soumission : le navigateur envoie "fr"            (valeur transportée)
+   └─ donnée     : "fr" retrouvée dans la liste         (donnée du modèle)
+
+soumettre "France" → absent des valeurs
+   → « The selected choice is invalid. »</code></pre>
+<p>Pourquoi <code>expanded</code> et <code>multiple</code> sont-ils deux axes indépendants ? <code>expanded</code>
+choisit <strong>comment on affiche</strong> (liste déroulante ou cases), <code>multiple</code> choisit
+<strong>combien on en accepte</strong> (un ou plusieurs). Ils se combinent donc en quatre
+rendus. Seul <code>multiple</code> change la forme de la donnée (un scalaire ou un tableau).</p>
+<div class="admonition info">
+<p class="admonition-title">🌍 In Real Life</p>
+<p><strong>La situation</strong> : un catalogue propose des articles avec un libellé et une référence. Présenter les choix dans une liste ou sur des cases ne change pas leurs références ; autoriser plusieurs coches change en revanche le nombre de choix attendu.</p>
+<p><strong>L’équivalent dans Symfony</strong> : ChoiceType distingue libellés, données de choix et valeurs transportées. <code>expanded</code> modifie la présentation ; <code>multiple</code> modifie la cardinalité. Dans <code>['France' =&gt; 'fr']</code>, le libellé France n'est pas la donnée fr.</p>
+<p><strong>Retour à la réalité technique</strong> : avec des objets ou <code>choice_value</code>, la valeur HTML peut encore différer de la donnée modèle. Les choix doivent être reconnus par la liste configurée ; cela ne remplace pas l'autorisation métier. EnumType exige une classe d'enum effective, fournie explicitement ou par une intégration qui la configure, pas déduite d'un simple libellé.</p>
+<p><strong>🧠 Comment le mémoriser</strong> : « Le libellé se lit, la référence se transporte. » Image mentale : France imprimé au-dessus de la référence fr. Question-réflexe : quelle valeur est affichée, envoyée puis retrouvée, et combien en attend-on ?</p>
+<p><strong>⚠️ À ne pas confondre</strong> : label, valeur HTML, donnée modèle, présentation et cardinalité.</p>
+</div><aside class="enrichment" aria-label="Autre explication"><p>Au menu, multiple demande combien de plats on peut choisir ; expanded décide si les choix sont tous visibles. Plusieurs choix visibles donnent des checkboxes ; un seul choix replié donne un select.</p></aside><div class="retained-answer-context">
+<p><strong>Repère — <code>RepeatedType</code> :</strong></p>
+<p lang="en"><strong>Question:</strong> Does RepeatedType return two independent model values?</p>
+<p lang="en"><strong>Answer:</strong> No. Matching inputs produce one value; mismatches make it invalid.</p>
+<p>Deux fields vérifient la même donnée. L'erreur de correspondance ne produit pas deux valeurs valides.</p>
+</div></section><section class="teaching-section" data-section="s-repeatedtype"><h2 id="s-repeatedtype" tabindex="-1">`RepeatedType`</h2><aside class="section-digest" id="s-repeatedtype-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Deux fields vérifient la même donnée.</li><li>L&#x27;erreur de correspondance ne produit pas deux valeurs valides.</li></ol></aside><p><strong>Où en est-on ?</strong> Étape 4 sur 5. Un type du groupe « Groups » qui ne répète
+<strong>pas</strong> des éléments : il demande deux fois la <strong>même</strong> valeur. Question :
+comment deux champs produisent-ils une seule donnée ?</p>
+<p>La confirmation du mot de passe fournit deux entrées pour produire une
+seule valeur applicative. L'égalité ne prouve ni sa robustesse ni son
+hachage : applique les contraintes requises et laisse le service dédié
+produire la valeur à conserver. En cas de divergence, le mapping d'erreur
+explique pourquoi le message apparaît sur le premier enfant.</p>
+<p>Deux enfants, <code>first</code> et <code>second</code>, du type donné par <code>type</code>. Valeurs égales :
+<strong>une seule donnée</strong>. Sinon : « The values do not match. », et la donnée vaut
+<code>null</code>. Dans une application complète, <code>RepeatedTypeValidatorExtension</code>
+redirige cette erreur vers <strong><code>first</code></strong> par <code>error_mapping</code>.</p>
+<pre class="highlight" tabindex="0"><code class="language-text">plainPassword (RepeatedType, type = PasswordType)
+   ├─ first   ┐
+   └─ second  ┘ égaux ?  ── oui ──► UNE donnée : "secret"
+                          └─ non ──► « The values do not match. » ; donnée = null
+                                     erreur placée sur  plainPassword.first</code></pre>
+<p>Vérification dans le code 8.0 : <code>RepeatedType</code> définit <code>first_name = 'first'</code>,
+<code>second_name = 'second'</code> et <code>invalid_message = 'The values do not match.'</code>.</p>
+<p>Pourquoi l'erreur apparaît-elle sur <code>first</code> et non sur le champ composé ?
+Dans une application complète, l'extension Validator ajoute un <code>error_mapping</code>
+<code>'.' =&gt; first_name</code> : l'erreur du composé est renvoyée vers le premier enfant,
+là où l'utilisateur l'attend.</p>
+<p>Comparaison de deux types « groupe » :</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th><code>RepeatedType</code></th>
+<th><code>CollectionType</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Nombre d'enfants</td>
+<td>exactement deux</td>
+<td>autant que d'éléments</td>
+</tr>
+<tr>
+<td>Donnée finale</td>
+<td><strong>une</strong> valeur</td>
+<td>un tableau / une collection</td>
+</tr>
+<tr>
+<td>Cas d'usage</td>
+<td>confirmation (mot de passe, e-mail)</td>
+<td>liste de tags, d'adresses</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition info">
+<p class="admonition-title">🌍 In Real Life</p>
+<p><strong>La situation</strong> : un formulaire demande deux fois une référence pour réduire les erreurs de saisie, mais le dossier final ne conserve qu'une référence concordante. Deux mauvaises copies identiques restent mauvaises.</p>
+<p><strong>L’équivalent dans Symfony</strong> : RepeatedType crée deux enfants du type demandé et produit une seule donnée lorsqu'ils concordent. L'extension Validator décrite dirige l'erreur de divergence vers le premier enfant via le mapping d'erreur.</p>
+<p><strong>Retour à la réalité technique</strong> : les noms first/second et le mapping peuvent être configurés ; regarde la vue effective avant de cibler une erreur. La concordance d'un mot de passe n'assure ni sa robustesse ni son hachage. Un état invalide ne doit pas servir à enregistrer une valeur métier, même si d'autres données existent déjà sur le modèle.</p>
+<p><strong>🧠 Comment le mémoriser</strong> : « Deux saisies pour une concordance, pas deux garanties de qualité. » Image mentale : deux cases convergeant vers une seule référence. Question-réflexe : ai-je contrôlé concordance, règles métier et traitement sécurisé séparément ?</p>
+<p><strong>⚠️ À ne pas confondre</strong> : RepeatedType, CollectionType, validation de robustesse et hachage.</p>
+</div></section><section class="teaching-section" data-section="s-les-boutons"><h2 id="s-les-boutons" tabindex="-1">Les boutons</h2><p><strong>Où en est-on ?</strong> Étape 5 sur 5. Les boutons sont la deuxième racine : ils
+n'héritent <strong>pas</strong> de <code>FormType</code>. Question : pourquoi un bouton n'est-il pas
+touché par une extension de <code>FormType</code> ?</p>
+<p>Avec « enregistrer » et « prévisualiser », le bouton cliqué peut orienter
+le traitement sans devenir une propriété de SignupData. Cette intention
+reste une entrée du client : elle ne lui accorde pas un droit supplémentaire.
+La racine ButtonType explique aussi pourquoi une extension de FormType
+ne personnalise pas automatiquement ces boutons.</p>
+<p><code>ButtonType</code> n'a pas de parent : une extension de <code>FormType</code> ne touche pas un
+<code>SubmitType</code>. Un bouton de soumission est un <code>SubmitButton</code>, mais les simples
+<code>ButtonType</code> et <code>ResetType</code> ne le sont pas. Les boutons sont absents de
+<code>getData()</code> ; sur le bouton de soumission, <code>isClicked()</code> dit s'il a servi,
+et <code>getClickedButton()</code> permet de le retrouver depuis le form.</p>
+<p>Vérification : dans le code 8.0, <code>ButtonType::getParent()</code> retourne <code>null</code>.</p>
+<pre class="highlight" tabindex="0"><code class="language-text">FormType ──► TextType ──► … (reçoit les extensions de FormType)
+
+ButtonType ──► SubmitType, ResetType   (NE reçoit PAS les extensions de FormType)</code></pre>
+<p>Pourquoi un bouton n'est-il pas un champ ? Il ne porte aucune <strong>donnée</strong>
+du modèle : il n'apparaît pas dans <code>getData()</code>. On l'utilise seulement pour
+savoir quelle action l'utilisateur a demandée (<code>isClicked()</code>).</p>
+<div class="admonition info">
+<p class="admonition-title">🌍 In Real Life</p>
+<p><strong>La situation</strong> : un dossier peut être déposé dans le bac « prévisualiser » ou « enregistrer ». Le bac choisi indique une demande de traitement ; il n'ajoute pas une information métier au dossier et ne donne aucun droit nouveau.</p>
+<p><strong>L’équivalent dans Symfony</strong> : <code>isClicked()</code> et <code>getClickedButton()</code> identifient le bouton de soumission traité. Les boutons ne deviennent pas des propriétés de la donnée du formulaire ; leur lignée part de ButtonType.</p>
+<p><strong>Retour à la réalité technique</strong> : SubmitType, ButtonType et ResetType n'ont pas le même rôle. Une soumission peut ne désigner aucun bouton ; prévois ce cas au lieu de supposer <code>getClickedButton()</code> toujours non null. L'état cliqué vient de la soumission, pas d'une preuve fiable d'un geste humain. Validation et droits de l'opération restent nécessaires.</p>
+<p><strong>🧠 Comment le mémoriser</strong> : « Le bac indique l'action, pas le droit de l'exécuter. » Image mentale : un dossier devant deux bacs d'action. Question-réflexe : quelle action est demandée, et que faire sans bouton reconnu ?</p>
+<p><strong>⚠️ À ne pas confondre</strong> : commande d'interface, donnée métier, bouton de soumission et autorisation.</p>
+</div></section><section class="teaching-section" data-section="s-pieges-d-examen"><h2 id="s-pieges-d-examen" tabindex="-1">Pièges d&#x27;examen</h2><p class="teaching-label pitfall"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="warning" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3L23 21H1L12 3ZM12 9V14M12 17V18"></path></svg> <strong>Piège à éviter</strong></p><ul class="pitfall-list"><li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : La famille « texte » n&#x27;est pas la lignée de TextType</summary><p><strong>La famille « texte » n'est pas la lignée de <code>TextType</code></strong> : les types
+numériques héritent directement de <code>FormType</code>. <em>Pourquoi on se trompe :
+<code>IntegerType</code> est rangé avec les champs texte dans la documentation.</em></p></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : Toute la famille des choix hérite de ChoiceType.</summary><p><strong>Toute la famille des choix hérite de <code>ChoiceType</code>.</strong> <em>Pourquoi on s'en
+souvient mal : <code>ChoiceType</code> lui-même est dans la famille, on croit donc que
+« choix » désigne seulement lui ; en réalité Country, Language, Locale,
+Timezone, Currency et Enum en descendent tous.</em></p></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : Les keys de choices sont les libellés.</summary><p><strong>Les keys de <code>choices</code> sont les libellés.</strong> <em>Pourquoi on se trompe : on
+imagine <code>['fr' =&gt; 'France']</code> (clé = valeur technique), alors que c'est
+l'inverse.</em></p></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : Un bouton n&#x27;est pas un FormType</summary><p><strong>Un bouton n'est pas un <code>FormType</code></strong> : une extension de <code>FormType</code> ne le
+touche pas. <em>Pourquoi on se trompe : « tout est un Form », donc on croit qu'une
+extension de la racine atteint tout.</em></p></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : RepeatedType rend deux fields mais une seule donnée.</summary><p><strong><code>RepeatedType</code> rend deux fields mais une seule donnée.</strong> <em>Pourquoi on se
+trompe : on le confond avec <code>CollectionType</code>.</em></p></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : L&#x27;erreur « The values do not match. » s&#x27;affiche sur first</summary><p><strong>L'erreur « The values do not match. » s'affiche sur <code>first</code></strong> dans une
+application complète : l'extension Validator l'y redirige. <em>Pourquoi on se
+trompe : on la cherche sur le champ composé ou sur <code>second</code>.</em></p></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : EnumType exige class.</summary><p><strong><code>EnumType</code> exige <code>class</code>.</strong> Contrairement au guesser d'enum de <code>add()</code> sans
+type, qui déduit l'enum de la propriété, <code>EnumType</code> déclaré explicitement ne la
+devine pas.</p></details></li></ul></section><section class="teaching-section" data-section="s-application"><h2 id="s-application" tabindex="-1">Application</h2><aside class="section-digest" id="s-application-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>EmailType descend de TextType.</li><li>IntegerType est un autre enfant de FormType.</li><li>Une famille documentaire n&#x27;est pas une lignée.</li><li>Le parent détermine réellement options, extensions et blocks.</li></ol></aside>
+
+
+
+</section><section class="teaching-section" data-section="s-fiche-express"><h2 id="s-fiche-express" tabindex="-1">Fiche express</h2><p class="teaching-label essential"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="book" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5C9 3 5 3 2 4V20C5 19 9 19 12 21C15 19 19 19 22 20V4C19 3 15 3 12 5V21M5 8H8M5 12H8M16 8H19M16 12H19"></path></svg> <strong>À mémoriser</strong></p><p><strong>🧠 À retenir pour la certification :</strong></p>
+<ul>
+<li><strong>Famille ≠ lignée</strong> : les types numériques héritent de <code>FormType</code>.</li>
+<li>Toute la famille des choix hérite de <strong><code>ChoiceType</code></strong>.</li>
+<li><code>multiple</code> / <code>expanded</code> : select, radio, select multiple, checkboxes.</li>
+<li><code>choices</code> : <strong>key = libellé</strong>, valeur = donnée.</li>
+<li><code>RepeatedType</code> : deux fields, <strong>une donnée</strong> ; erreur sur <strong><code>first</code></strong>.</li>
+<li>Boutons : <strong><code>ButtonType</code></strong>, sans parent ; hors de <code>getData()</code>.</li>
+<li><code>EnumType</code> : option <code>class</code> obligatoire.</li>
+</ul>
+<p>Moyen mnémotechnique : <strong>« La famille range, le parent décide »</strong>.</p>
+<p>Phrase de mémorisation : <strong>« La documentation range par famille pour que je
+trouve, mais Symfony applique rendu et extensions selon <code>getParent()</code> : je
+regarde toujours le parent. »</strong></p></section><section class="teaching-section" data-section="s-sources-officielles"><h2 id="s-sources-officielles" tabindex="-1">Sources officielles</h2><ul>
+<li><a href="https://symfony.com/doc/8.0/reference/forms/types.html">Form Types Reference</a></li>
+<li><a href="https://symfony.com/doc/8.0/forms.html">Form 8.0, <code>ChoiceType</code></a>, <a href="https://symfony.com/doc/8.0/forms.html"><code>RepeatedType</code></a> et <a href="https://symfony.com/doc/8.0/forms.html"><code>ButtonType</code></a></li>
+<li><a href="https://symfony.com/doc/8.0/forms.html">Form 8.0, <code>RepeatedTypeValidatorExtension</code></a></li>
+</ul></section><section id="course-recalls" aria-labelledby="course-recalls-title" tabindex="-1"><h2 id="course-recalls-title">Rappels et liens avec les autres cours</h2><div data-recall-group="current"><h3>Rappels du cours actuel</h3><ul><li data-recall-course="CRS-zsgx3tvpy1kn" data-recall-kind="digest_reference"><p class="recall-provenance">Module 07 — Formulaires · Cours « Built-in form types »</p><p class="digest-reference"><a href="#s-l-essentiel-digest">Revoir la règle : Une famille documentaire n&#x27;est pas une lignée.</a></p></li><li data-recall-course="CRS-zsgx3tvpy1kn" data-recall-kind="digest_reference"><p class="recall-provenance">Module 07 — Formulaires · Cours « Built-in form types »</p><p class="digest-reference"><a href="#s-le-schema-digest">Revoir la règle : EmailType descend de TextType.</a></p></li><li data-recall-course="CRS-zsgx3tvpy1kn" data-recall-kind="digest_reference"><p class="recall-provenance">Module 07 — Formulaires · Cours « Built-in form types »</p><p class="digest-reference"><a href="#s-l-exemple-l-inscription-digest">Revoir la règle : Les boutons ne font pas partie des données du modèle.</a></p></li><li><nav aria-label="Flashcards de l’application"><ul><li data-recall-course="CRS-zsgx3tvpy1kn" data-recall-kind="application"><p class="recall-provenance">Module 07 — Formulaires · Cours « Built-in form types »</p><a href="#A-zsgx3tvpy1kn-6e0103f6cc-03">Flashcard : EmailType descend de TextType. IntegerType est un autre enfant de FormType.</a></li><li data-recall-course="CRS-zsgx3tvpy1kn" data-recall-kind="application"><p class="recall-provenance">Module 07 — Formulaires · Cours « Built-in form types »</p><a href="#A-zsgx3tvpy1kn-65c42c80d9-01">Flashcard : Une famille documentaire n&#x27;est pas une lignée. Le parent détermine réellement options, extensions et blocks.</a></li></ul></nav></li><li data-recall-course="CRS-zsgx3tvpy1kn" data-recall-kind="digest_reference"><p class="recall-provenance">Module 07 — Formulaires · Cours « Built-in form types »</p><p class="digest-reference"><a href="#s-la-famille-des-choix-digest">Revoir la règle : expanded choisit le rendu développé.</a></p></li></ul></div><div data-recall-group="other"><h3>Rappels des cours précédents / autres modules</h3><ul><li data-recall-course="CRS-r3xywnpwrwh7" data-recall-kind="previous_course"><p class="recall-provenance">Module 07 — Formulaires · Cours « Forms theming »</p><p>block_prefix ajoute un niveau de personnalisation. Un préfixe _form_field cible un seul field.</p><p><a href="#cards-previous">Rappel : <span lang="en">How can selected fields share a custom theme block without a new form type?</span></a></p></li></ul></div></section><nav class="course-sequence" aria-label="Ordre de lecture"><a rel="prev" href="course-CRS-cpvcczhj7bzx.html" aria-label="Précédent : Handling file upload — Module 07 — Formulaires">Précédent : Handling file upload</a> <a href="lot-07.html">Sommaire : Module 07 — Formulaires</a> <a rel="next" href="course-CRS-b2pn9zz55e4n.html" aria-label="Suivant : Form events — Module 07 — Formulaires">Suivant : Form events</a></nav><p class="course-practice-entry"><a class="button" href="#view-quiz">Fin du cours — s’entraîner avec le Quiz</a></p></div><div id="view-flashcards" data-course-panel role="region" aria-labelledby="view-flashcards-title"><h2 id="view-flashcards-title">Flashcards</h2><p lang="en">Answer before revealing each card.</p><p>Ces cartes ne mesurent pas une maîtrise notée.</p><div id="cards-s-l-essentiel-1" data-card-section="s-l-essentiel"><h3><a href="#s-l-essentiel">Revoir : L&#x27;essentiel</a></h3><div class="reader-cards"><details class="reader-card" id="A-zsgx3tvpy1kn-65c42c80d9-01"><summary lang="en">Does the documentation&#x27;s text family imply every listed type inherits TextType?</summary><p lang="en">No. Some numeric types inherit FormType directly.</p><p lang="fr">Une famille documentaire n&#x27;est pas une lignée. Le parent détermine réellement options, extensions et blocks.</p><a href="course-CRS-zsgx3tvpy1kn.html#out-OUT-0a3jcmk5066b">Revoir le passage précis</a></details></div></div><div id="cards-s-le-schema-2" data-card-section="s-le-schema"><h3><a href="#s-le-schema">Revoir : Le schéma</a></h3><div class="reader-cards"><details class="reader-card" id="A-zsgx3tvpy1kn-6e0103f6cc-03"><summary lang="en">Does an extension of TextType affect IntegerType?</summary><p lang="en">No. IntegerType inherits FormType directly.</p><p lang="fr">EmailType descend de TextType. IntegerType est un autre enfant de FormType.</p><a href="course-CRS-zsgx3tvpy1kn.html#out-OUT-0a3jcmk5066b">Revoir le passage précis</a></details></div></div><div id="cards-s-l-exemple-l-inscription-3" data-card-section="s-l-exemple-l-inscription"><h3><a href="#s-l-exemple-l-inscription">Revoir : L&#x27;exemple : l&#x27;inscription</a></h3><div class="reader-cards"><details class="reader-card" id="A-zsgx3tvpy1kn-1b5a2700b5-06"><summary lang="en">Does extending FormType also extend SubmitType?</summary><p lang="en">No. Buttons descend from ButtonType, a separate root.</p><p lang="fr">Les boutons ne font pas partie des données du modèle. isClicked() identifie le bouton utilisé.</p><a href="course-CRS-zsgx3tvpy1kn.html#out-OUT-0a3jcmk5066b">Revoir le passage précis</a></details></div></div><div id="cards-s-le-catalogue-4" data-card-section="s-le-catalogue"><h3><a href="#s-le-catalogue">Revoir : Le catalogue</a></h3><div class="reader-cards"><p class="reader-card-reference" id="A-zsgx3tvpy1kn-d7925792cb-01">Rappel déjà proposé : <a lang="en" href="#A-zsgx3tvpy1kn-65c42c80d9-01">Does the documentation&#x27;s text family imply every listed type inherits TextType?</a> · <a href="course-CRS-zsgx3tvpy1kn.html#out-OUT-0a3jcmk5066b">Passage canonique</a></p></div></div><div id="cards-s-limites-de-perimetre-5" data-card-section="s-limites-de-perimetre"><h3><a href="#s-limites-de-perimetre">Revoir : Limites de périmètre</a></h3><div class="reader-cards"><details class="reader-card" id="A-zsgx3tvpy1kn-7e44391d27-02"><summary lang="en">Should every type visible in a wider reference be studied as part of this bounded form catalogue?</summary><p lang="en">No. Keep the listed core types admitted for this syllabus.</p><p lang="fr">Le catalogue publié est limité aux types admis. Les intégrations externes ne constituent pas un prérequis.</p><a href="course-CRS-zsgx3tvpy1kn.html#out-OUT-pesfrvtg5qj0">Revoir le passage précis</a></details></div></div><div id="cards-s-une-famille-n-est-pas-une-lignee-6" data-card-section="s-une-famille-n-est-pas-une-lignee"><h3><a href="#s-une-famille-n-est-pas-une-lignee">Revoir : Une famille n&#x27;est pas une lignée</a></h3><div class="reader-cards"><p class="reader-card-reference" id="A-zsgx3tvpy1kn-94206c6fd8-03">Rappel déjà proposé : <a lang="en" href="#A-zsgx3tvpy1kn-6e0103f6cc-03">Does an extension of TextType affect IntegerType?</a> · <a href="course-CRS-zsgx3tvpy1kn.html#out-OUT-0a3jcmk5066b">Passage canonique</a></p></div></div><div id="cards-s-la-famille-des-choix-7" data-card-section="s-la-famille-des-choix"><h3><a href="#s-la-famille-des-choix">Revoir : La famille des choix</a></h3><div class="reader-cards"><details class="reader-card" id="A-zsgx3tvpy1kn-393f3d324b-04"><summary lang="en">What does ChoiceType render with multiple=true and expanded=true?</summary><p lang="en">Checkboxes.</p><p lang="fr">expanded choisit le rendu développé. multiple autorise plusieurs valeurs.</p><a href="course-CRS-zsgx3tvpy1kn.html#out-OUT-41xcqcjzrmm1">Revoir le passage précis</a></details><details class="reader-card" id="INT-052"><summary lang="en">How do multiple and expanded determine ChoiceType rendering?</summary><p lang="en">false/false: select; false/true: radio buttons; true/false: multiple select; true/true: checkboxes.</p><p lang="fr">multiple règle le nombre de choix, expanded le rendu développé.</p><a href="course-CRS-zsgx3tvpy1kn.html#out-OUT-zq43jp3a97gg">Revoir le passage précis</a></details></div></div><div id="cards-s-repeatedtype-8" data-card-section="s-repeatedtype"><h3><a href="#s-repeatedtype">Revoir : `RepeatedType`</a></h3><div class="reader-cards"><details class="reader-card" id="A-zsgx3tvpy1kn-3548bb81b5-05"><summary lang="en">Does RepeatedType return two independent model values?</summary><p lang="en">No. Matching inputs produce one value; mismatches make it invalid.</p><p lang="fr">Deux fields vérifient la même donnée. L&#x27;erreur de correspondance ne produit pas deux valeurs valides.</p><a href="course-CRS-zsgx3tvpy1kn.html#out-OUT-41xcqcjzrmm1">Revoir le passage précis</a></details></div></div><div id="cards-s-les-boutons-9" data-card-section="s-les-boutons"><h3><a href="#s-les-boutons">Revoir : Les boutons</a></h3><div class="reader-cards"><p class="reader-card-reference" id="A-zsgx3tvpy1kn-897ac3682c-06">Rappel déjà proposé : <a lang="en" href="#A-zsgx3tvpy1kn-1b5a2700b5-06">Does extending FormType also extend SubmitType?</a> · <a href="course-CRS-zsgx3tvpy1kn.html#out-OUT-0a3jcmk5066b">Passage canonique</a></p></div></div><div id="cards-s-pieges-d-examen-10" data-card-section="s-pieges-d-examen"><h3><a href="#s-pieges-d-examen">Revoir : Pièges d&#x27;examen</a></h3><div class="reader-cards"><p class="reader-card-reference" id="A-zsgx3tvpy1kn-596d5af532-01">Rappel déjà proposé : <a lang="en" href="#A-zsgx3tvpy1kn-65c42c80d9-01">Does the documentation&#x27;s text family imply every listed type inherits TextType?</a> · <a href="course-CRS-zsgx3tvpy1kn.html#out-OUT-0a3jcmk5066b">Passage canonique</a></p></div></div><div id="cards-s-application-11" data-card-section="s-application"><h3><a href="#s-application">Revoir : Application</a></h3><div class="reader-cards"><p class="reader-card-reference" id="A-zsgx3tvpy1kn-e7ad522ea3-03">Rappel déjà proposé : <a lang="en" href="#A-zsgx3tvpy1kn-6e0103f6cc-03">Does an extension of TextType affect IntegerType?</a> · <a href="course-CRS-zsgx3tvpy1kn.html#out-OUT-0a3jcmk5066b">Passage canonique</a></p><p class="reader-card-reference" id="A-zsgx3tvpy1kn-e7ad522ea3-01">Rappel déjà proposé : <a lang="en" href="#A-zsgx3tvpy1kn-65c42c80d9-01">Does the documentation&#x27;s text family imply every listed type inherits TextType?</a> · <a href="course-CRS-zsgx3tvpy1kn.html#out-OUT-0a3jcmk5066b">Passage canonique</a></p></div></div><div id="cards-s-fiche-express-12" data-card-section="s-fiche-express"><h3><a href="#s-fiche-express">Revoir : Fiche express</a></h3><div class="reader-cards"><p class="reader-card-reference" id="A-zsgx3tvpy1kn-b11e58e15e-04">Rappel déjà proposé : <a lang="en" href="#A-zsgx3tvpy1kn-393f3d324b-04">What does ChoiceType render with multiple=true and expanded=true?</a> · <a href="course-CRS-zsgx3tvpy1kn.html#out-OUT-41xcqcjzrmm1">Passage canonique</a></p></div></div><div id="cards-previous"><p class="recall-provenance">Module 07 — Formulaires · Cours « Forms theming »</p><aside class="checkpoint"><h2>Rappel d’un cours antérieur</h2><p>Avant de poursuivre : Forms theming.</p><details class="corpus-correction"><summary lang="en">How can selected fields share a custom theme block without a new form type?</summary><p lang="en">Set a shared block_prefix option.</p><p>block_prefix ajoute un niveau de personnalisation. Un préfixe _form_field cible un seul field.</p><a href="course-CRS-r3xywnpwrwh7.html#out-OUT-zphxh7z24zht">Relire la correction dans le cours antérieur</a></details></aside></div></div><div id="view-quiz" data-course-panel role="region" aria-labelledby="view-quiz-title"><aside class="revision-context"><p><strong>Avant le quiz :</strong> Reconnaître les types fournis par Symfony, choisir le bon, et savoir de qui chacun hérite — c&#x27;est la lignée, pas la famille, qui décide du rendu.</p><p>Quelle donnée entre, quelle responsabilité agit et quelle condition change le résultat ? Pour chaque correction, vérifiez ces conditions dans <a href="course-CRS-zsgx3tvpy1kn.html#s-objectif">le passage enseigné</a>, sans supposer que toutes les branches du blog sont exécutées.</p></aside><h2 id="view-quiz-title">Quiz</h2><p class="quiz-size" lang="en">5 eligible learning questions · 5 per session. Repeating a question does not demonstrate mastery.</p><p id="course-quiz-status" role="status">Quiz interactif non chargé. Démarrez après chargement de la banque locale.</p><div id="course-quiz-controls" class="assessment-main" hidden><div id="course-quiz-assessment-controls" hidden><select id="course-quiz-assessment-mode" aria-label="Mode du quiz" hidden><option value="learning">Entraînement</option></select><p id="course-quiz-training-scope"></p><button id="course-quiz-start-assessment" type="button" lang="en">Start practice</button><button id="course-quiz-finish-assessment" type="button" lang="en" hidden>End session</button></div><p id="course-quiz-assessment-error" role="alert"></p><p id="course-quiz-assessment-timer" hidden></p><p id="course-quiz-session-progress" class="quiz-progress" role="status" lang="en"></p><div id="course-quiz-assessment-app" tabindex="-1"></div><nav id="course-quiz-session-navigation" aria-label="Questions du cours"></nav><div id="course-quiz-learning-overview" aria-live="polite"></div></div><div id="course-quiz-native"><p>Sans JavaScript ou si le chargement échoue : aucune tentative notée. Les <a href="#view-flashcards">flashcards du cours</a> restent disponibles.</p><details class="course-quiz-fallback" data-question-id="L-zsgx3tvpy1kn-base-v1"><summary lang="en">RADIO — Select one answer. Does the documentation&#x27;s text family imply every listed type inherits TextType?</summary><p>Correction de consultation — non notée.</p><p>Une famille documentaire n&#x27;est pas une lignée. Le parent détermine réellement options, extensions et blocks.</p><ul><li><strong lang="en">Correct: No; some numeric types inherit FormType directly.</strong><p>Une famille documentaire n&#x27;est pas une lignée. Le parent détermine réellement options, extensions et blocks.</p></li><li><strong lang="en">Distractor: Yes; documentation families define PHP type inheritance.</strong><p>Une famille documentaire n&#x27;est pas une lignée d&#x27;inheritance.</p></li><li><strong lang="en">Distractor: No; all built-in form types have no parent at all.</strong><p>Les types ont une hiérarchie réelle qui détermine options et blocks.</p></li></ul><a href="course-CRS-zsgx3tvpy1kn.html#out-OUT-0a3jcmk5066b">Relire le passage exact</a><a href="course-CRS-zsgx3tvpy1kn.html#s-le-catalogue">Relire la correction précise</a></details></div></div></div></div><details class="transfer-panel"><summary>Sauvegarde et transfert de progression</summary><p id="reading-status" role="status">Sans JavaScript : lecture libre ; progression non enregistrée.</p><p><a href="assessment.html#overview-title">Lecture, réussites immédiates et différées</a></p><p>Transfert manuel — aucune synchronisation automatique</p><p id="persistence-status" role="status"></p><button type="button" class="secondary" id="export-progress">Exporter ma progression</button><label for="import-progress">Choisir un JSON pour fusionner ma progression (sans remplacement)</label><input type="file" id="import-progress" accept="application/json,.json"><p id="transfer-status" role="status"></p></details></main><footer class="site-footer"><a href="catalogue.html">Catalogue</a> <a href="sources.html">Sources et attribution</a> <a href="#contenu">Haut de page</a></footer></body></html>

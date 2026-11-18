@@ -1,0 +1,192 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; connect-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Le parcours complet d’une requête — Symfony 8 Preparation</title><link rel="stylesheet" href="styles.css"><link rel="stylesheet" href="reader.css"><script src="mermaid.min.js" defer></script><script src="mermaid-init.js" defer></script><script src="fixed-exams-data.js" defer></script><script src="fixed-exams.js" defer></script><script src="learning-state.js" defer></script><script src="guide.js" defer></script><script src="reader-catalog.js" defer></script><script src="reader.js" defer></script><script src="site-state.js" defer></script><link rel="stylesheet" href="syntax-highlight.css"><script src="prism-syntax.js" defer></script><script src="syntax-highlight.js" defer></script></head><body><a class="skip" href="#contenu">Aller au contenu</a><header class="site-header"><a class="brand" href="index.html">S8 Preparation</a><nav aria-label="Navigation principale"><a href="index.html">Accueil</a> <a href="catalogue.html">Parcours</a> <a href="assessment.html?mode=review">Réviser</a> <a href="examens.html">Examens blancs</a> <a href="jour-j.html">Jour J</a></nav></header><main id="contenu" tabindex="-1" class="corpus-reader"><nav class="breadcrumb" aria-label="Fil d’Ariane"><a href="index.html">Accueil</a> <span aria-hidden="true">›</span> <a href="catalogue.html">Parcours</a> <span aria-hidden="true">›</span> <span aria-current="page">Le parcours complet d’une requête</span></nav><h1>Le parcours complet d’une requête</h1><p class="muted">Symfony 8.0 · API PHP ≤ 8.4 · Twig ≤ 3.22. Préparation indépendante.</p><nav class="narrative-guides" aria-label="Guides de lecture"><a href="vue-ensemble.html">Comprendre Symfony à partir de /blog/42</a><a href="parcours-requete.html">De Request à Response</a><a href="carte-composants.html">Carte des responsabilités</a><a href="ordre-lecture.html">Ordre de lecture recommandé</a><a href="glossaire.html">Glossaire du blog</a></nav><nav aria-label="Sections du guide"><ul><li><a href="#s-du-navigateur-a-request">Du navigateur à Request</a></li><li><a href="#s-choisir-puis-appeler-le-controleur">Choisir puis appeler le contrôleur</a></li><li><a href="#s-les-evenements-changent-le-trajet">Les événements changent le trajet</a></li><li><a href="#s-html-json-et-securite-des-choix-configures">HTML, JSON et sécurité : des choix configurés</a></li><li><a href="#s-route-absente-article-absent-panne">Route absente, article absent, panne</a></li><li><a href="#s-verifier-puis-bifurquer">Vérifier puis bifurquer</a></li></ul></nav><h2 id="s-du-navigateur-a-request">Du navigateur à Request</h2><p>Fixons les hypothèses : application conventionnelle, route <code>blog_show</code> importée,
+contrôleur enregistré, entrée Runtime HTTP standard, requête principale, aucun
+cache réutilisable ni interruption. Le navigateur demande <code>GET /blog/42</code>.
+Le serveur transmet au point d’entrée <code>public/index.php</code>.</p>
+<p>Dans cette variante, <code>vendor/autoload_runtime.php</code> résout et appelle le callable
+qui construit <code>App\Kernel</code>. Construire cet objet n’est pas le booter.
+<code>SymfonyRuntime::getRunner()</code> crée ensuite la Request depuis les superglobales
+pour ce chemin standard. Le runner appelle <code>handle()</code> ; le Kernel prépare
+l’application et délègue au service <code>http_kernel</code>. Un conteneur compilé utilisable
+est chargé ; il n’est reconstruit que si nécessaire.</p>
+<figure class="diagram" aria-labelledby="guide-parcours-requete-0-diagram-0-title guide-parcours-requete-0-diagram-0-description"><figcaption id="guide-parcours-requete-0-diagram-0-title">De GET blog 42 à une réponse envoyée</figcaption><p id="guide-parcours-requete-0-diagram-0-description">Chemin Runtime standard sans interruption. Le Kernel est construit avant la Request de ce runner. handle retourne une Response, distincte de son émission. Le runner appelle ensuite terminate si disponible, sans garantie universelle de réception préalable par le client.</p><div class="mermaid" hidden>flowchart TD
+  accTitle: De GET blog 42 à une réponse envoyée
+  accDescr: Chemin Runtime standard sans interruption. Le Kernel est construit avant la Request de ce runner. handle retourne une Response, distincte de son émission. Le runner appelle ensuite terminate si disponible, sans garantie universelle de réception préalable par le client.
+  B[&quot;Navigateur : GET /blog/42&quot;] --&gt;|&quot;HTTP&quot;| W[&quot;Serveur et public/index.php&quot;]
+  W --&gt;|&quot;autoload Runtime et callable&quot;| K[&quot;Objet App Kernel&quot;]
+  K --&gt;|&quot;choix du runner standard&quot;| Q[&quot;Request depuis les superglobales&quot;]
+  Q --&gt;|&quot;runner appelle handle&quot;| H[&quot;Préparation puis HttpKernel&quot;]
+  H --&gt;|&quot;retour de handle&quot;| R[&quot;Objet Response&quot;]
+  R --&gt;|&quot;runner envoie&quot;| S[&quot;Statut, en-têtes et contenu&quot;]
+  S --&gt;|&quot;suite du runner si disponible&quot;| T[&quot;terminate&quot;]
+  classDef operation fill:#e0f2fe,stroke:#0369a1,color:#0c4a6e
+  classDef result fill:#dcfce7,stroke:#15803d,color:#14532d
+  class W,K,Q,H,T operation
+  class R,S result</div></figure>
+<p>Une entrée <strong>manuelle</strong> assume explicitement création de Request, handle, envoi
+et terminaison éventuelle. Ce n’est pas une deuxième séquence à superposer au
+Runtime. Un runner personnalisé peut aussi changer l’entrée.</p>
+<div class="admonition info">
+<p class="admonition-title">🌍 In Real Life</p>
+<p><strong>La situation</strong> : l’établissement se prépare, puis un responsable coordonne la commande ; le résultat prêt attend encore sa remise.</p>
+<p><strong>L’équivalent dans Symfony</strong> : préparation de l’établissement → Kernel ; coordination de la demande → HttpKernel ; bon reçu → Request ; résultat prêt → Response ; remise → émission par le runner.</p>
+<p><strong>Retour à la réalité technique</strong> : Runtime amorce l’application et choisit un runner. Dans cette variante standard, le Kernel est construit avant la Request, mais construire n’est pas booter. <code>handle()</code> retourne la Response ; l’envoi puis l’éventuel <code>terminate()</code> sont séparés. L’image ne garantit pas la réception réseau.</p>
+<p><strong>🧠 Comment le mémoriser</strong> : « Prêt n’est pas envoyé. » Image : plateau encore au comptoir. Réflexe : « Qui appelle handle, send et terminate dans cette entrée ? »</p>
+<p><strong>⚠️ À ne pas confondre</strong> : Kernel prépare l’application ; HttpKernel traite la requête ; une entrée manuelle remplace ce chemin Runtime, elle ne le double pas.</p>
+</div>
+<p>Voir <a href="course-CRS-pm5kj5kh3gt2.html">Runtime</a> et
+<a href="course-CRS-mpwjc4g3vmj7.html">Request handling</a>.</p><h2 id="s-choisir-puis-appeler-le-controleur">Choisir puis appeler le contrôleur</h2><p>HttpKernel empile la Request et dispatche <code>kernel.request</code>. Si l’exécution
+atteint RouterListener, il peut effectuer le matching et écrire <code>_route</code>,
+<code>_controller</code> et <code>id</code> dans les <strong>attributes de Request</strong>. Dans notre exemple,
+<code>id</code> est la chaîne <code>'42'</code>. Un requirement numérique contraint le matching :
+il ne prouve pas l’existence de l’article et ne charge rien.</p>
+<figure class="diagram" aria-labelledby="guide-parcours-requete-1-diagram-0-title guide-parcours-requete-1-diagram-0-description"><figcaption id="guide-parcours-requete-1-diagram-0-title">HttpKernel appelle des collaborateurs aux responsabilités distinctes</figcaption><p id="guide-parcours-requete-1-diagram-0-description">Routing renseigne les attributs de Request. HttpKernel obtient un callable du ControllerResolver puis des valeurs de l&#x27;ArgumentResolver après kernel.controller. Il invoque le callable après kernel.controller_arguments. Les resolvers ne s&#x27;appellent pas successivement entre eux.</p><div class="mermaid" hidden>flowchart TD
+  accTitle: HttpKernel appelle des collaborateurs aux responsabilités distinctes
+  accDescr: Routing renseigne les attributs de Request. HttpKernel obtient un callable du ControllerResolver puis des valeurs de l&#x27;ArgumentResolver après kernel.controller. Il invoque le callable après kernel.controller_arguments. Les resolvers ne s&#x27;appellent pas successivement entre eux.
+  Q[&quot;Request : /blog/42&quot;] --&gt;|&quot;handle&quot;| HK[&quot;HttpKernel : orchestration&quot;]
+  HK --&gt;|&quot;1. kernel.request&quot;| ED[&quot;EventDispatcher&quot;]
+  ED --&gt;|&quot;listener atteint&quot;| R[&quot;RouterListener et Routing&quot;]
+  R --&gt;|&quot;matching&quot;| AT[&quot;Request avec _route, _controller, id&quot;]
+  HK --&gt;|&quot;2. getController sur Request enrichie&quot;| CR[&quot;ControllerResolver&quot;]
+  CR --&gt;|&quot;retour callable&quot;| HK
+  HK --&gt;|&quot;3. getArguments après kernel.controller&quot;| AR[&quot;ArgumentResolver&quot;]
+  AR --&gt;|&quot;interroge&quot;| VR[&quot;Value resolvers&quot;]
+  VR --&gt;|&quot;valeurs ou iterable vide&quot;| AR
+  AR --&gt;|&quot;retour arguments&quot;| HK
+  HK --&gt;|&quot;4. invoque après kernel.controller_arguments&quot;| X[&quot;BlogController::show&quot;]
+  X --&gt;|&quot;lecture applicative&quot;| CAT[&quot;ArticleCatalog en mémoire&quot;]
+  CAT --&gt;|&quot;ArticleView 42&quot;| X
+  X --&gt;|&quot;retourne ici&quot;| P[&quot;Response&quot;]
+  P --&gt;|&quot;filtrage et fin&quot;| HK
+  classDef operation fill:#e0f2fe,stroke:#0369a1,color:#0c4a6e
+  classDef result fill:#dcfce7,stroke:#15803d,color:#14532d
+  class R,HK,ED,CR,AR,VR operation
+  class Q,AT,X,CAT,P result</div></figure>
+<p>Le callable et ses arguments sont deux résultats différents. Après
+<code>kernel.controller</code>, ArgumentResolver interroge ses value resolvers pour la
+signature finale : Request courante, attribut de route, service d’un locator
+d’action, etc. Un resolver qui ne produit aucune valeur laisse essayer le
+suivant. <code>kernel.controller_arguments</code> peut encore modifier arguments et callable.</p>
+<p>L’action consulte maintenant <code>ArticleCatalog</code>, notre service en mémoire.
+<strong>Le routeur n’a pas lu l’article.</strong> Une intégration Doctrine configurée peut
+résoudre une entité avant l’action ; ce comportement appartient au bridge,
+pas à HttpKernel seul, et l’ORM reste hors du programme étudié.</p>
+<div class="admonition info">
+<p class="admonition-title">🌍 In Real Life</p>
+<p><strong>La situation</strong> : pour le bon 42, le responsable cherche la destination, le poste capable d’agir, puis les informations à lui remettre.</p>
+<p><strong>L’équivalent dans Symfony</strong> : destination annotée → matching et attributes via RouterListener ; poste choisi → callable du ControllerResolver ; fiche renseignée → arguments de l’ArgumentResolver ; consultation du catalogue → action appelant <code>ArticleCatalog</code>.</p>
+<p><strong>Retour à la réalité technique</strong> : HttpKernel orchestre ces collaborateurs ; ils ne s’appellent pas en chaîne. Résoudre prépare l’invocation, sans prouver l’existence de l’article. Dans la variante Doctrine, la résolution d’entité avant l’action repose sur le Doctrine Bridge et une intégration avec mapping configurés. Un value resolver personnalisé peut charger un objet sans Doctrine ; HttpKernel seul ne fournit pas ce chargement et l’ORM reste hors du programme étudié.</p>
+<p><strong>🧠 Comment le mémoriser</strong> : « Où, qui, avec quoi. » Image : destination, poste, fiche. Réflexe : « Ai-je obtenu des attributes, un callable ou des valeurs ? »</p>
+<p><strong>⚠️ À ne pas confondre</strong> : <code>id = '42'</code> n’est ni une entité chargée ni une conversion garantie par un requirement numérique.</p>
+</div>
+<p>Lire <a href="course-CRS-kqq96z5y9r2f.html">les routes</a>,
+<a href="course-CRS-d5ffd8b704zs.html">les arguments</a> et
+<a href="course-CRS-a669jpap5zf2.html">la Response</a>.</p><h2 id="s-les-evenements-changent-le-trajet">Les événements changent le trajet</h2><p>Un listener peut produire une réponse de maintenance sur <code>kernel.request</code>.
+HttpKernel n’a alors pas besoin du contrôleur. Autre bifurcation : si l’action
+ne retourne pas une Response, <code>kernel.view</code> permet à un listener d’en fournir
+une ; sans conversion, une exception est levée. Un tableau ne devient donc
+pas automatiquement du JSON.</p>
+<figure class="diagram" aria-labelledby="guide-parcours-requete-2-diagram-0-title guide-parcours-requete-2-diagram-0-description"><figcaption id="guide-parcours-requete-2-diagram-0-title">Les événements HttpKernel avec leurs conditions</figcaption><p id="guide-parcours-requete-2-diagram-0-description">Une réponse anticipée saute le contrôleur. view ne concerne qu&#x27;un retour autre que Response. Une exception interceptée et admissible peut être convertie. Le filtrage response et finish suppose ses listeners sans nouvelle erreur. terminate dépend de l&#x27;appelant après retour et émission.</p><div class="mermaid" hidden>flowchart TD
+  accTitle: Les événements HttpKernel avec leurs conditions
+  accDescr: Une réponse anticipée saute le contrôleur. view ne concerne qu&#x27;un retour autre que Response. Une exception interceptée et admissible peut être convertie. Le filtrage response et finish suppose ses listeners sans nouvelle erreur. terminate dépend de l&#x27;appelant après retour et émission.
+  Q[&quot;kernel.request&quot;] --&gt;|&quot;sans Response : callable résolu&quot;| C[&quot;kernel.controller&quot;]
+  C --&gt;|&quot;arguments résolus&quot;| A[&quot;kernel.controller_arguments&quot;]
+  A --&gt;|&quot;appel&quot;| X[&quot;Contrôleur&quot;]
+  Q --&gt;|&quot;Response anticipée&quot;| R[&quot;kernel.response&quot;]
+  X --&gt;|&quot;Response directe&quot;| R
+  X --&gt;|&quot;autre retour&quot;| V[&quot;kernel.view&quot;]
+  V --&gt;|&quot;Response fournie&quot;| R
+  E[&quot;Throwable intercepté et admissible&quot;] --&gt;|&quot;conversion possible&quot;| EX[&quot;kernel.exception&quot;]
+  EX --&gt;|&quot;Response fournie&quot;| R
+  R --&gt;|&quot;listeners réussis&quot;| F[&quot;kernel.finish_request&quot;]
+  F --&gt;|&quot;retour, émission, appel si disponible&quot;| T[&quot;kernel.terminate&quot;]
+  classDef event fill:#e0f2fe,stroke:#0369a1,color:#0c4a6e
+  classDef branch fill:#fef3c7,stroke:#b45309,color:#78350f
+  class Q,C,A,R,F,T event
+  class V,E,EX branch</div></figure>
+<p>Ce dessin ne promet pas tous ces événements à chaque requête. <code>$catch=false</code>,
+la prise en charge des <code>Error</code>, une exception non convertie ou une panne dans
+un listener changent la sortie. <code>kernel.finish_request</code> permet notamment de
+restaurer un contexte parent ; le dépilement se fait dans le <code>finally</code>.
+Il ne signifie pas que les octets sont déjà envoyés. Terminate n’est pas un
+worker durable. Approfondir <a href="course-CRS-2hpcy2rscq7m.html">événements et priorités</a>.</p>
+<div class="admonition info">
+<p class="admonition-title">🌍 In Real Life</p>
+<p><strong>La situation</strong> : une annonce « commande reçue » permet à l’accueil de répondre « maintenance » avant toute préparation.</p>
+<p><strong>L’équivalent dans Symfony</strong> : annonce → événement ; réaction enregistrée → listener ; intervenant déclarant les annonces auxquelles il réagit → subscriber ; réponse de maintenance → <code>RequestEvent::setResponse()</code>.</p>
+<p><strong>Retour à la réalité technique</strong> : EventDispatcher appelle des callables selon priorité et propagation. Un subscriber est une classe déclarant ses abonnements, avec des méthodes de réaction, pas une simple procédure écrite. Une réponse anticipée saute le contrôleur ; <code>kernel.view</code> ne survient que pour un retour autre que Response.</p>
+<p><strong>🧠 Comment le mémoriser</strong> : « Une annonce ouvre une possibilité, pas une obligation. » Image : embranchement devant la cuisine. Réflexe : « Quelle condition rend cet événement atteignable ? »</p>
+<p><strong>⚠️ À ne pas confondre</strong> : fin du traitement, émission et terminaison ; une panne peut interrompre ce parcours.</p>
+</div><h2 id="s-html-json-et-securite-des-choix-configures">HTML, JSON et sécurité : des choix configurés</h2><p>Pour le navigateur, Twig peut rendre <code>ArticleView</code> en HTML avant que l’action
+retourne la Response. Pour <code>GET /api/blog/42</code>, Serializer peut normaliser l’objet
+puis encoder du JSON. Ce sont deux représentations possibles, pas deux étapes
+obligatoires de GET. Désérialiser n’est ni valider ni autoriser.</p>
+<p>Avec Security installé et configuré, le firewall participe à <code>kernel.request</code> ;
+il n’attend pas une prétendue étape ORM obligatoire. Un contrôle d’autorisation
+dans l’action a lieu au point où vous l’appelez ; <code>#[IsGranted]</code> utilise un
+listener de <code>kernel.controller_arguments</code>. Ne placez donc pas toute la sécurité
+à une position universelle.</p>
+<div class="admonition info">
+<p class="admonition-title">🌍 In Real Life</p>
+<p><strong>La situation</strong> : le restaurant présente une fiche au client, mais réserve les notes internes au personnel autorisé.</p>
+<p><strong>L’équivalent dans Symfony</strong> : fiche mise en page → rendu Twig/HTML ; données structurées exportées → normalisation puis encodage JSON ; identité vérifiée → authentification ; permission de consulter les notes → autorisation.</p>
+<p><strong>Retour à la réalité technique</strong> : Twig rend un contenu ; Serializer convertit des représentations ; Security établit le contexte et contrôle les droits selon configuration. Aucun format ne rend les données automatiquement accessibles. Les contrôles peuvent intervenir avant l’action, pas seulement après une lecture métier.</p>
+<p><strong>🧠 Comment le mémoriser</strong> : « Présenter n’est pas permettre. » Image : même fiche, deux lecteurs aux droits différents. Réflexe : « Qui peut voir quels champs, et où ce droit est-il contrôlé ? »</p>
+<p><strong>⚠️ À ne pas confondre</strong> : connaître l’identité n’accorde pas tous les droits ; produire du JSON ne valide pas les données.</p>
+</div>
+<p><a href="course-CRS-2bj91rj9kvj0.html">Twig</a> ·
+<a href="course-CRS-3z96cp2s1dka.html">Serializer</a> ·
+<a href="course-CRS-x5frtpg07mmd.html">Firewalls</a> ·
+<a href="course-CRS-8hwpzyk1hrq9.html">Autorisation</a>.</p><h2 id="s-route-absente-article-absent-panne">Route absente, article absent, panne</h2><p>Un chemin inconnu peut échouer au matching. <code>/blog/999</code> peut matcher parfaitement
+mais ne trouver aucun article dans le catalogue : l’action décide alors d’une
+404 explicite. Une panne inattendue n’est pas une troisième preuve d’absence ;
+elle relève du traitement d’erreur, souvent 500, sans exposer de détails sensibles.</p>
+<div class="admonition info">
+<p class="admonition-title">🌍 In Real Life</p>
+<p><strong>La situation</strong> : l’accueil ne connaît pas la destination demandée ; ailleurs, le poste existe mais la référence manque ; ailleurs encore, le poste tombe en panne.</p>
+<p><strong>L’équivalent dans Symfony</strong> : destination inconnue → échec de matching ; référence 999 absente du catalogue → 404 décidée par l’action ; panne inattendue → traitement d’erreur, souvent 500.</p>
+<p><strong>Retour à la réalité technique</strong> : 404 signifie ressource non trouvée, pas nécessairement route inconnue. Une exception interceptée peut être convertie via <code>kernel.exception</code> ; sans Response fournie, elle remonte. L’analogie ne promet pas une réponse sur toute panne.</p>
+<p><strong>🧠 Comment le mémoriser</strong> : « Même 404, origines différentes. » Image : panneau absent ou fiche introuvable. Réflexe : « Le matching a-t-il réussi avant l’échec ? »</p>
+<p><strong>⚠️ À ne pas confondre</strong> : absence attendue et défaillance interne ; le client ne doit pas recevoir les détails sensibles de la panne.</p>
+</div>
+<p>Lisez <a href="course-CRS-kd67y4vnd0mm.html">les exceptions HTTP</a> après
+<a href="cours-http.html">les statuts</a>.</p>
+<p>Un cache navigateur/proxy peut répondre avant PHP. Le cache HTTP Symfony
+optionnel peut éviter le HttpKernel interne. Un cache applicatif réutilise un
+résultat de service : il ne supprime pas automatiquement le traitement HTTP.</p>
+<div class="admonition info">
+<p class="admonition-title">🌍 In Real Life</p>
+<p><strong>La situation</strong> : l’accueil conserve une copie autorisée d’une fiche publique ; en cuisine, on conserve seulement un calcul utile à sa préparation.</p>
+<p><strong>L’équivalent dans Symfony</strong> : fiche complète réutilisée à l’accueil → cache HTTP ; résultat intermédiaire réutilisé au poste → cache applicatif.</p>
+<p><strong>Retour à la réalité technique</strong> : le cache HTTP réutilise une réponse selon fraîcheur, variantes et règles HTTP ; un proxy peut éviter PHP. Le cache applicatif évite un calcul ciblé, pas automatiquement le contrôleur. Une revalidation peut rappeler l’application. On copie des données, pas une assiette consommable.</p>
+<p><strong>🧠 Comment le mémoriser</strong> : « Réponse entière ou résultat interne ? » Image : copie à l’accueil, note en cuisine. Réflexe : « Quel code ce cache permet-il réellement d’éviter ? »</p>
+<p><strong>⚠️ À ne pas confondre</strong> : entrée présente et réponse réutilisable pour ce client.</p>
+</div>
+<p>Comparer <a href="course-CRS-1k0ce9dvdr99.html">cache HTTP</a> et
+<a href="course-CRS-p6yhxmpxrzbs.html">cache applicatif</a>.</p><h2 id="s-verifier-puis-bifurquer">Vérifier puis bifurquer</h2><p>Testez le catalogue seul, puis le câblage, puis le statut et le contenu du GET.
+KernelBrowser n’est pas un serveur web ni un navigateur JavaScript : ce test
+ne prouve pas l’exécution native de l’entrée Runtime.</p>
+<div class="admonition info">
+<p class="admonition-title">🌍 In Real Life</p>
+<p><strong>La situation</strong> : avant l’ouverture, on vérifie séparément le catalogue, les raccordements et une commande simulée.</p>
+<p><strong>L’équivalent dans Symfony</strong> : catalogue isolé → test unitaire d’<code>ArticleCatalog</code> ; postes raccordés → test d’intégration avec KernelTestCase ; demande simulée → test fonctionnel avec WebTestCase/KernelBrowser.</p>
+<p><strong>Retour à la réalité technique</strong> : chaque test exerce un périmètre différent. KernelBrowser traite la demande dans l’application sans navigateur JavaScript ni véritable serveur web ; il ne démontre pas le démarrage par <code>public/index.php</code> et Runtime.</p>
+<p><strong>🧠 Comment le mémoriser</strong> : « Une répétition prouve ce qu’elle fait jouer. » Image : salle d’essai, porte extérieure non testée. Réflexe : « Quelle couche ce test traverse-t-il vraiment ? »</p>
+<p><strong>⚠️ À ne pas confondre</strong> : statut HTTP vérifié et parcours réseau/JavaScript vérifié.</p>
+</div>
+<p><a href="course-CRS-1en96h22twv7.html">Tests fonctionnels</a>.</p>
+<p>Quand le lecteur s’inscrit, Form transforme la saisie et Validator vérifie des
+contraintes selon l’intégration configurée ; aucune sauvegarde n’est implicite.
+Quand un rédacteur importe un fichier, Console utilise les services du même blog
+sans cycle HTTP obligatoire. Messenger peut ensuite différer le travail avec
+routage, transport et worker appropriés ; <code>dispatch()</code> ne signifie pas toujours
+« asynchrone ». <a href="ordre-lecture.html#bifurcations">Choisissez votre branche</a>.</p>
+<div class="admonition info">
+<p class="admonition-title">🌍 In Real Life</p>
+<p><strong>La situation</strong> : le même restaurant inscrit des clients et importe son catalogue ; ces tâches ne sont pas toutes des commandes à servir.</p>
+<p><strong>L’équivalent dans Symfony</strong> : fiche d’inscription transformée → Form ; règles vérifiées → Validator ; import lancé par le personnel → Console ; travail transmis maintenant ou différé → Messenger selon configuration.</p>
+<p><strong>Retour à la réalité technique</strong> : Form lie et transforme les données ; Validator produit des violations, sans sauvegarde implicite. Console exécute une commande sans cycle HTTP imposé. Messenger peut appeler un handler immédiatement ; un traitement différé exige transport approprié, routage et worker.</p>
+<p><strong>🧠 Comment le mémoriser</strong> : « Même établissement, plusieurs entrées. » Image : accueil, bureau d’import, bac de tâches. Réflexe : « Quelle entrée et quel mode d’exécution sont configurés ? »</p>
+<p><strong>⚠️ À ne pas confondre</strong> : message accepté et travail terminé ; <code>sync://</code> reste synchrone.</p>
+</div>
+<p>Source : <a href="https://symfony.com/doc/8.0/components/http_kernel.html">HttpKernel</a>.</p><details class="transfer-panel"><summary>Sauvegarde et transfert de progression</summary><p id="reading-status" role="status">Sans JavaScript : lecture libre ; progression non enregistrée.</p><p><a href="assessment.html#overview-title">Lecture, réussites immédiates et différées</a></p><p>Transfert manuel — aucune synchronisation automatique</p><p id="persistence-status" role="status"></p><button type="button" class="secondary" id="export-progress">Exporter ma progression</button><label for="import-progress">Choisir un JSON pour fusionner ma progression (sans remplacement)</label><input type="file" id="import-progress" accept="application/json,.json"><p id="transfer-status" role="status"></p></details></main><footer class="site-footer"><a href="catalogue.html">Catalogue</a> <a href="sources.html">Sources et attribution</a> <a href="#contenu">Haut de page</a></footer></body></html>

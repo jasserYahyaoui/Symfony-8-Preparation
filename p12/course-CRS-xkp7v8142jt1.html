@@ -1,0 +1,392 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; connect-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Request and response objects introspection — Symfony 8 Preparation</title><link rel="stylesheet" href="styles.css"><link rel="stylesheet" href="reader.css"><script src="mermaid.min.js" defer></script><script src="mermaid-init.js" defer></script><link rel="stylesheet" href="assessment.css"><script src="fixed-exams-data.js" defer></script><script src="fixed-exams.js" defer></script><script src="learning-state.js" defer></script><script src="guide.js" defer></script><script src="reader-catalog.js" defer></script><script src="reader.js" defer></script><script src="site-state.js" defer></script><script src="assessment.js" defer></script><script src="course-views.js" defer></script><link rel="stylesheet" href="syntax-highlight.css"><script src="prism-syntax.js" defer></script><script src="syntax-highlight.js" defer></script></head><body data-course-id="CRS-xkp7v8142jt1"><a class="skip" href="#contenu">Aller au contenu</a><header class="site-header"><a class="brand" href="index.html">S8 Preparation</a><nav aria-label="Navigation principale"><a href="index.html">Accueil</a> <a href="catalogue.html">Parcours</a> <a href="assessment.html?mode=review">Réviser</a> <a href="examens.html">Examens blancs</a> <a href="jour-j.html">Jour J</a></nav></header><main id="contenu" tabindex="-1" class="corpus-reader"><nav class="breadcrumb" aria-label="Fil d’Ariane"><a href="index.html">Accueil</a> <span aria-hidden="true">›</span> <a href="catalogue.html">Parcours</a> <span aria-hidden="true">›</span> <a href="lot-13.html">Module 13 — Tests automatisés</a> <span aria-hidden="true">›</span> <span aria-current="page">Request and response objects introspection</span></nav><h1>Request and response objects introspection</h1><p class="muted">Symfony 8.0 · API PHP ≤ 8.4 · Twig ≤ 3.22. Préparation indépendante.</p><p class="revision-status">Rédaction narrative P11 : projection nouvelle, non couverte par les décisions historiques P10. Aucune approbation officielle ni garantie de réussite.</p><aside class="narrative-context" aria-label="Repères de lecture"><p><strong>Prérequis de lecture :</strong> <a href="course-CRS-tt9yn0a06ngb.html">Unit tests with PHPUnit</a> · <a href="course-CRS-1en96h22twv7.html">Functional tests with PHPUnit</a></p><p><strong>Concepts voisins :</strong> <a href="course-CRS-mpwjc4g3vmj7.html">Request handling</a> — Identifier la frontière réellement exercée par le test. <a href="lot-13.html">Comparer les responsabilités dans ce module</a> · <a href="carte-composants.html">Situer cette responsabilité dans le blog</a> · <a href="glossaire.html">Distinguer les termes voisins</a></p><p><a href="ordre-lecture.html">Retrouver les 163 cours dans le parcours recommandé</a>. Ce repère ne modifie ni votre historique ni votre progression.</p></aside><div class="course-layout"><details class="lot-course-menu"><summary>Cours du module · 9 cours</summary><nav aria-label="Cours du module"><a class="lot-context" href="lot-13.html">Module 13 — Tests automatisés</a><ol><li><a href="course-CRS-tt9yn0a06ngb.html">Unit tests with PHPUnit</a></li><li><a href="course-CRS-1en96h22twv7.html">Functional tests with PHPUnit</a></li><li><a href="course-CRS-k5wg55q2mg0p.html">Client object</a></li><li><a href="course-CRS-zg5jg6hqp2mj.html">Crawler object (CssSelector and DomCrawler components)</a></li><li><a href="course-CRS-0x4v9jaz4cnq.html">Profiler object (WebProfiler bundle)</a></li><li><a href="course-CRS-g8v45328cg95.html">Framework objects access</a></li><li><a href="course-CRS-4x4ec26c9bfc.html">Client configuration</a></li><li><a href="course-CRS-xkp7v8142jt1.html" aria-current="page">Request and response objects introspection</a></li><li><a href="course-CRS-fak8bf9014br.html">Handling legacy deprecated code</a></li></ol><a href="lot-13.html#view-quiz">Quiz du module</a></nav></details><aside class="course-section-menu" aria-label="Sommaire du cours"><nav class="course-actions" aria-label="Activités du cours"><a id="tab-course" href="#view-course">Cours</a><a id="tab-flashcards" href="#view-flashcards">Flashcards</a><a id="tab-quiz" href="#view-quiz">Quiz</a></nav><details class="course-section-disclosure"><summary id="course-sections">Sections du cours</summary><nav aria-label="Sections du cours"><ul><li><a href="#s-objectif">Objectif</a></li><li><a href="#s-l-essentiel">L&#x27;essentiel</a></li><li><a href="#s-le-schema">Le schéma</a></li><li><a href="#s-l-exemple">L&#x27;exemple</a></li><li><a href="#s-les-deux-couches">Les deux couches</a></li><li><a href="#s-les-autres-objects-internes">Les autres objects internes</a></li><li><a href="#s-avant-la-premiere-request">Avant la première Request</a></li><li><a href="#s-introspecter-la-response">Introspecter la Response</a></li><li><a href="#s-introspecter-la-request">Introspecter la Request</a></li><li><a href="#s-apres-un-redirect">Après un redirect</a></li><li><a href="#s-pieges-d-examen">Pièges d&#x27;examen</a></li><li><a href="#s-fiche-express">Fiche express</a></li><li><a href="#reader-objectives">Objectifs d’apprentissage</a></li><li><a href="#reader-sources">Sources officielles et compléments</a></li><li><a href="#course-recalls">Rappels et liens avec les autres cours</a></li></ul></nav><nav aria-label="Flashcards par section"><a href="#view-flashcards">Flashcards par section</a><ul><li><a href="#cards-s-l-essentiel-1">L&#x27;essentiel</a></li><li><a href="#cards-s-le-schema-2">Le schéma</a></li><li><a href="#cards-s-l-exemple-3">L&#x27;exemple</a></li><li><a href="#cards-s-les-deux-couches-4">Les deux couches</a></li><li><a href="#cards-s-les-autres-objects-internes-5">Les autres objects internes</a></li><li><a href="#cards-s-avant-la-premiere-request-6">Avant la première Request</a></li><li><a href="#cards-s-introspecter-la-response-7">Introspecter la Response</a></li><li><a href="#cards-s-introspecter-la-request-8">Introspecter la Request</a></li><li><a href="#cards-s-apres-un-redirect-9">Après un redirect</a></li><li><a href="#cards-s-pieges-d-examen-10">Pièges d&#x27;examen</a></li><li><a href="#cards-s-fiche-express-11">Fiche express</a></li><li><a href="#cards-previous">Module 13 — Tests automatisés · Cours « Framework objects access » · Rappel : <span lang="en">What special access does KernelTestCase::getContainer() provide?</span></a></li></ul></nav><nav aria-label="Retour au module"><a href="lot-13.html">Tous les cours du module</a></nav></details><p class="local-quiz-count">7 questions disponibles · 7 par session Quiz</p></aside><div class="course-content"><div id="view-course" data-course-panel role="region" aria-labelledby="view-course-title"><h2 id="view-course-title">Cours</h2><p class="course-introduction"><a href="#s-objectif">Introduction</a> · <a href="#course-sections">Sections du cours</a></p><h2 id="reader-objectives" tabindex="-1">Objectifs d’apprentissage</h2><ul><li><a href="course-CRS-xkp7v8142jt1.html#out-OUT-az102q4grt31">Distinguer les objects BrowserKit des objects HttpFoundation</a></li><li><a href="course-CRS-xkp7v8142jt1.html#out-OUT-2qpbjpt6nv81">Lire code, headers et contenu de la Response</a></li><li><a href="course-CRS-xkp7v8142jt1.html#out-OUT-mvr73tryph6w">Identifier la route ayant répondu</a></li></ul><aside class="pedagogy-legend" aria-label="Repères pédagogiques"><p><strong>Repères pédagogiques</strong></p><p>Ces repères décrivent le rôle du bloc, pas une fréquence officielle à l’examen.</p><p class="teaching-label essential"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="brain" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5C12 1 6 1 6 5C2 5 1 10 4 12C1 15 3 19 6 19C6 23 12 23 12 19V5M12 5C12 1 18 1 18 5C22 5 23 10 20 12C23 15 21 19 18 19C18 23 12 23 12 19M6 5C6 8 8 9 9 9M4 12H7L9 14M6 19V16M18 5C18 8 16 9 15 9M20 12H17L15 14M18 19V16"></path></svg> <strong>À comprendre</strong></p><p class="teaching-label essential"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="book" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5C9 3 5 3 2 4V20C5 19 9 19 12 21C15 19 19 19 22 20V4C19 3 15 3 12 5V21M5 8H8M5 12H8M16 8H19M16 12H19"></path></svg> <strong>À mémoriser</strong></p><p class="teaching-label example"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="code" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6L2 12L8 18M16 6L22 12L16 18M14 3L10 21"></path></svg> <strong>Exemple concret</strong></p><p class="teaching-label pitfall"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="warning" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3L23 21H1L12 3ZM12 9V14M12 17V18"></path></svg> <strong>Piège à éviter</strong></p><p class="teaching-label nuance"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="balance" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3V21M7 21H17M3 7L21 5M5 7L1 15H9L5 7M19 6L15 14H23L19 6M1 15Q5 20 9 15M15 14Q19 19 23 14"></path></svg> <strong>Nuance à connaître</strong></p><p>Précision, exception ou condition d’application d’une règle.</p></aside><section class="teaching-section" data-section="s-objectif"><h2 id="s-objectif" tabindex="-1">Objectif</h2><p>Le client a demandé <code>/blog/42</code> avec les entrées préparées. Pour vérifier
+le résultat, il faut identifier la route sélectionnée, le statut,
+les en-têtes et le corps, pas seulement reconnaître un titre dans le HTML.
+Le navigateur simulé et l'application utilisent <strong>deux modèles HTTP</strong> :
+choisir le bon objet évite d'inspecter la mauvaise couche.</p>
+<p>Question centrale : <strong>quand j'écris <code>$client-&gt;getRequest()</code>, de quel objet
+parle-t-on, et qu'est-ce qu'il contient après le passage dans le kernel ?</strong></p></section><section class="teaching-section" data-section="s-l-essentiel"><h2 id="s-l-essentiel" tabindex="-1">L&#x27;essentiel</h2><p class="teaching-label essential"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="brain" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5C12 1 6 1 6 5C2 5 1 10 4 12C1 15 3 19 6 19C6 23 12 23 12 19V5M12 5C12 1 18 1 18 5C22 5 23 10 20 12C23 15 21 19 18 19C18 23 12 23 12 19M6 5C6 8 8 9 9 9M4 12H7L9 14M6 19V16M18 5C18 8 16 9 15 9M20 12H17L15 14M18 19V16"></path></svg> <strong>À comprendre</strong></p><aside class="section-digest" id="s-l-essentiel-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>internal désigne le navigateur simulé.</li><li>Les methods sans internal exposent HttpFoundation.</li></ol></aside><p><strong>Ce que cette partie veut réellement vous apprendre.</strong></p>
+<ul>
+<li><em>Pourquoi ce sujet existe.</em> Après une requête de test, on veut regarder ce
+  qui s'est passé : route choisie, statut, en-têtes, corps. Or il existe
+  <strong>deux paires</strong> d'objets Request/Response : celles de l'application
+  (HttpFoundation) et celles du navigateur simulé (BrowserKit). Prendre
+  l'une pour l'autre fausse l'inspection.</li>
+<li><em>Le piège de fond.</em> Le mot « internal » : il désigne l'interne du
+  <strong>navigateur simulé</strong>, pas l'interne de l'application.</li>
+<li><em>Ce que l'auteur veut que vous compreniez.</em> Le client est un <strong>traducteur</strong>
+  entre deux modèles HTTP ; chaque getter dit de quel côté on lit.</li>
+<li><em>Pourquoi c'est à l'examen.</em> Classes rendues par chaque getter,
+  <code>BadMethodCallException</code> avant la première requête, nature de <code>_route</code> /
+  <code>_controller</code>, règles de <code>followRedirect()</code> selon le statut.</li>
+</ul>
+<p>Le client expose <strong>deux couches</strong> : <code>getRequest()</code> et <code>getResponse()</code> rendent
+les objects <strong>HttpFoundation</strong> que l'application a vus ;
+<code>getInternalRequest()</code> et <code>getInternalResponse()</code> rendent ceux du <strong>navigateur
+simulé</strong>, BrowserKit. Avant toute Request, ils lèvent une exception. Après un
+redirect non suivi, <code>getRequest()</code> est la Request qui a redirigé.</p>
+<p>Ces méthodes relisent l'état courant du client ; elles n'envoient pas
+de nouvelle requête. « Internal » signifie interne au navigateur simulé,
+pas plus proche du contrôleur. Les attributs ajoutés par le routeur
+appartiennent à la requête HttpFoundation.</p></section><section class="teaching-section" data-section="s-le-schema"><h2 id="s-le-schema" tabindex="-1">Le schéma</h2><aside class="section-digest" id="s-le-schema-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Le client adapte les deux couches.</li><li>Le controller utilise HttpFoundation.</li></ol></aside><p><strong>Où en est-on ?</strong> Début du cours : la carte des deux couches et des
+conversions. Les sections suivantes détaillent chaque getter, puis le cas
+particulier du redirect (la branche du bas du schéma).</p>
+<p>La lecture directe de l'article emprunte la conversion BrowserKit →
+HttpFoundation → BrowserKit. La branche POST suivante sert à isoler
+ce qui change lorsqu'une réponse impose une nouvelle navigation :</p>
+<figure class="diagram" aria-labelledby="CRS-xkp7v8142jt1-3-diagram-0-title CRS-xkp7v8142jt1-3-diagram-0-description"><figcaption id="CRS-xkp7v8142jt1-3-diagram-0-title">Les objects de Request et de Response des deux couches du client de test</figcaption><p id="CRS-xkp7v8142jt1-3-diagram-0-description">request construit une Request BrowserKit, que getInternalRequest rend ; le client la convertit en Request HttpFoundation, que getRequest rend et que l&#x27;application traite. L&#x27;application produit une Response HttpFoundation, que getResponse rend ; le client la convertit en Response BrowserKit, que getInternalResponse rend. Avant toute Request, ces quatre methods et getCrawler lèvent BadMethodCallException, alors que getHistory et getCookieJar existent déjà. Après un redirect 301, 302 ou 303, followRedirect choisit GET, vide les fichiers et abandonne le corps ; après un 307 ou un 308, méthode, fichiers et corps sont conservés. Dans les deux branches, une méthode finale GET vide le tableau des paramètres ; sinon ce tableau est conservé.</p><div class="mermaid" hidden>---
+title: Les deux couches que le client expose
+---
+flowchart TD
+  accTitle: Les objects de Request et de Response des deux couches du client de test
+  accDescr: request construit une Request BrowserKit, que getInternalRequest rend ; le client la convertit en Request HttpFoundation, que getRequest rend et que l&#x27;application traite. L&#x27;application produit une Response HttpFoundation, que getResponse rend ; le client la convertit en Response BrowserKit, que getInternalResponse rend. Avant toute Request, ces quatre methods et getCrawler lèvent BadMethodCallException, alors que getHistory et getCookieJar existent déjà. Après un redirect 301, 302 ou 303, followRedirect choisit GET, vide les fichiers et abandonne le corps ; après un 307 ou un 308, méthode, fichiers et corps sont conservés. Dans les deux branches, une méthode finale GET vide le tableau des paramètres ; sinon ce tableau est conservé.
+  REQ[&quot;request(&#x27;POST&#x27;, &#x27;/go&#x27;)&quot;] --&gt;|&quot;construit&quot;| IR[&quot;BrowserKit Request&quot;]
+  IR --&gt;|&quot;filterRequest&quot;| HR[&quot;HttpFoundation Request&quot;]
+  HR --&gt;|&quot;handle&quot;| APP[&quot;Application&quot;]
+  APP --&gt;|&quot;retourne&quot;| HS[&quot;HttpFoundation Response&quot;]
+  HS --&gt;|&quot;filterResponse&quot;| IS[&quot;BrowserKit Response&quot;]
+  IS --&gt;|&quot;suivi demandé&quot;| RD{&quot;Statut du redirect ?&quot;}
+  RD --&gt;|&quot;301, 302, 303&quot;| GET[&quot;GET ; fichiers vidés ; corps abandonné&quot;]
+  RD --&gt;|&quot;307, 308&quot;| SAME[&quot;Méthode, fichiers et corps conservés&quot;]
+  GET --&gt; FINALGET{&quot;Méthode finale GET ?&quot;}
+  SAME --&gt; FINALGET
+  FINALGET --&gt;|&quot;oui, même après 307/308&quot;| CLEAR([&quot;Tableau des paramètres vidé&quot;])
+  FINALGET --&gt;|&quot;non&quot;| KEEP([&quot;Tableau des paramètres conservé&quot;])
+  classDef browser fill:#e0f2fe,stroke:#075985,color:#0c4a6e
+  classDef application fill:#dcfce7,stroke:#166534,color:#14532d
+  classDef decision fill:#fef3c7,stroke:#92400e,color:#78350f
+  class REQ,IR,IS,GET,SAME,CLEAR,KEEP browser
+  class HR,APP,HS application
+  class RD,FINALGET decision</div></figure>
+<p>Bleu : navigateur simulé ; vert : application ; ambre : suivi HTTP. Les flèches
+montrent des conversions et appels, pas de l'héritage. Le tableau ci-dessous
+relie chaque objet à son getter : « internal » désigne toujours BrowserKit.
+Les cas 301/302/303 dessinés partent d'un <strong>POST</strong>, comme l'exemple.</p>
+<p>La même idée en boîtes :</p>
+<pre class="highlight" tabindex="0"><code class="language-text">┌────────── navigateur simulé (BrowserKit) ──────────┐
+│ getInternalRequest()            getInternalResponse() │
+│        │ filterRequest()          ▲ filterResponse()   │
+└────────┼──────────────────────────┼───────────────────┘
+         ▼                          │
+┌────────── application (HttpFoundation) ─────────────┐
+│ getRequest()  ──► kernel ──►  getResponse()          │
+│ (attributes : _route, _controller)                   │
+└──────────────────────────────────────────────────────┘</code></pre></section><section class="teaching-section" data-section="s-l-exemple"><h2 id="s-l-exemple" tabindex="-1">L&#x27;exemple</h2><p class="teaching-label example"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="code" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6L2 12L8 18M16 6L22 12L16 18M14 3L10 21"></path></svg> <strong>Exemple concret</strong></p><aside class="section-digest" id="s-l-exemple-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>La Response applicative porte le HeaderBag.</li><li>La version BrowserKit possède une autre API.</li></ol></aside><p><strong>Où en est-on ?</strong> On observe le mécanisme sur un cas concret : une requête
+qui redirige. C'est le meilleur terrain pour voir quelle couche dit quoi.</p>
+<p>Le petit trajet <code>/go</code> → <code>/hello</code> est une fixture de test indépendante :
+il permet d'observer le même mécanisme qu'une soumission d'inscription
+redirigeant vers une page de confirmation du blog, sans dépendre ici
+de la validation du formulaire.</p>
+<pre class="highlight" tabindex="0"><code class="language-php">$client-&gt;request('POST', '/go');                       // répond 302 vers /hello
+$client-&gt;getResponse()-&gt;getStatusCode();               // 302, côté application
+$client-&gt;getRequest()-&gt;attributes-&gt;get('_route');      // 'go' : la Request qui a redirigé
+$this-&gt;assertResponseRedirects('/hello', 302);
+$client-&gt;followRedirect();
+$client-&gt;getRequest()-&gt;getMethod();                    // 'GET' : un 302 ne garde pas POST
+$this-&gt;assertRouteSame('hello');</code></pre>
+<p>On suppose deux routes nommées <code>go</code> et <code>hello</code>, la première renvoyant le 302.
+Lire <code>_route</code> avant le suivi prouve quelle route a redirigé ; le lire après
+prouve quelle route a traité la <strong>nouvelle</strong> requête. Deux templates identiques
+ne permettent pas cette distinction.</p></section><section class="teaching-section" data-section="s-les-deux-couches"><span class="outcome-anchor" id="out-OUT-az102q4grt31" tabindex="-1"></span><h2 id="s-les-deux-couches" tabindex="-1">Les deux couches</h2><aside class="section-digest" id="s-les-deux-couches-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Les APIs ne sont pas interchangeables.</li><li>Choisir selon la couche inspectée.</li></ol></aside><p><strong>Où en est-on ?</strong> Étape 1 sur 3 : savoir quel getter rend quel objet. C'est
+la clé des deux autres parties (Response, Request).</p>
+<div class="admonition info">
+<p class="admonition-title">🌍 In Real Life</p>
+<p><strong>La situation</strong> : au restaurant, la demande du visiteur est transcrite sur une fiche de service, enrichie de l'affectation interne, puis la réponse revient au visiteur.</p>
+<p><strong>L’équivalent dans Symfony</strong> : représentation du visiteur simulé → BrowserKit ; objets manipulés par l'application pour <code>/blog/42</code> → HttpFoundation ; affectation reconnue → attribut <code>_route</code>.</p>
+<p><strong>Retour à la réalité technique</strong> : <code>getInternalRequest()</code> désigne la couche BrowserKit, pas les détails internes de l'application. <code>getRequest()</code> expose la Request HttpFoundation, avec ses attributs issus du traitement.</p>
+<p><strong>🧠 Comment le mémoriser</strong> : « Interne au client, pas interne à l'application. » Image mentale : deux fiches portant des en-têtes différents. Question-réflexe : de quelle classe est l'objet inspecté ?</p>
+<p><strong>⚠️ À ne pas confondre</strong> : conversion de représentation et deuxième requête HTTP.</p>
+</div>
+<p>Pour la route principale, dans une méthode indépendante de <code>WebTestCase</code>,
+avec Symfony 8.0/PHPUnit 11.5 et le catalogue où 42 existe :</p>
+<pre class="highlight" tabindex="0"><code class="language-php">$client = static::createClient();
+$client-&gt;request('GET', '/blog/42');
+self::assertResponseStatusCodeSame(200);
+self::assertRouteSame('blog_show');
+$contentType = $client-&gt;getResponse()-&gt;headers-&gt;get('Content-Type');
+self::assertNotNull($contentType);</code></pre>
+<p>Le résultat attendu est le succès de ces assertions. Elles vérifient
+exactement 200, le nom de route et la présence d'un header, <strong>pas</strong> encore
+son type précis ni le titre de l'article. Renforcer le contrat selon
+le rendu attendu ; une page de repli pourrait aussi fournir du HTML en 200.</p>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Class rendue</th>
+<th>Couche</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>getRequest()</code></td>
+<td><code>HttpFoundation\Request</code></td>
+<td>application</td>
+</tr>
+<tr>
+<td><code>getInternalRequest()</code></td>
+<td><code>BrowserKit\Request</code></td>
+<td>navigateur simulé</td>
+</tr>
+<tr>
+<td><code>getResponse()</code></td>
+<td><code>HttpFoundation\Response</code></td>
+<td>application</td>
+</tr>
+<tr>
+<td><code>getInternalResponse()</code></td>
+<td><code>BrowserKit\Response</code></td>
+<td>navigateur simulé</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong><code>internal</code> désigne le navigateur</strong>, pas l'application.</li>
+<li><code>HttpKernelBrowser</code>, parent du client, traduit d'une couche à l'autre :
+  <code>filterRequest()</code> et <code>filterResponse()</code>.</li>
+<li>La Response BrowserKit n'a pas de property <code>headers</code> : <code>getHeader()</code>,
+  <code>getHeaders()</code>, <code>getStatusCode()</code>, <code>getContent()</code>.</li>
+</ul>
+<p><strong>Pourquoi deux modèles ?</strong> BrowserKit est un composant générique : il sait
+simuler un navigateur devant <strong>n'importe quelle</strong> application (même distante,
+via <code>HttpBrowser</code>). HttpFoundation est le modèle HTTP propre à Symfony. Le
+<code>HttpKernelBrowser</code> fait le pont : il convertit à l'aller (<code>filterRequest()</code>)
+et au retour (<code>filterResponse()</code>).</p>
+<p>La conversion entrante construit HttpFoundation à partir de l'URI,
+la méthode, les paramètres, fichiers, cookies, paramètres serveur et corps.
+Au retour, <code>filterResponse()</code> capture le contenu émis par <code>sendContent()</code>,
+puis crée la réponse BrowserKit avec ce contenu, le statut et les en-têtes.
+Les objets sont distincts : <code>getInternalResponse()-&gt;headers</code> n'est pas
+une autre orthographe de l'API HttpFoundation.</p></section><section class="teaching-section" data-section="s-les-autres-objects-internes"><h2 id="s-les-autres-objects-internes" tabindex="-1">Les autres objects internes</h2><aside class="section-digest" id="s-les-autres-objects-internes-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>L&#x27;historique appartient au client.</li><li>Il est distinct de la Request courante.</li></ol></aside><p><strong>Où en est-on ?</strong> Complément à l'étape 1 : en dehors du couple
+Request/Response, le client garde trois autres objets d'état.</p>
+<p>Le client conserve aussi son état de navigation et le document analysé.
+Ces objets répondent à des questions différentes : « où a-t-on navigué ? »,
+« quels cookies seront envoyés ? », « quels nœuds contient la dernière page ? »</p>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Class rendue</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>getHistory()</code></td>
+<td><code>BrowserKit\History</code></td>
+</tr>
+<tr>
+<td><code>getCookieJar()</code></td>
+<td><code>BrowserKit\CookieJar</code></td>
+</tr>
+<tr>
+<td><code>getCrawler()</code></td>
+<td><code>DomCrawler\Crawler</code>, le même object que celui rendu par <code>request()</code></td>
+</tr>
+</tbody>
+</table>
+<p>Conserver <code>$crawler</code> dans une variable ne le transforme pas en vue dynamique
+des prochaines pages. Après une nouvelle requête, le getter du client désigne
+le nouveau document ; l'ancienne variable reste attachée au précédent.</p></section><section class="teaching-section" data-section="s-avant-la-premiere-request"><h2 id="s-avant-la-premiere-request" tabindex="-1">Avant la première Request</h2><aside class="section-digest" id="s-avant-la-premiere-request-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>La Response n&#x27;existe pas toujours.</li><li>Envoyer une Request avant introspection.</li></ol></aside><p><strong>Où en est-on ?</strong> Cas limite de l'étape 1 : que rendent ces getters si aucune
+requête n'a encore eu lieu ? Pourquoi certains lèvent-ils une exception et
+d'autres non ?</p>
+<p>Créer le client prépare le navigateur et démarre le kernel, mais ne
+fabrique pas une réponse 200. C'est pourquoi la préparation d'un cookie
+est possible avant toute navigation, contrairement à l'inspection d'un corps :</p>
+<table>
+<thead>
+<tr>
+<th>Appel avant toute Request</th>
+<th>Résultat</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>getRequest()</code>, <code>getResponse()</code>, leurs versions <code>internal</code>, <code>getCrawler()</code></td>
+<td><code>BadMethodCallException</code> : « The "request()" method must be called before … »</td>
+</tr>
+<tr>
+<td><code>getHistory()</code></td>
+<td>un historique vide</td>
+</tr>
+<tr>
+<td><code>getCookieJar()</code></td>
+<td>utilisable : on peut y poser un cookie</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Pourquoi cette différence ?</strong> Une Request/Response/Crawler n'existe qu'<strong>après</strong>
+un échange : il n'y a rien à rendre, d'où l'exception (pas <code>null</code>). L'historique
+et le jar de cookies, eux, sont des conteneurs créés avec le client.</p></section><section class="teaching-section" data-section="s-introspecter-la-response"><span class="outcome-anchor" id="out-OUT-2qpbjpt6nv81" tabindex="-1"></span><h2 id="s-introspecter-la-response" tabindex="-1">Introspecter la Response</h2><aside class="section-digest" id="s-introspecter-la-response-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Le message d&#x27;échec aide à comprendre le comportement.</li><li>L&#x27;assertion exprime aussi l&#x27;intention.</li></ol></aside><p><strong>Où en est-on ?</strong> Étape 2 sur 3 : on lit le résultat de l'application (statut,
+en-tête, corps) sur la couche HttpFoundation.</p>
+<p>Pour une réponse ordinaire, les trois lectures sont distinctes :</p>
+<pre class="highlight" tabindex="0"><code class="language-php">$response = $client-&gt;getResponse();
+$status = $response-&gt;getStatusCode();
+$location = $response-&gt;headers-&gt;get('Location');
+$body = $response-&gt;getContent();</code></pre>
+<p>Dans la fixture <code>/go</code>, on attend 302 et <code>/hello</code> pour les deux premières
+valeurs ; le corps de la redirection n'est pas celui de la destination.
+Pour <code>/blog/999</code>, une assertion <code>assertResponseStatusCodeSame(404)</code> vérifie
+le statut attendu sans le confondre avec l'article 42.</p>
+<p>Les assertions Symfony apportent un diagnostic de réponse plus utile
+qu'une simple comparaison de deux nombres. Ne pas généraliser à toute
+assertion ou toute réponse l'affichage intégral du corps : les réponses
+streamées ou fichiers ont une gestion de contenu différente.
+Utiliser des données fictives, car les diagnostics peuvent exposer
+des en-têtes et du contenu.</p>
+<p>Si l'objectif est de voir l'exception plutôt que la réponse d'erreur
+produite par le kernel, régler <code>catchExceptions(false)</code> avant la requête.
+Cela ne transforme pas une réponse 500 explicitement retournée en exception,
+et ne remplace pas un test du traitement normal des erreurs.</p></section><section class="teaching-section" data-section="s-introspecter-la-request"><span class="outcome-anchor" id="out-OUT-mvr73tryph6w" tabindex="-1"></span><h2 id="s-introspecter-la-request" tabindex="-1">Introspecter la Request</h2><aside class="section-digest" id="s-introspecter-la-request-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>L&#x27;HTML ne révèle pas forcément la route.</li><li>L&#x27;attribute permet un contrôle précis.</li></ol></aside><p><strong>Où en est-on ?</strong> Étape 3 sur 3 : on lit, côté Request HttpFoundation, ce que
+le routeur y a déposé (<code>_route</code>, <code>_controller</code>) et ce que l'URL donne. On
+retrouve ici le mécanisme du cours « The request » (attributes).</p>
+<ul>
+<li><code>_route</code> indique <strong>la route reconnue</strong> — ce que vérifie
+  <code>assertRouteSame()</code>. Deux routes peuvent rendre le même HTML.</li>
+<li>Avec le loader d'attributs étudié, <code>_controller</code> vaut <code>Classe::méthode</code>
+  pour une méthode de contrôleur ordinaire.
+  Pour un controller invocable, la class seule :
+  <code>AttributeRouteControllerLoader</code> omet le nom de la method.</li>
+<li><code>getRequest()-&gt;getPathInfo()</code> rend <code>/hello</code> ; <code>getUri()</code>, des deux côtés,
+  <code>http://localhost/hello</code>.</li>
+</ul>
+<p>Pourquoi <code>_controller</code> n'a-t-il pas <code>::__invoke</code> pour un contrôleur
+invocable ? Parce que le loader fait <code>if ('__invoke' === $method-&gt;getName())</code>
+et ne retient alors que le nom de la classe ; sinon il écrit
+<code>Classe::méthode</code>.</p>
+<table>
+<thead>
+<tr>
+<th>Route sur…</th>
+<th><code>_controller</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>une méthode <code>show()</code></td>
+<td><code>App\Controller\BlogController::show</code></td>
+</tr>
+<tr>
+<td>une classe invocable</td>
+<td><code>App\Controller\InvController</code></td>
+</tr>
+</tbody>
+</table>
+<p>Sur <code>/blog/42</code>, le nom attendu est <code>blog_show</code>, tandis que le chemin
+est <code>/blog/42</code>. Ce sont deux informations différentes ; l'URI ajoute
+notamment le schéma et l'hôte. La présence de <code>_route</code> ou de <code>_controller</code>
+ne prouve pas à elle seule que l'action a terminé : une décision de sécurité
+ou une exception peut interrompre le traitement après le routage.</p></section><section class="teaching-section" data-section="s-apres-un-redirect"><h2 id="s-apres-un-redirect" tabindex="-1">Après un redirect</h2><aside class="section-digest" id="s-apres-un-redirect-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>La destination n&#x27;a pas toujours été appelée.</li><li>Le contexte change après followRedirect().</li></ol></aside><p><strong>Où en est-on ?</strong> Retour sur le cas de l'exemple : quand un redirect est
+suivi, les objets « courants » changent. Que gardent-ils de la requête
+d'origine ?</p>
+<div class="admonition info">
+<p class="admonition-title">🌍 In Real Life</p>
+<p><strong>La situation</strong> : le visiteur quitte le comptoir du blog sur instruction et rejoint un autre guichet. La fiche courante décrit désormais cette nouvelle visite.</p>
+<p><strong>L’équivalent dans Symfony</strong> : première instruction → redirection ; visite suivante → <code>followRedirect()</code> ; fiche courante remplacée → requête et réponse exposées après le suivi.</p>
+<p><strong>Retour à la réalité technique</strong> : les accesseurs du client décrivent la dernière requête. Pour vérifier le statut ou la route d'origine, les observer avant le suivi ou conserver les objets appropriés ; la méthode suivante dépend aussi du statut de redirection.</p>
+<p><strong>🧠 Comment le mémoriser</strong> : « Courant signifie dernier. » Image mentale : nouvelle fiche au-dessus de l'ancienne. Question-réflexe : ai-je déjà changé de requête ?</p>
+<p><strong>⚠️ À ne pas confondre</strong> : historique de navigation et objets courants du client.</p>
+</div>
+<p>Le client ne suit pas les redirects par défaut : <code>getRequest()</code> est <strong>la
+Request qui a redirigé</strong>.</p>
+<table>
+<thead>
+<tr>
+<th>Étape</th>
+<th><code>getResponse()</code></th>
+<th><code>_route</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>request('GET', '/go')</code></td>
+<td>302</td>
+<td><code>go</code></td>
+</tr>
+<tr>
+<td><code>followRedirect()</code></td>
+<td>200</td>
+<td><code>hello</code></td>
+</tr>
+</tbody>
+</table>
+<p>Dans BrowserKit 8.0, après 301, 302 ou 303, <code>followRedirect()</code> choisit
+<code>GET</code>, vide les fichiers et abandonne le corps initial. Après 307 ou 308,
+la méthode, les fichiers et le corps sont conservés.</p>
+<p>Pour un POST de formulaire, cela signifie : paramètres abandonnés avec
+303, conservés avec 307/308. Nuance du code : dès que la méthode finale
+est GET, le tableau des paramètres est vidé, même avec 307/308,
+pour demander l'URI de redirection plutôt que réinjecter les paramètres
+initiaux. Une query string déjà présente dans <code>Location</code> fait partie
+de cette nouvelle URI.</p>
+<p>Suivre une redirection peut donc répéter une écriture pour 307/308.
+Dans les tests de soumission, vérifier d'abord le statut et <code>Location</code>,
+puis la route de destination : un dernier statut 200 ne décrit pas
+à lui seul le trajet effectué.</p>
+<table>
+<thead>
+<tr>
+<th>Statut du redirect</th>
+<th>Méthode suivante</th>
+<th>Fichiers</th>
+<th>Corps</th>
+<th>Paramètres</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>301, 302, 303</td>
+<td><code>GET</code></td>
+<td>vidés</td>
+<td>abandonné</td>
+<td>vidés (méthode GET)</td>
+</tr>
+<tr>
+<td>307, 308 (après un POST)</td>
+<td><code>POST</code> (conservée)</td>
+<td>conservés</td>
+<td>conservé</td>
+<td>conservés</td>
+</tr>
+<tr>
+<td>307, 308 (après un GET)</td>
+<td><code>GET</code></td>
+<td>conservés</td>
+<td>conservé</td>
+<td>vidés (méthode GET)</td>
+</tr>
+</tbody>
+</table></section><section class="teaching-section" data-section="s-pieges-d-examen"><h2 id="s-pieges-d-examen" tabindex="-1">Pièges d&#x27;examen</h2><p class="teaching-label pitfall"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="warning" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3L23 21H1L12 3ZM12 9V14M12 17V18"></path></svg> <strong>Piège à éviter</strong></p><aside class="section-digest" id="s-pieges-d-examen-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Le client possède déjà son état navigateur.</li><li>Request, Response et Crawler nécessitent une navigation.</li></ol></aside><ul class="pitfall-list"><li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : getInternalRequest() est l&#x27;object BrowserKit</summary><p><strong><code>getInternalRequest()</code> est l'object BrowserKit</strong>, pas celui de l'application.
+<em>Pourquoi on se trompe : « internal » évoque « les entrailles de l'application ».</em></p></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : getRequest() et getResponse() sont les objects HttpFoundation</summary><p><strong><code>getRequest()</code> et <code>getResponse()</code> sont les objects HttpFoundation</strong> — ceux que
+l'application a traités et retournés ; la réponse peut aussi provenir
+d'un listener ou du traitement d'une exception, sans retour du contrôleur.</p></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : Avant toute Request, ils lèvent BadMethodCallException</summary><p><strong>Avant toute Request, ils lèvent <code>BadMethodCallException</code></strong> — ils ne rendent pas
+<code>null</code>. L'historique et les cookies, eux, existent déjà. <em>Pourquoi on se
+trompe : on attend <code>null</code> pour « pas encore de valeur ».</em></p></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : Un redirect non suivi</summary><p><strong>Un redirect non suivi</strong> laisse <code>_route</code> sur la route qui a redirigé.</p></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : Préférer les assertions Symfony</summary><p><strong>Préférer les assertions Symfony</strong> aux lectures brutes, pour le message
+d'échec.</p></details></li></ul></section><section class="teaching-section" data-section="s-fiche-express"><h2 id="s-fiche-express" tabindex="-1">Fiche express</h2><p class="teaching-label essential"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="book" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5C9 3 5 3 2 4V20C5 19 9 19 12 21C15 19 19 19 22 20V4C19 3 15 3 12 5V21M5 8H8M5 12H8M16 8H19M16 12H19"></path></svg> <strong>À mémoriser</strong></p><aside class="section-digest" id="s-fiche-express-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Le status code détermine la conservation de method.</li><li>Ne pas assimiler tous les redirects.</li></ol></aside><p>Le test relie désormais l'entrée préparée à trois preuves indépendantes :
+route reconnue, résultat HTTP et document rendu. Une nouvelle navigation
+change les objets courants ; lire l'ancien redirect avant de le suivre.</p>
+<p><strong>🧠 À retenir pour la certification :</strong></p>
+<ul>
+<li><strong><code>internal</code></strong> = navigateur simulé (<strong>BrowserKit</strong>).</li>
+<li><strong><code>getRequest()</code></strong>, <strong><code>getResponse()</code></strong> = <strong>HttpFoundation</strong>, ce qu'a vu
+  l'application.</li>
+<li><strong>Avant toute Request</strong> : <code>BadMethodCallException</code>, sauf <strong>historique</strong> et <strong>cookies</strong>.</li>
+<li><strong><code>getCrawler()</code></strong> : le crawler de la dernière Request.</li>
+<li><strong><code>_route</code></strong> et <strong><code>_controller</code></strong> dans les attributes de la Request
+  (<code>_controller</code> = classe seule pour un contrôleur invocable).</li>
+<li>Redirect <strong>non suivi</strong> : <code>_route</code> de la route qui a redirigé.</li>
+<li><strong>301/302/303 suivi → <code>GET</code></strong> ; 307/308 → même method.</li>
+</ul>
+<p>Moyen mnémotechnique :
+<strong>« Interne = navigateur ; rien avant request() »</strong>.</p>
+<p>Phrase de mémorisation : <em>le client traduit entre deux modèles HTTP ;
+« internal » veut dire navigateur, « sans internal » veut dire application.</em></p>
+<pre class="highlight" tabindex="0"><code class="language-text">internal = BrowserKit, sinon HttpFoundation
+rien avant request() (sauf History, CookieJar) ; _route / _controller
+redirect non suivi = Request d'origine
+followRedirect : 301/302/303 → GET, 307/308 → même method</code></pre>
+<p>La suite s'intéresse aux <a href="course-CRS-fak8bf9014br.html">signaux de dépréciation</a> :
+un comportement peut encore fonctionner tout en annonçant une migration nécessaire.</p></section><section class="official-sources"><h2 id="reader-sources" tabindex="-1">Sources officielles et compléments</h2><ul><li><a href="https://symfony.com/doc/8.0/components/browser_kit.html">Symfony 8.0 — BrowserKit</a></li><li><a href="https://symfony.com/doc/8.0/testing.html">Symfony 8.0 — testing</a></li></ul></section><section id="course-recalls" aria-labelledby="course-recalls-title" tabindex="-1"><h2 id="course-recalls-title">Rappels et liens avec les autres cours</h2><div data-recall-group="other"><h3>Rappels des cours précédents / autres modules</h3><ul><li data-recall-course="CRS-g8v45328cg95" data-recall-kind="previous_course"><p class="recall-provenance">Module 13 — Tests automatisés · Cours « Framework objects access »</p><p>Le TestContainer élargit l&#x27;accès pour les tests. Il ne recrée pas les services supprimés.</p><p><a href="#cards-previous">Rappel : <span lang="en">What special access does KernelTestCase::getContainer() provide?</span></a></p></li></ul></div></section><nav class="course-sequence" aria-label="Ordre de lecture"><a rel="prev" href="course-CRS-4x4ec26c9bfc.html" aria-label="Précédent : Client configuration — Module 13 — Tests automatisés">Précédent : Client configuration</a> <a href="lot-13.html">Sommaire : Module 13 — Tests automatisés</a> <a rel="next" href="course-CRS-fak8bf9014br.html" aria-label="Suivant : Handling legacy deprecated code — Module 13 — Tests automatisés">Suivant : Handling legacy deprecated code</a></nav><p class="course-practice-entry"><a class="button" href="#view-quiz">Fin du cours — s’entraîner avec le Quiz</a></p></div><div id="view-flashcards" data-course-panel role="region" aria-labelledby="view-flashcards-title"><h2 id="view-flashcards-title">Flashcards</h2><p lang="en">Answer before revealing each card.</p><p>Ces cartes ne mesurent pas une maîtrise notée.</p><div id="cards-s-l-essentiel-1" data-card-section="s-l-essentiel"><h3><a href="#s-l-essentiel">Revoir : L&#x27;essentiel</a></h3><div class="reader-cards"><details class="reader-card" id="B-xkp7v8142jt1-01"><summary lang="en">Which layer do getInternalRequest() and getInternalResponse() expose?</summary><p lang="en">BrowserKit&#x27;s simulated-browser objects.</p><p lang="fr">internal désigne le navigateur simulé. Les methods sans internal exposent HttpFoundation.</p><a href="course-CRS-xkp7v8142jt1.html#out-OUT-az102q4grt31">Revoir le passage précis</a></details></div></div><div id="cards-s-le-schema-2" data-card-section="s-le-schema"><h3><a href="#s-le-schema">Revoir : Le schéma</a></h3><div class="reader-cards"><details class="reader-card" id="B-xkp7v8142jt1-02"><summary lang="en">Which objects does KernelBrowser translate between?</summary><p lang="en">BrowserKit Request/Response and HttpFoundation Request/Response.</p><p lang="fr">Le client adapte les deux couches. Le controller utilise HttpFoundation.</p><a href="course-CRS-xkp7v8142jt1.html#out-OUT-az102q4grt31">Revoir le passage précis</a></details></div></div><div id="cards-s-l-exemple-3" data-card-section="s-l-exemple"><h3><a href="#s-l-exemple">Revoir : L&#x27;exemple</a></h3><div class="reader-cards"><details class="reader-card" id="B-xkp7v8142jt1-03"><summary lang="en">Where should a test inspect the actual application Response headers?</summary><p lang="en">On getResponse()-&gt;headers, the HttpFoundation Response.</p><p lang="fr">La Response applicative porte le HeaderBag. La version BrowserKit possède une autre API.</p><a href="course-CRS-xkp7v8142jt1.html#out-OUT-az102q4grt31">Revoir le passage précis</a></details></div></div><div id="cards-s-les-deux-couches-4" data-card-section="s-les-deux-couches"><h3><a href="#s-les-deux-couches">Revoir : Les deux couches</a></h3><div class="reader-cards"><details class="reader-card" id="B-xkp7v8142jt1-04"><summary lang="en">Does getInternalResponse() expose an HttpFoundation HeaderBag property?</summary><p lang="en">No. It exposes BrowserKit response accessors such as getHeader().</p><p lang="fr">Les APIs ne sont pas interchangeables. Choisir selon la couche inspectée.</p><a href="course-CRS-xkp7v8142jt1.html#out-OUT-az102q4grt31">Revoir le passage précis</a></details></div></div><div id="cards-s-les-autres-objects-internes-5" data-card-section="s-les-autres-objects-internes"><h3><a href="#s-les-autres-objects-internes">Revoir : Les autres objects internes</a></h3><div class="reader-cards"><details class="reader-card" id="B-xkp7v8142jt1-05"><summary lang="en">Which object stores the test browser&#x27;s navigation history?</summary><p lang="en">BrowserKit History, returned by getHistory().</p><p lang="fr">L&#x27;historique appartient au client. Il est distinct de la Request courante.</p><a href="course-CRS-xkp7v8142jt1.html#out-OUT-az102q4grt31">Revoir le passage précis</a></details></div></div><div id="cards-s-avant-la-premiere-request-6" data-card-section="s-avant-la-premiere-request"><h3><a href="#s-avant-la-premiere-request">Revoir : Avant la première Request</a></h3><div class="reader-cards"><details class="reader-card" id="B-xkp7v8142jt1-06"><summary lang="en">What happens if getResponse() is called before the first Request?</summary><p lang="en">It throws BadMethodCallException rather than returning null.</p><p lang="fr">La Response n&#x27;existe pas toujours. Envoyer une Request avant introspection.</p><a href="course-CRS-xkp7v8142jt1.html#out-OUT-2qpbjpt6nv81">Revoir le passage précis</a></details></div></div><div id="cards-s-introspecter-la-response-7" data-card-section="s-introspecter-la-response"><h3><a href="#s-introspecter-la-response">Revoir : Introspecter la Response</a></h3><div class="reader-cards"><details class="reader-card" id="B-xkp7v8142jt1-07"><summary lang="en">Why prefer assertResponseStatusCodeSame() over comparing raw numbers?</summary><p lang="en">Its failure output provides richer Response diagnostics.</p><p lang="fr">Le message d&#x27;échec aide à comprendre le comportement. L&#x27;assertion exprime aussi l&#x27;intention.</p><a href="course-CRS-xkp7v8142jt1.html#out-OUT-2qpbjpt6nv81">Revoir le passage précis</a></details></div></div><div id="cards-s-introspecter-la-request-8" data-card-section="s-introspecter-la-request"><h3><a href="#s-introspecter-la-request">Revoir : Introspecter la Request</a></h3><div class="reader-cards"><details class="reader-card" id="B-xkp7v8142jt1-08"><summary lang="en">Which Request attribute identifies the matched route?</summary><p lang="en">_route.</p><p lang="fr">L&#x27;HTML ne révèle pas forcément la route. L&#x27;attribute permet un contrôle précis.</p><a href="course-CRS-xkp7v8142jt1.html#out-OUT-mvr73tryph6w">Revoir le passage précis</a></details></div></div><div id="cards-s-apres-un-redirect-9" data-card-section="s-apres-un-redirect"><h3><a href="#s-apres-un-redirect">Revoir : Après un redirect</a></h3><div class="reader-cards"><details class="reader-card" id="B-xkp7v8142jt1-09"><summary lang="en">Before following a redirect, which Request does getRequest() return?</summary><p lang="en">The Request that produced the redirect.</p><p lang="fr">La destination n&#x27;a pas toujours été appelée. Le contexte change après followRedirect().</p><a href="course-CRS-xkp7v8142jt1.html#out-OUT-mvr73tryph6w">Revoir le passage précis</a></details></div></div><div id="cards-s-pieges-d-examen-10" data-card-section="s-pieges-d-examen"><h3><a href="#s-pieges-d-examen">Revoir : Pièges d&#x27;examen</a></h3><div class="reader-cards"><details class="reader-card" id="B-xkp7v8142jt1-10"><summary lang="en">Which browser objects are usable before any Request has been sent?</summary><p lang="en">The cookie jar and history.</p><p lang="fr">Le client possède déjà son état navigateur. Request, Response et Crawler nécessitent une navigation.</p><a href="course-CRS-xkp7v8142jt1.html#out-OUT-az102q4grt31">Revoir le passage précis</a></details></div></div><div id="cards-s-fiche-express-11" data-card-section="s-fiche-express"><h3><a href="#s-fiche-express">Revoir : Fiche express</a></h3><div class="reader-cards"><details class="reader-card" id="B-xkp7v8142jt1-11"><summary lang="en">How do followed 307 and 308 redirects treat the request method compared with ordinary 302 handling?</summary><p lang="en">307 and 308 preserve the method; the test client&#x27;s ordinary 302 following uses GET.</p><p lang="fr">Le status code détermine la conservation de method. Ne pas assimiler tous les redirects.</p><a href="course-CRS-xkp7v8142jt1.html#out-OUT-mvr73tryph6w">Revoir le passage précis</a></details></div></div><div id="cards-previous"><p class="recall-provenance">Module 13 — Tests automatisés · Cours « Framework objects access »</p><aside class="checkpoint"><h2>Rappel d’un cours antérieur</h2><p>Avant de poursuivre : Framework objects access.</p><details class="corpus-correction"><summary lang="en">What special access does KernelTestCase::getContainer() provide?</summary><p lang="en">Access to public and retained private services through the test container.</p><p>Le TestContainer élargit l&#x27;accès pour les tests. Il ne recrée pas les services supprimés.</p><a href="course-CRS-g8v45328cg95.html#out-OUT-jkdgtbjxta7j">Relire la correction dans le cours antérieur</a></details></aside></div></div><div id="view-quiz" data-course-panel role="region" aria-labelledby="view-quiz-title"><aside class="revision-context"><p><strong>Avant le quiz :</strong> Le client a demandé /blog/42 avec les entrées préparées. Pour vérifier le résultat, il faut identifier la route sélectionnée, le statut, les en-têtes et le corps, pas seulement reconnaître un titre dans le HTML. Le navigateur simulé et l&#x27;application utilisent deux modèles HTTP : choisir le bon objet évite d&#x27;inspecter la mauvaise couche.</p><p>Quelle donnée entre, quelle responsabilité agit et quelle condition change le résultat ? Pour chaque correction, vérifiez ces conditions dans <a href="course-CRS-xkp7v8142jt1.html#s-objectif">le passage enseigné</a>, sans supposer que toutes les branches du blog sont exécutées.</p></aside><h2 id="view-quiz-title">Quiz</h2><p class="quiz-size" lang="en">7 eligible learning questions · 7 per session. Repeating a question does not demonstrate mastery.</p><p id="course-quiz-status" role="status">Quiz interactif non chargé. Démarrez après chargement de la banque locale.</p><div id="course-quiz-controls" class="assessment-main" hidden><div id="course-quiz-assessment-controls" hidden><select id="course-quiz-assessment-mode" aria-label="Mode du quiz" hidden><option value="learning">Entraînement</option></select><p id="course-quiz-training-scope"></p><button id="course-quiz-start-assessment" type="button" lang="en">Start practice</button><button id="course-quiz-finish-assessment" type="button" lang="en" hidden>End session</button></div><p id="course-quiz-assessment-error" role="alert"></p><p id="course-quiz-assessment-timer" hidden></p><p id="course-quiz-session-progress" class="quiz-progress" role="status" lang="en"></p><div id="course-quiz-assessment-app" tabindex="-1"></div><nav id="course-quiz-session-navigation" aria-label="Questions du cours"></nav><div id="course-quiz-learning-overview" aria-live="polite"></div></div><div id="course-quiz-native"><p>Sans JavaScript ou si le chargement échoue : aucune tentative notée. Les <a href="#view-flashcards">flashcards du cours</a> restent disponibles.</p><details class="course-quiz-fallback" data-question-id="L-xkp7v8142jt1-base-v1"><summary lang="en">Which layer do getInternalRequest() and getInternalResponse() expose?</summary><p>Correction de consultation — non notée.</p><p>internal désigne le navigateur simulé. Les methods sans internal exposent HttpFoundation.</p><ul><li><strong lang="en">Distractor: The live web server&#x27;s network socket objects.</strong><p>Le client simulé n&#x27;expose pas ces sockets via ces methods.</p></li><li><strong lang="en">Correct: BrowserKit&#x27;s simulated-browser objects.</strong><p>internal désigne le navigateur simulé. Les methods sans internal exposent HttpFoundation.</p></li><li><strong lang="en">Distractor: HttpFoundation&#x27;s application-facing objects.</strong><p>Les methods sans internal exposent HttpFoundation.</p></li></ul><a href="course-CRS-xkp7v8142jt1.html#out-OUT-az102q4grt31">Relire le passage exact</a></details></div></div></div></div><details class="transfer-panel"><summary>Sauvegarde et transfert de progression</summary><p id="reading-status" role="status">Sans JavaScript : lecture libre ; progression non enregistrée.</p><p><a href="assessment.html#overview-title">Lecture, réussites immédiates et différées</a></p><p>Transfert manuel — aucune synchronisation automatique</p><p id="persistence-status" role="status"></p><button type="button" class="secondary" id="export-progress">Exporter ma progression</button><label for="import-progress">Choisir un JSON pour fusionner ma progression (sans remplacement)</label><input type="file" id="import-progress" accept="application/json,.json"><p id="transfer-status" role="status"></p></details></main><footer class="site-footer"><a href="catalogue.html">Catalogue</a> <a href="sources.html">Sources et attribution</a> <a href="#contenu">Haut de page</a></footer></body></html>

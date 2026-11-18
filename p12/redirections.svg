@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="320" height="490" viewBox="0 0 320 490" role="img" aria-labelledby="title desc">
+  <title id="title">Choisir une redirection sans changer la méthode</title>
+  <desc id="desc">Si la méthode et le body doivent être conservés, choisir 307 pour un déplacement temporaire ou 308 pour un déplacement permanent. Autre objectif : 303 oriente vers une récupération par GET ou HEAD, par exemple la lecture d'une confirmation après POST.</desc>
+  <defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0 L8 4 L0 8Z" fill="#165c50"/></marker></defs>
+  <rect x="10" y="10" width="300" height="70" rx="12" fill="#172f32"/>
+  <text x="160" y="38" text-anchor="middle" font-family="sans-serif" font-size="17" font-weight="700" fill="#fff">Conserver méthode</text>
+  <text x="160" y="62" text-anchor="middle" font-family="sans-serif" font-size="17" fill="#fff">et body ? Oui.</text>
+  <path d="M160 80V115H80V150 M160 115H240V150" fill="none" stroke="#165c50" stroke-width="2" marker-end="url(#arrow)"/>
+  <path d="M80 130V150" fill="none" stroke="#165c50" stroke-width="2" marker-end="url(#arrow)"/>
+  <rect x="10" y="158" width="142" height="88" rx="12" fill="#e7f2eb" stroke="#165c50"/>
+  <rect x="168" y="158" width="142" height="88" rx="12" fill="#e7f2eb" stroke="#165c50"/>
+  <text x="81" y="186" text-anchor="middle" font-family="sans-serif" font-size="16" fill="#172f32">Temporaire</text>
+  <text x="81" y="222" text-anchor="middle" font-family="monospace" font-size="30" font-weight="700" fill="#165c50">307</text>
+  <text x="239" y="186" text-anchor="middle" font-family="sans-serif" font-size="16" fill="#172f32">Permanent</text>
+  <text x="239" y="222" text-anchor="middle" font-family="monospace" font-size="30" font-weight="700" fill="#165c50">308</text>
+  <path d="M10 278H310" stroke="#cbd6cf" stroke-width="2"/>
+  <text x="160" y="309" text-anchor="middle" font-family="sans-serif" font-size="16" fill="#172f32">Autre objectif : après un POST</text>
+  <rect x="10" y="329" width="300" height="52" rx="12" fill="#e7f2eb" stroke="#165c50"/>
+  <text x="160" y="361" text-anchor="middle" font-family="sans-serif" font-size="17" font-weight="700" fill="#172f32">303 → GET ou HEAD</text>
+  <path d="M160 381V416" stroke="#165c50" stroke-width="2" marker-end="url(#arrow)"/>
+  <rect x="10" y="424" width="300" height="52" rx="12" fill="#fff" stroke="#165c50"/>
+  <text x="160" y="456" text-anchor="middle" font-family="sans-serif" font-size="17" fill="#172f32">Page de confirmation</text>
+</svg>
