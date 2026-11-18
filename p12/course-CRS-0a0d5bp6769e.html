@@ -1,0 +1,519 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; connect-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Service locators — Symfony 8 Preparation</title><link rel="stylesheet" href="styles.css"><link rel="stylesheet" href="reader.css"><script src="mermaid.min.js" defer></script><script src="mermaid-init.js" defer></script><link rel="stylesheet" href="assessment.css"><script src="fixed-exams-data.js" defer></script><script src="fixed-exams.js" defer></script><script src="learning-state.js" defer></script><script src="guide.js" defer></script><script src="reader-catalog.js" defer></script><script src="reader.js" defer></script><script src="site-state.js" defer></script><script src="assessment.js" defer></script><script src="course-views.js" defer></script><link rel="stylesheet" href="syntax-highlight.css"><script src="prism-syntax.js" defer></script><script src="syntax-highlight.js" defer></script></head><body data-course-id="CRS-0a0d5bp6769e"><a class="skip" href="#contenu">Aller au contenu</a><header class="site-header"><a class="brand" href="index.html">S8 Preparation</a><nav aria-label="Navigation principale"><a href="index.html">Accueil</a> <a href="catalogue.html">Parcours</a> <a href="assessment.html?mode=review">Réviser</a> <a href="examens.html">Examens blancs</a> <a href="jour-j.html">Jour J</a></nav></header><main id="contenu" tabindex="-1" class="corpus-reader"><nav class="breadcrumb" aria-label="Fil d’Ariane"><a href="index.html">Accueil</a> <span aria-hidden="true">›</span> <a href="catalogue.html">Parcours</a> <span aria-hidden="true">›</span> <a href="lot-09.html">Module 09 — Injection de dépendances</a> <span aria-hidden="true">›</span> <span aria-current="page">Service locators</span></nav><h1>Service locators</h1><p class="muted">Symfony 8.0 · API PHP ≤ 8.4 · Twig ≤ 3.22. Préparation indépendante.</p><p class="revision-status">Rédaction narrative P11 : projection nouvelle, non couverte par les décisions historiques P10. Aucune approbation officielle ni garantie de réussite.</p><aside class="narrative-context" aria-label="Repères de lecture"><p><strong>Prérequis de lecture :</strong> <a href="course-CRS-w6yfxm6ad4zy.html">Services autowiring</a></p><p><strong>Concepts voisins :</strong> <a href="course-CRS-brn6frfqpxxj.html">Console component</a> — Réutiliser le service du blog sans navigateur. <a href="lot-09.html">Comparer les responsabilités dans ce module</a> · <a href="carte-composants.html">Situer cette responsabilité dans le blog</a> · <a href="glossaire.html">Distinguer les termes voisins</a></p><p><a href="ordre-lecture.html">Retrouver les 163 cours dans le parcours recommandé</a>. Ce repère ne modifie ni votre historique ni votre progression.</p></aside><div class="course-layout"><details class="lot-course-menu"><summary>Cours du module · 12 cours</summary><nav aria-label="Cours du module"><a class="lot-context" href="lot-09.html">Module 09 — Injection de dépendances</a><ol><li><a href="course-CRS-htvm3b1gas0d.html">Dependency Injection component</a></li><li><a href="course-CRS-p1694d5f7r8c.html">Service container</a></li><li><a href="course-CRS-jtkmpfp3nwzk.html">Built-in services</a></li><li><a href="course-CRS-8zmj5ntgdhjv.html">Configuration parameters</a></li><li><a href="course-CRS-g8fteyd38nrt.html">Services registration (YAML and PHP attributes)</a></li><li><a href="course-CRS-fkebqqqke5y5.html">Service decoration</a></li><li><a href="course-CRS-b4g5s2asb9ye.html">Tags</a></li><li><a href="course-CRS-exs5dvtqa1as.html">Semantic configuration</a></li><li><a href="course-CRS-1bkg7pkf78c7.html">Factories</a></li><li><a href="course-CRS-d25bvr0097py.html">Compiler passes</a></li><li><a href="course-CRS-w6yfxm6ad4zy.html">Services autowiring</a></li><li><a href="course-CRS-0a0d5bp6769e.html" aria-current="page">Service locators</a></li></ol><a href="lot-09.html#view-quiz">Quiz du module</a></nav></details><aside class="course-section-menu" aria-label="Sommaire du cours"><nav class="course-actions" aria-label="Activités du cours"><a id="tab-course" href="#view-course">Cours</a><a id="tab-flashcards" href="#view-flashcards">Flashcards</a><a id="tab-quiz" href="#view-quiz">Quiz</a></nav><details class="course-section-disclosure"><summary id="course-sections">Sections du cours</summary><nav aria-label="Sections du cours"><ul><li><a href="#s-objectif">Objectif</a></li><li><a href="#s-l-essentiel">L&#x27;essentiel</a></li><li><a href="#s-le-schema">Le schéma</a></li><li><a href="#s-le-fil-rouge-un-commandbus">Le fil rouge : un CommandBus</a></li><li><a href="#s-le-cas-legitime-beaucoup-de-dependencies-une-seule-utilisee">Le cas légitime : beaucoup de dependencies, une seule utilisée</a></li><li><a href="#s-ce-que-cela-n-est-pas-le-container">Ce que cela n&#x27;est pas : le container</a></li><li><a href="#s-la-forme-courte-autowirelocator">La forme courte : `#[AutowireLocator]`</a></li><li><a href="#s-heriter-fusionner-avec-le-parent">Hériter : fusionner avec le parent</a></li><li><a href="#s-pieges-d-examen">Pièges d&#x27;examen</a></li><li><a href="#s-fiche-express">Fiche express</a><ul><li><a href="#s-fiche-express-nested-a-retenir-pour-la-certification">🧠 À retenir pour la certification</a></li></ul></li><li><a href="#reader-objectives">Objectifs d’apprentissage</a></li><li><a href="#reader-sources">Sources officielles et compléments</a></li><li><a href="#course-recalls">Rappels et liens avec les autres cours</a></li></ul></nav><nav aria-label="Flashcards par section"><a href="#view-flashcards">Flashcards par section</a><ul><li><a href="#cards-s-l-essentiel-1">L&#x27;essentiel</a></li><li><a href="#cards-s-le-schema-2">Le schéma</a></li><li><a href="#cards-s-le-fil-rouge-un-commandbus-3">Le fil rouge : un CommandBus</a></li><li><a href="#cards-s-le-cas-legitime-beaucoup-de-dependencies-une-seule-utilisee-4">Le cas légitime : beaucoup de dependencies, une seule utilisée</a></li><li><a href="#cards-s-ce-que-cela-n-est-pas-le-container-5">Ce que cela n&#x27;est pas : le container</a></li><li><a href="#cards-s-la-forme-courte-autowirelocator-6">La forme courte : `#[AutowireLocator]`</a></li><li><a href="#cards-s-heriter-fusionner-avec-le-parent-7">Hériter : fusionner avec le parent</a></li><li><a href="#cards-s-pieges-d-examen-8">Pièges d&#x27;examen</a></li><li><a href="#cards-s-fiche-express-9">Fiche express</a></li><li><a href="#cards-previous">Module 09 — Injection de dépendances · Cours « Factories » · Rappel : <span lang="en">When a service has a factory, who constructs the service object?</span></a></li></ul></nav><nav aria-label="Retour au module"><a href="lot-09.html">Tous les cours du module</a></nav></details><p class="local-quiz-count">5 questions disponibles · 5 par session Quiz</p></aside><div class="course-content"><div id="view-course" data-course-panel role="region" aria-labelledby="view-course-title"><h2 id="view-course-title">Cours</h2><p class="course-introduction"><a href="#s-objectif">Introduction</a> · <a href="#course-sections">Sections du cours</a></p><h2 id="reader-objectives" tabindex="-1">Objectifs d’apprentissage</h2><ul><li><a href="course-CRS-0a0d5bp6769e.html#out-OUT-3c8n410rjew2">Justifier un locator plutôt qu&#x27;une injection directe</a></li><li><a href="course-CRS-0a0d5bp6769e.html#out-OUT-treyye0w8xe4">Distinguer un locator de l&#x27;injection du container</a></li><li><a href="course-CRS-0a0d5bp6769e.html#out-OUT-g6613nkxjesh">Déclarer getSubscribedServices() et fusionner en inheritance</a></li><li><a href="course-CRS-0a0d5bp6769e.html#out-OUT-7s1prxwgdhe5">Reconnaître #[AutowireLocator]</a></li></ul><aside class="pedagogy-legend" aria-label="Repères pédagogiques"><p><strong>Repères pédagogiques</strong></p><p>Ces repères décrivent le rôle du bloc, pas une fréquence officielle à l’examen.</p><p class="teaching-label essential"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="brain" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5C12 1 6 1 6 5C2 5 1 10 4 12C1 15 3 19 6 19C6 23 12 23 12 19V5M12 5C12 1 18 1 18 5C22 5 23 10 20 12C23 15 21 19 18 19C18 23 12 23 12 19M6 5C6 8 8 9 9 9M4 12H7L9 14M6 19V16M18 5C18 8 16 9 15 9M20 12H17L15 14M18 19V16"></path></svg> <strong>À comprendre</strong></p><p class="teaching-label essential"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="book" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5C9 3 5 3 2 4V20C5 19 9 19 12 21C15 19 19 19 22 20V4C19 3 15 3 12 5V21M5 8H8M5 12H8M16 8H19M16 12H19"></path></svg> <strong>À mémoriser</strong></p><p class="teaching-label example"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="code" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6L2 12L8 18M16 6L22 12L16 18M14 3L10 21"></path></svg> <strong>Exemple concret</strong></p><p class="teaching-label pitfall"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="warning" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3L23 21H1L12 3ZM12 9V14M12 17V18"></path></svg> <strong>Piège à éviter</strong></p><p class="teaching-label nuance"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="balance" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3V21M7 21H17M3 7L21 5M5 7L1 15H9L5 7M19 6L15 14H23L19 6M1 15Q5 20 9 15M15 14Q19 19 23 14"></path></svg> <strong>Nuance à connaître</strong></p><p>Précision, exception ou condition d’application d’une règle.</p></aside><section class="teaching-section" data-section="s-objectif"><h2 id="s-objectif" tabindex="-1">Objectif</h2><p>L'import du blog peut choisir un seul exporteur parmi plusieurs formats.
+Injecter une grande collection pour la parcourir jusqu'au bon choix
+n'est pas toujours utile. Un locator déclare un petit ensemble de choix
+et diffère leur récupération. Nous allons expliquer ce compromis,
+ses erreurs et sa portée, sans donner au service métier un accès
+illimité au container. AbstractController reste traité dans son cours propre.</p>
+<p>Question directrice : <strong>comment un service peut-il choisir son collaborateur
+au dernier moment, sans recevoir tous les candidats ni tout le container ?</strong></p></section><section class="teaching-section" data-section="s-l-essentiel"><h2 id="s-l-essentiel" tabindex="-1">L&#x27;essentiel</h2><p class="teaching-label essential"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="brain" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5C12 1 6 1 6 5C2 5 1 10 4 12C1 15 3 19 6 19C6 23 12 23 12 19V5M12 5C12 1 18 1 18 5C22 5 23 10 20 12C23 15 21 19 18 19C18 23 12 23 12 19M6 5C6 8 8 9 9 9M4 12H7L9 14M6 19V16M18 5C18 8 16 9 15 9M20 12H17L15 14M18 19V16"></path></svg> <strong>À comprendre</strong></p><aside class="section-digest" id="s-l-essentiel-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Le locator limite les dependencies accessibles.</li><li>La création est différée au get().</li></ol></aside><p><strong>Ce que cette partie veut réellement vous apprendre.</strong></p>
+<ul>
+<li><em>Pourquoi ce sujet existe.</em> L'injection directe construit <strong>tout</strong> ce
+  qu'un service demande, même si une seule branche servira. Avec douze
+  formats d'export, douze objets seraient préparés pour en utiliser un.</li>
+<li><em>Le piège de fond.</em> Un locator ressemble à « tout le container » (il a
+  <code>get()</code>), mais il est <strong>borné</strong> : seules les clés déclarées sont
+  récupérables. C'est un container <em>réduit</em>, pas le container.</li>
+<li><em>Ce que l'auteur veut que vous compreniez.</em> La liste des possibilités est
+  connue <strong>à la compilation</strong> (donc vérifiée), le choix de la clé se fait
+  <strong>à l'exécution</strong>.</li>
+<li><em>Pourquoi c'est à l'examen.</em> Les questions portent sur <code>?</code> (facultatif),
+  les privés accessibles dans un locator, la clé <code>__METHOD__</code>, et ce que
+  voient <code>getProvidedServices()</code> et <code>count()</code>.</li>
+</ul>
+<p>Un <strong>service locator</strong> fournit <code>has()</code> et <code>get()</code> sur un ensemble
+restreint de clés. Il s'agit bien d'une recherche de service à l'utilisation,
+mais ses possibilités sont déclarées et peuvent être câblées à la compilation.
+Un <strong>service subscriber</strong> annonce cette liste via
+<code>ServiceSubscriberInterface</code>.</p>
+<p>Le locator diffère la récupération, pas nécessairement toute construction :
+un objet partagé déjà obtenu ailleurs peut être réutilisé.
+Pour deux collaborateurs toujours nécessaires, l'injection directe
+reste souvent plus simple. Le locator devient utile lorsque le choix
+se fait à l'exécution et qu'une seule branche sera utilisée.</p>
+<p>Comparaison des deux approches :</p>
+<pre class="highlight" tabindex="0"><code class="language-text">┌─────────────────────────────────────┐ ┌─────────────────────────────────────┐
+│ INJECTION DIRECTE                   │ │ SERVICE LOCATOR                     │
+├─────────────────────────────────────┤ ├─────────────────────────────────────┤
+│ Reçoit : les objets eux-mêmes       │ │ Reçoit : un petit fournisseur       │
+│ Construit : tout, à l'injection     │ │ Construit : seulement ce qu'on get()│
+│ Choix : fixé au câblage             │ │ Choix : à l'exécution (clé)         │
+│ Bon pour : 2 dépendances toujours   │ │ Bon pour : beaucoup de candidats,   │
+│            nécessaires              │ │            un seul utilisé          │
+└─────────────────────────────────────┘ └─────────────────────────────────────┘</code></pre>
+<div class="admonition info">
+<p class="admonition-title">🌍 In Real Life</p>
+<p><strong>La situation</strong> : le poste reçoit accès à quelques casiers identifiés et choisit l'outil utile au moment de travailler, sans vider tous les casiers.</p>
+<p><strong>L’équivalent dans Symfony</strong> : casiers déclarés → clés du locator ; choix local → clé demandée à l'exécution ; retrait → <code>get()</code> ; liste préparée → déclaration du service subscriber.</p>
+<p><strong>Retour à la réalité technique</strong> : le locator borne les services récupérables et diffère leur récupération. Il peut retrouver une instance partagée déjà construite ailleurs. Deux dépendances toujours nécessaires restent souvent plus claires en injection directe.</p>
+<p><strong>🧠 Comment le mémoriser</strong> : « Petit choix déclaré, retrait au besoin. » Image mentale : quelques casiers nommés, un seul ouvert. Question-réflexe : le choix doit-il réellement attendre l'exécution ?</p>
+<p><strong>⚠️ À ne pas confondre</strong> : service subscriber déclarant des dépendances et event subscriber déclarant des réactions aux événements.</p>
+</div></section><section class="teaching-section" data-section="s-le-schema"><h2 id="s-le-schema" tabindex="-1">Le schéma</h2><aside class="section-digest" id="s-le-schema-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Le locator n&#x27;est pas le container global.</li><li>Son contrat est une liste explicite.</li></ol></aside><p><strong>Où en est-on ?</strong> Avant le code, deux temps à distinguer : (1) la
+<strong>compilation</strong>, qui lit la liste déclarée et vérifie qu'elle est
+satisfaisable ; (2) l'<strong>exécution</strong>, où le code choisit une clé. Les deux
+schémas suivants montrent chacun un temps.</p>
+<p>La première vue concerne le subscriber enregistré et conservé,
+avec l'intégration qui lit sa liste. Les références obligatoires
+et facultatives n'ont pas la même politique d'absence :</p>
+<figure class="diagram" aria-labelledby="CRS-0a0d5bp6769e-3-diagram-0-title CRS-0a0d5bp6769e-3-diagram-0-description"><figcaption id="CRS-0a0d5bp6769e-3-diagram-0-title">getSubscribedServices lue à la compilation</figcaption><p id="CRS-0a0d5bp6769e-3-diagram-0-description">À la compilation, getSubscribedServices() est lue, de façon statique : un service manquant déclaré sans ? fait échouer ; avec ?, il est simplement absent du locator.</p><div class="mermaid" hidden>---
+title: Un service locator à la compilation
+---
+flowchart TD
+  accTitle: getSubscribedServices lue à la compilation
+  accDescr: À la compilation, getSubscribedServices() est lue, de façon statique : un service manquant déclaré sans ? fait échouer ; avec ?, il est simplement absent du locator.
+  C[&quot;compilation&lt;br/&gt;getSubscribedServices()&quot;] --&gt;|&quot;résout les types déclarés&quot;| M{&quot;service&lt;br/&gt;manquant ?&quot;}
+  M --&gt;|&quot;sans ?&quot;| F([&quot;échec&quot;])
+  M --&gt;|&quot;avec ?&quot;| AB([&quot;absent du locator&quot;])
+  M --&gt;|&quot;non&quot;| OK([&quot;référence disponible&quot;])
+  classDef config fill:#e0f2fe,stroke:#0369a1,color:#0c4a6e
+  classDef decision fill:#fef3c7,stroke:#b45309,color:#78350f
+  classDef result fill:#dcfce7,stroke:#15803d,color:#14532d
+  classDef error fill:#fee2e2,stroke:#b91c1c,color:#7f1d1d
+  class C config
+  class M decision
+  class AB,OK result
+  class F error</div></figure>
+<p><strong>Où en est-on ?</strong> Le locator est assemblé. Passons à l'exécution : une clé
+choisie par notre code provoque la récupération puis l'appel métier.</p>
+<p>La seconde vue commence après cet assemblage : une clé choisie
+par le code applicatif provoque la récupération puis l'appel métier.</p>
+<figure class="diagram" aria-labelledby="CRS-0a0d5bp6769e-3-diagram-1-title CRS-0a0d5bp6769e-3-diagram-1-description"><figcaption id="CRS-0a0d5bp6769e-3-diagram-1-title">L&#x27;injection du ServiceLocator et ses get</figcaption><p id="CRS-0a0d5bp6769e-3-diagram-1-description">Le bus reçoit un locator sans demander ses handlers. Une clé déclarée permet de récupérer le service ; s&#x27;il est partagé, une instance existante est réutilisée. Une clé non déclarée provoque une ServiceNotFoundException. Le bus appelle ensuite le handler obtenu.</p><div class="mermaid" hidden>---
+title: Un service locator à l&#x27;exécution
+---
+flowchart TD
+  accTitle: L&#x27;injection du ServiceLocator et ses get
+  accDescr: Le bus reçoit un locator sans demander ses handlers. Une clé déclarée permet de récupérer le service ; s&#x27;il est partagé, une instance existante est réutilisée. Une clé non déclarée provoque une ServiceNotFoundException. Le bus appelle ensuite le handler obtenu.
+  I[&quot;CommandBus&quot;] --&gt;|&quot;get de la clé choisie&quot;| L{&quot;clé disponible ?&quot;}
+  L --&gt;|&quot;oui : récupère le service&quot;| H[&quot;handler sélectionné&quot;]
+  H --&gt;|&quot;le bus appelle handle&quot;| R([&quot;commande traitée&quot;])
+  L --&gt;|&quot;non : lève&quot;| E([&quot;ServiceNotFoundException&quot;])
+  classDef runtime fill:#e0f2fe,stroke:#0369a1,color:#0c4a6e
+  classDef decision fill:#fef3c7,stroke:#b45309,color:#78350f
+  classDef result fill:#dcfce7,stroke:#15803d,color:#14532d
+  classDef error fill:#fee2e2,stroke:#b91c1c,color:#7f1d1d
+  class I,H runtime
+  class L decision
+  class R result
+  class E error</div></figure>
+<p>Bleu : travail effectué ; orange : décision ; vert ou rouge : résultat.
+Une clé absente au runtime ne signifie pas que sa déclaration obligatoire
+a échappé au contrôle : elle peut simplement n'avoir jamais été déclarée,
+ou correspondre à un service facultatif absent.</p>
+<p>Pour la suite, les handlers sont partagés et n'ont pas encore été construits
+ailleurs. Avec <code>shared: false</code>, une nouvelle résolution est demandée
+à chaque récupération ; le locator ne change pas la recette de création.
+Si une factory rend toujours le même objet, un nouvel appel n'impose
+pas une identité différente.</p></section><section class="teaching-section" data-section="s-le-fil-rouge-un-commandbus"><h2 id="s-le-fil-rouge-un-commandbus" tabindex="-1">Le fil rouge : un CommandBus</h2><aside class="section-digest" id="s-le-fil-rouge-un-commandbus-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Le bus connaît les keys de sélection.</li><li>Les handlers inutilisés restent non construits.</li></ol></aside><p><strong>Où en est-on ?</strong> On passe du schéma au code. Problème concret : un bus
+reçoit une commande qui désigne <strong>quel handler</strong> doit la traiter ; il ne
+peut pas savoir à l'avance lequel.</p>
+<p>Ce bus local illustre la sélection d'un traitement ; il n'est pas
+une implémentation du composant Messenger. <code>Command</code> représente
+ici une instruction applicative dont la clé a été choisie par notre code,
+pas un identifiant de service copié librement depuis une entrée utilisateur.
+FooHandler et BarHandler sont des classes applicatives exposant
+<code>handle(Command $command): void</code>.</p>
+<pre class="highlight" tabindex="0"><code class="language-php">use Psr\Container\ContainerInterface;
+use Psr\Log\LoggerInterface;
+use Symfony\Contracts\Service\ServiceSubscriberInterface;
+
+final class Command
+{
+    public function __construct(private string $handler) {}
+
+    public function handlerId(): string
+    {
+        return $this-&gt;handler;
+    }
+}
+
+class CommandBus implements ServiceSubscriberInterface
+{
+    public function __construct(private ContainerInterface $locator) {}
+
+    public static function getSubscribedServices(): array
+    {
+        return [
+            'App\Handler\FooHandler',
+            '?App\Handler\BarHandler',       // facultatif
+            'logger' =&gt; LoggerInterface::class,
+        ];
+    }
+
+    public function handle(Command $c): void
+    {
+        $this-&gt;locator-&gt;get($c-&gt;handlerId())-&gt;handle($c);
+    }
+}</code></pre>
+<p>Ce que Symfony voit ici, question par question :</p>
+<ul>
+<li><strong>Pourquoi <code>ContainerInterface</code> (PSR-11) dans le constructeur ?</strong> Le bus ne
+  veut dépendre que de <code>has()</code>/<code>get()</code>, pas du container Symfony entier.</li>
+<li><strong>Qui fournit ce <code>$locator</code> ?</strong> Parce que la classe implémente
+  <code>ServiceSubscriberInterface</code>, l'intégration lit <code>getSubscribedServices()</code>
+  et injecte un <strong>petit locator</strong> construit avec cette liste.</li>
+<li><strong>Pourquoi la méthode est-elle <code>static</code> ?</strong> Elle sert à préparer le câblage,
+  avant l'existence de l'objet.</li>
+</ul>
+<p>Le bus doit être enregistré et autowiré, avec l'autoconfiguration
+FrameworkBundle qui le reconnaît comme subscriber, ou le tag équivalent
+explicitement configuré. Le type PSR-11 <code>ContainerInterface</code>
+reçoit alors le locator préparé pour ce subscriber, pas le container global.</p>
+<p>Si FooHandler et le logger sont disponibles, le bus peut être construit
+même si BarHandler manque. <code>handle(new Command('App\Handler\FooHandler'))</code>
+récupère FooHandler et lui transmet le même Command.
+L'entrée locale <code>'logger'</code> est destinée à la journalisation,
+pas à être sélectionnée comme handler : la liste déclarée ne rend pas
+tous ses objets interchangeables.</p>
+<p>Appeler la branche Bar absente ferait échouer <code>get()</code> ;
+le préfixe <code>?</code> n'ajoute pas un objet vide et ne fait pas retourner
+automatiquement <code>null</code>. Une politique autorisant cette branche optionnelle
+doit tester sa disponibilité avant de la demander.</p>
+<pre class="highlight" tabindex="0"><code class="language-text"> getSubscribedServices()                  Locator injecté dans $locator
+┌──────────────────────────────────┐    ┌────────────────────────────────┐
+│ 'App\Handler\FooHandler'         │ ─▶ │ clé 'App\Handler\FooHandler'   │
+│ '?App\Handler\BarHandler'        │ ─▶ │ clé Bar… (absente si manquant) │
+│ 'logger' =&gt; LoggerInterface      │ ─▶ │ clé locale 'logger'            │
+└──────────────────────────────────┘    └────────────────────────────────┘</code></pre>
+<div class="admonition info">
+<p class="admonition-title">🌍 In Real Life</p>
+<p><strong>La situation</strong> : le responsable retire l'outil choisi, puis demande au poste correspondant de travailler ; un casier facultatif peut être absent.</p>
+<p><strong>L’équivalent dans Symfony</strong> : retrait → <code>$locator-&gt;get(...)</code> ; travail demandé ensuite → appel explicite à <code>handle()</code> ; casier facultatif absent → service déclaré avec <code>?</code> mais indisponible.</p>
+<p><strong>Retour à la réalité technique</strong> : le bus local effectue la sélection puis l'appel. <code>?</code> permet l'absence lors du câblage, pas un <code>get()</code> retournant automatiquement <code>null</code>. Il faut vérifier <code>has()</code> avant une branche facultative. Le logger déclaré n'est pas pour autant un handler interchangeable.</p>
+<p><strong>🧠 Comment le mémoriser</strong> : « Trouver, puis appeler. » Image mentale : la main retire l'outil avant le geste. Question-réflexe : la clé est-elle disponible et son objet respecte-t-il le contrat du traitement ?</p>
+<p><strong>⚠️ À ne pas confondre</strong> : ce CommandBus local et Messenger ; ni queue ni asynchronisme ne découlent du nom.</p>
+</div></section><section class="teaching-section" data-section="s-le-cas-legitime-beaucoup-de-dependencies-une-seule-utilisee"><span class="outcome-anchor" id="out-OUT-3c8n410rjew2" tabindex="-1"></span><h2 id="s-le-cas-legitime-beaucoup-de-dependencies-une-seule-utilisee" tabindex="-1">Le cas légitime : beaucoup de dependencies, une seule utilisée</h2><aside class="section-digest" id="s-le-cas-legitime-beaucoup-de-dependencies-une-seule-utilisee-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Le préfixe rend l&#x27;absence acceptable.</li><li>Le code doit tester la disponibilité.</li></ol></aside><p><strong>Où en est-on ?</strong> Étape 1 sur 4. Question : <em>qu'est-ce qui est réellement
+construit, et quand ?</em> Le tableau suit les deux temps.</p>
+<p>Nous évitons ici de récupérer tous les handlers pour n'en utiliser qu'un.
+Le tableau suit les deux temps, en supposant la définition du bus conservée :</p>
+<table>
+<thead>
+<tr>
+<th>Situation</th>
+<th>Résultat</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>après construction du bus</td>
+<td>aucun handler construit</td>
+</tr>
+<tr>
+<td><code>get(FooHandler::class)</code></td>
+<td>construit si nécessaire ; réutilisé aux appels suivants avec <code>shared: true</code></td>
+</tr>
+<tr>
+<td><code>?…\Missing</code> absent</td>
+<td><code>has()</code> rend <code>false</code> ; absent de <code>getProvidedServices()</code> et de <code>count()</code></td>
+</tr>
+<tr>
+<td>le même, <strong>sans</strong> <code>?</code></td>
+<td>la compilation échoue : « …has a dependency on a non-existent service… »</td>
+</tr>
+<tr>
+<td><code>get()</code> d'un service non déclaré</td>
+<td>« even though it exists in the app's container, the container inside … is a smaller service locator… »</td>
+</tr>
+</tbody>
+</table>
+<p>La première ligne signifie « aucun handler demandé par cette injection »,
+sous notre hypothèse d'absence de construction préalable.
+Un second <code>get()</code> de Foo réutilise normalement l'instance partagée.
+En revanche, la vérification d'une référence obligatoire concerne
+le graphe conservé ; un subscriber privé inutilisé peut être retiré
+avec ses dépendances avant certains contrôles.</p>
+<p><code>getSubscribedServices()</code> est statique parce que cette liste sert
+à préparer le câblage, avant l'existence de l'objet métier.
+Une clé textuelle comme <code>'logger'</code> est un nom <strong>local</strong> ; sans clé
+explicite, le type déclaré sert de clé, sans son éventuel <code>?</code>.</p>
+<p>Le locator Symfony 8.0 implémente <code>ServiceCollectionInterface</code>,
+qui étend <code>ServiceProviderInterface</code>, <code>Countable</code> et <code>IteratorAggregate</code>.
+<code>getProvidedServices()</code> décrit les clés et types sans récupérer
+les services ; <code>count()</code> compte ces entrées.
+En revanche, <code>foreach</code> récupère les services au fil de l'itération :
+ce n'est pas seulement une inspection gratuite des noms.</p>
+<table>
+<thead>
+<tr>
+<th>API du locator</th>
+<th>Récupère les objets ?</th>
+<th>Ce qu'elle donne</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>has($k)</code></td>
+<td>non</td>
+<td><code>true</code>/<code>false</code></td>
+</tr>
+<tr>
+<td><code>get($k)</code></td>
+<td><strong>oui</strong> (une clé)</td>
+<td>le service</td>
+</tr>
+<tr>
+<td><code>getProvidedServices()</code></td>
+<td>non</td>
+<td>clés → types</td>
+</tr>
+<tr>
+<td><code>count()</code></td>
+<td>non</td>
+<td>nombre d'entrées</td>
+</tr>
+<tr>
+<td><code>foreach</code></td>
+<td><strong>oui</strong> (tout, au fil du parcours)</td>
+<td>les services</td>
+</tr>
+</tbody>
+</table>
+<p>Pour changer la cible derrière une clé locale, l'intégration accepte
+le tag <code>container.service_subscriber</code> avec <code>key</code> et <code>id</code>,
+ou un <code>SubscribedService</code> portant <code>new Autowire(service: ...)</code>.
+La clé doit appartenir à la liste annoncée et la cible respecter
+son contrat : ce mécanisme ne doit pas servir à cacher un accès global.</p>
+<div class="admonition info">
+<p class="admonition-title">🌍 In Real Life</p>
+<p><strong>La situation</strong> : lire la liste des casiers n'en sort aucun outil ; ouvrir successivement tous les casiers est une autre opération.</p>
+<p><strong>L’équivalent dans Symfony</strong> : inventaire → <code>getProvidedServices()</code> ; nombre d'entrées → <code>count()</code> ; retraits au fil du parcours → itération <code>foreach</code> du locator.</p>
+<p><strong>Retour à la réalité technique</strong> : les métadonnées n'obtiennent pas les instances. L'itération récupère les services ; une entrée présente n'est pas une preuve d'objet déjà construit. Le facultatif absent disparaît de l'inventaire. La vérification des références obligatoires concerne le graphe compilé conservé.</p>
+<p><strong>🧠 Comment le mémoriser</strong> : « Compter les noms n'ouvre pas les casiers. » Image mentale : une liste cochée devant des portes fermées. Question-réflexe : cette API lit-elle les métadonnées ou récupère-t-elle les objets ?</p>
+<p><strong>⚠️ À ne pas confondre</strong> : nombre d'entrées, nombre de résolutions et nombre d'instances distinctes.</p>
+</div></section><section class="teaching-section" data-section="s-ce-que-cela-n-est-pas-le-container"><span class="outcome-anchor" id="out-OUT-treyye0w8xe4" tabindex="-1"></span><h2 id="s-ce-que-cela-n-est-pas-le-container" tabindex="-1">Ce que cela n&#x27;est pas : le container</h2><aside class="section-digest" id="s-ce-que-cela-n-est-pas-le-container-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Privé n&#x27;interdit pas une référence déclarée.</li><li>Le locator garde un accès restreint.</li></ol></aside><p><strong>Où en est-on ?</strong> Étape 2 sur 4. Question : <em>un locator est-il un moyen
+déguisé d'obtenir n'importe quel service ?</em> Non, et c'est son intérêt.</p>
+<p>Le petit locator constitue une capacité d'accès bornée.
+Un service peut exister dans l'application sans être accessible
+par cette voie :</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Container injecté</th>
+<th>Service locator</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>contenu accessible par <code>get()</code></td>
+<td>services publics disponibles</td>
+<td>la liste déclarée</td>
+</tr>
+<tr>
+<td>services privés</td>
+<td>inaccessibles</td>
+<td>accessibles s'ils sont déclarés</td>
+</tr>
+<tr>
+<td>dependency manquante</td>
+<td>à l'exécution</td>
+<td>à la <strong>compilation</strong> (sans <code>?</code>)</td>
+</tr>
+</tbody>
+</table>
+<p>La dernière ligne compare une recherche dynamique globale à des
+références obligatoires déclarées dans un locator compilé et conservé.
+Elle ne garantit pas que toute erreur possible soit détectée avant usage :
+la clé choisie à l'exécution peut manquer, ou la factory du service
+disponible peut échouer.</p>
+<p>Déclarer un privé dans le locator n'en fait pas un service public
+dans toute l'application. Inversement, rendre un service public
+ne l'ajoute pas à un locator qui ne le connaît pas.
+Le message « smaller service locator » invite à vérifier cette portée,
+pas à supprimer la restriction en injectant tout le container.</p>
+<pre class="highlight" tabindex="0"><code class="language-text">          Container applicatif                Locator du CommandBus
+        ┌──────────────────────────┐        ┌───────────────────────────┐
+        │ services publics         │        │ FooHandler   (même privé) │
+        │ (privés : inaccessibles) │        │ BarHandler?  (si présent) │
+        │ …des centaines d'autres  │        │ logger                    │
+        └──────────────────────────┘        └───────────────────────────┘
+          get('tout') → possible              get('autre') → exception
+                                              « smaller service locator »</code></pre>
+<p>Dans un test unitaire, fournir un petit locator ou un double PSR-11
+avec les seules clés nécessaires permet de vérifier les branches.
+Un locator construit manuellement avec des closures dépend de ces
+closures pour son partage : il ne reproduit pas automatiquement
+toutes les règles d'une définition Symfony compilée.</p>
+<div class="admonition info">
+<p class="admonition-title">🌍 In Real Life</p>
+<p><strong>La situation</strong> : un outil existe dans la réserve générale, mais ne figure pas dans le petit ensemble attribué à ce poste.</p>
+<p><strong>L’équivalent dans Symfony</strong> : réserve générale → conteneur applicatif ; ensemble du poste → locator compilé ; outil non attribué → clé absente de ce locator.</p>
+<p><strong>Retour à la réalité technique</strong> : rendre le service public ne l'ajoute pas au locator. Un service privé peut au contraire y être accessible s'il est déclaré. Cette restriction d'assemblage ne remplace pas l'autorisation métier ; la factory d'un service présent peut encore échouer lors de sa récupération.</p>
+<p><strong>🧠 Comment le mémoriser</strong> : « Existe quelque part ne veut pas dire disponible ici. » Image mentale : deux inventaires différents. Question-réflexe : dans quel conteneur ou locator effectue-t-on ce <code>get()</code> ?</p>
+<p><strong>⚠️ À ne pas confondre</strong> : clé absente et service absent de toute l'application.</p>
+</div></section><section class="teaching-section" data-section="s-la-forme-courte-autowirelocator"><span class="outcome-anchor" id="out-OUT-7s1prxwgdhe5" tabindex="-1"></span><h2 id="s-la-forme-courte-autowirelocator" tabindex="-1">La forme courte : `#[AutowireLocator]`</h2><aside class="section-digest" id="s-la-forme-courte-autowirelocator-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Le tag définit les membres.</li><li>Le locator sélectionne par key.</li></ol></aside><p><strong>Où en est-on ?</strong> Étape 3 sur 4. Le subscriber demande une classe + une
+méthode statique. Y a-t-il plus court quand la liste est locale au
+constructeur ? Oui : un attribut sur l'argument.</p>
+<p>Pour une liste locale proche du constructeur, la classe peut éviter
+l'interface subscriber. Avec <code>AutowireLocator</code> importé depuis
+<code>Symfony\Component\DependencyInjection\Attribute</code>, les classes
+FooHandler, BazHandler et BarHandler importées, et le consommateur autowiré :</p>
+<p class="snippet-context">Extrait PHP : contexte de class, method ou signature requis. Syntaxe vérifiée dans ce contexte ; ce fragment ne constitue pas un programme autonome.</p><pre class="highlight" tabindex="0"><code class="language-php">public function __construct(
+    #[AutowireLocator([
+        'foo' =&gt; FooHandler::class,
+        'optionalBaz' =&gt; '?'.BazHandler::class,
+        BarHandler::class,
+    ])]
+    private ContainerInterface $handlers,
+) {}</code></pre>
+<p>Les clés sont ici <code>foo</code>, éventuellement <code>optionalBaz</code>,
+et le FQCN de BarHandler. Baz absent ne produit pas une entrée
+nullable à récupérer : cette entrée facultative disparaît.
+Foo et Bar doivent pouvoir être résolus pour un consommateur conservé.</p>
+<p>L'export CLI peut appliquer le même choix à deux formats :</p>
+<pre class="highlight" tabindex="0"><code class="language-php">namespace App;
+
+use Psr\Container\ContainerInterface;
+use Symfony\Component\DependencyInjection\Attribute\AutowireLocator;
+
+final class ExportChoice
+{
+    public function __construct(
+        #[AutowireLocator([
+            'csv' =&gt; CsvExporter::class,
+            'json' =&gt; JsonExporter::class,
+        ])]
+        private ContainerInterface $exporters,
+    ) {}
+
+    public function select(string $format): object
+    {
+        if (!$this-&gt;exporters-&gt;has($format)) {
+            throw new \InvalidArgumentException('Format inconnu');
+        }
+
+        return $this-&gt;exporters-&gt;get($format);
+    }
+}</code></pre>
+<p>Avec CsvExporter et JsonExporter enregistrés et autoloadables,
+<code>select('json')</code> rend JsonExporter sans demander CsvExporter
+par cette voie. <code>select('xml')</code> lève l'erreur applicative avant <code>get()</code>.
+La sélection ne réalise aucun export ; les deux classes doivent encore
+exposer le contrat qu'utilisera le code appelant.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th><code>ServiceSubscriberInterface</code></th>
+<th><code>#[AutowireLocator]</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Où est la liste ?</td>
+<td>méthode statique <code>getSubscribedServices()</code></td>
+<td>attribut sur l'argument</td>
+</tr>
+<tr>
+<td>Qui l'injecte ?</td>
+<td>l'intégration subscriber (autoconfiguration/tag)</td>
+<td>l'autowiring du consommateur</td>
+</tr>
+<tr>
+<td>Héritage</td>
+<td>fusionner avec <code>parent::</code></td>
+<td>pas de méthode à fusionner</td>
+</tr>
+</tbody>
+</table>
+<p><code>#[AutowireLocator('app.handler')]</code> ou <code>!tagged_locator app.handler</code>
+collecte plutôt une famille extensible. Les clés dépendent des attributs
+d'index, méthodes de défaut et métadonnées <code>AsTaggedItem</code> applicables,
+puis de l'identifiant de service en dernier recours. Ce n'est pas
+toujours un champ littéralement nommé <code>index</code>.</p>
+<p>Une autre commodité, <code>ServiceMethodsSubscriberTrait</code>, associe les méthodes
+annotées <code>#[SubscribedService]</code> à une déclaration de dépendance.
+Avec la configuration subscriber appropriée, une méthode d'accès typée
+peut utiliser <code>$this-&gt;container-&gt;get(__METHOD__)</code>.
+Sa clé par défaut est <code>Classe::method</code>, pas le nom court de la méthode
+ni simplement son type de retour. Le trait prépare la liste et
+le raccord du container ; l'attribute ne récupère pas seul l'objet.</p>
+<div class="admonition info">
+<p class="admonition-title">🌍 In Real Life</p>
+<p><strong>La situation</strong> : le poste conserve près de lui une liste courte : « csv » et « json » ; les étiquettes locales désignent les équipements réels.</p>
+<p><strong>L’équivalent dans Symfony</strong> : liste près du poste → <code>#[AutowireLocator]</code> sur l'argument ; noms locaux → clés ; équipements cibles → services d'export enregistrés.</p>
+<p><strong>Retour à la réalité technique</strong> : l'attribute est traité pour le consommateur autowiré ; il ne récupère pas seul les services. <code>select('json')</code> retourne un objet sans lancer l'export. Une liste issue de tags suit ses règles d'indexation ; avec le trait décrit, la clé par défaut d'une méthode est <code>Classe::method</code>.</p>
+<p><strong>🧠 Comment le mémoriser</strong> : « Nom local, cible déclarée. » Image mentale : deux étiquettes reliées à deux casiers. Question-réflexe : quelle règle produit la clé que mon code demande ?</p>
+<p><strong>⚠️ À ne pas confondre</strong> : nom court de méthode, type retourné et clé <code>__METHOD__</code>.</p>
+</div></section><section class="teaching-section" data-section="s-heriter-fusionner-avec-le-parent"><span class="outcome-anchor" id="out-OUT-g6613nkxjesh" tabindex="-1"></span><h2 id="s-heriter-fusionner-avec-le-parent" tabindex="-1">Hériter : fusionner avec le parent</h2><aside class="section-digest" id="s-heriter-fusionner-avec-le-parent-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>La redéfinition ne fusionne pas automatiquement.</li><li>Conserver explicitement les services hérités.</li></ol></aside><p><strong>Où en est-on ?</strong> Étape 4 sur 4. Dernier piège de mécanisme : une classe
+fille redéfinit <code>getSubscribedServices()</code>. Question : <em>la liste du parent
+est-elle conservée ?</em> Non, c'est une simple redéfinition de méthode PHP.</p>
+<p>Une variante de bus ajoute un handler mais continue d'utiliser
+les méthodes héritées. Sa liste remplace celle du parent si elle
+ne la fusionne pas :</p>
+<pre class="highlight" tabindex="0"><code class="language-php">return array_merge(parent::getSubscribedServices(), [
+    'extra' =&gt; 'App\Handler\BazHandler',
+]);</code></pre>
+<p>Ce corps de <code>ChildBus::getSubscribedServices()</code> suppose BazHandler
+enregistré et conserve Foo, le logger et l'éventuel Bar du parent.
+Sans <code>parent::</code>, la nouvelle liste peut être cohérente à la compilation
+tout en ne contenant plus Foo : une méthode héritée échouera
+lorsqu'elle le demandera.</p>
+<p>Avec <code>array_merge()</code>, une clé textuelle répétée à droite remplace
+sa valeur précédente, tandis que les clés numériques sont réindexées.
+La fusion peut donc aussi surcharger volontairement un nom local.
+Testons une méthode héritée et une nouvelle branche, pas seulement
+la construction réussie de ChildBus.</p>
+<pre class="highlight" tabindex="0"><code class="language-text"> Sans parent::                          Avec array_merge(parent::…)
+┌────────────────────┐                 ┌────────────────────────────┐
+│ extra → Baz        │                 │ Foo, ?Bar, logger  (parent)│
+└────────────────────┘                 │ extra → Baz        (ajout) │
+ la méthode héritée qui demande Foo     └────────────────────────────┘
+ échoue à l'exécution</code></pre>
+<div class="admonition info">
+<p class="admonition-title">🌍 In Real Life</p>
+<p><strong>La situation</strong> : un nouveau poste reprend les tâches d'un ancien et ajoute un outil ; remplacer sa liste par ce seul ajout ferait oublier l'équipement des tâches héritées.</p>
+<p><strong>L’équivalent dans Symfony</strong> : besoins hérités → <code>parent::getSubscribedServices()</code> ; nouvel outil → entrée ajoutée ; liste complète → fusion explicite.</p>
+<p><strong>Retour à la réalité technique</strong> : redéfinir la méthode remplace la déclaration du parent. <code>array_merge()</code> conserve les entrées, remplace les clés textuelles répétées par celles de droite et réindexe les clés numériques. Une compilation réussie ne prouve pas qu'une méthode héritée retrouvera toutes ses clés.</p>
+<p><strong>🧠 Comment le mémoriser</strong> : « Hériter du travail, conserver ses outils. » Image mentale : ancienne liste augmentée, non jetée. Question-réflexe : une méthode héritée demande-t-elle encore une clé oubliée ?</p>
+<p><strong>⚠️ À ne pas confondre</strong> : héritage des méthodes et fusion automatique des tableaux qu'elles retournent.</p>
+</div></section><section class="teaching-section" data-section="s-pieges-d-examen"><h2 id="s-pieges-d-examen" tabindex="-1">Pièges d&#x27;examen</h2><p class="teaching-label pitfall"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="warning" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3L23 21H1L12 3ZM12 9V14M12 17V18"></path></svg> <strong>Piège à éviter</strong></p><aside class="section-digest" id="s-pieges-d-examen-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>La liste est disponible sans instance.</li><li>Elle participe à la compilation.</li></ol></aside><ul class="pitfall-list"><li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : Où en est-on ?</summary><p><strong>Où en est-on ?</strong> Pour chaque piège : l'énoncé, puis <em>pourquoi la mauvaise
+réponse est plausible</em>.</p></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : La déclaration précède les objets métier.</summary><p><strong>La déclaration précède les objets métier.</strong>
+<code>getSubscribedServices()</code> est statique ; elle n'est pas calculée
+à partir du lecteur courant de <code>/blog/42</code>.
+<em>Plausible car</em> on imagine une liste construite dynamiquement par instance.</p></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : Existence globale et accès local sont deux questions.</summary><p><strong>Existence globale et accès local sont deux questions.</strong>
+Un service public peut rester inconnu de ce locator ; un privé déclaré
+peut y être accessible sans devenir public partout.
+<em>Plausible car</em> « public/privé » évoque une règle universelle.</p></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : Différer un accès n&#x27;efface pas un objet déjà construit.</summary><p><strong>Différer un accès n'efface pas un objet déjà construit.</strong>
+La définition cible et sa factory gouvernent le partage.
+Un parcours <code>foreach</code> peut demander plusieurs services, contrairement
+à la simple lecture de leurs métadonnées.
+<em>Plausible car</em> « différé » est lu comme « toujours neuf ».</p></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : Facultatif ne signifie pas résultat null garanti.</summary><p><strong>Facultatif ne signifie pas résultat <code>null</code> garanti.</strong>
+Dans le locator compilé, une référence facultative absente disparaît ;
+<code>has()</code> rend <code>false</code> et un <code>get()</code> direct de cette clé échoue.
+Une référence obligatoire du graphe conservé doit être résolue.
+<em>Plausible car</em> <code>?</code> rappelle le type nullable PHP.</p></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : Une liste d&#x27;enfant ne conserve pas implicitement les besoins hérités.</summary><p><strong>Une liste d'enfant ne conserve pas implicitement les besoins hérités.</strong>
+Fusionnons le parent, puis contrôlons les clés textuelles redéfinies
+et une méthode qui utilise encore une dépendance du parent.
+<em>Plausible car</em> la compilation réussit, ce qui rassure à tort.</p></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : Compter les entrées ne compte pas les instances construites.</summary><p><strong>Compter les entrées ne compte pas les instances construites.</strong>
+L'optionnel absent n'apparaît ni dans <code>getProvidedServices()</code> ni dans
+<code>count()</code>. Une entrée présente peut exister avant toute récupération
+de l'objet correspondant.
+<em>Plausible car</em> « compter des services » évoque des objets existants.</p></details></li></ul></section><section class="teaching-section" data-section="s-fiche-express"><h2 id="s-fiche-express" tabindex="-1">Fiche express</h2><p class="teaching-label essential"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="book" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5C9 3 5 3 2 4V20C5 19 9 19 12 21C15 19 19 19 22 20V4C19 3 15 3 12 5V21M5 8H8M5 12H8M16 8H19M16 12H19"></path></svg> <strong>À mémoriser</strong></p><aside class="section-digest" id="s-fiche-express-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Le locator change l&#x27;accès, pas le partage.</li><li>La definition du service reste déterminante.</li></ol></aside><p>Pour choisir un traitement d'import sans ouvrir tout le container :</p>
+<ol>
+<li>Justifier le choix différé plutôt qu'une injection directe plus simple.</li>
+<li>Déclarer les clés et contrats du petit ensemble autorisé.</li>
+<li>Raccorder le subscriber ou utiliser AutowireLocator sur le consommateur autowiré.</li>
+<li>Tester la présence d'une branche facultative avant de la demander.</li>
+<li>Distinguer récupération, partage, inventaire et appel métier.</li>
+<li>Préserver les besoins hérités lors de l'extension d'un subscriber.</li>
+</ol>
+<p>Le blog et ses commandes peuvent ainsi partager des services bien définis
+sans confondre préparation du container, sélection d'un collaborateur
+et exécution de son travail.</p>
+<h3 tabindex="-1" id="s-fiche-express-nested-a-retenir-pour-la-certification">🧠 À retenir pour la certification</h3>
+<ul>
+<li>Un <strong>service locator</strong> = <code>has()</code>/<code>get()</code> sur un petit ensemble <strong>déclaré</strong> ; ce n'est pas le container.</li>
+<li>Liste connue à la <strong>compilation</strong> (obligatoire sans <code>?</code> → échec si manquant), clé choisie à l'<strong>exécution</strong>.</li>
+<li><code>?</code> : le service facultatif absent <strong>disparaît</strong> du locator ; <code>has()</code> → <code>false</code>, <code>get()</code> échoue (pas de <code>null</code>).</li>
+<li>Les <strong>privés</strong> déclarés sont accessibles dans le locator ; rendre un service public ne l'y ajoute pas.</li>
+<li><code>getProvidedServices()</code>/<code>count()</code> ne construisent rien ; <code>foreach</code> récupère les services.</li>
+<li><code>ServiceMethodsSubscriberTrait</code> : clé par défaut <code>Classe::method</code> (<code>__METHOD__</code>) ; <code>AutowireLocator</code> : forme courte sur l'argument.</li>
+<li>Subscriber enfant : <code>array_merge(parent::getSubscribedServices(), [...])</code>.</li>
+</ul>
+<p><strong>Phrase de mémorisation :</strong> « Un locator est un petit trousseau de clés déclarées à l'avance : on choisit la clé à l'exécution, on n'ouvre que la porte demandée, et le trousseau de l'enfant doit reprendre celui du parent. »</p></section><section class="official-sources"><h2 id="reader-sources" tabindex="-1">Sources officielles et compléments</h2><ul><li><a href="https://symfony.com/doc/8.0/service_container.html">Symfony 8.0 — DependencyInjection</a></li><li><a href="https://symfony.com/doc/8.0/service_container/service_subscribers_locators.html">Symfony 8.0 — service container / service subscribers locators</a></li></ul></section><section id="course-recalls" aria-labelledby="course-recalls-title" tabindex="-1"><h2 id="course-recalls-title">Rappels et liens avec les autres cours</h2><div data-recall-group="other"><h3>Rappels des cours précédents / autres modules</h3><ul><li data-recall-course="CRS-1bkg7pkf78c7" data-recall-kind="previous_course"><p class="recall-provenance">Module 09 — Injection de dépendances · Cours « Factories »</p><p>La factory décide de la construction. Sa valeur retournée devient le service.</p><p><a href="#cards-previous">Rappel : <span lang="en">When a service has a factory, who constructs the service object?</span></a></p></li></ul></div></section><nav class="course-sequence" aria-label="Ordre de lecture"><a rel="prev" href="course-CRS-d25bvr0097py.html" aria-label="Précédent : Compiler passes — Module 09 — Injection de dépendances">Précédent : Compiler passes</a> <a href="lot-09.html">Sommaire : Module 09 — Injection de dépendances</a> <a rel="next" href="course-CRS-yvhg325ax38y.html" aria-label="Suivant : Configuration — Module 10 — Sécurité">Suivant : Configuration</a></nav><p class="course-practice-entry"><a class="button" href="#view-quiz">Fin du cours — s’entraîner avec le Quiz</a></p></div><div id="view-flashcards" data-course-panel role="region" aria-labelledby="view-flashcards-title"><h2 id="view-flashcards-title">Flashcards</h2><p lang="en">Answer before revealing each card.</p><p>Ces cartes ne mesurent pas une maîtrise notée.</p><div id="cards-s-l-essentiel-1" data-card-section="s-l-essentiel"><h3><a href="#s-l-essentiel">Revoir : L&#x27;essentiel</a></h3><div class="reader-cards"><details class="reader-card" id="B-0a0d5bp6769e-01"><summary lang="en">Why use a service locator instead of injecting every possible handler eagerly?</summary><p lang="en">It exposes a declared subset and creates a selected service on demand.</p><p lang="fr">Le locator limite les dependencies accessibles. La création est différée au get().</p><a href="course-CRS-0a0d5bp6769e.html#out-OUT-3c8n410rjew2">Revoir le passage précis</a></details></div></div><div id="cards-s-le-schema-2" data-card-section="s-le-schema"><h3><a href="#s-le-schema">Revoir : Le schéma</a></h3><div class="reader-cards"><details class="reader-card" id="B-0a0d5bp6769e-02"><summary lang="en">Can a scoped locator retrieve any service from the application container?</summary><p lang="en">No. It can retrieve only its declared services.</p><p lang="fr">Le locator n&#x27;est pas le container global. Son contrat est une liste explicite.</p><a href="course-CRS-0a0d5bp6769e.html#out-OUT-treyye0w8xe4">Revoir le passage précis</a></details></div></div><div id="cards-s-le-fil-rouge-un-commandbus-3" data-card-section="s-le-fil-rouge-un-commandbus"><h3><a href="#s-le-fil-rouge-un-commandbus">Revoir : Le fil rouge : un CommandBus</a></h3><div class="reader-cards"><details class="reader-card" id="B-0a0d5bp6769e-03"><summary lang="en">How does a CommandBus avoid constructing ten unused handlers?</summary><p lang="en">It selects one handler from its injected locator.</p><p lang="fr">Le bus connaît les keys de sélection. Les handlers inutilisés restent non construits.</p><a href="course-CRS-0a0d5bp6769e.html#out-OUT-3c8n410rjew2">Revoir le passage précis</a></details></div></div><div id="cards-s-le-cas-legitime-beaucoup-de-dependencies-une-seule-utilisee-4" data-card-section="s-le-cas-legitime-beaucoup-de-dependencies-une-seule-utilisee"><h3><a href="#s-le-cas-legitime-beaucoup-de-dependencies-une-seule-utilisee">Revoir : Le cas légitime : beaucoup de dependencies, une seule utilisée</a></h3><div class="reader-cards"><details class="reader-card" id="B-0a0d5bp6769e-04"><summary lang="en">What does a leading ? mean in a subscribed service type?</summary><p lang="en">The dependency is optional; a missing service can be checked with has().</p><p lang="fr">Le préfixe rend l&#x27;absence acceptable. Le code doit tester la disponibilité.</p><a href="course-CRS-0a0d5bp6769e.html#out-OUT-3c8n410rjew2">Revoir le passage précis</a></details></div></div><div id="cards-s-ce-que-cela-n-est-pas-le-container-5" data-card-section="s-ce-que-cela-n-est-pas-le-container"><h3><a href="#s-ce-que-cela-n-est-pas-le-container">Revoir : Ce que cela n&#x27;est pas : le container</a></h3><div class="reader-cards"><details class="reader-card" id="B-0a0d5bp6769e-05"><summary lang="en">Can a locator expose a declared private service?</summary><p lang="en">Yes. Its declared references can reach private services without making the whole container public.</p><p lang="fr">Privé n&#x27;interdit pas une référence déclarée. Le locator garde un accès restreint.</p><a href="course-CRS-0a0d5bp6769e.html#out-OUT-treyye0w8xe4">Revoir le passage précis</a></details></div></div><div id="cards-s-la-forme-courte-autowirelocator-6" data-card-section="s-la-forme-courte-autowirelocator"><h3><a href="#s-la-forme-courte-autowirelocator">Revoir : La forme courte : `#[AutowireLocator]`</a></h3><div class="reader-cards"><details class="reader-card" id="B-0a0d5bp6769e-06"><summary lang="en">What does AutowireLocator(&#x27;app.handler&#x27;) collect?</summary><p lang="en">Services tagged app.handler, indexed for keyed lookup.</p><p lang="fr">Le tag définit les membres. Le locator sélectionne par key.</p><a href="course-CRS-0a0d5bp6769e.html#out-OUT-7s1prxwgdhe5">Revoir le passage précis</a></details></div></div><div id="cards-s-heriter-fusionner-avec-le-parent-7" data-card-section="s-heriter-fusionner-avec-le-parent"><h3><a href="#s-heriter-fusionner-avec-le-parent">Revoir : Hériter : fusionner avec le parent</a></h3><div class="reader-cards"><details class="reader-card" id="B-0a0d5bp6769e-07"><summary lang="en">What must a child subscriber do to retain its parent&#x27;s subscribed services?</summary><p lang="en">Merge parent::getSubscribedServices() with its own declarations.</p><p lang="fr">La redéfinition ne fusionne pas automatiquement. Conserver explicitement les services hérités.</p><a href="course-CRS-0a0d5bp6769e.html#out-OUT-g6613nkxjesh">Revoir le passage précis</a></details></div></div><div id="cards-s-pieges-d-examen-8" data-card-section="s-pieges-d-examen"><h3><a href="#s-pieges-d-examen">Revoir : Pièges d&#x27;examen</a></h3><div class="reader-cards"><details class="reader-card" id="B-0a0d5bp6769e-08"><summary lang="en">Must getSubscribedServices() be static?</summary><p lang="en">Yes, it declares the service dependency map statically.</p><p lang="fr">La liste est disponible sans instance. Elle participe à la compilation.</p><a href="course-CRS-0a0d5bp6769e.html#out-OUT-3c8n410rjew2">Revoir le passage précis</a></details></div></div><div id="cards-s-fiche-express-9" data-card-section="s-fiche-express"><h3><a href="#s-fiche-express">Revoir : Fiche express</a></h3><div class="reader-cards"><details class="reader-card" id="B-0a0d5bp6769e-09"><summary lang="en">Does retrieving a shared service through a locator create an independent copy?</summary><p lang="en">No. It uses the same shared service as the container.</p><p lang="fr">Le locator change l&#x27;accès, pas le partage. La definition du service reste déterminante.</p><a href="course-CRS-0a0d5bp6769e.html#out-OUT-treyye0w8xe4">Revoir le passage précis</a></details></div></div><div id="cards-previous"><p class="recall-provenance">Module 09 — Injection de dépendances · Cours « Factories »</p><aside class="checkpoint"><h2>Rappel d’un cours antérieur</h2><p>Avant de poursuivre : Factories.</p><details class="corpus-correction"><summary lang="en">When a service has a factory, who constructs the service object?</summary><p lang="en">The configured callable, not a direct container call to the service constructor.</p><p>La factory décide de la construction. Sa valeur retournée devient le service.</p><a href="course-CRS-1bkg7pkf78c7.html#out-OUT-rrswf59s7t5a">Relire la correction dans le cours antérieur</a></details></aside></div></div><div id="view-quiz" data-course-panel role="region" aria-labelledby="view-quiz-title"><aside class="revision-context"><p><strong>Avant le quiz :</strong> L&#x27;import du blog peut choisir un seul exporteur parmi plusieurs formats. Injecter une grande collection pour la parcourir jusqu&#x27;au bon choix n&#x27;est pas toujours utile. Un locator déclare un petit ensemble de choix et diffère leur récupération. Nous allons expliquer ce compromis, ses erreurs et sa portée, sans donner au service métier un accès illimité au container. AbstractController reste traité dans son cours propre.</p><p>Quelle donnée entre, quelle responsabilité agit et quelle condition change le résultat ? Pour chaque correction, vérifiez ces conditions dans <a href="course-CRS-0a0d5bp6769e.html#s-objectif">le passage enseigné</a>, sans supposer que toutes les branches du blog sont exécutées.</p></aside><h2 id="view-quiz-title">Quiz</h2><p class="quiz-size" lang="en">5 eligible learning questions · 5 per session. Repeating a question does not demonstrate mastery.</p><p id="course-quiz-status" role="status">Quiz interactif non chargé. Démarrez après chargement de la banque locale.</p><div id="course-quiz-controls" class="assessment-main" hidden><div id="course-quiz-assessment-controls" hidden><select id="course-quiz-assessment-mode" aria-label="Mode du quiz" hidden><option value="learning">Entraînement</option></select><p id="course-quiz-training-scope"></p><button id="course-quiz-start-assessment" type="button" lang="en">Start practice</button><button id="course-quiz-finish-assessment" type="button" lang="en" hidden>End session</button></div><p id="course-quiz-assessment-error" role="alert"></p><p id="course-quiz-assessment-timer" hidden></p><p id="course-quiz-session-progress" class="quiz-progress" role="status" lang="en"></p><div id="course-quiz-assessment-app" tabindex="-1"></div><nav id="course-quiz-session-navigation" aria-label="Questions du cours"></nav><div id="course-quiz-learning-overview" aria-live="polite"></div></div><div id="course-quiz-native"><p>Sans JavaScript ou si le chargement échoue : aucune tentative notée. Les <a href="#view-flashcards">flashcards du cours</a> restent disponibles.</p><details class="course-quiz-fallback" data-question-id="L-0a0d5bp6769e-base-v1"><summary lang="en">Why use a service locator instead of injecting every possible handler eagerly? Select one answer (radio).</summary><p>Correction de consultation — non notée.</p><p>Le locator limite les dependencies accessibles. La création est différée au get().</p><ul><li><strong lang="en">Distractor: It eagerly constructs every service in the application.</strong><p>Un locator permet justement une résolution différée d&#x27;un sous-ensemble.</p></li><li><strong lang="en">Distractor: It lets consumers access any undeclared private dependency.</strong><p>Le sous-ensemble déclaré limite ce qui est accessible.</p></li><li><strong lang="en">Correct: It exposes a declared subset and creates services on demand.</strong><p>Le locator limite les dependencies accessibles. La création est différée au get().</p></li></ul><a href="course-CRS-0a0d5bp6769e.html#out-OUT-3c8n410rjew2">Relire le passage exact</a></details></div></div></div></div><details class="transfer-panel"><summary>Sauvegarde et transfert de progression</summary><p id="reading-status" role="status">Sans JavaScript : lecture libre ; progression non enregistrée.</p><p><a href="assessment.html#overview-title">Lecture, réussites immédiates et différées</a></p><p>Transfert manuel — aucune synchronisation automatique</p><p id="persistence-status" role="status"></p><button type="button" class="secondary" id="export-progress">Exporter ma progression</button><label for="import-progress">Choisir un JSON pour fusionner ma progression (sans remplacement)</label><input type="file" id="import-progress" accept="application/json,.json"><p id="transfer-status" role="status"></p></details></main><footer class="site-footer"><a href="catalogue.html">Catalogue</a> <a href="sources.html">Sources et attribution</a> <a href="#contenu">Haut de page</a></footer></body></html>

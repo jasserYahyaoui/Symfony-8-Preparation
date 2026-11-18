@@ -1,0 +1,496 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; connect-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Backward compatibility promise — Symfony 8 Preparation</title><link rel="stylesheet" href="styles.css"><link rel="stylesheet" href="reader.css"><script src="mermaid.min.js" defer></script><script src="mermaid-init.js" defer></script><link rel="stylesheet" href="assessment.css"><script src="fixed-exams-data.js" defer></script><script src="fixed-exams.js" defer></script><script src="learning-state.js" defer></script><script src="guide.js" defer></script><script src="reader-catalog.js" defer></script><script src="reader.js" defer></script><script src="site-state.js" defer></script><script src="assessment.js" defer></script><script src="course-views.js" defer></script><link rel="stylesheet" href="syntax-highlight.css"><script src="prism-syntax.js" defer></script><script src="syntax-highlight.js" defer></script></head><body data-course-id="CRS-21ec5kwrcmkm"><a class="skip" href="#contenu">Aller au contenu</a><header class="site-header"><a class="brand" href="index.html">S8 Preparation</a><nav aria-label="Navigation principale"><a href="index.html">Accueil</a> <a href="catalogue.html">Parcours</a> <a href="assessment.html?mode=review">Réviser</a> <a href="examens.html">Examens blancs</a> <a href="jour-j.html">Jour J</a></nav></header><main id="contenu" tabindex="-1" class="corpus-reader"><nav class="breadcrumb" aria-label="Fil d’Ariane"><a href="index.html">Accueil</a> <span aria-hidden="true">›</span> <a href="catalogue.html">Parcours</a> <span aria-hidden="true">›</span> <a href="lot-03.html">Module 03 — Architecture Symfony</a> <span aria-hidden="true">›</span> <span aria-current="page">Backward compatibility promise</span></nav><h1>Backward compatibility promise</h1><p class="muted">Symfony 8.0 · API PHP ≤ 8.4 · Twig ≤ 3.22. Préparation indépendante.</p><p class="revision-status">Rédaction narrative P11 : projection nouvelle, non couverte par les décisions historiques P10. Aucune approbation officielle ni garantie de réussite.</p><aside class="narrative-context" aria-label="Repères de lecture"><p><strong>Prérequis de lecture :</strong> <a href="course-CRS-tygmreqkkds3.html">HttpKernel component and FrameworkBundle</a></p><p><strong>Concepts voisins :</strong> <a href="course-CRS-p1694d5f7r8c.html">Service container</a> — Séparer assemblage de l’application et appel HTTP. <a href="lot-03.html">Comparer les responsabilités dans ce module</a> · <a href="carte-composants.html">Situer cette responsabilité dans le blog</a> · <a href="glossaire.html">Distinguer les termes voisins</a></p><p><a href="ordre-lecture.html">Retrouver les 163 cours dans le parcours recommandé</a>. Ce repère ne modifie ni votre historique ni votre progression.</p></aside><div class="course-layout"><details class="lot-course-menu"><summary>Cours du module · 15 cours</summary><nav aria-label="Cours du module"><a class="lot-context" href="lot-03.html">Module 03 — Architecture Symfony</a><ol><li><a href="course-CRS-epx8j3fhb38n.html">HttpFoundation component</a></li><li><a href="course-CRS-tyf3yfxjc3sa.html">Symfony Flex</a></li><li><a href="course-CRS-y84syktt20ww.html">License</a></li><li><a href="course-CRS-1bxqx6ks853z.html">Components and Bridges</a></li><li><a href="course-CRS-156khyjssm25.html">Code organization</a></li><li><a href="course-CRS-mpwjc4g3vmj7.html">Request handling</a></li><li><a href="course-CRS-kd67y4vnd0mm.html">Exception handling</a></li><li><a href="course-CRS-2hpcy2rscq7m.html">Event dispatcher and kernel events</a></li><li><a href="course-CRS-k2xvr11x936e.html">Official best practices</a></li><li><a href="course-CRS-21ec5kwrcmkm.html" aria-current="page">Backward compatibility promise</a></li><li><a href="course-CRS-rkq1d437dw5d.html">Deprecations best practices</a></li><li><a href="course-CRS-f9s8mpaydnbx.html">Framework overloading</a></li><li><a href="course-CRS-6m32av3nr9eh.html">Release management and roadmap schedule</a></li><li><a href="course-CRS-f74jcpnrrkhz.html">Framework interoperability and PSRs</a></li><li><a href="course-CRS-9g4qrgfs7nm4.html">Naming conventions</a></li></ol><a href="lot-03.html#view-quiz">Quiz du module</a></nav></details><aside class="course-section-menu" aria-label="Sommaire du cours"><nav class="course-actions" aria-label="Activités du cours"><a id="tab-course" href="#view-course">Cours</a><a id="tab-flashcards" href="#view-flashcards">Flashcards</a><a id="tab-quiz" href="#view-quiz">Quiz</a></nav><details class="course-section-disclosure"><summary id="course-sections">Sections du cours</summary><nav aria-label="Sections du cours"><ul><li><a href="#s-objectif">Objectif</a></li><li><a href="#s-l-essentiel">L&#x27;essentiel</a></li><li><a href="#s-le-schema">Le schéma</a></li><li><a href="#s-l-exemple-un-argument-ajoute-en-mineure">L&#x27;exemple : un argument ajouté en mineure</a></li><li><a href="#s-utiliser-etendre-implementer">Utiliser, étendre, implémenter</a></li><li><a href="#s-les-traits-et-leur-asymetrie-avec-les-classes">Les traits, et leur asymétrie avec les classes</a></li><li><a href="#s-ajouter-un-argument-toujours-en-dernier">Ajouter un argument : toujours en dernier</a></li><li><a href="#s-les-trois-exclusions">Les trois exclusions</a></li><li><a href="#s-le-piege-des-named-arguments">Le piège des named arguments</a></li><li><a href="#s-final-et-final">final et @final</a></li><li><a href="#s-pieges-d-examen">Pièges d&#x27;examen</a></li><li><a href="#s-application">Application</a></li><li><a href="#s-fiche-express">Fiche express</a></li><li><a href="#s-sources-officielles">Sources officielles</a></li><li><a href="#reader-objectives">Objectifs d’apprentissage</a></li><li><a href="#course-recalls">Rappels et liens avec les autres cours</a></li></ul></nav><nav aria-label="Flashcards par section"><a href="#view-flashcards">Flashcards par section</a><ul><li><a href="#cards-s-l-essentiel-1">L&#x27;essentiel</a></li><li><a href="#cards-s-le-schema-2">Le schéma</a></li><li><a href="#cards-s-l-exemple-un-argument-ajoute-en-mineure-3">L&#x27;exemple : un argument ajouté en mineure</a></li><li><a href="#cards-s-utiliser-etendre-implementer-4">Utiliser, étendre, implémenter</a></li><li><a href="#cards-s-les-traits-et-leur-asymetrie-avec-les-classes-5">Les traits, et leur asymétrie avec les classes</a></li><li><a href="#cards-s-ajouter-un-argument-toujours-en-dernier-6">Ajouter un argument : toujours en dernier</a></li><li><a href="#cards-s-les-trois-exclusions-7">Les trois exclusions</a></li><li><a href="#cards-s-le-piege-des-named-arguments-8">Le piège des named arguments</a></li><li><a href="#cards-s-final-et-final-9">final et @final</a></li><li><a href="#cards-s-pieges-d-examen-10">Pièges d&#x27;examen</a></li><li><a href="#cards-s-application-11">Application</a></li><li><a href="#cards-s-fiche-express-12">Fiche express</a></li><li><a href="#cards-previous">Module 03 — Architecture Symfony · Cours « License » · Rappel : <span lang="en">Does using Symfony require publishing an application&#x27;s source code?</span></a></li></ul></nav><nav aria-label="Retour au module"><a href="lot-03.html">Tous les cours du module</a></nav></details><p class="local-quiz-count">7 questions disponibles · 7 par session Quiz</p></aside><div class="course-content"><div id="view-course" data-course-panel role="region" aria-labelledby="view-course-title"><h2 id="view-course-title">Cours</h2><p class="course-introduction"><a href="#s-objectif">Introduction</a> · <a href="#course-sections">Sections du cours</a></p><h2 id="reader-objectives" tabindex="-1">Objectifs d’apprentissage</h2><ul><li><a href="course-CRS-21ec5kwrcmkm.html#out-OUT-bmtapjwv4je4">Distinguer utiliser, étendre et implémenter au regard de la promesse</a></li><li><a href="course-CRS-21ec5kwrcmkm.html#out-OUT-z81y6z00tr3t">Identifier les cas non garantis lors de l&#x27;extension d&#x27;une class</a></li><li><a href="course-CRS-21ec5kwrcmkm.html#out-OUT-92tk3wgmcgkc">Énoncer le scope de la garantie sur les named arguments</a></li><li><a href="course-CRS-21ec5kwrcmkm.html#out-OUT-4x6dvn65hj5v">Citer les exclusions : @internal, experimental, translations internes</a></li><li><a href="course-CRS-21ec5kwrcmkm.html#out-OUT-xh1k5wmbaqwa">Distinguer final de @final</a></li></ul><aside class="pedagogy-legend" aria-label="Repères pédagogiques"><p><strong>Repères pédagogiques</strong></p><p>Ces repères décrivent le rôle du bloc, pas une fréquence officielle à l’examen.</p><p class="teaching-label essential"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="brain" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5C12 1 6 1 6 5C2 5 1 10 4 12C1 15 3 19 6 19C6 23 12 23 12 19V5M12 5C12 1 18 1 18 5C22 5 23 10 20 12C23 15 21 19 18 19C18 23 12 23 12 19M6 5C6 8 8 9 9 9M4 12H7L9 14M6 19V16M18 5C18 8 16 9 15 9M20 12H17L15 14M18 19V16"></path></svg> <strong>À comprendre</strong></p><p class="teaching-label essential"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="book" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5C9 3 5 3 2 4V20C5 19 9 19 12 21C15 19 19 19 22 20V4C19 3 15 3 12 5V21M5 8H8M5 12H8M16 8H19M16 12H19"></path></svg> <strong>À mémoriser</strong></p><p class="teaching-label example"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="code" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6L2 12L8 18M16 6L22 12L16 18M14 3L10 21"></path></svg> <strong>Exemple concret</strong></p><p class="teaching-label pitfall"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="warning" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3L23 21H1L12 3ZM12 9V14M12 17V18"></path></svg> <strong>Piège à éviter</strong></p><p class="teaching-label nuance"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="balance" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3V21M7 21H17M3 7L21 5M5 7L1 15H9L5 7M19 6L15 14H23L19 6M1 15Q5 20 9 15M15 14Q19 19 23 14"></path></svg> <strong>Nuance à connaître</strong></p><p>Précision, exception ou condition d’application d’une règle.</p></aside><section class="teaching-section" data-section="s-objectif"><h2 id="s-objectif" tabindex="-1">Objectif</h2><p>Le blog fonctionne en Symfony 8.0. Avant une mise à jour dans la même branche
+majeure, nous voulons conserver l'affichage de <code>/blog/42</code>, la validation de
+l'inscription et la commande d'import. La <em>backward compatibility promise</em>
+est la promesse de compatibilité avec les usages antérieurs de l'API.
+Elle aide à préparer cette maintenance, mais ne couvre pas tout ce que PHP
+permet techniquement de faire.</p>
+<p>Nous allons classer nos dépendances au framework : appeler une API,
+implémenter son contrat ou étendre une class. Le risque dépend aussi des
+annotations et de la partie exacte de l'API sur laquelle notre code s'appuie.</p>
+<p>Ce cours se lit après <a href="course-CRS-6m32av3nr9eh.html">Release management and roadmap schedule</a>
+(le calendrier des versions) et avant
+<a href="course-CRS-rkq1d437dw5d.html">Deprecations best practices</a> (comment se
+préparer concrètement à la majeure).</p></section><section class="teaching-section" data-section="s-l-essentiel"><h2 id="s-l-essentiel" tabindex="-1">L&#x27;essentiel</h2><p class="teaching-label essential"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="brain" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5C12 1 6 1 6 5C2 5 1 10 4 12C1 15 3 19 6 19C6 23 12 23 12 19V5M12 5C12 1 18 1 18 5C22 5 23 10 20 12C23 15 21 19 18 19C18 23 12 23 12 19M6 5C6 8 8 9 9 9M4 12H7L9 14M6 19V16M18 5C18 8 16 9 15 9M20 12H17L15 14M18 19V16"></path></svg> <strong>À comprendre</strong></p><aside class="section-digest" id="s-l-essentiel-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Utiliser une API n&#x27;est pas la même chose que l&#x27;étendre.</li><li>Un nouveau membre Symfony peut entrer en collision avec un membre ajouté.</li></ol></aside><p><strong>Ce que cette partie veut réellement vous apprendre.</strong></p>
+<ul>
+<li><em>Pourquoi ce sujet existe.</em> Des milliers d'applications dépendent de
+  Symfony. Si chaque mineure pouvait casser une API, personne ne mettrait à
+  jour. Symfony prend donc un engagement écrit : dans un périmètre précis, une
+  mise à jour mineure ne casse pas votre code.</li>
+<li><em>Le piège de fond.</em> La promesse <strong>n'est pas</strong> « tout ce que PHP permet reste
+  valide ». Elle couvre des usages précis d'API précises. Étendre, ajouter une
+  méthode, lire un privé par réflexion, nommer un argument : chacun a son
+  niveau de garantie.</li>
+<li><em>Ce que l'auteur veut que vous compreniez.</em> Il faut raisonner avec une
+  grille : <em>quelle API ? quel usage ? quelle annotation ?</em></li>
+<li><em>Pourquoi c'est à l'examen.</em> Les questions portent sur les exclusions
+  (<code>@internal</code>, <code>*\Tests\</code>, <code>@experimental</code>, traductions internes), sur les
+  named arguments, sur <code>final</code> / <code>@final</code> / <code>@final since</code>, et sur le procédé
+  d'ajout d'un argument en dernier.</li>
+</ul>
+<p>Le <em>semantic versioning</em> distingue version majeure, mineure et corrective.
+Dans le périmètre couvert, une mineure peut ajouter des fonctionnalités et
+déprécier des usages, c'est-à-dire annoncer leur abandon tout en les conservant.
+La majeure est le moment prévu pour les ruptures. Des exclusions et une
+tolérance pour les corrections de sécurité empêchent toutefois de résumer
+la règle à « une mineure ne peut jamais affecter mon application ».</p>
+<p>Appeler une méthode publique documentée n'engage pas les mêmes détails que
+lire une propriété privée par réflexion, mécanisme d'inspection du code.
+Ajouter notre propre méthode à une sous-classe crée encore un autre risque :
+le parent peut introduire plus tard le même nom. Nous examinerons donc le
+périmètre, puis l'usage, puis le détail auquel l'application se lie.</p>
+<p>Cette promesse concerne le code fourni par Symfony. Elle ne garantit pas
+automatiquement les APIs de <code>ArticleCatalog</code>, les packages tiers ou les URLs
+que notre équipe décide de modifier. Le test de <code>/blog/42</code> continue à protéger
+notre propre contrat public.</p>
+<pre class="highlight" tabindex="0"><code class="language-text">Semantic versioning : MAJEURE . MINEURE . CORRECTIVE
+                         8    .    0    .    3
+┌──────────────┬───────────────────────────────┬────────────────────────────┐
+│ Corrective   │ corrige des bogues            │ ne casse pas               │
+│ Mineure      │ ajoute, DÉPRÉCIE (annonce)    │ ne casse pas (périmètre    │
+│              │                               │ couvert)                   │
+│ Majeure      │ retire ce qui était déprécié  │ rupture autorisée          │
+└──────────────┴───────────────────────────────┴────────────────────────────┘
+Exceptions : exclusions (interne, expérimental, tests, traductions internes)
+             et rupture nécessaire à une correction de sécurité.</code></pre></section><section class="teaching-section" data-section="s-le-schema"><h2 id="s-le-schema" tabindex="-1">Le schéma</h2><aside class="section-digest" id="s-le-schema-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Les named arguments ordinaires ne sont pas garantis.</li><li>Les constructors d&#x27;attributes constituent l&#x27;exception.</li></ol></aside><p><strong>Où en est-on ?</strong> On connaît le principe. Avant de classer nos usages, un
+schéma sur un cas qui prête à confusion : les <strong>arguments nommés</strong>. La syntaxe
+PHP est identique d'un cas à l'autre, mais la garantie ne l'est pas ; ce
+schéma pose la question dans le bon ordre.</p>
+<p>La route du blog utilise des arguments nommés, par exemple <code>path:</code> dans
+<code>#[Route(...)]</code>. Une commande peut aussi appeler une méthode avec <code>timeout:</code>.
+La syntaxe PHP ressemble à la même chose ; la garantie sur le nom n'est
+pourtant pas identique. Le schéma isole cette question :</p>
+<figure class="diagram" aria-labelledby="CRS-21ec5kwrcmkm-3-diagram-0-title CRS-21ec5kwrcmkm-3-diagram-0-description"><figcaption id="CRS-21ec5kwrcmkm-3-diagram-0-title">Vérifier un appel nommé avant une mise à jour mineure</figcaption><p id="CRS-21ec5kwrcmkm-3-diagram-0-description">On vérifie d&#x27;abord que l&#x27;API appartient au périmètre de la promesse. Pour les noms de paramètres, seuls ceux des constructeurs de classes d&#x27;attributs sont couverts. Les autres appels nommés peuvent casser lors d&#x27;un renommage, même si les appels positionnels restent compatibles.</p><div class="mermaid" hidden>---
+title: Ce que la promesse couvre
+---
+flowchart TD
+  accTitle: Vérifier un appel nommé avant une mise à jour mineure
+  accDescr: On vérifie d&#x27;abord que l&#x27;API appartient au périmètre de la promesse. Pour les noms de paramètres, seuls ceux des constructeurs de classes d&#x27;attributs sont couverts. Les autres appels nommés peuvent casser lors d&#x27;un renommage, même si les appels positionnels restent compatibles.
+  A[&quot;appel avec un nom&lt;br/&gt;timeout: 5&quot;] --&gt;|&quot;vérifie le périmètre&quot;| P{&quot;API couverte ?&quot;}
+  P --&gt;|&quot;non : internal, experimental…&quot;| N([&quot;pas de garantie&quot;])
+  P --&gt;|&quot;oui&quot;| C{&quot;constructeur&lt;br/&gt;d&#x27;attribut ?&quot;}
+  C --&gt;|&quot;oui&quot;| O([&quot;nom du paramètre couvert&quot;])
+  C --&gt;|&quot;non&quot;| N
+  classDef runtime fill:#e0f2fe,stroke:#0369a1,color:#0c4a6e
+  classDef decision fill:#fef3c7,stroke:#b45309,color:#78350f
+  classDef result fill:#dcfce7,stroke:#15803d,color:#14532d
+  classDef risk fill:#fee2e2,stroke:#b91c1c,color:#7f1d1d
+  class A runtime
+  class P,C decision
+  class O result
+  class N risk</div></figure>
+<p>Le premier contrôle élimine les APIs hors promesse. Le second distingue
+le constructeur d'une class d'attribute d'une méthode ordinaire.
+Pour <code>#[Route(path: '/blog')]</code>, le nom <code>path</code> bénéficie de la protection
+spécifique ; cet exemple historique de route ne change pas notre route
+<code>blog_show</code>. Pour une méthode ordinaire, <code>timeout</code> peut être renommé sans
+déplacer la valeur dans la signature.</p>
+<p>Bleu : appel ; orange : contrôles ; vert ou rouge : couverture du <strong>nom</strong>.
+Le rouge ne dit pas que l'appel est invalide aujourd'hui ni que toute la méthode
+est hors promesse. Le vert ne dispense pas de respecter les autres conditions
+de l'API et les exceptions de sécurité.</p></section><section class="teaching-section" data-section="s-l-exemple-un-argument-ajoute-en-mineure"><h2 id="s-l-exemple-un-argument-ajoute-en-mineure" tabindex="-1">L&#x27;exemple : un argument ajouté en mineure</h2><p class="teaching-label example"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="code" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6L2 12L8 18M16 6L22 12L16 18M14 3L10 21"></path></svg> <strong>Exemple concret</strong></p><aside class="section-digest" id="s-l-exemple-un-argument-ajoute-en-mineure-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>L&#x27;argument ajouté vient en dernière position.</li><li>Le comportement antérieur reste le défaut effectif.</li></ol></aside><p><strong>Où en est-on ?</strong> Changement de point de vue : jusqu'ici nous étions
+<em>utilisateur</em> de l'API. Ici nous sommes <strong>l'auteur</strong> d'une bibliothèque qui
+veut ajouter un argument sans casser ses sous-classes. Pourquoi ? Voir le
+problème de l'autre côté explique la règle « toujours en dernier ».</p>
+<p>Passons du côté de l'auteur d'une bibliothèque utilisée par la commande
+d'import. Son ancien <code>say()</code> conserve les espaces ; il souhaite proposer
+leur suppression sans modifier immédiatement la signature redéfinie par
+des sous-classes. Le laboratoire PHP 8.4 conserve le procédé documentaire,
+et ajoute une sortie pour observer le résultat :</p>
+<pre class="highlight" tabindex="0"><code class="language-php">class ImportReporter
+{
+    /** @param bool $stripWhitespace */
+    public function say(string $text, /* bool $stripWhitespace = true */): void
+    {
+        $stripWhitespace = 2 &lt;= \func_num_args() ? func_get_arg(1) : false;
+        echo $stripWhitespace ? trim($text) : $text;
+        echo "\n";
+    }
+}
+
+$reporter = new ImportReporter();
+$reporter-&gt;say(' Article 42 ');
+$reporter-&gt;say(' Article 42 ', true);</code></pre>
+<p>Le premier appel conserve l'espace initial et final ; le second affiche
+<code>Article 42</code> sans ces espaces. <code>func_num_args()</code> compte les arguments fournis ;
+<code>func_get_arg(1)</code> lit le deuxième, l'index commençant à zéro.
+Le commentaire <code>= true</code> n'est pas une valeur par défaut exécutée par PHP :
+l'absence de second argument suit bien la branche <code>false</code>.</p>
+<p>Ce fragment montre une transition d'API, pas une API Symfony nommée
+<code>ImportReporter</code>. Le booléen commenté n'impose pas non plus un type PHP au
+second argument. Une bibliothèque doit documenter et encadrer ses entrées ;
+ce procédé n'est pas un modèle à généraliser à toutes les nouvelles méthodes.</p>
+<p>Pourquoi ne pas simplement écrire <code>bool $stripWhitespace = false</code> dans la
+signature ? Parce qu'une sous-classe qui redéfinit <code>say(string $text)</code> serait
+alors <strong>incompatible</strong> avec la signature du parent (PHP lèverait une erreur
+fatale) : la mineure casserait des applications. Le commentaire permet de
+préparer la transition sans toucher à la signature réelle.</p></section><section class="teaching-section" data-section="s-utiliser-etendre-implementer"><span class="outcome-anchor" id="out-OUT-bmtapjwv4je4" tabindex="-1"></span><span class="outcome-anchor" id="out-OUT-z81y6z00tr3t" tabindex="-1"></span><h2 id="s-utiliser-etendre-implementer" tabindex="-1">Utiliser, étendre, implémenter</h2><p><strong>Où en est-on ?</strong> Étape 1 sur 5 : le classement des usages, cœur du
+programme. Question : <em>selon ce que je fais d'une API (appeler, implémenter,
+étendre), qu'est-ce que Symfony me garantit ?</em></p>
+<p>Commençons par le code qui produit la Response de l'article.
+<strong>Utiliser</strong> une class publique signifie notamment l'instancier et appeler
+ses méthodes publiques. <strong>Implémenter</strong> une interface signifie fournir les
+méthodes du contrat dans notre propre class. Ces usages relèvent de la promesse
+pour les éléments couverts, sous réserve de signatures PHP compatibles et
+des exclusions examinées plus bas.</p>
+<p><strong>Étendre</strong> une class permet de réutiliser ses points publics et protégés.
+La grille protège largement ces usages et leurs redéfinitions compatibles,
+mais pas quatre opérations : ajouter une property, ajouter une méthode,
+appeler une méthode privée ou lire une property privée par réflexion.
+Les deux ajouts peuvent entrer en collision avec une évolution du parent :</p>
+<pre class="highlight" tabindex="0"><code class="language-text">Version A du parent : aucune méthode normalize()
+Application : sous-classe avec normalize(int): int
+Version B du parent : ajout public normalize(string): string
+Résultat : collision de signatures dans la sous-classe</code></pre>
+<p>Cette évolution peut laisser intacts les anciens appels publics du parent
+tout en cassant la sous-classe. Il ne s'agit pas d'une modification réelle
+d'une class Symfony nommée ici. C'est le risque à reconnaître avant d'ajouter
+un helper d'import à une class du framework : un service applicatif séparé,
+reçu par composition, évite de réserver ce nom chez le parent.
+La promesse ne rend pas une signature incompatible valide en PHP.</p>
+<p>Récapitulatif de la grille pour une <strong>classe</strong> :</p>
+<table>
+<thead>
+<tr>
+<th>Usage</th>
+<th>Couvert par la promesse ?</th>
+<th>Pourquoi</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Instancier, appeler une méthode publique</td>
+<td>oui</td>
+<td>contrat public</td>
+</tr>
+<tr>
+<td>Implémenter une interface</td>
+<td>oui (éléments couverts)</td>
+<td>contrat</td>
+</tr>
+<tr>
+<td>Étendre, utiliser le public/protégé hérité</td>
+<td>oui</td>
+<td>points d'extension</td>
+</tr>
+<tr>
+<td>Redéfinir de façon compatible</td>
+<td>oui</td>
+<td>signature identique</td>
+</tr>
+<tr>
+<td>Ajouter une property</td>
+<td><strong>non</strong></td>
+<td>le parent peut ajouter le même nom</td>
+</tr>
+<tr>
+<td>Ajouter une méthode</td>
+<td><strong>non</strong></td>
+<td>idem (collision future)</td>
+</tr>
+<tr>
+<td>Appeler une méthode privée (réflexion)</td>
+<td><strong>non</strong></td>
+<td>détail interne</td>
+</tr>
+<tr>
+<td>Lire une property privée (réflexion)</td>
+<td><strong>non</strong></td>
+<td>détail interne</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition info">
+<p class="admonition-title">🌍 In Real Life</p>
+<p><strong>La situation</strong> : utiliser les commandes prévues d'une machine ne revient pas à ajouter ses propres pièces à l'intérieur.</p>
+<p><strong>L’équivalent dans Symfony</strong> : commandes documentées → API publique couverte ; pièce ajoutée → nouveau membre d'une sous-classe ; inspection interne → réflexion sur le privé du parent.</p>
+<p><strong>Retour à la réalité technique</strong> : un futur membre du parent peut entrer en collision avec l'ajout. La promesse dépend du périmètre et de l'usage, pas de tout ce que PHP autorise.</p>
+<p><strong>🧠 Comment le mémoriser</strong> : « Utiliser n'est pas modifier l'intérieur. » Image mentale : panneau de commande face au mécanisme ouvert. Question-réflexe : quelle opération la grille couvre-t-elle ?</p>
+<p><strong>⚠️ À ne pas confondre</strong> : privé du parent et membre importé d'un trait public couvert, dont la grille est différente.</p>
+</div><div class="retained-answer-context">
+<p><strong>Repère — Les traits, et leur asymétrie avec les classes :</strong></p>
+<p lang="en"><strong>Question:</strong> Does the compatibility promise treat private trait members like private class members?</p>
+<p lang="en"><strong>Answer:</strong> No. Trait members become part of the consuming class and receive broader protection, unless internal.</p>
+<p>Le trait est intégré dans la class consommatrice. Le privé d'une class Symfony n'a pas la même garantie.</p>
+</div>
+
+<div class="retained-answer-context">
+<p><strong>Repère — Ajouter un argument : toujours en dernier :</strong></p>
+<p lang="en"><strong>Question:</strong> Where is an added public-method argument placed under the documented compatibility technique?</p>
+<p lang="en"><strong>Answer:</strong> Last, documented without breaking the existing signature, and read through func_get_arg().</p>
+<p>L'argument ajouté vient en dernière position. Le comportement antérieur reste le défaut effectif.</p>
+</div></section><section class="teaching-section" data-section="s-les-traits-et-leur-asymetrie-avec-les-classes"><h2 id="s-les-traits-et-leur-asymetrie-avec-les-classes" tabindex="-1">Les traits, et leur asymétrie avec les classes</h2><aside class="section-digest" id="s-les-traits-et-leur-asymetrie-avec-les-classes-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Le trait est intégré dans la class consommatrice.</li><li>Le privé d&#x27;une class Symfony n&#x27;a pas la même garantie.</li></ol></aside><p><strong>Où en est-on ?</strong> Étape 2 sur 5 : un cas qui <strong>inverse</strong> la règle précédente.
+Pourquoi le traiter ? Parce que « privé du parent = non couvert » est vrai
+pour une classe, mais faux pour un trait, et la différence est un classique
+de QCM.</p>
+<p>Un trait importe des membres dans la class qui l'utilise ; ce n'est pas un
+objet parent distinct. Cette différence explique pourquoi la grille de
+compatibilité des traits couvre l'utilisation de leurs properties et méthodes
+publiques, protégées <strong>et privées</strong>.</p>
+<p>Supposons que notre commande utilise un trait public du framework :
+un helper privé importé appartient alors à sa propre class. Le retirer peut
+casser directement cette utilisation. À l'inverse, sonder un helper privé
+d'un parent Symfony par réflexion dépend d'un détail que ce parent ne promet
+pas de conserver.</p>
+<p>La grille des traits n'a donc pas de ligne « non » pour les usages qu'elle
+énumère. Cela ne transforme pas un trait <code>@internal</code> en API publique,
+n'efface pas les exclusions générales et ne règle pas automatiquement
+les conflits entre plusieurs traits choisis par l'application.</p>
+<pre class="highlight" tabindex="0"><code class="language-text">        CLASSE PARENTE                         TRAIT
+┌───────────────────────────┐        ┌───────────────────────────┐
+│ class Parent {            │        │ trait T {                 │
+│   private function h()    │        │   private function h()    │
+│ }                         │        │ }                         │
+│ class Enfant extends Parent        │ class Cmd { use T; }      │
+├───────────────────────────┤        ├───────────────────────────┤
+│ h() reste chez le parent  │        │ h() est COPIÉ dans Cmd    │
+│ → détail interne          │        │ → membre de ma classe     │
+│ → NON couvert             │        │ → couvert                 │
+└───────────────────────────┘        └───────────────────────────┘</code></pre>
+<p>(Un trait marqué <code>@internal</code> reste, lui, exclu : voir plus bas.)</p></section><section class="teaching-section" data-section="s-ajouter-un-argument-toujours-en-dernier"><h2 id="s-ajouter-un-argument-toujours-en-dernier" tabindex="-1">Ajouter un argument : toujours en dernier</h2><p><strong>Où en est-on ?</strong> Étape 3 sur 5 : on revient à l'exemple <code>ImportReporter</code> pour
+en tirer <strong>la règle</strong> et son raisonnement. Question : <em>où met-on le nouvel
+argument, et que fait-on tant que la majeure n'est pas arrivée ?</em></p>
+<p>Le reporter a déjà des appelants : insérer le nouveau drapeau avant <code>$text</code>
+changerait leur interprétation. L'ajout envisagé doit donc être <strong>en dernière
+position</strong>. Pour la transition d'une méthode publique concernée par les
+contraintes d'héritage, la procédure documentée garde d'abord l'argument
+en commentaire, le décrit en PHPDoc et le lit avec les fonctions de comptage.</p>
+<p>Le défaut exécuté conserve le comportement précédent : <code>false</code> dans notre
+exemple. Si la future valeur par défaut change ce comportement, l'auteur
+avertit les appelants qui n'explicitent pas leur choix. À la majeure prévue,
+il peut rendre le paramètre réel et retirer le code de transition.</p>
+<p>Ce procédé répond à une contrainte de compatibilité, pas à une limitation
+de syntaxe PHP. La grille traite les constructeurs séparément : elle autorise
+l'ajout de paramètres optionnels en dernière position. Des cas de classes ou
+méthodes finales ont aussi leurs règles propres. Il faut lire la bonne ligne
+plutôt que conclure que tout nouvel argument doit éternellement rester commenté.</p>
+<p>Les quatre temps de la transition :</p>
+<pre class="highlight" tabindex="0"><code class="language-text">1. Mineure N     signature inchangée  say(string $text, /* bool $strip = true */)
+                 corps : func_num_args() ? func_get_arg(1) : false
+2. Mineure N     (si le défaut futur diffère) : avertir quand l'argument manque
+3. Majeure N+1   le paramètre devient réel : say(string $text, bool $strip = true)
+4. Majeure N+1   le code de transition disparaît</code></pre>
+<div class="admonition info">
+<p class="admonition-title">🌍 In Real Life</p>
+<p><strong>La situation</strong> : un formulaire conserve ses anciennes cases ; une option future est décrite en marge, mais le traitement actuel garde l'ancien choix quand elle manque.</p>
+<p><strong>L’équivalent dans Symfony</strong> : marge → argument commenté/PHPDoc ; lecture réelle → <code>func_num_args()</code> et <code>func_get_arg()</code> ; ancien choix → défaut exécuté <code>false</code>.</p>
+<p><strong>Retour à la réalité technique</strong> : le commentaire ne crée ni paramètre PHP ni défaut <code>true</code>. Cette transition répond aux contraintes d'héritage ; constructeurs et éléments finals ont leurs propres règles.</p>
+<p><strong>🧠 Comment le mémoriser</strong> : « La marge annonce, le corps décide. » Image mentale : annotation à côté du formulaire actif. Question-réflexe : quelle branche s'exécute si l'argument manque ?</p>
+<p><strong>⚠️ À ne pas confondre</strong> : procédé de compatibilité et style conseillé pour toute nouvelle méthode.</p>
+</div></section><section class="teaching-section" data-section="s-les-trois-exclusions"><span class="outcome-anchor" id="out-OUT-4x6dvn65hj5v" tabindex="-1"></span><h2 id="s-les-trois-exclusions" tabindex="-1">Les trois exclusions</h2><aside class="section-digest" id="s-les-trois-exclusions-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>@internal exclut l&#x27;API du contrat de stabilité.</li><li>Une fonctionnalité experimental possède une fenêtre limitée.</li></ol></aside><p><strong>Où en est-on ?</strong> Étape 4 sur 5 : ce qui sort du périmètre. Pourquoi ces
+exclusions ? Parce que Symfony doit pouvoir faire évoluer ses détails
+internes, tester de nouvelles idées et corriger des failles sans attendre la
+majeure. Trois familles à connaître, plus la tolérance de sécurité.</p>
+<p><strong>Les internes ne sont pas un raccourci de production.</strong> Une méthode peut
+être publique en PHP et porter <code>@internal</code> : la visibilité autorise l'appel,
+mais la promesse ne le couvre pas. Les classes des namespaces <code>*\Tests\</code>
+du framework sont également exclues. Pour fabriquer les données de l'article
+42, nous conservons nos propres fixtures au lieu de dépendre d'un helper
+de tests interne de Symfony.</p>
+<p><strong>L'expérimental sert à stabiliser un contrat.</strong> <code>@experimental</code> indique
+une API encore susceptible de changer. La période prévue est une mineure,
+prolongeable exceptionnellement d'une autre ; une fonctionnalité ne peut pas
+être introduite comme expérimentale dans une LTS, version à support prolongé.
+Les ruptures de cette période doivent être expliquées dans le changelog.
+Choisir ce code demande donc un suivi explicite, pas la confiance réservée
+à une API stabilisée.</p>
+<p><strong>Le texte traduit n'est pas un identifiant métier.</strong> Le form d'inscription
+affiche des messages de validation ; leurs traductions internes, comme
+celles de sécurité, peuvent changer ou disparaître. Ce laboratoire formule
+la mauvaise dépendance puis son remplacement :</p>
+<pre class="highlight" tabindex="0"><code class="language-text">Mauvais contrat : si le message traduit vaut exactement « valeur incorrecte »,
+                  classer l'erreur X
+Contrat préférable : utiliser le type ou le code d'erreur documenté,
+                  puis traduire pour l'affichage</code></pre>
+<p>Une reformulation destinée au lecteur ne change alors pas la décision métier.
+Il faut bien choisir un code ou type documenté, pas simplement un autre
+détail interne. Enfin, une rupture nécessaire à la correction d'une faille
+de sécurité est tolérée : elle constitue une exception supplémentaire,
+pas une autorisation générale de casser les usages stables.</p>
+<table>
+<thead>
+<tr>
+<th>Exclusion</th>
+<th>Marqueur</th>
+<th>Pourquoi on s'y laisse prendre</th>
+<th>Alternative</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Interne</td>
+<td><code>@internal</code></td>
+<td>la méthode est <code>public</code> en PHP</td>
+<td>n'utiliser que l'API documentée</td>
+</tr>
+<tr>
+<td>Tests du framework</td>
+<td>namespaces <code>*\Tests\</code></td>
+<td>classes accessibles via l'autoload</td>
+<td>ses propres fixtures</td>
+</tr>
+<tr>
+<td>Expérimental</td>
+<td><code>@experimental</code></td>
+<td>l'API est présente et fonctionne</td>
+<td>suivre le changelog</td>
+</tr>
+<tr>
+<td>Traductions internes</td>
+<td>messages de validation / security</td>
+<td>texte stable en apparence</td>
+<td>code ou type d'erreur</td>
+</tr>
+<tr>
+<td>Sécurité</td>
+<td>—</td>
+<td>« une mineure ne casse jamais »</td>
+<td>tolérance pour une faille</td>
+</tr>
+</tbody>
+</table><aside class="enrichment" aria-label="Autre explication"><p>Un contrat de location protège les pièces qui en font partie, pas les zones explicitement réservées au personnel. @internal marque pareillement une frontière : la visibilité PHP seule ne suffit pas à promettre la stabilité.</p></aside></section><section class="teaching-section" data-section="s-le-piege-des-named-arguments"><span class="outcome-anchor" id="out-OUT-92tk3wgmcgkc" tabindex="-1"></span><h2 id="s-le-piege-des-named-arguments" tabindex="-1">Le piège des named arguments</h2><p><strong>Où en est-on ?</strong> Étape 5 sur 5 : on revient à la question du schéma. Pourquoi
+cette partie ? Parce que le nom d'un paramètre est une <strong>seconde</strong> dépendance
+(en plus de sa position) que beaucoup de développeurs ignorent.</p>
+<p>Les arguments nommés associent une valeur au <strong>nom</strong> d'un paramètre, au lieu
+de se fonder seulement sur sa position. Ils rendent certains appels lisibles,
+mais ajoutent une dépendance au vocabulaire de la signature.
+Ce laboratoire autonome illustre le mécanisme avec un libellé d'import :</p>
+<pre class="highlight" tabindex="0"><code class="language-php">&lt;?php
+function formatLabel(string $text, bool $uppercase = false): string
+{
+    return $uppercase ? strtoupper($text) : $text;
+}
+echo formatLabel(text: 'demo', uppercase: true), "\n";</code></pre>
+<p>L'entrée <code>demo</code> et le drapeau <code>true</code> produisent <code>DEMO</code>.
+Si l'auteur renomme <code>$uppercase</code> en <code>$capitalize</code> et adapte le corps sans
+conserver l'ancien nom, cet appel nommé échoue ; l'appel positionnel
+<code>formatLabel('demo', true)</code> garde la même association. Ce n'est pas une
+fonction Symfony réelle ni une promesse sur les règles de notre application.</p>
+<p>Dans Symfony, les noms de paramètres ne sont couverts que pour les
+constructeurs de classes d'attribute, dans le périmètre de la promesse.
+La route <code>#[Route(path: '/blog')]</code> bénéficie de cette protection sur <code>path</code>.
+Une méthode ordinaire appelée avec <code>timeout: 5</code> n'en bénéficie pas
+automatiquement. La validité immédiate en PHP ne suffit donc pas à établir
+la stabilité lors d'une mise à jour.</p>
+<p>Avant / après un renommage <code>$uppercase</code> → <code>$capitalize</code> :</p>
+<pre class="highlight" tabindex="0"><code class="language-text">formatLabel('demo', true)                      ← positionnel : fonctionne toujours
+formatLabel(text: 'demo', uppercase: true)     ← nommé : Error (paramètre inconnu)</code></pre>
+<div class="admonition info">
+<p class="admonition-title">🌍 In Real Life</p>
+<p><strong>La situation</strong> : un guichet peut garder ses cases dans le même ordre tout en changeant leur intitulé ; demander une case par son ancien nom devient alors fragile.</p>
+<p><strong>L’équivalent dans Symfony</strong> : ordre → arguments positionnels ; intitulé → arguments nommés ; intitulés spécialement protégés → constructeurs d'attributes couverts.</p>
+<p><strong>Retour à la réalité technique</strong> : la promesse Symfony ne protège pas généralement les noms des paramètres ordinaires. Cela ne rend pas les appels nommés invalides aujourd'hui ni toute la méthode instable.</p>
+<p><strong>🧠 Comment le mémoriser</strong> : « Position et nom sont deux dépendances. » Image mentale : cases inchangées, étiquettes remplacées. Question-réflexe : ce nom appartient-il à un constructeur d'attribute couvert ?</p>
+<p><strong>⚠️ À ne pas confondre</strong> : syntaxe PHP valide et garantie de stabilité future.</p>
+</div></section><section class="teaching-section" data-section="s-final-et-final"><span class="outcome-anchor" id="out-OUT-xh1k5wmbaqwa" tabindex="-1"></span><h2 id="s-final-et-final" tabindex="-1">final et @final</h2><aside class="section-digest" id="s-final-et-final-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>final bloque techniquement l&#x27;extension.</li><li>@final peut exclure l&#x27;extension de la promesse sans la bloquer.</li></ol></aside><p><strong>Où en est-on ?</strong> Dernier thème : la <strong>finalité</strong> d'une classe. Pourquoi ici ?
+Parce que « puis-je étendre cette classe ? » est la question qui précède
+presque toute extension, et que trois écritures (<code>final</code>, <code>@final</code>,
+<code>@final since</code>) ont trois sens.</p>
+<p>Nous voulons enrichir le format d'affichage d'un diagnostic d'import.
+Si sa class porte le mot-clé PHP <code>final</code>, l'héritage est interdit.
+Avec la seule annotation PHPDoc <code>@final</code>, PHP peut encore accepter
+l'héritage, mais Symfony considère la class finale pour sa grille de
+compatibilité : cette extension n'est pas protégée.</p>
+<p>La forme <code>@final since Symfony x.y</code> annonce au contraire une transition
+vers la prochaine majeure. Pendant cette transition, la class n'est pas
+encore considérée finale. À la majeure, le projet peut employer le mot-clé
+ou l'annotation simple : l'annonce ne garantit pas à elle seule une future
+forme syntaxique précise.</p>
+<p>Nous pouvons ajouter notre présentation sans hériter. Ces deux classes
+du laboratoire PHP 8.4 sont indépendantes du framework :</p>
+<pre class="highlight" tabindex="0"><code class="language-php">&lt;?php
+final class BaseFormatter
+{
+    public function format(string $value): string { return trim($value); }
+}
+final class ApplicationFormatter
+{
+    public function __construct(private BaseFormatter $formatter) {}
+    public function format(string $value): string
+    {
+        return '['.$this-&gt;formatter-&gt;format($value).']';
+    }
+}
+echo (new ApplicationFormatter(new BaseFormatter()))-&gt;format(' demo '), "\n";</code></pre>
+<p>L'entrée entourée d'espaces produit <code>[demo]</code>. L'objet applicatif délègue
+la normalisation puis ajoute ses crochets : c'est de la composition.
+Il dépend toujours du contrat public <code>format()</code> et n'est pas une sous-classe
+de <code>BaseFormatter</code>. Retirer <code>final</code> dans une dépendance installée ne fournirait
+aucune garantie équivalente et créerait une modification locale à maintenir.</p>
+<p>Comparaison des trois écritures :</p>
+<pre class="highlight" tabindex="0"><code class="language-text">┌────────────────┬──────────────────┬───────────────────┬───────────────────────┐
+│                │ final            │ @final            │ @final since Symfony  │
+│                │ (mot-clé PHP)    │ (PHPDoc)          │ x.y                   │
+├────────────────┼──────────────────┼───────────────────┼───────────────────────┤
+│ PHP bloque     │ oui              │ non               │ non                   │
+│ l'héritage ?   │                  │                   │                       │
+├────────────────┼──────────────────┼───────────────────┼───────────────────────┤
+│ Extension      │ impossible       │ non protégée par  │ encore protégée       │
+│ couverte ?     │                  │ la promesse       │ jusqu'à la majeure    │
+├────────────────┼──────────────────┼───────────────────┼───────────────────────┤
+│ Sens           │ interdit         │ non garanti       │ bientôt retiré        │
+└────────────────┴──────────────────┴───────────────────┴───────────────────────┘</code></pre>
+<p>Note : Symfony n'ajoute pas <code>@final</code> simple en mineure, sauf annonce préalable
+sous la forme <code>@final since Symfony x.y</code> ; l'annonce se matérialise dans les
+messages de dépréciation, ce qui prépare la migration avant la majeure
+(voir <a href="course-CRS-rkq1d437dw5d.html">Deprecations best practices</a>).</p>
+<div class="admonition info">
+<p class="admonition-title">🌍 In Real Life</p>
+<p><strong>La situation</strong> : une porte peut être verrouillée, simplement signalée comme non destinée au passage, ou annoncée fermée lors de la prochaine rénovation.</p>
+<p><strong>L’équivalent dans Symfony</strong> : verrou → <code>final</code> PHP ; périmètre non garanti → <code>@final</code> ; transition annoncée → <code>@final since Symfony x.y</code>.</p>
+<p><strong>Retour à la réalité technique</strong> : le mot-clé interdit l'héritage ; l'annotation simple exclut sa protection ; l'annonce datée vise la prochaine majeure. Composer un service autour de l'API publique évite cet héritage sans supprimer toute dépendance.</p>
+<p><strong>🧠 Comment le mémoriser</strong> : « Interdit, non garanti, bientôt retiré. » Image mentale : trois panneaux distincts. Question-réflexe : quelle forme exacte est écrite ?</p>
+<p><strong>⚠️ À ne pas confondre</strong> : commentaire de maintenance et contrôle effectué par le moteur PHP.</p>
+</div></section><section class="teaching-section" data-section="s-pieges-d-examen"><h2 id="s-pieges-d-examen" tabindex="-1">Pièges d&#x27;examen</h2><p class="teaching-label pitfall"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="warning" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3L23 21H1L12 3ZM12 9V14M12 17V18"></path></svg> <strong>Piège à éviter</strong></p><ul class="pitfall-list"><li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : Une méthode ajoutée n&#x27;est pas une méthode redéfinie.</summary><p><strong>Une méthode ajoutée n'est pas une méthode redéfinie.</strong> Le helper inventé
+dans notre sous-classe expose à une collision future ; redéfinir un point
+public ou protégé couvert suit une autre ligne de la grille. Les deux autres
+usages non couverts de la class concernent son privé lu ou appelé par réflexion.
+<em>Pourquoi on se trompe : dans les deux cas on « touche » la sous-classe, donc
+on suppose la même garantie.</em></p></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : Un nom n&#x27;est pas une position.</summary><p><strong>Un nom n'est pas une position.</strong> Renommer un paramètre peut préserver
+l'appel positionnel et casser l'appel nommé. Vérifions l'exception des
+constructeurs d'attributes plutôt que d'étendre leur garantie à tout service.
+<em>Pourquoi on se trompe : l'attribut <code>#[Route(path: …)]</code> est partout dans la
+documentation, d'où l'idée que tous les noms sont protégés.</em></p></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : Un commentaire peut changer l&#x27;engagement sans changer le moteur PHP.</summary><p><strong>Un commentaire peut changer l'engagement sans changer le moteur PHP.</strong>
+<code>@final</code> simple exclut l'héritage de la promesse ; <code>final</code> le bloque.
+La forme <code>since Symfony x.y</code> donne un délai jusqu'à la majeure,
+elle n'est pas équivalente à une class déjà finale.
+<em>Pourquoi on se trompe : on croit que seul le mot-clé PHP « compte ».</em></p></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : Le mot « privé » ne suffit pas à choisir la grille.</summary><p><strong>Le mot « privé » ne suffit pas à choisir la grille.</strong> Dans un trait public
+couvert, le membre est importé dans notre class ; dans un parent, il reste
+un détail interne. La réflexion ne transforme pas ce détail en contrat.
+<em>Pourquoi on se trompe : même mot-clé <code>private</code>, deux mécanismes différents.</em></p></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : Le commentaire d&#x27;argument n&#x27;est pas son défaut exécuté.</summary><p><strong>Le commentaire d'argument n'est pas son défaut exécuté.</strong>
+Notre reporter utilise <code>false</code> quand le deuxième argument manque,
+même si le commentaire mentionne <code>true</code>. Il conserve ainsi les anciens
+appels pendant la transition ; les constructeurs et les cas finals doivent
+être examinés selon leurs propres règles.
+<em>Pourquoi on se trompe : on lit <code>= true</code> comme un défaut PHP.</em></p></details></li></ul></section><section class="teaching-section" data-section="s-application"><h2 id="s-application" tabindex="-1">Application</h2><aside class="section-digest" id="s-application-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Le trait est intégré dans la class consommatrice.</li><li>Le privé d&#x27;une class Symfony n&#x27;a pas la même garantie.</li><li>Les named arguments ordinaires ne sont pas garantis.</li><li>Les constructors d&#x27;attributes constituent l&#x27;exception.</li></ol></aside>
+
+
+
+</section><section class="teaching-section" data-section="s-fiche-express"><h2 id="s-fiche-express" tabindex="-1">Fiche express</h2><p class="teaching-label essential"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="book" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5C9 3 5 3 2 4V20C5 19 9 19 12 21C15 19 19 19 22 20V4C19 3 15 3 12 5V21M5 8H8M5 12H8M16 8H19M16 12H19"></path></svg> <strong>À mémoriser</strong></p><p><strong>🧠 À retenir pour la certification :</strong></p>
+<p>Avant de mettre à jour le blog, relisons sept dépendances :</p>
+<ol>
+<li>L'API est-elle couverte, ou interne, expérimentale, issue des tests
+   du framework ou de ses traductions internes ?</li>
+<li>L'utilisons-nous, l'implémentons-nous, ou étendons-nous sa class ?
+   Les garanties ne couvrent pas les mêmes opérations.</li>
+<li>Notre helper ajouté à une sous-classe peut-il entrer en collision avec
+   un futur membre du parent ? La composition peut éviter ce couplage.</li>
+<li>Le membre privé vient-il d'un trait importé ou d'un parent sondé
+   par réflexion ? Seul le premier usage figure dans la grille protégée.</li>
+<li>Un appel nommé dépend-il d'un constructeur d'attribute ou d'un nom
+   ordinaire non garanti ?</li>
+<li>La transition d'argument conserve-t-elle les appels existants et
+   leur défaut réel, avec l'ajout en dernière position ?</li>
+<li>La class est-elle <code>final</code>, <code>@final</code>, ou annoncée finale à la prochaine
+   majeure ? Préparons la migration avant que l'héritage ne soit retiré.</li>
+</ol>
+<p>Les tests restent nécessaires, notamment pour nos propres URLs et règles
+métier. La promesse organise la maintenance ; elle n'abolit ni les exclusions,
+ni les corrections de sécurité, ni les responsabilités de l'application.</p>
+<p><strong>Phrase de mémorisation : « Utiliser, implémenter, étendre : je ne m'appuie que sur le public documenté — pas d'interne, de test ou d'expérimental, et un nom d'argument n'est sûr que dans un attribut. »</strong></p></section><section class="teaching-section" data-section="s-sources-officielles"><h2 id="s-sources-officielles" tabindex="-1">Sources officielles</h2><ul>
+<li><a href="https://symfony.com/doc/8.0/contributing/code/bc.html">Our Backward Compatibility Promise</a></li>
+</ul></section><section id="course-recalls" aria-labelledby="course-recalls-title" tabindex="-1"><h2 id="course-recalls-title">Rappels et liens avec les autres cours</h2><div data-recall-group="current"><h3>Rappels du cours actuel</h3><ul><li data-recall-course="CRS-21ec5kwrcmkm" data-recall-kind="digest_reference"><p class="recall-provenance">Module 03 — Architecture Symfony · Cours « Backward compatibility promise »</p><p class="digest-reference"><a href="#s-l-essentiel-digest">Revoir la règle : Utiliser une API n&#x27;est pas la même chose que l&#x27;étendre.</a></p></li><li data-recall-course="CRS-21ec5kwrcmkm" data-recall-kind="digest_reference"><p class="recall-provenance">Module 03 — Architecture Symfony · Cours « Backward compatibility promise »</p><p class="digest-reference"><a href="#s-l-exemple-un-argument-ajoute-en-mineure-digest">Revoir la règle : L&#x27;argument ajouté vient en dernière position.</a></p></li><li data-recall-course="CRS-21ec5kwrcmkm" data-recall-kind="digest_reference"><p class="recall-provenance">Module 03 — Architecture Symfony · Cours « Backward compatibility promise »</p><p class="digest-reference"><a href="#s-le-schema-digest">Revoir la règle : Les named arguments ordinaires ne sont pas garantis.</a></p></li><li><nav aria-label="Flashcards de l’application"><ul><li data-recall-course="CRS-21ec5kwrcmkm" data-recall-kind="application"><p class="recall-provenance">Module 03 — Architecture Symfony · Cours « Backward compatibility promise »</p><a href="#A-21ec5kwrcmkm-81927966f2-02">Flashcard : Le trait est intégré dans la class consommatrice. Le privé d&#x27;une class Symfony n&#x27;a pas la même garantie.</a></li><li data-recall-course="CRS-21ec5kwrcmkm" data-recall-kind="application"><p class="recall-provenance">Module 03 — Architecture Symfony · Cours « Backward compatibility promise »</p><a href="#A-21ec5kwrcmkm-6e0103f6cc-05">Flashcard : Les named arguments ordinaires ne sont pas garantis. Les constructors d&#x27;attributes constituent l&#x27;exception.</a></li></ul></nav></li></ul></div><div data-recall-group="other"><h3>Rappels des cours précédents / autres modules</h3><ul><li data-recall-course="CRS-y84syktt20ww" data-recall-kind="previous_course"><p class="recall-provenance">Module 03 — Architecture Symfony · Cours « License »</p><p>MIT autorise l&#x27;usage propriétaire et commercial. Conserver les avis exigés dans les copies substantielles de Symfony.</p><p><a href="#cards-previous">Rappel : <span lang="en">Does using Symfony require publishing an application&#x27;s source code?</span></a></p></li></ul></div></section><nav class="course-sequence" aria-label="Ordre de lecture"><a rel="prev" href="course-CRS-k2xvr11x936e.html" aria-label="Précédent : Official best practices — Module 03 — Architecture Symfony">Précédent : Official best practices</a> <a href="lot-03.html">Sommaire : Module 03 — Architecture Symfony</a> <a rel="next" href="course-CRS-rkq1d437dw5d.html" aria-label="Suivant : Deprecations best practices — Module 03 — Architecture Symfony">Suivant : Deprecations best practices</a></nav><p class="course-practice-entry"><a class="button" href="#view-quiz">Fin du cours — s’entraîner avec le Quiz</a></p></div><div id="view-flashcards" data-course-panel role="region" aria-labelledby="view-flashcards-title"><h2 id="view-flashcards-title">Flashcards</h2><p lang="en">Answer before revealing each card.</p><p>Ces cartes ne mesurent pas une maîtrise notée.</p><div id="cards-s-l-essentiel-1" data-card-section="s-l-essentiel"><h3><a href="#s-l-essentiel">Revoir : L&#x27;essentiel</a></h3><div class="reader-cards"><details class="reader-card" id="A-21ec5kwrcmkm-65c42c80d9-01"><summary lang="en">Are newly added members in a Symfony subclass guaranteed against future name collisions?</summary><p lang="en">No. Adding methods or properties to a subclass is outside that collision guarantee.</p><p lang="fr">Utiliser une API n&#x27;est pas la même chose que l&#x27;étendre. Un nouveau membre Symfony peut entrer en collision avec un membre ajouté.</p><a href="course-CRS-21ec5kwrcmkm.html#out-OUT-bmtapjwv4je4">Revoir le passage précis</a></details></div></div><div id="cards-s-le-schema-2" data-card-section="s-le-schema"><h3><a href="#s-le-schema">Revoir : Le schéma</a></h3><div class="reader-cards"><details class="reader-card" id="A-21ec5kwrcmkm-6e0103f6cc-05"><summary lang="en">Which parameter names are specially protected by Symfony&#x27;s compatibility promise?</summary><p lang="en">Constructor parameter names of attribute classes.</p><p lang="fr">Les named arguments ordinaires ne sont pas garantis. Les constructors d&#x27;attributes constituent l&#x27;exception.</p><a href="course-CRS-21ec5kwrcmkm.html#out-OUT-92tk3wgmcgkc">Revoir le passage précis</a></details></div></div><div id="cards-s-l-exemple-un-argument-ajoute-en-mineure-3" data-card-section="s-l-exemple-un-argument-ajoute-en-mineure"><h3><a href="#s-l-exemple-un-argument-ajoute-en-mineure">Revoir : L&#x27;exemple : un argument ajouté en mineure</a></h3><div class="reader-cards"><details class="reader-card" id="A-21ec5kwrcmkm-c337a34687-03"><summary lang="en">Where is an added public-method argument placed under the documented compatibility technique?</summary><p lang="en">Last, documented without breaking the existing signature, and read through func_get_arg().</p><p lang="fr">L&#x27;argument ajouté vient en dernière position. Le comportement antérieur reste le défaut effectif.</p><a href="course-CRS-21ec5kwrcmkm.html#out-OUT-bmtapjwv4je4">Revoir le passage précis</a></details></div></div><div id="cards-s-utiliser-etendre-implementer-4" data-card-section="s-utiliser-etendre-implementer"><h3><a href="#s-utiliser-etendre-implementer">Revoir : Utiliser, étendre, implémenter</a></h3><div class="reader-cards"><p class="reader-card-reference" id="A-21ec5kwrcmkm-8922923468-01">Rappel déjà proposé : <a lang="en" href="#A-21ec5kwrcmkm-65c42c80d9-01">Are newly added members in a Symfony subclass guaranteed against future name collisions?</a> · <a href="course-CRS-21ec5kwrcmkm.html#out-OUT-bmtapjwv4je4">Passage canonique</a></p></div></div><div id="cards-s-les-traits-et-leur-asymetrie-avec-les-classes-5" data-card-section="s-les-traits-et-leur-asymetrie-avec-les-classes"><h3><a href="#s-les-traits-et-leur-asymetrie-avec-les-classes">Revoir : Les traits, et leur asymétrie avec les classes</a></h3><div class="reader-cards"><details class="reader-card" id="A-21ec5kwrcmkm-81927966f2-02"><summary lang="en">Does the compatibility promise treat private trait members like private class members?</summary><p lang="en">No. Trait members become part of the consuming class and receive broader protection, unless internal.</p><p lang="fr">Le trait est intégré dans la class consommatrice. Le privé d&#x27;une class Symfony n&#x27;a pas la même garantie.</p><a href="course-CRS-21ec5kwrcmkm.html#out-OUT-z81y6z00tr3t">Revoir le passage précis</a></details></div></div><div id="cards-s-ajouter-un-argument-toujours-en-dernier-6" data-card-section="s-ajouter-un-argument-toujours-en-dernier"><h3><a href="#s-ajouter-un-argument-toujours-en-dernier">Revoir : Ajouter un argument : toujours en dernier</a></h3><div class="reader-cards"><p class="reader-card-reference" id="A-21ec5kwrcmkm-b41de2fb35-03">Rappel déjà proposé : <a lang="en" href="#A-21ec5kwrcmkm-c337a34687-03">Where is an added public-method argument placed under the documented compatibility technique?</a> · <a href="course-CRS-21ec5kwrcmkm.html#out-OUT-bmtapjwv4je4">Passage canonique</a></p></div></div><div id="cards-s-les-trois-exclusions-7" data-card-section="s-les-trois-exclusions"><h3><a href="#s-les-trois-exclusions">Revoir : Les trois exclusions</a></h3><div class="reader-cards"><details class="reader-card" id="A-21ec5kwrcmkm-188b20862c-04"><summary lang="en">Are internal and experimental APIs covered like stable public APIs?</summary><p lang="en">No. They are explicit exclusions from the normal promise.</p><p lang="fr">@internal exclut l&#x27;API du contrat de stabilité. Une fonctionnalité experimental possède une fenêtre limitée.</p><a href="course-CRS-21ec5kwrcmkm.html#out-OUT-4x6dvn65hj5v">Revoir le passage précis</a></details></div></div><div id="cards-s-le-piege-des-named-arguments-8" data-card-section="s-le-piege-des-named-arguments"><h3><a href="#s-le-piege-des-named-arguments">Revoir : Le piège des named arguments</a></h3><div class="reader-cards"><p class="reader-card-reference" id="A-21ec5kwrcmkm-3144cad054-05">Rappel déjà proposé : <a lang="en" href="#A-21ec5kwrcmkm-6e0103f6cc-05">Which parameter names are specially protected by Symfony&#x27;s compatibility promise?</a> · <a href="course-CRS-21ec5kwrcmkm.html#out-OUT-92tk3wgmcgkc">Passage canonique</a></p></div></div><div id="cards-s-final-et-final-9" data-card-section="s-final-et-final"><h3><a href="#s-final-et-final">Revoir : final et @final</a></h3><div class="reader-cards"><details class="reader-card" id="A-21ec5kwrcmkm-8a229cb8d0-06"><summary lang="en">Does a PHPDoc @final annotation prevent inheritance at runtime?</summary><p lang="en">No. The final keyword enforces it; @final expresses a compatibility boundary.</p><p lang="fr">final bloque techniquement l&#x27;extension. @final peut exclure l&#x27;extension de la promesse sans la bloquer.</p><a href="course-CRS-21ec5kwrcmkm.html#out-OUT-xh1k5wmbaqwa">Revoir le passage précis</a></details></div></div><div id="cards-s-pieges-d-examen-10" data-card-section="s-pieges-d-examen"><h3><a href="#s-pieges-d-examen">Revoir : Pièges d&#x27;examen</a></h3><div class="reader-cards"><p class="reader-card-reference" id="A-21ec5kwrcmkm-596d5af532-03">Rappel déjà proposé : <a lang="en" href="#A-21ec5kwrcmkm-c337a34687-03">Where is an added public-method argument placed under the documented compatibility technique?</a> · <a href="course-CRS-21ec5kwrcmkm.html#out-OUT-bmtapjwv4je4">Passage canonique</a></p></div></div><div id="cards-s-application-11" data-card-section="s-application"><h3><a href="#s-application">Revoir : Application</a></h3><div class="reader-cards"><p class="reader-card-reference" id="A-21ec5kwrcmkm-e7ad522ea3-02">Rappel déjà proposé : <a lang="en" href="#A-21ec5kwrcmkm-81927966f2-02">Does the compatibility promise treat private trait members like private class members?</a> · <a href="course-CRS-21ec5kwrcmkm.html#out-OUT-z81y6z00tr3t">Passage canonique</a></p><p class="reader-card-reference" id="A-21ec5kwrcmkm-e7ad522ea3-05">Rappel déjà proposé : <a lang="en" href="#A-21ec5kwrcmkm-6e0103f6cc-05">Which parameter names are specially protected by Symfony&#x27;s compatibility promise?</a> · <a href="course-CRS-21ec5kwrcmkm.html#out-OUT-92tk3wgmcgkc">Passage canonique</a></p></div></div><div id="cards-s-fiche-express-12" data-card-section="s-fiche-express"><h3><a href="#s-fiche-express">Revoir : Fiche express</a></h3><div class="reader-cards"><p class="reader-card-reference" id="A-21ec5kwrcmkm-b11e58e15e-05">Rappel déjà proposé : <a lang="en" href="#A-21ec5kwrcmkm-6e0103f6cc-05">Which parameter names are specially protected by Symfony&#x27;s compatibility promise?</a> · <a href="course-CRS-21ec5kwrcmkm.html#out-OUT-92tk3wgmcgkc">Passage canonique</a></p></div></div><div id="cards-previous"><p class="recall-provenance">Module 03 — Architecture Symfony · Cours « License »</p><aside class="checkpoint"><h2>Rappel d’un cours antérieur</h2><p>Avant de poursuivre : License.</p><details class="corpus-correction"><summary lang="en">Does using Symfony require publishing an application&#x27;s source code?</summary><p lang="en">No. MIT permits proprietary and commercial use subject to its notice condition.</p><p>MIT autorise l&#x27;usage propriétaire et commercial. Conserver les avis exigés dans les copies substantielles de Symfony.</p><a href="course-CRS-y84syktt20ww.html#out-OUT-580atmp6tp25">Relire la correction dans le cours antérieur</a></details></aside></div></div><div id="view-quiz" data-course-panel role="region" aria-labelledby="view-quiz-title"><aside class="revision-context"><p><strong>Avant le quiz :</strong> Le blog fonctionne en Symfony 8.0. Avant une mise à jour dans la même branche majeure, nous voulons conserver l&#x27;affichage de /blog/42, la validation de l&#x27;inscription et la commande d&#x27;import. La backward compatibility promise est la promesse de compatibilité avec les usages antérieurs de l&#x27;API. Elle aide à préparer cette maintenance, mais ne couvre pas tout ce que PHP permet techniquement de faire.</p><p>Quelle donnée entre, quelle responsabilité agit et quelle condition change le résultat ? Pour chaque correction, vérifiez ces conditions dans <a href="course-CRS-21ec5kwrcmkm.html#s-objectif">le passage enseigné</a>, sans supposer que toutes les branches du blog sont exécutées.</p></aside><h2 id="view-quiz-title">Quiz</h2><p class="quiz-size" lang="en">7 eligible learning questions · 7 per session. Repeating a question does not demonstrate mastery.</p><p id="course-quiz-status" role="status">Quiz interactif non chargé. Démarrez après chargement de la banque locale.</p><div id="course-quiz-controls" class="assessment-main" hidden><div id="course-quiz-assessment-controls" hidden><select id="course-quiz-assessment-mode" aria-label="Mode du quiz" hidden><option value="learning">Entraînement</option></select><p id="course-quiz-training-scope"></p><button id="course-quiz-start-assessment" type="button" lang="en">Start practice</button><button id="course-quiz-finish-assessment" type="button" lang="en" hidden>End session</button></div><p id="course-quiz-assessment-error" role="alert"></p><p id="course-quiz-assessment-timer" hidden></p><p id="course-quiz-session-progress" class="quiz-progress" role="status" lang="en"></p><div id="course-quiz-assessment-app" tabindex="-1"></div><nav id="course-quiz-session-navigation" aria-label="Questions du cours"></nav><div id="course-quiz-learning-overview" aria-live="polite"></div></div><div id="course-quiz-native"><p>Sans JavaScript ou si le chargement échoue : aucune tentative notée. Les <a href="#view-flashcards">flashcards du cours</a> restent disponibles.</p><details class="course-quiz-fallback" data-question-id="L-21ec5kwrcmkm-base-v1"><summary lang="en">Are newly added members in a Symfony subclass guaranteed against future name collisions? Select one answer (radio).</summary><p>Correction de consultation — non notée.</p><p>Utiliser une API n&#x27;est pas la même chose que l&#x27;étendre. Un nouveau membre Symfony peut entrer en collision avec un membre ajouté.</p><ul><li><strong lang="en">Correct: No; new subclass members are outside that collision guarantee.</strong><p>Utiliser une API n&#x27;est pas la même chose que l&#x27;étendre. Un nouveau membre Symfony peut entrer en collision avec un membre ajouté.</p></li><li><strong lang="en">Distractor: Yes; Symfony reserves every name declared in user subclasses.</strong><p>Symfony ne peut réserver les noms de toutes les sous-classes.</p></li><li><strong lang="en">Distractor: Yes; protected methods are the only possible collision source.</strong><p>Les methods ou properties ajoutées peuvent entrer en collision, pas seulement protected.</p></li></ul><a href="course-CRS-21ec5kwrcmkm.html#out-OUT-bmtapjwv4je4">Relire le passage exact</a><a href="course-CRS-21ec5kwrcmkm.html#out-OUT-z81y6z00tr3t">Relire la correction précise</a></details></div></div></div></div><details class="transfer-panel"><summary>Sauvegarde et transfert de progression</summary><p id="reading-status" role="status">Sans JavaScript : lecture libre ; progression non enregistrée.</p><p><a href="assessment.html#overview-title">Lecture, réussites immédiates et différées</a></p><p>Transfert manuel — aucune synchronisation automatique</p><p id="persistence-status" role="status"></p><button type="button" class="secondary" id="export-progress">Exporter ma progression</button><label for="import-progress">Choisir un JSON pour fusionner ma progression (sans remplacement)</label><input type="file" id="import-progress" accept="application/json,.json"><p id="transfer-status" role="status"></p></details></main><footer class="site-footer"><a href="catalogue.html">Catalogue</a> <a href="sources.html">Sources et attribution</a> <a href="#contenu">Haut de page</a></footer></body></html>

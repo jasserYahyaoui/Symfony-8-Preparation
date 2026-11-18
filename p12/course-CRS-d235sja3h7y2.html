@@ -1,0 +1,430 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; connect-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Violations builder — Symfony 8 Preparation</title><link rel="stylesheet" href="styles.css"><link rel="stylesheet" href="reader.css"><script src="mermaid.min.js" defer></script><script src="mermaid-init.js" defer></script><link rel="stylesheet" href="assessment.css"><script src="fixed-exams-data.js" defer></script><script src="fixed-exams.js" defer></script><script src="learning-state.js" defer></script><script src="guide.js" defer></script><script src="reader-catalog.js" defer></script><script src="reader.js" defer></script><script src="site-state.js" defer></script><script src="assessment.js" defer></script><script src="course-views.js" defer></script><link rel="stylesheet" href="syntax-highlight.css"><script src="prism-syntax.js" defer></script><script src="syntax-highlight.js" defer></script></head><body data-course-id="CRS-d235sja3h7y2"><a class="skip" href="#contenu">Aller au contenu</a><header class="site-header"><a class="brand" href="index.html">S8 Preparation</a><nav aria-label="Navigation principale"><a href="index.html">Accueil</a> <a href="catalogue.html">Parcours</a> <a href="assessment.html?mode=review">Réviser</a> <a href="examens.html">Examens blancs</a> <a href="jour-j.html">Jour J</a></nav></header><main id="contenu" tabindex="-1" class="corpus-reader"><nav class="breadcrumb" aria-label="Fil d’Ariane"><a href="index.html">Accueil</a> <span aria-hidden="true">›</span> <a href="catalogue.html">Parcours</a> <span aria-hidden="true">›</span> <a href="lot-08.html">Module 08 — Validation des données</a> <span aria-hidden="true">›</span> <span aria-current="page">Violations builder</span></nav><h1>Violations builder</h1><p class="muted">Symfony 8.0 · API PHP ≤ 8.4 · Twig ≤ 3.22. Préparation indépendante.</p><p class="revision-status">Rédaction narrative P11 : projection nouvelle, non couverte par les décisions historiques P10. Aucune approbation officielle ni garantie de réussite.</p><aside class="narrative-context" aria-label="Repères de lecture"><p><strong>Prérequis de lecture :</strong> <a href="course-CRS-ax2v94pgbk0g.html">PHP object validation</a></p><p><strong>Concepts voisins :</strong> <a href="course-CRS-nfkzx2s1n3r3.html">Forms handling</a> — Situer la validation dans une soumission de formulaire. <a href="lot-08.html">Comparer les responsabilités dans ce module</a> · <a href="carte-composants.html">Situer cette responsabilité dans le blog</a> · <a href="glossaire.html">Distinguer les termes voisins</a></p><p><a href="ordre-lecture.html">Retrouver les 163 cours dans le parcours recommandé</a>. Ce repère ne modifie ni votre historique ni votre progression.</p></aside><div class="course-layout"><details class="lot-course-menu"><summary>Cours du module · 8 cours</summary><nav aria-label="Cours du module"><a class="lot-context" href="lot-08.html">Module 08 — Validation des données</a><ol><li><a href="course-CRS-way4aktj2d5m.html">Validator component</a></li><li><a href="course-CRS-ax2v94pgbk0g.html">PHP object validation</a></li><li><a href="course-CRS-569y6hb7fwj5.html">Built-in validation constraints</a></li><li><a href="course-CRS-wzmrks85zyh1.html">Validation scopes</a></li><li><a href="course-CRS-vskyr5zdwr2t.html">Validation groups</a></li><li><a href="course-CRS-bthv5xmh5wea.html">Group sequence</a></li><li><a href="course-CRS-96w05v20b8w1.html">Custom callback validators</a></li><li><a href="course-CRS-d235sja3h7y2.html" aria-current="page">Violations builder</a></li></ol><a href="lot-08.html#view-quiz">Quiz du module</a></nav></details><aside class="course-section-menu" aria-label="Sommaire du cours"><nav class="course-actions" aria-label="Activités du cours"><a id="tab-course" href="#view-course">Cours</a><a id="tab-flashcards" href="#view-flashcards">Flashcards</a><a id="tab-quiz" href="#view-quiz">Quiz</a></nav><details class="course-section-disclosure"><summary id="course-sections">Sections du cours</summary><nav aria-label="Sections du cours"><ul><li><a href="#s-objectif">Objectif</a></li><li><a href="#s-l-essentiel">L&#x27;essentiel</a></li><li><a href="#s-le-schema">Le schéma</a></li><li><a href="#s-l-exemple-une-adresse-deja-reservee">L&#x27;exemple : une adresse déjà réservée</a></li><li><a href="#s-les-deux-facons">Les deux façons</a></li><li><a href="#s-le-builder-n-ecrit-rien-tout-seul">Le builder n&#x27;écrit rien tout seul</a></li><li><a href="#s-ce-que-l-on-peut-regler">Ce que l&#x27;on peut régler</a></li><li><a href="#s-les-emplacements-du-message">Les emplacements du message</a></li><li><a href="#s-une-constraint-sur-mesure">Une constraint sur mesure</a></li><li><a href="#s-pieges-d-examen">Pièges d&#x27;examen</a></li><li><a href="#s-fiche-express">Fiche express</a><ul><li><a href="#s-fiche-express-nested-a-retenir-pour-la-certification">🧠 À retenir pour la certification</a></li></ul></li><li><a href="#reader-objectives">Objectifs d’apprentissage</a></li><li><a href="#reader-sources">Sources officielles et compléments</a></li><li><a href="#course-recalls">Rappels et liens avec les autres cours</a></li></ul></nav><nav aria-label="Flashcards par section"><a href="#view-flashcards">Flashcards par section</a><ul><li><a href="#cards-s-l-essentiel-1">L&#x27;essentiel</a></li><li><a href="#cards-s-le-schema-2">Le schéma</a></li><li><a href="#cards-s-l-exemple-une-adresse-deja-reservee-3">L&#x27;exemple : une adresse déjà réservée</a></li><li><a href="#cards-s-les-deux-facons-4">Les deux façons</a></li><li><a href="#cards-s-le-builder-n-ecrit-rien-tout-seul-5">Le builder n&#x27;écrit rien tout seul</a></li><li><a href="#cards-s-ce-que-l-on-peut-regler-6">Ce que l&#x27;on peut régler</a></li><li><a href="#cards-s-les-emplacements-du-message-7">Les emplacements du message</a></li><li><a href="#cards-s-une-constraint-sur-mesure-8">Une constraint sur mesure</a></li><li><a href="#cards-s-pieges-d-examen-9">Pièges d&#x27;examen</a></li><li><a href="#cards-s-fiche-express-10">Fiche express</a></li><li><a href="#cards-previous">Module 08 — Validation des données · Cours « Group sequence » · Rappel : <span lang="en">When does a group sequence stop?</span></a></li></ul></nav><nav aria-label="Retour au module"><a href="lot-08.html">Tous les cours du module</a></nav></details><p class="local-quiz-count">6 questions disponibles · 6 par session Quiz</p></aside><div class="course-content"><div id="view-course" data-course-panel role="region" aria-labelledby="view-course-title"><h2 id="view-course-title">Cours</h2><p class="course-introduction"><a href="#s-objectif">Introduction</a> · <a href="#course-sections">Sections du cours</a></p><h2 id="reader-objectives" tabindex="-1">Objectifs d’apprentissage</h2><ul><li><a href="course-CRS-d235sja3h7y2.html#out-OUT-x2rv3kwasf88">Distinguer addViolation() de buildViolation() sur le contexte</a></li><li><a href="course-CRS-d235sja3h7y2.html#out-OUT-y8sak1s2672z">Énoncer qu&#x27;une chaîne d&#x27;appels sans addViolation() n&#x27;enregistre rien</a></li><li><a href="course-CRS-d235sja3h7y2.html#out-OUT-eq4vjk7mmyxm">Attribuer une violation à une property par atPath()</a></li><li><a href="course-CRS-d235sja3h7y2.html#out-OUT-nb6w1gbs0ndt">Remplir un emplacement de message par setParameter()</a></li><li><a href="course-CRS-d235sja3h7y2.html#out-OUT-7m4ym18awd8g">Écrire une Constraint et son ConstraintValidator : validatedBy(), null, UnexpectedValueException</a></li></ul><aside class="pedagogy-legend" aria-label="Repères pédagogiques"><p><strong>Repères pédagogiques</strong></p><p>Ces repères décrivent le rôle du bloc, pas une fréquence officielle à l’examen.</p><p class="teaching-label essential"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="brain" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5C12 1 6 1 6 5C2 5 1 10 4 12C1 15 3 19 6 19C6 23 12 23 12 19V5M12 5C12 1 18 1 18 5C22 5 23 10 20 12C23 15 21 19 18 19C18 23 12 23 12 19M6 5C6 8 8 9 9 9M4 12H7L9 14M6 19V16M18 5C18 8 16 9 15 9M20 12H17L15 14M18 19V16"></path></svg> <strong>À comprendre</strong></p><p class="teaching-label essential"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="book" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5C9 3 5 3 2 4V20C5 19 9 19 12 21C15 19 19 19 22 20V4C19 3 15 3 12 5V21M5 8H8M5 12H8M16 8H19M16 12H19"></path></svg> <strong>À mémoriser</strong></p><p class="teaching-label example"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="code" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6L2 12L8 18M16 6L22 12L16 18M14 3L10 21"></path></svg> <strong>Exemple concret</strong></p><p class="teaching-label pitfall"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="warning" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3L23 21H1L12 3ZM12 9V14M12 17V18"></path></svg> <strong>Piège à éviter</strong></p><p class="teaching-label nuance"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="balance" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3V21M7 21H17M3 7L21 5M5 7L1 15H9L5 7M19 6L15 14H23L19 6M1 15Q5 20 9 15M15 14Q19 19 23 14"></path></svg> <strong>Nuance à connaître</strong></p><p>Précision, exception ou condition d’application d’une règle.</p></aside><section class="teaching-section" data-section="s-objectif"><h2 id="s-objectif" tabindex="-1">Objectif</h2><p>Signaler une violation depuis un callback ou un validator, et savoir laquelle
+des deux methods du contexte utiliser.</p>
+<p>Question fil rouge : <strong>comment une règle écrite par moi « dit » à Symfony
+qu'une donnée est invalide, avec quel message, quel code, quel chemin ?</strong></p></section><section class="teaching-section" data-section="s-l-essentiel"><h2 id="s-l-essentiel" tabindex="-1">L&#x27;essentiel</h2><p class="teaching-label essential"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="brain" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5C12 1 6 1 6 5C2 5 1 10 4 12C1 15 3 19 6 19C6 23 12 23 12 19V5M12 5C12 1 18 1 18 5C22 5 23 10 20 12C23 15 21 19 18 19C18 23 12 23 12 19M6 5C6 8 8 9 9 9M4 12H7L9 14M6 19V16M18 5C18 8 16 9 15 9M20 12H17L15 14M18 19V16"></path></svg> <strong>À comprendre</strong></p><aside class="section-digest" id="s-l-essentiel-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Le builder prépare la violation.</li><li>addViolation() l&#x27;enregistre.</li></ol></aside><p><strong>Ce que cette partie veut réellement vous apprendre.</strong></p>
+<ul>
+<li><em>Pourquoi ce sujet existe.</em> Une règle personnalisée (callback ou validator)
+  ne retourne ni <code>true</code> ni <code>false</code> : elle <strong>écrit une violation</strong> dans le
+  contexte d'exécution. Il faut donc connaître l'API d'écriture, et savoir ce
+  qu'on peut y préciser (chemin, code stable, paramètres, valeur fautive).</li>
+<li><em>Le piège de fond.</em> <code>buildViolation()</code> ressemble à « créer une violation »
+  mais <strong>ne crée rien</strong> : elle prépare un builder. Sans l'appel final
+  <code>addViolation()</code>, la règle échoue sans rien signaler.</li>
+<li><em>Ce que l'auteur veut que vous compreniez.</em> Le contexte d'exécution signale
+  une violation de deux façons : directement, ou par un <strong>builder</strong> qu'on
+  configure — field visé, code, parameters — puis qu'on <strong>enregistre</strong> par
+  <code>addViolation()</code>. L'oubli de ce dernier appel est le piège central : la règle
+  échoue mais n'ajoute aucune violation ; les autres règles peuvent encore
+  rendre la validation invalide.</li>
+<li><em>Pourquoi c'est à l'examen.</em> Les QCM jouent sur : builder non enregistré,
+  <code>addViolation()</code> à deux endroits, <code>atPath()</code> contre <code>setInvalidValue()</code>,
+  <code>UnexpectedValueException</code> contre <code>UnexpectedTypeException</code>, cible d'une
+  constraint (<code>getTargets()</code>).</li>
+</ul></section><section class="teaching-section" data-section="s-le-schema"><h2 id="s-le-schema" tabindex="-1">Le schéma</h2><aside class="section-digest" id="s-le-schema-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Le path situe l&#x27;erreur.</li><li>Le code permet un traitement machine stable.</li></ol></aside><p><strong>Où en est-on ?</strong> Vue d'ensemble : deux chemins mènent à la <strong>liste des
+violations</strong>. Le chemin court (<code>addViolation(message)</code> sur le contexte) et le
+chemin long (<code>buildViolation()</code> → configuration → <code>addViolation()</code> sur le
+builder). Les sections suivantes détaillent : les deux façons, l'oubli final,
+les réglages, les emplacements du message, puis une constraint complète.</p>
+<figure class="diagram" aria-labelledby="CRS-d235sja3h7y2-3-diagram-0-title CRS-d235sja3h7y2-3-diagram-0-description"><figcaption id="CRS-d235sja3h7y2-3-diagram-0-title">Enregistrer une violation tout de suite, ou la construire</figcaption><p id="CRS-d235sja3h7y2-3-diagram-0-description">Le contexte peut enregistrer directement une violation. buildViolation crée au contraire un builder sans modifier la liste. Ses méthodes configurent message, chemin, code et valeur fautive ; seul addViolation sur le builder ajoute la violation.</p><div class="mermaid" hidden>---
+title: addViolation ou buildViolation
+---
+flowchart TD
+  accTitle: Enregistrer une violation tout de suite, ou la construire
+  accDescr: Le contexte peut enregistrer directement une violation. buildViolation crée au contraire un builder sans modifier la liste. Ses méthodes configurent message, chemin, code et valeur fautive ; seul addViolation sur le builder ajoute la violation.
+  C[&quot;Contexte&quot;] --&gt;|&quot;addViolation(message)&quot;| L([&quot;Liste : une violation ajoutée&quot;])
+  C --&gt;|&quot;buildViolation(message)&quot;| B[&quot;Builder non enregistré&quot;]
+  B --&gt;|&quot;atPath, setCode, setInvalidValue&quot;| O[&quot;Builder configuré&quot;]
+  O --&gt;|&quot;addViolation()&quot;| L
+  classDef context fill:#e0f2fe,stroke:#0369a1,color:#0c4a6e
+  classDef pending fill:#fef3c7,stroke:#b45309,color:#78350f
+  classDef result fill:#dcfce7,stroke:#15803d,color:#14532d
+  class C context
+  class B,O pending
+  class L result</div></figure>
+<p>Bleu = contexte d'exécution ; ambre = construction sans effet sur la liste ;
+vert = violation enregistrée. Les flèches sont des appels, pas de l'héritage.
+Configurer plusieurs options ne crée pas plusieurs violations ; oublier
+l'appel final n'en crée aucune, même si d'autres règles ont déjà échoué.</p>
+<p>Pourquoi un builder ? Parce qu'une violation a <strong>beaucoup de propriétés
+optionnelles</strong> (chemin, code, paramètres, valeur, pluriel, cause…). Plutôt
+qu'une méthode à dix arguments, Symfony offre une chaîne fluide, terminée par
+un appel qui <em>valide</em> la construction.</p></section><section class="teaching-section" data-section="s-l-exemple-une-adresse-deja-reservee"><h2 id="s-l-exemple-une-adresse-deja-reservee" tabindex="-1">L&#x27;exemple : une adresse déjà réservée</h2><p class="teaching-label example"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="code" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6L2 12L8 18M16 6L22 12L16 18M14 3L10 21"></path></svg> <strong>Exemple concret</strong></p><aside class="section-digest" id="s-l-exemple-une-adresse-deja-reservee-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Le path et la valeur sont indépendants.</li><li>Régler les deux si nécessaire.</li></ol></aside><p><strong>Où en est-on ?</strong> Le code minimal du schéma complet : un callback de class
+qui utilise le chemin long. Chaque ligne du builder sera expliquée dans les
+sections suivantes.</p>
+<p>Le POST d'inscription doit pouvoir distinguer un email mal formé d'une
+adresse réservée par la politique de l'application. L'exemple emploie
+une réservation locale déterministe, sans base de données. Le callback
+prépare message, chemin et code pour l'appelant ; il ne choisit pas
+si l'interface sera un formulaire HTML ou une réponse JSON.</p>
+<pre class="highlight" tabindex="0"><code class="language-php">use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Validator\Context\ExecutionContextInterface;
+
+#[Assert\Callback('check')]
+class Registration
+{
+    public const EMAIL_TAKEN = 'EMAIL_TAKEN';
+    public string $email = '';
+
+    private function isReserved(string $email): bool
+    {
+        return 'reserved@example.com' === $email;
+    }
+
+    public function check(ExecutionContextInterface $context): void
+    {
+        if ($this-&gt;isReserved($this-&gt;email)) {
+            $context-&gt;buildViolation('L\'adresse {{ value }} est déjà prise.')
+                -&gt;setParameter('{{ value }}', $this-&gt;email)
+                -&gt;atPath('email')
+                -&gt;setCode(self::EMAIL_TAKEN)
+                -&gt;setInvalidValue($this-&gt;email)
+                -&gt;addViolation();
+        }
+    }
+}</code></pre>
+<p>Lecture ligne à ligne :</p>
+<table>
+<thead>
+<tr>
+<th>Appel</th>
+<th>Ce qu'il fait</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>buildViolation('… {{ value }} …')</code></td>
+<td>crée un builder avec le <strong>modèle</strong> de message</td>
+</tr>
+<tr>
+<td><code>setParameter('{{ value }}', …)</code></td>
+<td>remplit l'emplacement <code>{{ value }}</code></td>
+</tr>
+<tr>
+<td><code>atPath('email')</code></td>
+<td>rattache la violation au champ <code>email</code></td>
+</tr>
+<tr>
+<td><code>setCode(self::EMAIL_TAKEN)</code></td>
+<td>code machine stable</td>
+</tr>
+<tr>
+<td><code>setInvalidValue(…)</code></td>
+<td>valeur enregistrée comme fautive</td>
+</tr>
+<tr>
+<td><code>addViolation()</code></td>
+<td><strong>enregistre</strong> : sans cet appel, rien</td>
+</tr>
+</tbody>
+</table></section><section class="teaching-section" data-section="s-les-deux-facons"><span class="outcome-anchor" id="out-OUT-x2rv3kwasf88" tabindex="-1"></span><h2 id="s-les-deux-facons" tabindex="-1">Les deux façons</h2><aside class="section-digest" id="s-les-deux-facons-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Le contexte peut enregistrer directement.</li><li>Le builder permet une configuration supplémentaire.</li></ol></aside><p><strong>Où en est-on ?</strong> Étape 1 sur 5 : le contexte offre deux méthodes qui
+portent presque le même nom. Laquelle choisir, et pourquoi existent-elles
+toutes les deux ?</p>
+<p>Depuis un callback de classe, l'erreur par défaut concerne l'objet au
+chemin courant. Si le lecteur doit la voir près de l'email, le builder
+permet d'ajouter cette localisation et un code stable. L'appel direct
+convient quand le contexte possède déjà l'emplacement et les informations
+nécessaires.</p>
+<table>
+<thead>
+<tr>
+<th>Method du contexte</th>
+<th>Effet</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>addViolation('msg', [params])</code></td>
+<td>enregistre <strong>immédiatement</strong>, au path courant</td>
+</tr>
+<tr>
+<td><code>buildViolation('msg', [params])</code></td>
+<td>rend un builder : field, code, valeur fautive réglables</td>
+</tr>
+</tbody>
+</table>
+<p>Seul le builder permet de choisir le field visé, le code ou la valeur fautive.</p>
+<p>Code minimal des deux façons :</p>
+<pre class="highlight" tabindex="0"><code class="language-php">// façon 1 : directe, au chemin courant, rien à régler
+$context-&gt;addViolation('Ce prénom semble inventé.');
+
+// façon 2 : builder, tout est réglable
+$context-&gt;buildViolation('Ce prénom semble inventé.')
+    -&gt;atPath('firstName')
+    -&gt;setCode('FAKE_NAME')
+    -&gt;addViolation();</code></pre>
+<p>Comparaison :</p>
+<pre class="highlight" tabindex="0"><code class="language-text">┌──────────────────────────────┐   ┌───────────────────────────────────┐
+│ $context-&gt;addViolation()     │   │ $context-&gt;buildViolation()        │
+├──────────────────────────────┤   ├───────────────────────────────────┤
+│ enregistre tout de suite     │   │ retourne un builder (rien écrit)  │
+│ chemin = chemin courant      │   │ atPath, code, valeur, plural…     │
+│ message + paramètres         │   │ finir par -&gt;addViolation()        │
+└──────────────────────────────┘   └───────────────────────────────────┘</code></pre>
+<div class="admonition info">
+<p class="admonition-title">🌍 In Real Life</p>
+<p><strong>La situation</strong> : l'agent peut déposer immédiatement une remarque à la rubrique courante, ou préparer une fiche détaillée avec une autre localisation et une catégorie d'anomalie.</p>
+<p><strong>L’équivalent dans Symfony</strong> : <code>ExecutionContextInterface::addViolation()</code> ajoute directement au chemin courant. <code>buildViolation()</code> fournit un builder pour préciser chemin, code ou valeur fautive avant l'ajout.</p>
+<p><strong>Retour à la réalité technique</strong> : ce choix porte sur la construction du résultat, pas sur l'exécution de la règle ni sur la réponse HTTP. Parmi ces deux API, le builder expose les réglages détaillés. Le chemin de validation n'est pas à lui seul la position visuelle dans un Form ; mapping et bubbling interviennent ensuite.</p>
+<p><strong>🧠 Comment le mémoriser</strong> : « Remarque immédiate ou fiche à compléter. » Image mentale : guichet de dépôt à côté d'une table de préparation. Question-réflexe : le contexte courant suffit-il, ou faut-il préciser la violation ?</p>
+<p><strong>⚠️ À ne pas confondre</strong> : ajout au contexte, construction de violation, placement Form et réponse JSON.</p>
+</div></section><section class="teaching-section" data-section="s-le-builder-n-ecrit-rien-tout-seul"><span class="outcome-anchor" id="out-OUT-y8sak1s2672z" tabindex="-1"></span><h2 id="s-le-builder-n-ecrit-rien-tout-seul" tabindex="-1">Le builder n&#x27;écrit rien tout seul</h2><aside class="section-digest" id="s-le-builder-n-ecrit-rien-tout-seul-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Configurer n&#x27;écrit pas dans la liste.</li><li>L&#x27;oubli final laisse la validation réussir.</li></ol></aside><p><strong>Où en est-on ?</strong> Étape 2 sur 5 : le piège central du cours. On a vu qu'il
+existe un builder ; que se passe-t-il si on ne le termine pas ?</p>
+<p>Après <code>buildViolation()</code>, la liste que retournera Validator n'a pas encore
+changé. Configurer <code>atPath('email')</code> ou le code ne modifie que cet objet
+de préparation. L'appel final fait passer de la description d'un problème
+à son enregistrement ; vérifie donc le contenu de la liste, pas seulement
+que la branche de code a été exécutée.</p>
+<p><code>buildViolation()</code> <strong>ne crée aucune violation</strong> : elle prépare un object. Tant
+que <code>addViolation()</code> n'est pas appelée au bout de la chaîne d'appels, rien
+n'est enregistré. <code>addViolation()</code> existe donc des deux côtés : sur le
+contexte, elle enregistre ; sur le builder, elle termine la chaîne d'appels.</p>
+<p>Pourquoi rien n'est-il enregistré ? Dans le code de <code>ConstraintViolationBuilder</code>
+(branche 8.0), seul <code>addViolation()</code> construit l'objet <code>ConstraintViolation</code>
+(message traduit, chemin, valeur, code…) et l'ajoute à la liste
+(<code>$this-&gt;violations-&gt;add(...)</code>). Les autres méthodes se contentent de
+modifier les champs du builder.</p>
+<p>Avant / après :</p>
+<pre class="highlight" tabindex="0"><code class="language-php">// ❌ le builder est préparé puis abandonné : aucune violation
+$context-&gt;buildViolation('Trop court')-&gt;atPath('title')-&gt;setCode('SHORT');
+
+// ✅ le dernier appel enregistre
+$context-&gt;buildViolation('Trop court')-&gt;atPath('title')-&gt;setCode('SHORT')-&gt;addViolation();</code></pre>
+<p>Le piège de nom : <code>addViolation()</code> existe sur <strong>deux objets</strong> (le contexte
+et le builder). Même nom, deux rôles : sur le contexte il <em>enregistre un
+message</em>, sur le builder il <em>termine une chaîne</em>.</p>
+<div class="admonition info">
+<p class="admonition-title">🌍 In Real Life</p>
+<p><strong>La situation</strong> : une fiche remplie mais laissée sur la table n'entre pas dans le registre. Changer sa catégorie ou son adresse ne remplace jamais le dépôt.</p>
+<p><strong>L’équivalent dans Symfony</strong> : les méthodes du builder préparent la violation ; seul son <code>addViolation()</code> l'ajoute à la liste du contexte. Sur le contexte, la méthode du même nom reçoit le message directement.</p>
+<p><strong>Retour à la réalité technique</strong> : construire puis abandonner le builder ne signale rien pour cette règle. L'ajout n'est ni une écriture en base ni un envoi au navigateur. Vérifie la liste et ses propriétés, pas seulement le passage dans la branche d'échec ; les autres règles peuvent déjà avoir ajouté leurs violations.</p>
+<p><strong>🧠 Comment le mémoriser</strong> : « Fiche remplie, registre inchangé tant qu'elle n'est pas déposée. » Image mentale : fiche prête à côté d'un registre encore inchangé. Question-réflexe : quel appel ajoute effectivement cette violation ?</p>
+<p><strong>⚠️ À ne pas confondre</strong> : builder configuré, liste modifiée, persistance et émission HTTP.</p>
+</div></section><section class="teaching-section" data-section="s-ce-que-l-on-peut-regler"><span class="outcome-anchor" id="out-OUT-eq4vjk7mmyxm" tabindex="-1"></span><h2 id="s-ce-que-l-on-peut-regler" tabindex="-1">Ce que l&#x27;on peut régler</h2><aside class="section-digest" id="s-ce-que-l-on-peut-regler-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Le code identifie la règle en échec.</li><li>La cause aide au diagnostic.</li></ol></aside><p><strong>Où en est-on ?</strong> Étape 3 sur 5 : le builder est lancé ; que peut-on
+y préciser ? Dix méthodes, que l'on range par rôle : <em>où</em>, <em>quoi</em>, <em>comment
+l'afficher</em>, <em>pour qui</em>.</p>
+<p>Pour une inscription imbriquée, le chemin email doit conserver le préfixe
+du contexte. Le code identifie la catégorie d'erreur indépendamment de
+la langue du message ; la valeur fautive reste une autre information.
+Ne renvoie pas automatiquement cette valeur ni la cause technique dans
+une API publique : elles peuvent contenir des données sensibles.</p>
+<p>Les dix methods de <code>ConstraintViolationBuilderInterface</code> (8.0, relues par
+réflexion) :</p>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Effet</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>atPath()</code></td>
+<td>ajoute un chemin relatif au chemin courant</td>
+</tr>
+<tr>
+<td><code>setParameter()</code> / <code>setParameters()</code></td>
+<td>remplit les emplacements <code>{{ … }}</code></td>
+</tr>
+<tr>
+<td><code>setCode()</code></td>
+<td>un code machine stable, lu par <code>getCode()</code></td>
+</tr>
+<tr>
+<td><code>setInvalidValue()</code></td>
+<td>la valeur affichée comme fautive</td>
+</tr>
+<tr>
+<td><code>setPlural()</code></td>
+<td>le nombre qui choisit la forme plurielle</td>
+</tr>
+<tr>
+<td><code>setTranslationDomain()</code> / <code>disableTranslation()</code></td>
+<td>le traitement du message</td>
+</tr>
+<tr>
+<td><code>setCause()</code></td>
+<td>la cause technique, pour le debug</td>
+</tr>
+<tr>
+<td><code>addViolation()</code></td>
+<td>enregistre, en fin de chaîne d'appels</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>Sans <code>atPath()</code>, une violation de class conserve le <strong>path courant</strong> de
+  l'object : vide à la racine de validation, mais par exemple <code>child</code> pour
+  un objet imbriqué. Sa construction ne décide pas à elle seule de
+  l'emplacement dans un formulaire : celui-ci dépend du mapping et du
+  bubbling des erreurs. Pour l'objet du formulaire racine, avec le mapping
+  standard sans redirection d'erreur, une violation au path vide reste sur
+  ce formulaire, pas sur un field particulier.</li>
+<li>Le path se compose : depuis la racine, <code>atPath('address.city')</code> donne
+  <code>address.city</code> ; depuis <code>addresses[0]</code>, <code>atPath('city')</code> donne
+  <code>addresses[0].city</code>. Ce n'est pas un chemin absolu qui efface le préfixe.</li>
+<li><code>atPath()</code> ne change pas la valeur fautive : elle reste l'object entier ;
+  <code>setInvalidValue()</code> la corrige.</li>
+</ul>
+<p>Pourquoi <code>atPath()</code> <em>compose-t-il</em> au lieu de remplacer ? Son code est
+<code>PropertyPath::append($this-&gt;propertyPath, $path)</code> : on ajoute à la fin du
+chemin courant. Dans une cascade, le chemin courant est déjà <code>addresses[0]</code> ;
+un <code>atPath('city')</code> donne <code>addresses[0].city</code>, jamais <code>city</code> seul.</p>
+<p>Pourquoi <code>atPath()</code> ne change-t-il pas la valeur fautive ? Ce sont deux
+champs distincts du builder : <code>propertyPath</code> et <code>invalidValue</code>. Pour une
+violation de class, <code>invalidValue</code> est l'objet entier ; pour qu'elle porte
+l'email, il faut <code>setInvalidValue($this-&gt;email)</code>.</p>
+<pre class="highlight" tabindex="0"><code class="language-text">Chemin courant (cascade)     atPath()              Chemin final
+(racine)                     'address.city'        address.city
+addresses[0]                 'city'                addresses[0].city
+(racine, Callback de class)  (aucun atPath)        (vide : sur l'objet)
+
+                      ┌──────────────┐    ┌─────────────────┐
+ atPath('email')  ──► │ propertyPath │    │  invalidValue   │ ◄── setInvalidValue()
+                      └──────────────┘    └─────────────────┘
+                        deux champs indépendants</code></pre>
+<div class="admonition info">
+<p class="admonition-title">🌍 In Real Life</p>
+<p><strong>La situation</strong> : une fiche d'anomalie a une adresse, un code de catégorie, un extrait concerné et une note interne. Changer l'adresse ne change ni l'extrait ni le dossier original.</p>
+<p><strong>L’équivalent dans Symfony</strong> : atPath compose le chemin relatif ; setCode identifie l'erreur ; setInvalidValue précise la valeur enregistrée comme fautive ; setCause conserve une cause. Traduction et pluriel règlent le message.</p>
+<p><strong>Retour à la réalité technique</strong> : ces métadonnées sont distinctes. Depuis addresses[0], city donne addresses[0].city ; atPath ne lit pas cette propriété et setInvalidValue ne la corrige pas. La valeur fautive n'est pas automatiquement affichée ni remplacée dans le message. L'API publique doit sélectionner les informations exposées, sans recopier aveuglément valeur, objet ou cause ; le code de violation n'est pas un statut HTTP.</p>
+<p><strong>🧠 Comment le mémoriser</strong> : « Adresse, catégorie, extrait : trois cases différentes. » Image mentale : fiche avec cases séparées et note interne repliée. Question-réflexe : quelle métadonnée suis-je en train de changer et peut-elle être rendue publique ?</p>
+<p><strong>⚠️ À ne pas confondre</strong> : chemin, valeur fautive, paramètre du message, cause technique, code métier et statut HTTP.</p>
+</div></section><section class="teaching-section" data-section="s-les-emplacements-du-message"><span class="outcome-anchor" id="out-OUT-nb6w1gbs0ndt" tabindex="-1"></span><h2 id="s-les-emplacements-du-message" tabindex="-1">Les emplacements du message</h2><aside class="section-digest" id="s-les-emplacements-du-message-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Le template reste traduisible.</li><li>Les parameters portent les valeurs variables.</li></ol></aside><p><strong>Où en est-on ?</strong> Étape 4 sur 5 : le message lui-même. Pourquoi écrire
+<code>{{ value }}</code> plutôt que concaténer l'adresse dans la phrase ?</p>
+<p>Garde un modèle de message stable et transmets séparément l'adresse.
+Les doubles accolades sont ici des emplacements du message, pas du Twig
+exécuté une seconde fois. Une fois traduit et rempli, le message reste
+à échapper dans son contexte de sortie HTML ; la traduction ne rend
+pas la saisie sûre.</p>
+<p>Le message porte des emplacements <code>{{ … }}</code>, remplis par <code>setParameter()</code>.
+C'est ce qui permet de le traduire sans y concaténer la valeur. La violation
+garde les deux formes : <code>getMessageTemplate()</code> rend le modèle, <code>getMessage()</code>
+le texte rempli.</p>
+<p>Pourquoi ne pas concaténer ? Le <strong>modèle</strong> (<code>L'adresse {{ value }} est déjà
+prise.</code>) est ce qu'on envoie au traducteur ; la valeur, elle, change à chaque
+appel. En séparant les deux, une seule traduction sert pour toutes les valeurs.</p>
+<pre class="highlight" tabindex="0"><code class="language-text">modèle      : L'adresse {{ value }} est déjà prise.     ← getMessageTemplate()
+paramètre   : {{ value }} = reserved@example.com
+résultat    : L'adresse reserved@example.com est déjà prise.   ← getMessage()</code></pre>
+<p>Une nuance de signature : <code>setParameter(string $key, string $value)</code> attend
+une <strong>string</strong> ; pour une valeur non textuelle, on la formate soi-même (les
+validators natifs utilisent <code>formatValue()</code>).</p>
+<div class="admonition info">
+<p class="admonition-title">🌍 In Real Life</p>
+<p><strong>La situation</strong> : le bureau utilise une lettre type traduisible et remplit séparément la case « adresse concernée ». Il ne transforme pas le texte de cette case en une nouvelle instruction d'impression.</p>
+<p><strong>L’équivalent dans Symfony</strong> : le modèle du message et ses paramètres restent distincts ; setParameter renseigne l'emplacement choisi. getMessageTemplate conserve le modèle, getMessage donne le texte traité.</p>
+<p><strong>Retour à la réalité technique</strong> : les doubles accolades du message ne déclenchent pas Twig. Traduire et substituer ne rendent pas une saisie sûre pour HTML : l'échappement dépend encore du contexte de sortie. Pour JSON, l'encodage JSON est une autre étape. Évite d'insérer des secrets dans les paramètres, même si la valeur fautive n'est pas exportée.</p>
+<p><strong>🧠 Comment le mémoriser</strong> : « Remplir la lettre n'exécute pas son contenu. » Image mentale : lettre type et case d'adresse remplie séparément. Question-réflexe : ai-je séparé traduction, substitution et protection de la sortie ?</p>
+<p><strong>⚠️ À ne pas confondre</strong> : emplacement de message, expression Twig, traduction, échappement HTML et encodage JSON.</p>
+</div></section><section class="teaching-section" data-section="s-une-constraint-sur-mesure"><span class="outcome-anchor" id="out-OUT-7m4ym18awd8g" tabindex="-1"></span><h2 id="s-une-constraint-sur-mesure" tabindex="-1">Une constraint sur mesure</h2><aside class="section-digest" id="s-une-constraint-sur-mesure-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Le nom de validator suit une convention.</li><li>validatedBy() permet de choisir autrement.</li><li>La cible PHP autorise le placement de l&#x27;attribute.</li><li>getTargets() déclare séparément le scope de validation.</li></ol></aside><p><strong>Où en est-on ?</strong> Étape 5 sur 5 : jusqu'ici le builder servait dans un
+callback. Son usage « normal » est dans un <code>ConstraintValidator</code>, la classe
+qui exécute une constraint réutilisable.</p>
+<p>Une règle de slug réutilisée par plusieurs modèles mérite sa propre
+contrainte et son validateur. Le fragment ci-dessous est une méthode
+de SlugValidator, pas une classe complète : il suppose les classes
+Constraint et les exceptions du namespace Validator, ainsi que Slug
+et son message. Ces exceptions distinguent mauvaise configuration de
+la règle et forme incorrecte de la valeur, sans remplacer le contrôle
+d'autorisation sur l'article.</p>
+<p>Le builder sert d'abord dans un <code>ConstraintValidator</code> : une class <code>Slug</code>
+(extends <code>Constraint</code>) et sa class <code>SlugValidator</code>.</p>
+<p class="snippet-context">Extrait PHP : contexte de class, method ou signature requis. Syntaxe vérifiée dans ce contexte ; ce fragment ne constitue pas un programme autonome.</p><pre class="highlight" tabindex="0"><code class="language-php">public function validate(mixed $value, Constraint $constraint): void
+{
+    if (!$constraint instanceof Slug) {
+        throw new UnexpectedTypeException($constraint, Slug::class);
+    }
+    if (null === $value || '' === $value) {
+        return;
+    }
+    if (!is_string($value)) {
+        throw new UnexpectedValueException($value, 'string');
+    }
+    if (!preg_match('/^[a-z0-9-]+$/', $value)) {
+        $this-&gt;context-&gt;buildViolation($constraint-&gt;message)
+            -&gt;setParameter('{{ value }}', $value)
+            -&gt;addViolation();
+    }
+}</code></pre>
+<ul>
+<li><code>validatedBy()</code> rend par défaut le nom de la class suivi de <code>Validator</code>.</li>
+<li>Le validator <strong>reçoit <code>null</code></strong> : le <code>return</code> est son travail, pour laisser
+  <code>NotNull</code> ou <code>NotBlank</code> décider.</li>
+<li><code>UnexpectedValueException</code> devient une violation ; <code>UnexpectedTypeException</code>
+  remonte : c'est une erreur de code.</li>
+<li><code>getTargets()</code> vaut <code>PROPERTY_CONSTRAINT</code> : posée sur une class, la
+  constraint lève une <code>ConstraintDefinitionException</code>.</li>
+<li>En 8.0, une option se déclare dans le constructor, qui appelle
+  <code>parent::__construct(null, $groups, $payload)</code>.</li>
+</ul>
+<p>Pourquoi deux exceptions différentes ? <code>UnexpectedTypeException</code> signifie « le
+validator a reçu une <strong>mauvaise constraint</strong> » : c'est une erreur de
+programmation, elle remonte. <code>UnexpectedValueException</code> signifie « la <strong>valeur</strong>
+n'a pas le type attendu » : c'est un problème de donnée. Le
+<code>RecursiveContextualValidator</code> (dans <code>validateInGroup</code>) l'attrape et construit
+lui-même une violation « This value should be of type {{ type }}. ».</p>
+<pre class="highlight" tabindex="0"><code class="language-text">validate($value, $constraint)
+   ├─ mauvaise Constraint     → UnexpectedTypeException  → REMONTE (bug de code)
+   ├─ null / ''               → return                   → rien (présence ailleurs)
+   ├─ type de valeur invalide → UnexpectedValueException → devient une VIOLATION
+   └─ format invalide         → buildViolation()…addViolation()</code></pre>
+<p>Pourquoi une <code>ConstraintDefinitionException</code> sur une class ? <code>Constraint::getTargets()</code>
+retourne par défaut <code>self::PROPERTY_CONSTRAINT</code> : la constraint n'est autorisée
+que sur une property (ou un getter). Pour l'autoriser sur une class, il faut
+redéfinir <code>getTargets()</code> et rendre <code>CLASS_CONSTRAINT</code>.</p>
+<div class="admonition info">
+<p class="admonition-title">🌍 In Real Life</p>
+<p><strong>La situation</strong> : la fiche de consigne définit la règle du slug ; l'inspecteur applique cette règle et dépose les anomalies. Recevoir la mauvaise consigne n'est pas la même chose que recevoir une valeur du mauvais type.</p>
+<p><strong>L’équivalent dans Symfony</strong> : Slug porte la configuration, SlugValidator exécute le contrôle et utilise son contexte. validatedBy fournit par défaut le nom du validateur ; la factory et, si nécessaire, les services configurés permettent de l'obtenir.</p>
+<p><strong>Retour à la réalité technique</strong> : dans le parcours standard RecursiveContextualValidator, UnexpectedValueException du composant est convertie en violation, contrairement à UnexpectedTypeException sur la contrainte. Un appel direct au validateur n'assure pas cette conversion. Ignorer null/vide est ici un choix laissant la présence à d'autres contraintes. Le fragment ne fournit ni classe complète ni garantie d'unicité ou d'autorisation. Attention aussi à la regex illustrative : <code>$</code> peut accepter une position avant un saut de ligne final ; une politique de slug stricte doit traiter ce cas explicitement.</p>
+<p><strong>🧠 Comment le mémoriser</strong> : « Consigne décrit, inspecteur contrôle, contexte enregistre. » Image mentale : fiche Slug, inspecteur SlugValidator et registre distincts. Question-réflexe : ai-je une mauvaise contrainte, un mauvais type de valeur ou un véritable défaut de format ?</p>
+<p><strong>⚠️ À ne pas confondre</strong> : Constraint, ConstraintValidator, cible autorisée, présence, format et unicité.</p>
+</div><aside class="enrichment" aria-label="Autre explication"><p>Pour une constraint utilisée en attribute de class, deux déclarations ont des rôles différents : la cible PHP <code>Attribute::TARGET_CLASS</code> autorise le placement de l'attribute ; <code>getTargets()</code> doit aussi annoncer <code>Constraint::CLASS_CONSTRAINT</code> au Validator. La cible PHP seule ne change pas la portée du Validator.</p>
+<p><a href="https://symfony.com/doc/8.0/validation/custom_constraint.html">Documentation Symfony 8.0</a>.</p></aside></section><section class="teaching-section" data-section="s-pieges-d-examen"><h2 id="s-pieges-d-examen" tabindex="-1">Pièges d&#x27;examen</h2><p class="teaching-label pitfall"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="warning" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3L23 21H1L12 3ZM12 9V14M12 17V18"></path></svg> <strong>Piège à éviter</strong></p><aside class="section-digest" id="s-pieges-d-examen-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Le validator reçoit null.</li><li>La séparation présence et format doit être explicite.</li></ol></aside><ul class="pitfall-list"><li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : Où en est-on ?</summary><p><strong>Où en est-on ?</strong> Récapitulatif des pièges, avec la raison de leur
+plausibilité.</p></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : buildViolation() seule n&#x27;enregistre rien.</summary><p><strong><code>buildViolation()</code> seule n'enregistre rien.</strong> Sans <code>addViolation()</code> au bout de
+la chaîne d'appels, cette règle ne signale rien malgré son échec ; les autres
+contraintes continuent à déterminer le résultat global.
+<em>Pourquoi on se trompe :</em> le nom « build » laisse croire que l'objet est créé <em>et</em> ajouté.</p></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : addViolation() existe des deux côtés</summary><p><strong><code>addViolation()</code> existe des deux côtés</strong> : sur le contexte, elle enregistre
+directement ; sur le builder, elle termine la chaîne d'appels. Ce ne sont pas les
+mêmes methods.
+<em>Pourquoi on se trompe :</em> même nom, donc même signature supposée.</p></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : Sans atPath(), une violation de portée class garde le path de l&#x27;object courant</summary><p><strong>Sans <code>atPath()</code>, une violation de portée class garde le path de l'object
+courant</strong>, pas nécessairement un path vide. Le placement dans un formulaire
+dépend ensuite du mapping et du bubbling ; ne pas en déduire une position
+universelle en tête du formulaire racine.
+<em>Pourquoi on se trompe :</em> à la racine le chemin est vide, d'où la généralisation abusive.</p></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : atPath() déplace le path, pas la valeur fautive.</summary><p><strong><code>atPath()</code> déplace le path, pas la valeur fautive.</strong>
+<em>Pourquoi on se trompe :</em> on pense que viser un champ désigne aussi sa valeur.</p></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : Le traitement de null appartient au validator.</summary><p><strong>Le traitement de <code>null</code> appartient au validator.</strong> Une règle de format
+l'ignore généralement pour laisser <code>NotNull</code> ou <code>NotBlank</code> gérer la présence ;
+une contrainte dont le rôle est précisément d'exiger une valeur le refuse.
+<em>Pourquoi on se trompe :</em> on croit que <code>null</code> est toujours filtré en amont par le framework.</p></details></li></ul></section><section class="teaching-section" data-section="s-fiche-express"><h2 id="s-fiche-express" tabindex="-1">Fiche express</h2><p class="teaching-label essential"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="book" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5C9 3 5 3 2 4V20C5 19 9 19 12 21C15 19 19 19 22 20V4C19 3 15 3 12 5V21M5 8H8M5 12H8M16 8H19M16 12H19"></path></svg> <strong>À mémoriser</strong></p><aside class="section-digest" id="s-fiche-express-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Conserver le modèle facilite la traduction.</li><li>Le message final contient les parameters.</li></ol></aside><p><strong>Si tu dois retenir seulement 6 choses :</strong></p>
+<ul>
+<li><code>addViolation()</code> du <strong>contexte</strong> : immédiat ; <code>buildViolation()</code> : un builder.</li>
+<li>Le builder <strong>n'enregistre rien</strong> sans <code>-&gt;addViolation()</code> à la fin.</li>
+<li><code>atPath()</code> ajoute un path relatif ; sans lui, le <strong>path courant</strong> reste
+  inchangé, vide seulement à la racine de validation. Le mapping du form
+  décide ensuite du placement.</li>
+<li><code>atPath()</code> ne change pas la <strong>valeur fautive</strong> : <code>setInvalidValue()</code>.</li>
+<li><code>setParameter()</code> remplit <code>{{ … }}</code> ; <code>setCode()</code> donne un code stable.</li>
+<li>Constraint maison : <code>SlugValidator</code> par défaut, <code>return</code> sur <code>null</code>,
+  <code>UnexpectedValueException</code> → violation.</li>
+</ul>
+<p>Moyen mnémotechnique : <strong>« Construire, viser, coder, ajouter »</strong>.</p>
+<h3 tabindex="-1" id="s-fiche-express-nested-a-retenir-pour-la-certification">🧠 À retenir pour la certification</h3>
+<ol>
+<li>Deux façons de signaler : <code>$context-&gt;addViolation()</code> (direct) ou
+   <code>buildViolation()</code> → builder → <code>addViolation()</code>.</li>
+<li><code>buildViolation()</code> ne crée rien : sans <code>addViolation()</code> final, aucune violation.</li>
+<li>Dix méthodes de builder : <code>atPath</code>, <code>setParameter(s)</code>, <code>setCode</code>,
+   <code>setInvalidValue</code>, <code>setPlural</code>, <code>setTranslationDomain</code>, <code>disableTranslation</code>,
+   <code>setCause</code>, <code>addViolation</code>.</li>
+<li><code>atPath()</code> compose avec le chemin courant et ne touche pas la valeur fautive.</li>
+<li>Modèle <code>{{ … }}</code> + <code>setParameter()</code> : <code>getMessageTemplate()</code> ≠ <code>getMessage()</code>.</li>
+<li>Validator maison : <code>Slug</code>/<code>SlugValidator</code>, <code>null</code> ignoré, <code>UnexpectedValueException</code>
+   → violation, <code>UnexpectedTypeException</code> remonte, <code>getTargets()</code> = property par défaut.</li>
+</ol>
+<p><strong>Phrase de mémorisation :</strong> « Je construis la fiche, je vise le champ, je donne
+un code, et rien n'existe tant que je n'ai pas dit addViolation(). »</p></section><section class="official-sources"><h2 id="reader-sources" tabindex="-1">Sources officielles et compléments</h2><ul><li><a href="https://symfony.com/doc/8.0/validation.html">Symfony 8.0 — Validator</a></li><li><a href="https://symfony.com/doc/8.0/validation/custom_constraint.html">Symfony 8.0 — validation / custom constraint</a></li></ul></section><section id="course-recalls" aria-labelledby="course-recalls-title" tabindex="-1"><h2 id="course-recalls-title">Rappels et liens avec les autres cours</h2><div data-recall-group="other"><h3>Rappels des cours précédents / autres modules</h3><ul><li data-recall-course="CRS-bthv5xmh5wea" data-recall-kind="previous_course"><p class="recall-provenance">Module 08 — Validation des données · Cours « Group sequence »</p><p>L&#x27;arrêt porte sur une étape. Il ne signifie pas première violation seulement.</p><p><a href="#cards-previous">Rappel : <span lang="en">When does a group sequence stop?</span></a></p></li></ul></div></section><nav class="course-sequence" aria-label="Ordre de lecture"><a rel="prev" href="course-CRS-96w05v20b8w1.html" aria-label="Précédent : Custom callback validators — Module 08 — Validation des données">Précédent : Custom callback validators</a> <a href="lot-08.html">Sommaire : Module 08 — Validation des données</a> <a rel="next" href="course-CRS-jtkmpfp3nwzk.html" aria-label="Suivant : Built-in services — Module 09 — Injection de dépendances">Suivant : Built-in services</a></nav><p class="course-practice-entry"><a class="button" href="#view-quiz">Fin du cours — s’entraîner avec le Quiz</a></p></div><div id="view-flashcards" data-course-panel role="region" aria-labelledby="view-flashcards-title"><h2 id="view-flashcards-title">Flashcards</h2><p lang="en">Answer before revealing each card.</p><p>Ces cartes ne mesurent pas une maîtrise notée.</p><div id="cards-s-l-essentiel-1" data-card-section="s-l-essentiel"><h3><a href="#s-l-essentiel">Revoir : L&#x27;essentiel</a></h3><div class="reader-cards"><details class="reader-card" id="B-d235sja3h7y2-01"><summary lang="en">When does a violation builder actually record its violation?</summary><p lang="en">When addViolation() is called on the builder.</p><p lang="fr">Le builder prépare la violation. addViolation() l&#x27;enregistre.</p><a href="course-CRS-d235sja3h7y2.html#out-OUT-y8sak1s2672z">Revoir le passage précis</a></details></div></div><div id="cards-s-le-schema-2" data-card-section="s-le-schema"><h3><a href="#s-le-schema">Revoir : Le schéma</a></h3><div class="reader-cards"><details class="reader-card" id="B-d235sja3h7y2-02"><summary lang="en">Which steps are needed to create a targeted, coded violation?</summary><p lang="en">Build it, set its path and code, then call addViolation().</p><p lang="fr">Le path situe l&#x27;erreur. Le code permet un traitement machine stable.</p><a href="course-CRS-d235sja3h7y2.html#out-OUT-eq4vjk7mmyxm">Revoir le passage précis</a></details></div></div><div id="cards-s-l-exemple-une-adresse-deja-reservee-3" data-card-section="s-l-exemple-une-adresse-deja-reservee"><h3><a href="#s-l-exemple-une-adresse-deja-reservee">Revoir : L&#x27;exemple : une adresse déjà réservée</a></h3><div class="reader-cards"><details class="reader-card" id="B-d235sja3h7y2-03"><summary lang="en">Does targeting an email field also change the recorded invalid value?</summary><p lang="en">No. atPath() changes the path; setInvalidValue() changes the invalid value.</p><p lang="fr">Le path et la valeur sont indépendants. Régler les deux si nécessaire.</p><a href="course-CRS-d235sja3h7y2.html#out-OUT-eq4vjk7mmyxm">Revoir le passage précis</a></details></div></div><div id="cards-s-les-deux-facons-4" data-card-section="s-les-deux-facons"><h3><a href="#s-les-deux-facons">Revoir : Les deux façons</a></h3><div class="reader-cards"><details class="reader-card" id="B-d235sja3h7y2-04"><summary lang="en">How does context-&gt;addViolation() differ from context-&gt;buildViolation()?</summary><p lang="en">The first records immediately; the second returns a configurable builder.</p><p lang="fr">Le contexte peut enregistrer directement. Le builder permet une configuration supplémentaire.</p><a href="course-CRS-d235sja3h7y2.html#out-OUT-x2rv3kwasf88">Revoir le passage précis</a></details></div></div><div id="cards-s-le-builder-n-ecrit-rien-tout-seul-5" data-card-section="s-le-builder-n-ecrit-rien-tout-seul"><h3><a href="#s-le-builder-n-ecrit-rien-tout-seul">Revoir : Le builder n&#x27;écrit rien tout seul</a></h3><div class="reader-cards"><details class="reader-card" id="B-d235sja3h7y2-05"><summary lang="en">A builder is created and configured but never finalized. How many violations does it add?</summary><p lang="en">None; addViolation() is required.</p><p lang="fr">Configurer n&#x27;écrit pas dans la liste. L&#x27;oubli final laisse la validation réussir.</p><a href="course-CRS-d235sja3h7y2.html#out-OUT-y8sak1s2672z">Revoir le passage précis</a></details></div></div><div id="cards-s-ce-que-l-on-peut-regler-6" data-card-section="s-ce-que-l-on-peut-regler"><h3><a href="#s-ce-que-l-on-peut-regler">Revoir : Ce que l&#x27;on peut régler</a></h3><div class="reader-cards"><details class="reader-card" id="B-d235sja3h7y2-06"><summary lang="en">Which builder method supplies a stable identifier for machine handling?</summary><p lang="en">setCode(); setCause() instead records a technical cause.</p><p lang="fr">Le code identifie la règle en échec. La cause aide au diagnostic.</p><a href="course-CRS-d235sja3h7y2.html#out-OUT-eq4vjk7mmyxm">Revoir le passage précis</a></details></div></div><div id="cards-s-les-emplacements-du-message-7" data-card-section="s-les-emplacements-du-message"><h3><a href="#s-les-emplacements-du-message">Revoir : Les emplacements du message</a></h3><div class="reader-cards"><details class="reader-card" id="B-d235sja3h7y2-07"><summary lang="en">Why use message placeholders instead of concatenating an invalid value?</summary><p lang="en">setParameter() fills placeholders while preserving a translatable message template.</p><p lang="fr">Le template reste traduisible. Les parameters portent les valeurs variables.</p><a href="course-CRS-d235sja3h7y2.html#out-OUT-nb6w1gbs0ndt">Revoir le passage précis</a></details></div></div><div id="cards-s-une-constraint-sur-mesure-8" data-card-section="s-une-constraint-sur-mesure"><h3><a href="#s-une-constraint-sur-mesure">Revoir : Une constraint sur mesure</a></h3><div class="reader-cards"><details class="reader-card" id="B-d235sja3h7y2-08"><summary lang="en">What is the default validator class name for a custom Slug constraint?</summary><p lang="en">SlugValidator, unless validatedBy() overrides the convention.</p><p lang="fr">Le nom de validator suit une convention. validatedBy() permet de choisir autrement.</p><a href="course-CRS-d235sja3h7y2.html#out-OUT-7m4ym18awd8g">Revoir le passage précis</a></details><details class="reader-card" id="B-d235sja3h7y2-E20"><summary lang="en">Does Attribute::TARGET_CLASS alone make a custom validation constraint class-scoped?</summary><p lang="en">No. PHP attribute placement and Validator scope are separate; getTargets() must also return CLASS_CONSTRAINT.</p><p lang="fr">La cible PHP autorise le placement de l&#x27;attribute. getTargets() déclare séparément le scope de validation.</p><a href="course-CRS-d235sja3h7y2.html#out-OUT-7m4ym18awd8g">Revoir le passage précis</a></details></div></div><div id="cards-s-pieges-d-examen-9" data-card-section="s-pieges-d-examen"><h3><a href="#s-pieges-d-examen">Revoir : Pièges d&#x27;examen</a></h3><div class="reader-cards"><details class="reader-card" id="B-d235sja3h7y2-09"><summary lang="en">Must a custom validator itself decide how to handle null?</summary><p lang="en">Yes. Return early when null should be left to NotNull or NotBlank.</p><p lang="fr">Le validator reçoit null. La séparation présence et format doit être explicite.</p><a href="course-CRS-d235sja3h7y2.html#out-OUT-7m4ym18awd8g">Revoir le passage précis</a></details></div></div><div id="cards-s-fiche-express-10" data-card-section="s-fiche-express"><h3><a href="#s-fiche-express">Revoir : Fiche express</a></h3><div class="reader-cards"><details class="reader-card" id="B-d235sja3h7y2-10"><summary lang="en">Which violation getters distinguish the template from the rendered message?</summary><p lang="en">getMessageTemplate() returns the template; getMessage() returns the completed message.</p><p lang="fr">Conserver le modèle facilite la traduction. Le message final contient les parameters.</p><a href="course-CRS-d235sja3h7y2.html#out-OUT-nb6w1gbs0ndt">Revoir le passage précis</a></details></div></div><div id="cards-previous"><p class="recall-provenance">Module 08 — Validation des données · Cours « Group sequence »</p><aside class="checkpoint"><h2>Rappel d’un cours antérieur</h2><p>Avant de poursuivre : Group sequence.</p><details class="corpus-correction"><summary lang="en">When does a group sequence stop?</summary><p lang="en">After the first failing stage; all constraints within that stage can still report violations.</p><p>L&#x27;arrêt porte sur une étape. Il ne signifie pas première violation seulement.</p><a href="course-CRS-bthv5xmh5wea.html#out-OUT-xyz5371z2twb">Relire la correction dans le cours antérieur</a></details></aside></div></div><div id="view-quiz" data-course-panel role="region" aria-labelledby="view-quiz-title"><aside class="revision-context"><p><strong>Avant le quiz :</strong> Signaler une violation depuis un callback ou un validator, et savoir laquelle des deux methods du contexte utiliser.</p><p>Quelle donnée entre, quelle responsabilité agit et quelle condition change le résultat ? Pour chaque correction, vérifiez ces conditions dans <a href="course-CRS-d235sja3h7y2.html#s-objectif">le passage enseigné</a>, sans supposer que toutes les branches du blog sont exécutées.</p></aside><h2 id="view-quiz-title">Quiz</h2><p class="quiz-size" lang="en">6 eligible learning questions · 6 per session. Repeating a question does not demonstrate mastery.</p><p id="course-quiz-status" role="status">Quiz interactif non chargé. Démarrez après chargement de la banque locale.</p><div id="course-quiz-controls" class="assessment-main" hidden><div id="course-quiz-assessment-controls" hidden><select id="course-quiz-assessment-mode" aria-label="Mode du quiz" hidden><option value="learning">Entraînement</option></select><p id="course-quiz-training-scope"></p><button id="course-quiz-start-assessment" type="button" lang="en">Start practice</button><button id="course-quiz-finish-assessment" type="button" lang="en" hidden>End session</button></div><p id="course-quiz-assessment-error" role="alert"></p><p id="course-quiz-assessment-timer" hidden></p><p id="course-quiz-session-progress" class="quiz-progress" role="status" lang="en"></p><div id="course-quiz-assessment-app" tabindex="-1"></div><nav id="course-quiz-session-navigation" aria-label="Questions du cours"></nav><div id="course-quiz-learning-overview" aria-live="polite"></div></div><div id="course-quiz-native"><p>Sans JavaScript ou si le chargement échoue : aucune tentative notée. Les <a href="#view-flashcards">flashcards du cours</a> restent disponibles.</p><details class="course-quiz-fallback" data-question-id="L-d235sja3h7y2-base-v1"><summary lang="en">RADIO — Select one answer. When does a violation builder actually record its violation?</summary><p>Correction de consultation — non notée.</p><p>Le builder prépare la violation. addViolation() l&#x27;enregistre.</p><ul><li><strong lang="en">Distractor: When setParameter() supplies the first placeholder value.</strong><p>Définir un parameter ne déclenche pas l&#x27;enregistrement.</p></li><li><strong lang="en">Correct: When addViolation() is called on the builder.</strong><p>Le builder prépare la violation. addViolation() l&#x27;enregistre.</p></li><li><strong lang="en">Distractor: As soon as buildViolation() returns the builder.</strong><p>Le builder prépare la violation ; il faut la finaliser.</p></li></ul><a href="course-CRS-d235sja3h7y2.html#out-OUT-y8sak1s2672z">Relire le passage exact</a><a href="course-CRS-d235sja3h7y2.html#s-le-builder-n-ecrit-rien-tout-seul">Relire la correction précise</a></details></div></div></div></div><details class="transfer-panel"><summary>Sauvegarde et transfert de progression</summary><p id="reading-status" role="status">Sans JavaScript : lecture libre ; progression non enregistrée.</p><p><a href="assessment.html#overview-title">Lecture, réussites immédiates et différées</a></p><p>Transfert manuel — aucune synchronisation automatique</p><p id="persistence-status" role="status"></p><button type="button" class="secondary" id="export-progress">Exporter ma progression</button><label for="import-progress">Choisir un JSON pour fusionner ma progression (sans remplacement)</label><input type="file" id="import-progress" accept="application/json,.json"><p id="transfer-status" role="status"></p></details></main><footer class="site-footer"><a href="catalogue.html">Catalogue</a> <a href="sources.html">Sources et attribution</a> <a href="#contenu">Haut de page</a></footer></body></html>

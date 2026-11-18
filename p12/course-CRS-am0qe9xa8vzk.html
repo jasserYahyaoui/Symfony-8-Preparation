@@ -1,0 +1,514 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; connect-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Process — Symfony 8 Preparation</title><link rel="stylesheet" href="styles.css"><link rel="stylesheet" href="reader.css"><script src="mermaid.min.js" defer></script><script src="mermaid-init.js" defer></script><link rel="stylesheet" href="assessment.css"><script src="fixed-exams-data.js" defer></script><script src="fixed-exams.js" defer></script><script src="learning-state.js" defer></script><script src="guide.js" defer></script><script src="reader-catalog.js" defer></script><script src="reader.js" defer></script><script src="site-state.js" defer></script><script src="assessment.js" defer></script><script src="course-views.js" defer></script><link rel="stylesheet" href="syntax-highlight.css"><script src="prism-syntax.js" defer></script><script src="syntax-highlight.js" defer></script></head><body data-course-id="CRS-am0qe9xa8vzk"><a class="skip" href="#contenu">Aller au contenu</a><header class="site-header"><a class="brand" href="index.html">S8 Preparation</a><nav aria-label="Navigation principale"><a href="index.html">Accueil</a> <a href="catalogue.html">Parcours</a> <a href="assessment.html?mode=review">Réviser</a> <a href="examens.html">Examens blancs</a> <a href="jour-j.html">Jour J</a></nav></header><main id="contenu" tabindex="-1" class="corpus-reader"><nav class="breadcrumb" aria-label="Fil d’Ariane"><a href="index.html">Accueil</a> <span aria-hidden="true">›</span> <a href="catalogue.html">Parcours</a> <span aria-hidden="true">›</span> <a href="lot-23.html">Module 23 — Process</a> <span aria-hidden="true">›</span> <span aria-current="page">Process</span></nav><h1>Process</h1><p class="muted">Symfony 8.0 · API PHP ≤ 8.4 · Twig ≤ 3.22. Préparation indépendante.</p><p class="revision-status">Rédaction narrative P11 : projection nouvelle, non couverte par les décisions historiques P10. Aucune approbation officielle ni garantie de réussite.</p><aside class="narrative-context" aria-label="Repères de lecture"><p><strong>Prérequis de lecture :</strong> <a href="course-CRS-p1694d5f7r8c.html">Service container</a> · <a href="course-CRS-mpwjc4g3vmj7.html">Request handling</a></p><p><strong>Concepts voisins :</strong> <a href="course-CRS-mpwjc4g3vmj7.html">Request handling</a> — Raccorder une capacité au blog sans en faire une étape HTTP obligatoire. <a href="lot-23.html">Comparer les responsabilités dans ce module</a> · <a href="carte-composants.html">Situer cette responsabilité dans le blog</a> · <a href="glossaire.html">Distinguer les termes voisins</a></p><p><a href="ordre-lecture.html">Retrouver les 163 cours dans le parcours recommandé</a>. Ce repère ne modifie ni votre historique ni votre progression.</p></aside><div class="course-layout"><details class="lot-course-menu"><summary>Cours du module · 1 cours</summary><nav aria-label="Cours du module"><a class="lot-context" href="lot-23.html">Module 23 — Process</a><ol><li><a href="course-CRS-am0qe9xa8vzk.html" aria-current="page">Process</a></li></ol><a href="lot-23.html#view-quiz">Quiz du module</a></nav></details><aside class="course-section-menu" aria-label="Sommaire du cours"><nav class="course-actions" aria-label="Activités du cours"><a id="tab-course" href="#view-course">Cours</a><a id="tab-flashcards" href="#view-flashcards">Flashcards</a><a id="tab-quiz" href="#view-quiz">Quiz</a></nav><details class="course-section-disclosure"><summary id="course-sections">Sections du cours</summary><nav aria-label="Sections du cours"><ul><li><a href="#s-objectif">Objectif</a></li><li><a href="#s-l-essentiel">L&#x27;essentiel</a></li><li><a href="#s-le-schema">Le schéma</a></li><li><a href="#s-l-exemple-lister-un-dossier">L&#x27;exemple : lister un dossier</a></li><li><a href="#s-array-ou-string">Array ou string</a></li><li><a href="#s-trois-facons-de-lancer">Trois façons de lancer</a></li><li><a href="#s-recuperer-l-output">Récupérer l&#x27;output</a></li><li><a href="#s-les-deux-delais">Les deux délais</a><ul><li><a href="#s-les-deux-delais-nested-qui-verifie-les-delais">Qui vérifie les délais ?</a></li><li><a href="#s-les-deux-delais-nested-arreter-stop">Arrêter : stop()</a></li></ul></li><li><a href="#s-pieges-d-examen">Pièges d&#x27;examen</a><ul><li><a href="#s-pieges-d-examen-nested-a-ne-pas-confondre">⚠️ À ne pas confondre</a></li><li><a href="#s-pieges-d-examen-nested-a-retenir-pour-la-certification">🧠 À retenir pour la certification</a></li></ul></li><li><a href="#s-fiche-express">Fiche express</a></li><li><a href="#reader-objectives">Objectifs d’apprentissage</a></li><li><a href="#reader-sources">Sources officielles et compléments</a></li><li><a href="#course-recalls">Rappels et liens avec les autres cours</a></li></ul></nav><nav aria-label="Flashcards par section"><a href="#view-flashcards">Flashcards par section</a><ul><li><a href="#cards-s-l-essentiel-1">L&#x27;essentiel</a></li><li><a href="#cards-s-le-schema-2">Le schéma</a></li><li><a href="#cards-s-l-exemple-lister-un-dossier-3">L&#x27;exemple : lister un dossier</a></li><li><a href="#cards-s-array-ou-string-4">Array ou string</a></li><li><a href="#cards-s-trois-facons-de-lancer-5">Trois façons de lancer</a></li><li><a href="#cards-s-recuperer-l-output-6">Récupérer l&#x27;output</a></li><li><a href="#cards-s-les-deux-delais-7">Les deux délais</a></li><li><a href="#cards-s-pieges-d-examen-8">Pièges d&#x27;examen</a></li><li><a href="#cards-s-fiche-express-9">Fiche express</a></li><li><a href="#cards-previous">Module 22 — Mailer et Mime · Cours « Mailer » · Rappel : <span lang="en">Does successful Mailer sending prove delivery to the recipient&#x27;s inbox?</span></a></li></ul></nav><nav aria-label="Retour au module"><a href="lot-23.html">Tous les cours du module</a></nav></details><p class="local-quiz-count">6 questions disponibles · 6 par session Quiz</p></aside><div class="course-content"><div id="view-course" data-course-panel role="region" aria-labelledby="view-course-title"><h2 id="view-course-title">Cours</h2><p class="course-introduction"><a href="#s-objectif">Introduction</a> · <a href="#course-sections">Sections du cours</a></p><h2 id="reader-objectives" tabindex="-1">Objectifs d’apprentissage</h2><ul><li><a href="course-CRS-am0qe9xa8vzk.html#out-OUT-4h80hb7ky1wt">Choisir entre un lancement bloquant et un lancement asynchrone, et savoir lequel lève</a></li><li><a href="course-CRS-am0qe9xa8vzk.html#out-OUT-vr32ta087n2a">Reconnaître que l&#x27;array d&#x27;arguments est la forme recommandée et ce qu&#x27;une string transfère à l&#x27;appelant</a></li><li><a href="course-CRS-am0qe9xa8vzk.html#out-OUT-hsn9hab7spvy">Savoir que le délai par défaut vaut 60 secondes et qu&#x27;un process asynchrone impose une vérification explicite</a></li><li><a href="course-CRS-am0qe9xa8vzk.html#out-OUT-ew0th9575tfe">Distinguer le délai total de l&#x27;idle timeout</a></li><li><a href="course-CRS-am0qe9xa8vzk.html#out-OUT-z054mp760r1h">Connaître les conséquences de la désactivation de l&#x27;output</a></li></ul><aside class="pedagogy-legend" aria-label="Repères pédagogiques"><p><strong>Repères pédagogiques</strong></p><p>Ces repères décrivent le rôle du bloc, pas une fréquence officielle à l’examen.</p><p class="teaching-label essential"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="brain" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5C12 1 6 1 6 5C2 5 1 10 4 12C1 15 3 19 6 19C6 23 12 23 12 19V5M12 5C12 1 18 1 18 5C22 5 23 10 20 12C23 15 21 19 18 19C18 23 12 23 12 19M6 5C6 8 8 9 9 9M4 12H7L9 14M6 19V16M18 5C18 8 16 9 15 9M20 12H17L15 14M18 19V16"></path></svg> <strong>À comprendre</strong></p><p class="teaching-label essential"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="book" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5C9 3 5 3 2 4V20C5 19 9 19 12 21C15 19 19 19 22 20V4C19 3 15 3 12 5V21M5 8H8M5 12H8M16 8H19M16 12H19"></path></svg> <strong>À mémoriser</strong></p><p class="teaching-label example"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="code" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6L2 12L8 18M16 6L22 12L16 18M14 3L10 21"></path></svg> <strong>Exemple concret</strong></p><p class="teaching-label pitfall"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="warning" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3L23 21H1L12 3ZM12 9V14M12 17V18"></path></svg> <strong>Piège à éviter</strong></p><p class="teaching-label nuance"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="balance" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3V21M7 21H17M3 7L21 5M5 7L1 15H9L5 7M19 6L15 14H23L19 6M1 15Q5 20 9 15M15 14Q19 19 23 14"></path></svg> <strong>Nuance à connaître</strong></p><p>Précision, exception ou condition d’application d’une règle.</p></aside><section class="teaching-section" data-section="s-objectif"><h2 id="s-objectif" tabindex="-1">Objectif</h2><p>Finder a sélectionné les fichiers d'import. Si leur conversion exige un
+programme externe, l'application doit lui transmettre des arguments,
+attendre ou surveiller son exécution, puis interpréter son résultat.
+Process gère cette frontière avec un processus enfant ; il ne remplace
+pas le service qui décide si les données obtenues sont utilisables.</p>
+<p>Ce cours répond à quatre questions, dans cet ordre :</p>
+<ol>
+<li>Comment <strong>décrire</strong> la commande à lancer ? (array ou string)</li>
+<li>Quand l'appel <strong>rend-il la main</strong> et que se passe-t-il en cas d'échec ?</li>
+<li>Comment <strong>récupérer</strong> ce que l'enfant a écrit ?</li>
+<li>Qu'est-ce qui <strong>interrompt</strong> l'enfant : deux délais et <code>stop()</code> ?</li>
+</ol></section><section class="teaching-section" data-section="s-l-essentiel"><h2 id="s-l-essentiel" tabindex="-1">L&#x27;essentiel</h2><p class="teaching-label essential"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="brain" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5C12 1 6 1 6 5C2 5 1 10 4 12C1 15 3 19 6 19C6 23 12 23 12 19V5M12 5C12 1 18 1 18 5C22 5 23 10 20 12C23 15 21 19 18 19C18 23 12 23 12 19M6 5C6 8 8 9 9 9M4 12H7L9 14M6 19V16M18 5C18 8 16 9 15 9M20 12H17L15 14M18 19V16"></path></svg> <strong>À comprendre</strong></p><aside class="section-digest" id="s-l-essentiel-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Les arguments restent littéraux.</li><li>Le shell n&#x27;est pas nécessaire pour un exécutable simple.</li></ol></aside><p><strong>Ce que cette partie veut réellement vous apprendre.</strong></p>
+<ul>
+<li><em>Pourquoi ce sujet existe.</em> PHP sait lancer un programme externe avec
+  <code>exec()</code>, <code>passthru()</code>, <code>shell_exec()</code> ou <code>system()</code>, mais ces fonctions
+  laissent à vous l'escaping des arguments, les différences entre systèmes
+  et la surveillance. <code>Process</code> les remplace.</li>
+<li><em>Le piège de fond.</em> Lancer n'est pas réussir : « le programme est parti »,
+  « le programme a fini » et « le programme a bien travaillé » sont trois
+  observations distinctes.</li>
+<li><em>Ce que l'auteur veut que vous compreniez.</em> Le parent et l'enfant sont
+  deux processus ; les délais ne sont pas surveillés par un gardien
+  autonome, c'est <strong>le parent</strong> qui les contrôle à des points précis.</li>
+<li><em>Pourquoi c'est à l'examen.</em> Les questions portent sur la forme array
+  recommandée, le délai par défaut (60 s), <code>mustRun()</code> contre <code>run()</code>,
+  <code>checkTimeout()</code> après <code>start()</code>, <code>disableOutput()</code> et l'idle timeout,
+  <code>false</code> pour retirer une variable d'environment, et <code>SIGTERM</code> puis
+  <code>SIGKILL</code>.</li>
+</ul>
+<p><code>Process</code> exécute un programme externe dans un sous-processus, en gérant les
+différences entre systèmes et l'escaping des arguments ; il remplace
+<code>exec()</code>, <code>passthru()</code>, <code>shell_exec()</code> et <code>system()</code>. Trois questions décident
+de tout : la forme de la command (array ou string), le moment où l'appel rend
+la main, et ce qui l'interrompt — deux délais et <code>stop()</code>.</p>
+<p>Le parent et l'enfant sont deux processus : partager un service Symfony
+n'est pas possible par simple appel d'objet à travers cette frontière.
+L'enfant reçoit des arguments, un environnement et éventuellement une
+entrée standard ; il produit des flux et un code de sortie. Lancer
+<code>bin/console</code> comme enfant démarre une autre application, pas une étape
+obligatoire de <code>GET /blog/42</code>.</p>
+<pre class="highlight" tabindex="0"><code class="language-text">        PARENT (votre code PHP)                 ENFANT (programme externe)
+   ┌──────────────────────────────┐         ┌──────────────────────────────┐
+   │ new Process(['ls', '-lsa'])  │         │                              │
+   │ run() / start()              │ ──────▶ │ reçoit : arguments,          │
+   │                              │         │          environnement,      │
+   │ lit : getOutput()            │ ◀────── │          stdin (option)      │
+   │       getErrorOutput()       │         │ produit : stdout, stderr,    │
+   │       getExitCode()          │         │           code de sortie     │
+   └──────────────────────────────┘         └──────────────────────────────┘
+        deux processus : on échange des octets, pas des objets</code></pre></section><section class="teaching-section" data-section="s-le-schema"><h2 id="s-le-schema" tabindex="-1">Le schéma</h2><aside class="section-digest" id="s-le-schema-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Le mode d&#x27;attente et la gestion d&#x27;erreur sont distincts.</li><li>Un démarrage async exige un suivi.</li></ol></aside><p><strong>Où en est-on ?</strong> Avant le détail de chaque choix, voici la vie complète
+d'un <code>Process</code> : on le construit, on le lance, puis le parent surveille. Les
+quatre sections suivantes zooment chacune sur une case de ce cycle.</p>
+<p>Construire <code>Process</code> ne lance pas encore le programme. Après le lancement,
+le parent reste responsable de la surveillance : les délais sont vérifiés
+à des points de contrôle, pas par un thread de surveillance autonome.</p>
+<figure class="diagram" aria-labelledby="CRS-am0qe9xa8vzk-3-diagram-0-title CRS-am0qe9xa8vzk-3-diagram-0-description"><figcaption id="CRS-am0qe9xa8vzk-3-diagram-0-title">Surveiller un sous-processus lancé sans attendre</figcaption><p id="CRS-am0qe9xa8vzk-3-diagram-0-description">start rend la main après lancement. Le code appelant vérifie les délais et l&#x27;état jusqu&#x27;à la fin, puis lit le code de sortie. wait réalise une attente bloquante avec vérification des délais.</p><div class="mermaid" hidden>---
+title: Construire, lancer, borner un Process
+---
+flowchart TD
+  accTitle: Surveiller un sous-processus lancé sans attendre
+  accDescr: start rend la main après lancement. Le code appelant vérifie les délais et l&#x27;état jusqu&#x27;à la fin, puis lit le code de sortie. wait réalise une attente bloquante avec vérification des délais.
+  S[&quot;start&quot;] --&gt;|&quot;lancement effectué&quot;| C[&quot;checkTimeout&quot;]
+  C --&gt;|&quot;délai dépassé&quot;| E([&quot;ProcessTimedOutException&quot;])
+  C --&gt;|&quot;délai respecté&quot;| R{&quot;isRunning ?&quot;}
+  R --&gt;|&quot;oui, poursuivre la surveillance&quot;| C
+  R --&gt;|&quot;non&quot;| X([&quot;Lire exit code et output&quot;])
+  classDef action fill:#e0f2fe,stroke:#075985,color:#0c4a6e
+  classDef decision fill:#fef3c7,stroke:#92400e,color:#78350f
+  classDef result fill:#dcfce7,stroke:#166534,color:#14532d
+  class S,C action
+  class R decision
+  class E,X result</div></figure>
+<p>Bleu : appels ; ambre : état ; vert : fin observable. Cette boucle est un
+modèle, pas une boucle PHP à copier sans pause : éviter une attente active
+coûteuse. <code>wait()</code> gère l'attente bloquante ; <code>start()</code> ne crée ni daemon
+supervisé ni garantie de survie après la fin du processus parent.</p>
+<p>Le même cycle, vu comme une conversation entre le parent et l'enfant :</p>
+<figure class="diagram" aria-labelledby="CRS-am0qe9xa8vzk-3-diagram-1-title CRS-am0qe9xa8vzk-3-diagram-1-description"><figcaption id="CRS-am0qe9xa8vzk-3-diagram-1-title">Échange entre le parent PHP et le sous-processus</figcaption><p id="CRS-am0qe9xa8vzk-3-diagram-1-description">Le parent construit le Process puis appelle start. L&#x27;enfant s&#x27;exécute et écrit sur stdout. Le parent appelle checkTimeout puis wait. À la fin, il lit le code de sortie et la sortie.</p><div class="mermaid" hidden>---
+title: Parent et enfant autour d&#x27;un Process
+---
+sequenceDiagram
+  accTitle: Échange entre le parent PHP et le sous-processus
+  accDescr: Le parent construit le Process puis appelle start. L&#x27;enfant s&#x27;exécute et écrit sur stdout. Le parent appelle checkTimeout puis wait. À la fin, il lit le code de sortie et la sortie.
+  autonumber
+  participant P as Parent PHP
+  participant E as Enfant
+  P-&gt;&gt;P: new Process([...]) (rien ne démarre)
+  P-&gt;&gt;E: start() (lancement)
+  E--&gt;&gt;P: stdout / stderr au fil de l&#x27;eau
+  P-&gt;&gt;P: checkTimeout() (le parent contrôle)
+  P-&gt;&gt;E: wait() (blocage + contrôle des délais)
+  E--&gt;&gt;P: code de sortie
+  P-&gt;&gt;P: getExitCode(), getOutput()</div></figure></section><section class="teaching-section" data-section="s-l-exemple-lister-un-dossier"><h2 id="s-l-exemple-lister-un-dossier" tabindex="-1">L&#x27;exemple : lister un dossier</h2><p class="teaching-label example"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="code" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6L2 12L8 18M16 6L22 12L16 18M14 3L10 21"></path></svg> <strong>Exemple concret</strong></p><aside class="section-digest" id="s-l-exemple-lister-un-dossier-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>La valeur n&#x27;est pas interprétée par un shell.</li><li>La forme array protège les frontières d&#x27;arguments.</li></ol></aside><p><strong>Où en est-on ?</strong> Avant d'étudier chaque option, on fait tourner le plus
+petit <code>Process</code> utile pour voir le contrat lancement / résultat.</p>
+<p>Avant de brancher un convertisseur, ce petit exemple vérifie le contrat
+lancement/résultat avec un outil Unix connu. Avec Symfony Process 8.0
+chargé et <code>ls</code> disponible :</p>
+<pre class="highlight" tabindex="0"><code class="language-php">use Symfony\Component\Process\Exception\ProcessFailedException;
+use Symfony\Component\Process\Process;
+
+$process = new Process(['ls', '-lsa']);
+$process-&gt;setTimeout(120);
+$process-&gt;run();
+
+if (!$process-&gt;isSuccessful()) {
+    throw new ProcessFailedException($process);
+}
+echo $process-&gt;getOutput();</code></pre>
+<p>Ce que fait chaque ligne :</p>
+<table>
+<thead>
+<tr>
+<th>Ligne</th>
+<th>Ce qui se passe réellement</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>new Process(['ls', '-lsa'])</code></td>
+<td>décrit la commande ; <strong>rien n'est lancé</strong></td>
+</tr>
+<tr>
+<td><code>setTimeout(120)</code></td>
+<td>remplace le délai total par défaut (60 s)</td>
+</tr>
+<tr>
+<td><code>run()</code></td>
+<td>lance <strong>et attend</strong> la fin</td>
+</tr>
+<tr>
+<td><code>isSuccessful()</code></td>
+<td>le code de sortie vaut-il 0 ?</td>
+</tr>
+<tr>
+<td><code>ProcessFailedException</code></td>
+<td>levée ici <strong>par nous</strong>, car <code>run()</code> ne lève pas sur échec</td>
+</tr>
+<tr>
+<td><code>getOutput()</code></td>
+<td>lit le buffer stdout</td>
+</tr>
+</tbody>
+</table>
+<p>Cet exemple et les questions sur <code>sleep</code>, SIGTERM et SIGKILL supposent Unix.
+La sortie de <code>ls</code> dépend du répertoire courant. Le tableau d'arguments protège
+la séparation des arguments, mais il faut encore valider les options acceptées
+par le programme cible (et utiliser <code>--</code> quand il le prend en charge).</p>
+<p>Si <code>ls</code> termine à 0, son listing est affiché ; sinon le code lève l'exception.
+La sortie n'est pas un format stable de lot d'import : pour sélectionner
+les fichiers depuis PHP, garder Finder. Process est pertinent quand le
+programme externe réalise une opération dont l'application a besoin.</p></section><section class="teaching-section" data-section="s-array-ou-string"><span class="outcome-anchor" id="out-OUT-vr32ta087n2a" tabindex="-1"></span><h2 id="s-array-ou-string" tabindex="-1">Array ou string</h2><aside class="section-digest" id="s-array-ou-string-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Le shell apporte pipes et redirections.</li><li>Il ajoute une responsabilité d&#x27;échappement.</li></ol></aside><p><strong>Où en est-on ?</strong> Étape 1 sur 4 : avant tout lancement, il faut dire à
+Symfony <strong>quelle commande</strong> exécuter. Deux écritures existent, et elles ne
+confient pas le même travail à Symfony.</p>
+<p><strong>Pourquoi deux formes ?</strong> Parce qu'une ligne de commande peut être lue de
+deux façons : comme une <strong>liste de morceaux déjà séparés</strong> (l'array), ou
+comme <strong>une phrase que le shell va découper et interpréter</strong> (la string).</p>
+<pre class="highlight" tabindex="0"><code class="language-text">Array :  new Process(['printf', '%s', 'a b;c $HOME'])
+         3 arguments, déjà séparés : aucun shell n'interprète rien
+
+String : Process::fromShellCommandline('printf "%s" "a b" | wc -c')
+         une phrase : le shell la découpe, gère « | », « &gt; », « $VAR »</code></pre>
+<p>Comparons les deux formes :</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Array</th>
+<th>String (<code>fromShellCommandline</code>)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Qui découpe les arguments ?</td>
+<td><strong>vous</strong> (chaque case)</td>
+<td>le shell</td>
+</tr>
+<tr>
+<td>Escaping</td>
+<td><strong>inutile</strong></td>
+<td>à votre charge</td>
+</tr>
+<tr>
+<td><code>&gt;</code>, <code>\|</code>, <code>&amp;&amp;</code></td>
+<td>non disponibles</td>
+<td>disponibles (grammaire du shell)</td>
+</tr>
+<tr>
+<td>Signaux (<code>stop()</code>)</td>
+<td>passent</td>
+<td>passent moins bien</td>
+</tr>
+<tr>
+<td>Valeurs variables</td>
+<td>directement dans l'array</td>
+<td>via variables d'environment <code>"${:NOM}"</code></td>
+</tr>
+<tr>
+<td>Recommandation</td>
+<td><strong>forme recommandée</strong></td>
+<td>seulement si le shell est nécessaire</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>Le <strong>array d'arguments est la forme recommandée</strong> : pas d'escaping manuel, les
+  signaux passent. <code>['printf', '%s', 'a b;c $HOME']</code> affiche <code>a b;c $HOME</code>,
+  littéral.</li>
+<li>Une string, par <code>Process::fromShellCommandline()</code>, sert aux fonctionnalités
+  du shell (<code>&gt;</code>, <code>|</code>) ; les valeurs passent par des variables
+  d'environment, <code>"${:NOM}"</code> restant portable. Une valeur non fournie lève une
+  <code>InvalidArgumentException</code> au lancement.</li>
+<li>Un processus CLI hérite de l'environnement du parent ; passer
+  <code>['OTHER' =&gt; 'x']</code> laisse une variable non nommée toujours héritée : pour en
+  retirer une, la passer à <code>false</code>.</li>
+</ul>
+<p>Avant / après sur l'environnement, parent ayant <code>HOME</code> et <code>LANG</code> :</p>
+<pre class="highlight" tabindex="0"><code class="language-text">run(['OTHER' =&gt; 'x'])      enfant voit : HOME, LANG (hérités) + OTHER=x
+run(['HOME'  =&gt; false])    enfant voit : LANG (hérité)        sans HOME</code></pre>
+<p>Le tableau protège les frontières d'arguments, pas le choix du binaire,
+les options de ce binaire ou les chemins auxquels il aura accès. Fixer
+l'exécutable depuis une configuration maîtrisée ; ne pas concaténer une
+valeur utilisateur dans une ligne shell.</p>
+<p>L'environnement explicite complète celui hérité, il n'est pas une liste
+d'autorisation exhaustive. Ne pas transmettre ou journaliser des secrets
+inutiles. L'implémentation 8.0.16 filtre aussi certaines variables de contexte
+de requête sous les SAPIs non CLI : « toutes les variables de la machine »
+ne décrit donc pas le contrat réel.</p>
+<div class="admonition info">
+<p class="admonition-title">🌍 In Real Life</p>
+<p><strong>La situation</strong> : le blog remet au convertisseur des cases séparées « outil », « format », « fichier », plutôt qu'une phrase à réinterpréter comme des instructions.</p>
+<p><strong>L’équivalent dans Symfony</strong> : cases séparées → tableau d'arguments ; phrase utilisant une grammaire supplémentaire → ligne interprétée par le shell.</p>
+<p><strong>Retour à la réalité technique</strong> : le tableau préserve les frontières des arguments sans interpolation shell des valeurs. Il ne valide pas les options métier du programme appelé : une valeur reste à contrôler selon ce programme.</p>
+<p><strong>🧠 Comment le mémoriser</strong> : « Des cases, pas une phrase à deviner. » Image mentale : trois compartiments fermés. Question-réflexe : ai-je réellement besoin des opérateurs du shell ?</p>
+<p><strong>⚠️ À ne pas confondre</strong> : échappement des arguments et autorisation d'exécuter n'importe quelle commande.</p>
+</div></section><section class="teaching-section" data-section="s-trois-facons-de-lancer"><span class="outcome-anchor" id="out-OUT-4h80hb7ky1wt" tabindex="-1"></span><h2 id="s-trois-facons-de-lancer" tabindex="-1">Trois façons de lancer</h2><aside class="section-digest" id="s-trois-facons-de-lancer-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Le retour immédiat n&#x27;est pas une réussite finale.</li><li>wait() peut attendre la fin.</li></ol></aside><p><strong>Où en est-on ?</strong> Étape 2 sur 4 : la commande est décrite. Reste à choisir
+<strong>quand l'appel rend la main</strong> et <strong>ce qui arrive si le programme échoue</strong>.
+Ce sont deux décisions indépendantes, qu'on confond souvent.</p>
+<p>L'attente et la politique d'erreur sont deux choix séparés. Si un
+convertisseur termine normalement avec le code 7, <code>run()</code> rend 7,
+<code>mustRun()</code> transforme ce résultat en exception, et un lancement par
+<code>start()</code> exige une observation ultérieure :</p>
+<table>
+<thead>
+<tr>
+<th>Appel</th>
+<th>Rend la main</th>
+<th>En cas d'échec</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>run()</code></td>
+<td>à la fin du process</td>
+<td>rend un exit code</td>
+</tr>
+<tr>
+<td><code>mustRun()</code></td>
+<td>à la fin du process</td>
+<td>lève <code>ProcessFailedException</code></td>
+</tr>
+<tr>
+<td><code>start()</code></td>
+<td>après le lancement, sans attendre la fin comme <code>run()</code></td>
+<td>résultat final à vérifier</td>
+</tr>
+</tbody>
+</table>
+<p>Ce tableau compare les <strong>codes de sortie non nuls</strong>. Un lancement peut lui-même
+lever une exception. <code>mustRun()</code> ne lève <code>ProcessFailedException</code> que si le
+programme termine en échec, pas à chaque appel.</p>
+<p>Après <code>start()</code>, <code>isRunning()</code> interroge l'état et <code>wait()</code> <strong>bloque</strong>.
+<code>ExecutableFinder</code> trouve le path d'un exécutable, <code>PhpExecutableFinder</code> celui
+du binaire PHP.</p>
+<pre class="highlight" tabindex="0"><code class="language-text">run()      ──[ lancement ]──[ attente ........ fin ]──▶ rend le code (ex. 7)
+mustRun()  ──[ lancement ]──[ attente ........ fin ]──▶ code ≠ 0 ? exception
+start()    ──[ lancement ]──▶ rend la main tout de suite
+                              (isRunning(), checkTimeout(), wait() ensuite)</code></pre>
+<p><code>start()</code> effectue lui-même des opérations et un contrôle initial :
+« non bloquant jusqu'à la fin » ne signifie pas « temps de lancement nul ».
+Pour du travail durable, ce n'est pas un substitut à une file Messenger
+configurée et à un worker supervisé. Le code de sortie de l'enfant doit
+ensuite être traduit selon le contrat de la commande d'import parente.</p>
+<div class="admonition info">
+<p class="admonition-title">🌍 In Real Life</p>
+<p><strong>La situation</strong> : au bureau du blog, on peut attendre le convertisseur, exiger un résultat réussi ou le lancer puis surveiller son avancement.</p>
+<p><strong>L’équivalent dans Symfony</strong> : attendre le code → <code>run()</code> ; attendre et lever sur échec → <code>mustRun()</code> ; lancer sans attendre la fin → <code>start()</code>.</p>
+<p><strong>Retour à la réalité technique</strong> : rendre la main tôt n'apporte aucune preuve de réussite finale. Le parent doit encore observer la fin et le code ; le sous-processus n'est pas pour autant une tâche durable supervisée.</p>
+<p><strong>🧠 Comment le mémoriser</strong> : « Parti n'est pas fini. » Image mentale : un bon de lancement sans bon de livraison. Question-réflexe : où sera contrôlé le résultat final ?</p>
+<p><strong>⚠️ À ne pas confondre</strong> : attente et politique de transformation d'un échec en exception.</p>
+</div></section><section class="teaching-section" data-section="s-recuperer-l-output"><span class="outcome-anchor" id="out-OUT-z054mp760r1h" tabindex="-1"></span><h2 id="s-recuperer-l-output" tabindex="-1">Récupérer l&#x27;output</h2><aside class="section-digest" id="s-recuperer-l-output-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Le flux peut être suivi par morceaux.</li><li>Le buffer complet reste une autre vue.</li></ol></aside><p><strong>Où en est-on ?</strong> Étape 3 sur 4 : le programme tourne ou a fini. Que
+peut-on lire, et dans quelles conditions ? C'est aussi ici que se cache le
+piège de <code>disableOutput()</code>.</p>
+<p><code>getOutput()</code> et <code>getErrorOutput()</code> lisent les buffers stdout et stderr.
+<code>getIncrementalOutput()</code> lit stdout depuis la dernière lecture incrémentale ;
+un <code>getOutput()</code> ordinaire ne déplace pas ce curseur. Lire par morceaux
+ne signifie pas que les données déjà capturées sont automatiquement libérées.</p>
+<table>
+<thead>
+<tr>
+<th>Méthode</th>
+<th>Ce qu'elle lit</th>
+<th>Curseur incrémental</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>getOutput()</code></td>
+<td>tout stdout capturé</td>
+<td><strong>ne le déplace pas</strong></td>
+</tr>
+<tr>
+<td><code>getErrorOutput()</code></td>
+<td>tout stderr capturé</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>getIncrementalOutput()</code></td>
+<td>stdout depuis la dernière lecture incrémentale</td>
+<td>le déplace</td>
+</tr>
+</tbody>
+</table>
+<p>Une ligne stderr peut être un diagnostic d'un enfant qui réussit ; stdout
+peut contenir des données partielles avant un échec. Inspecter le code final
+et le contenu attendu, pas seulement la présence de texte.</p>
+<p><code>disableOutput()</code> évite la collecte mais interdit les lectures capturées
+et l'activation d'un idle timeout : la combinaison lève <code>LogicException</code>,
+quel que soit l'ordre de préparation. <code>setIdleTimeout(null)</code> retire ce délai
+et reste distinct de son activation. Changer la collecte avec
+<code>disableOutput()</code> ou <code>enableOutput()</code> pendant l'exécution lève
+<code>RuntimeException</code>. Le statut final et le délai total restent utilisables.</p>
+<pre class="highlight" tabindex="0"><code class="language-text">disableOutput()   avant lancement   →  pas de collecte
+                  + getOutput()      →  LogicException
+                  + setIdleTimeout() →  LogicException (idle = surveille la sortie)
+                  pendant exécution  →  RuntimeException
+setIdleTimeout(null)                 →  retire le délai : ce n'est PAS l'activer</code></pre>
+<p>Pourquoi un idle timeout est-il incompatible avec <code>disableOutput()</code> ? Parce
+qu'il mesure « le temps depuis la dernière <strong>sortie</strong> » : sans collecte de la
+sortie, il n'y a rien à mesurer.</p>
+<div class="admonition info">
+<p class="admonition-title">🌍 In Real Life</p>
+<p><strong>La situation</strong> : le convertisseur laisse un journal de bord et un registre d'incidents. Lire un registre non vide ne dit pas que la conversion a échoué.</p>
+<p><strong>L'équivalent dans Symfony</strong> : journal normal → stdout ; registre d'incidents → stderr ; marque de lecture → curseur de <code>getIncrementalOutput()</code>.</p>
+<p><strong>Retour à la réalité technique</strong> : un contenu stderr n'est pas une preuve d'échec et un stdout non vide n'est pas une preuve de réussite ; le code final et le contenu attendu décident.</p>
+<p><strong>🧠 Comment le mémoriser</strong> : « Deux flux, un code, un contrôle. » Image mentale : deux carnets et un tampon final. Question-réflexe : ai-je lu le code de sortie avant de croire le texte ?</p>
+<p><strong>⚠️ À ne pas confondre</strong> : <code>getOutput()</code> (tout stdout) et <code>getIncrementalOutput()</code> (depuis la dernière lecture incrémentale).</p>
+</div></section><section class="teaching-section" data-section="s-les-deux-delais"><span class="outcome-anchor" id="out-OUT-hsn9hab7spvy" tabindex="-1"></span><span class="outcome-anchor" id="out-OUT-ew0th9575tfe" tabindex="-1"></span><h2 id="s-les-deux-delais" tabindex="-1">Les deux délais</h2><aside class="section-digest" id="s-les-deux-delais-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Deux horloges surveillent le process.</li><li>La première limite atteinte peut l&#x27;interrompre.</li></ol></aside><p><strong>Où en est-on ?</strong> Étape 4 sur 4 : on sait lancer et lire. Reste à
+<strong>interrompre</strong> un enfant trop long ou muet : deux délais, puis <code>stop()</code>.</p>
+<p>Le convertisseur peut rester vivant sans produire de résultat. Un calcul
+silencieux peut pourtant progresser : le délai d'inactivité mesure une
+absence de sortie observée, pas une absence de travail métier.</p>
+<ul>
+<li><code>setTimeout()</code> borne la <strong>durée totale</strong> : <strong>60 secondes</strong> par défaut.</li>
+<li><code>setIdleTimeout()</code> borne le temps <strong>depuis la dernière sortie</strong>.</li>
+<li>Lors d'un contrôle, un dépassement détecté arrête le process et lève
+  <code>ProcessTimedOutException</code>.</li>
+</ul>
+<pre class="highlight" tabindex="0"><code class="language-text"> départ           sortie        sortie                        temps
+   │────────────────●─────────────●─────────────────────────▶
+   │◀──── idle ─────▶│◀── idle ───▶│◀────── idle (silence) ──▶ ✗ idle dépassé
+   │◀───────────────────── timeout total (60 s par défaut) ──────────▶ ✗ total</code></pre>
+<p><code>checkTimeout()</code> teste d'abord le délai total, puis l'inactivité. Si les
+deux sont déjà dépassés au moment où le parent reprend le contrôle, c'est
+le dépassement total qui est signalé, pas nécessairement celui dont
+l'échéance était chronologiquement la plus proche.</p>
+<p>Avec un interpréteur PHP 8.4 CLI pour le parent et Process 8.0 chargé,
+cet enfant minimal permet d'observer une réussite sans outil de conversion :</p>
+<pre class="highlight" tabindex="0"><code class="language-php">&lt;?php
+use Symfony\Component\Process\Process;
+
+$process = new Process([PHP_BINARY, '-r', 'fwrite(STDOUT, "ready\n");']);
+$process-&gt;setTimeout(5);
+$process-&gt;setIdleTimeout(2);
+$process-&gt;mustRun();
+echo $process-&gt;getOutput();</code></pre>
+<p>Sortie attendue : <code>ready</code> suivi d'un saut de ligne. L'enfant termine
+normalement à 0 ; cela ne dit rien de la réussite d'un import qui n'est
+pas exécuté ici. Les délais doivent convenir au vrai programme, notamment
+à ses phases silencieuses.</p>
+<h3 tabindex="-1" id="s-les-deux-delais-nested-qui-verifie-les-delais">Qui vérifie les délais ?</h3>
+<p>Après un lancement asynchrone, le parent doit continuer les contrôles.
+Dans le scénario suivant, l'enfant Unix est encore en cours à 1,5 s :</p>
+<table>
+<thead>
+<tr>
+<th>À 1,5 s, <code>sleep 3</code> limité à 1 s</th>
+<th>Résultat</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>isRunning()</code>, <code>getOutput()</code></td>
+<td>rien n'est levé</td>
+</tr>
+<tr>
+<td><code>checkTimeout()</code></td>
+<td><code>ProcessTimedOutException</code></td>
+</tr>
+<tr>
+<td><code>wait()</code></td>
+<td><code>ProcessTimedOutException</code> : il vérifie le délai en attendant</td>
+</tr>
+</tbody>
+</table>
+<p>Pourquoi <code>getOutput()</code> ne lève-t-il rien alors que le délai est dépassé ?
+Parce qu'aucun gardien indépendant ne tourne : seules les méthodes qui
+<strong>vérifient explicitement</strong> (<code>checkTimeout()</code>, <code>wait()</code>) comparent l'horloge
+aux délais.</p>
+<h3 tabindex="-1" id="s-les-deux-delais-nested-arreter-stop">Arrêter : <code>stop()</code></h3>
+<p><code>stop()</code> envoie d'abord <code>SIGTERM</code>, puis, si le process tourne encore à
+l'échéance (10 s par défaut), le signal passé — <code>SIGKILL</code> par défaut.</p>
+<pre class="highlight" tabindex="0"><code class="language-text">stop(2)  ── SIGTERM ──▶ l'enfant réagit ?  oui → arrêt immédiat (pas d'attente)
+                                           non → attente jusqu'à 2 s
+                                                 ── SIGKILL ──▶ arrêt forcé</code></pre>
+<p>Si l'enfant réagit à <code>SIGTERM</code>, il n'est pas nécessaire d'attendre toute
+la période ni d'envoyer le second signal. Cet arrêt n'annule pas les fichiers
+déjà produits ; prévoir leur publication et leur nettoyage avec Filesystem.
+Les signaux restent dépendants de la plateforme.</p>
+<div class="admonition info">
+<p class="admonition-title">🌍 In Real Life</p>
+<p><strong>La situation</strong> : l'équipe du blog borne la durée de conversion et le silence entre deux nouvelles du convertisseur. Un opérateur vérifie les deux montres.</p>
+<p><strong>L’équivalent dans Symfony</strong> : durée depuis le départ → timeout total ; temps depuis la dernière sortie → idle timeout ; contrôle de l'opérateur → vérification par le parent.</p>
+<p><strong>Retour à la réalité technique</strong> : le silence ne prouve pas l'absence de calcul. Après <code>start()</code>, une surveillance adaptée reste nécessaire ; la configuration d'un délai n'est pas un gardien indépendant du processus parent.</p>
+<p><strong>🧠 Comment le mémoriser</strong> : « Deux montres, un contrôle. » Image mentale : départ et dernière nouvelle sur deux cadrans. Question-réflexe : mesure-t-on le temps total ou le silence observé ?</p>
+<p><strong>⚠️ À ne pas confondre</strong> : sortie produite et progrès métier réel.</p>
+</div></section><section class="teaching-section" data-section="s-pieges-d-examen"><h2 id="s-pieges-d-examen" tabindex="-1">Pièges d&#x27;examen</h2><p class="teaching-label pitfall"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="warning" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3L23 21H1L12 3ZM12 9V14M12 17V18"></path></svg> <strong>Piège à éviter</strong></p><aside class="section-digest" id="s-pieges-d-examen-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Un process async n&#x27;est pas surveillé par magie.</li><li>isRunning() seul ne remplace pas ce contrôle.</li></ol></aside><ul class="pitfall-list"><li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : L&#x27;array d&#x27;arguments est la forme recommandée</summary><p><strong>L'array d'arguments est la forme recommandée</strong> ; la string transfère
+l'escaping et la portabilité à l'appelant.</p></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : Le délai par défaut est de 60 secondes</summary><p><strong>Le délai par défaut est de 60 secondes</strong>, et sur un process asynchrone il
+faut appeler <code>checkTimeout()</code> soi-même.</p></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : disableOutput() interdit l&#x27;activation d&#x27;un idle timeout.</summary><p><strong><code>disableOutput()</code> interdit l'activation d'un idle timeout.</strong>
+Retirer ce délai par <code>setIdleTimeout(null)</code> n'est pas l'activer.</p></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : Pour retirer une variable d&#x27;environment héritée, il faut la mettre à false</summary><p><strong>Pour retirer une variable d'environment héritée, il faut la mettre à
+<code>false</code></strong> — passer d'autres variables ne la retire pas.</p></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : stop() commence par SIGTERM</summary><p><strong><code>stop()</code> commence par <code>SIGTERM</code></strong> ; <code>SIGKILL</code> n'arrive qu'à l'échéance.</p></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : wait() vérifie le délai</summary><p><strong><code>wait()</code> vérifie le délai</strong>, mais <code>isRunning()</code> et <code>getOutput()</code> non.</p></details></li></ul>
+<h3 tabindex="-1" id="s-pieges-d-examen-nested-a-ne-pas-confondre">⚠️ À ne pas confondre</h3>
+<table>
+<thead>
+<tr>
+<th>Confusion</th>
+<th>Plausible car…</th>
+<th>Réalité</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>mustRun()</code> lève toujours</td>
+<td>le nom dit « must »</td>
+<td>il lève <code>ProcessFailedException</code> <strong>seulement si</strong> le programme termine en échec</td>
+</tr>
+<tr>
+<td><code>start()</code> suffit pour un travail de fond</td>
+<td>il rend la main vite</td>
+<td>pas de daemon supervisé, pas de survie garantie au parent : Messenger + worker</td>
+</tr>
+<tr>
+<td>Le timeout est surveillé tout seul</td>
+<td>on règle <code>setTimeout()</code></td>
+<td>le parent doit appeler <code>checkTimeout()</code> ou <code>wait()</code></td>
+</tr>
+<tr>
+<td><code>setIdleTimeout(null)</code> active l'idle</td>
+<td>on passe une valeur au setter</td>
+<td><code>null</code> <strong>retire</strong> le délai ; combiné à <code>disableOutput()</code>, c'est l'activation qui lève</td>
+</tr>
+<tr>
+<td>Passer <code>['OTHER' =&gt; 'x']</code> isole l'enfant</td>
+<td>on croit à une liste exhaustive</td>
+<td>l'environnement hérité reste ; seul <code>false</code> retire une variable</td>
+</tr>
+<tr>
+<td><code>stop()</code> tue tout de suite</td>
+<td>le mot « stop »</td>
+<td><code>SIGTERM</code> d'abord, <code>SIGKILL</code> à l'échéance (10 s par défaut)</td>
+</tr>
+<tr>
+<td>Le tableau d'arguments valide les options</td>
+<td>il « protège »</td>
+<td>il protège les frontières d'arguments, pas le choix du binaire ni ses options</td>
+</tr>
+</tbody>
+</table>
+<h3 tabindex="-1" id="s-pieges-d-examen-nested-a-retenir-pour-la-certification">🧠 À retenir pour la certification</h3>
+<ul class="pitfall-list"><li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : Array</summary><ul>
+<li><strong>Array</strong> recommandé ; string via <code>fromShellCommandline()</code> = shell, escaping à vous, <code>"${:NOM}"</code>.</li>
+<li><code>run()</code> attend et rend le code ; <code>mustRun()</code> lève sur échec ; <code>start()</code> rend la main.</li>
+<li>Délai total <strong>60 s</strong> par défaut ; idle = depuis la dernière sortie.</li>
+<li>Asynchrone : appeler <code>checkTimeout()</code> ; <code>wait()</code> vérifie aussi, <code>isRunning()</code> et <code>getOutput()</code> non.</li>
+<li><code>disableOutput()</code> interdit les lectures et l'activation d'un idle timeout (<code>LogicException</code>) ; le changer en cours d'exécution lève <code>RuntimeException</code>.</li>
+<li>Variable héritée retirée seulement par <code>false</code>.</li>
+<li><code>stop()</code> : <code>SIGTERM</code>, puis <code>SIGKILL</code> à l'échéance.</li>
+</ul></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : Phrase de mémorisation :</summary><p><strong>Phrase de mémorisation :</strong> « Je décris en cases, je lance, et c'est moi le
+parent qui contrôle les deux montres avant de couper par SIGTERM puis
+SIGKILL. »</p></details></li></ul></section><section class="teaching-section" data-section="s-fiche-express"><h2 id="s-fiche-express" tabindex="-1">Fiche express</h2><p class="teaching-label essential"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="book" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5C9 3 5 3 2 4V20C5 19 9 19 12 21C15 19 19 19 22 20V4C19 3 15 3 12 5V21M5 8H8M5 12H8M16 8H19M16 12H19"></path></svg> <strong>À mémoriser</strong></p><aside class="section-digest" id="s-fiche-express-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Sans output observé le délai idle n&#x27;a pas de mesure.</li><li>Le component refuse cette combinaison.</li></ol></aside><p>Le lot sélectionné peut maintenant traverser un programme externe sous
+surveillance. La preuve attendue reste précise : lancement, fin, code
+et sortie validée sont quatre observations, pas un seul « succès ».</p>
+<p><strong>Si tu dois retenir seulement 7 choses :</strong></p>
+<ul>
+<li><strong>Array</strong> recommandé ; string = shell, escaping à votre charge, <code>"${:NOM}"</code>.</li>
+<li><code>run()</code> attend et rend le code ; <strong><code>mustRun()</code></strong> lève ; <strong><code>start()</code></strong> rend la
+  main.</li>
+<li>Délai total <strong>60 s</strong> par défaut ; idle = depuis la dernière sortie.</li>
+<li>Asynchrone : <strong><code>checkTimeout()</code></strong> à appeler ; <code>wait()</code> vérifie aussi.</li>
+<li><code>disableOutput()</code> interdit <code>getOutput()</code> et <strong>l'activation d'un idle timeout</strong>.</li>
+<li>Variable héritée retirée seulement par <strong><code>false</code></strong>.</li>
+<li><code>stop()</code> : <strong><code>SIGTERM</code></strong>, puis <code>SIGKILL</code> à l'échéance.</li>
+</ul>
+<p>Moyen mnémotechnique : <strong>« Lancer, attendre, couper »</strong>.</p>
+<p>Revenir à <a href="course-CRS-h9nryezt8wnb.html">Filesystem</a> pour publier seulement
+les résultats complets. Si la conversion doit être différée hors de la
+requête, comparer les <a href="course-CRS-se1jr6cxh2n7.html">transports Messenger</a>
+plutôt que supposer qu'un enfant survivra seul au parent HTTP.</p></section><section class="official-sources"><h2 id="reader-sources" tabindex="-1">Sources officielles et compléments</h2><ul><li><a href="https://symfony.com/doc/8.0/components/process.html">Symfony 8.0 — Process</a></li></ul></section><section id="course-recalls" aria-labelledby="course-recalls-title" tabindex="-1"><h2 id="course-recalls-title">Rappels et liens avec les autres cours</h2><div data-recall-group="other"><h3>Rappels des cours précédents / autres modules</h3><ul><li data-recall-course="CRS-h304h6ht87kc" data-recall-kind="previous_course"><p class="recall-provenance">Module 22 — Mailer et Mime · Cours « Mailer »</p><p>Le retour du Mailer ne prouve ni envoi ni acceptation ; une acceptation effective n&#x27;est pas la remise finale. La suite échappe au contrat immédiat.</p><p><a href="#cards-previous">Rappel : <span lang="en">Does successful Mailer sending prove delivery to the recipient&#x27;s inbox?</span></a></p></li></ul></div></section><nav class="course-sequence" aria-label="Ordre de lecture"><a rel="prev" href="course-CRS-82d40ncj59k9.html" aria-label="Précédent : Mime — Module 22 — Mailer et Mime">Précédent : Mime</a> <a href="lot-23.html">Sommaire : Module 23 — Process</a> <a rel="next" href="course-CRS-5vz7w1ny9shd.html" aria-label="Suivant : PropertyAccess — Module 24 — PropertyAccess">Suivant : PropertyAccess</a></nav><p class="course-practice-entry"><a class="button" href="#view-quiz">Fin du cours — s’entraîner avec le Quiz</a></p></div><div id="view-flashcards" data-course-panel role="region" aria-labelledby="view-flashcards-title"><h2 id="view-flashcards-title">Flashcards</h2><p lang="en">Answer before revealing each card.</p><p>Ces cartes ne mesurent pas une maîtrise notée.</p><div id="cards-s-l-essentiel-1" data-card-section="s-l-essentiel"><h3><a href="#s-l-essentiel">Revoir : L&#x27;essentiel</a></h3><div class="reader-cards"><details class="reader-card" id="B-am0qe9xa8vzk-01"><summary lang="en">Why is an argument array the recommended Process command form?</summary><p lang="en">It keeps argument boundaries explicit and avoids shell interpretation of argument values.</p><p lang="fr">Les arguments restent littéraux. Le shell n&#x27;est pas nécessaire pour un exécutable simple.</p><a href="course-CRS-am0qe9xa8vzk.html#out-OUT-vr32ta087n2a">Revoir le passage précis</a></details></div></div><div id="cards-s-le-schema-2" data-card-section="s-le-schema"><h3><a href="#s-le-schema">Revoir : Le schéma</a></h3><div class="reader-cards"><details class="reader-card" id="B-am0qe9xa8vzk-02"><summary lang="en">How do run(), mustRun() and start() differ?</summary><p lang="en">run() waits and returns a code; mustRun() waits and throws on failure; start() returns immediately.</p><p lang="fr">Le mode d&#x27;attente et la gestion d&#x27;erreur sont distincts. Un démarrage async exige un suivi.</p><a href="course-CRS-am0qe9xa8vzk.html#out-OUT-4h80hb7ky1wt">Revoir le passage précis</a></details></div></div><div id="cards-s-l-exemple-lister-un-dossier-3" data-card-section="s-l-exemple-lister-un-dossier"><h3><a href="#s-l-exemple-lister-un-dossier">Revoir : L&#x27;exemple : lister un dossier</a></h3><div class="reader-cards"><details class="reader-card" id="B-am0qe9xa8vzk-03"><summary lang="en">Would a semicolon inside an argument array value automatically start a second shell command?</summary><p lang="en">No. It is passed as part of the argument.</p><p lang="fr">La valeur n&#x27;est pas interprétée par un shell. La forme array protège les frontières d&#x27;arguments.</p><a href="course-CRS-am0qe9xa8vzk.html#out-OUT-vr32ta087n2a">Revoir le passage précis</a></details></div></div><div id="cards-s-array-ou-string-4" data-card-section="s-array-ou-string"><h3><a href="#s-array-ou-string">Revoir : Array ou string</a></h3><div class="reader-cards"><details class="reader-card" id="B-am0qe9xa8vzk-04"><summary lang="en">When should Process::fromShellCommandline() be used instead of an array?</summary><p lang="en">When shell features are required, with careful handling of dynamic values.</p><p lang="fr">Le shell apporte pipes et redirections. Il ajoute une responsabilité d&#x27;échappement.</p><a href="course-CRS-am0qe9xa8vzk.html#out-OUT-vr32ta087n2a">Revoir le passage précis</a></details></div></div><div id="cards-s-trois-facons-de-lancer-5" data-card-section="s-trois-facons-de-lancer"><h3><a href="#s-trois-facons-de-lancer">Revoir : Trois façons de lancer</a></h3><div class="reader-cards"><details class="reader-card" id="B-am0qe9xa8vzk-05"><summary lang="en">Does start() guarantee the subprocess completed successfully?</summary><p lang="en">No. It only starts asynchronously; later status and exit results must be checked.</p><p lang="fr">Le retour immédiat n&#x27;est pas une réussite finale. wait() peut attendre la fin.</p><a href="course-CRS-am0qe9xa8vzk.html#out-OUT-4h80hb7ky1wt">Revoir le passage précis</a></details></div></div><div id="cards-s-recuperer-l-output-6" data-card-section="s-recuperer-l-output"><h3><a href="#s-recuperer-l-output">Revoir : Récupérer l&#x27;output</a></h3><div class="reader-cards"><details class="reader-card" id="B-am0qe9xa8vzk-06"><summary lang="en">How does getIncrementalOutput() differ from getOutput()?</summary><p lang="en">It returns output since the previous incremental read rather than the full buffer.</p><p lang="fr">Le flux peut être suivi par morceaux. Le buffer complet reste une autre vue.</p><a href="course-CRS-am0qe9xa8vzk.html#out-OUT-z054mp760r1h">Revoir le passage précis</a></details></div></div><div id="cards-s-les-deux-delais-7" data-card-section="s-les-deux-delais"><h3><a href="#s-les-deux-delais">Revoir : Les deux délais</a></h3><div class="reader-cards"><details class="reader-card" id="B-am0qe9xa8vzk-07"><summary lang="en">How do total timeout and idle timeout differ?</summary><p lang="en">Total timeout measures runtime; idle timeout measures time since output was produced.</p><p lang="fr">Deux horloges surveillent le process. La première limite atteinte peut l&#x27;interrompre.</p><a href="course-CRS-am0qe9xa8vzk.html#out-OUT-hsn9hab7spvy">Revoir le passage précis</a></details></div></div><div id="cards-s-pieges-d-examen-8" data-card-section="s-pieges-d-examen"><h3><a href="#s-pieges-d-examen">Revoir : Pièges d&#x27;examen</a></h3><div class="reader-cards"><details class="reader-card" id="B-am0qe9xa8vzk-08"><summary lang="en">Who enforces timeout checks after an asynchronous start when the caller does not wait()?</summary><p lang="en">The caller must invoke checkTimeout() during its monitoring loop.</p><p lang="fr">Un process async n&#x27;est pas surveillé par magie. isRunning() seul ne remplace pas ce contrôle.</p><a href="course-CRS-am0qe9xa8vzk.html#out-OUT-hsn9hab7spvy">Revoir le passage précis</a></details></div></div><div id="cards-s-fiche-express-9" data-card-section="s-fiche-express"><h3><a href="#s-fiche-express">Revoir : Fiche express</a></h3><div class="reader-cards"><details class="reader-card" id="B-am0qe9xa8vzk-09"><summary lang="en">Can idle timeout be used after output capture is disabled?</summary><p lang="en">No. Idle detection requires output tracking.</p><p lang="fr">Sans output observé le délai idle n&#x27;a pas de mesure. Le component refuse cette combinaison.</p><a href="course-CRS-am0qe9xa8vzk.html#out-OUT-ew0th9575tfe">Revoir le passage précis</a></details></div></div><div id="cards-previous"><p class="recall-provenance">Module 22 — Mailer et Mime · Cours « Mailer »</p><aside class="checkpoint"><h2>Rappel d’un cours antérieur</h2><p>Avant de poursuivre : Mailer.</p><details class="corpus-correction"><summary lang="en">Does successful Mailer sending prove delivery to the recipient&#x27;s inbox?</summary><p lang="en">No. A normal Mailer return may follow queueing or rejection without sending; even transport acceptance does not prove inbox delivery.</p><p>Le retour du Mailer ne prouve ni envoi ni acceptation ; une acceptation effective n&#x27;est pas la remise finale. La suite échappe au contrat immédiat.</p><a href="course-CRS-h304h6ht87kc.html#out-OUT-7fptsggm3eqe">Relire la correction dans le cours antérieur</a></details></aside></div></div><div id="view-quiz" data-course-panel role="region" aria-labelledby="view-quiz-title"><aside class="revision-context"><p><strong>Avant le quiz :</strong> Finder a sélectionné les fichiers d&#x27;import. Si leur conversion exige un programme externe, l&#x27;application doit lui transmettre des arguments, attendre ou surveiller son exécution, puis interpréter son résultat. Process gère cette frontière avec un processus enfant ; il ne remplace pas le service qui décide si les données obtenues sont utilisables.</p><p>Quelle donnée entre, quelle responsabilité agit et quelle condition change le résultat ? Pour chaque correction, vérifiez ces conditions dans <a href="course-CRS-am0qe9xa8vzk.html#s-objectif">le passage enseigné</a>, sans supposer que toutes les branches du blog sont exécutées.</p></aside><h2 id="view-quiz-title">Quiz</h2><p class="quiz-size" lang="en">6 eligible learning questions · 6 per session. Repeating a question does not demonstrate mastery.</p><p id="course-quiz-status" role="status">Quiz interactif non chargé. Démarrez après chargement de la banque locale.</p><div id="course-quiz-controls" class="assessment-main" hidden><div id="course-quiz-assessment-controls" hidden><select id="course-quiz-assessment-mode" aria-label="Mode du quiz" hidden><option value="learning">Entraînement</option></select><p id="course-quiz-training-scope"></p><button id="course-quiz-start-assessment" type="button" lang="en">Start practice</button><button id="course-quiz-finish-assessment" type="button" lang="en" hidden>End session</button></div><p id="course-quiz-assessment-error" role="alert"></p><p id="course-quiz-assessment-timer" hidden></p><p id="course-quiz-session-progress" class="quiz-progress" role="status" lang="en"></p><div id="course-quiz-assessment-app" tabindex="-1"></div><nav id="course-quiz-session-navigation" aria-label="Questions du cours"></nav><div id="course-quiz-learning-overview" aria-live="polite"></div></div><div id="course-quiz-native"><p>Sans JavaScript ou si le chargement échoue : aucune tentative notée. Les <a href="#view-flashcards">flashcards du cours</a> restent disponibles.</p><details class="course-quiz-fallback" data-question-id="L-am0qe9xa8vzk-base-v1"><summary lang="en">Why is an argument array the recommended Process command form?</summary><p>Correction de consultation — non notée.</p><p>Les arguments restent littéraux. Le shell n&#x27;est pas nécessaire pour un exécutable simple.</p><ul><li><strong lang="en">Distractor: It expands every argument through the shell automatically.</strong><p>L&#x27;array conserve les arguments littéraux et évite ce passage au shell.</p></li><li><strong lang="en">Distractor: It combines all arguments into one unescaped shell string.</strong><p>C&#x27;est précisément cette concaténation que la forme array évite.</p></li><li><strong lang="en">Correct: It preserves argument boundaries without shell interpretation.</strong><p>Les arguments restent littéraux. Le shell n&#x27;est pas nécessaire pour un exécutable simple.</p></li></ul><a href="course-CRS-am0qe9xa8vzk.html#out-OUT-vr32ta087n2a">Relire le passage exact</a></details></div></div></div></div><details class="transfer-panel"><summary>Sauvegarde et transfert de progression</summary><p id="reading-status" role="status">Sans JavaScript : lecture libre ; progression non enregistrée.</p><p><a href="assessment.html#overview-title">Lecture, réussites immédiates et différées</a></p><p>Transfert manuel — aucune synchronisation automatique</p><p id="persistence-status" role="status"></p><button type="button" class="secondary" id="export-progress">Exporter ma progression</button><label for="import-progress">Choisir un JSON pour fusionner ma progression (sans remplacement)</label><input type="file" id="import-progress" accept="application/json,.json"><p id="transfer-status" role="status"></p></details></main><footer class="site-footer"><a href="catalogue.html">Catalogue</a> <a href="sources.html">Sources et attribution</a> <a href="#contenu">Haut de page</a></footer></body></html>

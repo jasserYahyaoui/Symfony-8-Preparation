@@ -1,0 +1,287 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; connect-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Roles — Symfony 8 Preparation</title><link rel="stylesheet" href="styles.css"><link rel="stylesheet" href="reader.css"><script src="mermaid.min.js" defer></script><script src="mermaid-init.js" defer></script><link rel="stylesheet" href="assessment.css"><script src="fixed-exams-data.js" defer></script><script src="fixed-exams.js" defer></script><script src="learning-state.js" defer></script><script src="guide.js" defer></script><script src="reader-catalog.js" defer></script><script src="reader.js" defer></script><script src="site-state.js" defer></script><script src="assessment.js" defer></script><script src="course-views.js" defer></script><link rel="stylesheet" href="syntax-highlight.css"><script src="prism-syntax.js" defer></script><script src="syntax-highlight.js" defer></script></head><body data-course-id="CRS-2s6e4qgkcqza"><a class="skip" href="#contenu">Aller au contenu</a><header class="site-header"><a class="brand" href="index.html">S8 Preparation</a><nav aria-label="Navigation principale"><a href="index.html">Accueil</a> <a href="catalogue.html">Parcours</a> <a href="assessment.html?mode=review">Réviser</a> <a href="examens.html">Examens blancs</a> <a href="jour-j.html">Jour J</a></nav></header><main id="contenu" tabindex="-1" class="corpus-reader"><nav class="breadcrumb" aria-label="Fil d’Ariane"><a href="index.html">Accueil</a> <span aria-hidden="true">›</span> <a href="catalogue.html">Parcours</a> <span aria-hidden="true">›</span> <a href="lot-10.html">Module 10 — Sécurité</a> <span aria-hidden="true">›</span> <span aria-current="page">Roles</span></nav><h1>Roles</h1><p class="muted">Symfony 8.0 · API PHP ≤ 8.4 · Twig ≤ 3.22. Préparation indépendante.</p><p class="revision-status">Rédaction narrative P11 : projection nouvelle, non couverte par les décisions historiques P10. Aucune approbation officielle ni garantie de réussite.</p><aside class="narrative-context" aria-label="Repères de lecture"><p><strong>Prérequis de lecture :</strong> <a href="course-CRS-rdzx4ka72saj.html">Authentication</a> · <a href="course-CRS-8hwpzyk1hrq9.html">Authorization</a></p><p><strong>Concepts voisins :</strong> <a href="course-CRS-y3g0v9nmne3t.html">Voters and voting strategies</a> — Distinguer identité et décision sur l’article. <a href="lot-10.html">Comparer les responsabilités dans ce module</a> · <a href="carte-composants.html">Situer cette responsabilité dans le blog</a> · <a href="glossaire.html">Distinguer les termes voisins</a></p><p><a href="ordre-lecture.html">Retrouver les 163 cours dans le parcours recommandé</a>. Ce repère ne modifie ni votre historique ni votre progression.</p></aside><div class="course-layout"><details class="lot-course-menu"><summary>Cours du module · 12 cours</summary><nav aria-label="Cours du module"><a class="lot-context" href="lot-10.html">Module 10 — Sécurité</a><ol><li><a href="course-CRS-awb7sd999c5j.html">Security Core, CSRF and PasswordHasher components</a></li><li><a href="course-CRS-rdzx4ka72saj.html">Authentication</a></li><li><a href="course-CRS-8hwpzyk1hrq9.html">Authorization</a></li><li><a href="course-CRS-yvhg325ax38y.html">Configuration</a></li><li><a href="course-CRS-enbbsykx22xe.html">Providers</a></li><li><a href="course-CRS-x5frtpg07mmd.html">Firewalls</a></li><li><a href="course-CRS-n9ngfssrq1bt.html">Users</a></li><li><a href="course-CRS-g4sth72ww979.html">Password hashers</a></li><li><a href="course-CRS-2s6e4qgkcqza.html" aria-current="page">Roles</a></li><li><a href="course-CRS-2ec5yksjfm9s.html">Access Control Rules</a></li><li><a href="course-CRS-6gc45etcssfb.html">Authenticators, Passports and Badges</a></li><li><a href="course-CRS-y3g0v9nmne3t.html">Voters and voting strategies</a></li></ol><a href="lot-10.html#view-quiz">Quiz du module</a></nav></details><aside class="course-section-menu" aria-label="Sommaire du cours"><nav class="course-actions" aria-label="Activités du cours"><a id="tab-course" href="#view-course">Cours</a><a id="tab-flashcards" href="#view-flashcards">Flashcards</a><a id="tab-quiz" href="#view-quiz">Quiz</a></nav><details class="course-section-disclosure"><summary id="course-sections">Sections du cours</summary><nav aria-label="Sections du cours"><ul><li><a href="#s-objectif">Objectif</a></li><li><a href="#s-l-essentiel">L&#x27;essentiel</a></li><li><a href="#s-le-schema">Le schéma</a></li><li><a href="#s-l-exemple">L&#x27;exemple</a></li><li><a href="#s-la-regle">La règle</a></li><li><a href="#s-la-hierarchie">La hiérarchie</a></li><li><a href="#s-les-attributes-qui-ne-sont-pas-des-roles">Les attributes qui ne sont pas des roles</a></li><li><a href="#s-pieges-d-examen">Pièges d&#x27;examen</a></li><li><a href="#s-fiche-express">Fiche express</a></li><li><a href="#reader-objectives">Objectifs d’apprentissage</a></li><li><a href="#reader-sources">Sources officielles et compléments</a></li><li><a href="#course-recalls">Rappels et liens avec les autres cours</a></li></ul></nav><nav aria-label="Flashcards par section"><a href="#view-flashcards">Flashcards par section</a><ul><li><a href="#cards-s-l-essentiel-1">L&#x27;essentiel</a></li><li><a href="#cards-s-le-schema-2">Le schéma</a></li><li><a href="#cards-s-l-exemple-3">L&#x27;exemple</a></li><li><a href="#cards-s-la-regle-4">La règle</a></li><li><a href="#cards-s-la-hierarchie-5">La hiérarchie</a></li><li><a href="#cards-s-les-attributes-qui-ne-sont-pas-des-roles-6">Les attributes qui ne sont pas des roles</a></li><li><a href="#cards-s-pieges-d-examen-7">Pièges d&#x27;examen</a></li><li><a href="#cards-s-fiche-express-8">Fiche express</a></li><li><a href="#cards-previous">Module 10 — Sécurité · Cours « Configuration » · Rappel : <span lang="en">Which security configuration lists use first-match ordering?</span></a></li></ul></nav><nav aria-label="Retour au module"><a href="lot-10.html">Tous les cours du module</a></nav></details><p class="local-quiz-count">3 questions disponibles · 3 par session Quiz</p></aside><div class="course-content"><div id="view-course" data-course-panel role="region" aria-labelledby="view-course-title"><h2 id="view-course-title">Cours</h2><p class="course-introduction"><a href="#s-objectif">Introduction</a> · <a href="#course-sections">Sections du cours</a></p><h2 id="reader-objectives" tabindex="-1">Objectifs d’apprentissage</h2><ul><li><a href="course-CRS-2s6e4qgkcqza.html#out-OUT-nb8grypjavr8">Énoncer la constraint de nommage d&#x27;un role</a></li><li><a href="course-CRS-2s6e4qgkcqza.html#out-OUT-se3aqxhdbf9t">Reconnaître les valeurs de la hiérarchie des roles comme statiques</a></li><li><a href="course-CRS-2s6e4qgkcqza.html#out-OUT-mh5phj2ea2p7">Distinguer IS_AUTHENTICATED_* d&#x27;un role</a></li></ul><aside class="pedagogy-legend" aria-label="Repères pédagogiques"><p><strong>Repères pédagogiques</strong></p><p>Ces repères décrivent le rôle du bloc, pas une fréquence officielle à l’examen.</p><p class="teaching-label essential"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="brain" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5C12 1 6 1 6 5C2 5 1 10 4 12C1 15 3 19 6 19C6 23 12 23 12 19V5M12 5C12 1 18 1 18 5C22 5 23 10 20 12C23 15 21 19 18 19C18 23 12 23 12 19M6 5C6 8 8 9 9 9M4 12H7L9 14M6 19V16M18 5C18 8 16 9 15 9M20 12H17L15 14M18 19V16"></path></svg> <strong>À comprendre</strong></p><p class="teaching-label essential"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="book" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5C9 3 5 3 2 4V20C5 19 9 19 12 21C15 19 19 19 22 20V4C19 3 15 3 12 5V21M5 8H8M5 12H8M16 8H19M16 12H19"></path></svg> <strong>À mémoriser</strong></p><p class="teaching-label example"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="code" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6L2 12L8 18M16 6L22 12L16 18M14 3L10 21"></path></svg> <strong>Exemple concret</strong></p><p class="teaching-label pitfall"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="warning" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3L23 21H1L12 3ZM12 9V14M12 17V18"></path></svg> <strong>Piège à éviter</strong></p><p class="teaching-label nuance"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="balance" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3V21M7 21H17M3 7L21 5M5 7L1 15H9L5 7M19 6L15 14H23L19 6M1 15Q5 20 9 15M15 14Q19 19 23 14"></path></svg> <strong>Nuance à connaître</strong></p><p>Précision, exception ou condition d’application d’une règle.</p></aside><section class="teaching-section" data-section="s-objectif"><h2 id="s-objectif" tabindex="-1">Objectif</h2><p>Alice possède <code>ROLE_ADMIN</code>. L'écran d'édition du blog exige pourtant
+<code>ROLE_EDITOR</code> : faut-il recopier ce rôle sur son compte ?
+La hiérarchie exprime cette implication, tandis que le contrôle d'accès
+continue à passer par les voters.</p>
+<p>Question du cours : <strong>qu'est-ce qu'un rôle pour Symfony, qui le lit, et
+pourquoi <code>isGranted()</code> voit-il des rôles que <code>getRoles()</code> ne montre pas ?</strong></p></section><section class="teaching-section" data-section="s-l-essentiel"><h2 id="s-l-essentiel" tabindex="-1">L&#x27;essentiel</h2><p class="teaching-label essential"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="brain" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5C12 1 6 1 6 5C2 5 1 10 4 12C1 15 3 19 6 19C6 23 12 23 12 19V5M12 5C12 1 18 1 18 5C22 5 23 10 20 12C23 15 21 19 18 19C18 23 12 23 12 19M6 5C6 8 8 9 9 9M4 12H7L9 14M6 19V16M18 5C18 8 16 9 15 9M20 12H17L15 14M18 19V16"></path></svg> <strong>À comprendre</strong></p><aside class="section-digest" id="s-l-essentiel-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Le voter natif reconnaît ce préfixe.</li><li>Une autre convention demanderait un voter adapté.</li></ol></aside><p><strong>Ce que cette partie veut réellement vous apprendre.</strong></p>
+<ul>
+<li><em>Pourquoi ce sujet existe.</em> Il faut un vocabulaire simple pour dire « ce
+  user peut faire ce type de chose ». Le rôle est cette étiquette. Mais ce
+  n'est pas lui qui décide : c'est un <strong>voter</strong>.</li>
+<li><em>Le piège de fond.</em> Trois choses se ressemblent et ne sont pas
+  interchangeables : les rôles <strong>directs</strong> (<code>getRoles()</code>), les rôles
+  <strong>atteignables</strong> (hiérarchie) et les attributs <strong>qui ne sont pas des rôles</strong>
+  (<code>IS_AUTHENTICATED_FULLY</code>…).</li>
+<li><em>Ce que l'auteur veut que vous compreniez.</em> <code>isGranted()</code> passe par les
+  voters, donc par la hiérarchie ; <code>in_array()</code> sur <code>getRoles()</code> l'ignore.</li>
+<li><em>Pourquoi c'est à l'examen.</em> Préfixe <code>ROLE_</code>, abstention contre refus,
+  transitivité, hiérarchie statique, liste des six attributs spéciaux.</li>
+</ul>
+<p>Un rôle est une étiquette de permission portée par l'utilisateur, par exemple
+<code>ROLE_EDITOR</code>. Le voter de rôles standard reconnaît le préfixe <code>ROLE_</code>,
+sensible à la casse. D'autres attributes, comme <code>EDIT</code> sur un article,
+peuvent être traités par des voters applicatifs : ce ne sont pas des rôles
+standard mal nommés.</p>
+<p><strong>Pourquoi une hiérarchie ?</strong> Pour ne pas recopier les rôles hérités sur chaque
+compte. <code>RoleHierarchyVoter</code> calcule les rôles atteignables pour décider ; il ne
+réécrit pas le tableau retourné par <code>$user-&gt;getRoles()</code>.</p>
+<p>Le mot <code>ADMIN</code> n'a aucun pouvoir intrinsèque. Ce sont la configuration
+et la décision qui lui donnent un effet ; un rôle global ne décrit pas
+à lui seul la relation d'Alice avec l'article 42.</p></section><section class="teaching-section" data-section="s-le-schema"><h2 id="s-le-schema" tabindex="-1">Le schéma</h2><aside class="section-digest" id="s-le-schema-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>La hiérarchie est dirigée.</li><li>La transitivité ne crée pas de relation inverse.</li></ol></aside><p><strong>Où en est-on ?</strong> Carte du cours : un seul graphe, celui de la décision
+« Alice (ROLE_ADMIN) peut-elle éditer (ROLE_EDITOR) ? ». Les parties suivantes
+détaillent le préfixe, la hiérarchie, puis les attributs qui ne sont pas des
+rôles.</p>
+<p>Les relations du graphe viennent de la configuration préparée.
+Le voter les utilise pour la décision ; il ne charge pas une liste
+d'articles et ne recompile pas le container pour étendre les rôles.</p>
+<figure class="diagram" aria-labelledby="CRS-2s6e4qgkcqza-3-diagram-0-title CRS-2s6e4qgkcqza-3-diagram-0-description"><figcaption id="CRS-2s6e4qgkcqza-3-diagram-0-title">ROLE_ADMIN permet de voter sur ROLE_EDITOR grâce à la hiérarchie</figcaption><p id="CRS-2s6e4qgkcqza-3-diagram-0-description">Le token porte ROLE_ADMIN. RoleHierarchyVoter utilise la hiérarchie configurée pour calculer les rôles atteignables, dont ROLE_EDITOR et ROLE_USER dans l&#x27;exemple. Il compare alors le rôle demandé à cet ensemble. Cela ne modifie pas les rôles explicitement retournés par le user.</p><div class="mermaid" hidden>---
+title: La hiérarchie enrichit la décision, pas le tableau du user
+---
+flowchart TD
+  accTitle: ROLE_ADMIN permet de voter sur ROLE_EDITOR grâce à la hiérarchie
+  accDescr: Le token porte ROLE_ADMIN. RoleHierarchyVoter utilise la hiérarchie configurée pour calculer les rôles atteignables, dont ROLE_EDITOR et ROLE_USER dans l&#x27;exemple. Il compare alors le rôle demandé à cet ensemble. Cela ne modifie pas les rôles explicitement retournés par le user.
+  T[(&quot;Token : ROLE_ADMIN&quot;)] --&gt;|&quot;lit les rôles du token&quot;| V[&quot;RoleHierarchyVoter&quot;]
+  H[&quot;role_hierarchy&quot;] -.-&gt;|&quot;configure les relations&quot;| RH[&quot;Objet RoleHierarchy&quot;]
+  V --&gt;|&quot;getReachableRoleNames&quot;| RH
+  RH --&gt;|&quot;retourne notamment&quot;| R[(&quot;ROLE_ADMIN&lt;br/&gt;ROLE_EDITOR, ROLE_USER&quot;)]
+  R --&gt;|&quot;contient ROLE_EDITOR&quot;| G([&quot;Vote favorable&quot;])
+  classDef actor fill:#e0f2fe,stroke:#075985,color:#0c4a6e
+  classDef config fill:#f1f5f9,stroke:#475569,color:#1e293b
+  classDef result fill:#dcfce7,stroke:#166534,color:#14532d
+  class V,RH actor
+  class H config
+  class T,R,G result</div></figure>
+<p>Bleu : voter ; gris et pointillés : configuration ; cylindres verts :
+données. Les flèches pleines décrivent le calcul de ce voter. La décision
+finale appartient à l'<code>AccessDecisionManager</code>, selon sa stratégie et les
+autres votes éventuels. Le graphe utilise exactement la hiérarchie de
+l'exemple, et non une relation spéciale attachée au mot <code>ADMIN</code>.</p></section><section class="teaching-section" data-section="s-l-exemple"><h2 id="s-l-exemple" tabindex="-1">L&#x27;exemple</h2><p class="teaching-label example"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="code" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6L2 12L8 18M16 6L22 12L16 18M14 3L10 21"></path></svg> <strong>Exemple concret</strong></p><aside class="section-digest" id="s-l-exemple-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Le user garde ses roles directs.</li><li>Le voter applique la hiérarchie.</li></ol></aside><p><strong>Où en est-on ?</strong> Code minimal : une hiérarchie de quatre lignes et trois
+appels. On regarde <strong>quel appel voit la hiérarchie et lequel ne la voit pas</strong>.</p>
+<p>Supposons un token authentifié portant seulement <code>ROLE_ADMIN</code>, un user
+dont les rôles directs sont identiques, et les voters standard avec
+leur stratégie par défaut. Dans un <code>AbstractController</code> :</p>
+<pre class="highlight" tabindex="0"><code class="language-yaml">security:
+    role_hierarchy:
+        ROLE_EDITOR: ROLE_USER
+        ROLE_ADMIN: [ROLE_EDITOR, ROLE_ALLOWED_TO_SWITCH]</code></pre>
+<pre class="highlight" tabindex="0"><code class="language-php">$this-&gt;isGranted('ROLE_EDITOR');            // vrai pour un ROLE_ADMIN : hiérarchie
+in_array('ROLE_EDITOR', $user-&gt;getRoles()); // faux pour le même user : la documentation dit BAD
+$this-&gt;isGranted('IS_AUTHENTICATED_FULLY'); // un état de connexion, pas un role</code></pre>
+<p>Le premier appel vaut <code>true</code>, la recherche directe de <code>ROLE_EDITOR</code>
+vaut <code>false</code>. Avec seulement <code>ROLE_EDITOR</code>, l'implication inverse vers
+<code>ROLE_ADMIN</code> ne naît pas. Le troisième appel dépend du mode d'authentification,
+pas du rôle administratif.</p>
+<table>
+<thead>
+<tr>
+<th>Appel</th>
+<th>Passe par</th>
+<th>Résultat pour Alice (<code>ROLE_ADMIN</code> seul)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>isGranted('ROLE_EDITOR')</code></td>
+<td>voters + hiérarchie</td>
+<td><code>true</code></td>
+</tr>
+<tr>
+<td><code>in_array('ROLE_EDITOR', getRoles())</code></td>
+<td>simple lecture d'un tableau</td>
+<td><code>false</code></td>
+</tr>
+<tr>
+<td><code>isGranted('IS_AUTHENTICATED_FULLY')</code></td>
+<td><code>AuthenticatedVoter</code></td>
+<td>selon le mode de connexion</td>
+</tr>
+</tbody>
+</table></section><section class="teaching-section" data-section="s-la-regle"><span class="outcome-anchor" id="out-OUT-nb8grypjavr8" tabindex="-1"></span><h2 id="s-la-regle" tabindex="-1">La règle</h2><aside class="section-digest" id="s-la-regle-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>La casse compte pour le voter natif.</li><li>Les attributes métier suivent leurs propres voters.</li></ol></aside><p><strong>Où en est-on ?</strong> Étape 1 sur 3 : le <strong>vocabulaire</strong> d'un rôle. Avant la
+hiérarchie, il faut savoir ce que le voter reconnaît comme un rôle, et ce qu'il
+fait quand ce n'est pas le cas.</p>
+<div class="admonition info">
+<p class="admonition-title">🌍 In Real Life</p>
+<p><strong>La situation</strong> : le secrétariat du blog traite les demandes portant un préfixe précis. Une demande reconnue sans habilitation reçoit « non » ; une autre catégorie est hors de son ressort.</p>
+<p><strong>L’équivalent dans Symfony</strong> : préfixe reconnu → <code>ROLE_</code> par le RoleVoter standard ; habilitation absente → refus ; attribut non reconnu → abstention.</p>
+<p><strong>Retour à la réalité technique</strong> : <code>ROLE_ADMIN</code>, <code>role_admin</code> et <code>ADMIN</code> ne sont pas interchangeables. Un voter applicatif peut traiter d'autres chaînes ; le refus final dépend des votes et de la stratégie, pas du seul vocabulaire.</p>
+<p><strong>🧠 Comment le mémoriser</strong> : « Mauvaise habilitation ou mauvais guichet ? » Image mentale : formulaire reconnu refusé face à formulaire réorienté. Question-réflexe : le voter supporte-t-il ce droit avant même de chercher le rôle ?</p>
+<p><strong>⚠️ À ne pas confondre</strong> : rôle manquant dans le token et attribut inconnu du voter.</p>
+</div>
+<p>Une faute de casse ne signifie pas toujours la même chose :
+le droit demandé peut être reconnu mais absent, ou ne pas être reconnu
+du tout par ce voter. Les deux cas peuvent finir en refus par défaut,
+mais pour des raisons différentes.</p>
+<ul>
+<li>Un role est une string libre qui commence par <strong><code>ROLE_</code></strong> — « otherwise,
+  things won't work as expected ».</li>
+<li><code>RoleVoter</code> reconnaît les <strong>attributes demandés</strong> qui commencent par ce
+  préfixe. Pour <code>isGranted('ROLE_ADMIN')</code>, il refuse si le token ne contient
+  que <code>role_admin</code> : les chaînes diffèrent. Pour <code>isGranted('ADMIN')</code>, il
+  s'abstient car l'attribute n'est pas de son ressort. Un voter maison peut
+  néanmoins traiter <code>ADMIN</code> ; toutes les abstentions donnent un refus avec
+  la configuration par défaut.</li>
+<li>Le code de la classe utilisateur peut ajouter <code>ROLE_USER</code> dans <code>getRoles()</code>.
+  Le contrat <code>UserInterface</code> ne l'ajoute pas automatiquement.</li>
+</ul>
+<p><strong>Pourquoi distinguer refus et abstention ?</strong> Dans <code>RoleVoter::vote()</code>, seuls
+les attributs commençant par <code>ROLE_</code> sont examinés. S'il y en a un et que le
+token ne le porte pas, le vote est <code>ACCESS_DENIED</code> ; s'il n'y en a aucun, le vote
+est <code>ACCESS_ABSTAIN</code>. Un autre voter peut alors se prononcer.</p>
+<pre class="highlight" tabindex="0"><code class="language-text">isGranted('ROLE_ADMIN'), token = ['role_admin']
+   → attribut supporté (préfixe ROLE_) ; 'role_admin' ≠ 'ROLE_ADMIN'
+   → DENIED
+
+isGranted('ADMIN'), token = ['ROLE_ADMIN']
+   → attribut non supporté par RoleVoter (pas de préfixe)
+   → ABSTAIN (un voter maison pourrait répondre ; sinon refus par défaut)</code></pre></section><section class="teaching-section" data-section="s-la-hierarchie"><span class="outcome-anchor" id="out-OUT-se3aqxhdbf9t" tabindex="-1"></span><h2 id="s-la-hierarchie" tabindex="-1">La hiérarchie</h2><aside class="section-digest" id="s-la-hierarchie-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Une recherche dans l&#x27;array ignore la hiérarchie.</li><li>Le contrôle doit passer par les voters.</li></ol></aside><p><strong>Où en est-on ?</strong> Étape 2 sur 3 : le rôle est défini. Comment un rôle <strong>en
+implique-t-il</strong> d'autres sans qu'on les recopie ? C'est le rôle de
+<code>role_hierarchy</code> et de <code>RoleHierarchyVoter</code>.</p>
+<div class="admonition info">
+<p class="admonition-title">🌍 In Real Life</p>
+<p><strong>La situation</strong> : une habilitation de responsable du blog inclut les tâches d'éditeur, qui incluent celles de lecteur. La carte ne doit pas être réimprimée avec chaque tâche dérivée.</p>
+<p><strong>L’équivalent dans Symfony</strong> : inclusions configurées → <code>role_hierarchy</code> ; tâches atteignables → extension transitive par RoleHierarchyVoter ; mentions originales → rôles directs.</p>
+<p><strong>Retour à la réalité technique</strong> : l'implication suit les flèches, sans remonter. <code>getRoles()</code> n'acquiert pas automatiquement les rôles hérités ; utiliser la décision d'autorisation. Une hiérarchie globale ne décide pas à elle seule si Alice peut modifier l'article d'un autre auteur.</p>
+<p><strong>🧠 Comment le mémoriser</strong> : « Suivre les flèches, pas réécrire la carte. » Image mentale : carte ADMIN devant une chaîne de flèches vers EDITOR puis USER. Question-réflexe : est-ce un rôle direct, atteignable ou un droit sur un sujet ?</p>
+<p><strong>⚠️ À ne pas confondre</strong> : hiérarchie de rôles et héritage de classes PHP.</p>
+</div>
+<p>La hiérarchie est adaptée aux implications globales. La règle « peut modifier
+cet article précis » demande un sujet et une politique applicative,
+pas une hiérarchie différente cachée dans chaque appel à <code>getRoles()</code>.</p>
+<ul>
+<li>Un <code>ROLE_ADMIN</code> obtient <code>ROLE_USER</code> sans qu'on l'écrive sur le user ; la
+  hiérarchie est <strong>transitive</strong> et ne <strong>remonte</strong> pas.</li>
+<li>Elle est appliquée par le voter : <code>isGranted('ROLE_USER')</code> est vrai,
+  <code>in_array('ROLE_USER', $user-&gt;getRoles())</code> peut rester faux si le rôle
+  n'y est pas explicitement retourné.</li>
+<li>Avec <code>role_hierarchy</code>, le container remplace <code>RoleVoter</code> par
+  <strong><code>RoleHierarchyVoter</code></strong>, qui l'étend et calcule les roles atteignables.</li>
+<li>Les valeurs de <code>role_hierarchy</code> sont <strong>statiques</strong> ; pour une hiérarchie en
+  base, la documentation recommande un voter — un service qui implémente
+  <code>RoleHierarchyInterface</code> et décore <code>security.role_hierarchy</code> marche aussi.</li>
+<li><code>php bin/console debug:security:role-hierarchy</code> affiche la hiérarchie au
+  format Mermaid (<code>graph TB</code>).</li>
+</ul>
+<p>La commande doit montrer les relations configurées ; elle n'est pas exécutée
+ici et ne prouve pas la décision d'une requête donnée. Une décoration
+dynamique est une extension avancée à tester ; elle n'est pas une lecture
+automatique de la source des utilisateurs par <code>role_hierarchy</code>.</p>
+<pre class="highlight" tabindex="0"><code class="language-text">role_hierarchy                 Qui est atteignable ?
+                               (les flèches se suivent vers le BAS seulement)
+ROLE_ADMIN ──► ROLE_EDITOR ──► ROLE_USER
+     └──────► ROLE_ALLOWED_TO_SWITCH
+
+token : [ROLE_ADMIN]   →  atteignables : ADMIN, EDITOR, USER, ALLOWED_TO_SWITCH
+token : [ROLE_EDITOR]  →  atteignables : EDITOR, USER  (ça ne remonte pas)</code></pre>
+<table>
+<thead>
+<tr>
+<th></th>
+<th><code>getRoles()</code></th>
+<th><code>isGranted('ROLE_USER')</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Ce que ça lit</td>
+<td>les rôles <strong>directs</strong> du user</td>
+<td>la <strong>décision</strong> des voters</td>
+</tr>
+<tr>
+<td>Hiérarchie</td>
+<td>ignorée</td>
+<td>appliquée (<code>RoleHierarchyVoter</code>)</td>
+</tr>
+<tr>
+<td>Pour un <code>ROLE_ADMIN</code> seul</td>
+<td><code>['ROLE_ADMIN']</code></td>
+<td><code>true</code></td>
+</tr>
+</tbody>
+</table></section><section class="teaching-section" data-section="s-les-attributes-qui-ne-sont-pas-des-roles"><span class="outcome-anchor" id="out-OUT-mh5phj2ea2p7" tabindex="-1"></span><h2 id="s-les-attributes-qui-ne-sont-pas-des-roles" tabindex="-1">Les attributes qui ne sont pas des roles</h2><aside class="section-digest" id="s-les-attributes-qui-ne-sont-pas-des-roles-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>L&#x27;attribute décrit l&#x27;état d&#x27;authentication.</li><li>Il ne représente pas un role métier.</li></ol></aside><p><strong>Où en est-on ?</strong> Étape 3 sur 3 : on a parlé des rôles ; il reste ce qui leur
+<strong>ressemble</strong> dans <code>isGranted()</code> sans en être : des attributs relatifs à
+l'état de la connexion, lus par <code>AuthenticatedVoter</code>.</p>
+<p><code>AuthenticatedVoter</code> traite les attributs spéciaux suivants. <code>PUBLIC_ACCESS</code>
+exprime une politique publique ; les autres interrogent l'état
+d'authentification. Le tableau décrit le voter standard pour chaque
+attribut demandé isolément :</p>
+<table>
+<thead>
+<tr>
+<th>Attribute</th>
+<th>Accordé quand</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>PUBLIC_ACCESS</code></td>
+<td>toujours, anonyme compris</td>
+</tr>
+<tr>
+<td><code>IS_AUTHENTICATED</code></td>
+<td>un user est authentifié</td>
+</tr>
+<tr>
+<td><code>IS_AUTHENTICATED_REMEMBERED</code></td>
+<td>authentifié, cookie « se souvenir de moi » compris</td>
+</tr>
+<tr>
+<td><code>IS_AUTHENTICATED_FULLY</code></td>
+<td>authentifié, sans être reconnu seulement par remember-me</td>
+</tr>
+<tr>
+<td><code>IS_REMEMBERED</code></td>
+<td>authentifié par le cookie « se souvenir de moi »</td>
+</tr>
+<tr>
+<td><code>IS_IMPERSONATOR</code></td>
+<td>le user en usurpe un autre</td>
+</tr>
+</tbody>
+</table>
+<p>Ils s'emploient dans <code>isGranted()</code>, jamais dans <code>getRoles()</code>.</p>
+<p><code>AuthenticationTrustResolver::isFullFledged()</code> vérifie une identité
+authentifiée qui n'est pas remember-me : une session persistée n'est pas
+une condition nécessaire. Une API stateless peut donc être pleinement
+authentifiée. <code>PUBLIC_ACCESS</code> ne désactive pas le firewall et ne garantit
+pas que tout autre contrôle de l'application accordera l'accès.</p>
+<pre class="highlight" tabindex="0"><code class="language-text">Anonyme            : PUBLIC_ACCESS
+Connecté remember  : PUBLIC_ACCESS, IS_AUTHENTICATED_REMEMBERED,
+                     IS_AUTHENTICATED, IS_REMEMBERED
+Connecté par login : PUBLIC_ACCESS, IS_AUTHENTICATED_REMEMBERED,
+                     IS_AUTHENTICATED, IS_AUTHENTICATED_FULLY
+(IS_IMPERSONATOR : seulement si le token est un SwitchUserToken)</code></pre></section><section class="teaching-section" data-section="s-pieges-d-examen"><h2 id="s-pieges-d-examen" tabindex="-1">Pièges d&#x27;examen</h2><p class="teaching-label pitfall"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="warning" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3L23 21H1L12 3ZM12 9V14M12 17V18"></path></svg> <strong>Piège à éviter</strong></p><aside class="section-digest" id="s-pieges-d-examen-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>La configuration est statique.</li><li>Une règle dynamique appartient au code d&#x27;autorisation.</li></ol></aside><ul class="pitfall-list"><li class="pitfall-item"><details class="pitfall-explanation"><summary>Rôle direct, hiérarchie et permission métier</summary><p>Pour l'édition de 42, comparer trois questions : rôle direct,
+rôle atteignable et permission métier sur cet article. Remplacer
+la troisième par une lecture du tableau des rôles perd la politique voulue.</p></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : Un attribute sans ROLE_ n&#x27;est pas traité comme un rôle par RoleVoter</summary><p><strong>Un attribute sans <code>ROLE_</code> n'est pas traité comme un rôle par <code>RoleVoter</code></strong> ;
+ne pas confondre son abstention avec la décision de tous les autres voters.
+<em>Pourquoi on se trompe : « abstention » ressemble à « refus » ; en réalité un
+autre voter peut encore accorder.</em></p></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : in_array(&#x27;ROLE_ADMIN&#x27;, $user-&gt;getRoles()) ignore la hiérarchie.</summary><p><strong><code>in_array('ROLE_ADMIN', $user-&gt;getRoles())</code> ignore la hiérarchie.</strong> La
+documentation marque cette ligne <code>BAD</code> et lui oppose <code>isGranted('ROLE_ADMIN')</code>.
+<em>Pourquoi on se trompe : le test semble équivalent, mais il ne lit que les
+rôles directs.</em></p></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : Les valeurs de role_hierarchy sont statiques</summary><p><strong>Les valeurs de <code>role_hierarchy</code> sont statiques</strong> ; une hiérarchie en base
+demande du code — un voter, selon la documentation. <em>Pourquoi on se trompe :
+on suppose que la hiérarchie se recharge depuis les données applicatives ; elle
+est préparée avec le container.</em></p></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : IS_AUTHENTICATED_FULLY n&#x27;est pas un role</summary><p><strong><code>IS_AUTHENTICATED_FULLY</code> n'est pas un role</strong> et n'a rien à faire dans
+<code>getRoles()</code>. <em>Pourquoi on se trompe : la forme en majuscules avec underscores
+évoque un rôle.</em></p></details></li></ul></section><section class="teaching-section" data-section="s-fiche-express"><h2 id="s-fiche-express" tabindex="-1">Fiche express</h2><p class="teaching-label essential"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="book" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5C9 3 5 3 2 4V20C5 19 9 19 12 21C15 19 19 19 22 20V4C19 3 15 3 12 5V21M5 8H8M5 12H8M16 8H19M16 12H19"></path></svg> <strong>À mémoriser</strong></p><aside class="section-digest" id="s-fiche-express-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>L&#x27;accès public n&#x27;exige pas d&#x27;identité.</li><li>Il ne désactive pas le firewall entier.</li></ol></aside><p>La hiérarchie explique les permissions globales sans réécrire Alice.
+Les <a href="course-CRS-2ec5yksjfm9s.html">règles d'accès</a> appliquent ces exigences
+à la requête ; les voters métier prennent ensuite le sujet concret.</p>
+<p><strong>🧠 À retenir pour la certification :</strong></p>
+<ul>
+<li>Un role commence par <strong><code>ROLE_</code></strong>, casse comprise.</li>
+<li>Sans le préfixe : abstention du <strong>voter de rôles standard</strong>.</li>
+<li>Hiérarchie <strong>transitive</strong>, appliquée par le <strong>voter</strong> (<code>RoleHierarchyVoter</code>).</li>
+<li><strong><code>in_array(…, getRoles())</code></strong> ignore la hiérarchie : <code>isGranted()</code>.</li>
+<li><code>role_hierarchy</code> <strong>statique</strong> ; en base : un voter.</li>
+<li><code>IS_AUTHENTICATED_*</code>, <code>PUBLIC_ACCESS</code>, <code>IS_IMPERSONATOR</code> :
+  <strong>attributs spéciaux</strong>, pas des rôles.</li>
+</ul>
+<p>Moyen mnémotechnique : <strong>« ROLE_ devant, la hiérarchie dans le voter »</strong>.</p>
+<pre class="highlight" tabindex="0"><code class="language-text">role = ROLE_* (casse) ; RoleVoter → RoleHierarchyVoter si role_hierarchy
+(transitive, statique) ; isGranted, pas in_array ;
+AuthenticatedVoter : PUBLIC_ACCESS, IS_AUTHENTICATED(_FULLY/_REMEMBERED),
+IS_REMEMBERED, IS_IMPERSONATOR</code></pre></section><section class="official-sources"><h2 id="reader-sources" tabindex="-1">Sources officielles et compléments</h2><ul><li><a href="https://symfony.com/doc/8.0/security.html">Symfony 8.0 — Security</a></li></ul></section><section id="course-recalls" aria-labelledby="course-recalls-title" tabindex="-1"><h2 id="course-recalls-title">Rappels et liens avec les autres cours</h2><div data-recall-group="other"><h3>Rappels des cours précédents / autres modules</h3><ul><li data-recall-course="CRS-yvhg325ax38y" data-recall-kind="previous_course"><p class="recall-provenance">Module 10 — Sécurité · Cours « Configuration »</p><p>Deux décisions suivent l&#x27;ordre de déclaration. Leurs listes ne doivent pas être confondues.</p><p><a href="#cards-previous">Rappel : <span lang="en">Which security configuration lists use first-match ordering?</span></a></p></li></ul></div></section><nav class="course-sequence" aria-label="Ordre de lecture"><a rel="prev" href="course-CRS-enbbsykx22xe.html" aria-label="Précédent : Providers — Module 10 — Sécurité">Précédent : Providers</a> <a href="lot-10.html">Sommaire : Module 10 — Sécurité</a> <a rel="next" href="course-CRS-2ec5yksjfm9s.html" aria-label="Suivant : Access Control Rules — Module 10 — Sécurité">Suivant : Access Control Rules</a></nav><p class="course-practice-entry"><a class="button" href="#view-quiz">Fin du cours — s’entraîner avec le Quiz</a></p></div><div id="view-flashcards" data-course-panel role="region" aria-labelledby="view-flashcards-title"><h2 id="view-flashcards-title">Flashcards</h2><p lang="en">Answer before revealing each card.</p><p>Ces cartes ne mesurent pas une maîtrise notée.</p><div id="cards-s-l-essentiel-1" data-card-section="s-l-essentiel"><h3><a href="#s-l-essentiel">Revoir : L&#x27;essentiel</a></h3><div class="reader-cards"><details class="reader-card" id="B-2s6e4qgkcqza-01"><summary lang="en">Which prefix does the built-in RoleVoter recognize?</summary><p lang="en">ROLE_, case-sensitively.</p><p lang="fr">Le voter natif reconnaît ce préfixe. Une autre convention demanderait un voter adapté.</p><a href="course-CRS-2s6e4qgkcqza.html#out-OUT-nb8grypjavr8">Revoir le passage précis</a></details></div></div><div id="cards-s-le-schema-2" data-card-section="s-le-schema"><h3><a href="#s-le-schema">Revoir : Le schéma</a></h3><div class="reader-cards"><details class="reader-card" id="B-2s6e4qgkcqza-02"><summary lang="en">Does a role hierarchy work in both directions?</summary><p lang="en">No. Higher roles inherit configured lower roles, not the reverse.</p><p lang="fr">La hiérarchie est dirigée. La transitivité ne crée pas de relation inverse.</p><a href="course-CRS-2s6e4qgkcqza.html#out-OUT-se3aqxhdbf9t">Revoir le passage précis</a></details></div></div><div id="cards-s-l-exemple-3" data-card-section="s-l-exemple"><h3><a href="#s-l-exemple">Revoir : L&#x27;exemple</a></h3><div class="reader-cards"><details class="reader-card" id="B-2s6e4qgkcqza-03"><summary lang="en">Why can isGranted(&#x27;ROLE_USER&#x27;) be true when getRoles() only returns ROLE_ADMIN?</summary><p lang="en">The configured hierarchy makes ROLE_USER reachable from ROLE_ADMIN.</p><p lang="fr">Le user garde ses roles directs. Le voter applique la hiérarchie.</p><a href="course-CRS-2s6e4qgkcqza.html#out-OUT-se3aqxhdbf9t">Revoir le passage précis</a></details></div></div><div id="cards-s-la-regle-4" data-card-section="s-la-regle"><h3><a href="#s-la-regle">Revoir : La règle</a></h3><div class="reader-cards"><details class="reader-card" id="B-2s6e4qgkcqza-04"><summary lang="en">Will the built-in RoleVoter grant an attribute named role_admin?</summary><p lang="en">No. Its ROLE_ prefix matching is case-sensitive.</p><p lang="fr">La casse compte pour le voter natif. Les attributes métier suivent leurs propres voters.</p><a href="course-CRS-2s6e4qgkcqza.html#out-OUT-nb8grypjavr8">Revoir le passage précis</a></details></div></div><div id="cards-s-la-hierarchie-5" data-card-section="s-la-hierarchie"><h3><a href="#s-la-hierarchie">Revoir : La hiérarchie</a></h3><div class="reader-cards"><details class="reader-card" id="B-2s6e4qgkcqza-05"><summary lang="en">Why should application code prefer isGranted() over in_array() on getRoles()?</summary><p lang="en">isGranted() applies role hierarchy and the access decision system.</p><p lang="fr">Une recherche dans l&#x27;array ignore la hiérarchie. Le contrôle doit passer par les voters.</p><a href="course-CRS-2s6e4qgkcqza.html#out-OUT-se3aqxhdbf9t">Revoir le passage précis</a></details></div></div><div id="cards-s-les-attributes-qui-ne-sont-pas-des-roles-6" data-card-section="s-les-attributes-qui-ne-sont-pas-des-roles"><h3><a href="#s-les-attributes-qui-ne-sont-pas-des-roles">Revoir : Les attributes qui ne sont pas des roles</a></h3><div class="reader-cards"><details class="reader-card" id="B-2s6e4qgkcqza-06"><summary lang="en">Where should IS_AUTHENTICATED_FULLY be used?</summary><p lang="en">As an authorization attribute, not as a role returned by getRoles().</p><p lang="fr">L&#x27;attribute décrit l&#x27;état d&#x27;authentication. Il ne représente pas un role métier.</p><a href="course-CRS-2s6e4qgkcqza.html#out-OUT-mh5phj2ea2p7">Revoir le passage précis</a></details></div></div><div id="cards-s-pieges-d-examen-7" data-card-section="s-pieges-d-examen"><h3><a href="#s-pieges-d-examen">Revoir : Pièges d&#x27;examen</a></h3><div class="reader-cards"><details class="reader-card" id="B-2s6e4qgkcqza-07"><summary lang="en">Are role_hierarchy values dynamically recomputed from application data by default?</summary><p lang="en">No. They are static configuration; dynamic policies need application logic such as a voter.</p><p lang="fr">La configuration est statique. Une règle dynamique appartient au code d&#x27;autorisation.</p><a href="course-CRS-2s6e4qgkcqza.html#out-OUT-nb8grypjavr8">Revoir le passage précis</a></details></div></div><div id="cards-s-fiche-express-8" data-card-section="s-fiche-express"><h3><a href="#s-fiche-express">Revoir : Fiche express</a></h3><div class="reader-cards"><details class="reader-card" id="B-2s6e4qgkcqza-08"><summary lang="en">Which attribute allows access even without an authenticated user?</summary><p lang="en">PUBLIC_ACCESS.</p><p lang="fr">L&#x27;accès public n&#x27;exige pas d&#x27;identité. Il ne désactive pas le firewall entier.</p><a href="course-CRS-2s6e4qgkcqza.html#out-OUT-mh5phj2ea2p7">Revoir le passage précis</a></details></div></div><div id="cards-previous"><p class="recall-provenance">Module 10 — Sécurité · Cours « Configuration »</p><aside class="checkpoint"><h2>Rappel d’un cours antérieur</h2><p>Avant de poursuivre : Configuration.</p><details class="corpus-correction"><summary lang="en">Which security configuration lists use first-match ordering?</summary><p lang="en">Both firewalls and access_control, independently.</p><p>Deux décisions suivent l&#x27;ordre de déclaration. Leurs listes ne doivent pas être confondues.</p><a href="course-CRS-yvhg325ax38y.html#out-OUT-wnw02nsyvmyg">Relire la correction dans le cours antérieur</a></details></aside></div></div><div id="view-quiz" data-course-panel role="region" aria-labelledby="view-quiz-title"><aside class="revision-context"><p><strong>Avant le quiz :</strong> Alice possède ROLE_ADMIN. L&#x27;écran d&#x27;édition du blog exige pourtant ROLE_EDITOR : faut-il recopier ce rôle sur son compte ? La hiérarchie exprime cette implication, tandis que le contrôle d&#x27;accès continue à passer par les voters.</p><p>Quelle donnée entre, quelle responsabilité agit et quelle condition change le résultat ? Pour chaque correction, vérifiez ces conditions dans <a href="course-CRS-2s6e4qgkcqza.html#s-objectif">le passage enseigné</a>, sans supposer que toutes les branches du blog sont exécutées.</p></aside><h2 id="view-quiz-title">Quiz</h2><p class="quiz-size" lang="en">3 eligible learning questions · 3 per session. Repeating a question does not demonstrate mastery.</p><p id="course-quiz-status" role="status">Quiz interactif non chargé. Démarrez après chargement de la banque locale.</p><div id="course-quiz-controls" class="assessment-main" hidden><div id="course-quiz-assessment-controls" hidden><select id="course-quiz-assessment-mode" aria-label="Mode du quiz" hidden><option value="learning">Entraînement</option></select><p id="course-quiz-training-scope"></p><button id="course-quiz-start-assessment" type="button" lang="en">Start practice</button><button id="course-quiz-finish-assessment" type="button" lang="en" hidden>End session</button></div><p id="course-quiz-assessment-error" role="alert"></p><p id="course-quiz-assessment-timer" hidden></p><p id="course-quiz-session-progress" class="quiz-progress" role="status" lang="en"></p><div id="course-quiz-assessment-app" tabindex="-1"></div><nav id="course-quiz-session-navigation" aria-label="Questions du cours"></nav><div id="course-quiz-learning-overview" aria-live="polite"></div></div><div id="course-quiz-native"><p>Sans JavaScript ou si le chargement échoue : aucune tentative notée. Les <a href="#view-flashcards">flashcards du cours</a> restent disponibles.</p><details class="course-quiz-fallback" data-question-id="L-2s6e4qgkcqza-base-v1"><summary lang="en">Which prefix does the built-in RoleVoter recognize?</summary><p>Correction de consultation — non notée.</p><p>Le voter natif reconnaît ce préfixe. Une autre convention demanderait un voter adapté.</p><ul><li><strong lang="en">Distractor: role_, case-insensitively.</strong><p>Le préfixe natif est ROLE_ et sa casse compte.</p></li><li><strong lang="en">Distractor: Any non-empty prefix configured on UserInterface.</strong><p>UserInterface ne configure pas le préfixe reconnu par RoleVoter.</p></li><li><strong lang="en">Correct: ROLE_, case-sensitively.</strong><p>Le voter natif reconnaît ce préfixe. Une autre convention demanderait un voter adapté.</p></li></ul><a href="course-CRS-2s6e4qgkcqza.html#out-OUT-nb8grypjavr8">Relire le passage exact</a></details></div></div></div></div><details class="transfer-panel"><summary>Sauvegarde et transfert de progression</summary><p id="reading-status" role="status">Sans JavaScript : lecture libre ; progression non enregistrée.</p><p><a href="assessment.html#overview-title">Lecture, réussites immédiates et différées</a></p><p>Transfert manuel — aucune synchronisation automatique</p><p id="persistence-status" role="status"></p><button type="button" class="secondary" id="export-progress">Exporter ma progression</button><label for="import-progress">Choisir un JSON pour fusionner ma progression (sans remplacement)</label><input type="file" id="import-progress" accept="application/json,.json"><p id="transfer-status" role="status"></p></details></main><footer class="site-footer"><a href="catalogue.html">Catalogue</a> <a href="sources.html">Sources et attribution</a> <a href="#contenu">Haut de page</a></footer></body></html>

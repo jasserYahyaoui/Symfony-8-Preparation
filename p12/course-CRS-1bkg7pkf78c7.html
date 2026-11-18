@@ -1,0 +1,420 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; connect-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Factories — Symfony 8 Preparation</title><link rel="stylesheet" href="styles.css"><link rel="stylesheet" href="reader.css"><script src="mermaid.min.js" defer></script><script src="mermaid-init.js" defer></script><link rel="stylesheet" href="assessment.css"><script src="fixed-exams-data.js" defer></script><script src="fixed-exams.js" defer></script><script src="learning-state.js" defer></script><script src="guide.js" defer></script><script src="reader-catalog.js" defer></script><script src="reader.js" defer></script><script src="site-state.js" defer></script><script src="assessment.js" defer></script><script src="course-views.js" defer></script><link rel="stylesheet" href="syntax-highlight.css"><script src="prism-syntax.js" defer></script><script src="syntax-highlight.js" defer></script></head><body data-course-id="CRS-1bkg7pkf78c7"><a class="skip" href="#contenu">Aller au contenu</a><header class="site-header"><a class="brand" href="index.html">S8 Preparation</a><nav aria-label="Navigation principale"><a href="index.html">Accueil</a> <a href="catalogue.html">Parcours</a> <a href="assessment.html?mode=review">Réviser</a> <a href="examens.html">Examens blancs</a> <a href="jour-j.html">Jour J</a></nav></header><main id="contenu" tabindex="-1" class="corpus-reader"><nav class="breadcrumb" aria-label="Fil d’Ariane"><a href="index.html">Accueil</a> <span aria-hidden="true">›</span> <a href="catalogue.html">Parcours</a> <span aria-hidden="true">›</span> <a href="lot-09.html">Module 09 — Injection de dépendances</a> <span aria-hidden="true">›</span> <span aria-current="page">Factories</span></nav><h1>Factories</h1><p class="muted">Symfony 8.0 · API PHP ≤ 8.4 · Twig ≤ 3.22. Préparation indépendante.</p><p class="revision-status">Rédaction narrative P11 : projection nouvelle, non couverte par les décisions historiques P10. Aucune approbation officielle ni garantie de réussite.</p><aside class="narrative-context" aria-label="Repères de lecture"><p><strong>Prérequis de lecture :</strong> <a href="course-CRS-w6yfxm6ad4zy.html">Services autowiring</a></p><p><strong>Concepts voisins :</strong> <a href="course-CRS-brn6frfqpxxj.html">Console component</a> — Réutiliser le service du blog sans navigateur. <a href="lot-09.html">Comparer les responsabilités dans ce module</a> · <a href="carte-composants.html">Situer cette responsabilité dans le blog</a> · <a href="glossaire.html">Distinguer les termes voisins</a></p><p><a href="ordre-lecture.html">Retrouver les 163 cours dans le parcours recommandé</a>. Ce repère ne modifie ni votre historique ni votre progression.</p></aside><div class="course-layout"><details class="lot-course-menu"><summary>Cours du module · 12 cours</summary><nav aria-label="Cours du module"><a class="lot-context" href="lot-09.html">Module 09 — Injection de dépendances</a><ol><li><a href="course-CRS-htvm3b1gas0d.html">Dependency Injection component</a></li><li><a href="course-CRS-p1694d5f7r8c.html">Service container</a></li><li><a href="course-CRS-jtkmpfp3nwzk.html">Built-in services</a></li><li><a href="course-CRS-8zmj5ntgdhjv.html">Configuration parameters</a></li><li><a href="course-CRS-g8fteyd38nrt.html">Services registration (YAML and PHP attributes)</a></li><li><a href="course-CRS-fkebqqqke5y5.html">Service decoration</a></li><li><a href="course-CRS-b4g5s2asb9ye.html">Tags</a></li><li><a href="course-CRS-exs5dvtqa1as.html">Semantic configuration</a></li><li><a href="course-CRS-1bkg7pkf78c7.html" aria-current="page">Factories</a></li><li><a href="course-CRS-d25bvr0097py.html">Compiler passes</a></li><li><a href="course-CRS-w6yfxm6ad4zy.html">Services autowiring</a></li><li><a href="course-CRS-0a0d5bp6769e.html">Service locators</a></li></ol><a href="lot-09.html#view-quiz">Quiz du module</a></nav></details><aside class="course-section-menu" aria-label="Sommaire du cours"><nav class="course-actions" aria-label="Activités du cours"><a id="tab-course" href="#view-course">Cours</a><a id="tab-flashcards" href="#view-flashcards">Flashcards</a><a id="tab-quiz" href="#view-quiz">Quiz</a></nav><details class="course-section-disclosure"><summary id="course-sections">Sections du cours</summary><nav aria-label="Sections du cours"><ul><li><a href="#s-objectif">Objectif</a></li><li><a href="#s-l-essentiel">L&#x27;essentiel</a></li><li><a href="#s-le-schema">Le schéma</a></li><li><a href="#s-le-fil-rouge-un-newslettermanager">Le fil rouge : un NewsletterManager</a></li><li><a href="#s-les-ecritures-choisir-selon-la-nature-du-callable">Les écritures : choisir selon la nature du callable</a></li><li><a href="#s-null-create-la-class-du-service-elle-meme">`[null, &#x27;create&#x27;]` : la class du service elle-même</a></li><li><a href="#s-les-arguments-vont-a-la-factory">Les arguments vont à la factory</a></li><li><a href="#s-ce-que-le-container-retient-la-valeur-retournee">Ce que le container retient : la valeur retournée</a></li><li><a href="#s-une-expression-comme-factory">Une expression comme factory</a></li><li><a href="#s-pieges-d-examen">Pièges d&#x27;examen</a></li><li><a href="#s-fiche-express">Fiche express</a><ul><li><a href="#s-fiche-express-nested-a-retenir-pour-la-certification">🧠 À retenir pour la certification</a></li></ul></li><li><a href="#reader-objectives">Objectifs d’apprentissage</a></li><li><a href="#reader-sources">Sources officielles et compléments</a></li><li><a href="#course-recalls">Rappels et liens avec les autres cours</a></li></ul></nav><nav aria-label="Flashcards par section"><a href="#view-flashcards">Flashcards par section</a><ul><li><a href="#cards-s-l-essentiel-1">L&#x27;essentiel</a></li><li><a href="#cards-s-le-schema-2">Le schéma</a></li><li><a href="#cards-s-le-fil-rouge-un-newslettermanager-3">Le fil rouge : un NewsletterManager</a></li><li><a href="#cards-s-les-ecritures-choisir-selon-la-nature-du-callable-4">Les écritures : choisir selon la nature du callable</a></li><li><a href="#cards-s-null-create-la-class-du-service-elle-meme-5">`[null, &#x27;create&#x27;]` : la class du service elle-même</a></li><li><a href="#cards-s-les-arguments-vont-a-la-factory-6">Les arguments vont à la factory</a></li><li><a href="#cards-s-ce-que-le-container-retient-la-valeur-retournee-7">Ce que le container retient : la valeur retournée</a></li><li><a href="#cards-s-une-expression-comme-factory-8">Une expression comme factory</a></li><li><a href="#cards-s-pieges-d-examen-9">Pièges d&#x27;examen</a></li><li><a href="#cards-s-fiche-express-10">Fiche express</a></li><li><a href="#cards-previous">Module 09 — Injection de dépendances · Cours « Tags » · Rappel : <span lang="en">Does adding a tag to a service execute any behavior by itself?</span></a></li></ul></nav><nav aria-label="Retour au module"><a href="lot-09.html">Tous les cours du module</a></nav></details><p class="local-quiz-count">5 questions disponibles · 5 par session Quiz</p></aside><div class="course-content"><div id="view-course" data-course-panel role="region" aria-labelledby="view-course-title"><h2 id="view-course-title">Cours</h2><p class="course-introduction"><a href="#s-objectif">Introduction</a> · <a href="#course-sections">Sections du cours</a></p><h2 id="reader-objectives" tabindex="-1">Objectifs d’apprentissage</h2><ul><li><a href="course-CRS-1bkg7pkf78c7.html#out-OUT-rrswf59s7t5a">Choisir l&#x27;écriture de factory selon la nature du callable</a></li><li><a href="course-CRS-1bkg7pkf78c7.html#out-OUT-mfkawre47dv3">Énoncer que arguments alimente la factory</a></li><li><a href="course-CRS-1bkg7pkf78c7.html#out-OUT-5tp6e11ygzgz">Interpréter [null, &#x27;create&#x27;]</a></li></ul><aside class="pedagogy-legend" aria-label="Repères pédagogiques"><p><strong>Repères pédagogiques</strong></p><p>Ces repères décrivent le rôle du bloc, pas une fréquence officielle à l’examen.</p><p class="teaching-label essential"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="brain" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5C12 1 6 1 6 5C2 5 1 10 4 12C1 15 3 19 6 19C6 23 12 23 12 19V5M12 5C12 1 18 1 18 5C22 5 23 10 20 12C23 15 21 19 18 19C18 23 12 23 12 19M6 5C6 8 8 9 9 9M4 12H7L9 14M6 19V16M18 5C18 8 16 9 15 9M20 12H17L15 14M18 19V16"></path></svg> <strong>À comprendre</strong></p><p class="teaching-label essential"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="book" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5C9 3 5 3 2 4V20C5 19 9 19 12 21C15 19 19 19 22 20V4C19 3 15 3 12 5V21M5 8H8M5 12H8M16 8H19M16 12H19"></path></svg> <strong>À mémoriser</strong></p><p class="teaching-label example"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="code" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6L2 12L8 18M16 6L22 12L16 18M14 3L10 21"></path></svg> <strong>Exemple concret</strong></p><p class="teaching-label pitfall"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="warning" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3L23 21H1L12 3ZM12 9V14M12 17V18"></path></svg> <strong>Piège à éviter</strong></p><p class="teaching-label nuance"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="balance" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3V21M7 21H17M3 7L21 5M5 7L1 15H9L5 7M19 6L15 14H23L19 6M1 15Q5 20 9 15M15 14Q19 19 23 14"></path></svg> <strong>Nuance à connaître</strong></p><p>Précision, exception ou condition d’application d’une règle.</p></aside><section class="teaching-section" data-section="s-objectif"><h2 id="s-objectif" tabindex="-1">Objectif</h2><p>La notification d'inscription a désormais ses collaborateurs et ses valeurs.
+Certains objets doivent toutefois être créés par une méthode qui normalise
+les entrées ou choisit une implémentation. Une <strong>factory</strong>, ou fabrique,
+prend cette décision à la place de l'appel direct au constructeur
+par le container. Nous allons suivre son entrée, son retour et le partage
+de l'objet obtenu, sans ajouter un envoi d'email réel.</p>
+<p>Question directrice : <strong>quand <code>new Classe(...)</code> ne suffit pas, comment dire
+au container « pour fabriquer ce service, appelle plutôt <em>cette</em> méthode » ?</strong></p></section><section class="teaching-section" data-section="s-l-essentiel"><h2 id="s-l-essentiel" tabindex="-1">L&#x27;essentiel</h2><p class="teaching-label essential"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="brain" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5C12 1 6 1 6 5C2 5 1 10 4 12C1 15 3 19 6 19C6 23 12 23 12 19V5M12 5C12 1 18 1 18 5C22 5 23 10 20 12C23 15 21 19 18 19C18 23 12 23 12 19M6 5C6 8 8 9 9 9M4 12H7L9 14M6 19V16M18 5C18 8 16 9 15 9M20 12H17L15 14M18 19V16"></path></svg> <strong>À comprendre</strong></p><aside class="section-digest" id="s-l-essentiel-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>La factory décide de la construction.</li><li>Sa valeur retournée devient le service.</li></ol></aside><p><strong>Ce que cette partie veut réellement vous apprendre.</strong></p>
+<ul>
+<li><em>Pourquoi ce sujet existe.</em> Un constructeur doit seulement ranger ses
+  arguments. Si la création demande de nettoyer une entrée, de choisir entre
+  deux implémentations ou de refuser une valeur, cette logique n'a pas sa
+  place dans le constructeur : on la met dans une <strong>méthode de création</strong>.</li>
+<li><em>Le piège de fond.</em> Il y a <strong>deux signatures</strong> : celle de la factory
+  (qui reçoit les <code>arguments</code> configurés) et celle du constructeur final
+  (qui reçoit ce que la factory décide de lui passer). On les confond.</li>
+<li><em>Ce que l'auteur veut que vous compreniez.</em> Le container n'appelle que la
+  factory ; la <strong>valeur retournée devient le service</strong>, sans conversion.</li>
+<li><em>Pourquoi c'est à l'examen.</em> Les questions portent sur les cinq écritures
+  de <code>factory</code>, le <code>null</code> de <code>[null, 'create']</code>, <code>constructor:</code> vs <code>factory:</code>
+  et ce que reçoit réellement le constructeur.</li>
+</ul>
+<p>Un <strong>callable</strong> est une cible que PHP peut appeler : méthode statique,
+méthode d'un objet, objet invocable ou fonction. <code>factory</code> choisit
+ce callable pour produire le service. Les <code>arguments</code> configurés
+alimentent sa signature, pas directement celle du constructeur final.</p>
+<p>La factory peut elle-même faire <code>new</code>, choisir un objet existant
+ou échouer. La valeur retournée devient le service ; déclarer <code>class</code>
+ne convertit pas cette valeur vers cette class. Les types PHP de retour
+et des consommateurs restent des contraintes réelles.
+Un simple constructeur reste préférable si aucun protocole de création
+supplémentaire n'est nécessaire.</p>
+<p>Plan du cours :</p>
+<pre class="highlight" tabindex="0"><code class="language-text">Factory
+   ├─ 1. Les écritures    → quel type de callable fabrique ? (@ ou pas)
+   ├─ 2. [null, 'create'] → la classe du service elle-même
+   ├─ 3. Les arguments    → ils vont à la FACTORY, pas au constructeur
+   ├─ 4. Le retour        → la valeur retournée EST le service
+   └─ 5. Les expressions  → choisir plutôt que fabriquer</code></pre></section><section class="teaching-section" data-section="s-le-schema"><h2 id="s-le-schema" tabindex="-1">Le schéma</h2><aside class="section-digest" id="s-le-schema-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Le container appelle la factory.</li><li>La factory choisit ensuite les arguments du constructor.</li></ol></aside><p><strong>Où en est-on ?</strong> Avant les cinq écritures, le chemin d'exécution complet
+d'un service fabriqué : qui appelle qui, avec quelle valeur.</p>
+<p>Le laboratoire conserve le nom <code>fabien</code> pour rendre la transformation
+visible : il entre dans <code>create()</code>, puis reçoit le préfixe <code>factory:</code>
+avant d'atteindre le constructeur.</p>
+<figure class="diagram" aria-labelledby="CRS-1bkg7pkf78c7-3-diagram-0-title CRS-1bkg7pkf78c7-3-diagram-0-description"><figcaption id="CRS-1bkg7pkf78c7-3-diagram-0-title">La factory choisit les arguments du constructeur</figcaption><p id="CRS-1bkg7pkf78c7-3-diagram-0-description">La définition configure create comme factory et fabien comme argument. Lors de la première demande, le container appelle create avec fabien. Cette méthode fait new self avec factory:fabien et retourne le NewsletterManager. Le container réutilise ce service s&#x27;il est partagé.</p><div class="mermaid" hidden>---
+title: Un service construit par une factory
+---
+flowchart TD
+  accTitle: La factory choisit les arguments du constructeur
+  accDescr: La définition configure create comme factory et fabien comme argument. Lors de la première demande, le container appelle create avec fabien. Cette méthode fait new self avec factory:fabien et retourne le NewsletterManager. Le container réutilise ce service s&#x27;il est partagé.
+  D[&quot;définition&lt;br/&gt;factory: create&lt;br/&gt;argument: fabien&quot;] -. &quot;configure l&#x27;appel&quot; .-&gt; C[&quot;container&quot;]
+  C --&gt;|&quot;create avec fabien&quot;| F[&quot;NewsletterManager::create&quot;]
+  F --&gt;|&quot;new self avec factory:fabien&quot;| O([&quot;NewsletterManager&quot;])
+  O --&gt;|&quot;retourné par create&quot;| S[&quot;service conservé&lt;br/&gt;si shared: true&quot;]
+  classDef config fill:#fef3c7,stroke:#b45309,color:#78350f
+  classDef runtime fill:#e0f2fe,stroke:#0369a1,color:#0c4a6e
+  classDef result fill:#dcfce7,stroke:#15803d,color:#14532d
+  class D config
+  class C,F runtime
+  class O,S result</div></figure>
+<p>Le pointillé orange décrit l'instruction ; les flèches pleines
+suivent l'appel puis le retour. Le résultat vert est l'objet fabriqué,
+pas nécessairement l'objet factory. Ce chemin suppose la première
+résolution ordinaire réussie d'un service partagé.
+Le constructeur s'exécute bien, mais la factory décide de ses arguments.
+Une nouvelle utilisation d'une méthode du service ne rejoue pas
+automatiquement cette création.</p>
+<p>Sans factory / avec factory :</p>
+<pre class="highlight" tabindex="0"><code class="language-text"> SANS factory                           AVEC factory
+┌──────────────────────────┐          ┌─────────────────────────────────┐
+│ container                │          │ container                       │
+│   └─ new Classe($args)   │          │   └─ Classe::create($args)      │
+│                          │          │          └─ new self(décidé)    │
+└──────────────────────────┘          └─────────────────────────────────┘
+ arguments → constructeur               arguments → FACTORY
+                                        la factory → constructeur</code></pre></section><section class="teaching-section" data-section="s-le-fil-rouge-un-newslettermanager"><h2 id="s-le-fil-rouge-un-newslettermanager" tabindex="-1">Le fil rouge : un NewsletterManager</h2><aside class="section-digest" id="s-le-fil-rouge-un-newslettermanager-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Le résultat suit le partage du service.</li><li>shared: false redemande une construction.</li></ol></aside><p><strong>Où en est-on ?</strong> On pose l'objet de laboratoire. Observez bien d'où vient
+chaque valeur : c'est tout l'enjeu du cours.</p>
+<p>Ce type applicatif fictif conserve seulement un libellé d'expéditeur.
+L'accesseur permet d'observer ce que le constructeur a reçu :</p>
+<pre class="highlight" tabindex="0"><code class="language-php">class NewsletterManager
+{
+    public function __construct(private string $sender = 'none') {}
+
+    public static function create(string $sender): self
+    {
+        return new self('factory:'.$sender);
+    }
+
+    public function sender(): string
+    {
+        return $this-&gt;sender;
+    }
+}</code></pre>
+<p><code>NewsletterManager::create('fabien')-&gt;sender()</code> rend <code>factory:fabien</code>.
+<code>(new NewsletterManager('fabien'))-&gt;sender()</code> rend <code>fabien</code>.
+La différence vient de la méthode appelée, pas d'une transformation
+automatique des strings par DependencyInjection. Aucun message
+n'est envoyé par cette classe.</p></section><section class="teaching-section" data-section="s-les-ecritures-choisir-selon-la-nature-du-callable"><span class="outcome-anchor" id="out-OUT-rrswf59s7t5a" tabindex="-1"></span><h2 id="s-les-ecritures-choisir-selon-la-nature-du-callable" tabindex="-1">Les écritures : choisir selon la nature du callable</h2><aside class="section-digest" id="s-les-ecritures-choisir-selon-la-nature-du-callable-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Le préfixe @ désigne un service.</li><li>Sans @ le callable est statique.</li></ol></aside><p><strong>Où en est-on ?</strong> Étape 1 sur 5. Question : <em>comment dire au container
+quelle méthode appeler ?</em> Tout dépend d'une seule interrogation : la
+création a-t-elle besoin d'<strong>une instance</strong> (avec ses propres dépendances)
+ou peut-elle être <strong>statique</strong> ?</p>
+<p>Avant d'écrire le YAML, regardons la signature de la création :
+exige-t-elle une instance possédant ses propres dépendances,
+ou peut-elle être appelée statiquement ? Les classes et fonctions
+de ce tableau sont des variantes applicatives à fournir, pas des APIs Symfony :</p>
+<table>
+<thead>
+<tr>
+<th>Ce qui fabrique</th>
+<th>Écriture YAML</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>une method <strong>statique</strong> d'une autre class</td>
+<td><code>factory: ['App\Email\NewsletterManagerStaticFactory', 'createNewsletterManager']</code></td>
+</tr>
+<tr>
+<td>une method statique de la class <strong>du service</strong></td>
+<td><code>factory: [null, 'create']</code></td>
+</tr>
+<tr>
+<td>une method d'un <strong>service</strong></td>
+<td><code>factory: ['@App\Email\NewsletterManagerFactory', 'createNewsletterManager']</code></td>
+</tr>
+<tr>
+<td>un service <strong>invocable</strong></td>
+<td><code>factory: '@App\Email\InvokableNewsletterManagerFactory'</code> → <code>__invoke()</code></td>
+</tr>
+<tr>
+<td>une function PHP</td>
+<td><code>factory: 'App\make_newsletter'</code></td>
+</tr>
+</tbody>
+</table>
+<p>Sans <code>@</code> dans le premier élément, le nom de class désigne un appel
+statique. Avec <code>@</code>, le container résout d'abord l'objet factory.
+La forme courte d'un service invocable appelle son <code>__invoke()</code>.
+Une fonction doit, elle aussi, être effectivement chargée ;
+l'autoload PSR-4 des classes ne découvre pas automatiquement les fonctions.</p>
+<p>Arbre de décision :</p>
+<pre class="highlight" tabindex="0"><code class="language-text">La méthode de création est-elle statique ?
+   ├─ oui ──▶ [ 'Classe', 'méthode' ]            (sans @)
+   │           └─ c'est la classe du service ? ─▶ [ null, 'méthode' ]
+   └─ non ──▶ [ '@service', 'méthode' ]          (avec @)
+                └─ pas de méthode, objet invocable ─▶ '@service'  (__invoke)
+Fonction PHP globale ou namespacée (chargée) ─▶ 'App\ma_fonction'</code></pre>
+<p>Par exemple, pour <code>App\TokenFactory</code> sans argument requis et sa méthode
+d'instance <code>create(): Token</code>, avec les deux classes autoloadables :</p>
+<pre class="highlight" tabindex="0"><code class="language-yaml">services:
+    App\TokenFactory: ~
+    App\Token:
+        factory: ['@App\TokenFactory', 'create']</code></pre>
+<p>Demander Token appelle <code>create()</code> sur l'objet factory.
+Retirer <code>@</code> tenterait un appel statique invalide ; dans ce cas,
+la configuration peut traverser la compilation puis échouer
+à l'exécution avec <code>Non-static method ... cannot be called statically</code>.
+Une compilation réussie ne valide donc pas tout comportement du callable.</p>
+<p>L'API PHP propose aussi
+<code>-&gt;factory(NewsletterManagerStaticFactory::createNewsletterManager(...))</code>
+ou <code>-&gt;factory([service(...), 'createNewsletterManager'])</code>.
+La première forme utilise la syntaxe PHP de création d'un callable,
+pas un appel immédiat avec des arguments métier ; la seconde référence
+un service via le helper de configuration approprié.</p>
+<div class="admonition info">
+<p class="admonition-title">🌍 In Real Life</p>
+<p><strong>La situation</strong> : une instruction de fabrication peut désigner une procédure directement, ou demander de passer par un atelier équipé de ses propres outils.</p>
+<p><strong>L’équivalent dans Symfony</strong> : procédure directe → callable statique ou fonction ; atelier à obtenir d'abord → service factory référencé par <code>@</code> ; entrée unique de l'atelier → <code>__invoke()</code>.</p>
+<p><strong>Retour à la réalité technique</strong> : <code>['Classe', 'méthode']</code> demande un appel statique ; <code>['@service', 'méthode']</code> appelle une instance résolue. La forme <code>'@service'</code> exige un objet invocable. Une fonction doit être chargée ; l'autoload des classes ne la découvre pas automatiquement. La syntaxe PHP <code>méthode(...)</code> crée un callable, sans lancer ici sa fabrication métier.</p>
+<p><strong>🧠 Comment le mémoriser</strong> : « Dois-je obtenir le fabricant avant de lui demander le produit ? » Image mentale : procédure écrite d'un côté, atelier équipé de l'autre. Question-réflexe : le callable exige-t-il une instance ?</p>
+<p><strong>⚠️ À ne pas confondre</strong> : objet factory et objet produit ; une compilation réussie ne rend pas statique une méthode d'instance.</p>
+</div></section><section class="teaching-section" data-section="s-null-create-la-class-du-service-elle-meme"><span class="outcome-anchor" id="out-OUT-5tp6e11ygzgz" tabindex="-1"></span><h2 id="s-null-create-la-class-du-service-elle-meme" tabindex="-1">`[null, &#x27;create&#x27;]` : la class du service elle-même</h2><aside class="section-digest" id="s-null-create-la-class-du-service-elle-meme-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>null reprend la class de la definition.</li><li>Il ne désigne pas une function globale.</li></ol></aside><p><strong>Où en est-on ?</strong> Étape 2 sur 5. Cas le plus courant : la méthode de création
+est dans la classe qu'on est en train de définir. Question : <em>faut-il
+répéter le nom de la classe ?</em> Non : <code>null</code> le remplace.</p>
+<p>Le raccourci résout <code>null</code> vers la class de la définition courante.
+Pour notre NewsletterManager autoloadable :</p>
+<pre class="highlight" tabindex="0"><code class="language-yaml">services:
+    NewsletterManager:
+        factory: [null, 'create']
+        arguments: ['fabien']
+        public: true</code></pre>
+<p>Dans ce laboratoire, <code>public: true</code> permet l'observation par
+<code>$container-&gt;get(NewsletterManager::class)-&gt;sender()</code> après chargement
+et compilation : le résultat attendu est <code>factory:fabien</code>.
+Le <code>null</code> ne désigne ni un service absent ni une fonction globale.</p>
+<p><code>constructor: 'create'</code> exprime la même sélection de méthode statique.
+Il ne se combine pas avec <code>factory</code> sur la même définition :
+le loader YAML lève <code>LogicException</code> dès le chargement.
+<code>#[Autoconfigure(constructor: 'create')]</code> peut porter cette intention
+sur la class, à condition que l'autoconfiguration applicable la lise.
+Ce n'est pas une nouvelle règle PHP permettant d'appeler statiquement
+une méthode d'instance ou de contourner sa visibilité.</p>
+<table>
+<thead>
+<tr>
+<th>Écriture</th>
+<th>Équivalent</th>
+<th>Combinable avec <code>factory</code> ?</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>factory: [null, 'create']</code></td>
+<td>méthode statique de la classe du service</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>constructor: 'create'</code></td>
+<td>le loader en fait <code>[null, 'create']</code></td>
+<td><strong>non</strong> : <code>LogicException</code> au chargement</td>
+</tr>
+<tr>
+<td><code>#[Autoconfigure(constructor: 'create')]</code></td>
+<td>même intention portée par la classe</td>
+<td>si l'autoconfiguration la lit</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition info">
+<p class="admonition-title">🌍 In Real Life</p>
+<p><strong>La situation</strong> : sur la fiche d'un modèle, « utiliser sa procédure create » désigne la procédure du modèle inscrit sur cette fiche, pas un fabricant inconnu.</p>
+<p><strong>L’équivalent dans Symfony</strong> : modèle de la fiche → classe de la définition ; instruction relative → <code>[null, 'create']</code> ; autre notation de ce choix → <code>constructor: 'create'</code>.</p>
+<p><strong>Retour à la réalité technique</strong> : le <code>null</code> est remplacé par la classe de la définition, sans promettre un retour nullable. <code>factory</code> et <code>constructor</code> sont deux instructions alternatives : les combiner provoque une erreur au chargement YAML. L'attribute correspondant exige que l'autoconfiguration applicable le lise.</p>
+<p><strong>🧠 Comment le mémoriser</strong> : « Ici, null veut dire cette classe. » Image mentale : une flèche de la procédure vers le nom en haut de sa propre fiche. Question-réflexe : quelle classe cette définition porte-t-elle ?</p>
+<p><strong>⚠️ À ne pas confondre</strong> : option de configuration <code>constructor</code> et appel direct imposé à <code>__construct()</code> ; ici l'option sélectionne une méthode statique.</p>
+</div></section><section class="teaching-section" data-section="s-les-arguments-vont-a-la-factory"><span class="outcome-anchor" id="out-OUT-mfkawre47dv3" tabindex="-1"></span><h2 id="s-les-arguments-vont-a-la-factory" tabindex="-1">Les arguments vont à la factory</h2><aside class="section-digest" id="s-les-arguments-vont-a-la-factory-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>La signature de la factory est câblée.</li><li>Les arguments ne ciblent pas directement le constructor final.</li></ol></aside><p><strong>Où en est-on ?</strong> Étape 3 sur 5, la plus piégeuse. Question : <em>à quelle
+signature appartiennent les <code>arguments:</code> du YAML ?</em> À celle de la
+<strong>factory</strong>, jamais directement à <code>__construct()</code>.</p>
+<p>Rejouons exactement le YAML précédent, sans intercaler un autre <code>new</code> :</p>
+<table>
+<thead>
+<tr>
+<th>Appel</th>
+<th>Valeur reçue</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>NewsletterManager::create()</code>, par le container</td>
+<td><code>'fabien'</code></td>
+</tr>
+<tr>
+<td><code>__construct()</code>, par <code>new self(...)</code> dans <code>create()</code></td>
+<td><code>'factory:fabien'</code></td>
+</tr>
+</tbody>
+</table>
+<p>Le container n'injecte pas d'abord <code>fabien</code> dans le constructeur
+puis dans <code>create()</code> : il appelle seulement la factory configurée.
+Si l'autowiring est actif, il examine sa signature ; les valeurs
+scalaires nécessitent toujours un choix explicite.
+Les named arguments doivent donc correspondre aux noms de la factory.</p>
+<p>Ce second laboratoire montre une validation avant création :</p>
+<pre class="highlight" tabindex="0"><code class="language-php">final class Newsletter
+{
+    private function __construct(public readonly string $sender) {}
+
+    public static function create(string $rawSender): self
+    {
+        $sender = trim($rawSender);
+        if ($sender === '') {
+            throw new InvalidArgumentException('Expéditeur vide');
+        }
+
+        return new self($sender);
+    }
+}
+$newsletter = Newsletter::create(' équipe ');
+echo $newsletter-&gt;sender, "\n";</code></pre>
+<p>La sortie est <code>équipe</code>. Une entrée composée seulement d'espaces
+lève l'exception avant de construire l'objet. Dans sa définition
+de service, l'argument nommé serait <code>$rawSender</code>, et non <code>$sender</code>.
+La validation vérifie ici une string non vide, pas une adresse email valide.</p>
+<p>Pourquoi un constructeur <code>private</code> ici ? Pour <strong>forcer</strong> le passage par
+<code>create()</code> : on ne peut plus fabriquer un <code>Newsletter</code> sans validation.
+La factory statique peut appeler ce constructeur privé parce qu'elle
+appartient à la même classe.</p>
+<div class="admonition info">
+<p class="admonition-title">🌍 In Real Life</p>
+<p><strong>La situation</strong> : l'atelier reçoit un bon brut, nettoie le libellé et transmet seulement le libellé accepté à l'assemblage. Il peut refuser le bon avant de fabriquer quoi que ce soit.</p>
+<p><strong>L’équivalent dans Symfony</strong> : bon brut → arguments configurés de la factory ; nettoyage/refus → code de <code>create()</code> ; entrée d'assemblage → arguments qu'elle passe elle-même au constructeur.</p>
+<p><strong>Retour à la réalité technique</strong> : le conteneur appelle la factory configurée, pas d'abord le constructeur final. Autowiring et arguments nommés concernent sa signature. Dans l'exemple, <code>$rawSender</code> devient <code>$sender</code> après <code>trim()</code> ; une chaîne non vide n'est pas forcément une adresse email valide.</p>
+<p><strong>🧠 Comment le mémoriser</strong> : « La factory reçoit, puis décide ce que le constructeur reçoit. » Image mentale : deux bons successifs, brut puis préparé. Question-réflexe : à quelle signature appartient ce nom d'argument ?</p>
+<p><strong>⚠️ À ne pas confondre</strong> : transformation effectuée par le code de création et conversion automatique par DependencyInjection.</p>
+</div></section><section class="teaching-section" data-section="s-ce-que-le-container-retient-la-valeur-retournee"><h2 id="s-ce-que-le-container-retient-la-valeur-retournee" tabindex="-1">Ce que le container retient : la valeur retournée</h2><aside class="section-digest" id="s-ce-que-le-container-retient-la-valeur-retournee-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>La class guide l&#x27;autowiring.</li><li>Le retour de la factory doit respecter le contrat.</li></ol></aside><p><strong>Où en est-on ?</strong> Étape 4 sur 5. La factory a tourné. Question : <em>que garde
+le container, et vérifie-t-il que c'est du bon type ?</em></p>
+<p>Le service attendu par nos consommateurs est un objet compatible.
+Utiliser <code>strtoupper</code> comme factory, avec une string en argument,
+produit une string : une voie de récupération typée <code>?object</code>
+la refuse. La signature nullable ne transforme pas le container
+en registre général de valeurs scalaires ; les valeurs de configuration
+ont leurs mécanismes propres.</p>
+<p>L'option <code>class</code> sert notamment à décrire le service pour le câblage ;
+elle ne convertit pas un <code>stdClass</code> en <code>Liar</code>.
+Si une factory déclarée <code>: Liar</code> rend un autre objet, PHP peut déjà
+échouer à son retour. Si aucun type de retour n'intercepte la faute,
+un consommateur exigeant <code>Liar</code> peut la révéler lors de l'injection.
+« Le container ne convertit pas » ne signifie pas « aucun type n'est contrôlé ».</p>
+<p>Pour une même définition partagée et un même container, l'objet produit
+est normalement conservé après une résolution réussie.
+<code>shared: false</code> demande une nouvelle production à chaque résolution,
+pas à chaque méthode appelée sur un objet déjà obtenu.
+Même une factory rappelée peut choisir de rendre le même objet :
+un nouvel appel n'est pas une garantie d'identité différente.</p>
+<pre class="highlight" tabindex="0"><code class="language-text"> factory retourne  ──▶  devient LE service  ──▶  injecté dans le consommateur
+      │                       │                            │
+      │ (type de retour PHP)  │ (class: = description,     │ (type du paramètre
+      │  1re frontière        │  PAS une conversion)       │  2e frontière)</code></pre>
+<div class="admonition info">
+<p class="admonition-title">🌍 In Real Life</p>
+<p><strong>La situation</strong> : coller « modèle Liar » sur un colis ne transforme pas son contenu. Rappeler le fournisseur ne garantit pas non plus qu'il livre un objet différent.</p>
+<p><strong>L’équivalent dans Symfony</strong> : étiquette → option <code>class</code> ; contenu réel → retour de la factory ; rappel du fournisseur → nouvelle résolution avec <code>shared: false</code>.</p>
+<p><strong>Retour à la réalité technique</strong> : le retour devient le service, sans conversion vers la classe déclarée. Les types PHP du retour ou du consommateur peuvent rejeter l'objet incompatible. Pour une définition partagée, le résultat réussi est normalement conservé ; une factory rappelée peut volontairement retourner la même instance.</p>
+<p><strong>🧠 Comment le mémoriser</strong> : « Vérifie le produit, pas seulement l'étiquette. » Image mentale : un colis ouvert à côté de son étiquette. Question-réflexe : quel objet est réellement retourné et qui décide de le réutiliser ?</p>
+<p><strong>⚠️ À ne pas confondre</strong> : partage de la factory, partage du produit et appel d'une méthode sur un produit déjà obtenu.</p>
+</div></section><section class="teaching-section" data-section="s-une-expression-comme-factory"><h2 id="s-une-expression-comme-factory" tabindex="-1">Une expression comme factory</h2><aside class="section-digest" id="s-une-expression-comme-factory-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>L&#x27;expression accède aux arguments configurés.</li><li>ExpressionLanguage doit être disponible.</li></ol></aside><p><strong>Où en est-on ?</strong> Étape 5 sur 5. Jusqu'ici la factory <em>fabrique</em>. Parfois il
+suffit de <strong>choisir</strong> parmi des services déjà définis, selon un paramètre :
+une expression le fait en une ligne.</p>
+<p>Une sélection simple peut aussi être décrite par une expression.
+Ce fragment de définition suppose ExpressionLanguage 8.0 disponible,
+<code>kernel.debug</code> défini, et deux services existants et compatibles
+avec les consommateurs :</p>
+<pre class="highlight" tabindex="0"><code class="language-yaml">factory: '@=parameter("kernel.debug") ? service("tracable_newsletter") : service("newsletter")'</code></pre>
+<p>Si <code>kernel.debug</code> vaut <code>true</code>, l'expression rend le service nommé
+<code>tracable_newsletter</code> ; sinon elle rend <code>newsletter</code>.
+Ces identifiants historiques doivent correspondre à de vraies définitions.
+La factory sélectionne ici un objet plutôt que d'en construire forcément un neuf.</p>
+<p>Dans ce contexte d'expression factory, <code>arg(0)</code> permet de lire
+le premier argument configuré de la définition.
+Sans ExpressionLanguage, cette syntaxe <code>@=</code> échoue au chargement.
+Le loader ne l'accepte pas comme <code>configurator</code> :
+un configurator intervient sur un objet déjà créé, ce qui est
+une responsabilité différente. Une sélection complexe serait souvent
+plus lisible et testable dans une classe factory explicite.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Factory</th>
+<th>Configurator</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Moment</td>
+<td><strong>crée</strong> (ou sélectionne) l'objet</td>
+<td>agit sur un objet <strong>déjà créé</strong></td>
+</tr>
+<tr>
+<td>Retour</td>
+<td>devient le service</td>
+<td>—</td>
+</tr>
+<tr>
+<td>Expression <code>@=</code></td>
+<td>acceptée</td>
+<td><strong>refusée</strong> par le loader</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition info">
+<p class="admonition-title">🌍 In Real Life</p>
+<p><strong>La situation</strong> : le responsable choisit un équipement parmi deux déjà prévus, selon le mode de travail. Cette sélection n'exige pas de fabriquer un troisième équipement.</p>
+<p><strong>L’équivalent dans Symfony</strong> : critère de choix → <code>kernel.debug</code> ; équipements disponibles → services référencés ; sélection → expression <code>@=</code> utilisée comme factory.</p>
+<p><strong>Retour à la réalité technique</strong> : l'expression peut retourner un service existant ; les dépendances référencées doivent être disponibles et compatibles. Elle exige ExpressionLanguage. <code>arg(0)</code> lit l'argument configuré ; cette syntaxe de factory n'est pas acceptée comme configurator, qui intervient sur un objet déjà créé.</p>
+<p><strong>🧠 Comment le mémoriser</strong> : « Produire un résultat peut consister à choisir. » Image mentale : un aiguillage vers deux équipements disponibles. Question-réflexe : doit-on obtenir le service ou régler un objet déjà créé ?</p>
+<p><strong>⚠️ À ne pas confondre</strong> : factory et configurator ; une expression longue ne devient pas préférable à une classe de création testable.</p>
+</div></section><section class="teaching-section" data-section="s-pieges-d-examen"><h2 id="s-pieges-d-examen" tabindex="-1">Pièges d&#x27;examen</h2><p class="teaching-label pitfall"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="warning" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3L23 21H1L12 3ZM12 9V14M12 17V18"></path></svg> <strong>Piège à éviter</strong></p><aside class="section-digest" id="s-pieges-d-examen-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Les deux mécanismes choisissent la construction.</li><li>Il faut sélectionner une seule forme.</li></ol></aside><ul class="pitfall-list"><li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : Où en est-on ?</summary><p><strong>Où en est-on ?</strong> Pour chaque piège : l'énoncé, puis <em>pourquoi la mauvaise
+réponse semble plausible</em>.</p></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : Suivre les deux signatures, pas seulement la valeur finale.</summary><p><strong>Suivre les deux signatures, pas seulement la valeur finale.</strong>
+<code>create('fabien')</code> reçoit la valeur configurée ; son <code>new self()</code>
+reçoit <code>factory:fabien</code>. Un argument nommé doit viser la première signature.
+<em>Plausible car</em> on lit <code>arguments: ['fabien']</code> comme « le constructeur reçoit fabien ».</p></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : Le null du raccourci est une cible relative.</summary><p><strong>Le <code>null</code> du raccourci est une cible relative.</strong>
+Il désigne la class du service, pas un résultat nullable
+ni une fonction à chercher dans le namespace global.
+<em>Plausible car</em> <code>null</code> évoque « rien » en PHP.</p></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : Le @ décide si l&#x27;on demande un objet factory.</summary><p><strong>Le <code>@</code> décide si l'on demande un objet factory.</strong>
+Une méthode d'instance exige cette instance ; la forme courte
+<code>'@service'</code> appelle son <code>__invoke()</code>, pas son constructeur comme résultat final.
+<em>Plausible car</em> <code>@</code> est lu comme un simple préfixe de référence.</p></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : Compilation réussie ne rend pas une méthode statique.</summary><p><strong>Compilation réussie ne rend pas une méthode statique.</strong>
+Le mauvais callable peut échouer au premier appel effectif.
+Vérifions la signature et la référence plutôt que déduire la validité
+de l'absence d'erreur lors du chargement.
+<em>Plausible car</em> « compilé » rassure sur la validité de tout.</p></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : La class déclarée ne transforme pas le retour.</summary><p><strong>La class déclarée ne transforme pas le retour.</strong>
+Les signatures PHP de la factory, des accès et du consommateur
+peuvent chacune révéler une incompatibilité à leur frontière.
+<em>Plausible car</em> <code>class:</code> ressemble à un cast.</p></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : Choisir une seule instruction de fabrication.</summary><p><strong>Choisir une seule instruction de fabrication.</strong>
+<code>factory</code> et <code>constructor</code> sur la même définition provoquent
+<code>LogicException</code> au chargement ; ce n'est pas une séquence de deux créations.
+<em>Plausible car</em> les deux semblent complémentaires.</p></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : Un attribute ignoré ne remplace pas le constructeur.</summary><p><strong>Un attribute ignoré ne remplace pas le constructeur.</strong>
+Avec autoconfiguration désactivée et aucune autre factory explicite,
+la création ordinaire s'applique. L'attribute ne s'exécute pas de lui-même.
+<em>Plausible car</em> un attribut PHP paraît actif dès qu'il est écrit.</p></details></li></ul></section><section class="teaching-section" data-section="s-fiche-express"><h2 id="s-fiche-express" tabindex="-1">Fiche express</h2><p class="teaching-label essential"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="book" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5C9 3 5 3 2 4V20C5 19 9 19 12 21C15 19 19 19 22 20V4C19 3 15 3 12 5V21M5 8H8M5 12H8M16 8H19M16 12H19"></path></svg> <strong>À mémoriser</strong></p><aside class="section-digest" id="s-fiche-express-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Un service peut être callable.</li><li>La factory invocable n&#x27;a pas besoin de nom de method séparé.</li></ol></aside><p>Avant de fabriquer le service de notification :</p>
+<ol>
+<li>Choisir constructeur ordinaire ou véritable protocole de création.</li>
+<li>Identifier callable statique, objet factory, invocable ou fonction.</li>
+<li>Fournir les arguments de <strong>ce</strong> callable.</li>
+<li>Vérifier la compatibilité du retour et les erreurs avant création.</li>
+<li>Ne pas combiner <code>constructor</code> et <code>factory</code>.</li>
+<li>Raisonner sur le partage du produit, séparément de celui de la factory.</li>
+<li>Réserver les expressions aux choix lisibles avec leurs dépendances disponibles.</li>
+</ol>
+<p>Les services seront construits plus tard. Pour transformer leur plan
+collectivement avant cette utilisation, il faut comprendre les compiler passes.</p>
+<h3 tabindex="-1" id="s-fiche-express-nested-a-retenir-pour-la-certification">🧠 À retenir pour la certification</h3>
+<ul>
+<li><code>factory</code> désigne un <strong>callable</strong> ; les <code>arguments</code> vont à <strong>la factory</strong>, pas au constructeur final.</li>
+<li>Sans <code>@</code> → appel <strong>statique</strong> (<code>['Classe','méthode']</code>) ; avec <code>@</code> → instance résolue ; <code>'@service'</code> seul → <code>__invoke()</code>.</li>
+<li><code>[null, 'create']</code> : <code>null</code> = la classe de la définition ; <code>constructor: 'create'</code> équivaut, mais <strong>jamais avec <code>factory</code></strong> (<code>LogicException</code>).</li>
+<li>Mauvais callable : la compilation peut réussir, l'erreur survient au premier appel.</li>
+<li>La <strong>valeur retournée devient le service</strong> ; <code>class:</code> ne convertit rien, les types PHP contrôlent aux frontières.</li>
+<li><code>shared: false</code> → nouvelle production par résolution ; une factory peut rendre le même objet.</li>
+<li><code>@=</code> (ExpressionLanguage) : sélection OK comme factory, refusée comme <code>configurator</code>.</li>
+</ul>
+<p><strong>Phrase de mémorisation :</strong> « Le container appelle la factory avec mes arguments ; ce qu'elle retourne devient le service, et le constructeur ne voit que ce qu'elle lui passe. »</p></section><section class="official-sources"><h2 id="reader-sources" tabindex="-1">Sources officielles et compléments</h2><ul><li><a href="https://symfony.com/doc/8.0/service_container.html">Symfony 8.0 — DependencyInjection</a></li><li><a href="https://symfony.com/doc/8.0/service_container/factories.html">Symfony 8.0 — service container / factories</a></li></ul></section><section id="course-recalls" aria-labelledby="course-recalls-title" tabindex="-1"><h2 id="course-recalls-title">Rappels et liens avec les autres cours</h2><div data-recall-group="other"><h3>Rappels des cours précédents / autres modules</h3><ul><li data-recall-course="CRS-b4g5s2asb9ye" data-recall-kind="previous_course"><p class="recall-provenance">Module 09 — Injection de dépendances · Cours « Tags »</p><p>Un tag est un marqueur. Son lecteur lui donne un effet.</p><p><a href="#cards-previous">Rappel : <span lang="en">Does adding a tag to a service execute any behavior by itself?</span></a></p></li></ul></div></section><nav class="course-sequence" aria-label="Ordre de lecture"><a rel="prev" href="course-CRS-exs5dvtqa1as.html" aria-label="Précédent : Semantic configuration — Module 09 — Injection de dépendances">Précédent : Semantic configuration</a> <a href="lot-09.html">Sommaire : Module 09 — Injection de dépendances</a> <a rel="next" href="course-CRS-d25bvr0097py.html" aria-label="Suivant : Compiler passes — Module 09 — Injection de dépendances">Suivant : Compiler passes</a></nav><p class="course-practice-entry"><a class="button" href="#view-quiz">Fin du cours — s’entraîner avec le Quiz</a></p></div><div id="view-flashcards" data-course-panel role="region" aria-labelledby="view-flashcards-title"><h2 id="view-flashcards-title">Flashcards</h2><p lang="en">Answer before revealing each card.</p><p>Ces cartes ne mesurent pas une maîtrise notée.</p><div id="cards-s-l-essentiel-1" data-card-section="s-l-essentiel"><h3><a href="#s-l-essentiel">Revoir : L&#x27;essentiel</a></h3><div class="reader-cards"><details class="reader-card" id="B-1bkg7pkf78c7-01"><summary lang="en">When a service has a factory, who constructs the service object?</summary><p lang="en">The configured callable, not a direct container call to the service constructor.</p><p lang="fr">La factory décide de la construction. Sa valeur retournée devient le service.</p><a href="course-CRS-1bkg7pkf78c7.html#out-OUT-rrswf59s7t5a">Revoir le passage précis</a></details></div></div><div id="cards-s-le-schema-2" data-card-section="s-le-schema"><h3><a href="#s-le-schema">Revoir : Le schéma</a></h3><div class="reader-cards"><details class="reader-card" id="B-1bkg7pkf78c7-02"><summary lang="en">Where are a factory-based definition&#x27;s arguments passed?</summary><p lang="en">To the factory callable.</p><p lang="fr">Le container appelle la factory. La factory choisit ensuite les arguments du constructor.</p><a href="course-CRS-1bkg7pkf78c7.html#out-OUT-rrswf59s7t5a">Revoir le passage précis</a></details></div></div><div id="cards-s-le-fil-rouge-un-newslettermanager-3" data-card-section="s-le-fil-rouge-un-newslettermanager"><h3><a href="#s-le-fil-rouge-un-newslettermanager">Revoir : Le fil rouge : un NewsletterManager</a></h3><div class="reader-cards"><details class="reader-card" id="B-1bkg7pkf78c7-03"><summary lang="en">Does a shared factory-based NewsletterManager call its factory on every retrieval?</summary><p lang="en">No. The shared result is reused after the first creation.</p><p lang="fr">Le résultat suit le partage du service. shared: false redemande une construction.</p><a href="course-CRS-1bkg7pkf78c7.html#out-OUT-rrswf59s7t5a">Revoir le passage précis</a></details></div></div><div id="cards-s-les-ecritures-choisir-selon-la-nature-du-callable-4" data-card-section="s-les-ecritures-choisir-selon-la-nature-du-callable"><h3><a href="#s-les-ecritures-choisir-selon-la-nature-du-callable">Revoir : Les écritures : choisir selon la nature du callable</a></h3><div class="reader-cards"><details class="reader-card" id="B-1bkg7pkf78c7-04"><summary lang="en">How does [&#x27;@factory_service&#x27;, &#x27;create&#x27;] differ from [&#x27;FactoryClass&#x27;, &#x27;create&#x27;]?</summary><p lang="en">The first calls an instance service; the second calls a static class method.</p><p lang="fr">Le préfixe @ désigne un service. Sans @ le callable est statique.</p><a href="course-CRS-1bkg7pkf78c7.html#out-OUT-rrswf59s7t5a">Revoir le passage précis</a></details></div></div><div id="cards-s-null-create-la-class-du-service-elle-meme-5" data-card-section="s-null-create-la-class-du-service-elle-meme"><h3><a href="#s-null-create-la-class-du-service-elle-meme">Revoir : `[null, &#x27;create&#x27;]` : la class du service elle-même</a></h3><div class="reader-cards"><details class="reader-card" id="B-1bkg7pkf78c7-05"><summary lang="en">What does factory: [null, &#x27;create&#x27;] mean?</summary><p lang="en">Call create() statically on the class configured for that service.</p><p lang="fr">null reprend la class de la definition. Il ne désigne pas une function globale.</p><a href="course-CRS-1bkg7pkf78c7.html#out-OUT-5tp6e11ygzgz">Revoir le passage précis</a></details></div></div><div id="cards-s-les-arguments-vont-a-la-factory-6" data-card-section="s-les-arguments-vont-a-la-factory"><h3><a href="#s-les-arguments-vont-a-la-factory">Revoir : Les arguments vont à la factory</a></h3><div class="reader-cards"><details class="reader-card" id="B-1bkg7pkf78c7-06"><summary lang="en">Can a factory receive autowired service arguments?</summary><p lang="en">Yes, when autowiring is enabled for its definition.</p><p lang="fr">La signature de la factory est câblée. Les arguments ne ciblent pas directement le constructor final.</p><a href="course-CRS-1bkg7pkf78c7.html#out-OUT-mfkawre47dv3">Revoir le passage précis</a></details></div></div><div id="cards-s-ce-que-le-container-retient-la-valeur-retournee-7" data-card-section="s-ce-que-le-container-retient-la-valeur-retournee"><h3><a href="#s-ce-que-le-container-retient-la-valeur-retournee">Revoir : Ce que le container retient : la valeur retournée</a></h3><div class="reader-cards"><details class="reader-card" id="B-1bkg7pkf78c7-07"><summary lang="en">Does declaring class: Expected guarantee that a factory returns Expected?</summary><p lang="en">No. A wrong object type may fail later when injected into a typed consumer.</p><p lang="fr">La class guide l&#x27;autowiring. Le retour de la factory doit respecter le contrat.</p><a href="course-CRS-1bkg7pkf78c7.html#out-OUT-rrswf59s7t5a">Revoir le passage précis</a></details></div></div><div id="cards-s-une-expression-comme-factory-8" data-card-section="s-une-expression-comme-factory"><h3><a href="#s-une-expression-comme-factory">Revoir : Une expression comme factory</a></h3><div class="reader-cards"><details class="reader-card" id="B-1bkg7pkf78c7-08"><summary lang="en">What does arg(0) refer to in a factory expression?</summary><p lang="en">The first configured argument of the service definition.</p><p lang="fr">L&#x27;expression accède aux arguments configurés. ExpressionLanguage doit être disponible.</p><a href="course-CRS-1bkg7pkf78c7.html#out-OUT-mfkawre47dv3">Revoir le passage précis</a></details></div></div><div id="cards-s-pieges-d-examen-9" data-card-section="s-pieges-d-examen"><h3><a href="#s-pieges-d-examen">Revoir : Pièges d&#x27;examen</a></h3><div class="reader-cards"><details class="reader-card" id="B-1bkg7pkf78c7-09"><summary lang="en">Can factory and constructor be configured together on the same definition?</summary><p lang="en">No. Their combination is rejected.</p><p lang="fr">Les deux mécanismes choisissent la construction. Il faut sélectionner une seule forme.</p><a href="course-CRS-1bkg7pkf78c7.html#out-OUT-rrswf59s7t5a">Revoir le passage précis</a></details></div></div><div id="cards-s-fiche-express-10" data-card-section="s-fiche-express"><h3><a href="#s-fiche-express">Revoir : Fiche express</a></h3><div class="reader-cards"><details class="reader-card" id="B-1bkg7pkf78c7-10"><summary lang="en">What does a factory configured only as &#x27;@factory_service&#x27; invoke?</summary><p lang="en">The service&#x27;s __invoke() method.</p><p lang="fr">Un service peut être callable. La factory invocable n&#x27;a pas besoin de nom de method séparé.</p><a href="course-CRS-1bkg7pkf78c7.html#out-OUT-rrswf59s7t5a">Revoir le passage précis</a></details></div></div><div id="cards-previous"><p class="recall-provenance">Module 09 — Injection de dépendances · Cours « Tags »</p><aside class="checkpoint"><h2>Rappel d’un cours antérieur</h2><p>Avant de poursuivre : Tags.</p><details class="corpus-correction"><summary lang="en">Does adding a tag to a service execute any behavior by itself?</summary><p lang="en">No. A compiler pass or another consumer must read the tag.</p><p>Un tag est un marqueur. Son lecteur lui donne un effet.</p><a href="course-CRS-b4g5s2asb9ye.html#out-OUT-deqvr7c2bvsf">Relire la correction dans le cours antérieur</a></details></aside></div></div><div id="view-quiz" data-course-panel role="region" aria-labelledby="view-quiz-title"><aside class="revision-context"><p><strong>Avant le quiz :</strong> La notification d&#x27;inscription a désormais ses collaborateurs et ses valeurs. Certains objets doivent toutefois être créés par une méthode qui normalise les entrées ou choisit une implémentation. Une factory, ou fabrique, prend cette décision à la place de l&#x27;appel direct au constructeur par le container. Nous allons suivre son entrée, son retour et le partage de l&#x27;objet obtenu, sans ajouter un envoi d&#x27;email réel.</p><p>Quelle donnée entre, quelle responsabilité agit et quelle condition change le résultat ? Pour chaque correction, vérifiez ces conditions dans <a href="course-CRS-1bkg7pkf78c7.html#s-objectif">le passage enseigné</a>, sans supposer que toutes les branches du blog sont exécutées.</p></aside><h2 id="view-quiz-title">Quiz</h2><p class="quiz-size" lang="en">5 eligible learning questions · 5 per session. Repeating a question does not demonstrate mastery.</p><p id="course-quiz-status" role="status">Quiz interactif non chargé. Démarrez après chargement de la banque locale.</p><div id="course-quiz-controls" class="assessment-main" hidden><div id="course-quiz-assessment-controls" hidden><select id="course-quiz-assessment-mode" aria-label="Mode du quiz" hidden><option value="learning">Entraînement</option></select><p id="course-quiz-training-scope"></p><button id="course-quiz-start-assessment" type="button" lang="en">Start practice</button><button id="course-quiz-finish-assessment" type="button" lang="en" hidden>End session</button></div><p id="course-quiz-assessment-error" role="alert"></p><p id="course-quiz-assessment-timer" hidden></p><p id="course-quiz-session-progress" class="quiz-progress" role="status" lang="en"></p><div id="course-quiz-assessment-app" tabindex="-1"></div><nav id="course-quiz-session-navigation" aria-label="Questions du cours"></nav><div id="course-quiz-learning-overview" aria-live="polite"></div></div><div id="course-quiz-native"><p>Sans JavaScript ou si le chargement échoue : aucune tentative notée. Les <a href="#view-flashcards">flashcards du cours</a> restent disponibles.</p><details class="course-quiz-fallback" data-question-id="L-1bkg7pkf78c7-base-v1"><summary lang="en">When a service has a factory, who constructs the service object? Select one answer (radio).</summary><p>Correction de consultation — non notée.</p><p>La factory décide de la construction. Sa valeur retournée devient le service.</p><ul><li><strong lang="en">Distractor: The container always calls the class constructor directly.</strong><p>Une factory remplace cet appel direct par son callable.</p></li><li><strong lang="en">Distractor: The factory only validates arguments after construction.</strong><p>La factory décide de la construction et retourne le service.</p></li><li><strong lang="en">Correct: The configured callable returns the service object.</strong><p>La factory décide de la construction. Sa valeur retournée devient le service.</p></li></ul><a href="course-CRS-1bkg7pkf78c7.html#out-OUT-rrswf59s7t5a">Relire le passage exact</a></details></div></div></div></div><details class="transfer-panel"><summary>Sauvegarde et transfert de progression</summary><p id="reading-status" role="status">Sans JavaScript : lecture libre ; progression non enregistrée.</p><p><a href="assessment.html#overview-title">Lecture, réussites immédiates et différées</a></p><p>Transfert manuel — aucune synchronisation automatique</p><p id="persistence-status" role="status"></p><button type="button" class="secondary" id="export-progress">Exporter ma progression</button><label for="import-progress">Choisir un JSON pour fusionner ma progression (sans remplacement)</label><input type="file" id="import-progress" accept="application/json,.json"><p id="transfer-status" role="status"></p></details></main><footer class="site-footer"><a href="catalogue.html">Catalogue</a> <a href="sources.html">Sources et attribution</a> <a href="#contenu">Haut de page</a></footer></body></html>

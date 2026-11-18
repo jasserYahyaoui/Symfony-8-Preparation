@@ -1,0 +1,315 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; connect-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'"><meta name="viewport" content="width=device-width, initial-scale=1"><title>The session — Symfony 8 Preparation</title><link rel="stylesheet" href="styles.css"><link rel="stylesheet" href="reader.css"><script src="mermaid.min.js" defer></script><script src="mermaid-init.js" defer></script><link rel="stylesheet" href="assessment.css"><script src="fixed-exams-data.js" defer></script><script src="fixed-exams.js" defer></script><script src="learning-state.js" defer></script><script src="guide.js" defer></script><script src="reader-catalog.js" defer></script><script src="reader.js" defer></script><script src="site-state.js" defer></script><script src="assessment.js" defer></script><script src="course-views.js" defer></script><link rel="stylesheet" href="syntax-highlight.css"><script src="prism-syntax.js" defer></script><script src="syntax-highlight.js" defer></script></head><body data-course-id="CRS-a51fqgqynr2d"><a class="skip" href="#contenu">Aller au contenu</a><header class="site-header"><a class="brand" href="index.html">S8 Preparation</a><nav aria-label="Navigation principale"><a href="index.html">Accueil</a> <a href="catalogue.html">Parcours</a> <a href="assessment.html?mode=review">Réviser</a> <a href="examens.html">Examens blancs</a> <a href="jour-j.html">Jour J</a></nav></header><main id="contenu" tabindex="-1" class="corpus-reader"><nav class="breadcrumb" aria-label="Fil d’Ariane"><a href="index.html">Accueil</a> <span aria-hidden="true">›</span> <a href="catalogue.html">Parcours</a> <span aria-hidden="true">›</span> <a href="lot-04.html">Module 04 — Contrôleurs</a> <span aria-hidden="true">›</span> <span aria-current="page">The session</span></nav><h1>The session</h1><p class="muted">Symfony 8.0 · API PHP ≤ 8.4 · Twig ≤ 3.22. Préparation indépendante.</p><p class="revision-status">Rédaction narrative P11 : projection nouvelle, non couverte par les décisions historiques P10. Aucune approbation officielle ni garantie de réussite.</p><aside class="narrative-context" aria-label="Repères de lecture"><p><strong>Prérequis de lecture :</strong> <a href="course-CRS-h8s87edcx8ae.html">The base AbstractController class</a></p><p><strong>Concepts voisins :</strong> <a href="course-CRS-kqq96z5y9r2f.html">Configuration (YAML and PHP attributes)</a> — Retrouver la route avant le callable. <a href="lot-04.html">Comparer les responsabilités dans ce module</a> · <a href="carte-composants.html">Situer cette responsabilité dans le blog</a> · <a href="glossaire.html">Distinguer les termes voisins</a></p><p><a href="ordre-lecture.html">Retrouver les 163 cours dans le parcours recommandé</a>. Ce repère ne modifie ni votre historique ni votre progression.</p></aside><div class="course-layout"><details class="lot-course-menu"><summary>Cours du module · 14 cours</summary><nav aria-label="Cours du module"><a class="lot-context" href="lot-04.html">Module 04 — Contrôleurs</a><ol><li><a href="course-CRS-tygmreqkkds3.html">HttpKernel component and FrameworkBundle</a></li><li><a href="course-CRS-9fz4erg0wmbq.html">Naming conventions</a></li><li><a href="course-CRS-h8s87edcx8ae.html">The base AbstractController class</a></li><li><a href="course-CRS-ea3twt9jcan2.html">The request</a></li><li><a href="course-CRS-a669jpap5zf2.html">The response</a></li><li><a href="course-CRS-thmkagkjcvh3.html">The cookies</a></li><li><a href="course-CRS-a51fqgqynr2d.html" aria-current="page">The session</a></li><li><a href="course-CRS-ak7sdgcdjb7e.html">The flash messages</a></li><li><a href="course-CRS-7zy5ndjgnpk1.html">HTTP redirects</a></li><li><a href="course-CRS-fd24qxy0x1s6.html">Internal redirects</a></li><li><a href="course-CRS-p57qsnnfpd2a.html">Generate 404 pages</a></li><li><a href="course-CRS-5pns7nw7612s.html">File upload</a></li><li><a href="course-CRS-zmg0wrxvqqdq.html">Built-in internal controllers</a></li><li><a href="course-CRS-d5ffd8b704zs.html">Argument value resolvers</a></li></ol><a href="lot-04.html#view-quiz">Quiz du module</a></nav></details><aside class="course-section-menu" aria-label="Sommaire du cours"><nav class="course-actions" aria-label="Activités du cours"><a id="tab-course" href="#view-course">Cours</a><a id="tab-flashcards" href="#view-flashcards">Flashcards</a><a id="tab-quiz" href="#view-quiz">Quiz</a></nav><details class="course-section-disclosure"><summary id="course-sections">Sections du cours</summary><nav aria-label="Sections du cours"><ul><li><a href="#s-objectif">Objectif</a></li><li><a href="#s-l-essentiel">L&#x27;essentiel</a></li><li><a href="#s-le-schema">Le schéma</a></li><li><a href="#s-l-exemple">L&#x27;exemple</a></li><li><a href="#s-l-obtenir">L&#x27;obtenir</a></li><li><a href="#s-le-demarrage-est-lazy">Le démarrage est lazy</a><ul><li><a href="#s-le-demarrage-est-lazy-nested-pourquoi-paresseux">Pourquoi « paresseux » ?</a></li><li><a href="#s-le-demarrage-est-lazy-nested-les-trois-effets-qu-il-ne-faut-pas-confondre">Les trois effets, qu&#x27;il ne faut pas confondre</a></li></ul></li><li><a href="#s-l-api">L&#x27;API</a><ul><li><a href="#s-l-api-nested-pourquoi-regenerer-l-identifiant-apres-une-connexion">Pourquoi régénérer l&#x27;identifiant après une connexion ?</a></li><li><a href="#s-l-api-nested-comparaison">Comparaison</a></li></ul></li><li><a href="#s-pieges-d-examen">Pièges d&#x27;examen</a></li><li><a href="#s-application">Application</a></li><li><a href="#s-fiche-express">Fiche express</a></li><li><a href="#s-sources-officielles">Sources officielles</a></li><li><a href="#reader-objectives">Objectifs d’apprentissage</a></li><li><a href="#course-recalls">Rappels et liens avec les autres cours</a></li></ul></nav><nav aria-label="Flashcards par section"><a href="#view-flashcards">Flashcards par section</a><ul><li><a href="#cards-s-l-essentiel-1">L&#x27;essentiel</a></li><li><a href="#cards-s-le-schema-2">Le schéma</a></li><li><a href="#cards-s-l-exemple-3">L&#x27;exemple</a></li><li><a href="#cards-s-l-obtenir-4">L&#x27;obtenir</a></li><li><a href="#cards-s-le-demarrage-est-lazy-5">Le démarrage est lazy</a></li><li><a href="#cards-s-l-api-6">L&#x27;API</a></li><li><a href="#cards-s-pieges-d-examen-7">Pièges d&#x27;examen</a></li><li><a href="#cards-s-application-8">Application</a></li><li><a href="#cards-s-fiche-express-9">Fiche express</a></li><li><a href="#cards-previous">Module 04 — Contrôleurs · Cours « Naming conventions » · Rappel : <span lang="en">Does route-name generation split CamelCase words into snake_case?</span></a></li></ul></nav><nav aria-label="Retour au module"><a href="lot-04.html">Tous les cours du module</a></nav></details><p class="local-quiz-count">6 questions disponibles · 6 par session Quiz</p></aside><div class="course-content"><div id="view-course" data-course-panel role="region" aria-labelledby="view-course-title"><h2 id="view-course-title">Cours</h2><p class="course-introduction"><a href="#s-objectif">Introduction</a> · <a href="#course-sections">Sections du cours</a></p><h2 id="reader-objectives" tabindex="-1">Objectifs d’apprentissage</h2><ul><li><a href="course-CRS-a51fqgqynr2d.html#out-OUT-wc78qqp1pj1p">Obtenir la session dans un controller et dans un service</a></li><li><a href="course-CRS-a51fqgqynr2d.html#out-OUT-vvctkweagzvz">Énoncer les trois actions qui démarrent la session</a></li><li><a href="course-CRS-a51fqgqynr2d.html#out-OUT-srphtyf5qzqs">Expliquer l&#x27;effet du démarrage sur le cookie et la cachabilité</a></li><li><a href="course-CRS-a51fqgqynr2d.html#out-OUT-7t4egm4bdr19">Distinguer migrate() de invalidate()</a></li></ul><aside class="pedagogy-legend" aria-label="Repères pédagogiques"><p><strong>Repères pédagogiques</strong></p><p>Ces repères décrivent le rôle du bloc, pas une fréquence officielle à l’examen.</p><p class="teaching-label essential"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="brain" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5C12 1 6 1 6 5C2 5 1 10 4 12C1 15 3 19 6 19C6 23 12 23 12 19V5M12 5C12 1 18 1 18 5C22 5 23 10 20 12C23 15 21 19 18 19C18 23 12 23 12 19M6 5C6 8 8 9 9 9M4 12H7L9 14M6 19V16M18 5C18 8 16 9 15 9M20 12H17L15 14M18 19V16"></path></svg> <strong>À comprendre</strong></p><p class="teaching-label essential"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="book" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5C9 3 5 3 2 4V20C5 19 9 19 12 21C15 19 19 19 22 20V4C19 3 15 3 12 5V21M5 8H8M5 12H8M16 8H19M16 12H19"></path></svg> <strong>À mémoriser</strong></p><p class="teaching-label example"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="code" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6L2 12L8 18M16 6L22 12L16 18M14 3L10 21"></path></svg> <strong>Exemple concret</strong></p><p class="teaching-label pitfall"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="warning" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3L23 21H1L12 3ZM12 9V14M12 17V18"></path></svg> <strong>Piège à éviter</strong></p><p class="teaching-label nuance"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="balance" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3V21M7 21H17M3 7L21 5M5 7L1 15H9L5 7M19 6L15 14H23L19 6M1 15Q5 20 9 15M15 14Q19 19 23 14"></path></svg> <strong>Nuance à connaître</strong></p><p>Précision, exception ou condition d’application d’une règle.</p></aside><section class="teaching-section" data-section="s-objectif"><h2 id="s-objectif" tabindex="-1">Objectif</h2><p>Obtenir la session depuis un controller, connaître son API de base, et
+comprendre quand elle démarre réellement.</p>
+<p>Question fil rouge : <strong>HTTP n'a pas de mémoire ; comment garder un état entre
+deux requêtes, et à partir de quand cela me coûte-t-il quelque chose ?</strong></p></section><section class="teaching-section" data-section="s-l-essentiel"><h2 id="s-l-essentiel" tabindex="-1">L&#x27;essentiel</h2><p class="teaching-label essential"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="brain" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5C12 1 6 1 6 5C2 5 1 10 4 12C1 15 3 19 6 19C6 23 12 23 12 19V5M12 5C12 1 18 1 18 5C22 5 23 10 20 12C23 15 21 19 18 19C18 23 12 23 12 19M6 5C6 8 8 9 9 9M4 12H7L9 14M6 19V16M18 5C18 8 16 9 15 9M20 12H17L15 14M18 19V16"></path></svg> <strong>À comprendre</strong></p><aside class="section-digest" id="s-l-essentiel-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>La régénération d&#x27;identifier ne vide pas les données.</li><li>invalidate() vide puis appelle migrate(true).</li></ol></aside><p><strong>Ce que cette partie veut réellement vous apprendre.</strong></p>
+<ul>
+<li><em>Pourquoi ce sujet existe.</em> HTTP est sans état : chaque Request est
+  indépendante. La session associe un <strong>identifiant</strong> (porté par un cookie) à un
+  <strong>stockage côté serveur</strong>, pour retrouver l'état du visiteur d'une requête à
+  l'autre (panier, sélection, utilisateur connecté).</li>
+<li><em>Le piège de fond.</em> On croit que « session activée » veut dire « session
+  démarrée », et que <strong>tester</strong> une valeur (<code>has()</code>) est neutre. Faux dans les
+  deux cas : le démarrage est <strong>paresseux</strong> et le moindre accès au bag le
+  déclenche — avec des conséquences sur le cookie et le cache.</li>
+<li><em>Ce que l'auteur veut que vous compreniez.</em> Trois choses : comment
+  l'obtenir (trois chemins), quand elle démarre (au premier accès, test
+  compris), et la différence <code>migrate()</code> / <code>invalidate()</code>.</li>
+<li><em>Pourquoi c'est à l'examen.</em> <code>has()</code> démarre la session, <code>migrate()</code> ne
+  détruit pas l'ancienne session par défaut, <code>invalidate()</code> vide <em>puis</em> migre.</li>
+</ul>
+<p>En résumé : la session s'obtient par la Request, par un argument typé <code>SessionInterface</code>
+ou, dans un service, par <code>RequestStack</code>. Elle démarre <strong>paresseusement</strong> :
+pas parce que la configuration l'active, mais au premier accès — lire, écrire
+<strong>ou tester</strong>. <code>migrate()</code> change l'identifier en gardant les données ;
+<code>invalidate()</code> vide le stockage, puis appelle <code>migrate(true)</code>.</p>
+<p>Ce cours prolonge <a>The request</a> (<code>getSession()</code> de la
+<code>RequestStack</code> y est présenté) ; les messages éphémères stockés en session
+sont le sujet de <a>The flash messages</a> ; l'identifiant de
+session voyage dans un cookie, voir <a>The cookies</a>.</p></section><section class="teaching-section" data-section="s-le-schema"><h2 id="s-le-schema" tabindex="-1">Le schéma</h2><p><strong>Où en est-on ?</strong> Le cours suit trois questions : <em>comment l'obtenir ?</em>,
+<em>quand démarre-t-elle ?</em>, <em>quelle API (et que font <code>migrate</code> et <code>invalidate</code>) ?</em>
+Le schéma ci-dessous raconte la deuxième, la plus piégeuse : de l'accès au bag
+jusqu'aux effets sur la Response.</p>
+<figure class="diagram" aria-labelledby="CRS-a51fqgqynr2d-3-diagram-0-title CRS-a51fqgqynr2d-3-diagram-0-description"><figcaption id="CRS-a51fqgqynr2d-3-diagram-0-title">Accès, démarrage, effet sur la Response, migrate et invalidate</figcaption><p id="CRS-a51fqgqynr2d-3-diagram-0-description">L&#x27;accès au bag démarre le stockage. Sur la réponse principale, le listener sauvegarde puis ajuste cookies et cache selon l&#x27;usage, le contenu et l&#x27;identifiant reçu.</p><div class="mermaid" hidden>---
+title: Quand la session démarre, et ce qu&#x27;elle change
+---
+flowchart TD
+  accTitle: Accès, démarrage, effet sur la Response, migrate et invalidate
+  accDescr: L&#x27;accès au bag démarre le stockage. Sur la réponse principale, le listener sauvegarde puis ajuste cookies et cache selon l&#x27;usage, le contenu et l&#x27;identifiant reçu.
+  AC[&quot;Objet session&quot;] --&gt;|&quot;get, set ou has&quot;| D[&quot;Accès au bag&quot;]
+  D --&gt;|&quot;kernel.response principal&quot;| R[&quot;Listener : sauvegarder&quot;]
+  R --&gt;|&quot;comparer contenu et identifiant&quot;| C[&quot;Ajuster Set-Cookie&quot;]
+  R --&gt;|&quot;usage et cache automatique&quot;| P([&quot;Réponse privée&quot;])
+  classDef operation fill:#e0f2fe,stroke:#0369a1,color:#0c4a6e
+  classDef result fill:#dcfce7,stroke:#15803d,color:#14532d
+  class AC,D,R,C operation
+  class P result</div></figure>
+<p>Bleu = opérations ; vert = effet standard sans désactivation du cache
+automatique. Stockage, cookie d'identification et politique HTTP sont distincts.</p>
+<p>Lecture : tout se joue à l'événement <code>kernel.response</code> de la requête
+<strong>principale</strong>. Le listener regarde trois choses — la session a-t-elle servi ?
+est-elle vide ? l'identifiant diffère-t-il de celui reçu dans le cookie ? — et
+en déduit deux effets <strong>indépendants</strong> : le <code>Set-Cookie</code> et le caractère privé
+de la Response.</p></section><section class="teaching-section" data-section="s-l-exemple"><h2 id="s-l-exemple" tabindex="-1">L&#x27;exemple</h2><p class="teaching-label example"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="code" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6L2 12L8 18M16 6L22 12L16 18M14 3L10 21"></path></svg> <strong>Exemple concret</strong></p><aside class="section-digest" id="s-l-exemple-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>has() n&#x27;est pas une consultation neutre.</li><li>La Response peut devenir private même sans cookie émis pour une session vide.</li></ol></aside><p><strong>Où en est-on ?</strong> Un cas concret avant le détail : un panier minimal qui
+utilise les trois verbes de base <code>get</code>, <code>set</code> et le redirect.</p>
+<p>Le panier ci-dessous est une variante d'état conservé entre requêtes,
+comme une sélection d'articles du blog. Il ne fait pas partie de la lecture
+publique obligatoire de <code>/blog/42</code>. L'action obtient une session attachée
+à sa Request ; le cookie éventuel identifie ce stockage, il ne contient
+pas nécessairement le tableau <code>cart</code>.</p>
+<pre class="highlight" tabindex="0"><code class="language-php">use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
+
+final class CartController extends AbstractController
+{
+    public function addToCart(SessionInterface $session, int $id): Response
+    {
+        $cart = $session-&gt;get('cart', []);   // [] par défaut
+        $cart[] = $id;
+        $session-&gt;set('cart', $cart);
+        return $this-&gt;redirectToRoute('cart_show', [], 303);
+    }
+}</code></pre>
+<p>Le contrôleur est enregistré dans une application avec session et route
+<code>cart_show</code> configurées ; l'identifiant reçu a déjà été validé.</p>
+<p>Ce que cet exemple montre :</p>
+<pre class="highlight" tabindex="0"><code class="language-text">POST /cart/add/7
+   │ Cookie: PHPSESSID=abc  (identifiant seulement)
+   ▼
+get('cart', [])  ← lit dans le STOCKAGE serveur sous l'id « abc »
+set('cart', [..., 7])
+   ▼
+303 → cart_show   (voir HTTP redirects : Post / Redirect / Get)</code></pre>
+<p>Le cookie ne contient <strong>pas</strong> le panier : il contient l'identifiant qui permet
+de retrouver le stockage côté serveur.</p></section><section class="teaching-section" data-section="s-l-obtenir"><span class="outcome-anchor" id="out-OUT-wc78qqp1pj1p" tabindex="-1"></span><h2 id="s-l-obtenir" tabindex="-1">L&#x27;obtenir</h2><aside class="section-digest" id="s-l-obtenir-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Un controller peut recevoir SessionInterface.</li><li>RequestStack retrouve la session liée à la Request courante.</li></ol></aside><p><strong>Où en est-on ?</strong> Question 1 sur 3 : <em>par où récupère-t-on la session ?</em> Même
+logique que pour la Request : le chemin dépend du contexte (contrôleur ou
+service).</p>
+<p>Dans l'action du blog, <code>SessionValueResolver</code> fournit la session de la
+Request courante ; ce n'est pas l'autowiring d'un service session universel.
+Un service applicatif reçoit plutôt <code>RequestStack</code> et consulte le contexte
+au moment utile. Ces accès supposent une session disponible : hors HTTP
+ou sans intégration, ne présume pas qu'elle existe.</p>
+<table>
+<thead>
+<tr>
+<th>Contexte</th>
+<th>Accès</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>controller, Request en main</td>
+<td><code>$request-&gt;getSession()</code></td>
+</tr>
+<tr>
+<td>controller, argument typé</td>
+<td><code>SessionInterface $session</code>, via <code>SessionValueResolver</code></td>
+</tr>
+<tr>
+<td>service</td>
+<td><code>RequestStack::getSession()</code></td>
+</tr>
+</tbody>
+</table>
+<p>Pourquoi l'argument <code>SessionInterface $session</code> fonctionne-t-il dans une
+action ? Même raisonnement que pour <code>Request $request</code> (voir
+<a>The request</a>) : Symfony lit la signature, un resolver
+dédié reconnaît le type et fournit <strong>la session de la Request en cours</strong>. Ce
+n'est pas de l'autowiring ; la liste des resolvers est détaillée dans
+<a>Argument value resolvers</a>.</p>
+<pre class="highlight" tabindex="0"><code class="language-text">┌───────────────────────────────────────┐ ┌───────────────────────────────────────┐
+│              CONTRÔLEUR               │ │                SERVICE                │
+├───────────────────────────────────────┤ ├───────────────────────────────────────┤
+│ SessionInterface $session             │ │ __construct(RequestStack $stack)      │
+│ Qui : SessionValueResolver            │ │ Qui : conteneur / autowiring          │
+│ Quand : à chaque appel de l'action    │ │ Quand : consultation au moment utile  │
+│ Reçoit : la session de CETTE Request  │ │ $stack-&gt;getSession()                  │
+└───────────────────────────────────────┘ └───────────────────────────────────────┘</code></pre>
+<p>Rappel (cours The request) : <code>RequestStack::getSession()</code> <strong>lève</strong> une
+exception s'il n'y a pas de session, au lieu de rendre <code>null</code>.</p>
+<div class="admonition info">
+<p class="admonition-title">🌍 In Real Life</p>
+<p><strong>La situation</strong> : un bureau retrouve le dossier du visiteur en cours, pas un dossier unique partagé entre tous les visiteurs. Le conseiller demande le dossier au moment de traiter cette visite.</p>
+<p><strong>L’équivalent dans Symfony</strong> : <code>SessionValueResolver</code> fournit à l'action la session attachée à sa Request. Un service peut consulter <code>RequestStack</code> au moment utile pour accéder au contexte courant, au lieu de supposer une session universelle injectée.</p>
+<p><strong>Retour à la réalité technique</strong> : obtenir cette session suppose l'intégration et le contexte appropriés. Une commande sans requête HTTP ne dispose pas automatiquement d'une session. Le cookie d'identification et les données du stockage de session sont deux éléments distincts.</p>
+<p><strong>🧠 Comment le mémoriser</strong> : « Le dossier de cette visite, pas celui de tout le bureau. » Image mentale : dossier correspondant au visiteur devant le guichet. Question-réflexe : quelle Request fournit cette session, et existe-t-elle ici ?</p>
+<p><strong>⚠️ À ne pas confondre</strong> : résolution d'un argument de contrôleur et autowiring d'un service ; session et preuve d'authentification.</p>
+</div></section><section class="teaching-section" data-section="s-le-demarrage-est-lazy"><span class="outcome-anchor" id="out-OUT-vvctkweagzvz" tabindex="-1"></span><span class="outcome-anchor" id="out-OUT-srphtyf5qzqs" tabindex="-1"></span><h2 id="s-le-demarrage-est-lazy" tabindex="-1">Le démarrage est lazy</h2><p><strong>Où en est-on ?</strong> Question 2 sur 3, le cœur du cours : <em>à quel moment la
+session démarre-t-elle réellement ?</em> Pourquoi c'est important : démarrer la
+session a un coût (lecture du stockage) <strong>et</strong> des effets sur la Response
+(cookie, cache privé).</p>
+<h3 tabindex="-1" id="s-le-demarrage-est-lazy-nested-pourquoi-paresseux">Pourquoi « paresseux » ?</h3>
+<p>Une page d'article publique peut être rendue sans session. Mais ajouter
+« si le lecteur possède une sélection » avec <code>has('selection')</code> accède
+déjà au bag : ce simple test change le traitement de la réponse par le
+listener standard. Vérifie séparément démarrage, émission d'un cookie et
+cache privé ; ce ne sont pas trois synonymes du même effet.</p>
+<p>La documentation écrit que la session démarre quand on la lit ou l'écrit. Le
+code va plus loin : sept methods de <code>Session</code> — <code>has()</code>, <code>get()</code>, <code>set()</code>,
+<code>all()</code>, <code>replace()</code>, <code>remove()</code>, <code>clear()</code> — passent par <code>getAttributeBag()</code>,
+qui démarre la session. Il n'y a donc <strong>aucune consultation neutre</strong> : <code>has()</code>
+la démarre comme <code>get()</code>.</p>
+<pre class="highlight" tabindex="0"><code class="language-text">config : session activée      →  RIEN ne démarre
+$session-&gt;has('x')            →  getAttributeBag() → start()   ◄ démarre
+$session-&gt;get('x')            →  getAttributeBag() → start()   ◄ démarre
+$session-&gt;set('x', 1)         →  getAttributeBag() → start()   ◄ démarre</code></pre>
+<h3 tabindex="-1" id="s-le-demarrage-est-lazy-nested-les-trois-effets-qu-il-ne-faut-pas-confondre">Les trois effets, qu'il ne faut pas confondre</h3>
+<p>Sans usage de session, ce mécanisme n'impose pas de cookie ni de privatisation ;
+cela ne rend pas automatiquement la réponse publiquement cachable.
+Avec la configuration standard, l'usage du bag rend la réponse principale
+privée. Si les cookies sont activés, une session non vide reçoit un cookie
+lorsque son identifiant diffère de celui reçu ; il n'est pas renvoyé à chaque
+lecture. Une session devenue vide peut produire un cookie d'expiration.
+Un simple <code>has()</code> sur une session neuve vide donne « privée sans nouveau cookie ».</p>
+<p>Vérifié dans <code>AbstractSessionListener</code> (8.0) : le cookie n'est posé que si les
+cookies de session sont utilisés et que la session n'est pas vide avec un
+identifiant différent de celui reçu ; si un cookie de session était reçu et que
+la session est devenue vide, le cookie est effacé (<code>clearCookie</code>). Le cache
+automatique est désactivable par l'en-tête interne
+<code>Symfony-Session-NoAutoCacheControl</code> (constante
+<code>NO_AUTO_CACHE_CONTROL_HEADER</code>) : c'est ce que le texte appelle « cache
+automatique non désactivé ».</p>
+<table>
+<thead>
+<tr>
+<th>Situation (listener standard, cookies activés)</th>
+<th>Session démarrée ?</th>
+<th>Réponse privée ?</th>
+<th><code>Set-Cookie</code> ?</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Aucun accès à la session</td>
+<td>non</td>
+<td>non (rien ne la privatise)</td>
+<td>non</td>
+</tr>
+<tr>
+<td><code>has('x')</code> sur une session neuve vide</td>
+<td>oui</td>
+<td>oui</td>
+<td><strong>non</strong> (vide)</td>
+</tr>
+<tr>
+<td><code>set('cart', [1])</code> sur une session neuve</td>
+<td>oui</td>
+<td>oui</td>
+<td><strong>oui</strong> (non vide, id différent)</td>
+</tr>
+<tr>
+<td><code>get()</code> avec cookie reçu, session non vide, même id</td>
+<td>oui</td>
+<td>oui</td>
+<td>non (déjà connu)</td>
+</tr>
+<tr>
+<td>session devenue vide avec cookie reçu</td>
+<td>oui</td>
+<td>oui</td>
+<td>cookie d'<strong>expiration</strong></td>
+</tr>
+</tbody>
+</table>
+<p>Pourquoi privée ? Parce que le contenu dépend du visiteur : un cache partagé
+(proxy) ne doit pas servir la page d'un visiteur à un autre.</p>
+<div class="admonition info">
+<p class="admonition-title">🌍 In Real Life</p>
+<p><strong>La situation</strong> : l'armoire peut rester fermée tant qu'on sert une brochure publique. Demander « le dossier contient-il une sélection ? » oblige déjà à l'ouvrir, même si la réponse est non.</p>
+<p><strong>L’équivalent dans Symfony</strong> : <code>has()</code> accède au bag de données comme <code>get()</code> ; ce n'est pas une consultation sans démarrage. L'usage de la session est ensuite pris en compte par le listener de réponse pour la sauvegarde et, normalement, le cache privé.</p>
+<p><strong>Retour à la réalité technique</strong> : disponibilité de la session, démarrage du stockage, cookie émis et politique de cache sont distincts. Une session neuve vide peut rendre la réponse privée sans nouveau cookie. Le comportement décrit suppose l'intégration standard et le cache automatique non désactivé.</p>
+<p><strong>🧠 Comment le mémoriser</strong> : « Vérifier le contenu, c'est déjà ouvrir l'armoire. » Image mentale : armoire ouverte pour une simple question oui/non. Question-réflexe : un test ou un layout accède-t-il au bag malgré mon intention de servir une page publique ?</p>
+<p><strong>⚠️ À ne pas confondre</strong> : absence de <code>Set-Cookie</code>, absence d'usage de session et autorisation de mise en cache partagée.</p>
+</div><aside class="enrichment" aria-label="Autre explication"><p>Le cookie de session est le ticket, les données restent dans le casier côté serveur. Attention à la limite de l'image du vestiaire : même demander si un objet est présent avec has() démarre l'accès à la session.</p></aside></section><section class="teaching-section" data-section="s-l-api"><span class="outcome-anchor" id="out-OUT-7t4egm4bdr19" tabindex="-1"></span><h2 id="s-l-api" tabindex="-1">L&#x27;API</h2><p><strong>Où en est-on ?</strong> Question 3 sur 3 : <em>que puis-je faire avec la session, et que
+font exactement <code>migrate()</code> et <code>invalidate()</code> ?</em> Pourquoi ces deux-là ? Parce
+qu'ils répondent à deux événements de sécurité : la connexion et la
+déconnexion.</p>
+<p>Après connexion, on veut éviter de continuer avec un identifiant fixé
+avant l'authentification tout en gardant la sélection. À la déconnexion,
+on peut vouloir effacer ces données. La différence <code>migrate</code>/<code>invalidate</code>
+porte donc sur l'identifiant <strong>et</strong> le contenu ; l'intégration Security
+gère normalement sa stratégie, il ne faut pas la doubler sans raison.</p>
+<p><code>set()</code>, <code>get($name, $default)</code>, <code>has()</code>, <code>remove()</code>, <code>all()</code>, <code>clear()</code>.
+Pour la security, deux methods, l'une bâtie sur l'autre :</p>
+<ul>
+<li><strong><code>migrate($destroy = false, $lifetime = null)</code></strong> régénère l'identifier et
+  garde les données ; avec <code>destroy</code> à <code>false</code>, l'ancienne session <strong>reste sur
+  le serveur</strong>. On l'appelle après une authentication réussie, contre la
+  fixation de session.</li>
+<li><strong><code>invalidate($lifetime = null)</code></strong> vide le stockage, <em>puis</em> appelle
+  <code>migrate(true, $lifetime)</code>. C'est le vidage qui supprime les données, pas la
+  régénération. On l'appelle à la déconnexion.</li>
+</ul>
+<p>Les deux rendent un <code>bool</code>.</p>
+<p>Vérifié dans <code>Session</code> (8.0) : <code>invalidate()</code> fait
+<code>$this-&gt;storage-&gt;clear(); return $this-&gt;migrate(true, $lifetime);</code> et
+<code>migrate()</code> fait <code>return $this-&gt;storage-&gt;regenerate($destroy, $lifetime);</code>.</p>
+<h3 tabindex="-1" id="s-l-api-nested-pourquoi-regenerer-l-identifiant-apres-une-connexion">Pourquoi régénérer l'identifiant après une connexion ?</h3>
+<p>Contre la <strong>fixation de session</strong> : un attaquant fait adopter à la victime un
+identifiant qu'il connaît, la victime se connecte, et l'attaquant, qui possède
+le même identifiant, est alors connecté. Changer l'identifiant à la connexion
+rend l'identifiant connu de l'attaquant inutile.</p>
+<h3 tabindex="-1" id="s-l-api-nested-comparaison">Comparaison</h3>
+<pre class="highlight" tabindex="0"><code class="language-text">┌──────────────────────────────────────┐ ┌──────────────────────────────────────┐
+│           migrate($destroy=false)    │ │           invalidate()               │
+├──────────────────────────────────────┤ ├──────────────────────────────────────┤
+│ Données           : GARDÉES          │ │ Données           : VIDÉES           │
+│ Identifiant       : nouveau          │ │ Identifiant       : nouveau          │
+│ Ancien stockage   : reste (destroy   │ │ Ancien stockage   : détruit          │
+│                     = false)         │ │                     (migrate(true))  │
+│ Usage typique     : après connexion  │ │ Usage typique     : déconnexion      │
+├──────────────────────────────────────┤ ├──────────────────────────────────────┤
+│ Mécanisme : regenerate($destroy)     │ │ Mécanisme : clear() PUIS migrate(true)│
+└──────────────────────────────────────┘ └──────────────────────────────────────┘</code></pre>
+<div class="admonition info">
+<p class="admonition-title">🌍 In Real Life</p>
+<p><strong>La situation</strong> : le bureau peut attribuer un nouveau numéro à un dossier en conservant ses feuilles, ou vider le dossier avant de lui attribuer ce nouveau numéro. Ce sont deux opérations différentes.</p>
+<p><strong>L’équivalent dans Symfony</strong> : les méthodes ordinaires lisent et modifient les données ; <code>migrate()</code> régénère l'identifiant en conservant le contenu. <code>invalidate()</code> vide le stockage puis appelle <code>migrate(true, …)</code>.</p>
+<p><strong>Retour à la réalité technique</strong> : l'option <code>$destroy</code> concerne l'ancien stockage, pas l'effacement des données conservées sous le nouvel identifiant. Elle vaut <code>false</code> par défaut. La stratégie Security configurée gère normalement les transitions de connexion ; changer un identifiant ne réalise pas à lui seul une authentification ou une déconnexion complète.</p>
+<p><strong>🧠 Comment le mémoriser</strong> : « Nouveau numéro ne signifie pas dossier vide. » Image mentale : même pile de feuilles avec une nouvelle étiquette, puis dossier vidé. Question-réflexe : veux-je garder les données, détruire l'ancien stockage, ou les deux ?</p>
+<p><strong>⚠️ À ne pas confondre</strong> : <code>migrate(true)</code> conserve les données courantes ; <code>invalidate()</code> les vide avant la migration.</p>
+</div></section><section class="teaching-section" data-section="s-pieges-d-examen"><h2 id="s-pieges-d-examen" tabindex="-1">Pièges d&#x27;examen</h2><p class="teaching-label pitfall"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="warning" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3L23 21H1L12 3ZM12 9V14M12 17V18"></path></svg> <strong>Piège à éviter</strong></p><ul class="pitfall-list"><li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : Tester une valeur démarre la session, comme la lire.</summary><p><strong>Tester une valeur démarre la session, comme la lire.</strong> Il n'existe pas de
+consultation neutre : <code>has()</code> passe par le même accès au sac que <code>get()</code>. La
+vérification suffit à rendre la page non cachable par un proxy partagé — sans
+nouveau cookie d'identification pour une session neuve vide. Une session
+vide avec cookie reçu peut au contraire produire son expiration. <em>Pourquoi on
+se trompe : « has » ressemble à une simple question, sans effet de bord.</em></p></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : Activer la session dans la configuration ne la démarre pas.</summary><p><strong>Activer la session dans la configuration ne la démarre pas.</strong> Le démarrage est
+lazy ; sans autre intervention, une page qui n'y touche jamais ne déclenche
+pas de cookie par ce mécanisme. <em>Pourquoi on se trompe : on confond
+« disponible » et « démarrée ».</em></p></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : invalidate() n&#x27;est pas l&#x27;opposé de migrate(), elle l&#x27;utilise.</summary><p><strong><code>invalidate()</code> n'est pas l'opposé de <code>migrate()</code>, elle l'utilise.</strong> Elle vide
+le stockage puis appelle <code>migrate(true, …)</code>. La suppression des données vient du
+vidage, pas de la régénération. <em>Pourquoi on se trompe : le nom « invalider »
+suggère une destruction, on attribue donc l'effacement à la régénération.</em></p></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : migrate() seule ne détruit pas l&#x27;ancienne session.</summary><p><strong><code>migrate()</code> seule ne détruit pas l'ancienne session.</strong> Son argument <code>$destroy</code>
+vaut <code>false</code> par défaut : l'identifier change, mais la session précédente reste
+sur le serveur. C'est <code>invalidate()</code> qui passe <code>true</code>. <em>Pourquoi on se trompe :
+« changer d'identifiant » semble supprimer l'ancien.</em></p></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : La documentation ne mentionne pas le test.</summary><p><strong>La documentation ne mentionne pas le test.</strong> Elle parle de lire et d'écrire ;
+c'est le code qui montre que tester compte aussi. Sur ce point précis, se fier
+au texte seul donne une réponse fausse.</p></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : Cookie, démarrage et cache privé sont trois effets distincts.</summary><p><strong>Cookie, démarrage et cache privé sont trois effets distincts.</strong> Une session
+neuve vide, simplement testée, rend la réponse privée mais n'envoie aucun
+cookie. <em>Pourquoi on se trompe : on les croit liés par une même cause.</em></p></details></li></ul></section><section class="teaching-section" data-section="s-application"><h2 id="s-application" tabindex="-1">Application</h2><aside class="section-digest" id="s-application-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>La régénération d&#x27;identifier ne vide pas les données.</li><li>invalidate() vide puis appelle migrate(true).</li><li>has() n&#x27;est pas une consultation neutre.</li><li>La Response peut devenir private même sans cookie émis pour une session vide.</li></ol></aside>
+
+
+
+</section><section class="teaching-section" data-section="s-fiche-express"><h2 id="s-fiche-express" tabindex="-1">Fiche express</h2><p class="teaching-label essential"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="book" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5C9 3 5 3 2 4V20C5 19 9 19 12 21C15 19 19 19 22 20V4C19 3 15 3 12 5V21M5 8H8M5 12H8M16 8H19M16 12H19"></path></svg> <strong>À mémoriser</strong></p><p><strong>🧠 À retenir pour la certification :</strong></p>
+<ul>
+<li>Accès : Request, <strong><code>SessionInterface</code></strong> typé, <strong><code>RequestStack</code></strong> en service.</li>
+<li>Démarrage <strong>lazy</strong> : lire, écrire <strong>ou tester</strong> — <code>has()</code> compte.</li>
+<li>Pas d'usage → aucune garantie de cache public : vérifier la politique HTTP.</li>
+<li>Usage → <strong>private</strong> par défaut ; cookie selon contenu et identifiant reçu.</li>
+<li><code>migrate()</code> : nouvel id, données gardées, <code>destroy</code> à <strong><code>false</code></strong>.</li>
+<li><code>invalidate()</code> = <strong>vider</strong> puis <code>migrate(true)</code>.</li>
+</ul>
+<p>Moyen mnémotechnique : <strong>« Migrate garde, invalidate vide »</strong>.</p>
+<p>Phrase de mémorisation complète : <strong>« La session ne démarre qu'au premier accès
+au bag — même un <code>has()</code> —, ce qui rend la réponse privée ; <code>migrate()</code> change
+l'id et garde les données, <code>invalidate()</code> les vide puis migre. »</strong></p></section><section class="teaching-section" data-section="s-sources-officielles"><h2 id="s-sources-officielles" tabindex="-1">Sources officielles</h2><ul>
+<li><a href="https://symfony.com/doc/8.0/session.html">Sessions</a></li>
+<li><a href="https://symfony.com/doc/8.0/controller.html">Controller, « Managing the Session »</a></li>
+<li><a href="https://symfony.com/doc/8.0/components/http_foundation.html"><code>Session</code>, branche 8.0</a></li>
+</ul></section><section id="course-recalls" aria-labelledby="course-recalls-title" tabindex="-1"><h2 id="course-recalls-title">Rappels et liens avec les autres cours</h2><div data-recall-group="current"><h3>Rappels du cours actuel</h3><ul><li data-recall-course="CRS-a51fqgqynr2d" data-recall-kind="digest_reference"><p class="recall-provenance">Module 04 — Contrôleurs · Cours « The session »</p><p class="digest-reference"><a href="#s-l-essentiel-digest">Revoir la règle : La régénération d&#x27;identifier ne vide pas les données.</a></p></li><li data-recall-course="CRS-a51fqgqynr2d" data-recall-kind="digest_reference"><p class="recall-provenance">Module 04 — Contrôleurs · Cours « The session »</p><p class="digest-reference"><a href="#s-l-exemple-digest">Revoir la règle : has() n&#x27;est pas une consultation neutre.</a></p></li><li><nav aria-label="Flashcards de l’application"><ul><li data-recall-course="CRS-a51fqgqynr2d" data-recall-kind="application"><p class="recall-provenance">Module 04 — Contrôleurs · Cours « The session »</p><a href="#A-a51fqgqynr2d-65c42c80d9-03">Flashcard : La régénération d&#x27;identifier ne vide pas les données. invalidate() vide puis appelle migrate(true).</a></li><li data-recall-course="CRS-a51fqgqynr2d" data-recall-kind="application"><p class="recall-provenance">Module 04 — Contrôleurs · Cours « The session »</p><a href="#A-a51fqgqynr2d-88b6fbd62c-02">Flashcard : has() n&#x27;est pas une consultation neutre. La Response peut devenir private même sans cookie émis pour une session vide.</a></li></ul></nav></li></ul></div><div data-recall-group="other"><h3>Rappels des cours précédents / autres modules</h3><ul><li data-recall-course="CRS-9fz4erg0wmbq" data-recall-kind="previous_course"><p class="recall-provenance">Module 04 — Contrôleurs · Cours « Naming conventions »</p><p>Le nom généré n&#x27;est pas une conversion générale en snake_case. Pour une même méthode, seuls les noms générés reçoivent les suffixes _1, _2 à partir du deuxième nom généré ; des noms explicites identiques peuvent se remplacer dans la collection.</p><p><a href="#cards-previous">Rappel : <span lang="en">Does route-name generation split CamelCase words into snake_case?</span></a></p></li></ul></div></section><nav class="course-sequence" aria-label="Ordre de lecture"><a rel="prev" href="course-CRS-thmkagkjcvh3.html" aria-label="Précédent : The cookies — Module 04 — Contrôleurs">Précédent : The cookies</a> <a href="lot-04.html">Sommaire : Module 04 — Contrôleurs</a> <a rel="next" href="course-CRS-ak7sdgcdjb7e.html" aria-label="Suivant : The flash messages — Module 04 — Contrôleurs">Suivant : The flash messages</a></nav><p class="course-practice-entry"><a class="button" href="#view-quiz">Fin du cours — s’entraîner avec le Quiz</a></p></div><div id="view-flashcards" data-course-panel role="region" aria-labelledby="view-flashcards-title"><h2 id="view-flashcards-title">Flashcards</h2><p lang="en">Answer before revealing each card.</p><p>Ces cartes ne mesurent pas une maîtrise notée.</p><div id="cards-s-l-essentiel-1" data-card-section="s-l-essentiel"><h3><a href="#s-l-essentiel">Revoir : L&#x27;essentiel</a></h3><div class="reader-cards"><details class="reader-card" id="A-a51fqgqynr2d-65c42c80d9-03"><summary lang="en">How do migrate() and invalidate() differ?</summary><p lang="en">migrate() changes the session ID while keeping data; invalidate() clears data and migrates with destruction.</p><p lang="fr">La régénération d&#x27;identifier ne vide pas les données. invalidate() vide puis appelle migrate(true).</p><a href="course-CRS-a51fqgqynr2d.html#out-OUT-7t4egm4bdr19">Revoir le passage précis</a></details></div></div><div id="cards-s-le-schema-2" data-card-section="s-le-schema"><h3><a href="#s-le-schema">Revoir : Le schéma</a></h3><div class="reader-cards"><p class="reader-card-reference" id="A-a51fqgqynr2d-6e0103f6cc-03">Rappel déjà proposé : <a lang="en" href="#A-a51fqgqynr2d-65c42c80d9-03">How do migrate() and invalidate() differ?</a> · <a href="course-CRS-a51fqgqynr2d.html#out-OUT-7t4egm4bdr19">Passage canonique</a></p></div></div><div id="cards-s-l-exemple-3" data-card-section="s-l-exemple"><h3><a href="#s-l-exemple">Revoir : L&#x27;exemple</a></h3><div class="reader-cards"><details class="reader-card" id="A-a51fqgqynr2d-88b6fbd62c-02"><summary lang="en">Can Session::has() start the session?</summary><p lang="en">Yes. Testing an attribute accesses the bag and starts the session.</p><p lang="fr">has() n&#x27;est pas une consultation neutre. La Response peut devenir private même sans cookie émis pour une session vide.</p><a href="course-CRS-a51fqgqynr2d.html#out-OUT-vvctkweagzvz">Revoir le passage précis</a></details></div></div><div id="cards-s-l-obtenir-4" data-card-section="s-l-obtenir"><h3><a href="#s-l-obtenir">Revoir : L&#x27;obtenir</a></h3><div class="reader-cards"><details class="reader-card" id="A-a51fqgqynr2d-8b7026e6a9-01"><summary lang="en">How should a service access the current session?</summary><p lang="en">Through RequestStack::getSession().</p><p lang="fr">Un controller peut recevoir SessionInterface. RequestStack retrouve la session liée à la Request courante.</p><a href="course-CRS-a51fqgqynr2d.html#out-OUT-wc78qqp1pj1p">Revoir le passage précis</a></details></div></div><div id="cards-s-le-demarrage-est-lazy-5" data-card-section="s-le-demarrage-est-lazy"><h3><a href="#s-le-demarrage-est-lazy">Revoir : Le démarrage est lazy</a></h3><div class="reader-cards"><p class="reader-card-reference" id="A-a51fqgqynr2d-595df62b20-02">Rappel déjà proposé : <a lang="en" href="#A-a51fqgqynr2d-88b6fbd62c-02">Can Session::has() start the session?</a> · <a href="course-CRS-a51fqgqynr2d.html#out-OUT-vvctkweagzvz">Passage canonique</a></p><details class="reader-card" id="INT-024"><summary lang="en">Does Session::has() necessarily send a session cookie?</summary><p lang="en">No. It starts session storage, but has() alone does not modify a Response. In the integrated HTTP cycle, SessionListener with auto cache control makes the response private after session use; an empty session need not send Set-Cookie.</p><p lang="fr">Session::has() démarre le stockage mais ne modifie pas une Response isolée. Dans le cycle HTTP intégré, SessionListener applique la confidentialité si le contrôle automatique du cache est actif. Démarrage, confidentialité et émission effective du cookie restent trois effets distincts.</p><a href="course-CRS-a51fqgqynr2d.html#out-OUT-srphtyf5qzqs">Revoir le passage précis</a></details></div></div><div id="cards-s-l-api-6" data-card-section="s-l-api"><h3><a href="#s-l-api">Revoir : L&#x27;API</a></h3><div class="reader-cards"><p class="reader-card-reference" id="A-a51fqgqynr2d-658f121e23-03">Rappel déjà proposé : <a lang="en" href="#A-a51fqgqynr2d-65c42c80d9-03">How do migrate() and invalidate() differ?</a> · <a href="course-CRS-a51fqgqynr2d.html#out-OUT-7t4egm4bdr19">Passage canonique</a></p></div></div><div id="cards-s-pieges-d-examen-7" data-card-section="s-pieges-d-examen"><h3><a href="#s-pieges-d-examen">Revoir : Pièges d&#x27;examen</a></h3><div class="reader-cards"><p class="reader-card-reference" id="A-a51fqgqynr2d-596d5af532-03">Rappel déjà proposé : <a lang="en" href="#A-a51fqgqynr2d-65c42c80d9-03">How do migrate() and invalidate() differ?</a> · <a href="course-CRS-a51fqgqynr2d.html#out-OUT-7t4egm4bdr19">Passage canonique</a></p></div></div><div id="cards-s-application-8" data-card-section="s-application"><h3><a href="#s-application">Revoir : Application</a></h3><div class="reader-cards"><p class="reader-card-reference" id="A-a51fqgqynr2d-e7ad522ea3-03">Rappel déjà proposé : <a lang="en" href="#A-a51fqgqynr2d-65c42c80d9-03">How do migrate() and invalidate() differ?</a> · <a href="course-CRS-a51fqgqynr2d.html#out-OUT-7t4egm4bdr19">Passage canonique</a></p><p class="reader-card-reference" id="A-a51fqgqynr2d-e7ad522ea3-02">Rappel déjà proposé : <a lang="en" href="#A-a51fqgqynr2d-88b6fbd62c-02">Can Session::has() start the session?</a> · <a href="course-CRS-a51fqgqynr2d.html#out-OUT-vvctkweagzvz">Passage canonique</a></p></div></div><div id="cards-s-fiche-express-9" data-card-section="s-fiche-express"><h3><a href="#s-fiche-express">Revoir : Fiche express</a></h3><div class="reader-cards"><p class="reader-card-reference" id="A-a51fqgqynr2d-b11e58e15e-03">Rappel déjà proposé : <a lang="en" href="#A-a51fqgqynr2d-65c42c80d9-03">How do migrate() and invalidate() differ?</a> · <a href="course-CRS-a51fqgqynr2d.html#out-OUT-7t4egm4bdr19">Passage canonique</a></p></div></div><div id="cards-previous"><p class="recall-provenance">Module 04 — Contrôleurs · Cours « Naming conventions »</p><aside class="checkpoint"><h2>Rappel d’un cours antérieur</h2><p>Avant de poursuivre : Naming conventions.</p><details class="corpus-correction"><summary lang="en">Does route-name generation split CamelCase words into snake_case?</summary><p lang="en">No. It lowercases and transforms class/method names; FrameworkBundle removes conventional segments.</p><p>Le nom généré n&#x27;est pas une conversion générale en snake_case. Pour une même méthode, seuls les noms générés reçoivent les suffixes _1, _2 à partir du deuxième nom généré ; des noms explicites identiques peuvent se remplacer dans la collection.</p><a href="course-CRS-9fz4erg0wmbq.html#out-OUT-j9vdv1qav4by">Relire la correction dans le cours antérieur</a></details></aside></div></div><div id="view-quiz" data-course-panel role="region" aria-labelledby="view-quiz-title"><aside class="revision-context"><p><strong>Avant le quiz :</strong> Obtenir la session depuis un controller, connaître son API de base, et comprendre quand elle démarre réellement.</p><p>Quelle donnée entre, quelle responsabilité agit et quelle condition change le résultat ? Pour chaque correction, vérifiez ces conditions dans <a href="course-CRS-a51fqgqynr2d.html#s-objectif">le passage enseigné</a>, sans supposer que toutes les branches du blog sont exécutées.</p></aside><h2 id="view-quiz-title">Quiz</h2><p class="quiz-size" lang="en">6 eligible learning questions · 6 per session. Repeating a question does not demonstrate mastery.</p><p id="course-quiz-status" role="status">Quiz interactif non chargé. Démarrez après chargement de la banque locale.</p><div id="course-quiz-controls" class="assessment-main" hidden><div id="course-quiz-assessment-controls" hidden><select id="course-quiz-assessment-mode" aria-label="Mode du quiz" hidden><option value="learning">Entraînement</option></select><p id="course-quiz-training-scope"></p><button id="course-quiz-start-assessment" type="button" lang="en">Start practice</button><button id="course-quiz-finish-assessment" type="button" lang="en" hidden>End session</button></div><p id="course-quiz-assessment-error" role="alert"></p><p id="course-quiz-assessment-timer" hidden></p><p id="course-quiz-session-progress" class="quiz-progress" role="status" lang="en"></p><div id="course-quiz-assessment-app" tabindex="-1"></div><nav id="course-quiz-session-navigation" aria-label="Questions du cours"></nav><div id="course-quiz-learning-overview" aria-live="polite"></div></div><div id="course-quiz-native"><p>Sans JavaScript ou si le chargement échoue : aucune tentative notée. Les <a href="#view-flashcards">flashcards du cours</a> restent disponibles.</p><details class="course-quiz-fallback" data-question-id="L-a51fqgqynr2d-base-v1"><summary lang="en">RADIO — Select one answer. How do migrate() and invalidate() differ?</summary><p>Correction de consultation — non notée.</p><p>La régénération d&#x27;identifier ne vide pas les données. invalidate() vide puis appelle migrate(true).</p><ul><li><strong lang="en">Distractor: Both keep data, but invalidate() destroys only the old ID.</strong><p>invalidate() vide les données puis appelle migrate(true).</p></li><li><strong lang="en">Correct: migrate() keeps data; invalidate() clears data and migrates.</strong><p>La régénération d&#x27;identifier ne vide pas les données. invalidate() vide puis appelle migrate(true).</p></li><li><strong lang="en">Distractor: Both clear data, but only invalidate() changes the ID.</strong><p>migrate() change l&#x27;ID sans vider les données.</p></li></ul><a href="course-CRS-a51fqgqynr2d.html#out-OUT-7t4egm4bdr19">Relire le passage exact</a><a href="course-CRS-a51fqgqynr2d.html#s-l-api">Relire la correction précise</a></details></div></div></div></div><details class="transfer-panel"><summary>Sauvegarde et transfert de progression</summary><p id="reading-status" role="status">Sans JavaScript : lecture libre ; progression non enregistrée.</p><p><a href="assessment.html#overview-title">Lecture, réussites immédiates et différées</a></p><p>Transfert manuel — aucune synchronisation automatique</p><p id="persistence-status" role="status"></p><button type="button" class="secondary" id="export-progress">Exporter ma progression</button><label for="import-progress">Choisir un JSON pour fusionner ma progression (sans remplacement)</label><input type="file" id="import-progress" accept="application/json,.json"><p id="transfer-status" role="status"></p></details></main><footer class="site-footer"><a href="catalogue.html">Catalogue</a> <a href="sources.html">Sources et attribution</a> <a href="#contenu">Haut de page</a></footer></body></html>

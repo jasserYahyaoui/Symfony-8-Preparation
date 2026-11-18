@@ -1,0 +1,380 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; connect-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Custom commands — Symfony 8 Preparation</title><link rel="stylesheet" href="styles.css"><link rel="stylesheet" href="reader.css"><script src="mermaid.min.js" defer></script><script src="mermaid-init.js" defer></script><link rel="stylesheet" href="assessment.css"><script src="fixed-exams-data.js" defer></script><script src="fixed-exams.js" defer></script><script src="learning-state.js" defer></script><script src="guide.js" defer></script><script src="reader-catalog.js" defer></script><script src="reader.js" defer></script><script src="site-state.js" defer></script><script src="assessment.js" defer></script><script src="course-views.js" defer></script><link rel="stylesheet" href="syntax-highlight.css"><script src="prism-syntax.js" defer></script><script src="syntax-highlight.js" defer></script></head><body data-course-id="CRS-cb51hcng9dh5"><a class="skip" href="#contenu">Aller au contenu</a><header class="site-header"><a class="brand" href="index.html">S8 Preparation</a><nav aria-label="Navigation principale"><a href="index.html">Accueil</a> <a href="catalogue.html">Parcours</a> <a href="assessment.html?mode=review">Réviser</a> <a href="examens.html">Examens blancs</a> <a href="jour-j.html">Jour J</a></nav></header><main id="contenu" tabindex="-1" class="corpus-reader"><nav class="breadcrumb" aria-label="Fil d’Ariane"><a href="index.html">Accueil</a> <span aria-hidden="true">›</span> <a href="catalogue.html">Parcours</a> <span aria-hidden="true">›</span> <a href="lot-12.html">Module 12 — Console</a> <span aria-hidden="true">›</span> <span aria-current="page">Custom commands</span></nav><h1>Custom commands</h1><p class="muted">Symfony 8.0 · API PHP ≤ 8.4 · Twig ≤ 3.22. Préparation indépendante.</p><p class="revision-status">Rédaction narrative P11 : projection nouvelle, non couverte par les décisions historiques P10. Aucune approbation officielle ni garantie de réussite.</p><aside class="narrative-context" aria-label="Repères de lecture"><p><strong>Prérequis de lecture :</strong> <a href="course-CRS-brn6frfqpxxj.html">Console component</a></p><p><strong>Concepts voisins :</strong> <a href="course-CRS-5gezsra1sp01.html">Messenger component</a> — Comparer import immédiat et traitement différé configuré. <a href="lot-12.html">Comparer les responsabilités dans ce module</a> · <a href="carte-composants.html">Situer cette responsabilité dans le blog</a> · <a href="glossaire.html">Distinguer les termes voisins</a></p><p><a href="ordre-lecture.html">Retrouver les 163 cours dans le parcours recommandé</a>. Ce repère ne modifie ni votre historique ni votre progression.</p></aside><div class="course-layout"><details class="lot-course-menu"><summary>Cours du module · 9 cours</summary><nav aria-label="Cours du module"><a class="lot-context" href="lot-12.html">Module 12 — Console</a><ol><li><a href="course-CRS-brn6frfqpxxj.html">Console component</a></li><li><a href="course-CRS-rk0fkn1q5byc.html">Built-in commands</a></li><li><a href="course-CRS-cb51hcng9dh5.html" aria-current="page">Custom commands</a></li><li><a href="course-CRS-sf3701ncg2va.html">Configuration</a></li><li><a href="course-CRS-q2dxjhx6d35k.html">Options and arguments (using PHP attributes)</a></li><li><a href="course-CRS-0ab7kpexq9w9.html">Input and Output objects</a></li><li><a href="course-CRS-3p9jdkw1nd3g.html">Built-in helpers</a></li><li><a href="course-CRS-y0zc67f3e5zk.html">Console events</a></li><li><a href="course-CRS-96c85hjezj1r.html">Verbosity levels</a></li></ol><a href="lot-12.html#view-quiz">Quiz du module</a></nav></details><aside class="course-section-menu" aria-label="Sommaire du cours"><nav class="course-actions" aria-label="Activités du cours"><a id="tab-course" href="#view-course">Cours</a><a id="tab-flashcards" href="#view-flashcards">Flashcards</a><a id="tab-quiz" href="#view-quiz">Quiz</a></nav><details class="course-section-disclosure"><summary id="course-sections">Sections du cours</summary><nav aria-label="Sections du cours"><ul><li><a href="#s-objectif">Objectif</a></li><li><a href="#s-l-essentiel">L&#x27;essentiel</a></li><li><a href="#s-le-schema">Le schéma</a></li><li><a href="#s-l-exemple-creer-un-user">L&#x27;exemple : créer un user</a></li><li><a href="#s-la-forme-recommandee-la-command-invocable">La forme recommandée : la command invocable</a></li><li><a href="#s-comment-symfony-la-trouve">Comment Symfony la trouve</a></li><li><a href="#s-la-syntaxe-classique-toujours-valide">La syntaxe classique, toujours valide</a></li><li><a href="#s-pieges-d-examen">Pièges d&#x27;examen</a></li><li><a href="#s-fiche-express">Fiche express</a></li><li><a href="#reader-objectives">Objectifs d’apprentissage</a></li><li><a href="#reader-sources">Sources officielles et compléments</a></li><li><a href="#course-recalls">Rappels et liens avec les autres cours</a></li></ul></nav><nav aria-label="Flashcards par section"><a href="#view-flashcards">Flashcards par section</a><ul><li><a href="#cards-s-l-essentiel-1">L&#x27;essentiel</a></li><li><a href="#cards-s-le-schema-2">Le schéma</a></li><li><a href="#cards-s-l-exemple-creer-un-user-3">L&#x27;exemple : créer un user</a></li><li><a href="#cards-s-la-forme-recommandee-la-command-invocable-4">La forme recommandée : la command invocable</a></li><li><a href="#cards-s-comment-symfony-la-trouve-5">Comment Symfony la trouve</a></li><li><a href="#cards-s-la-syntaxe-classique-toujours-valide-6">La syntaxe classique, toujours valide</a></li><li><a href="#cards-s-pieges-d-examen-7">Pièges d&#x27;examen</a></li><li><a href="#cards-s-fiche-express-8">Fiche express</a></li><li><a href="#cards-previous">Module 26 — Serializer · Cours « Serializer » · Rappel : <span lang="en">What are the two main stages of serialization?</span></a></li></ul></nav><nav aria-label="Retour au module"><a href="lot-12.html">Tous les cours du module</a></nav></details><p class="local-quiz-count">4 questions disponibles · 4 par session Quiz</p></aside><div class="course-content"><div id="view-course" data-course-panel role="region" aria-labelledby="view-course-title"><h2 id="view-course-title">Cours</h2><p class="course-introduction"><a href="#s-objectif">Introduction</a> · <a href="#course-sections">Sections du cours</a></p><h2 id="reader-objectives" tabindex="-1">Objectifs d’apprentissage</h2><ul><li><a href="course-CRS-cb51hcng9dh5.html#out-OUT-86vxgq9k86kd">Écrire une command invocable avec #[AsCommand] et __invoke()</a></li><li><a href="course-CRS-cb51hcng9dh5.html#out-OUT-g23jwhyz5189">Expliquer comment le container découvre une command</a></li><li><a href="course-CRS-cb51hcng9dh5.html#out-OUT-npjsrz7new8m">Dire quand étendre Command reste nécessaire</a></li></ul><aside class="pedagogy-legend" aria-label="Repères pédagogiques"><p><strong>Repères pédagogiques</strong></p><p>Ces repères décrivent le rôle du bloc, pas une fréquence officielle à l’examen.</p><p class="teaching-label essential"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="brain" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5C12 1 6 1 6 5C2 5 1 10 4 12C1 15 3 19 6 19C6 23 12 23 12 19V5M12 5C12 1 18 1 18 5C22 5 23 10 20 12C23 15 21 19 18 19C18 23 12 23 12 19M6 5C6 8 8 9 9 9M4 12H7L9 14M6 19V16M18 5C18 8 16 9 15 9M20 12H17L15 14M18 19V16"></path></svg> <strong>À comprendre</strong></p><p class="teaching-label essential"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="book" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5C9 3 5 3 2 4V20C5 19 9 19 12 21C15 19 19 19 22 20V4C19 3 15 3 12 5V21M5 8H8M5 12H8M16 8H19M16 12H19"></path></svg> <strong>À mémoriser</strong></p><p class="teaching-label example"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="code" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6L2 12L8 18M16 6L22 12L16 18M14 3L10 21"></path></svg> <strong>Exemple concret</strong></p><p class="teaching-label pitfall"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="warning" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3L23 21H1L12 3ZM12 9V14M12 17V18"></path></svg> <strong>Piège à éviter</strong></p><p class="teaching-label nuance"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="balance" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3V21M7 21H17M3 7L21 5M5 7L1 15H9L5 7M19 6L15 14H23L19 6M1 15Q5 20 9 15M15 14Q19 19 23 14"></path></svg> <strong>Nuance à connaître</strong></p><p>Précision, exception ou condition d’application d’une règle.</p></aside><section class="teaching-section" data-section="s-objectif"><h2 id="s-objectif" tabindex="-1">Objectif</h2><p>Les commandes intégrées inspectent l'application ; aucune ne connaît notre
+traitement d'import. Il faut donc exposer ce travail sous <code>app:blog:import</code>
+et lui fournir les services nécessaires. Nous allons séparer découverte,
+injection et appel, puis conserver une petite branche utile : créer un auteur
+par le terminal avant de lui attribuer des articles.</p></section><section class="teaching-section" data-section="s-l-essentiel"><h2 id="s-l-essentiel" tabindex="-1">L&#x27;essentiel</h2><p class="teaching-label essential"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="brain" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5C12 1 6 1 6 5C2 5 1 10 4 12C1 15 3 19 6 19C6 23 12 23 12 19V5M12 5C12 1 18 1 18 5C22 5 23 10 20 12C23 15 21 19 18 19C18 23 12 23 12 19M6 5C6 8 8 9 9 9M4 12H7L9 14M6 19V16M18 5C18 8 16 9 15 9M20 12H17L15 14M18 19V16"></path></svg> <strong>À comprendre</strong></p><aside class="section-digest" id="s-l-essentiel-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>La command invocable évite l&#x27;inheritance.</li><li>Le contrat reste un exit code int.</li></ol></aside><p><strong>Ce que cette partie veut réellement vous apprendre.</strong></p>
+<ul>
+<li><em>Pourquoi ce sujet existe.</em> Votre logique métier vit dans des services ;
+  pour la déclencher depuis un terminal ou un cron, il faut une porte
+  d'entrée CLI. C'est le rôle d'une commande.</li>
+<li><em>Le piège de fond.</em> Trois verbes différents : <strong>enregistrer</strong> (le conteneur
+  met la commande dans le catalogue), <strong>injecter</strong> (le constructeur reçoit
+  les services), <strong>exécuter</strong> (Console fournit les valeurs saisies).</li>
+<li><em>Ce que l'auteur veut que vous compreniez.</em> En Symfony 8.0, la forme
+  recommandée est une classe ordinaire invocable avec <code>#[AsCommand]</code> ;
+  <code>extends Command</code> est la forme classique, indispensable seulement pour
+  <code>initialize()</code>.</li>
+<li><em>Pourquoi c'est à l'examen.</em> On teste ce qui rend une classe « commande »
+  (attribut ou héritage + autoconfiguration), <code>hidden</code>, <code>aliases</code>, et le
+  comportement de <code>#[Ask]</code> avec <code>-n</code>.</li>
+</ul>
+<p>Une commande expose un traitement applicatif au terminal, sans faire passer
+ce travail par <code>BlogController::show</code>. Avec Symfony 8.0,
+une classe ordinaire portant <code>#[AsCommand]</code> et une méthode <code>__invoke(): int</code>
+suffit dans une application qui l'enregistre comme service avec
+autoconfiguration. Elle n'a pas besoin d'hériter de <code>Command</code>.</p>
+<p>Deux étapes sont distinctes : <strong>enregistrer</strong> la commande dans le catalogue,
+puis <strong>l'exécuter</strong> avec des entrées. L'attribute ne scanne pas les fichiers
+à lui seul. Étendre <code>Command</code> reste une autre forme valide, notamment pour
+personnaliser <code>initialize()</code>.</p>
+<p>Une classe <strong>invocable</strong> possède une méthode publique <code>__invoke()</code> :
+son objet peut être appelé comme une fonction. Cela décrit une capacité
+PHP, pas une inscription automatique dans Console. Le nom de commande,
+la définition du service et l'adaptation par Console donnent à cette
+capacité une entrée CLI.</p>
+<pre class="highlight" tabindex="0"><code class="language-text">  AVANT L'EXÉCUTION (conteneur)         À L'EXÉCUTION (Console)
+  ┌──────────────────────────┐          ┌────────────────────────────┐
+  │ service + tag            │  nom     │ argv → arguments/options   │
+  │ console.command          ├─────────►│ → __invoke(...) → int      │
+  │ (dépendances injectées)  │          │                            │
+  └──────────────────────────┘          └────────────────────────────┘</code></pre></section><section class="teaching-section" data-section="s-le-schema"><h2 id="s-le-schema" tabindex="-1">Le schéma</h2><aside class="section-digest" id="s-le-schema-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>La class doit être un service.</li><li>L&#x27;autoconfiguration lit AsCommand.</li></ol></aside><p><strong>Où en est-on ?</strong> Nous savons qu'« enregistrer » et « exécuter » sont deux
+temps. Ce schéma détaille le premier : comment une classe devient une entrée
+du catalogue <strong>avant</strong> qu'on ne tape la moindre commande.</p>
+<p>Avant de recevoir <code>articles.csv</code>, la préparation du conteneur doit relier
+le nom de commande à un service. Une classe exclue des ressources de
+services ne franchit pas la première étape, même avec le bon attribut :</p>
+<figure class="diagram" aria-labelledby="CRS-cb51hcng9dh5-3-diagram-0-title CRS-cb51hcng9dh5-3-diagram-0-description"><figcaption id="CRS-cb51hcng9dh5-3-diagram-0-title">Enregistrer le service puis le rendre disponible à Application</figcaption><p id="CRS-cb51hcng9dh5-3-diagram-0-description">Une définition de service incluse dans les ressources et autoconfigurée reçoit console.command grâce à AsCommand, ou grâce à l&#x27;héritage de Command. La compilation prépare le chargement des commandes. Application résout ensuite le nom demandé. Une classe exclue des ressources n&#x27;est pas enregistrée par la seule présence de l&#x27;attribute.</p><div class="mermaid" hidden>---
+title: Comment une class devient une command
+---
+flowchart TD
+  accTitle: Enregistrer le service puis le rendre disponible à Application
+  accDescr: Une définition de service incluse dans les ressources et autoconfigurée reçoit console.command grâce à AsCommand, ou grâce à l&#x27;héritage de Command. La compilation prépare le chargement des commandes. Application résout ensuite le nom demandé. Une classe exclue des ressources n&#x27;est pas enregistrée par la seule présence de l&#x27;attribute.
+  F[&quot;Définition de service incluse&quot;] -.-&gt;|&quot;autoconfiguration active&quot;| Q{&quot;AsCommand ou sous-classe ?&quot;}
+  Q -.-&gt;|&quot;oui : ajoute&quot;| T[&quot;Tag console.command&quot;]
+  Q -.-&gt;|&quot;non : sans tag manuel&quot;| NO([&quot;Pas d&#x27;enregistrement automatique&quot;])
+  T -.-&gt;|&quot;compilation : prépare&quot;| L[&quot;Chargeur de commandes&quot;]
+  L --&gt;|&quot;nom demandé : fournit la commande&quot;| A[&quot;Application&quot;]
+  classDef config fill:#f1f5f9,stroke:#475569,color:#1e293b
+  classDef choice fill:#fef3c7,stroke:#92400e,color:#78350f
+  classDef action fill:#e0f2fe,stroke:#075985,color:#0c4a6e
+  classDef result fill:#dcfce7,stroke:#166534,color:#14532d
+  class F,T config
+  class Q choice
+  class L,A action
+  class NO result</div></figure>
+<p>Les pointillés décrivent la configuration et la compilation ; le trait plein
+décrit le chargement à l'exécution. Les couleurs distinguent configuration
+(gris), décision (ambre), objets (bleu) et résultat (vert). Ce n'est pas
+un graphe d'héritage : le cas <code>extends Command</code> est un <strong>critère
+d'autoconfiguration</strong>, pas un appel à la classe parente.</p>
+<p>Ce travail de préparation n'est pas rejoué pour chaque article importé
+ni pour chaque <code>GET /blog/42</code>. Une fois le conteneur utilisable, Console
+résout le nom demandé et obtient la commande ; le traitement métier vient
+ensuite.</p></section><section class="teaching-section" data-section="s-l-exemple-creer-un-user"><h2 id="s-l-exemple-creer-un-user" tabindex="-1">L&#x27;exemple : créer un user</h2><p class="teaching-label example"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="code" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6L2 12L8 18M16 6L22 12L16 18M14 3L10 21"></path></svg> <strong>Exemple concret</strong></p><aside class="section-digest" id="s-l-exemple-creer-un-user-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>La command est un service ordinaire.</li><li>Les arguments CLI restent des entrées d&#x27;exécution.</li></ol></aside><p><strong>Où en est-on ?</strong> Du schéma au code : une commande complète mais courte,
+avec <strong>un service injecté</strong> (venant du conteneur) et <strong>un argument saisi</strong>
+(venant du terminal). Gardez en tête cette distinction : c'est le cœur de la
+section.</p>
+<div class="admonition info">
+<p class="admonition-title">🌍 In Real Life</p>
+<p><strong>La situation</strong> : l'équipe du blog équipe le bureau de création des auteurs, puis lui remet le dossier « Alice ».</p>
+<p><strong>L’équivalent dans Symfony</strong> : équipement du bureau → <code>UserManager</code> injecté au constructeur ; dossier courant → nom fourni par l'entrée Console.</p>
+<p><strong>Retour à la réalité technique</strong> : le conteneur fournit le service ; Console fournit les valeurs de la commande. Créer un compte n'authentifie pas une requête. En mode non interactif, une entrée requise manquante doit être traitée avant l'appel métier.</p>
+<p><strong>🧠 Comment le mémoriser</strong> : « L'outil reste, le dossier change. » Image mentale : un outil fixe et une pile de noms. Question-réflexe : cette valeur vient-elle du conteneur ou du terminal ?</p>
+<p><strong>⚠️ À ne pas confondre</strong> : injection de dépendances et résolution des entrées CLI.</p>
+</div>
+<p>Conservons cette branche d'administration : créer l'auteur <code>Alice</code> avant
+l'import de ses articles. Le mécanisme d'injection est le même que pour
+un service d'import ; créer l'auteur n'est pas authentifier une requête HTTP.
+La classe ci-dessous suppose un service applicatif <code>App\Service\UserManager</code>
+avec une méthode <code>create(string $name)</code> qui réalise ce travail :</p>
+<pre class="highlight" tabindex="0"><code class="language-php">&lt;?php
+namespace App\Command;
+
+use App\Service\UserManager;
+use Symfony\Component\Console\Attribute\Argument;
+use Symfony\Component\Console\Attribute\AsCommand;
+use Symfony\Component\Console\Attribute\Ask;
+use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Output\OutputInterface;
+
+#[AsCommand(name: 'app:create-user', description: 'Creates a user')]
+class CreateUserCommand
+{
+    public function __construct(private UserManager $userManager)
+    {
+    }
+
+    public function __invoke(OutputInterface $output, #[Argument, Ask('Name?')] string $name): int
+    {
+        $this-&gt;userManager-&gt;create($name);
+        $output-&gt;writeln('User successfully generated!');
+
+        return Command::SUCCESS;
+    }
+}</code></pre>
+<p>Les dependencies arrivent par le constructor ; <code>__invoke()</code> reçoit l'output,
+l'entrée, et les arguments et options décrits par attributes.</p>
+<p>Ce que Symfony voit dans cette classe :</p>
+<table>
+<thead>
+<tr>
+<th>Élément</th>
+<th>Qui le fournit</th>
+<th>Quand</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>UserManager $userManager</code> (constructeur)</td>
+<td>le conteneur (autowiring)</td>
+<td>à la construction du service</td>
+</tr>
+<tr>
+<td><code>OutputInterface $output</code> (<code>__invoke</code>)</td>
+<td>Console</td>
+<td>à chaque exécution</td>
+</tr>
+<tr>
+<td><code>#[Argument] string $name</code></td>
+<td>l'entrée CLI (<code>Alice</code>)</td>
+<td>à chaque exécution</td>
+</tr>
+<tr>
+<td><code>#[Ask('Name?')]</code></td>
+<td>question posée si <code>name</code> manque et si l'entrée est interactive</td>
+<td>avant la validation</td>
+</tr>
+</tbody>
+</table>
+<p><code>UserManager</code> est une dépendance à fournir, pas un service Symfony implicite.
+La création et la persistance de comptes ne sont pas implémentées par ce
+fragment. Une fois la classe et cette dépendance enregistrées :</p>
+<pre class="highlight" tabindex="0"><code class="language-bash">php bin/console app:create-user Alice</code></pre>
+<p>Le service reçoit <code>Alice</code>. Si <code>create()</code> se termine normalement, la sortie
+est la suivante et le code de commande vaut 0 :</p>
+<pre class="highlight" tabindex="0"><code class="language-text">User successfully generated!</code></pre>
+<p>Avec <code>-n</code> sans nom, la validation échoue avant cet appel : le code ne crée
+pas un utilisateur vide. Les dépendances du constructeur restent différentes
+des valeurs de saisie : <code>UserManager</code> vient du conteneur, <code>Alice</code> vient de
+l'entrée Console.</p></section><section class="teaching-section" data-section="s-la-forme-recommandee-la-command-invocable"><span class="outcome-anchor" id="out-OUT-86vxgq9k86kd" tabindex="-1"></span><h2 id="s-la-forme-recommandee-la-command-invocable" tabindex="-1">La forme recommandée : la command invocable</h2><aside class="section-digest" id="s-la-forme-recommandee-la-command-invocable-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Le nom permet d&#x27;appeler la command.</li><li>Description et aide sont facultatives.</li></ol></aside><p><strong>Où en est-on ?</strong> Étape 1 sur 3 : la forme à privilégier. Pour la comprendre
+sans le bruit du compte utilisateur, on isole la plus petite commande
+possible.</p>
+<p>Pour isoler l'enregistrement de toute logique de compte, voici aussi la
+commande minimale <code>app:greet</code>, à placer dans <code>src/Command/GreetCommand.php</code>
+et à découvrir comme service. Elle conserve le petit test de contrat :</p>
+<pre class="highlight" tabindex="0"><code class="language-php">&lt;?php
+namespace App\Command;
+
+use Symfony\Component\Console\Attribute\AsCommand;
+use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Output\OutputInterface;
+
+#[AsCommand(name: 'app:greet', description: 'Affiche un accueil.')]
+final class GreetCommand
+{
+    public function __invoke(OutputInterface $output): int
+    {
+        $output-&gt;writeln('Bonjour.');
+
+        return Command::SUCCESS;
+    }
+}</code></pre>
+<pre class="highlight" tabindex="0"><code class="language-bash">php bin/console app:greet</code></pre>
+<p>Résultat attendu en verbosity normale, avec code 0 :</p>
+<pre class="highlight" tabindex="0"><code class="language-text">Bonjour.</code></pre>
+<p>Importer <code>Command</code> donne accès à la constante, sans imposer l'héritage.
+Utiliser <code>OutputInterface</code> ou <code>SymfonyStyle</code> permet à Console de maîtriser
+la sortie ; un <code>echo</code> métier contournerait notamment ce réglage.</p>
+<ul>
+<li>La class <strong>n'étend pas <code>Command</code></strong> ; la constant <code>Command::SUCCESS</code> reste
+  utilisée pour la lisibilité.</li>
+<li><code>#[AsCommand]</code> n'exige que <code>name</code> ; <code>description</code>, <code>aliases</code>, <code>hidden</code>,
+  <code>help</code> et <code>usages</code> sont facultatifs.</li>
+<li><code>#[Ask]</code> pose la question si l'argument manque ; <code>#[Interact]</code> sur une method
+  publique couvre une interaction plus riche. Avec <code>-n</code> et sans argument :
+  « Not enough arguments (missing: "name"). », code 1.</li>
+</ul>
+<p>La question ne doit pas devenir un prérequis caché de l'automatisation.
+Pour <code>app:blog:import</code>, transmettre le chemin explicitement avec <code>-n</code> rend
+le contrat reproductible. Les noms et les valeurs acceptées seront détaillés
+dans <a href="course-CRS-q2dxjhx6d35k.html">Options et arguments</a>.</p></section><section class="teaching-section" data-section="s-comment-symfony-la-trouve"><span class="outcome-anchor" id="out-OUT-g23jwhyz5189" tabindex="-1"></span><h2 id="s-comment-symfony-la-trouve" tabindex="-1">Comment Symfony la trouve</h2><aside class="section-digest" id="s-comment-symfony-la-trouve-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Être invocable ne suffit pas.</li><li>Le framework doit reconnaître la command.</li></ol></aside><p><strong>Où en est-on ?</strong> Étape 2 sur 3 : le schéma d'enregistrement revient, cette
+fois en <strong>quatre étapes numérotées</strong>. C'est la réponse à « pourquoi ma
+commande n'apparaît pas dans <code>list</code> ? ».</p>
+<div class="admonition info">
+<p class="admonition-title">🌍 In Real Life</p>
+<p><strong>La situation</strong> : une personne compétente pour importer les articles doit aussi figurer dans l'annuaire du blog.</p>
+<p><strong>L’équivalent dans Symfony</strong> : personne identifiée → définition de service ; rôle déclaré → tag <code>console.command</code> ; annuaire préparé → configuration du chargeur de commandes.</p>
+<p><strong>Retour à la réalité technique</strong> : avec l'autoconfiguration, <code>#[AsCommand]</code> apporte le rôle à un service découvert. Le compiler pass prépare son intégration ; l'attribut ne recherche pas seul toutes les classes du disque.</p>
+<p><strong>🧠 Comment le mémoriser</strong> : « Compétent ne veut pas dire enregistré. » Image mentale : une fiche à insérer dans l'annuaire. Question-réflexe : la définition existe-t-elle et porte-t-elle le bon tag ?</p>
+<p><strong>⚠️ À ne pas confondre</strong> : commande cachée de la liste et commande non enregistrée.</p>
+</div>
+<p>Une commande absente de <code>list</code> peut être non enregistrée ou simplement
+cachée. Pour trancher, suivre les responsabilités plutôt que modifier au
+hasard son constructeur :</p>
+<ol>
+<li>La configuration des services inclut une <strong>définition</strong> de la classe.</li>
+<li><code>FrameworkExtension</code> enregistre les règles d'autoconfiguration :
+   <code>#[AsCommand]</code> ou l'héritage de <code>Command</code> fait ajouter le tag
+   <code>console.command</code> à une définition autoconfigurée.</li>
+<li>Le compiler pass <code>AddConsoleCommandPass</code> consomme les définitions
+   taguées. Pour une classe ordinaire invocable, il prépare un objet
+   <code>Command</code> adaptateur et lui associe le callable via <code>setCode()</code>.</li>
+<li>Les noms connus alimentent le chargeur de commandes ; un nom fourni
+   uniquement lors de la construction d'une commande classique suit la
+   voie d'enregistrement correspondante. À l'exécution, <code>Application</code>
+   peut alors demander la commande choisie.</li>
+</ol>
+<p>L'<strong>autowiring</strong> résout les dépendances comme <code>UserManager</code> ;
+l'<strong>autoconfiguration</strong> attribue ici le tag ; l'extension enregistre ces
+règles et le <strong>compiler pass</strong> exploite les définitions. Ce sont des rôles
+distincts, pas quatre mots pour « créer la commande ».</p>
+<table>
+<thead>
+<tr>
+<th>Rôle</th>
+<th>Ce qu'il fait ici</th>
+<th>Ce qu'il ne fait pas</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>autowiring</td>
+<td>injecte <code>UserManager</code> au constructeur</td>
+<td>n'enregistre pas la commande</td>
+</tr>
+<tr>
+<td>autoconfiguration</td>
+<td>pose le tag <code>console.command</code></td>
+<td>ne scanne pas le disque</td>
+</tr>
+<tr>
+<td><code>FrameworkExtension</code></td>
+<td>déclare les règles d'autoconfiguration</td>
+<td>n'exécute pas la commande</td>
+</tr>
+<tr>
+<td><code>AddConsoleCommandPass</code></td>
+<td>consomme les services taggués</td>
+<td>ne lit pas les arguments CLI</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>Class</th>
+<th>Attribute</th>
+<th>Résultat</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>étend <code>Command</code>, nom posé dans <code>configure()</code></td>
+<td>non</td>
+<td><strong>enregistrée</strong></td>
+</tr>
+<tr>
+<td>invocable, n'étend rien</td>
+<td>non</td>
+<td><strong>absente</strong> de l'application</td>
+</tr>
+<tr>
+<td>invocable, <code>hidden: true</code>, alias <code>app:h</code></td>
+<td>oui</td>
+<td>absente de <code>list</code>, exécutable par son nom <strong>et</strong> son alias</td>
+</tr>
+</tbody>
+</table>
+<p>Une class de bibliothèque, hors de la ressource <code>src/</code>, se déclare comme
+service.</p>
+<p>Ces résultats supposent l'autoconfiguration active et aucune déclaration
+manuelle de tag. Une définition explicitement marquée <code>console.command</code>
+constitue une autre voie d'enregistrement ; ne pas confondre « non découvert
+automatiquement » avec « impossible à enregistrer ».</p>
+<p>Dans la voie manuelle, fournir aussi un nom de commande exploitable :
+un tag sur une invocable anonyme ne suffit pas à inventer le nom métier
+<code>app:blog:import</code>. Le nom de classe n'est pas une convention de commande
+automatique.</p></section><section class="teaching-section" data-section="s-la-syntaxe-classique-toujours-valide"><span class="outcome-anchor" id="out-OUT-npjsrz7new8m" tabindex="-1"></span><h2 id="s-la-syntaxe-classique-toujours-valide" tabindex="-1">La syntaxe classique, toujours valide</h2><aside class="section-digest" id="s-la-syntaxe-classique-toujours-valide-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Le style classique n&#x27;est pas supprimé.</li><li>Il donne notamment accès à initialize().</li></ol></aside><p><strong>Où en est-on ?</strong> Étape 3 sur 3 : l'ancienne forme, que le programme
+continue d'interroger. Elle reste valide ; c'est surtout le seul moyen
+d'accéder à <code>initialize()</code>.</p>
+<p>Voici une <strong>alternative</strong>, et non une seconde classe à charger en même
+temps que l'exemple <code>CreateUserCommand</code>. Ce squelette montre uniquement
+la signature classique ; il n'appelle pas encore <code>UserManager</code> :</p>
+<pre class="highlight" tabindex="0"><code class="language-php">&lt;?php
+namespace App\Command;
+
+use Symfony\Component\Console\Attribute\AsCommand;
+use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
+
+#[AsCommand(name: 'app:create-user')]
+class CreateUserCommand extends Command
+{
+    protected function execute(InputInterface $input, OutputInterface $output): int
+    {
+        return Command::SUCCESS;
+    }
+}</code></pre>
+<p>La documentation la nomme <em>legacy syntax</em>. <code>initialize()</code> est une method de
+<code>Command</code>, sans équivalent par attribute : une command qui en a besoin étend
+<code>Command</code>, et peut alors définir <code>__invoke()</code> au lieu d'<code>execute()</code> —
+<code>initialize()</code> puis <code>__invoke()</code>.</p>
+<p>La condition compte : <code>Command</code> sélectionne l'adaptateur invocable si
+<code>execute()</code> reste celui de la classe de base. Avec une redéfinition
+d'<code>execute()</code>, ne pas supposer que Console exécute également <code>__invoke()</code>.
+Si un constructeur personnalisé est nécessaire dans la sous-classe,
+appeler le constructeur parent pour initialiser la définition et la
+configuration de la commande.</p>
+<p>Comparaison des deux formes :</p>
+<pre class="highlight" tabindex="0"><code class="language-text">┌──────────────────────────────────┐   ┌──────────────────────────────────┐
+│ INVOCABLE (recommandée)          │   │ CLASSIQUE (legacy)               │
+├──────────────────────────────────┤   ├──────────────────────────────────┤
+│ class X { __invoke(): int }      │   │ class X extends Command          │
+│ #[AsCommand(name: …)]            │   │ execute(): int                   │
+│ n'hérite de rien                 │   │ accès à initialize()             │
+│ entrées par #[Argument]/#[Option]│   │ entrées par configure()          │
+└──────────────────────────────────┘   └──────────────────────────────────┘
+        Hybride : extends Command + __invoke() (sans redéfinir execute())</code></pre></section><section class="teaching-section" data-section="s-pieges-d-examen"><h2 id="s-pieges-d-examen" tabindex="-1">Pièges d&#x27;examen</h2><p class="teaching-label pitfall"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="warning" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3L23 21H1L12 3ZM12 9V14M12 17V18"></path></svg> <strong>Piège à éviter</strong></p><aside class="section-digest" id="s-pieges-d-examen-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Masquer ne désactive pas.</li><li>Un alias reste un accès valide.</li></ol></aside><ul class="pitfall-list"><li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : Une command invocable n&#x27;a pas besoin d&#x27;étendre Command.</summary><p><strong>Une command invocable n'a pas besoin d'étendre <code>Command</code>.</strong> L'invocation
+et l'héritage ne sont pas incompatibles : le cas hybride a été décrit
+ci-dessus. <em>Pourquoi on se trompe : les anciens tutoriels écrivent
+toujours <code>extends Command</code>.</em></p></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : __invoke() doit retourner un int.</summary><p><strong><code>__invoke()</code> doit retourner un <code>int</code>.</strong> C'est l'exit code du process.</p></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : #[AsCommand] exige un name.</summary><p><strong><code>#[AsCommand]</code> exige un <code>name</code>.</strong> C'est le seul parameter obligatoire ;
+<code>description</code>, <code>aliases</code>, <code>hidden</code>, <code>help</code> et <code>usages</code> sont facultatifs.</p></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : Sans attribute, une sous-classe de Command peut être enregistrée par autoconfiguration</summary><p><strong>Sans attribute, une sous-classe de <code>Command</code> peut être enregistrée par
+autoconfiguration</strong>, avec un nom défini. Une invocable ordinaire sans
+attribut ni autre enregistrement ne reçoit pas automatiquement le tag.
+<em>Pourquoi on se trompe : « elle est invocable, donc elle est une commande »
+confond la capacité PHP et l'inscription au catalogue.</em></p></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : hidden: true retire la command de list, pas de l&#x27;application.</summary><p><strong><code>hidden: true</code> retire la command de <code>list</code>, pas de l'application.</strong>
+Ce n'est pas une autorisation d'administration : le contrôle d'accès au
+process et les protections du traitement restent nécessaires.
+<em>Pourquoi on se trompe : « caché » évoque « inaccessible ».</em></p></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : Interagir ne suppose plus d&#x27;étendre Command</summary><p><strong>Interagir ne suppose plus d'étendre <code>Command</code></strong> : <code>#[Ask]</code> et <code>#[Interact]</code>.
+Seul <code>initialize()</code> reste propre à <code>Command</code>.</p></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : Le callable doit respecter le contrat de paramètres.</summary><p><strong>Le callable doit respecter le contrat de paramètres.</strong> Même avec
+<code>setCode()</code>, une closure aux paramètres <code>$input, $output</code> non typés échoue
+à leur résolution en 8.0. Donner les types Console reconnus et retourner
+un entier ; le problème peut apparaître à l'exécution, loin de l'appel à
+<code>setCode()</code>. Un service métier arbitraire typé dans <code>__invoke()</code> ne devient
+pas pour autant une dépendance autowirée : le placer dans le constructeur.</p></details></li></ul></section><section class="teaching-section" data-section="s-fiche-express"><h2 id="s-fiche-express" tabindex="-1">Fiche express</h2><p class="teaching-label essential"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="book" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5C9 3 5 3 2 4V20C5 19 9 19 12 21C15 19 19 19 22 20V4C19 3 15 3 12 5V21M5 8H8M5 12H8M16 8H19M16 12H19"></path></svg> <strong>À mémoriser</strong></p><aside class="section-digest" id="s-fiche-express-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>L&#x27;interaction ne nécessite pas toujours Command.</li><li>Le mode non interactif peut la sauter.</li></ol></aside><p>Pour notre import, la bonne question de diagnostic dépend du moment :
+la commande est-elle enregistrée, ses dépendances sont-elles résolues,
+ou ses entrées d'exécution sont-elles invalides ?</p>
+<p><strong>🧠 À retenir pour la certification — si tu dois retenir seulement 6 choses :</strong></p>
+<ul>
+<li><strong><code>#[AsCommand(name: …)]</code></strong> + <strong><code>__invoke(): int</code></strong>, sans inheritance.</li>
+<li>Tag <code>console.command</code> : l'attribute, <strong>ou</strong> une sous-classe de <code>Command</code>.</li>
+<li>Invocable ordinaire sans attribute ni autre enregistrement :
+  <strong>pas automatiquement une command</strong>.</li>
+<li>Dependencies par le <strong>constructor</strong> : la command est un service.</li>
+<li><code>hidden: true</code> : hors de <code>list</code>, <strong>toujours exécutable</strong>.</li>
+<li><code>extends Command</code> : <em>legacy</em>, mais seul accès à <strong><code>initialize()</code></strong>.</li>
+</ul>
+<p>Moyen mnémotechnique : <strong>« Un attribute, un <code>__invoke()</code>, un int »</strong>.
+Phrase de mémorisation : <strong>« Le conteneur enregistre et injecte, Console
+fournit les valeurs, et <code>__invoke()</code> rend un int. »</strong></p>
+<p>L'interface existe ; il reste à nommer ses alias, rédiger son aide et
+choisir ce qui est visible. Continuer avec
+<a href="course-CRS-sf3701ncg2va.html">Console Configuration</a>.</p></section><section class="official-sources"><h2 id="reader-sources" tabindex="-1">Sources officielles et compléments</h2><ul><li><a href="https://symfony.com/doc/8.0/console.html">Symfony 8.0 — Console</a></li><li><a href="https://symfony.com/doc/8.0/console.html#creating-a-command">Symfony 8.0 — Console — creating a command</a></li><li><a href="https://symfony.com/doc/8.0/console/input.html">Symfony 8.0 — console / input</a></li><li><a href="https://symfony.com/doc/8.0/console/input.html#using-arguments-in-invokable-commands">Symfony 8.0 — console / input — using arguments in invokable commands</a></li><li><a href="https://symfony.com/doc/8.0/console/input.html#using-options-in-invokable-commands">Symfony 8.0 — console / input — using options in invokable commands</a></li><li><a href="https://symfony.com/doc/8.0/reference/configuration/framework.html">Symfony 8.0 — reference / configuration / framework</a></li></ul><aside class="video-resources"><h3>Vidéos complémentaires</h3><p>Facultatives et non officielles ; les sources officielles restent la référence. Aucun lecteur intégré.</p><ul><li><a data-video href="https://www.youtube.com/watch?v=V8NY-6No5DM&amp;t=472s" rel="noreferrer">7:52–8:31 — invokable commands et arguments BackedEnum</a><p>Symfony 8.0 : les nouvelles fonctionnalités — Devscast Software · fr · Symfony 8.0 · publié le 2025-11-27 · extrait contrôlé le 2026-11-11.</p><p>Deux extraits Console uniquement. La vidéo présente des nouveautés communes à Symfony 7.4 et 8.0 ; la vidéo entière n’est pas approuvée. Lecture ciblée de la transcription par le parent, recoupée avec la documentation 8.0 ; pas une revue audiovisuelle intégrale. Arrêter à 8:31 : la discussion suivante sur les valeurs nullable est exclue.</p><p>Le lien YouTube démarre au début indiqué, mais ne s’arrête pas automatiquement à la fin affichée.</p></li></ul></aside></section><section id="course-recalls" aria-labelledby="course-recalls-title" tabindex="-1"><h2 id="course-recalls-title">Rappels et liens avec les autres cours</h2><div data-recall-group="other"><h3>Rappels des cours précédents / autres modules</h3><ul><li data-recall-course="CRS-3z96cp2s1dka" data-recall-kind="previous_course"><p class="recall-provenance">Module 26 — Serializer · Cours « Serializer »</p><p>Le normalizer choisit la représentation. L&#x27;encoder produit le format.</p><p><a href="#cards-previous">Rappel : <span lang="en">What are the two main stages of serialization?</span></a></p></li></ul></div></section><nav class="course-sequence" aria-label="Ordre de lecture"><a rel="prev" href="course-CRS-brn6frfqpxxj.html" aria-label="Précédent : Console component — Module 12 — Console">Précédent : Console component</a> <a href="lot-12.html">Sommaire : Module 12 — Console</a> <a rel="next" href="course-CRS-q2dxjhx6d35k.html" aria-label="Suivant : Options and arguments (using PHP attributes) — Module 12 — Console">Suivant : Options and arguments (using PHP attributes)</a></nav><p class="course-practice-entry"><a class="button" href="#view-quiz">Fin du cours — s’entraîner avec le Quiz</a></p></div><div id="view-flashcards" data-course-panel role="region" aria-labelledby="view-flashcards-title"><h2 id="view-flashcards-title">Flashcards</h2><p lang="en">Answer before revealing each card.</p><p>Ces cartes ne mesurent pas une maîtrise notée.</p><div id="cards-s-l-essentiel-1" data-card-section="s-l-essentiel"><h3><a href="#s-l-essentiel">Revoir : L&#x27;essentiel</a></h3><div class="reader-cards"><details class="reader-card" id="B-cb51hcng9dh5-01"><summary lang="en">Must a Symfony 8.0 command extend Command?</summary><p lang="en">No. An AsCommand class with an integer-returning __invoke() can be used.</p><p lang="fr">La command invocable évite l&#x27;inheritance. Le contrat reste un exit code int.</p><a href="course-CRS-cb51hcng9dh5.html#out-OUT-86vxgq9k86kd">Revoir le passage précis</a></details></div></div><div id="cards-s-le-schema-2" data-card-section="s-le-schema"><h3><a href="#s-le-schema">Revoir : Le schéma</a></h3><div class="reader-cards"><details class="reader-card" id="B-cb51hcng9dh5-02"><summary lang="en">How is an attribute-based command added to the application in the framework?</summary><p lang="en">Service discovery and autoconfiguration register its console.command tag.</p><p lang="fr">La class doit être un service. L&#x27;autoconfiguration lit AsCommand.</p><a href="course-CRS-cb51hcng9dh5.html#out-OUT-g23jwhyz5189">Revoir le passage précis</a></details></div></div><div id="cards-s-l-exemple-creer-un-user-3" data-card-section="s-l-exemple-creer-un-user"><h3><a href="#s-l-exemple-creer-un-user">Revoir : L&#x27;exemple : créer un user</a></h3><div class="reader-cards"><details class="reader-card" id="B-cb51hcng9dh5-03"><summary lang="en">Where should a command&#x27;s application-service dependencies be injected?</summary><p lang="en">Through its constructor.</p><p lang="fr">La command est un service ordinaire. Les arguments CLI restent des entrées d&#x27;exécution.</p><a href="course-CRS-cb51hcng9dh5.html#out-OUT-g23jwhyz5189">Revoir le passage précis</a></details></div></div><div id="cards-s-la-forme-recommandee-la-command-invocable-4" data-card-section="s-la-forme-recommandee-la-command-invocable"><h3><a href="#s-la-forme-recommandee-la-command-invocable">Revoir : La forme recommandée : la command invocable</a></h3><div class="reader-cards"><details class="reader-card" id="B-cb51hcng9dh5-04"><summary lang="en">Which AsCommand parameter is mandatory?</summary><p lang="en">name.</p><p lang="fr">Le nom permet d&#x27;appeler la command. Description et aide sont facultatives.</p><a href="course-CRS-cb51hcng9dh5.html#out-OUT-86vxgq9k86kd">Revoir le passage précis</a></details></div></div><div id="cards-s-comment-symfony-la-trouve-5" data-card-section="s-comment-symfony-la-trouve"><h3><a href="#s-comment-symfony-la-trouve">Revoir : Comment Symfony la trouve</a></h3><div class="reader-cards"><details class="reader-card" id="B-cb51hcng9dh5-05"><summary lang="en">Is an unannotated plain invokable service automatically a console command?</summary><p lang="en">No. It needs registration such as AsCommand.</p><p lang="fr">Être invocable ne suffit pas. Le framework doit reconnaître la command.</p><a href="course-CRS-cb51hcng9dh5.html#out-OUT-g23jwhyz5189">Revoir le passage précis</a></details></div></div><div id="cards-s-la-syntaxe-classique-toujours-valide-6" data-card-section="s-la-syntaxe-classique-toujours-valide"><h3><a href="#s-la-syntaxe-classique-toujours-valide">Revoir : La syntaxe classique, toujours valide</a></h3><div class="reader-cards"><details class="reader-card" id="B-cb51hcng9dh5-06"><summary lang="en">Is extending Command and implementing execute() still supported?</summary><p lang="en">Yes. The classic syntax remains valid.</p><p lang="fr">Le style classique n&#x27;est pas supprimé. Il donne notamment accès à initialize().</p><a href="course-CRS-cb51hcng9dh5.html#out-OUT-npjsrz7new8m">Revoir le passage précis</a></details></div></div><div id="cards-s-pieges-d-examen-7" data-card-section="s-pieges-d-examen"><h3><a href="#s-pieges-d-examen">Revoir : Pièges d&#x27;examen</a></h3><div class="reader-cards"><details class="reader-card" id="B-cb51hcng9dh5-07"><summary lang="en">Can a hidden command still run by its name or alias?</summary><p lang="en">Yes. hidden removes it from normal listing, not execution.</p><p lang="fr">Masquer ne désactive pas. Un alias reste un accès valide.</p><a href="course-CRS-cb51hcng9dh5.html#out-OUT-npjsrz7new8m">Revoir le passage précis</a></details></div></div><div id="cards-s-fiche-express-8" data-card-section="s-fiche-express"><h3><a href="#s-fiche-express">Revoir : Fiche express</a></h3><div class="reader-cards"><details class="reader-card" id="B-cb51hcng9dh5-08"><summary lang="en">Which attributes support interaction in an invokable command?</summary><p lang="en">Ask on an argument and Interact on a public method.</p><p lang="fr">L&#x27;interaction ne nécessite pas toujours Command. Le mode non interactif peut la sauter.</p><a href="course-CRS-cb51hcng9dh5.html#out-OUT-npjsrz7new8m">Revoir le passage précis</a></details></div></div><div id="cards-previous"><p class="recall-provenance">Module 26 — Serializer · Cours « Serializer »</p><aside class="checkpoint"><h2>Rappel d’un cours antérieur</h2><p>Avant de poursuivre : Serializer.</p><details class="corpus-correction"><summary lang="en">What are the two main stages of serialization?</summary><p lang="en">Normalization to a PHP representation, then encoding to a format.</p><p>Le normalizer choisit la représentation. L&#x27;encoder produit le format.</p><a href="course-CRS-3z96cp2s1dka.html#out-OUT-a95xx41fw6hn">Relire la correction dans le cours antérieur</a></details></aside></div></div><div id="view-quiz" data-course-panel role="region" aria-labelledby="view-quiz-title"><aside class="revision-context"><p><strong>Avant le quiz :</strong> Les commandes intégrées inspectent l&#x27;application ; aucune ne connaît notre traitement d&#x27;import. Il faut donc exposer ce travail sous app:blog:import et lui fournir les services nécessaires. Nous allons séparer découverte, injection et appel, puis conserver une petite branche utile : créer un auteur par le terminal avant de lui attribuer des articles.</p><p>Quelle donnée entre, quelle responsabilité agit et quelle condition change le résultat ? Pour chaque correction, vérifiez ces conditions dans <a href="course-CRS-cb51hcng9dh5.html#s-objectif">le passage enseigné</a>, sans supposer que toutes les branches du blog sont exécutées.</p></aside><h2 id="view-quiz-title">Quiz</h2><p class="quiz-size" lang="en">4 eligible learning questions · 4 per session. Repeating a question does not demonstrate mastery.</p><p id="course-quiz-status" role="status">Quiz interactif non chargé. Démarrez après chargement de la banque locale.</p><div id="course-quiz-controls" class="assessment-main" hidden><div id="course-quiz-assessment-controls" hidden><select id="course-quiz-assessment-mode" aria-label="Mode du quiz" hidden><option value="learning">Entraînement</option></select><p id="course-quiz-training-scope"></p><button id="course-quiz-start-assessment" type="button" lang="en">Start practice</button><button id="course-quiz-finish-assessment" type="button" lang="en" hidden>End session</button></div><p id="course-quiz-assessment-error" role="alert"></p><p id="course-quiz-assessment-timer" hidden></p><p id="course-quiz-session-progress" class="quiz-progress" role="status" lang="en"></p><div id="course-quiz-assessment-app" tabindex="-1"></div><nav id="course-quiz-session-navigation" aria-label="Questions du cours"></nav><div id="course-quiz-learning-overview" aria-live="polite"></div></div><div id="course-quiz-native"><p>Sans JavaScript ou si le chargement échoue : aucune tentative notée. Les <a href="#view-flashcards">flashcards du cours</a> restent disponibles.</p><details class="course-quiz-fallback" data-question-id="L-cb51hcng9dh5-base-v1"><summary lang="en">Must a Symfony 8.0 command extend Command?</summary><p>Correction de consultation — non notée.</p><p>La command invocable évite l&#x27;inheritance. Le contrat reste un exit code int.</p><ul><li><strong lang="en">Correct: No; an AsCommand class can expose an integer-returning __invoke().</strong><p>La command invocable évite l&#x27;inheritance. Le contrat reste un exit code int.</p></li><li><strong lang="en">Distractor: Yes; extending Command is the only supported registration path.</strong><p>Symfony 8.0 accepte aussi une command invocable avec AsCommand.</p></li><li><strong lang="en">Distractor: No; any class name is automatically an executable command.</strong><p>Il faut la metadata et un callable respectant le contrat d&#x27;exécution.</p></li></ul><a href="course-CRS-cb51hcng9dh5.html#out-OUT-86vxgq9k86kd">Relire le passage exact</a></details></div></div></div></div><details class="transfer-panel"><summary>Sauvegarde et transfert de progression</summary><p id="reading-status" role="status">Sans JavaScript : lecture libre ; progression non enregistrée.</p><p><a href="assessment.html#overview-title">Lecture, réussites immédiates et différées</a></p><p>Transfert manuel — aucune synchronisation automatique</p><p id="persistence-status" role="status"></p><button type="button" class="secondary" id="export-progress">Exporter ma progression</button><label for="import-progress">Choisir un JSON pour fusionner ma progression (sans remplacement)</label><input type="file" id="import-progress" accept="application/json,.json"><p id="transfer-status" role="status"></p></details></main><footer class="site-footer"><a href="catalogue.html">Catalogue</a> <a href="sources.html">Sources et attribution</a> <a href="#contenu">Haut de page</a></footer></body></html>

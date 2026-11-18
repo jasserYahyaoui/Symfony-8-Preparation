@@ -1,0 +1,376 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; connect-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Input and Output objects — Symfony 8 Preparation</title><link rel="stylesheet" href="styles.css"><link rel="stylesheet" href="reader.css"><script src="mermaid.min.js" defer></script><script src="mermaid-init.js" defer></script><link rel="stylesheet" href="assessment.css"><script src="fixed-exams-data.js" defer></script><script src="fixed-exams.js" defer></script><script src="learning-state.js" defer></script><script src="guide.js" defer></script><script src="reader-catalog.js" defer></script><script src="reader.js" defer></script><script src="site-state.js" defer></script><script src="assessment.js" defer></script><script src="course-views.js" defer></script><link rel="stylesheet" href="syntax-highlight.css"><script src="prism-syntax.js" defer></script><script src="syntax-highlight.js" defer></script></head><body data-course-id="CRS-0ab7kpexq9w9"><a class="skip" href="#contenu">Aller au contenu</a><header class="site-header"><a class="brand" href="index.html">S8 Preparation</a><nav aria-label="Navigation principale"><a href="index.html">Accueil</a> <a href="catalogue.html">Parcours</a> <a href="assessment.html?mode=review">Réviser</a> <a href="examens.html">Examens blancs</a> <a href="jour-j.html">Jour J</a></nav></header><main id="contenu" tabindex="-1" class="corpus-reader"><nav class="breadcrumb" aria-label="Fil d’Ariane"><a href="index.html">Accueil</a> <span aria-hidden="true">›</span> <a href="catalogue.html">Parcours</a> <span aria-hidden="true">›</span> <a href="lot-12.html">Module 12 — Console</a> <span aria-hidden="true">›</span> <span aria-current="page">Input and Output objects</span></nav><h1>Input and Output objects</h1><p class="muted">Symfony 8.0 · API PHP ≤ 8.4 · Twig ≤ 3.22. Préparation indépendante.</p><p class="revision-status">Rédaction narrative P11 : projection nouvelle, non couverte par les décisions historiques P10. Aucune approbation officielle ni garantie de réussite.</p><aside class="narrative-context" aria-label="Repères de lecture"><p><strong>Prérequis de lecture :</strong> <a href="course-CRS-q2dxjhx6d35k.html">Options and arguments (using PHP attributes)</a></p><p><strong>Concepts voisins :</strong> <a href="course-CRS-5gezsra1sp01.html">Messenger component</a> — Comparer import immédiat et traitement différé configuré. <a href="lot-12.html">Comparer les responsabilités dans ce module</a> · <a href="carte-composants.html">Situer cette responsabilité dans le blog</a> · <a href="glossaire.html">Distinguer les termes voisins</a></p><p><a href="ordre-lecture.html">Retrouver les 163 cours dans le parcours recommandé</a>. Ce repère ne modifie ni votre historique ni votre progression.</p></aside><div class="course-layout"><details class="lot-course-menu"><summary>Cours du module · 9 cours</summary><nav aria-label="Cours du module"><a class="lot-context" href="lot-12.html">Module 12 — Console</a><ol><li><a href="course-CRS-brn6frfqpxxj.html">Console component</a></li><li><a href="course-CRS-rk0fkn1q5byc.html">Built-in commands</a></li><li><a href="course-CRS-cb51hcng9dh5.html">Custom commands</a></li><li><a href="course-CRS-sf3701ncg2va.html">Configuration</a></li><li><a href="course-CRS-q2dxjhx6d35k.html">Options and arguments (using PHP attributes)</a></li><li><a href="course-CRS-0ab7kpexq9w9.html" aria-current="page">Input and Output objects</a></li><li><a href="course-CRS-3p9jdkw1nd3g.html">Built-in helpers</a></li><li><a href="course-CRS-y0zc67f3e5zk.html">Console events</a></li><li><a href="course-CRS-96c85hjezj1r.html">Verbosity levels</a></li></ol><a href="lot-12.html#view-quiz">Quiz du module</a></nav></details><aside class="course-section-menu" aria-label="Sommaire du cours"><nav class="course-actions" aria-label="Activités du cours"><a id="tab-course" href="#view-course">Cours</a><a id="tab-flashcards" href="#view-flashcards">Flashcards</a><a id="tab-quiz" href="#view-quiz">Quiz</a></nav><details class="course-section-disclosure"><summary id="course-sections">Sections du cours</summary><nav aria-label="Sections du cours"><ul><li><a href="#s-objectif">Objectif</a></li><li><a href="#s-l-essentiel">L&#x27;essentiel</a></li><li><a href="#s-le-schema">Le schéma</a></li><li><a href="#s-l-exemple-une-command-d-export">L&#x27;exemple : une command d&#x27;export</a></li><li><a href="#s-inputinterface-lire">`InputInterface` — lire</a></li><li><a href="#s-outputinterface-ecrire">`OutputInterface` — écrire</a></li><li><a href="#s-l-output-d-erreur">L&#x27;output d&#x27;erreur</a></li><li><a href="#s-tester-une-command">Tester une command</a></li><li><a href="#s-pieges-d-examen">Pièges d&#x27;examen</a></li><li><a href="#s-fiche-express">Fiche express</a></li><li><a href="#reader-objectives">Objectifs d’apprentissage</a></li><li><a href="#reader-sources">Sources officielles et compléments</a></li><li><a href="#course-recalls">Rappels et liens avec les autres cours</a></li></ul></nav><nav aria-label="Flashcards par section"><a href="#view-flashcards">Flashcards par section</a><ul><li><a href="#cards-s-l-essentiel-1">L&#x27;essentiel</a></li><li><a href="#cards-s-le-schema-2">Le schéma</a></li><li><a href="#cards-s-l-exemple-une-command-d-export-3">L&#x27;exemple : une command d&#x27;export</a></li><li><a href="#cards-s-inputinterface-lire-4">`InputInterface` — lire</a></li><li><a href="#cards-s-outputinterface-ecrire-5">`OutputInterface` — écrire</a></li><li><a href="#cards-s-l-output-d-erreur-6">L&#x27;output d&#x27;erreur</a></li><li><a href="#cards-s-tester-une-command-7">Tester une command</a></li><li><a href="#cards-s-pieges-d-examen-8">Pièges d&#x27;examen</a></li><li><a href="#cards-s-fiche-express-9">Fiche express</a></li><li><a href="#cards-previous">Module 12 — Console · Cours « Custom commands » · Rappel : <span lang="en">Must a Symfony 8.0 command extend Command?</span></a></li></ul></nav><nav aria-label="Retour au module"><a href="lot-12.html">Tous les cours du module</a></nav></details><p class="local-quiz-count">5 questions disponibles · 5 par session Quiz</p></aside><div class="course-content"><div id="view-course" data-course-panel role="region" aria-labelledby="view-course-title"><h2 id="view-course-title">Cours</h2><p class="course-introduction"><a href="#s-objectif">Introduction</a> · <a href="#course-sections">Sections du cours</a></p><h2 id="reader-objectives" tabindex="-1">Objectifs d’apprentissage</h2><ul><li><a href="course-CRS-0ab7kpexq9w9.html#out-OUT-eea5s77r44aw">Lire l&#x27;entrée par InputInterface</a></li><li><a href="course-CRS-0ab7kpexq9w9.html#out-OUT-b3v4c3hz8gha">Écrire par OutputInterface et ses tags de style</a></li><li><a href="course-CRS-0ab7kpexq9w9.html#out-OUT-8pz0624za51p">Diriger un diagnostic vers STDERR</a></li><li><a href="course-CRS-0ab7kpexq9w9.html#out-OUT-mb5e4wzg3d34">Tester une command avec CommandTester ou ApplicationTester</a></li></ul><aside class="pedagogy-legend" aria-label="Repères pédagogiques"><p><strong>Repères pédagogiques</strong></p><p>Ces repères décrivent le rôle du bloc, pas une fréquence officielle à l’examen.</p><p class="teaching-label essential"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="brain" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5C12 1 6 1 6 5C2 5 1 10 4 12C1 15 3 19 6 19C6 23 12 23 12 19V5M12 5C12 1 18 1 18 5C22 5 23 10 20 12C23 15 21 19 18 19C18 23 12 23 12 19M6 5C6 8 8 9 9 9M4 12H7L9 14M6 19V16M18 5C18 8 16 9 15 9M20 12H17L15 14M18 19V16"></path></svg> <strong>À comprendre</strong></p><p class="teaching-label essential"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="book" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5C9 3 5 3 2 4V20C5 19 9 19 12 21C15 19 19 19 22 20V4C19 3 15 3 12 5V21M5 8H8M5 12H8M16 8H19M16 12H19"></path></svg> <strong>À mémoriser</strong></p><p class="teaching-label example"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="code" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6L2 12L8 18M16 6L22 12L16 18M14 3L10 21"></path></svg> <strong>Exemple concret</strong></p><p class="teaching-label pitfall"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="warning" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3L23 21H1L12 3ZM12 9V14M12 17V18"></path></svg> <strong>Piège à éviter</strong></p><p class="teaching-label nuance"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="balance" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3V21M7 21H17M3 7L21 5M5 7L1 15H9L5 7M19 6L15 14H23L19 6M1 15Q5 20 9 15M15 14Q19 19 23 14"></path></svg> <strong>Nuance à connaître</strong></p><p>Précision, exception ou condition d’application d’une règle.</p></aside><section class="teaching-section" data-section="s-objectif"><h2 id="s-objectif" tabindex="-1">Objectif</h2><p>L'import accepte maintenant un fichier et ses options. Nous voulons aussi
+produire un export exploitable par un autre outil et tester son résultat.
+Une ligne de diagnostic mélangée aux données peut suffire à casser cet échange.
+Les objets Input et Output permettent de séparer lecture, données et
+diagnostic, sans enfermer le traitement dans un terminal réel.</p></section><section class="teaching-section" data-section="s-l-essentiel"><h2 id="s-l-essentiel" tabindex="-1">L&#x27;essentiel</h2><p class="teaching-label essential"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="brain" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5C12 1 6 1 6 5C2 5 1 10 4 12C1 15 3 19 6 19C6 23 12 23 12 19V5M12 5C12 1 18 1 18 5C22 5 23 10 20 12C23 15 21 19 18 19C18 23 12 23 12 19M6 5C6 8 8 9 9 9M4 12H7L9 14M6 19V16M18 5C18 8 16 9 15 9M20 12H17L15 14M18 19V16"></path></svg> <strong>À comprendre</strong></p><aside class="section-digest" id="s-l-essentiel-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>L&#x27;output centralise le comportement console.</li><li>echo contourne ces mécanismes.</li></ol></aside><p><strong>Ce que cette partie veut réellement vous apprendre.</strong></p>
+<ul>
+<li><em>Pourquoi ce sujet existe.</em> Une commande qui lit <code>$argv</code> et fait <code>echo</code>
+  est impossible à tester et mélange tout. Console donne deux <strong>contrats</strong>
+  (<code>InputInterface</code>, <code>OutputInterface</code>) que le terminal comme les tests
+  implémentent différemment.</li>
+<li><em>Le piège de fond.</em> Trois choses qu'on confond : la <strong>déclaration</strong> d'une
+  option, sa <strong>valeur</strong> et sa <strong>saisie brute</strong> ; et côté sortie, la
+  <strong>couleur</strong> d'un message (<code>&lt;error&gt;</code>) et sa <strong>destination</strong> (STDERR).</li>
+<li><em>Ce que l'auteur veut que vous compreniez.</em> Données sur STDOUT,
+  diagnostic sur STDERR, statut dans le code de retour : trois canaux
+  indépendants, tous testables.</li>
+<li><em>Pourquoi c'est à l'examen.</em> <code>hasOption</code> vs <code>hasParameterOption</code>, kebab-case,
+  modes <code>OUTPUT_*</code>, <code>getErrorOutput()</code> réservé à <code>ConsoleOutputInterface</code>,
+  <code>CommandTester</code> vs <code>ApplicationTester</code>.</li>
+</ul>
+<p><code>InputInterface</code> décrit les opérations de lecture ; <code>OutputInterface</code> décrit
+les opérations d'écriture. Ce sont des <strong>contrats</strong>, pas des objets qui
+exécutent le travail. La commande reçoit leurs implémentations : par exemple
+<code>ArgvInput</code> et <code>ConsoleOutput</code> au terminal, <code>ArrayInput</code> et une sortie capturée
+dans un test. Écrire par <code>$output</code> préserve le formatage et la verbosité ;
+<code>echo</code> contournerait ces mécanismes.</p>
+<p>Pour un export CSV, les données vont sur la sortie standard (<code>STDOUT</code>) et
+les diagnostics sur la sortie d'erreur (<code>STDERR</code>). Un message « export terminé »
+ne devient ainsi pas une ligne du fichier de données.</p>
+<p>Le même principe s'applique à un rapport d'import des articles : la commande
+travaille avec les services métier, mais le terminal et le test fournissent
+des implémentations différentes des mêmes contrats. Ce ne sont ni les objets
+<code>Request</code>/<code>Response</code> de <code>GET /blog/42</code>, ni une seconde implémentation du domaine.</p>
+<pre class="highlight" tabindex="0"><code class="language-text">┌──────────────────────┐   ┌──────────────────────┐   ┌──────────────────────┐
+│ Données              │   │ Diagnostic           │   │ Statut               │
+│ STDOUT (getOutput…)  │   │ STDERR (ErrorOutput) │   │ code de retour (int) │
+│ « id;nom »           │   │ « En-tête écrit »    │   │ 0                    │
+└──────────────────────┘   └──────────────────────┘   └──────────────────────┘
+        trois canaux indépendants, à vérifier séparément</code></pre></section><section class="teaching-section" data-section="s-le-schema"><h2 id="s-le-schema" tabindex="-1">Le schéma</h2><aside class="section-digest" id="s-le-schema-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>La même logique peut recevoir plusieurs entrées.</li><li>Les tests peuvent capturer la sortie.</li></ol></aside><p><strong>Où en est-on ?</strong> Nous venons de poser le « pourquoi ». Deux schémas
+suivent : le premier montre <em>qui parle à qui</em> (commande, objets, contrats) ;
+le second zoome sur la <strong>seconde sortie</strong>, celle du diagnostic.</p>
+<p>La commande reste l'appelant. Elle demande une valeur à l'entrée déjà liée
+à sa définition et écrit sur la sortie reçue. Le contrat ne fait pas le
+travail à sa place :</p>
+<figure class="diagram" aria-labelledby="CRS-0ab7kpexq9w9-3-diagram-0-title CRS-0ab7kpexq9w9-3-diagram-0-description"><figcaption id="CRS-0ab7kpexq9w9-3-diagram-0-title">Lecture des options et écriture des données dans une commande</figcaption><p id="CRS-0ab7kpexq9w9-3-diagram-0-description">La commande appelle getOption sur un objet ArgvInput qui respecte InputInterface. Elle appelle writeln sur ConsoleOutput, qui respecte OutputInterface. ConsoleOutput écrit les données sur STDOUT. Les flèches pointillées décrivent les contrats et non des appels.</p><div class="mermaid" hidden>---
+title: La commande utilise des objets, pas le terminal directement
+---
+flowchart TD
+  accTitle: Lecture des options et écriture des données dans une commande
+  accDescr: La commande appelle getOption sur un objet ArgvInput qui respecte InputInterface. Elle appelle writeln sur ConsoleOutput, qui respecte OutputInterface. ConsoleOutput écrit les données sur STDOUT. Les flèches pointillées décrivent les contrats et non des appels.
+  C[&quot;Commande&quot;] --&gt;|&quot;getOption&quot;| I[&quot;ArgvInput&quot;]
+  I -.-&gt;|&quot;respecte le contrat&quot;| IC([&quot;InputInterface&quot;])
+  C --&gt;|&quot;writeln&quot;| O[&quot;ConsoleOutput&quot;]
+  O -.-&gt;|&quot;respecte le contrat&quot;| OC([&quot;OutputInterface&quot;])
+  O --&gt;|&quot;écrit les données&quot;| S[(&quot;STDOUT&quot;)]
+  classDef actor fill:#e0f2fe,stroke:#075985,color:#0c4a6e
+  classDef contract fill:#f1f5f9,stroke:#475569,color:#1e293b
+  classDef result fill:#dcfce7,stroke:#166534,color:#14532d
+  class C,I,O actor
+  class IC,OC contract
+  class S result</div></figure>
+<p>Les rectangles bleus représentent les objets en action, les formes arrondies
+grises leurs contrats, le cylindre vert un flux. Les traits pleins sont des
+appels ou des écritures ; les pointillés sont des relations de contrat.</p>
+<p><strong>Pourquoi un second schéma ?</strong> Parce que <code>OutputInterface</code> seul ne promet
+qu'<strong>une</strong> sortie. La seconde (STDERR) est un contrat plus précis.</p>
+<p>Il reste à protéger les données exportées des messages destinés à la personne.
+La seconde sortie n'est disponible que si l'objet reçu fournit le contrat
+plus précis <code>ConsoleOutputInterface</code> :</p>
+<figure class="diagram" aria-labelledby="CRS-0ab7kpexq9w9-3-diagram-1-title CRS-0ab7kpexq9w9-3-diagram-1-description"><figcaption id="CRS-0ab7kpexq9w9-3-diagram-1-title">Séparer le diagnostic des données exportées</figcaption><p id="CRS-0ab7kpexq9w9-3-diagram-1-description">Si l&#x27;objet de sortie respecte ConsoleOutputInterface, la commande appelle getErrorOutput pour obtenir une seconde sortie, puis writeln sur cette sortie. Avec ConsoleOutput au terminal, ce second flux est STDERR. Sans ce contrat, la commande ne peut pas supposer que cette méthode existe.</p><div class="mermaid" hidden>flowchart TD
+  accTitle: Séparer le diagnostic des données exportées
+  accDescr: Si l&#x27;objet de sortie respecte ConsoleOutputInterface, la commande appelle getErrorOutput pour obtenir une seconde sortie, puis writeln sur cette sortie. Avec ConsoleOutput au terminal, ce second flux est STDERR. Sans ce contrat, la commande ne peut pas supposer que cette méthode existe.
+  C[&quot;Commande&quot;] --&gt;|&quot;vérifie instanceof&quot;| Q{&quot;ConsoleOutputInterface ?&quot;}
+  Q --&gt;|&quot;oui : getErrorOutput&quot;| E[&quot;Sortie d&#x27;erreur&quot;]
+  E --&gt;|&quot;writeln du diagnostic&quot;| S[(&quot;STDERR&quot;)]
+  Q --&gt;|&quot;non&quot;| N([&quot;Pas de seconde sortie garantie&quot;])
+  classDef actor fill:#e0f2fe,stroke:#075985,color:#0c4a6e
+  classDef choice fill:#fef3c7,stroke:#92400e,color:#78350f
+  classDef result fill:#dcfce7,stroke:#166534,color:#14532d
+  class C,E actor
+  class Q choice
+  class S,N result</div></figure>
+<p>Le losange indique une condition, pas une conversion de type. Ces vues
+montrent le cas terminal ; un test peut remplacer les flux par des buffers.</p></section><section class="teaching-section" data-section="s-l-exemple-une-command-d-export"><h2 id="s-l-exemple-une-command-d-export" tabindex="-1">L&#x27;exemple : une command d&#x27;export</h2><p class="teaching-label example"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="code" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6L2 12L8 18M16 6L22 12L16 18M14 3L10 21"></path></svg> <strong>Exemple concret</strong></p><aside class="section-digest" id="s-l-exemple-une-command-d-export-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Séparer données et diagnostic.</li><li>STDERR évite de corrompre l&#x27;export.</li></ol></aside><p><strong>Où en est-on ?</strong> Code minimal : une commande qui écrit <strong>une</strong> donnée sur
+STDOUT et <strong>un</strong> diagnostic sur STDERR. Tout le reste du cours part de cet
+exemple (lecture, écriture, test).</p>
+<p>Cette petite commande exporte uniquement l'en-tête d'un fichier d'auteurs,
+utile à la branche d'administration du blog. Placer la classe dans
+<code>src/Command/HeaderCommand.php</code> avec la découverte des services active :</p>
+<pre class="highlight" tabindex="0"><code class="language-php">&lt;?php
+namespace App\Command;
+
+use Symfony\Component\Console\Attribute\AsCommand;
+use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\ConsoleOutputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
+
+#[AsCommand(name: 'app:export-header')]
+final class HeaderCommand
+{
+    public function __invoke(InputInterface $input, OutputInterface $output): int
+    {
+        $output-&gt;writeln('id;nom');                    // les données : STDOUT
+        if ($output instanceof ConsoleOutputInterface) {
+            $output-&gt;getErrorOutput()-&gt;writeln('&lt;info&gt;En-tête écrit&lt;/info&gt;'); // diagnostic : STDERR
+        }
+
+        return Command::SUCCESS;
+    }
+}</code></pre>
+<p>Cet extrait suppose une commande <code>app:export-header</code> déjà enregistrée et les classes
+Console importées. Il écrit seulement l'en-tête <code>id;nom</code>, pas 42 lignes
+d'enregistrements. Une redirection de la seule sortie standard capture cet
+en-tête ; « En-tête écrit » reste sur la sortie d'erreur.</p>
+<pre class="highlight" tabindex="0"><code class="language-bash">php bin/console app:export-header</code></pre>
+<p>En verbosity normale, la sortie standard contient :</p>
+<pre class="highlight" tabindex="0"><code class="language-text">id;nom</code></pre>
+<p>La sortie d'erreur contient <code>En-tête écrit</code>, éventuellement coloré, et le
+code retourné vaut 0. Le diagnostic peut sembler voisin des données sur un
+terminal ; cela ne signifie pas que les deux flux ont été fusionnés.</p>
+<p>Pour le vérifier soi-même :</p>
+<pre class="highlight" tabindex="0"><code class="language-text">php bin/console app:export-header &gt; export.csv
+  → à l'écran : « En-tête écrit »   (STDERR n'est pas redirigé)
+  → export.csv contient : id;nom    (STDOUT seulement)</code></pre></section><section class="teaching-section" data-section="s-inputinterface-lire"><span class="outcome-anchor" id="out-OUT-eea5s77r44aw" tabindex="-1"></span><h2 id="s-inputinterface-lire" tabindex="-1">`InputInterface` — lire</h2><aside class="section-digest" id="s-inputinterface-lire-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>La définition et la saisie sont distinctes.</li><li>Choisir la bonne interrogation.</li></ol></aside><p><strong>Où en est-on ?</strong> Étape 1 sur 4 : la <strong>lecture</strong>. Mécanisme : Console lie
+la saisie à la définition (cours précédent), puis expose trois niveaux
+d'information que le programme veut vous voir distinguer.</p>
+<div class="admonition info">
+<p class="admonition-title">🌍 In Real Life</p>
+<p><strong>La situation</strong> : le bordereau d'import possède une case « simulation ». Son existence ne dit pas si l'opérateur l'a cochée.</p>
+<p><strong>L’équivalent dans Symfony</strong> : case prévue → <code>hasOption()</code> ; valeur retenue → <code>getOption()</code> ; saisie brute → méthodes <code>*ParameterOption()</code>.</p>
+<p><strong>Retour à la réalité technique</strong> : définition, valeur avec défaut et présence dans l'entrée sont trois observations distinctes. Lire <code>hasOption('dry-run')</code> ne démontre pas que la simulation a été demandée.</p>
+<p><strong>🧠 Comment le mémoriser</strong> : « Case présente, choix absent. » Image mentale : une case vide imprimée sur tous les formulaires. Question-réflexe : cherche-t-on la déclaration, la valeur ou la saisie ?</p>
+<p><strong>⚠️ À ne pas confondre</strong> : contrat <code>InputInterface</code> et implémentation concrète de l'entrée.</p>
+</div>
+<p>Pour savoir si un import est une simulation, trois questions sont possibles :
+l'option <code>dry-run</code> existe-t-elle, quelle est sa valeur, a-t-elle été
+explicitement saisie ? Elles ne sont pas interchangeables :</p>
+<table>
+<thead>
+<tr>
+<th>Appel</th>
+<th>Ce qu'il rend</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>getArgument('username')</code>, <code>getOption('iterations')</code></td>
+<td>la valeur, ou la default value</td>
+</tr>
+<tr>
+<td><code>hasOption('dry-run')</code></td>
+<td>l'option est-elle <strong>déclarée</strong> ? — <code>true</code> même non passée</td>
+</tr>
+<tr>
+<td><code>hasParameterOption('--env')</code>, <code>getParameterOption('--env')</code></td>
+<td>lus sur la <strong>ligne brute</strong>, sans definition</td>
+</tr>
+<tr>
+<td><code>isInteractive()</code></td>
+<td>état interactif de l'objet ; l'Application standard le désactive notamment avec <code>-n</code>, <code>-q</code> ou <code>--silent</code></td>
+</tr>
+</tbody>
+</table>
+<p><code>setArgument()</code> et <code>setOption()</code> permettent à <code>interact()</code> de compléter une
+valeur. Le nom attendu est le nom <strong>kebab-case</strong> déclaré : un
+<code>#[Argument] string $userName</code> se lit <code>getArgument('user-name')</code>.</p>
+<p>Avec un drapeau <code>dry-run</code> déclaré et de défaut <code>false</code>, une invocation qui
+l'omet peut donc donner <code>hasOption('dry-run') === true</code> et
+<code>getOption('dry-run') === false</code>. Pour la logique métier, lire la valeur ;
+pour diagnostiquer la saisie brute, utiliser l'API appropriée.</p>
+<pre class="highlight" tabindex="0"><code class="language-text">php bin/console app:import f.csv          (--dry-run NON passé)
+
+hasOption('dry-run')           → true    (déclarée dans la définition)
+getOption('dry-run')           → false   (valeur par défaut)
+hasParameterOption('--dry-run')→ false   (absente de la ligne brute)</code></pre>
+<p>Sur <code>ArgvInput</code>, la lecture brute ignore la définition. Avec <code>onlyParams: true</code>,
+elle s'arrête au séparateur <code>--</code> ; sans ce réglage, elle peut aussi examiner
+des tokens qui suivent ce séparateur. Ne pas prendre cette recherche
+pour un parseur métier validant le sens des options.</p>
+<p><code>isInteractive()</code> ne recherche pas un terminal : il lit un booléen que
+<code>setInteractive()</code> peut modifier. Un test ou une application personnalisée
+peut donc rendre l'entrée non interactive sans aucun drapeau CLI.</p></section><section class="teaching-section" data-section="s-outputinterface-ecrire"><span class="outcome-anchor" id="out-OUT-b3v4c3hz8gha" tabindex="-1"></span><h2 id="s-outputinterface-ecrire" tabindex="-1">`OutputInterface` — écrire</h2><aside class="section-digest" id="s-outputinterface-ecrire-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Les tags peuvent modifier l&#x27;affichage.</li><li>Échapper le texte externe avant formatage.</li></ol></aside><p><strong>Où en est-on ?</strong> Étape 2 sur 4 : l'<strong>écriture</strong> et son formatage. Pourquoi
+s'y attarder ? Parce qu'un titre d'article contenant <code>&lt;error&gt;</code> ne doit pas
+prendre le contrôle des couleurs : il faut savoir quand le formateur
+interprète les balises et quand il faut les échapper.</p>
+<p>Les titres des articles et les noms d'auteurs peuvent contenir des caractères
+qui ressemblent aux balises du formateur. Avant de les inclure dans un
+diagnostic stylé, distinguer le texte externe des instructions de présentation :</p>
+<ul>
+<li><code>write()</code>, <code>writeln()</code>, avec un array pour plusieurs lignes.</li>
+<li>Quatre tags par défaut : <code>&lt;info&gt;</code> vert, <code>&lt;comment&gt;</code> jaune, <code>&lt;question&gt;</code>
+  noir sur cyan, <code>&lt;error&gt;</code> blanc sur rouge. Un tag inconnu, <code>&lt;script&gt;</code>, passe
+  intact.</li>
+<li>Une string venue de l'extérieur passe par <code>OutputFormatter::escape()</code>.</li>
+<li>Modes : <code>OUTPUT_NORMAL</code> interprète les tags, <code>OUTPUT_RAW</code> les laisse,
+  <code>OUTPUT_PLAIN</code> les interprète <strong>puis</strong> applique <code>strip_tags()</code> : sur un output
+  décoré, <code>&lt;info&gt;ok&lt;/info&gt;</code> reste <strong>toujours en vert</strong>.</li>
+<li><code>SymfonyStyle</code> enveloppe le tout : <code>title()</code>, <code>success()</code>, <code>error()</code>,
+  <code>ask()</code>, <code>table()</code>, et <code>getErrorStyle()</code> pour la sortie d'erreur <strong>si elle
+  existe</strong> ; sinon ce style réutilise la sortie reçue.</li>
+</ul>
+<p>Dans <code>Output::write()</code>, le niveau de verbosity filtre d'abord les messages.
+Ensuite le mode sélectionne le formatage, avant l'écriture effective.
+<code>OUTPUT_PLAIN</code> ne veut pas dire « sans séquence ANSI » : <code>strip_tags()</code>
+supprime les balises restantes, pas les codes de couleur déjà produits.
+<code>OUTPUT_RAW</code> évite l'interprétation, mais affiche aussi littéralement les
+balises que le programme avait éventuellement ajoutées.</p>
+<p>Comparaison des trois modes sur <code>'&lt;info&gt;ok&lt;/info&gt; &lt;script&gt;x&lt;/script&gt;'</code>
+(output décoré) :</p>
+<table>
+<thead>
+<tr>
+<th>Mode</th>
+<th>Étape 1 : formatage</th>
+<th>Étape 2</th>
+<th>Résultat affiché</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>OUTPUT_NORMAL</code></td>
+<td>tags connus interprétés</td>
+<td>—</td>
+<td><code>ok</code> en vert, <code>&lt;script&gt;x&lt;/script&gt;</code> intact</td>
+</tr>
+<tr>
+<td><code>OUTPUT_RAW</code></td>
+<td>aucune interprétation</td>
+<td>—</td>
+<td><code>&lt;info&gt;ok&lt;/info&gt; &lt;script&gt;x&lt;/script&gt;</code></td>
+</tr>
+<tr>
+<td><code>OUTPUT_PLAIN</code></td>
+<td>tags connus interprétés (couleur produite)</td>
+<td><code>strip_tags()</code></td>
+<td><code>ok</code> en vert, puis <code>x</code></td>
+</tr>
+</tbody>
+</table>
+<p>Cette fonction conserve un repli explicite pour une commande de diagnostic
+qui accepte de n'avoir qu'une sortie :</p>
+<pre class="highlight" tabindex="0"><code class="language-php">&lt;?php
+use Symfony\Component\Console\Formatter\OutputFormatter;
+use Symfony\Component\Console\Output\ConsoleOutputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
+
+function writeDiagnostic(OutputInterface $output, string $message): void
+{
+    $errors = $output instanceof ConsoleOutputInterface
+        ? $output-&gt;getErrorOutput()
+        : $output;
+    $errors-&gt;writeln('&lt;error&gt;'.OutputFormatter::escape($message).'&lt;/error&gt;');
+}</code></pre>
+<p>Avec le message <code>&lt;info&gt;Alice&lt;/info&gt;</code>, ces caractères restent du texte dans
+le bloc d'erreur au lieu d'imposer leur propre style. Cet échappement vise
+les balises Console ; ce n'est pas un encodeur CSV ou HTML.
+Le repli vers <code>$output</code> n'est <strong>pas</strong> adapté tel quel à un export qui exige
+une séparation stricte : il y mélangerait le diagnostic aux données.</p></section><section class="teaching-section" data-section="s-l-output-d-erreur"><span class="outcome-anchor" id="out-OUT-8pz0624za51p" tabindex="-1"></span><h2 id="s-l-output-d-erreur" tabindex="-1">L&#x27;output d&#x27;erreur</h2><aside class="section-digest" id="s-l-output-d-erreur-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Tous les outputs n&#x27;ont pas STDERR séparé.</li><li>Tester le contrat avant l&#x27;appel.</li></ol></aside><p><strong>Où en est-on ?</strong> Étape 3 sur 4 : la <strong>destination</strong> du diagnostic. Question
+centrale : pourquoi <code>&lt;error&gt;</code> ne suffit-il pas à écrire sur STDERR ? Parce
+qu'une balise change un <em>style</em>, jamais une <em>adresse</em>.</p>
+<div class="admonition info">
+<p class="admonition-title">🌍 In Real Life</p>
+<p><strong>La situation</strong> : le blog remet un fichier d'export à une machine et une note de diagnostic à l'opérateur, dans deux corbeilles.</p>
+<p><strong>L’équivalent dans Symfony</strong> : données → sortie normale ; note → sortie d'erreur de <code>ConsoleOutputInterface</code> ; couleur de la note → style du formateur.</p>
+<p><strong>Retour à la réalité technique</strong> : <code>&lt;error&gt;</code> ne choisit pas STDERR. Il faut écrire sur la sortie appropriée, si l'objet expose ce contrat. Le code de retour reste indépendant des deux flux.</p>
+<p><strong>🧠 Comment le mémoriser</strong> : « La couleur n'est pas l'adresse. » Image mentale : une feuille rouge dans la mauvaise corbeille. Question-réflexe : sur quel objet Output écrit-on ?</p>
+<p><strong>⚠️ À ne pas confondre</strong> : sortie d'erreur, style d'erreur et statut d'échec.</p>
+</div>
+<p><code>getErrorOutput()</code> appartient à <code>ConsoleOutputInterface</code>, pas à
+<code>OutputInterface</code> : un <code>BufferedOutput</code> ne l'a pas, d'où le test de type.</p>
+<p>Une balise <code>&lt;error&gt;</code> change un style, pas une destination. Un appel à
+<code>writeln('&lt;error&gt;…&lt;/error&gt;')</code> sur la sortie normale reste sur cette sortie.
+Pour l'export, choisir explicitement une seconde sortie, ou une politique
+documentée lorsque ce contrat manque : l'exemple d'en-tête omet le
+diagnostic dans ce cas. Un autre outil peut exiger deux sorties plutôt que
+continuer avec un repli.</p>
+<p>De même, afficher une erreur ne change pas le code de retour de la commande.
+Le statut et les deux flux restent trois observations distinctes à tester.</p>
+<pre class="highlight" tabindex="0"><code class="language-text">$output-&gt;writeln('&lt;error&gt;boom&lt;/error&gt;')              → STDOUT, en rouge
+$output-&gt;getErrorOutput()-&gt;writeln('boom')           → STDERR, sans couleur
+$output-&gt;getErrorOutput()-&gt;writeln('&lt;error&gt;boom&lt;/error&gt;') → STDERR, en rouge
+return Command::SUCCESS;                             → code 0 malgré le « boom »</code></pre></section><section class="teaching-section" data-section="s-tester-une-command"><span class="outcome-anchor" id="out-OUT-mb5e4wzg3d34" tabindex="-1"></span><h2 id="s-tester-une-command" tabindex="-1">Tester une command</h2><aside class="section-digest" id="s-tester-une-command-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Le cycle Application porte les events.</li><li>Tester seulement la command ne les déclenche pas.</li></ol></aside><p><strong>Où en est-on ?</strong> Étape 4 sur 4 : vérifier tout cela <strong>sans terminal</strong>.
+Mécanisme : <code>CommandTester</code> remplace <code>ArgvInput</code>/<code>ConsoleOutput</code> par des
+objets qui capturent la sortie, puis appelle <code>Command::run()</code>.</p>
+<p>Commençons par tester l'en-tête, pas une salutation interactive étrangère
+à ce comportement. Dans un contexte où l'autoload du projet est chargé :</p>
+<pre class="highlight" tabindex="0"><code class="language-php">&lt;?php
+use App\Command\HeaderCommand;
+use Symfony\Component\Console\Tester\CommandTester;
+
+$tester = new CommandTester(new HeaderCommand());
+$status = $tester-&gt;execute([], [
+    'interactive' =&gt; false,
+    'capture_stderr_separately' =&gt; true,
+]);
+
+$data = $tester-&gt;getDisplay(true);       // "id;nom\n"
+$diagnostic = $tester-&gt;getErrorOutput(true); // "En-tête écrit\n"
+// $status vaut 0 ; ces trois valeurs se vérifient séparément.</code></pre>
+<p>Le testeur accepte l'objet invocable et l'adapte en <code>Command</code>. L'option
+de capture séparée prépare des sorties distinctes ; appeler
+<code>getErrorOutput()</code> sur le testeur sans cette option lève une <code>LogicException</code>.
+La normalisation demandée ici rend les fins de ligne comparables.</p>
+<p>Pour une <strong>autre commande</strong> qui pose réellement une question, conserver
+le principe <code>setInputs(['Bob'])</code> : cela fournit une réponse simulée,
+pas un argument nommé. Avec <code>interactive: false</code>, cette réserve ne remplit
+pas magiquement un argument requis ; transmettre sa valeur dans le premier
+tableau d'<code>execute()</code> ou attendre l'erreur de validation.</p>
+<ul>
+<li><code>CommandTester</code> appelle la command <strong>seule</strong> : aucun event console.
+  <code>ApplicationTester</code> passe par l'<code>Application</code>, avec <code>setAutoExit(false)</code>.
+  Les événements Console sont distribués <strong>si l'Application dispose d'un
+  dispatcher</strong> : changer de testeur n'installe pas à lui seul les listeners.</li>
+<li>Ordre : <code>initialize()</code>, <code>interact()</code> (en interactif), validation de l'entrée,
+  <code>execute()</code> ; non interactive, un argument requis manquant lève « Not enough
+  arguments ».</li>
+<li>Avec <code>capture_stderr_separately</code>, ce qu'écrit <code>getErrorStyle()</code> passe dans
+  <code>getErrorOutput()</code>, comme le libellé d'une question de <code>QuestionHelper</code> ; celui
+  de <code>SymfonyStyle::ask()</code> reste dans <code>getDisplay()</code>.</li>
+</ul>
+<p><code>QuestionHelper</code> bascule vers la sortie d'erreur lorsqu'il reçoit une
+<code>ConsoleOutputInterface</code>. <code>SymfonyStyle::ask()</code> lui passe le style comme
+objet de sortie : ne pas déduire le flux d'une question de son seul texte.
+Enfin, <code>CommandTester</code> contourne <code>Application::configureIO()</code> ;
+configurer <code>interactive</code> et <code>verbosity</code> dans le test plutôt que présumer
+que toutes les options globales du vrai entry point ont été appliquées.</p>
+<p>Comparaison des deux testeurs :</p>
+<pre class="highlight" tabindex="0"><code class="language-text">┌──────────────────────────────────┐   ┌──────────────────────────────────┐
+│ CommandTester                    │   │ ApplicationTester                │
+├──────────────────────────────────┤   ├──────────────────────────────────┤
+│ Appelle : Command::run()         │   │ Appelle : Application::run()     │
+│ Événements Console : aucun       │   │ Événements : si dispatcher       │
+│ Nom de commande : inutile        │   │ Nom de commande : dans l'entrée  │
+│ configureIO() : contourné        │   │ autoExit : false                 │
+└──────────────────────────────────┘   └──────────────────────────────────┘</code></pre></section><section class="teaching-section" data-section="s-pieges-d-examen"><h2 id="s-pieges-d-examen" tabindex="-1">Pièges d&#x27;examen</h2><p class="teaching-label pitfall"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="warning" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3L23 21H1L12 3ZM12 9V14M12 17V18"></path></svg> <strong>Piège à éviter</strong></p><aside class="section-digest" id="s-pieges-d-examen-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Le nom PHP et le nom CLI diffèrent.</li><li>Lire la définition effective.</li></ol></aside><ul class="pitfall-list"><li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : Passer par l&#x27;output plutôt que echo</summary><p><strong>Passer par l'output plutôt que <code>echo</code></strong> : cet <code>echo</code> ne figure pas dans
+<code>CommandTester::getDisplay()</code> et échappe à la verbosity de Console.
+Un autre dispositif de capture PHP peut le voir, mais ce n'est pas le
+contrat du testeur présenté ici. <em>Pourquoi on se trompe : à l'écran, <code>echo</code>
+et <code>writeln</code> ont l'air identiques.</em></p></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : getErrorOutput() n&#x27;appartient pas à OutputInterface</summary><p><strong><code>getErrorOutput()</code> n'appartient pas à <code>OutputInterface</code></strong> mais à
+<code>ConsoleOutputInterface</code> — d'où le test de type. <em>Pourquoi on se trompe :
+on suppose que tout objet « Output » possède deux flux.</em></p></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : hasOption() interroge la definition</summary><p><strong><code>hasOption()</code> interroge la definition</strong>, pas la ligne de command : il vaut
+<code>true</code> même quand l'option n'a pas été passée. C'est <code>hasParameterOption()</code>
+qui lit la ligne brute. <em>Pourquoi on se trompe : le verbe « has » évoque « la
+saisie contient ».</em></p></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : OUTPUT_PLAIN garde les couleurs</summary><p><strong><code>OUTPUT_PLAIN</code> garde les couleurs</strong> d'un output décoré. <em>Pourquoi on se
+trompe : « plain » évoque « sans rien ».</em></p></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : Le nom passé à getArgument() est le nom kebab-case</summary><p><strong>Le nom passé à <code>getArgument()</code> est le nom kebab-case</strong> déclaré, pas celui du
+paramètre PHP lorsque le nom est inféré. Un <code>name</code> explicite dans l'attribut
+remplace cette convention : lire le nom réellement déclaré.</p></details></li></ul></section><section class="teaching-section" data-section="s-fiche-express"><h2 id="s-fiche-express" tabindex="-1">Fiche express</h2><p class="teaching-label essential"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="book" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5C9 3 5 3 2 4V20C5 19 9 19 12 21C15 19 19 19 22 20V4C19 3 15 3 12 5V21M5 8H8M5 12H8M16 8H19M16 12H19"></path></svg> <strong>À mémoriser</strong></p><aside class="section-digest" id="s-fiche-express-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Les deux flux peuvent être vérifiés séparément.</li><li>Le diagnostic ne doit pas polluer les données.</li></ol></aside><p>Le rapport d'import ou l'export peut maintenant conserver ses données,
+son diagnostic et son statut séparés au terminal comme en test. Cette
+séparation est le résultat recherché, pas seulement une préférence de style.</p>
+<p><strong>🧠 À retenir pour la certification — si tu dois retenir seulement 7 choses :</strong></p>
+<ul>
+<li>Lire par <strong><code>InputInterface</code></strong>, écrire par <strong><code>OutputInterface</code></strong> ; jamais
+  <code>echo</code>.</li>
+<li><code>ArgvInput</code>, <code>ArrayInput</code>, <code>StringInput</code> : même contrat.</li>
+<li><strong><code>hasOption()</code></strong> : déclarée ? ; <strong><code>hasParameterOption()</code></strong> : ligne brute.</li>
+<li>Arguments et options sous leur nom <strong>kebab-case</strong>.</li>
+<li>Quatre tags ; <strong><code>escape()</code></strong> pour ce qui vient de l'extérieur.</li>
+<li><strong><code>getErrorOutput()</code></strong> (<code>ConsoleOutputInterface</code>) pour <code>STDERR</code>.</li>
+<li><code>CommandTester</code> : la commande seule ; <code>ApplicationTester</code> : le parcours
+  <code>Application</code>, avec événements si un dispatcher est configuré.</li>
+</ul>
+<p>Moyen mnémotechnique : <strong>« Lire l'entrée, écrire l'output, crier sur
+STDERR »</strong>.
+Phrase de mémorisation : <strong>« La commande lit un contrat, écrit les données
+sur STDOUT, le diagnostic sur STDERR, rend son statut en int — et le
+testeur capture les trois. »</strong></p>
+<p>Pour présenter progression, tableaux et questions sans reconstruire ces
+mécanismes, poursuivre avec <a href="course-CRS-3p9jdkw1nd3g.html">Built-in helpers</a>.
+Les <a href="course-CRS-y0zc67f3e5zk.html">événements Console</a> expliqueront ensuite
+ce que le parcours <code>ApplicationTester</code> ajoute au test de la commande seule.</p></section><section class="official-sources"><h2 id="reader-sources" tabindex="-1">Sources officielles et compléments</h2><ul><li><a href="https://symfony.com/doc/8.0/console.html">Symfony 8.0 — Console</a></li><li><a href="https://symfony.com/doc/8.0/console/style.html">Symfony 8.0 — console / style</a></li></ul></section><section id="course-recalls" aria-labelledby="course-recalls-title" tabindex="-1"><h2 id="course-recalls-title">Rappels et liens avec les autres cours</h2><div data-recall-group="other"><h3>Rappels des cours précédents / autres modules</h3><ul><li data-recall-course="CRS-cb51hcng9dh5" data-recall-kind="previous_course"><p class="recall-provenance">Module 12 — Console · Cours « Custom commands »</p><p>La command invocable évite l&#x27;inheritance. Le contrat reste un exit code int.</p><p><a href="#cards-previous">Rappel : <span lang="en">Must a Symfony 8.0 command extend Command?</span></a></p></li></ul></div></section><nav class="course-sequence" aria-label="Ordre de lecture"><a rel="prev" href="course-CRS-q2dxjhx6d35k.html" aria-label="Précédent : Options and arguments (using PHP attributes) — Module 12 — Console">Précédent : Options and arguments (using PHP attributes)</a> <a href="lot-12.html">Sommaire : Module 12 — Console</a> <a rel="next" href="course-CRS-5gezsra1sp01.html" aria-label="Suivant : Messenger component — Module 11 — Messenger">Suivant : Messenger component</a></nav><p class="course-practice-entry"><a class="button" href="#view-quiz">Fin du cours — s’entraîner avec le Quiz</a></p></div><div id="view-flashcards" data-course-panel role="region" aria-labelledby="view-flashcards-title"><h2 id="view-flashcards-title">Flashcards</h2><p lang="en">Answer before revealing each card.</p><p>Ces cartes ne mesurent pas une maîtrise notée.</p><div id="cards-s-l-essentiel-1" data-card-section="s-l-essentiel"><h3><a href="#s-l-essentiel">Revoir : L&#x27;essentiel</a></h3><div class="reader-cards"><details class="reader-card" id="B-0ab7kpexq9w9-01"><summary lang="en">Why should a command write through OutputInterface instead of echo?</summary><p lang="en">So formatting, verbosity and test capture apply consistently.</p><p lang="fr">L&#x27;output centralise le comportement console. echo contourne ces mécanismes.</p><a href="course-CRS-0ab7kpexq9w9.html#out-OUT-b3v4c3hz8gha">Revoir le passage précis</a></details></div></div><div id="cards-s-le-schema-2" data-card-section="s-le-schema"><h3><a href="#s-le-schema">Revoir : Le schéma</a></h3><div class="reader-cards"><details class="reader-card" id="B-0ab7kpexq9w9-02"><summary lang="en">Which abstractions separate command logic from the actual terminal?</summary><p lang="en">InputInterface and OutputInterface.</p><p lang="fr">La même logique peut recevoir plusieurs entrées. Les tests peuvent capturer la sortie.</p><a href="course-CRS-0ab7kpexq9w9.html#out-OUT-eea5s77r44aw">Revoir le passage précis</a></details></div></div><div id="cards-s-l-exemple-une-command-d-export-3" data-card-section="s-l-exemple-une-command-d-export"><h3><a href="#s-l-exemple-une-command-d-export">Revoir : L&#x27;exemple : une command d&#x27;export</a></h3><div class="reader-cards"><details class="reader-card" id="B-0ab7kpexq9w9-03"><summary lang="en">Where should export diagnostics go when standard output contains machine-readable data?</summary><p lang="en">To the error output stream, leaving standard output clean.</p><p lang="fr">Séparer données et diagnostic. STDERR évite de corrompre l&#x27;export.</p><a href="course-CRS-0ab7kpexq9w9.html#out-OUT-8pz0624za51p">Revoir le passage précis</a></details></div></div><div id="cards-s-inputinterface-lire-4" data-card-section="s-inputinterface-lire"><h3><a href="#s-inputinterface-lire">Revoir : `InputInterface` — lire</a></h3><div class="reader-cards"><details class="reader-card" id="B-0ab7kpexq9w9-04"><summary lang="en">Does hasOption(&#x27;dry-run&#x27;) prove the user supplied --dry-run?</summary><p lang="en">No. It checks whether the option is defined; raw input checks use hasParameterOption().</p><p lang="fr">La définition et la saisie sont distinctes. Choisir la bonne interrogation.</p><a href="course-CRS-0ab7kpexq9w9.html#out-OUT-eea5s77r44aw">Revoir le passage précis</a></details></div></div><div id="cards-s-outputinterface-ecrire-5" data-card-section="s-outputinterface-ecrire"><h3><a href="#s-outputinterface-ecrire">Revoir : `OutputInterface` — écrire</a></h3><div class="reader-cards"><details class="reader-card" id="B-0ab7kpexq9w9-05"><summary lang="en">How should untrusted text be protected from Console formatting tags?</summary><p lang="en">Escape it with OutputFormatter::escape().</p><p lang="fr">Les tags peuvent modifier l&#x27;affichage. Échapper le texte externe avant formatage.</p><a href="course-CRS-0ab7kpexq9w9.html#out-OUT-b3v4c3hz8gha">Revoir le passage précis</a></details></div></div><div id="cards-s-l-output-d-erreur-6" data-card-section="s-l-output-d-erreur"><h3><a href="#s-l-output-d-erreur">Revoir : L&#x27;output d&#x27;erreur</a></h3><div class="reader-cards"><details class="reader-card" id="B-0ab7kpexq9w9-06"><summary lang="en">Which output interface exposes getErrorOutput()?</summary><p lang="en">ConsoleOutputInterface, not the base OutputInterface.</p><p lang="fr">Tous les outputs n&#x27;ont pas STDERR séparé. Tester le contrat avant l&#x27;appel.</p><a href="course-CRS-0ab7kpexq9w9.html#out-OUT-8pz0624za51p">Revoir le passage précis</a></details></div></div><div id="cards-s-tester-une-command-7" data-card-section="s-tester-une-command"><h3><a href="#s-tester-une-command">Revoir : Tester une command</a></h3><div class="reader-cards"><details class="reader-card" id="B-0ab7kpexq9w9-07"><summary lang="en">Which tester is needed to exercise Console application events?</summary><p lang="en">ApplicationTester; CommandTester executes the command directly.</p><p lang="fr">Le cycle Application porte les events. Tester seulement la command ne les déclenche pas.</p><a href="course-CRS-0ab7kpexq9w9.html#out-OUT-mb5e4wzg3d34">Revoir le passage précis</a></details></div></div><div id="cards-s-pieges-d-examen-8" data-card-section="s-pieges-d-examen"><h3><a href="#s-pieges-d-examen">Revoir : Pièges d&#x27;examen</a></h3><div class="reader-cards"><details class="reader-card" id="B-0ab7kpexq9w9-08"><summary lang="en">Which name should getArgument() use for a parameter userName mapped by attributes?</summary><p lang="en">user-name, the declared kebab-case argument name.</p><p lang="fr">Le nom PHP et le nom CLI diffèrent. Lire la définition effective.</p><a href="course-CRS-0ab7kpexq9w9.html#out-OUT-eea5s77r44aw">Revoir le passage précis</a></details></div></div><div id="cards-s-fiche-express-9" data-card-section="s-fiche-express"><h3><a href="#s-fiche-express">Revoir : Fiche express</a></h3><div class="reader-cards"><details class="reader-card" id="B-0ab7kpexq9w9-09"><summary lang="en">How can a test capture stderr independently of normal command output?</summary><p lang="en">Enable capture_stderr_separately in CommandTester execution options.</p><p lang="fr">Les deux flux peuvent être vérifiés séparément. Le diagnostic ne doit pas polluer les données.</p><a href="course-CRS-0ab7kpexq9w9.html#out-OUT-8pz0624za51p">Revoir le passage précis</a></details></div></div><div id="cards-previous"><p class="recall-provenance">Module 12 — Console · Cours « Custom commands »</p><aside class="checkpoint"><h2>Rappel d’un cours antérieur</h2><p>Avant de poursuivre : Custom commands.</p><details class="corpus-correction"><summary lang="en">Must a Symfony 8.0 command extend Command?</summary><p lang="en">No. An AsCommand class with an integer-returning __invoke() can be used.</p><p>La command invocable évite l&#x27;inheritance. Le contrat reste un exit code int.</p><a href="course-CRS-cb51hcng9dh5.html#out-OUT-86vxgq9k86kd">Relire la correction dans le cours antérieur</a></details></aside></div></div><div id="view-quiz" data-course-panel role="region" aria-labelledby="view-quiz-title"><aside class="revision-context"><p><strong>Avant le quiz :</strong> L&#x27;import accepte maintenant un fichier et ses options. Nous voulons aussi produire un export exploitable par un autre outil et tester son résultat. Une ligne de diagnostic mélangée aux données peut suffire à casser cet échange. Les objets Input et Output permettent de séparer lecture, données et diagnostic, sans enfermer le traitement dans un terminal réel.</p><p>Quelle donnée entre, quelle responsabilité agit et quelle condition change le résultat ? Pour chaque correction, vérifiez ces conditions dans <a href="course-CRS-0ab7kpexq9w9.html#s-objectif">le passage enseigné</a>, sans supposer que toutes les branches du blog sont exécutées.</p></aside><h2 id="view-quiz-title">Quiz</h2><p class="quiz-size" lang="en">5 eligible learning questions · 5 per session. Repeating a question does not demonstrate mastery.</p><p id="course-quiz-status" role="status">Quiz interactif non chargé. Démarrez après chargement de la banque locale.</p><div id="course-quiz-controls" class="assessment-main" hidden><div id="course-quiz-assessment-controls" hidden><select id="course-quiz-assessment-mode" aria-label="Mode du quiz" hidden><option value="learning">Entraînement</option></select><p id="course-quiz-training-scope"></p><button id="course-quiz-start-assessment" type="button" lang="en">Start practice</button><button id="course-quiz-finish-assessment" type="button" lang="en" hidden>End session</button></div><p id="course-quiz-assessment-error" role="alert"></p><p id="course-quiz-assessment-timer" hidden></p><p id="course-quiz-session-progress" class="quiz-progress" role="status" lang="en"></p><div id="course-quiz-assessment-app" tabindex="-1"></div><nav id="course-quiz-session-navigation" aria-label="Questions du cours"></nav><div id="course-quiz-learning-overview" aria-live="polite"></div></div><div id="course-quiz-native"><p>Sans JavaScript ou si le chargement échoue : aucune tentative notée. Les <a href="#view-flashcards">flashcards du cours</a> restent disponibles.</p><details class="course-quiz-fallback" data-question-id="L-0ab7kpexq9w9-base-v1"><summary lang="en">How should untrusted text be protected from Console formatting tags?</summary><p>Correction de consultation — non notée.</p><p>Les tags peuvent modifier l&#x27;affichage. Échapper le texte externe avant formatage.</p><ul><li><strong lang="en">Correct: Use OutputFormatter::escape() before formatted output.</strong><p>Les tags peuvent modifier l&#x27;affichage. Échapper le texte externe avant formatage.</p></li><li><strong lang="en">Distractor: Use strip_tags() to preserve the original text.</strong><p>strip_tags() retire du texte au lieu de neutraliser les tags Console en le préservant.</p></li><li><strong lang="en">Distractor: Pass the text directly to writeln() in normal mode.</strong><p>Le mode normal interprète les tags ; il faut échapper le texte non fiable.</p></li></ul><a href="course-CRS-0ab7kpexq9w9.html#out-OUT-b3v4c3hz8gha">Relire le passage exact</a></details></div></div></div></div><details class="transfer-panel"><summary>Sauvegarde et transfert de progression</summary><p id="reading-status" role="status">Sans JavaScript : lecture libre ; progression non enregistrée.</p><p><a href="assessment.html#overview-title">Lecture, réussites immédiates et différées</a></p><p>Transfert manuel — aucune synchronisation automatique</p><p id="persistence-status" role="status"></p><button type="button" class="secondary" id="export-progress">Exporter ma progression</button><label for="import-progress">Choisir un JSON pour fusionner ma progression (sans remplacement)</label><input type="file" id="import-progress" accept="application/json,.json"><p id="transfer-status" role="status"></p></details></main><footer class="site-footer"><a href="catalogue.html">Catalogue</a> <a href="sources.html">Sources et attribution</a> <a href="#contenu">Haut de page</a></footer></body></html>

@@ -1,0 +1,371 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; connect-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Custom callback validators — Symfony 8 Preparation</title><link rel="stylesheet" href="styles.css"><link rel="stylesheet" href="reader.css"><script src="mermaid.min.js" defer></script><script src="mermaid-init.js" defer></script><link rel="stylesheet" href="assessment.css"><script src="fixed-exams-data.js" defer></script><script src="fixed-exams.js" defer></script><script src="learning-state.js" defer></script><script src="guide.js" defer></script><script src="reader-catalog.js" defer></script><script src="reader.js" defer></script><script src="site-state.js" defer></script><script src="assessment.js" defer></script><script src="course-views.js" defer></script><link rel="stylesheet" href="syntax-highlight.css"><script src="prism-syntax.js" defer></script><script src="syntax-highlight.js" defer></script></head><body data-course-id="CRS-96w05v20b8w1"><a class="skip" href="#contenu">Aller au contenu</a><header class="site-header"><a class="brand" href="index.html">S8 Preparation</a><nav aria-label="Navigation principale"><a href="index.html">Accueil</a> <a href="catalogue.html">Parcours</a> <a href="assessment.html?mode=review">Réviser</a> <a href="examens.html">Examens blancs</a> <a href="jour-j.html">Jour J</a></nav></header><main id="contenu" tabindex="-1" class="corpus-reader"><nav class="breadcrumb" aria-label="Fil d’Ariane"><a href="index.html">Accueil</a> <span aria-hidden="true">›</span> <a href="catalogue.html">Parcours</a> <span aria-hidden="true">›</span> <a href="lot-08.html">Module 08 — Validation des données</a> <span aria-hidden="true">›</span> <span aria-current="page">Custom callback validators</span></nav><h1>Custom callback validators</h1><p class="muted">Symfony 8.0 · API PHP ≤ 8.4 · Twig ≤ 3.22. Préparation indépendante.</p><p class="revision-status">Rédaction narrative P11 : projection nouvelle, non couverte par les décisions historiques P10. Aucune approbation officielle ni garantie de réussite.</p><aside class="narrative-context" aria-label="Repères de lecture"><p><strong>Prérequis de lecture :</strong> <a href="course-CRS-ax2v94pgbk0g.html">PHP object validation</a></p><p><strong>Concepts voisins :</strong> <a href="course-CRS-nfkzx2s1n3r3.html">Forms handling</a> — Situer la validation dans une soumission de formulaire. <a href="lot-08.html">Comparer les responsabilités dans ce module</a> · <a href="carte-composants.html">Situer cette responsabilité dans le blog</a> · <a href="glossaire.html">Distinguer les termes voisins</a></p><p><a href="ordre-lecture.html">Retrouver les 163 cours dans le parcours recommandé</a>. Ce repère ne modifie ni votre historique ni votre progression.</p></aside><div class="course-layout"><details class="lot-course-menu"><summary>Cours du module · 8 cours</summary><nav aria-label="Cours du module"><a class="lot-context" href="lot-08.html">Module 08 — Validation des données</a><ol><li><a href="course-CRS-way4aktj2d5m.html">Validator component</a></li><li><a href="course-CRS-ax2v94pgbk0g.html">PHP object validation</a></li><li><a href="course-CRS-569y6hb7fwj5.html">Built-in validation constraints</a></li><li><a href="course-CRS-wzmrks85zyh1.html">Validation scopes</a></li><li><a href="course-CRS-vskyr5zdwr2t.html">Validation groups</a></li><li><a href="course-CRS-bthv5xmh5wea.html">Group sequence</a></li><li><a href="course-CRS-96w05v20b8w1.html" aria-current="page">Custom callback validators</a></li><li><a href="course-CRS-d235sja3h7y2.html">Violations builder</a></li></ol><a href="lot-08.html#view-quiz">Quiz du module</a></nav></details><aside class="course-section-menu" aria-label="Sommaire du cours"><nav class="course-actions" aria-label="Activités du cours"><a id="tab-course" href="#view-course">Cours</a><a id="tab-flashcards" href="#view-flashcards">Flashcards</a><a id="tab-quiz" href="#view-quiz">Quiz</a></nav><details class="course-section-disclosure"><summary id="course-sections">Sections du cours</summary><nav aria-label="Sections du cours"><ul><li><a href="#s-objectif">Objectif</a></li><li><a href="#s-l-essentiel">L&#x27;essentiel</a></li><li><a href="#s-le-schema">Le schéma</a></li><li><a href="#s-l-exemple-un-author">L&#x27;exemple : un `Author`</a></li><li><a href="#s-le-principe">Le principe</a></li><li><a href="#s-les-deux-signatures">Les deux signatures</a></li><li><a href="#s-les-formes-du-callback">Les formes du `callback`</a></li><li><a href="#s-ce-que-le-callback-doit-faire">Ce que le callback doit faire</a></li><li><a href="#s-pieges-d-examen">Pièges d&#x27;examen</a></li><li><a href="#s-fiche-express">Fiche express</a><ul><li><a href="#s-fiche-express-nested-a-retenir-pour-la-certification">🧠 À retenir pour la certification</a></li></ul></li><li><a href="#reader-objectives">Objectifs d’apprentissage</a></li><li><a href="#reader-sources">Sources officielles et compléments</a></li><li><a href="#course-recalls">Rappels et liens avec les autres cours</a></li></ul></nav><nav aria-label="Flashcards par section"><a href="#view-flashcards">Flashcards par section</a><ul><li><a href="#cards-s-l-essentiel-1">L&#x27;essentiel</a></li><li><a href="#cards-s-le-schema-2">Le schéma</a></li><li><a href="#cards-s-l-exemple-un-author-3">L&#x27;exemple : un `Author`</a></li><li><a href="#cards-s-le-principe-4">Le principe</a></li><li><a href="#cards-s-les-deux-signatures-5">Les deux signatures</a></li><li><a href="#cards-s-les-formes-du-callback-6">Les formes du `callback`</a></li><li><a href="#cards-s-ce-que-le-callback-doit-faire-7">Ce que le callback doit faire</a></li><li><a href="#cards-s-pieges-d-examen-8">Pièges d&#x27;examen</a></li><li><a href="#cards-s-fiche-express-9">Fiche express</a></li><li><a href="#cards-previous">Module 08 — Validation des données · Cours « Validation groups » · Rappel : <span lang="en">Which group does validate($object) select when no group is supplied?</span></a></li></ul></nav><nav aria-label="Retour au module"><a href="lot-08.html">Tous les cours du module</a></nav></details><p class="local-quiz-count">3 questions disponibles · 3 par session Quiz</p></aside><div class="course-content"><div id="view-course" data-course-panel role="region" aria-labelledby="view-course-title"><h2 id="view-course-title">Cours</h2><p class="course-introduction"><a href="#s-objectif">Introduction</a> · <a href="#course-sections">Sections du cours</a></p><h2 id="reader-objectives" tabindex="-1">Objectifs d’apprentissage</h2><ul><li><a href="course-CRS-96w05v20b8w1.html#out-OUT-fh85dvq5wq94">Écrire la signature d&#x27;un callback d&#x27;instance et d&#x27;un callback statique</a></li><li><a href="course-CRS-96w05v20b8w1.html#out-OUT-3mgrr61v77zn">Énoncer que le retour est ignore et qu&#x27;une violation doit être ajoutée</a></li><li><a href="course-CRS-96w05v20b8w1.html#out-OUT-4637w32xw9y8">Reconnaître un callable statique externe</a></li></ul><aside class="pedagogy-legend" aria-label="Repères pédagogiques"><p><strong>Repères pédagogiques</strong></p><p>Ces repères décrivent le rôle du bloc, pas une fréquence officielle à l’examen.</p><p class="teaching-label essential"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="brain" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5C12 1 6 1 6 5C2 5 1 10 4 12C1 15 3 19 6 19C6 23 12 23 12 19V5M12 5C12 1 18 1 18 5C22 5 23 10 20 12C23 15 21 19 18 19C18 23 12 23 12 19M6 5C6 8 8 9 9 9M4 12H7L9 14M6 19V16M18 5C18 8 16 9 15 9M20 12H17L15 14M18 19V16"></path></svg> <strong>À comprendre</strong></p><p class="teaching-label essential"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="book" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5C9 3 5 3 2 4V20C5 19 9 19 12 21C15 19 19 19 22 20V4C19 3 15 3 12 5V21M5 8H8M5 12H8M16 8H19M16 12H19"></path></svg> <strong>À mémoriser</strong></p><p class="teaching-label example"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="code" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6L2 12L8 18M16 6L22 12L16 18M14 3L10 21"></path></svg> <strong>Exemple concret</strong></p><p class="teaching-label pitfall"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="warning" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3L23 21H1L12 3ZM12 9V14M12 17V18"></path></svg> <strong>Piège à éviter</strong></p><p class="teaching-label nuance"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="balance" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3V21M7 21H17M3 7L21 5M5 7L1 15H9L5 7M19 6L15 14H23L19 6M1 15Q5 20 9 15M15 14Q19 19 23 14"></path></svg> <strong>Nuance à connaître</strong></p><p>Précision, exception ou condition d’application d’une règle.</p></aside><section class="teaching-section" data-section="s-objectif"><h2 id="s-objectif" tabindex="-1">Objectif</h2><p>Écrire une règle de validation arbitraire sans créer de class de constraint, et
+connaître la signature attendue — elle change selon que la method est
+d'instance ou statique.</p>
+<p>Question fil rouge : <strong>quand Symfony appelle ma method de validation, que
+lui passe-t-il, et comment lui dire qu'une règle est violée ?</strong></p></section><section class="teaching-section" data-section="s-l-essentiel"><h2 id="s-l-essentiel" tabindex="-1">L&#x27;essentiel</h2><p class="teaching-label essential"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="brain" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5C12 1 6 1 6 5C2 5 1 10 4 12C1 15 3 19 6 19C6 23 12 23 12 19V5M12 5C12 1 18 1 18 5C22 5 23 10 20 12C23 15 21 19 18 19C18 23 12 23 12 19M6 5C6 8 8 9 9 9M4 12H7L9 14M6 19V16M18 5C18 8 16 9 15 9M20 12H17L15 14M18 19V16"></path></svg> <strong>À comprendre</strong></p><aside class="section-digest" id="s-l-essentiel-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Le retour du callback est ignoré.</li><li>Le contexte porte les violations.</li></ol></aside><p><strong>Ce que cette partie veut réellement vous apprendre.</strong></p>
+<ul>
+<li><em>Pourquoi ce sujet existe.</em> Les constraints natives couvrent les règles
+  courantes. Pour une règle propre à votre métier (« la date de fin suit la
+  date de début », « ce prénom est interdit »), créer une class de
+  constraint + un validator serait disproportionné. <code>Callback</code> est la
+  porte de sortie : <strong>vous écrivez le code, Symfony l'appelle au bon moment</strong>.</li>
+<li><em>Le piège de fond.</em> Un callback n'est <strong>pas</strong> un contrôleur : il n'y a pas
+  d'autowiring. Les arguments ont des <strong>positions fixes</strong> décidées par
+  <code>CallbackValidator</code>, selon la forme du callable.</li>
+<li><em>Ce que l'auteur veut que vous compreniez.</em> Deux choses tombent à
+  l'examen : la signature change selon que la method est d'instance ou
+  <strong>statique</strong>, et la valeur retournée est <strong>ignorée</strong> — seule une violation
+  ajoutée au contexte compte.</li>
+<li><em>Pourquoi c'est à l'examen.</em> Les QCM jouent sur l'ordre des arguments,
+  sur <code>return false</code>, sur la visibilité de la method et sur ce que reçoit
+  un callback posé sur une property.</li>
+</ul>
+<p><code>Callback</code> fait donc appeler <strong>ta</strong> method par le validator : elle seule décide
+des violations.</p></section><section class="teaching-section" data-section="s-le-schema"><h2 id="s-le-schema" tabindex="-1">Le schéma</h2><aside class="section-digest" id="s-le-schema-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Le callback exprime la règle.</li><li>addViolation() rend l&#x27;échec observable.</li></ol></aside><p><strong>Où en est-on ?</strong> On regarde l'intérieur de <code>CallbackValidator</code>, le
+validator associé à la constraint <code>Callback</code>. Il examine <strong>comment</strong> le
+callback est désigné, choisit les arguments à transmettre, puis laisse ta
+method écrire dans le contexte de validation. Les sections suivantes
+détaillent chaque case : signatures, formes du <code>callback</code>, rôle du contexte.</p>
+<figure class="diagram" aria-labelledby="CRS-96w05v20b8w1-3-diagram-0-title CRS-96w05v20b8w1-3-diagram-0-description"><figcaption id="CRS-96w05v20b8w1-3-diagram-0-title">CallbackValidator adapte les arguments au callable</figcaption><p id="CRS-96w05v20b8w1-3-diagram-0-description">Pour une méthode d&#x27;instance désignée sur l&#x27;objet validé, CallbackValidator transmet contexte et payload. Pour une méthode statique, une closure ou un callable en tableau, il transmet d&#x27;abord la valeur validée. La valeur de retour n&#x27;est pas utilisée : le callback doit ajouter les violations au contexte.</p><div class="mermaid" hidden>---
+title: Où poser un Callback, et ce qu&#x27;il reçoit
+---
+flowchart TD
+  accTitle: CallbackValidator adapte les arguments au callable
+  accDescr: Pour une méthode d&#x27;instance désignée sur l&#x27;objet validé, CallbackValidator transmet contexte et payload. Pour une méthode statique, une closure ou un callable en tableau, il transmet d&#x27;abord la valeur validée. La valeur de retour n&#x27;est pas utilisée : le callback doit ajouter les violations au contexte.
+  V[&quot;CallbackValidator&quot;] --&gt;|&quot;examine le callable&quot;| Q{&quot;Méthode d&#x27;instance&lt;br/&gt;désignée par son nom ?&quot;}
+  Q --&gt;|&quot;oui : invoke sur l&#x27;objet&quot;| I[&quot;context, payload&quot;]
+  Q --&gt;|&quot;non : statique ou callable&quot;| S[&quot;value, context, payload&quot;]
+  I --&gt;|&quot;le callback signale l&#x27;échec&quot;| C[&quot;Contexte de validation&quot;]
+  S --&gt;|&quot;le callback signale l&#x27;échec&quot;| C
+  C --&gt;|&quot;addViolation enregistre&quot;| L([&quot;Liste de violations&quot;])
+  classDef operation fill:#e0f2fe,stroke:#0369a1,color:#0c4a6e
+  classDef decision fill:#fef3c7,stroke:#b45309,color:#78350f
+  classDef result fill:#dcfce7,stroke:#15803d,color:#14532d
+  class V,I,S,C operation
+  class Q decision
+  class L result</div></figure>
+<p>Bleu = appel ou données ; ambre = choix de signature ; vert = résultat.
+Les flèches représentent le traitement d'un callback valide, pas de l'héritage.
+Une méthode inexistante ou un callable invalide interrompt ce chemin par
+une exception de configuration ; <code>return false</code> ne crée aucune violation.</p>
+<p>Pourquoi deux branches ? Une method <strong>d'instance</strong> a déjà l'objet (<code>$this</code>) :
+inutile de le lui passer. Une method <strong>statique</strong>, une closure ou un callable
+externe n'ont pas cet objet : <code>CallbackValidator</code> le leur donne en premier
+argument.</p></section><section class="teaching-section" data-section="s-l-exemple-un-author"><h2 id="s-l-exemple-un-author" tabindex="-1">L&#x27;exemple : un `Author`</h2><p class="teaching-label example"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="code" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6L2 12L8 18M16 6L22 12L16 18M14 3L10 21"></path></svg> <strong>Exemple concret</strong></p><aside class="section-digest" id="s-l-exemple-un-author-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Une règle de class voit l&#x27;Author entier.</li><li>atPath() rattache l&#x27;erreur au field.</li></ol></aside><p><strong>Où en est-on ?</strong> Avant la théorie, le plus petit exemple utile : une
+method privée d'instance qui ajoute une violation ciblée. Il sert de repère
+pour toutes les sections suivantes.</p>
+<p>Pour le profil d'auteur du blog, la règle ci-dessous montre comment ajouter
+une erreur ciblée à partir d'une liste locale. C'est une politique illustrative,
+pas une méthode fiable pour établir l'identité réelle d'un lecteur.
+La règle ne crée pas de compte et n'écrit pas de Response : elle enrichit
+le résultat de validation que l'appelant traitera ensuite.</p>
+<pre class="highlight" tabindex="0"><code class="language-php">use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Validator\Context\ExecutionContextInterface;
+
+class Author
+{
+    public string $firstName = '';
+    private array $fakeNames = ['Toto', 'Test', 'Foo'];
+
+    #[Assert\Callback]
+    private function validate(ExecutionContextInterface $context, mixed $payload): void
+    {
+        if (in_array($this-&gt;firstName, $this-&gt;fakeNames, true)) {
+            $context-&gt;buildViolation('Ce prénom semble inventé.')
+                -&gt;atPath('firstName')
+                -&gt;addViolation();
+        }
+    }
+}</code></pre>
+<p>Avec le mapping d'attributs activé, un <code>Author</code> dont <code>firstName</code> vaut <code>Toto</code>
+produit une violation au chemin <code>firstName</code>. Avec <code>Ada</code>, ce callback n'en
+produit aucune ; les autres contraintes éventuelles restent indépendantes.</p>
+<p>Ce que Symfony voit et fait :</p>
+<table>
+<thead>
+<tr>
+<th>Élément</th>
+<th>Rôle</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>#[Assert\Callback]</code> sur la method</td>
+<td>« appelle cette method pendant la validation de <code>Author</code> »</td>
+</tr>
+<tr>
+<td><code>ExecutionContextInterface $context</code></td>
+<td>le carnet où l'on écrit les violations</td>
+</tr>
+<tr>
+<td><code>$payload</code></td>
+<td>donnée libre de l'option <code>payload</code> (ici <code>null</code>)</td>
+</tr>
+<tr>
+<td><code>buildViolation(...)-&gt;atPath(...)-&gt;addViolation()</code></td>
+<td>enregistre l'erreur</td>
+</tr>
+<tr>
+<td>rien d'autre</td>
+<td>aucune <code>Response</code>, aucun compte créé</td>
+</tr>
+</tbody>
+</table></section><section class="teaching-section" data-section="s-le-principe"><h2 id="s-le-principe" tabindex="-1">Le principe</h2><aside class="section-digest" id="s-le-principe-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Callback convient à une règle locale.</li><li>Une constraint dédiée favorise la réutilisation.</li></ol></aside><p><strong>Où en est-on ?</strong> Étape 1 sur 4 : <em>sur quoi</em> pose-t-on <code>Callback</code> et
+<em>qu'est-ce que la method reçoit comme valeur</em> ? Choisir la portée vient
+<strong>avant</strong> de choisir la signature.</p>
+<p>Si une combinaison propre à SignupData n'est pas exprimée simplement par
+une contrainte native, un callback peut examiner l'objet. Le placer sur
+une propriété change cependant son entrée : il reçoit cette valeur,
+pas automatiquement l'objet parent. Choisis la portée avant la signature.</p>
+<p><code>Callback</code> est la porte de sortie quand aucune constraint native n'exprime la
+règle, et qu'une class de constraint serait disproportionnée.</p>
+<ul>
+<li>L'attribute se pose sur la method ; sur la class, il nomme la method :
+  <code>#[Assert\Callback(callback: 'validate')]</code>.</li>
+<li>La method peut être <strong>privée</strong> : elle est appelée, et sa violation remonte.</li>
+</ul>
+<p>Elle accepte aussi une <strong>property</strong> : le callback reçoit alors la <strong>valeur</strong> de
+la property, et sa violation porte le path de la property. Un nom de method
+seul y est cherché sur cette valeur — une string — d'où une
+<code>ConstraintDefinitionException</code> : « Method "nope" targeted by Callback
+constraint does not exist in class "string". ».</p>
+<p>Pourquoi une method privée fonctionne-t-elle ? Parce que <code>CallbackValidator</code>
+l'appelle par <strong>réflexion</strong> (<code>ReflectionMethod::invoke</code>), qui ignore la
+visibilité. Ce n'est pas une règle générale : un callable en tableau doit,
+lui, être réellement appelable (<code>is_callable</code>) depuis le contexte du validator.</p>
+<pre class="highlight" tabindex="0"><code class="language-text">Callback posé sur la CLASSE         Callback posé sur une PROPERTY
+┌─────────────────────────┐         ┌──────────────────────────────┐
+│ valeur validée = l'objet│         │ valeur validée = la valeur   │
+│ method nommée cherchée  │         │ de la property (ex. string)  │
+│ sur l'objet             │         │ nom seul cherché sur CETTE   │
+│ voit TOUS les champs    │         │ valeur → erreur de définition│
+│ → règles croisées       │         │ chemin = la property         │
+└─────────────────────────┘         └──────────────────────────────┘</code></pre>
+<div class="admonition info">
+<p class="admonition-title">🌍 In Real Life</p>
+<p><strong>La situation</strong> : une checklist standard ne suffit pas pour comparer deux rubriques du dossier. On ajoute une consigne locale ; si on ne remet qu'une case au contrôleur, il ne reçoit pas pour autant tout le dossier.</p>
+<p><strong>L’équivalent dans Symfony</strong> : Callback délègue une règle personnalisée à du code. Sa cible de classe lui donne l'objet ; sa cible de propriété lui donne la valeur de cette propriété. Une méthode nommée est recherchée sur la valeur validée.</p>
+<p><strong>Retour à la réalité technique</strong> : les métadonnées et le groupe doivent sélectionner la règle. L'appel par réflexion d'une méthode privée nommée sur l'objet ne rend pas tout callable privé accessible par toute autre forme d'appel. Une cible incorrecte peut produire une erreur de configuration, pas une violation de donnée. Cette règle peut servir à SignupData après Form ou désérialisation JSON, sans créer le compte.</p>
+<p><strong>🧠 Comment le mémoriser</strong> : « Remettre une case ne remet pas le dossier. » Image mentale : contrôleur recevant soit un dossier, soit une seule case. Question-réflexe : quelle valeur la cible remet-elle à ce callback ?</p>
+<p><strong>⚠️ À ne pas confondre</strong> : portée de Callback, objet parent, callable valide, désérialisation et validation.</p>
+</div></section><section class="teaching-section" data-section="s-les-deux-signatures"><span class="outcome-anchor" id="out-OUT-fh85dvq5wq94" tabindex="-1"></span><h2 id="s-les-deux-signatures" tabindex="-1">Les deux signatures</h2><aside class="section-digest" id="s-les-deux-signatures-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Une method statique n&#x27;a pas this.</li><li>La valeur validée est donc son premier argument.</li></ol></aside><p><strong>Où en est-on ?</strong> Étape 2 sur 4 : la portée est choisie, il faut écrire la
+signature. C'est <strong>le</strong> point d'examen : l'ordre des arguments dépend de la
+forme du callable.</p>
+<p>CallbackValidator décide des arguments selon la forme du callable.
+Il ne fait pas l'autowiring d'une action de contrôleur : le contexte
+et le payload ont des positions définies. Une méthode statique reçoit
+explicitement l'objet qui remplacerait <code>$this</code>, tandis que le payload
+vient de la contrainte et non du body HTTP.</p>
+<table>
+<thead>
+<tr>
+<th>Forme</th>
+<th>Signature</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>instance</td>
+<td><code>validate(ExecutionContextInterface $context, mixed $payload)</code></td>
+</tr>
+<tr>
+<td>statique, closure</td>
+<td><code>validate(mixed $value, ExecutionContextInterface $context, mixed $payload)</code></td>
+</tr>
+</tbody>
+</table>
+<p>Une method statique n'a pas <code>$this</code> : l'object validé lui est passé, <strong>en
+premier</strong>. <code>CallbackValidator</code> teste <code>isStatic()</code> et choisit l'appel. Une
+method statique écrite avec la signature d'instance lève une <code>TypeError</code>, pas
+une validation silencieusement fausse.</p>
+<p>Le <code>$payload</code> est la donnée de l'option <code>payload</code>, transmise telle quelle : le
+validator ne s'en sert pas.</p>
+<p>Pourquoi la <code>TypeError</code> ? Pour une method statique nommée, le validator
+exécute <code>invoke(null, $object, $context, $payload)</code>. Si la method attend
+<code>(ExecutionContextInterface $context, mixed $payload)</code>, son premier
+paramètre typé reçoit l'objet validé : PHP refuse.</p>
+<pre class="highlight" tabindex="0"><code class="language-text">Instance    invoke($objet, $context, $payload)
+                         ↓       ↓
+            validate(ExecutionContextInterface $context, mixed $payload)
+
+Statique    invoke(null, $objet, $context, $payload)
+                          ↓       ↓          ↓
+            validate(mixed $value, ExecutionContextInterface $context,
+                     mixed $payload)</code></pre>
+<div class="admonition info">
+<p class="admonition-title">🌍 In Real Life</p>
+<p><strong>La situation</strong> : le contrôleur installé dans le dossier connaît déjà ce dossier. Le contrôleur externe doit recevoir d'abord la pièce à examiner, puis son carnet de remarques et la note jointe à la règle.</p>
+<p><strong>L’équivalent dans Symfony</strong> : pour la méthode d'instance désignée par son nom, CallbackValidator transmet contexte puis payload. Pour la méthode statique, la closure ou le callable en tableau, il transmet valeur, contexte, payload.</p>
+<p><strong>Retour à la réalité technique</strong> : c'est la forme d'appel qui détermine ce protocole, pas un autowiring par noms ou types. La valeur peut être scalaire, pas nécessairement un objet. Payload vient de l'option de contrainte, pas du corps HTTP. Une mauvaise signature typée peut provoquer TypeError ; cette erreur de programmation n'est pas un verdict faux.</p>
+<p><strong>🧠 Comment le mémoriser</strong> : « Dehors, livrer la pièce avant le carnet. » Image mentale : paquet valeur, carnet contexte, note payload dans cet ordre. Question-réflexe : est-ce une méthode nommée sur l'instance ou un callable recevant explicitement la valeur ?</p>
+<p><strong>⚠️ À ne pas confondre</strong> : signature Callback, ArgumentResolver HTTP, payload de contrainte et payload de requête.</p>
+</div></section><section class="teaching-section" data-section="s-les-formes-du-callback"><span class="outcome-anchor" id="out-OUT-4637w32xw9y8" tabindex="-1"></span><h2 id="s-les-formes-du-callback" tabindex="-1">Les formes du `callback`</h2><aside class="section-digest" id="s-les-formes-du-callback-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Le nom seul vise la valeur courante.</li><li>Un callable explicite permet une autre cible.</li></ol></aside><p><strong>Où en est-on ?</strong> Étape 3 sur 4 : la signature dépend de la <em>forme</em> de
+l'option <code>callback</code>. Voyons les trois formes et où chacune est cherchée.</p>
+<p>Une méthode nommée suffit lorsque la règle appartient à l'objet validé.
+Un callable externe permet de réutiliser un contrôle indépendant, mais
+une chaîne de nom de service n'est pas automatiquement résolue comme
+un contrôleur. Si la règle requiert des services, une contrainte et
+son validateur configuré peuvent offrir un contrat plus approprié.</p>
+<table>
+<thead>
+<tr>
+<th>Valeur de l'option</th>
+<th>Où la method est cherchée</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>un nom de method</td>
+<td>sur la <strong>valeur validée</strong> — l'object, sur une class</td>
+</tr>
+<tr>
+<td><code>[Classe::class, 'méthode']</code></td>
+<td>le callable statique désigné, <strong>hors</strong> de la class</td>
+</tr>
+<tr>
+<td>une closure</td>
+<td>appelée avec <code>($value, $context, $payload)</code></td>
+</tr>
+</tbody>
+</table>
+<p>Un nom de method absent lève une <code>ConstraintDefinitionException</code>.</p>
+<p>Code minimal des deux dernières formes :</p>
+<pre class="highlight" tabindex="0"><code class="language-php">// callable statique externe : ZipChecker::check(mixed $value, $context, $payload)
+#[Assert\Callback([ZipChecker::class, 'check'])]
+public string $zip = '';
+
+final class ZipChecker
+{
+    public static function check(mixed $value, ExecutionContextInterface $context, mixed $payload): void
+    {
+        if (!preg_match('/^\d{5}$/', (string) $value)) {
+            $context-&gt;buildViolation('Code postal invalide.')-&gt;addViolation();
+        }
+    }
+}</code></pre>
+<p>Comparaison rapide :</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Nom de method</th>
+<th><code>[Classe::class, 'm']</code> / closure</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Où est le code ?</td>
+<td>dans l'objet validé</td>
+<td>ailleurs, réutilisable</td>
+</tr>
+<tr>
+<td>Arguments</td>
+<td><code>(context, payload)</code></td>
+<td><code>(value, context, payload)</code></td>
+</tr>
+<tr>
+<td>Si introuvable</td>
+<td><code>ConstraintDefinitionException</code></td>
+<td>callable invalide : <code>ConstraintDefinitionException</code></td>
+</tr>
+<tr>
+<td>Services injectés ?</td>
+<td>non</td>
+<td>non : pas de résolution de service</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition info">
+<p class="admonition-title">🌍 In Real Life</p>
+<p><strong>La situation</strong> : « consulter la méthode locale » et « appeler ce spécialiste précis » sont deux adresses différentes. Un simple nom écrit sur une note ne demande pas à un standard de trouver n'importe quel service.</p>
+<p><strong>L’équivalent dans Symfony</strong> : le nom seul vise une méthode de la valeur validée ; un tableau callable ou une closure désigne explicitement le contrôle. CallbackValidator ne résout pas une chaîne de service comme un ControllerResolver.</p>
+<p><strong>Retour à la réalité technique</strong> : le tableau statique du cours est une forme de callable, pas l'obligation que toute règle soit dans une autre classe. Un tableau avec objet peut aussi être callable, sous réserve d'être appelable et de respecter la signature avec valeur. Si la règle dépend de services, préfère un validateur personnalisé correctement enregistré plutôt qu'une résolution de service supposée.</p>
+<p><strong>🧠 Comment le mémoriser</strong> : « Nom local ou adresse callable : pas d'annuaire magique. » Image mentale : étiquette locale à côté d'une adresse explicite. Question-réflexe : où cette forme cherche-t-elle réellement la méthode ?</p>
+<p><strong>⚠️ À ne pas confondre</strong> : méthode nommée, callable PHP, identifiant de service et contrôleur.</p>
+</div></section><section class="teaching-section" data-section="s-ce-que-le-callback-doit-faire"><span class="outcome-anchor" id="out-OUT-3mgrr61v77zn" tabindex="-1"></span><h2 id="s-ce-que-le-callback-doit-faire" tabindex="-1">Ce que le callback doit faire</h2><aside class="section-digest" id="s-ce-que-le-callback-doit-faire-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Sans atPath(), l&#x27;erreur conserve le path courant de l&#x27;objet : vide à la racine, préfixé lors d&#x27;une validation imbriquée.</li><li>Le field doit être désigné volontairement.</li></ol></aside><p><strong>Où en est-on ?</strong> Étape 4 sur 4 : la method est appelée avec les bons
+arguments ; comment <em>signale-t-elle</em> une erreur ? Réponse : en <strong>écrivant</strong>
+dans le contexte, jamais en retournant une valeur.</p>
+<p>Le booléen d'un getter avec IsTrue est interprété par son validateur ;
+le retour d'un Callback ne l'est pas. Pour signaler la fin de période
+incorrecte d'un article, ajoute donc une violation sur le chemin choisi.
+Sans cet enregistrement, ce callback reste silencieux, même si d'autres
+règles font déjà échouer le formulaire.</p>
+<p><strong>Ne pas ajouter de violation signifie que ce callback ne signale rien.</strong>
+Cela ne garantit pas la réussite des autres règles. Pour signaler un
+problème : <code>$context-&gt;buildViolation('message')</code>, puis <code>-&gt;atPath('firstName')</code>
+si la règle vise un field, puis <code>-&gt;addViolation()</code>. Sans <code>atPath()</code>, la
+violation garde le chemin courant : <code>''</code> pour un objet validé à la racine,
+ou le préfixe de cet objet dans une validation imbriquée.</p>
+<p>Pourquoi <code>return false</code> ne marche-t-il pas ? Dans le code de
+<code>CallbackValidator::validate()</code>, l'appel est fait sans utiliser son
+résultat : <code>$method($object, $this-&gt;context, ...)</code>. Comparez avec
+<code>#[Assert\IsTrue]</code> sur un getter : c'est le validator d'<code>IsTrue</code> qui lit le
+booléen. Chaque constraint a son validator, donc son protocole.</p>
+<p>Avant / après :</p>
+<pre class="highlight" tabindex="0"><code class="language-php">// ❌ silencieux : le retour est ignoré
+#[Assert\Callback]
+public function check(ExecutionContextInterface $context): bool
+{
+    return $this-&gt;end &gt;= $this-&gt;start;   // false n'ajoute rien
+}
+
+// ✅ la violation est enregistrée au bon chemin
+#[Assert\Callback]
+public function check(ExecutionContextInterface $context): void
+{
+    if ($this-&gt;end &lt; $this-&gt;start) {
+        $context-&gt;buildViolation('La fin précède le début.')
+            -&gt;atPath('end')
+            -&gt;addViolation();
+    }
+}</code></pre>
+<p>Le builder n'a aucun effet tant qu'<code>addViolation()</code> n'est pas appelé :
+<code>buildViolation()</code> prépare, <code>addViolation()</code> dépose.</p>
+<div class="admonition info">
+<p class="admonition-title">🌍 In Real Life</p>
+<p><strong>La situation</strong> : penser « non » ne laisse aucune remarque dans le dossier. Le contrôleur doit écrire et déposer sa fiche d'anomalie à l'emplacement concerné.</p>
+<p><strong>L’équivalent dans Symfony</strong> : CallbackValidator ignore le retour du callback. Le code ajoute la violation au contexte, directement ou via un builder terminé par addViolation ; atPath précise son emplacement relatif.</p>
+<p><strong>Retour à la réalité technique</strong> : return false ne joue pas le rôle du booléen contrôlé par IsTrue. Sans ajout, ce callback reste silencieux, sans effacer les violations des autres règles. Le chemin courant peut déjà être imbriqué ; le chemin de violation n'est pas un identifiant HTML et son affichage Form peut demander un mapping.</p>
+<p><strong>🧠 Comment le mémoriser</strong> : « Un non pensé n'est pas une remarque déposée. » Image mentale : fiche d'anomalie déposée sur la rubrique du dossier. Question-réflexe : ai-je effectivement enregistré une violation au bon chemin ?</p>
+<p><strong>⚠️ À ne pas confondre</strong> : retour booléen, builder préparé, violation ajoutée et affichage d'erreur.</p>
+</div></section><section class="teaching-section" data-section="s-pieges-d-examen"><h2 id="s-pieges-d-examen" tabindex="-1">Pièges d&#x27;examen</h2><p class="teaching-label pitfall"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="warning" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3L23 21H1L12 3ZM12 9V14M12 17V18"></path></svg> <strong>Piège à éviter</strong></p><aside class="section-digest" id="s-pieges-d-examen-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>L&#x27;ordre des arguments fait partie du contrat.</li><li>La valeur précède le contexte en statique.</li></ol></aside><ul class="pitfall-list"><li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : Où en est-on ?</summary><p><strong>Où en est-on ?</strong> Récapitulatif des erreurs de QCM, avec la raison de leur
+plausibilité.</p></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : La signature statique commence par la valeur, pas par le contexte</summary><p><strong>La signature statique commence par la valeur, pas par le contexte</strong> ; la
+confondre lève une <code>TypeError</code>.
+<em>Pourquoi on se trompe :</em> la signature d'instance, plus fréquente, devient un réflexe.</p></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : Le retour est ignoré.</summary><p><strong>Le retour est ignoré.</strong> Une règle non respectée doit produire une violation,
+pas un <code>return false</code>.
+<em>Pourquoi on se trompe :</em> <code>IsTrue</code> sur un getter, lui, lit bien un booléen.</p></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : Un nom de method seul est cherché sur la valeur validée</summary><p><strong>Un nom de method seul est cherché sur la valeur validée</strong> — l'object quand
+la constraint est posée sur la class —, jamais ailleurs.
+<em>Pourquoi on se trompe :</em> on imagine une résolution comme celle d'un contrôleur ou d'un service.</p></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : Posée sur la class, Callback voit tout l&#x27;object</summary><p><strong>Posée sur la class, <code>Callback</code> voit tout l'object</strong>, ce qui la rend adaptée
+aux règles croisées — mais il faut alors <code>atPath()</code> pour attribuer
+l'erreur au bon field.
+<em>Pourquoi on se trompe :</em> sans <code>atPath()</code>, la violation est rattachée à l'objet (chemin vide), pas à un champ.</p></details></li></ul></section><section class="teaching-section" data-section="s-fiche-express"><h2 id="s-fiche-express" tabindex="-1">Fiche express</h2><p class="teaching-label essential"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="book" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5C9 3 5 3 2 4V20C5 19 9 19 12 21C15 19 19 19 22 20V4C19 3 15 3 12 5V21M5 8H8M5 12H8M16 8H19M16 12H19"></path></svg> <strong>À mémoriser</strong></p><aside class="section-digest" id="s-fiche-express-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Le payload est une donnée auxiliaire.</li><li>La logique reste dans le callback.</li></ol></aside><p><strong>Si tu dois retenir seulement 6 choses :</strong></p>
+<ul>
+<li><code>Callback</code> appelle <strong>ta</strong> method ; elle seule décide des violations.</li>
+<li>Instance : <code>(context, payload)</code> ; <strong>statique / closure : <code>(value, context,
+  payload)</code></strong> — sinon <code>TypeError</code>.</li>
+<li>Nom seul : cherché sur la valeur validée ; array : callable statique externe.</li>
+<li>Sur une property, le callback reçoit la <strong>valeur</strong> de la property.</li>
+<li><strong>Aucune violation ajoutée = aucun échec signalé par ce callback</strong> ;
+  <code>return false</code> est ignoré.</li>
+<li><code>atPath()</code> pour rattacher l'erreur à un field.</li>
+</ul>
+<p>Moyen mnémotechnique : <strong>« Statique, l'object d'abord »</strong>.</p>
+<h3 tabindex="-1" id="s-fiche-express-nested-a-retenir-pour-la-certification">🧠 À retenir pour la certification</h3>
+<ol>
+<li><code>Callback</code> = règle sur mesure sans class de constraint ; <code>CallbackValidator</code>
+   choisit les arguments <strong>selon la forme</strong> du callable (pas d'autowiring).</li>
+<li>Instance : <code>(ExecutionContextInterface $context, mixed $payload)</code>.</li>
+<li>Statique, closure, <code>[Classe::class, 'm']</code> : <code>(mixed $value, $context, $payload)</code>.</li>
+<li>Le retour est ignoré ; on signale avec <code>buildViolation()…addViolation()</code>.</li>
+<li>Sur la class : l'objet entier (règles croisées, <code>atPath()</code> requis) ; sur une
+   property : la valeur seule.</li>
+<li>Méthode privée acceptée (réflexion) ; method inexistante →
+   <code>ConstraintDefinitionException</code>.</li>
+</ol>
+<p><strong>Phrase de mémorisation :</strong> « Callback appelle ma method : l'objet d'abord
+si elle est statique, contexte ensuite, et seule une violation ajoutée compte. »</p></section><section class="official-sources"><h2 id="reader-sources" tabindex="-1">Sources officielles et compléments</h2><ul><li><a href="https://symfony.com/doc/8.0/reference/constraints/Callback.html">Symfony 8.0 — reference / constraints / Callback</a></li><li><a href="https://symfony.com/doc/8.0/validation.html">Symfony 8.0 — Validator</a></li></ul></section><section id="course-recalls" aria-labelledby="course-recalls-title" tabindex="-1"><h2 id="course-recalls-title">Rappels et liens avec les autres cours</h2><div data-recall-group="other"><h3>Rappels des cours précédents / autres modules</h3><ul><li data-recall-course="CRS-vskyr5zdwr2t" data-recall-kind="previous_course"><p class="recall-provenance">Module 08 — Validation des données · Cours « Validation groups »</p><p>Default est sélectionné implicitement. Les groups nommés demandent une sélection explicite.</p><p><a href="#cards-previous">Rappel : <span lang="en">Which group does validate($object) select when no group is supplied?</span></a></p></li></ul></div></section><nav class="course-sequence" aria-label="Ordre de lecture"><a rel="prev" href="course-CRS-bthv5xmh5wea.html" aria-label="Précédent : Group sequence — Module 08 — Validation des données">Précédent : Group sequence</a> <a href="lot-08.html">Sommaire : Module 08 — Validation des données</a> <a rel="next" href="course-CRS-d235sja3h7y2.html" aria-label="Suivant : Violations builder — Module 08 — Validation des données">Suivant : Violations builder</a></nav><p class="course-practice-entry"><a class="button" href="#view-quiz">Fin du cours — s’entraîner avec le Quiz</a></p></div><div id="view-flashcards" data-course-panel role="region" aria-labelledby="view-flashcards-title"><h2 id="view-flashcards-title">Flashcards</h2><p lang="en">Answer before revealing each card.</p><p>Ces cartes ne mesurent pas une maîtrise notée.</p><div id="cards-s-l-essentiel-1" data-card-section="s-l-essentiel"><h3><a href="#s-l-essentiel">Revoir : L&#x27;essentiel</a></h3><div class="reader-cards"><details class="reader-card" id="B-96w05v20b8w1-01"><summary lang="en">Does returning false from a validation callback create a violation?</summary><p lang="en">No. The callback must add a violation through its execution context.</p><p lang="fr">Le retour du callback est ignoré. Le contexte porte les violations.</p><a href="course-CRS-96w05v20b8w1.html#out-OUT-3mgrr61v77zn">Revoir le passage précis</a></details></div></div><div id="cards-s-le-schema-2" data-card-section="s-le-schema"><h3><a href="#s-le-schema">Revoir : Le schéma</a></h3><div class="reader-cards"><details class="reader-card" id="B-96w05v20b8w1-02"><summary lang="en">What marks failure in the callback validation flow?</summary><p lang="en">A call that adds a violation, not the callback&#x27;s return value.</p><p lang="fr">Le callback exprime la règle. addViolation() rend l&#x27;échec observable.</p><a href="course-CRS-96w05v20b8w1.html#out-OUT-3mgrr61v77zn">Revoir le passage précis</a></details></div></div><div id="cards-s-l-exemple-un-author-3" data-card-section="s-l-exemple-un-author"><h3><a href="#s-l-exemple-un-author">Revoir : L&#x27;exemple : un `Author`</a></h3><div class="reader-cards"><details class="reader-card" id="B-96w05v20b8w1-03"><summary lang="en">How can an Author callback place an error on firstName?</summary><p lang="en">Build a violation, call atPath(&#x27;firstName&#x27;), then addViolation().</p><p lang="fr">Une règle de class voit l&#x27;Author entier. atPath() rattache l&#x27;erreur au field.</p><a href="course-CRS-96w05v20b8w1.html#out-OUT-3mgrr61v77zn">Revoir le passage précis</a></details></div></div><div id="cards-s-le-principe-4" data-card-section="s-le-principe"><h3><a href="#s-le-principe">Revoir : Le principe</a></h3><div class="reader-cards"><details class="reader-card" id="B-96w05v20b8w1-04"><summary lang="en">When is Callback preferable to a separate custom constraint class?</summary><p lang="en">For an object-specific rule that needs custom logic without a reusable constraint type.</p><p lang="fr">Callback convient à une règle locale. Une constraint dédiée favorise la réutilisation.</p><a href="course-CRS-96w05v20b8w1.html#out-OUT-3mgrr61v77zn">Revoir le passage précis</a></details></div></div><div id="cards-s-les-deux-signatures-5" data-card-section="s-les-deux-signatures"><h3><a href="#s-les-deux-signatures">Revoir : Les deux signatures</a></h3><div class="reader-cards"><details class="reader-card" id="B-96w05v20b8w1-05"><summary lang="en">How do instance and static validation callback signatures differ?</summary><p lang="en">An instance callback receives context and payload; a static callback receives value, context and payload.</p><p lang="fr">Une method statique n&#x27;a pas this. La valeur validée est donc son premier argument.</p><a href="course-CRS-96w05v20b8w1.html#out-OUT-fh85dvq5wq94">Revoir le passage précis</a></details></div></div><div id="cards-s-les-formes-du-callback-6" data-card-section="s-les-formes-du-callback"><h3><a href="#s-les-formes-du-callback">Revoir : Les formes du `callback`</a></h3><div class="reader-cards"><details class="reader-card" id="B-96w05v20b8w1-06"><summary lang="en">Where is a string callback method name resolved?</summary><p lang="en">On the value being validated, not on an arbitrary service.</p><p lang="fr">Le nom seul vise la valeur courante. Un callable explicite permet une autre cible.</p><a href="course-CRS-96w05v20b8w1.html#out-OUT-4637w32xw9y8">Revoir le passage précis</a></details></div></div><div id="cards-s-ce-que-le-callback-doit-faire-7" data-card-section="s-ce-que-le-callback-doit-faire"><h3><a href="#s-ce-que-le-callback-doit-faire">Revoir : Ce que le callback doit faire</a></h3><div class="reader-cards"><details class="reader-card" id="B-96w05v20b8w1-07"><summary lang="en">What does a class callback&#x27;s violation path look like without atPath()?</summary><p lang="en">It retains the current object&#x27;s path: empty at the root, but a prefix such as child when nested.</p><p lang="fr">Sans atPath(), l&#x27;erreur conserve le path courant de l&#x27;objet : vide à la racine, préfixé lors d&#x27;une validation imbriquée. Le field doit être désigné volontairement.</p><a href="course-CRS-96w05v20b8w1.html#out-OUT-3mgrr61v77zn">Revoir le passage précis</a></details></div></div><div id="cards-s-pieges-d-examen-8" data-card-section="s-pieges-d-examen"><h3><a href="#s-pieges-d-examen">Revoir : Pièges d&#x27;examen</a></h3><div class="reader-cards"><details class="reader-card" id="B-96w05v20b8w1-08"><summary lang="en">What happens if a static callback uses the instance callback signature?</summary><p lang="en">The argument types do not match and can cause TypeError.</p><p lang="fr">L&#x27;ordre des arguments fait partie du contrat. La valeur précède le contexte en statique.</p><a href="course-CRS-96w05v20b8w1.html#out-OUT-fh85dvq5wq94">Revoir le passage précis</a></details></div></div><div id="cards-s-fiche-express-9" data-card-section="s-fiche-express"><h3><a href="#s-fiche-express">Revoir : Fiche express</a></h3><div class="reader-cards"><details class="reader-card" id="B-96w05v20b8w1-09"><summary lang="en">Does the Validator interpret a callback&#x27;s payload option as a rule?</summary><p lang="en">No. It passes the payload to the callback unchanged for application use.</p><p lang="fr">Le payload est une donnée auxiliaire. La logique reste dans le callback.</p><a href="course-CRS-96w05v20b8w1.html#out-OUT-fh85dvq5wq94">Revoir le passage précis</a></details></div></div><div id="cards-previous"><p class="recall-provenance">Module 08 — Validation des données · Cours « Validation groups »</p><aside class="checkpoint"><h2>Rappel d’un cours antérieur</h2><p>Avant de poursuivre : Validation groups.</p><details class="corpus-correction"><summary lang="en">Which group does validate($object) select when no group is supplied?</summary><p lang="en">Default, not every declared group.</p><p>Default est sélectionné implicitement. Les groups nommés demandent une sélection explicite.</p><a href="course-CRS-vskyr5zdwr2t.html#out-OUT-yme605pqpcbw">Relire la correction dans le cours antérieur</a></details></aside></div></div><div id="view-quiz" data-course-panel role="region" aria-labelledby="view-quiz-title"><aside class="revision-context"><p><strong>Avant le quiz :</strong> Écrire une règle de validation arbitraire sans créer de class de constraint, et connaître la signature attendue — elle change selon que la method est d&#x27;instance ou statique.</p><p>Quelle donnée entre, quelle responsabilité agit et quelle condition change le résultat ? Pour chaque correction, vérifiez ces conditions dans <a href="course-CRS-96w05v20b8w1.html#s-objectif">le passage enseigné</a>, sans supposer que toutes les branches du blog sont exécutées.</p></aside><h2 id="view-quiz-title">Quiz</h2><p class="quiz-size" lang="en">3 eligible learning questions · 3 per session. Repeating a question does not demonstrate mastery.</p><p id="course-quiz-status" role="status">Quiz interactif non chargé. Démarrez après chargement de la banque locale.</p><div id="course-quiz-controls" class="assessment-main" hidden><div id="course-quiz-assessment-controls" hidden><select id="course-quiz-assessment-mode" aria-label="Mode du quiz" hidden><option value="learning">Entraînement</option></select><p id="course-quiz-training-scope"></p><button id="course-quiz-start-assessment" type="button" lang="en">Start practice</button><button id="course-quiz-finish-assessment" type="button" lang="en" hidden>End session</button></div><p id="course-quiz-assessment-error" role="alert"></p><p id="course-quiz-assessment-timer" hidden></p><p id="course-quiz-session-progress" class="quiz-progress" role="status" lang="en"></p><div id="course-quiz-assessment-app" tabindex="-1"></div><nav id="course-quiz-session-navigation" aria-label="Questions du cours"></nav><div id="course-quiz-learning-overview" aria-live="polite"></div></div><div id="course-quiz-native"><p>Sans JavaScript ou si le chargement échoue : aucune tentative notée. Les <a href="#view-flashcards">flashcards du cours</a> restent disponibles.</p><details class="course-quiz-fallback" data-question-id="L-96w05v20b8w1-base-v1"><summary lang="en">RADIO — Select one answer. Does returning false from a validation callback create a violation?</summary><p>Correction de consultation — non notée.</p><p>Le retour du callback est ignoré. Le contexte porte les violations.</p><ul><li><strong lang="en">Distractor: Yes; false automatically becomes a generic violation.</strong><p>Le retour du callback est ignoré.</p></li><li><strong lang="en">Distractor: No; callbacks must throw an exception to reject data.</strong><p>Le mécanisme attendu est l&#x27;ajout d&#x27;une violation au contexte.</p></li><li><strong lang="en">Correct: No; add a violation through the execution context.</strong><p>Le retour du callback est ignoré. Le contexte porte les violations.</p></li></ul><a href="course-CRS-96w05v20b8w1.html#out-OUT-3mgrr61v77zn">Relire le passage exact</a><a href="course-CRS-96w05v20b8w1.html#s-ce-que-le-callback-doit-faire">Relire la correction précise</a></details></div></div></div></div><details class="transfer-panel"><summary>Sauvegarde et transfert de progression</summary><p id="reading-status" role="status">Sans JavaScript : lecture libre ; progression non enregistrée.</p><p><a href="assessment.html#overview-title">Lecture, réussites immédiates et différées</a></p><p>Transfert manuel — aucune synchronisation automatique</p><p id="persistence-status" role="status"></p><button type="button" class="secondary" id="export-progress">Exporter ma progression</button><label for="import-progress">Choisir un JSON pour fusionner ma progression (sans remplacement)</label><input type="file" id="import-progress" accept="application/json,.json"><p id="transfer-status" role="status"></p></details></main><footer class="site-footer"><a href="catalogue.html">Catalogue</a> <a href="sources.html">Sources et attribution</a> <a href="#contenu">Haut de page</a></footer></body></html>

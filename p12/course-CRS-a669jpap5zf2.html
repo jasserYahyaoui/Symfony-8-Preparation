@@ -1,0 +1,347 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; connect-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'"><meta name="viewport" content="width=device-width, initial-scale=1"><title>The response — Symfony 8 Preparation</title><link rel="stylesheet" href="styles.css"><link rel="stylesheet" href="reader.css"><script src="mermaid.min.js" defer></script><script src="mermaid-init.js" defer></script><link rel="stylesheet" href="assessment.css"><script src="fixed-exams-data.js" defer></script><script src="fixed-exams.js" defer></script><script src="learning-state.js" defer></script><script src="guide.js" defer></script><script src="reader-catalog.js" defer></script><script src="reader.js" defer></script><script src="site-state.js" defer></script><script src="assessment.js" defer></script><script src="course-views.js" defer></script><link rel="stylesheet" href="syntax-highlight.css"><script src="prism-syntax.js" defer></script><script src="syntax-highlight.js" defer></script></head><body data-course-id="CRS-a669jpap5zf2"><a class="skip" href="#contenu">Aller au contenu</a><header class="site-header"><a class="brand" href="index.html">S8 Preparation</a><nav aria-label="Navigation principale"><a href="index.html">Accueil</a> <a href="catalogue.html">Parcours</a> <a href="assessment.html?mode=review">Réviser</a> <a href="examens.html">Examens blancs</a> <a href="jour-j.html">Jour J</a></nav></header><main id="contenu" tabindex="-1" class="corpus-reader"><nav class="breadcrumb" aria-label="Fil d’Ariane"><a href="index.html">Accueil</a> <span aria-hidden="true">›</span> <a href="catalogue.html">Parcours</a> <span aria-hidden="true">›</span> <a href="lot-04.html">Module 04 — Contrôleurs</a> <span aria-hidden="true">›</span> <span aria-current="page">The response</span></nav><h1>The response</h1><p class="muted">Symfony 8.0 · API PHP ≤ 8.4 · Twig ≤ 3.22. Préparation indépendante.</p><p class="revision-status">Rédaction narrative P11 : projection nouvelle, non couverte par les décisions historiques P10. Aucune approbation officielle ni garantie de réussite.</p><aside class="narrative-context" aria-label="Repères de lecture"><p><strong>Prérequis de lecture :</strong> <a href="course-CRS-d5ffd8b704zs.html">Argument value resolvers</a></p><p><strong>Concepts voisins :</strong> <a href="course-CRS-kqq96z5y9r2f.html">Configuration (YAML and PHP attributes)</a> — Retrouver la route avant le callable. <a href="lot-04.html">Comparer les responsabilités dans ce module</a> · <a href="carte-composants.html">Situer cette responsabilité dans le blog</a> · <a href="glossaire.html">Distinguer les termes voisins</a></p><p><a href="ordre-lecture.html">Retrouver les 163 cours dans le parcours recommandé</a>. Ce repère ne modifie ni votre historique ni votre progression.</p></aside><div class="course-layout"><details class="lot-course-menu"><summary>Cours du module · 14 cours</summary><nav aria-label="Cours du module"><a class="lot-context" href="lot-04.html">Module 04 — Contrôleurs</a><ol><li><a href="course-CRS-tygmreqkkds3.html">HttpKernel component and FrameworkBundle</a></li><li><a href="course-CRS-9fz4erg0wmbq.html">Naming conventions</a></li><li><a href="course-CRS-h8s87edcx8ae.html">The base AbstractController class</a></li><li><a href="course-CRS-ea3twt9jcan2.html">The request</a></li><li><a href="course-CRS-a669jpap5zf2.html" aria-current="page">The response</a></li><li><a href="course-CRS-thmkagkjcvh3.html">The cookies</a></li><li><a href="course-CRS-a51fqgqynr2d.html">The session</a></li><li><a href="course-CRS-ak7sdgcdjb7e.html">The flash messages</a></li><li><a href="course-CRS-7zy5ndjgnpk1.html">HTTP redirects</a></li><li><a href="course-CRS-fd24qxy0x1s6.html">Internal redirects</a></li><li><a href="course-CRS-p57qsnnfpd2a.html">Generate 404 pages</a></li><li><a href="course-CRS-5pns7nw7612s.html">File upload</a></li><li><a href="course-CRS-zmg0wrxvqqdq.html">Built-in internal controllers</a></li><li><a href="course-CRS-d5ffd8b704zs.html">Argument value resolvers</a></li></ol><a href="lot-04.html#view-quiz">Quiz du module</a></nav></details><aside class="course-section-menu" aria-label="Sommaire du cours"><nav class="course-actions" aria-label="Activités du cours"><a id="tab-course" href="#view-course">Cours</a><a id="tab-flashcards" href="#view-flashcards">Flashcards</a><a id="tab-quiz" href="#view-quiz">Quiz</a></nav><details class="course-section-disclosure"><summary id="course-sections">Sections du cours</summary><nav aria-label="Sections du cours"><ul><li><a href="#s-objectif">Objectif</a></li><li><a href="#s-l-essentiel">L&#x27;essentiel</a></li><li><a href="#s-le-schema">Le schéma</a></li><li><a href="#s-l-exemple-un-form-deux-issues">L&#x27;exemple : un form, deux issues</a></li><li><a href="#s-la-regle">La règle</a><ul><li><a href="#s-la-regle-nested-pourquoi-une-action-doit-elle-retourner-une-response">Pourquoi une action doit-elle retourner une Response ?</a></li></ul></li><li><a href="#s-rendre-un-template">Rendre un template</a><ul><li><a href="#s-rendre-un-template-nested-le-formulaire-et-le-422-automatique">Le formulaire et le 422 automatique</a></li></ul></li><li><a href="#s-json">JSON</a></li><li><a href="#s-servir-un-file">Servir un file</a></li><li><a href="#s-pieges-d-examen">Pièges d&#x27;examen</a></li><li><a href="#s-application">Application</a></li><li><a href="#s-fiche-express">Fiche express</a></li><li><a href="#s-sources-officielles">Sources officielles</a></li><li><a href="#reader-objectives">Objectifs d’apprentissage</a></li><li><a href="#course-recalls">Rappels et liens avec les autres cours</a></li></ul></nav><nav aria-label="Flashcards par section"><a href="#view-flashcards">Flashcards par section</a><ul><li><a href="#cards-s-l-essentiel-1">L&#x27;essentiel</a></li><li><a href="#cards-s-le-schema-2">Le schéma</a></li><li><a href="#cards-s-l-exemple-un-form-deux-issues-3">L&#x27;exemple : un form, deux issues</a></li><li><a href="#cards-s-la-regle-4">La règle</a></li><li><a href="#cards-s-rendre-un-template-5">Rendre un template</a></li><li><a href="#cards-s-json-6">JSON</a></li><li><a href="#cards-s-servir-un-file-7">Servir un file</a></li><li><a href="#cards-s-pieges-d-examen-8">Pièges d&#x27;examen</a></li><li><a href="#cards-s-application-9">Application</a></li><li><a href="#cards-s-fiche-express-10">Fiche express</a></li><li><a href="#cards-previous">Module 04 — Contrôleurs · Cours « The request » · Rappel : <span lang="en">How does a controller request the current Request object?</span></a></li></ul></nav><nav aria-label="Retour au module"><a href="lot-04.html">Tous les cours du module</a></nav></details><p class="local-quiz-count">5 questions disponibles · 5 par session Quiz</p></aside><div class="course-content"><div id="view-course" data-course-panel role="region" aria-labelledby="view-course-title"><h2 id="view-course-title">Cours</h2><p class="course-introduction"><a href="#s-objectif">Introduction</a> · <a href="#course-sections">Sections du cours</a></p><h2 id="reader-objectives" tabindex="-1">Objectifs d’apprentissage</h2><ul><li><a href="course-CRS-a669jpap5zf2.html#out-OUT-4wrmsr0a1xvb">Énoncer l&#x27;obligation de retourner une Response et ce qui arrive sinon</a></li><li><a href="course-CRS-a669jpap5zf2.html#out-OUT-5ram2kxkc3de">Distinguer render() de renderView() par leur return type</a></li><li><a href="course-CRS-a669jpap5zf2.html#out-OUT-k5603xv7233j">Énoncer le statut retourne par render() avec un form invalide</a></li><li><a href="course-CRS-a669jpap5zf2.html#out-OUT-fy6864mta4ff">Choisir entre json(), file() et stream() selon le cas</a></li><li><a href="course-CRS-a669jpap5zf2.html#out-OUT-d9trsb0jwxp7">Énoncer la disposition par défaut de file()</a></li></ul><aside class="pedagogy-legend" aria-label="Repères pédagogiques"><p><strong>Repères pédagogiques</strong></p><p>Ces repères décrivent le rôle du bloc, pas une fréquence officielle à l’examen.</p><p class="teaching-label essential"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="brain" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5C12 1 6 1 6 5C2 5 1 10 4 12C1 15 3 19 6 19C6 23 12 23 12 19V5M12 5C12 1 18 1 18 5C22 5 23 10 20 12C23 15 21 19 18 19C18 23 12 23 12 19M6 5C6 8 8 9 9 9M4 12H7L9 14M6 19V16M18 5C18 8 16 9 15 9M20 12H17L15 14M18 19V16"></path></svg> <strong>À comprendre</strong></p><p class="teaching-label essential"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="book" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5C9 3 5 3 2 4V20C5 19 9 19 12 21C15 19 19 19 22 20V4C19 3 15 3 12 5V21M5 8H8M5 12H8M16 8H19M16 12H19"></path></svg> <strong>À mémoriser</strong></p><p class="teaching-label example"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="code" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6L2 12L8 18M16 6L22 12L16 18M14 3L10 21"></path></svg> <strong>Exemple concret</strong></p><p class="teaching-label pitfall"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="warning" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3L23 21H1L12 3ZM12 9V14M12 17V18"></path></svg> <strong>Piège à éviter</strong></p><p class="teaching-label nuance"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="balance" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3V21M7 21H17M3 7L21 5M5 7L1 15H9L5 7M19 6L15 14H23L19 6M1 15Q5 20 9 15M15 14Q19 19 23 14"></path></svg> <strong>Nuance à connaître</strong></p><p>Précision, exception ou condition d’application d’une règle.</p></aside><section class="teaching-section" data-section="s-objectif"><h2 id="s-objectif" tabindex="-1">Objectif</h2><p><code>BlogController::show</code> a trouvé l'<code>ArticleView</code> 42 dans <code>ArticleCatalog</code>.
+Il doit maintenant transformer ce résultat applicatif en contenu, statut
+et en-têtes HTTP. Le même article peut alimenter une page HTML ou une
+réponse JSON ; ce sont deux sorties possibles, pas deux opérations obligatoires
+successives.</p>
+<p>Produire la Response depuis un controller, et choisir le bon raccourci. Le
+catalogue des sous-classes de <code>Response</code> et les methods de test de statut
+appartiennent au Module 02 — Fondamentaux HTTP.</p>
+<p>Question fil rouge : <strong>mon action a fini son travail ; que doit-elle rendre à
+Symfony, et quel raccourci d'<code>AbstractController</code> fabrique le bon objet ?</strong></p></section><section class="teaching-section" data-section="s-l-essentiel"><h2 id="s-l-essentiel" tabindex="-1">L&#x27;essentiel</h2><p class="teaching-label essential"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="brain" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5C12 1 6 1 6 5C2 5 1 10 4 12C1 15 3 19 6 19C6 23 12 23 12 19V5M12 5C12 1 18 1 18 5C22 5 23 10 20 12C23 15 21 19 18 19C18 23 12 23 12 19M6 5C6 8 8 9 9 9M4 12H7L9 14M6 19V16M18 5C18 8 16 9 15 9M20 12H17L15 14M18 19V16"></path></svg> <strong>À comprendre</strong></p><aside class="section-digest" id="s-l-essentiel-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Le contrat final exige une Response.</li><li>Une string seule n&#x27;est pas une Response.</li></ol></aside><p><strong>Ce que cette partie veut réellement vous apprendre.</strong></p>
+<ul>
+<li><em>Pourquoi ce sujet existe.</em> Le contrat d'HttpKernel est simple : une action
+  doit rendre une <code>Response</code>. Mais fabriquer une <code>Response</code> à la main est
+  fastidieux ; <code>AbstractController</code> offre des <strong>raccourcis</strong> (<code>render</code>,
+  <code>json</code>, <code>file</code>, <code>stream</code>…) et chacun a un <strong>type de retour</strong> précis.</li>
+<li><em>Le piège de fond.</em> Les noms se ressemblent (<code>render</code> / <code>renderView</code>) mais
+  les retours diffèrent : une <code>Response</code> contre une simple <strong>string</strong>. Retourner
+  la string déclenche <code>kernel.view</code>, qui échoue s'il n'y a pas de listener.</li>
+<li><em>Ce que l'auteur veut que vous compreniez.</em> Que le contrôleur n'« envoie »
+  rien : il <strong>retourne</strong> un objet ; le kernel et le front controller se
+  chargent de la suite. Et que <code>render()</code> fait un travail discret mais
+  important avec les formulaires (422).</li>
+<li><em>Pourquoi c'est à l'examen.</em> Types de retour des helpers, conditions
+  exactes du 422, valeur <code>null</code> de <code>json()</code>, disposition <code>attachment</code> de
+  <code>file()</code>.</li>
+</ul>
+<p>En résumé : un controller retourne une <code>Response</code> ; sinon, <code>kernel.view</code> doit convertir la
+valeur. Les raccourcis d'<code>AbstractController</code> se distinguent par leur return
+type : <code>render()</code> rend une <strong>Response</strong>, <code>renderView()</code> une <strong>string</strong>,
+<code>file()</code> une <code>BinaryFileResponse</code> qui <strong>télécharge</strong> par défaut. Le piège
+central est le <strong>422</strong> automatique, qui exige trois conditions à la fois.</p>
+<p>Les sous-classes de <code>Response</code> et ses méthodes de test de statut sont dans le
+module HTTP ; les redirections (autre type de <code>Response</code>) ont leur cours :
+<a>HTTP redirects</a>. Les helpers appartiennent à
+<a>The base AbstractController class</a>.</p></section><section class="teaching-section" data-section="s-le-schema"><h2 id="s-le-schema" tabindex="-1">Le schéma</h2><aside class="section-digest" id="s-le-schema-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>render() convient au retour du controller.</li><li>renderView() fournit uniquement le contenu.</li></ol></aside><p><strong>Où en est-on ?</strong> Le cours suit quatre étapes : <em>la règle</em> (que doit rendre
+l'action ?), <em>rendre un template</em>, <em>JSON</em>, <em>servir un file</em>. Le premier
+schéma traite l'étape 1 : que devient la valeur retournée ? Le second est un
+guide de choix des raccourcis pour les étapes 2 à 4.</p>
+<pre class="highlight" tabindex="0"><code class="language-text">Le retour d'un controller
+   ├─ 1. La règle            → Response, sinon kernel.view
+   ├─ 2. Rendre un template  → render() / renderView() / stream()
+   ├─ 3. JSON                → json()
+   └─ 4. Servir un file      → file()</code></pre>
+<figure class="diagram" aria-labelledby="CRS-a669jpap5zf2-3-diagram-0-title CRS-a669jpap5zf2-3-diagram-0-description"><figcaption id="CRS-a669jpap5zf2-3-diagram-0-title">Le retour d&#x27;un controller</figcaption><p id="CRS-a669jpap5zf2-3-diagram-0-description">HttpKernel accepte une Response ou demande aux listeners kernel.view de convertir le retour. Sans conversion, il échoue. Une réponse valide passe ensuite par kernel.response ; son envoi relève d&#x27;une étape ultérieure.</p><div class="mermaid" hidden>---
+title: Ce que devient la valeur rendue
+---
+flowchart TD
+  accTitle: Le retour d&#x27;un controller
+  accDescr: HttpKernel accepte une Response ou demande aux listeners kernel.view de convertir le retour. Sans conversion, il échoue. Une réponse valide passe ensuite par kernel.response ; son envoi relève d&#x27;une étape ultérieure.
+  RT{&quot;Retour du contrôleur&quot;} --&gt;|&quot;Response&quot;| SE[&quot;kernel.response&quot;]
+  RT --&gt;|&quot;autre valeur&quot;| KV[&quot;kernel.view&quot;]
+  KV --&gt;|&quot;Response fournie&quot;| SE
+  KV --&gt;|&quot;aucune Response&quot;| E([&quot;Erreur&quot;])
+  SE --&gt;|&quot;retour au code appelant&quot;| R([&quot;Response à envoyer&quot;])
+  classDef operation fill:#e0f2fe,stroke:#0369a1,color:#0c4a6e
+  classDef decision fill:#fef3c7,stroke:#b45309,color:#78350f
+  class RT decision
+  class SE,KV,R operation</div></figure>
+<p><strong>Où en est-on ?</strong> Une fois la règle comprise, le second schéma sert de
+carte : selon la donnée à produire (template, JSON, fichier), quel helper
+choisir et que se passe-t-il pour les formulaires.</p>
+<figure class="diagram" aria-labelledby="CRS-a669jpap5zf2-3-diagram-1-title CRS-a669jpap5zf2-3-diagram-1-description"><figcaption id="CRS-a669jpap5zf2-3-diagram-1-title">render, json et file dans AbstractController</figcaption><p id="CRS-a669jpap5zf2-3-diagram-1-description">Choisir le type de sortie : string pour renderView et renderBlockView, Response pour render et renderBlock, StreamedResponse pour stream, JSON ou fichier pour les helpers dédiés. La Response facultative est le troisième argument de render mais le quatrième de renderBlock. Seuls les rendus concernés convertissent directement les paramètres FormInterface et peuvent promouvoir un statut 200 en 422.</p><div class="mermaid" hidden>---
+title: Les raccourcis qui fabriquent la Response
+---
+flowchart TD
+  accTitle: render, json et file dans AbstractController
+  accDescr: Choisir le type de sortie : string pour renderView et renderBlockView, Response pour render et renderBlock, StreamedResponse pour stream, JSON ou fichier pour les helpers dédiés. La Response facultative est le troisième argument de render mais le quatrième de renderBlock. Seuls les rendus concernés convertissent directement les paramètres FormInterface et peuvent promouvoir un statut 200 en 422.
+  SH{&quot;Donnée à produire ?&quot;} --&gt;|&quot;template&quot;| RE[&quot;render : contenu Twig&quot;]
+  RE --&gt;|&quot;FormInterface soumis invalide et statut 200&quot;| FM[&quot;Response 422&quot;]
+  RE --&gt;|&quot;autres cas&quot;| OK[&quot;Response : statut conservé&quot;]
+  SH --&gt;|&quot;données JSON&quot;| JS[&quot;json : JsonResponse&quot;]
+  SH --&gt;|&quot;fichier&quot;| FI[&quot;file : BinaryFileResponse&quot;]
+  classDef choice fill:#fef3c7,stroke:#b45309,color:#78350f
+  classDef result fill:#e0f2fe,stroke:#0369a1,color:#0c4a6e
+  class SH choice
+  class RE,FM,OK,JS,FI result</div></figure>
+<p>Ambre = décision ; bleu = traitement ou résultat. Ces helpers construisent
+des réponses : ils ne garantissent pas un envoi immédiat. <code>stream()</code> diffère
+le rendu jusqu'à l'exécution de son callback ; il ne suit pas la conversion
+automatique des formulaires ni le contrôle 422 de <code>render()</code>.
+La réponse facultative est le troisième argument de <code>render()</code>, mais le
+<strong>quatrième</strong> de <code>renderBlock(view, block, parameters, response)</code>.</p></section><section class="teaching-section" data-section="s-l-exemple-un-form-deux-issues"><h2 id="s-l-exemple-un-form-deux-issues" tabindex="-1">L&#x27;exemple : un form, deux issues</h2><p class="teaching-label example"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="code" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6L2 12L8 18M16 6L22 12L16 18M14 3L10 21"></path></svg> <strong>Exemple concret</strong></p><aside class="section-digest" id="s-l-exemple-un-form-deux-issues-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Un form non soumis ne déclenche pas 422.</li><li>Un statut explicite n&#x27;est pas remplacé par cette règle.</li></ol></aside><p><strong>Où en est-on ?</strong> Avant la règle, un exemple concret qui concentre le piège
+le plus testé (le 422) : une action de saisie qui peut <strong>rediriger</strong> ou
+<strong>réafficher</strong>.</p>
+<p>Quittons provisoirement la lecture de l'article pour la saisie d'un billet.
+Le formulaire n'appartient pas au trajet obligatoire de <code>/blog/42</code> :
+il existe parce que cette action de création le construit et lui présente
+la Request. Le premier affichage ne signifie pas soumission ; après un POST,
+le résultat de la validation décide entre redirection et réaffichage.</p>
+<pre class="highlight" tabindex="0"><code class="language-php">public function new(Request $request): Response
+{
+    $form = $this-&gt;createForm(PostType::class)-&gt;handleRequest($request);
+    if ($form-&gt;isSubmitted() &amp;&amp; $form-&gt;isValid()) {
+        // … enregistrement
+        return $this-&gt;redirectToRoute('post_index');
+    }
+
+    // 200 au premier affichage, 422 si soumis et invalide
+    return $this-&gt;render('post/new.html.twig', ['form' =&gt; $form]);
+}</code></pre>
+<p>Les trois issues possibles de cette action :</p>
+<pre class="highlight" tabindex="0"><code class="language-text">GET  /post/new                    → form non soumis          → render → 200
+POST /post/new  (données valides) → redirectToRoute          → 302
+POST /post/new  (données fausses) → soumis ET invalide       → render → 422</code></pre>
+<p>Pourquoi un 422 et pas un 200 au réaffichage ? Le client (navigateur
+moderne, Turbo, <code>fetch</code>…) doit pouvoir distinguer « page affichée » de
+« soumission refusée » ; 422 (« Unprocessable Entity ») dit : le contenu est
+bien formé mais inacceptable.</p>
+<div class="admonition info">
+<p class="admonition-title">🌍 In Real Life</p>
+<p><strong>La situation</strong> : l’auteur du blog reçoit une fiche vierge pour proposer un billet. Une fiche affichée n’est pas encore déposée ; une fiche déposée avec des erreurs doit revenir pour correction.</p>
+<p><strong>L’équivalent dans Symfony</strong> : fiche construite → <code>createForm()</code> ; réception des données → <code>handleRequest()</code> ; dépôt et contrôle → <code>isSubmitted()</code> puis <code>isValid()</code> ; orientation après réussite → réponse de redirection.</p>
+<p><strong>Retour à la réalité technique</strong> : cette action de saisie est une branche distincte de la lecture de <code>/blog/42</code>, comme l’inscription du lecteur. Le réaffichage utilise ici <code>render()</code> avec le <code>FormInterface</code> direct et une réponse initialement 200 ; soumis et invalide, il permet le passage à 422. L’enregistrement métier reste à implémenter.</p>
+<p><strong>🧠 Comment le mémoriser</strong> : « Afficher n’est pas déposer ; déposer n’est pas réussir. » Image mentale : fiche vierge, fiche remise, fiche annotée. Question-réflexe : « Le formulaire est-il soumis, valide, et quel helper construit la réponse ? »</p>
+<p><strong>⚠️ À ne pas confondre</strong> : un formulaire valide n’enregistre pas automatiquement le billet.</p>
+</div></section><section class="teaching-section" data-section="s-la-regle"><span class="outcome-anchor" id="out-OUT-4wrmsr0a1xvb" tabindex="-1"></span><h2 id="s-la-regle" tabindex="-1">La règle</h2><p><strong>Où en est-on ?</strong> Étape 1 sur 4 : <em>que doit rendre l'action ?</em> C'est le contrat
+qui explique tout le reste : si le helper produit une <code>Response</code>, rien d'autre
+à faire.</p>
+<h3 tabindex="-1" id="s-la-regle-nested-pourquoi-une-action-doit-elle-retourner-une-response">Pourquoi une action doit-elle retourner une Response ?</h3>
+<p>Parce que <code>HttpKernel::handle()</code> doit retourner une <code>Response</code> à son
+appelant (le front controller), qui l'enverra. L'action est le maillon qui la
+fournit.</p>
+<p>Dans la branche HTML, retourner <code>$this-&gt;render('blog/show.html.twig', ...)</code>
+fournit directement la Response : HttpKernel saute alors <code>kernel.view</code>.
+Retourner seulement un <code>ArticleView</code> ou une string ne choisit pas
+automatiquement un template ou du JSON. Un listener de <code>kernel.view</code>
+doit explicitement prendre en charge cette autre valeur.</p>
+<p>Un controller doit retourner un object <code>Response</code>. S'il retourne autre chose,
+l'event <code>kernel.view</code> est dispatché pour convertir la valeur ; sans listener
+capable de le faire, la Request échoue.</p>
+<p>Une réponse obtenue suit normalement <code>kernel.response</code>, puis
+<code>kernel.finish_request</code>, avant le retour de <code>handle()</code> et le dépilement
+de la Request. L'appelant l'envoie ensuite ; la terminaison est un appel
+séparé. Si la conversion échoue, le chemin d'exception applicable remplace
+cette suite nominale : tous les événements ne sont pas garantis.</p>
+<pre class="highlight" tabindex="0"><code class="language-text">action retourne ──► Response ?  oui ──► kernel.response ──► kernel.finish_request
+                        │                                         │
+                        non                                       ▼
+                        ▼                              handle() rend la Response
+                  kernel.view (un listener convertit ?)     │
+                     oui │   non                            ▼
+                         │    └──► exception            le front controller
+                         └──► Response ───────────────►  send() puis terminate()</code></pre>
+<p>Ce chemin est celui du module Architecture (HttpKernel) : voir
+<a>HttpKernel component and FrameworkBundle</a> pour le détail
+des événements.</p>
+<div class="admonition info">
+<p class="admonition-title">🌍 In Real Life</p>
+<p><strong>La situation</strong> : le poste remet au responsable un résultat préparé. S’il ne remet qu’un élément brut, une étape supplémentaire doit le rendre présentable ; quelqu’un doit encore le transmettre au client.</p>
+<p><strong>L’équivalent dans Symfony</strong> : résultat préparé → <code>Response</code> retournée ; élément brut → autre valeur de retour ; adaptation éventuelle → listener de <code>kernel.view</code> ; transmission → appel d’envoi par l’entrée HTTP.</p>
+<p><strong>Retour à la réalité technique</strong> : une <code>Response</code> saute <code>kernel.view</code>. Sinon, sans listener produisant une réponse, le traitement échoue. <code>handle()</code> retourne l’objet après le chemin de filtrage applicable ; il n’appelle pas automatiquement <code>send()</code> ni <code>terminate()</code>. Les erreurs peuvent interrompre ce chemin.</p>
+<p><strong>🧠 Comment le mémoriser</strong> : « Prêt à remettre n’est pas déjà remis. » Image mentale : résultat au passe avant son départ vers la salle. Question-réflexe : « Suis-je au retour PHP ou à l’émission HTTP ? »</p>
+<p><strong>⚠️ À ne pas confondre</strong> : <code>kernel.view</code> est une branche conditionnelle, pas le passage obligatoire de tout rendu Twig.</p>
+</div><aside class="enrichment" aria-label="Autre explication"><p>Le controller prépare une enveloppe de sortie : JsonResponse pour des données JSON, BinaryFileResponse pour un file, StreamedResponse pour un contenu produit progressivement. Le kernel reste chargé d'obtenir une Response exploitable.</p></aside><div class="retained-answer-context">
+<p><strong>Repère — JSON :</strong></p>
+<p lang="en"><strong>Question:</strong> What does the json() controller helper return?</p>
+<p lang="en"><strong>Answer:</strong> A JsonResponse, using the Serializer when available.</p>
+<p>json() produit une Response JSON. Sans Serializer, le helper utilise l'encodage JSON natif.</p>
+</div></section><section class="teaching-section" data-section="s-rendre-un-template"><span class="outcome-anchor" id="out-OUT-5ram2kxkc3de" tabindex="-1"></span><span class="outcome-anchor" id="out-OUT-k5603xv7233j" tabindex="-1"></span><h2 id="s-rendre-un-template" tabindex="-1">Rendre un template</h2><aside class="section-digest" id="s-rendre-un-template-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>render() convient au retour du controller.</li><li>renderView() fournit uniquement le contenu.</li><li>Un form non soumis ne déclenche pas 422.</li><li>Un statut explicite n&#x27;est pas remplacé par cette règle.</li></ol></aside><p><strong>Où en est-on ?</strong> Étape 2 sur 4 : <em>produire du HTML avec Twig.</em> Pourquoi
+trois helpers ? Parce que l'on veut parfois seulement le <strong>texte</strong> (corps d'un
+email), parfois la <strong>Response</strong> complète, parfois un rendu <strong>au fil de l'eau</strong>.</p>
+<p>Pour l'article 42, Twig reçoit l'objet comme donnée de template et produit
+du texte ; le helper <code>render()</code> place ce texte dans une Response. Un appel
+à <code>renderView()</code> s'arrête au texte, utile pour le corps d'un email mais
+insuffisant comme retour HTTP sans conversion. L'échappement Twig protège
+la sortie selon son contexte ; il ne valide pas les données ni les droits
+du lecteur.</p>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Retourne</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>render()</code>, <code>renderBlock()</code></td>
+<td>un object <code>Response</code></td>
+</tr>
+<tr>
+<td><code>renderView()</code>, <code>renderBlockView()</code></td>
+<td>une <strong>string</strong></td>
+</tr>
+<tr>
+<td><code>stream()</code></td>
+<td>une <code>StreamedResponse</code>, envoyée au fil du rendu</td>
+</tr>
+</tbody>
+</table>
+<p>Vérifié dans <code>AbstractController</code> (8.0) : <code>render(string $view, array
+$parameters = [], ?Response $response = null): Response</code>,
+<code>renderBlock(string $view, string $block, array $parameters = [], ?Response
+$response = null): Response</code>, <code>renderView(...)</code>: <code>string</code>, <code>stream(string $view,
+array $parameters = [], ?StreamedResponse $response = null)</code>:
+<code>StreamedResponse</code>. Toutes ces méthodes sont <code>protected</code>.</p>
+<p>Le troisième argument de <code>render()</code> est une <code>Response</code> déjà construite, dont il
+remplit le contenu : c'est ainsi qu'on impose un autre statut. Sans le bundle
+Twig, ces methods lèvent une <code>LogicException</code> qui nomme la method appelée et le
+package à installer.</p>
+<h3 tabindex="-1" id="s-rendre-un-template-nested-le-formulaire-et-le-422-automatique">Le formulaire et le 422 automatique</h3>
+<p><strong>Un form est converti pour vous par les helpers de rendu concernés,
+pas par <code>stream()</code>.</strong> Chaque parameter direct <code>FormInterface</code> est
+remplacé par son <code>createView()</code> avant le rendu : l'appeler à la main est
+redondant, pas faux.</p>
+<p><strong>Le 422 automatique tient à trois conditions</strong> : la Response est encore en
+<strong>200</strong>, un parameter est un <code>FormInterface</code>, et ce form est <strong>soumis et
+invalide</strong>. Un statut autre que 200 est conservé ; un form jamais soumis laisse le
+200. <code>renderBlock()</code> suit la même règle.</p>
+<p>Pourquoi trois conditions ? Chacune écarte un cas où promouvoir en 422 serait
+faux :</p>
+<pre class="highlight" tabindex="0"><code class="language-text">Condition                              Si elle manque…
+───────────────────────────────────────────────────────────────────────────
+1. statut encore 200                   vous avez choisi un statut : conservé
+2. paramètre de type FormInterface     une FormView passée à la main : aucun
+                                       contrôle possible (la validité est perdue)
+3. formulaire soumis ET invalide       jamais soumis → 200 ; valide → 200</code></pre>
+<p>Comparaison utile : pourquoi <code>stream()</code> n'a pas ce mécanisme ? Parce que le
+rendu y est <strong>différé</strong> : le template n'est exécuté qu'au moment de l'envoi
+(dans le callback), donc trop tard pour modifier le statut.</p>
+<pre class="highlight" tabindex="0"><code class="language-text">┌──────────────────────────────────────┐ ┌──────────────────────────────────────┐
+│     render() / renderBlock()         │ │              stream()                │
+├──────────────────────────────────────┤ ├──────────────────────────────────────┤
+│ Rend le template : TOUT DE SUITE     │ │ Rend le template : à l'envoi         │
+│ Retour : Response                    │ │ Retour : StreamedResponse            │
+│ FormInterface → createView() auto    │ │ pas de conversion de formulaire      │
+│ 422 si form soumis et invalide       │ │ pas de contrôle 422                  │
+└──────────────────────────────────────┘ └──────────────────────────────────────┘</code></pre>
+<div class="admonition info">
+<p class="admonition-title">🌍 In Real Life</p>
+<p><strong>La situation</strong> : rédiger le texte d’une lettre ne prépare pas encore son enveloppe. Une réponse complète ajoute les informations nécessaires à sa remise.</p>
+<p><strong>L’équivalent dans Symfony</strong> : texte seul → <code>renderView()</code> ou <code>renderBlockView()</code> ; texte avec enveloppe HTTP → <code>render()</code> ou <code>renderBlock()</code> ; production différée du texte → callback de la <code>StreamedResponse</code> de <code>stream()</code>.</p>
+<p><strong>Retour à la réalité technique</strong> : la <code>Response</code> porte contenu, statut et headers. Dans les rendus concernés, un <code>FormInterface</code> direct, soumis et invalide, fait passer une réponse encore 200 à 422 ; une simple <code>FormView</code> ne donne pas ce même contrôle. <code>stream()</code> ne reprend pas ce mécanisme.</p>
+<p><strong>🧠 Comment le mémoriser</strong> : « Le texte n’est pas l’enveloppe. » Image mentale : feuille seule, puis enveloppe étiquetée. Question-réflexe : « Mon destinataire attend-il une string ou une Response, et le helper voit-il encore le FormInterface ? »</p>
+<p><strong>⚠️ À ne pas confondre</strong> : échappement de sortie, validation des données et autorisation du lecteur répondent à trois questions différentes.</p>
+</div></section><section class="teaching-section" data-section="s-json"><h2 id="s-json" tabindex="-1">JSON</h2><aside class="section-digest" id="s-json-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>json() produit une Response JSON.</li><li>Sans Serializer, le helper utilise l&#x27;encodage JSON natif.</li></ol></aside><p><strong>Où en est-on ?</strong> Étape 3 sur 4 : <em>répondre à une autre application plutôt
+qu'à un lecteur.</em> Ici, pas de template : des <strong>données</strong> à encoder.</p>
+<p>Sur la branche <code>/api/blog/42</code>, sélectionne les données publiques de
+l'article avant de produire le JSON. Avec Serializer configuré, le contexte
+contrôle cette représentation ; ni la normalisation ni l'encodage
+n'accordent une autorisation et ne remplacent la validation d'une saisie.
+Un tableau de données donné à <code>json()</code> n'est pas une string déjà encodée :
+évite de l'encoder une seconde fois.</p>
+<p><code>json()</code> retourne une <code>JsonResponse</code>. Avec le Serializer, le contexte est
+fusionné par-dessus les options d'encoding par défaut : c'est par lui qu'on les
+change. Sans Serializer, <code>json_encode</code> sert, et une donnée <code>null</code> donne la
+string <code>null</code>.</p>
+<p>Vérifié dans <code>AbstractController::json()</code> (8.0) : avec le service <code>serializer</code>,
+le résultat est <code>serialize($data, 'json', array_merge(['json_encode_options' =&gt;
+JsonResponse::DEFAULT_ENCODING_OPTIONS], $context))</code> puis
+<code>new JsonResponse($json, $status, $headers, true)</code> — le <code>true</code> signifie « déjà
+encodé ». Sans Serializer : si <code>$data === null</code>, <code>new JsonResponse('null', …,
+true)</code> ; sinon <code>new JsonResponse($data, …)</code>.</p>
+<pre class="highlight" tabindex="0"><code class="language-text">json($data)
+   │
+   ├─ Serializer présent ? ── oui ─► serialize(..., contexte fusionné)
+   │                                 └─► JsonResponse(string, déjà encodé)
+   │
+   └─ non ─► $data === null ?
+                ├─ oui ─► JsonResponse('null', déjà encodé)   → body : null
+                └─ non ─► JsonResponse($data)   → json_encode par la Response</code></pre>
+<p>Pourquoi le cas <code>null</code> est-il traité à part ? Une <code>JsonResponse</code> construite
+avec <code>null</code> est remplacée par un objet vide <code>{}</code> ; le helper veut que
+<code>json(null)</code> produise réellement <code>null</code> (voir Question 2).</p>
+<div class="admonition info">
+<p class="admonition-title">🌍 In Real Life</p>
+<p><strong>La situation</strong> : le blog remet la fiche publique du billet dans un format lisible par une autre application, plutôt que dans une mise en page destinée au lecteur.</p>
+<p><strong>L’équivalent dans Symfony</strong> : sélection de la fiche publique → choix des données et du contexte ; conversion en représentation transportable → Serializer configuré ; réponse à l’autre application → <code>JsonResponse</code> retournée par <code>json()</code>.</p>
+<p><strong>Retour à la réalité technique</strong> : HTML et JSON sont deux sorties possibles. Le helper dispose d’un repli sans Serializer ; cela ne lui donne pas les mêmes capacités de normalisation d’objets. Fournir une string JSON comme donnée risque de l’encoder comme une string, au lieu de produire la structure attendue.</p>
+<p><strong>🧠 Comment le mémoriser</strong> : « Une représentation, un encodage. » Image mentale : fiche publique exportée une seule fois. Question-réflexe : « Ai-je des données à encoder ou du JSON déjà encodé ? »</p>
+<p><strong>⚠️ À ne pas confondre</strong> : choisir les champs exposés n’autorise pas à lui seul l’accès à l’article ; sérialiser ne valide pas une inscription.</p>
+</div></section><section class="teaching-section" data-section="s-servir-un-file"><span class="outcome-anchor" id="out-OUT-fy6864mta4ff" tabindex="-1"></span><span class="outcome-anchor" id="out-OUT-d9trsb0jwxp7" tabindex="-1"></span><h2 id="s-servir-un-file" tabindex="-1">Servir un file</h2><aside class="section-digest" id="s-servir-un-file-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>file() produit une BinaryFileResponse.</li><li>Le nom présenté au client peut différer du nom sur disque.</li></ol></aside><p><strong>Où en est-on ?</strong> Étape 4 sur 4 : <em>remettre un fichier existant.</em> Pas de
+rendu : un <strong>chemin sur disque</strong> à transformer en <code>Response</code>.</p>
+<p>Si le blog propose une annexe PDF, l'action dispose cette fois d'un chemin
+de fichier autorisé, pas d'un template à rendre. Le helper prépare une
+réponse de fichier ; ne transmets pas directement un chemin arbitraire
+fourni par le client. Le nom proposé au téléchargement et le chemin réel
+sur disque remplissent deux rôles distincts.</p>
+<p><code>file()</code> retourne une <code>BinaryFileResponse</code> en disposition <code>attachment</code> : le
+navigateur télécharge. Pour afficher dans la page, il faut
+<code>ResponseHeaderBag::DISPOSITION_INLINE</code>. Le deuxième argument renomme le file
+vu par le user ; omis, c'est le nom réel sur disque. Le header de disposition
+est écrit dans tous les cas.</p>
+<p>Signature vérifiée (8.0) : <code>file(\SplFileInfo|string $file, ?string $fileName =
+null, string $disposition = ResponseHeaderBag::DISPOSITION_ATTACHMENT):
+BinaryFileResponse</code>.</p>
+<pre class="highlight" tabindex="0"><code class="language-text">file('/var/data/f81c.pdf')
+   → attachment; filename="f81c.pdf"      (téléchargement)
+
+file('/var/data/f81c.pdf', 'annexe.pdf')
+   → attachment; filename="annexe.pdf"    (renommé pour l'utilisateur)
+
+file('/var/data/f81c.pdf', null, ResponseHeaderBag::DISPOSITION_INLINE)
+   → inline; filename="f81c.pdf"          (affiché dans la page)
+(valeurs du header Content-Disposition)</code></pre>
+<p>Le chemin réel (premier argument) et le nom présenté (deuxième argument) sont
+deux informations distinctes : le renommage ne touche pas le fichier source. Un
+téléversement, en sens inverse, est traité dans <a>File upload</a>.</p>
+<div class="admonition info">
+<p class="admonition-title">🌍 In Real Life</p>
+<p><strong>La situation</strong> : le service documentaire du blog remet une annexe PDF. Son emplacement dans les archives et le titre imprimé sur la copie ne sont pas la même information.</p>
+<p><strong>L’équivalent dans Symfony</strong> : emplacement d’archive → chemin de fichier fiable ; titre de la copie → nom proposé au téléchargement ; consigne de remise → <code>Content-Disposition</code>, <code>attachment</code> par défaut avec <code>file()</code>.</p>
+<p><strong>Retour à la réalité technique</strong> : le helper retourne une <code>BinaryFileResponse</code>, sans envoyer immédiatement le fichier. <code>inline</code> demande une présentation intégrée, selon les capacités du client ; ce n’est ni une autorisation d’accès ni une garantie d’affichage. Changer le nom téléchargé ne renomme pas le fichier source.</p>
+<p><strong>🧠 Comment le mémoriser</strong> : « Où il est stocké, comment il est remis. » Image mentale : cote d’archive cachée et titre public sur la copie. Question-réflexe : « Ce paramètre désigne-t-il le fichier réel ou son nom de présentation ? »</p>
+<p><strong>⚠️ À ne pas confondre</strong> : accepter un nom de téléchargement ne justifie jamais d’ouvrir un chemin arbitraire fourni par le client.</p>
+</div></section><section class="teaching-section" data-section="s-pieges-d-examen"><h2 id="s-pieges-d-examen" tabindex="-1">Pièges d&#x27;examen</h2><p class="teaching-label pitfall"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="warning" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3L23 21H1L12 3ZM12 9V14M12 17V18"></path></svg> <strong>Piège à éviter</strong></p><ul class="pitfall-list"><li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : Deux methods de rendu, deux return types.</summary><p><strong>Deux methods de rendu, deux return types.</strong> L'une retourne une <code>Response</code>
+prête à être retournée par le controller, l'autre une simple string. Retourner
+la string depuis un controller déclenche <code>kernel.view</code>, et sans listener pour
+la convertir, la Request échoue. <em>Pourquoi on se trompe : les deux noms
+(<code>render</code>, <code>renderView</code>) sont presque identiques et produisent le même HTML.</em></p></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : Le 422 n&#x27;est pas inconditionnel.</summary><p><strong>Le 422 n'est pas inconditionnel.</strong> Il faut un statut encore à 200, un
+parameter <code>FormInterface</code>, et un form <strong>soumis</strong> <em>et</em> invalide. Un statut
+autre que 200 est conservé ; un form non soumis ne déclenche rien. <em>Pourquoi on
+se trompe : « formulaire invalide → 422 » est retenu sans les deux autres
+conditions.</em></p></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : Servir un file télécharge par défaut.</summary><p><strong>Servir un file télécharge par défaut.</strong> L'affichage dans la page demande de
+changer explicitement la disposition. <em>Pourquoi on se trompe : on imagine qu'un
+PDF « s'affiche » naturellement.</em></p></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : Sans Twig, le rendu lève.</summary><p><strong>Sans Twig, le rendu lève.</strong> La <code>LogicException</code> nomme la method et le package
+manquant ; ce n'est pas une Response vide. <em>Pourquoi on se trompe : on suppose
+une dégradation silencieuse.</em></p></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : json(null) ne donne pas {}.</summary><p><strong><code>json(null)</code> ne donne pas <code>{}</code>.</strong> Sans Serializer, le helper passe la string
+<code>null</code> déjà encodée. <em>Pourquoi on se trompe : <code>new JsonResponse(null)</code> donne
+<code>{}</code>, d'où l'idée que le helper fait de même.</em></p></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : Le contrôleur n&#x27;envoie rien.</summary><p><strong>Le contrôleur n'envoie rien.</strong> Il retourne une <code>Response</code> ; l'envoi
+(<code>send()</code>) puis <code>terminate()</code> sont faits par l'appelant. <em>Pourquoi on se
+trompe : « renvoyer une réponse » est lu comme « l'envoyer ».</em></p></details></li></ul></section><section class="teaching-section" data-section="s-application"><h2 id="s-application" tabindex="-1">Application</h2>
+
+
+
+</section><section class="teaching-section" data-section="s-fiche-express"><h2 id="s-fiche-express" tabindex="-1">Fiche express</h2><p class="teaching-label essential"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="book" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5C9 3 5 3 2 4V20C5 19 9 19 12 21C15 19 19 19 22 20V4C19 3 15 3 12 5V21M5 8H8M5 12H8M16 8H19M16 12H19"></path></svg> <strong>À mémoriser</strong></p><p><strong>🧠 À retenir pour la certification :</strong></p>
+<ul>
+<li>Retourner une <code>Response</code>, sinon <strong><code>kernel.view</code></strong> doit convertir.</li>
+<li><code>render()</code> → <strong>Response</strong>, <code>renderView()</code> → <strong>string</strong>.</li>
+<li>Form en parameter : <strong><code>createView()</code></strong> automatique.</li>
+<li>422 : statut <strong>200</strong> + <code>FormInterface</code> + <strong>soumis et invalide</strong> ; un statut autre que 200 est conservé.</li>
+<li><code>json()</code> : Serializer si présent, contexte = <strong>options d'encoding</strong> ; <code>null</code> → <code>null</code>.</li>
+<li><code>file()</code> : <strong>attachment</strong> par défaut, <code>DISPOSITION_INLINE</code> pour afficher.</li>
+</ul>
+<p>Moyen mnémotechnique : <strong>« View, c'est la vue seule : une string »</strong>.</p>
+<p>Phrase de mémorisation complète : <strong>« L'action retourne une <code>Response</code> — <code>render</code>
+l'habille, <code>renderView</code> ne rend que la string, <code>json</code> et <code>file</code> fabriquent la
+leur — et le 422 n'arrive que pour un <code>FormInterface</code> soumis, invalide, sur un
+200. »</strong></p></section><section class="teaching-section" data-section="s-sources-officielles"><h2 id="s-sources-officielles" tabindex="-1">Sources officielles</h2><ul>
+<li><a href="https://symfony.com/doc/8.0/reference/configuration/framework.html">AbstractController, branche 8.0</a></li>
+<li><a href="https://symfony.com/doc/8.0/controller.html">Controller, « Returning JSON Response »</a></li>
+</ul></section><section id="course-recalls" aria-labelledby="course-recalls-title" tabindex="-1"><h2 id="course-recalls-title">Rappels et liens avec les autres cours</h2><div data-recall-group="current"><h3>Rappels du cours actuel</h3><ul><li data-recall-course="CRS-a669jpap5zf2" data-recall-kind="digest_reference"><p class="recall-provenance">Module 04 — Contrôleurs · Cours « The response »</p><p class="digest-reference"><a href="#s-l-essentiel-digest">Revoir la règle : Le contrat final exige une Response.</a></p></li><li data-recall-course="CRS-a669jpap5zf2" data-recall-kind="digest_reference"><p class="recall-provenance">Module 04 — Contrôleurs · Cours « The response »</p><p class="digest-reference"><a href="#s-l-exemple-un-form-deux-issues-digest">Revoir la règle : Un form non soumis ne déclenche pas 422.</a></p></li><li data-recall-course="CRS-a669jpap5zf2" data-recall-kind="digest_reference"><p class="recall-provenance">Module 04 — Contrôleurs · Cours « The response »</p><p class="digest-reference"><a href="#s-rendre-un-template-digest">Revoir la règle : render() convient au retour du controller.</a></p></li><li><nav aria-label="Flashcards de l’application"><ul><li data-recall-course="CRS-a669jpap5zf2" data-recall-kind="application"><p class="recall-provenance">Module 04 — Contrôleurs · Cours « The response »</p><a href="#A-a669jpap5zf2-6e0103f6cc-02">Flashcard : render() convient au retour du controller. renderView() fournit uniquement le contenu.</a></li><li data-recall-course="CRS-a669jpap5zf2" data-recall-kind="application"><p class="recall-provenance">Module 04 — Contrôleurs · Cours « The response »</p><a href="#A-a669jpap5zf2-e43044db2c-03">Flashcard : Un form non soumis ne déclenche pas 422. Un statut explicite n&#x27;est pas remplacé par cette règle.</a></li></ul></nav></li></ul></div><div data-recall-group="other"><h3>Rappels des cours précédents / autres modules</h3><ul><li data-recall-course="CRS-ea3twt9jcan2" data-recall-kind="previous_course"><p class="recall-provenance">Module 04 — Contrôleurs · Cours « The request »</p><p>Le type déclenche le resolver. Dans un service durable, utiliser RequestStack.</p><p><a href="#cards-previous">Rappel : <span lang="en">How does a controller request the current Request object?</span></a></p></li></ul></div></section><nav class="course-sequence" aria-label="Ordre de lecture"><a rel="prev" href="course-CRS-d5ffd8b704zs.html" aria-label="Précédent : Argument value resolvers — Module 04 — Contrôleurs">Précédent : Argument value resolvers</a> <a href="lot-04.html">Sommaire : Module 04 — Contrôleurs</a> <a rel="next" href="course-CRS-h8s87edcx8ae.html" aria-label="Suivant : The base AbstractController class — Module 04 — Contrôleurs">Suivant : The base AbstractController class</a></nav><p class="course-practice-entry"><a class="button" href="#view-quiz">Fin du cours — s’entraîner avec le Quiz</a></p></div><div id="view-flashcards" data-course-panel role="region" aria-labelledby="view-flashcards-title"><h2 id="view-flashcards-title">Flashcards</h2><p lang="en">Answer before revealing each card.</p><p>Ces cartes ne mesurent pas une maîtrise notée.</p><div id="cards-s-l-essentiel-1" data-card-section="s-l-essentiel"><h3><a href="#s-l-essentiel">Revoir : L&#x27;essentiel</a></h3><div class="reader-cards"><details class="reader-card" id="A-a669jpap5zf2-65c42c80d9-01"><summary lang="en">What happens if a controller returns a string instead of a Response?</summary><p lang="en">kernel.view gets an opportunity to convert it; otherwise handling fails.</p><p lang="fr">Le contrat final exige une Response. Une string seule n&#x27;est pas une Response.</p><a href="course-CRS-a669jpap5zf2.html#out-OUT-4wrmsr0a1xvb">Revoir le passage précis</a></details></div></div><div id="cards-s-le-schema-2" data-card-section="s-le-schema"><h3><a href="#s-le-schema">Revoir : Le schéma</a></h3><div class="reader-cards"><details class="reader-card" id="A-a669jpap5zf2-6e0103f6cc-02"><summary lang="en">How do render() and renderView() differ?</summary><p lang="en">render() returns a Response; renderView() returns a string.</p><p lang="fr">render() convient au retour du controller. renderView() fournit uniquement le contenu.</p><a href="course-CRS-a669jpap5zf2.html#out-OUT-5ram2kxkc3de">Revoir le passage précis</a></details></div></div><div id="cards-s-l-exemple-un-form-deux-issues-3" data-card-section="s-l-exemple-un-form-deux-issues"><h3><a href="#s-l-exemple-un-form-deux-issues">Revoir : L&#x27;exemple : un form, deux issues</a></h3><div class="reader-cards"><details class="reader-card" id="A-a669jpap5zf2-e43044db2c-03"><summary lang="en">When does rendering a form automatically select status 422?</summary><p lang="en">When the response is still 200 and a FormInterface parameter is submitted and invalid.</p><p lang="fr">Un form non soumis ne déclenche pas 422. Un statut explicite n&#x27;est pas remplacé par cette règle.</p><a href="course-CRS-a669jpap5zf2.html#out-OUT-5ram2kxkc3de">Revoir le passage précis</a></details></div></div><div id="cards-s-la-regle-4" data-card-section="s-la-regle"><h3><a href="#s-la-regle">Revoir : La règle</a></h3><div class="reader-cards"><p class="reader-card-reference" id="A-a669jpap5zf2-c8fc659d4e-01">Rappel déjà proposé : <a lang="en" href="#A-a669jpap5zf2-65c42c80d9-01">What happens if a controller returns a string instead of a Response?</a> · <a href="course-CRS-a669jpap5zf2.html#out-OUT-4wrmsr0a1xvb">Passage canonique</a></p></div></div><div id="cards-s-rendre-un-template-5" data-card-section="s-rendre-un-template"><h3><a href="#s-rendre-un-template">Revoir : Rendre un template</a></h3><div class="reader-cards"><p class="reader-card-reference" id="A-a669jpap5zf2-6b6678a1ae-02">Rappel déjà proposé : <a lang="en" href="#A-a669jpap5zf2-6e0103f6cc-02">How do render() and renderView() differ?</a> · <a href="course-CRS-a669jpap5zf2.html#out-OUT-5ram2kxkc3de">Passage canonique</a></p><p class="reader-card-reference" id="A-a669jpap5zf2-6b6678a1ae-03">Rappel déjà proposé : <a lang="en" href="#A-a669jpap5zf2-e43044db2c-03">When does rendering a form automatically select status 422?</a> · <a href="course-CRS-a669jpap5zf2.html#out-OUT-5ram2kxkc3de">Passage canonique</a></p></div></div><div id="cards-s-json-6" data-card-section="s-json"><h3><a href="#s-json">Revoir : JSON</a></h3><div class="reader-cards"><details class="reader-card" id="A-a669jpap5zf2-db1a21a0bc-04"><summary lang="en">What does the json() controller helper return?</summary><p lang="en">A JsonResponse, using the Serializer when available.</p><p lang="fr">json() produit une Response JSON. Sans Serializer, le helper utilise l&#x27;encodage JSON natif.</p><a href="course-CRS-a669jpap5zf2.html#out-OUT-4wrmsr0a1xvb">Revoir le passage précis</a></details></div></div><div id="cards-s-servir-un-file-7" data-card-section="s-servir-un-file"><h3><a href="#s-servir-un-file">Revoir : Servir un file</a></h3><div class="reader-cards"><details class="reader-card" id="A-a669jpap5zf2-37366848c4-05"><summary lang="en">What is file()&#x27;s default content disposition?</summary><p lang="en">attachment; choose inline explicitly to request in-page display.</p><p lang="fr">file() produit une BinaryFileResponse. Le nom présenté au client peut différer du nom sur disque.</p><a href="course-CRS-a669jpap5zf2.html#out-OUT-fy6864mta4ff">Revoir le passage précis</a></details></div></div><div id="cards-s-pieges-d-examen-8" data-card-section="s-pieges-d-examen"><h3><a href="#s-pieges-d-examen">Revoir : Pièges d&#x27;examen</a></h3><div class="reader-cards"><p class="reader-card-reference" id="A-a669jpap5zf2-596d5af532-03">Rappel déjà proposé : <a lang="en" href="#A-a669jpap5zf2-e43044db2c-03">When does rendering a form automatically select status 422?</a> · <a href="course-CRS-a669jpap5zf2.html#out-OUT-5ram2kxkc3de">Passage canonique</a></p></div></div><div id="cards-s-application-9" data-card-section="s-application"><h3><a href="#s-application">Revoir : Application</a></h3><div class="reader-cards"><p class="reader-card-reference" id="A-a669jpap5zf2-e7ad522ea3-02">Rappel déjà proposé : <a lang="en" href="#A-a669jpap5zf2-6e0103f6cc-02">How do render() and renderView() differ?</a> · <a href="course-CRS-a669jpap5zf2.html#out-OUT-5ram2kxkc3de">Passage canonique</a></p><p class="reader-card-reference" id="A-a669jpap5zf2-e7ad522ea3-03">Rappel déjà proposé : <a lang="en" href="#A-a669jpap5zf2-e43044db2c-03">When does rendering a form automatically select status 422?</a> · <a href="course-CRS-a669jpap5zf2.html#out-OUT-5ram2kxkc3de">Passage canonique</a></p></div></div><div id="cards-s-fiche-express-10" data-card-section="s-fiche-express"><h3><a href="#s-fiche-express">Revoir : Fiche express</a></h3><div class="reader-cards"><p class="reader-card-reference" id="A-a669jpap5zf2-b11e58e15e-03">Rappel déjà proposé : <a lang="en" href="#A-a669jpap5zf2-e43044db2c-03">When does rendering a form automatically select status 422?</a> · <a href="course-CRS-a669jpap5zf2.html#out-OUT-5ram2kxkc3de">Passage canonique</a></p></div></div><div id="cards-previous"><p class="recall-provenance">Module 04 — Contrôleurs · Cours « The request »</p><aside class="checkpoint"><h2>Rappel d’un cours antérieur</h2><p>Avant de poursuivre : The request.</p><details class="corpus-correction"><summary lang="en">How does a controller request the current Request object?</summary><p lang="en">By type-hinting Symfony HttpFoundation Request on an action argument.</p><p>Le type déclenche le resolver. Dans un service durable, utiliser RequestStack.</p><a href="course-CRS-ea3twt9jcan2.html#out-OUT-gvjp79xbcjsb">Relire la correction dans le cours antérieur</a></details></aside></div></div><div id="view-quiz" data-course-panel role="region" aria-labelledby="view-quiz-title"><aside class="revision-context"><p><strong>Avant le quiz :</strong> BlogController::show a trouvé l&#x27;ArticleView 42 dans ArticleCatalog. Il doit maintenant transformer ce résultat applicatif en contenu, statut et en-têtes HTTP. Le même article peut alimenter une page HTML ou une réponse JSON ; ce sont deux sorties possibles, pas deux opérations obligatoires successives.</p><p>Quelle donnée entre, quelle responsabilité agit et quelle condition change le résultat ? Pour chaque correction, vérifiez ces conditions dans <a href="course-CRS-a669jpap5zf2.html#s-objectif">le passage enseigné</a>, sans supposer que toutes les branches du blog sont exécutées.</p></aside><h2 id="view-quiz-title">Quiz</h2><p class="quiz-size" lang="en">5 eligible learning questions · 5 per session. Repeating a question does not demonstrate mastery.</p><p id="course-quiz-status" role="status">Quiz interactif non chargé. Démarrez après chargement de la banque locale.</p><div id="course-quiz-controls" class="assessment-main" hidden><div id="course-quiz-assessment-controls" hidden><select id="course-quiz-assessment-mode" aria-label="Mode du quiz" hidden><option value="learning">Entraînement</option></select><p id="course-quiz-training-scope"></p><button id="course-quiz-start-assessment" type="button" lang="en">Start practice</button><button id="course-quiz-finish-assessment" type="button" lang="en" hidden>End session</button></div><p id="course-quiz-assessment-error" role="alert"></p><p id="course-quiz-assessment-timer" hidden></p><p id="course-quiz-session-progress" class="quiz-progress" role="status" lang="en"></p><div id="course-quiz-assessment-app" tabindex="-1"></div><nav id="course-quiz-session-navigation" aria-label="Questions du cours"></nav><div id="course-quiz-learning-overview" aria-live="polite"></div></div><div id="course-quiz-native"><p>Sans JavaScript ou si le chargement échoue : aucune tentative notée. Les <a href="#view-flashcards">flashcards du cours</a> restent disponibles.</p><details class="course-quiz-fallback" data-question-id="L-a669jpap5zf2-base-v1"><summary lang="en">RADIO — Select one answer. What happens if a controller returns a string instead of a Response?</summary><p>Correction de consultation — non notée.</p><p>Le contrat final exige une Response. Une string seule n&#x27;est pas une Response.</p><ul><li><strong lang="en">Correct: kernel.view may convert it; otherwise handling fails.</strong><p>Le contrat final exige une Response. Une string seule n&#x27;est pas une Response.</p></li><li><strong lang="en">Distractor: The string always becomes a 200 Response automatically.</strong><p>Sans conversion par kernel.view, le résultat ne satisfait pas le contrat.</p></li><li><strong lang="en">Distractor: The string bypasses kernel.view and is sent directly.</strong><p>kernel.view reçoit justement l&#x27;occasion de convertir un résultat non-Response.</p></li></ul><a href="course-CRS-a669jpap5zf2.html#out-OUT-4wrmsr0a1xvb">Relire le passage exact</a><a href="course-CRS-a669jpap5zf2.html#s-la-regle">Relire la correction précise</a></details></div></div></div></div><details class="transfer-panel"><summary>Sauvegarde et transfert de progression</summary><p id="reading-status" role="status">Sans JavaScript : lecture libre ; progression non enregistrée.</p><p><a href="assessment.html#overview-title">Lecture, réussites immédiates et différées</a></p><p>Transfert manuel — aucune synchronisation automatique</p><p id="persistence-status" role="status"></p><button type="button" class="secondary" id="export-progress">Exporter ma progression</button><label for="import-progress">Choisir un JSON pour fusionner ma progression (sans remplacement)</label><input type="file" id="import-progress" accept="application/json,.json"><p id="transfer-status" role="status"></p></details></main><footer class="site-footer"><a href="catalogue.html">Catalogue</a> <a href="sources.html">Sources et attribution</a> <a href="#contenu">Haut de page</a></footer></body></html>

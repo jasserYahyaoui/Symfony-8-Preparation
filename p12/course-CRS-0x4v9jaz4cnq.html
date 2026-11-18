@@ -1,0 +1,274 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; connect-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Profiler object (WebProfiler bundle) — Symfony 8 Preparation</title><link rel="stylesheet" href="styles.css"><link rel="stylesheet" href="reader.css"><script src="mermaid.min.js" defer></script><script src="mermaid-init.js" defer></script><link rel="stylesheet" href="assessment.css"><script src="fixed-exams-data.js" defer></script><script src="fixed-exams.js" defer></script><script src="learning-state.js" defer></script><script src="guide.js" defer></script><script src="reader-catalog.js" defer></script><script src="reader.js" defer></script><script src="site-state.js" defer></script><script src="assessment.js" defer></script><script src="course-views.js" defer></script><link rel="stylesheet" href="syntax-highlight.css"><script src="prism-syntax.js" defer></script><script src="syntax-highlight.js" defer></script></head><body data-course-id="CRS-0x4v9jaz4cnq"><a class="skip" href="#contenu">Aller au contenu</a><header class="site-header"><a class="brand" href="index.html">S8 Preparation</a><nav aria-label="Navigation principale"><a href="index.html">Accueil</a> <a href="catalogue.html">Parcours</a> <a href="assessment.html?mode=review">Réviser</a> <a href="examens.html">Examens blancs</a> <a href="jour-j.html">Jour J</a></nav></header><main id="contenu" tabindex="-1" class="corpus-reader"><nav class="breadcrumb" aria-label="Fil d’Ariane"><a href="index.html">Accueil</a> <span aria-hidden="true">›</span> <a href="catalogue.html">Parcours</a> <span aria-hidden="true">›</span> <a href="lot-13.html">Module 13 — Tests automatisés</a> <span aria-hidden="true">›</span> <span aria-current="page">Profiler object (WebProfiler bundle)</span></nav><h1>Profiler object (WebProfiler bundle)</h1><p class="muted">Symfony 8.0 · API PHP ≤ 8.4 · Twig ≤ 3.22. Préparation indépendante.</p><p class="revision-status">Rédaction narrative P11 : projection nouvelle, non couverte par les décisions historiques P10. Aucune approbation officielle ni garantie de réussite.</p><aside class="narrative-context" aria-label="Repères de lecture"><p><strong>Prérequis de lecture :</strong> <a href="course-CRS-tt9yn0a06ngb.html">Unit tests with PHPUnit</a> · <a href="course-CRS-1en96h22twv7.html">Functional tests with PHPUnit</a></p><p><strong>Concepts voisins :</strong> <a href="course-CRS-mpwjc4g3vmj7.html">Request handling</a> — Identifier la frontière réellement exercée par le test. <a href="lot-13.html">Comparer les responsabilités dans ce module</a> · <a href="carte-composants.html">Situer cette responsabilité dans le blog</a> · <a href="glossaire.html">Distinguer les termes voisins</a></p><p><a href="ordre-lecture.html">Retrouver les 163 cours dans le parcours recommandé</a>. Ce repère ne modifie ni votre historique ni votre progression.</p></aside><div class="course-layout"><details class="lot-course-menu"><summary>Cours du module · 9 cours</summary><nav aria-label="Cours du module"><a class="lot-context" href="lot-13.html">Module 13 — Tests automatisés</a><ol><li><a href="course-CRS-tt9yn0a06ngb.html">Unit tests with PHPUnit</a></li><li><a href="course-CRS-1en96h22twv7.html">Functional tests with PHPUnit</a></li><li><a href="course-CRS-k5wg55q2mg0p.html">Client object</a></li><li><a href="course-CRS-zg5jg6hqp2mj.html">Crawler object (CssSelector and DomCrawler components)</a></li><li><a href="course-CRS-0x4v9jaz4cnq.html" aria-current="page">Profiler object (WebProfiler bundle)</a></li><li><a href="course-CRS-g8v45328cg95.html">Framework objects access</a></li><li><a href="course-CRS-4x4ec26c9bfc.html">Client configuration</a></li><li><a href="course-CRS-xkp7v8142jt1.html">Request and response objects introspection</a></li><li><a href="course-CRS-fak8bf9014br.html">Handling legacy deprecated code</a></li></ol><a href="lot-13.html#view-quiz">Quiz du module</a></nav></details><aside class="course-section-menu" aria-label="Sommaire du cours"><nav class="course-actions" aria-label="Activités du cours"><a id="tab-course" href="#view-course">Cours</a><a id="tab-flashcards" href="#view-flashcards">Flashcards</a><a id="tab-quiz" href="#view-quiz">Quiz</a></nav><details class="course-section-disclosure"><summary id="course-sections">Sections du cours</summary><nav aria-label="Sections du cours"><ul><li><a href="#s-objectif">Objectif</a></li><li><a href="#s-l-essentiel">L&#x27;essentiel</a></li><li><a href="#s-le-schema">Le schéma</a></li><li><a href="#s-l-exemple">L&#x27;exemple</a></li><li><a href="#s-deux-reglages-pas-un">Deux réglages, pas un</a></li><li><a href="#s-lire-un-collector">Lire un collector</a></li><li><a href="#s-pieges-d-examen">Pièges d&#x27;examen</a></li><li><a href="#s-fiche-express">Fiche express</a></li><li><a href="#reader-objectives">Objectifs d’apprentissage</a></li><li><a href="#reader-sources">Sources officielles et compléments</a></li><li><a href="#course-recalls">Rappels et liens avec les autres cours</a></li></ul></nav><nav aria-label="Flashcards par section"><a href="#view-flashcards">Flashcards par section</a><ul><li><a href="#cards-s-l-essentiel-1">L&#x27;essentiel</a></li><li><a href="#cards-s-le-schema-2">Le schéma</a></li><li><a href="#cards-s-l-exemple-3">L&#x27;exemple</a></li><li><a href="#cards-s-deux-reglages-pas-un-4">Deux réglages, pas un</a></li><li><a href="#cards-s-lire-un-collector-5">Lire un collector</a></li><li><a href="#cards-s-pieges-d-examen-6">Pièges d&#x27;examen</a></li><li><a href="#cards-s-fiche-express-7">Fiche express</a></li><li><a href="#cards-previous">Module 13 — Tests automatisés · Cours « Client object » · Rappel : <span lang="en">Does KernelBrowser execute JavaScript?</span></a></li></ul></nav><nav aria-label="Retour au module"><a href="lot-13.html">Tous les cours du module</a></nav></details><p class="local-quiz-count">4 questions disponibles · 4 par session Quiz</p></aside><div class="course-content"><div id="view-course" data-course-panel role="region" aria-labelledby="view-course-title"><h2 id="view-course-title">Cours</h2><p class="course-introduction"><a href="#s-objectif">Introduction</a> · <a href="#course-sections">Sections du cours</a></p><h2 id="reader-objectives" tabindex="-1">Objectifs d’apprentissage</h2><ul><li><a href="course-CRS-0x4v9jaz4cnq.html#out-OUT-r3rw0s0swgpy">Énoncer la configuration du profiler en test</a></li><li><a href="course-CRS-0x4v9jaz4cnq.html#out-OUT-bbrw7hnswytn">Utiliser enableProfiler() et getProfile()</a></li></ul><aside class="pedagogy-legend" aria-label="Repères pédagogiques"><p><strong>Repères pédagogiques</strong></p><p>Ces repères décrivent le rôle du bloc, pas une fréquence officielle à l’examen.</p><p class="teaching-label essential"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="brain" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5C12 1 6 1 6 5C2 5 1 10 4 12C1 15 3 19 6 19C6 23 12 23 12 19V5M12 5C12 1 18 1 18 5C22 5 23 10 20 12C23 15 21 19 18 19C18 23 12 23 12 19M6 5C6 8 8 9 9 9M4 12H7L9 14M6 19V16M18 5C18 8 16 9 15 9M20 12H17L15 14M18 19V16"></path></svg> <strong>À comprendre</strong></p><p class="teaching-label essential"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="book" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5C9 3 5 3 2 4V20C5 19 9 19 12 21C15 19 19 19 22 20V4C19 3 15 3 12 5V21M5 8H8M5 12H8M16 8H19M16 12H19"></path></svg> <strong>À mémoriser</strong></p><p class="teaching-label example"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="code" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6L2 12L8 18M16 6L22 12L16 18M14 3L10 21"></path></svg> <strong>Exemple concret</strong></p><p class="teaching-label pitfall"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="warning" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3L23 21H1L12 3ZM12 9V14M12 17V18"></path></svg> <strong>Piège à éviter</strong></p><p class="teaching-label nuance"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="balance" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3V21M7 21H17M3 7L21 5M5 7L1 15H9L5 7M19 6L15 14H23L19 6M1 15Q5 20 9 15M15 14Q19 19 23 14"></path></svg> <strong>Nuance à connaître</strong></p><p>Précision, exception ou condition d’application d’une règle.</p></aside><section class="teaching-section" data-section="s-objectif"><h2 id="s-objectif" tabindex="-1">Objectif</h2><p>Le test de <code>/blog/42</code> vérifie maintenant le statut et le contenu. Il peut
+pourtant rester vert après une régression du travail serveur. Pour un
+test ciblé sur une métrique, le profiler conserve les données recueillies
+pendant cette requête ; les en-têtes et le HTML ne suffisent pas à les déduire.</p>
+<p>Question centrale : <strong>comment un test peut-il lire ce que le serveur a mesuré
+pendant la requête, et pourquoi faut-il deux réglages pour y arriver ?</strong></p></section><section class="teaching-section" data-section="s-l-essentiel"><h2 id="s-l-essentiel" tabindex="-1">L&#x27;essentiel</h2><p class="teaching-label essential"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="brain" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5C12 1 6 1 6 5C2 5 1 10 4 12C1 15 3 19 6 19C6 23 12 23 12 19V5M12 5C12 1 18 1 18 5C22 5 23 10 20 12C23 15 21 19 18 19C18 23 12 23 12 19M6 5C6 8 8 9 9 9M4 12H7L9 14M6 19V16M18 5C18 8 16 9 15 9M20 12H17L15 14M18 19V16"></path></svg> <strong>À comprendre</strong></p><aside class="section-digest" id="s-l-essentiel-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Activer le service et collecter sont deux réglages.</li><li>Le helper agit sur la collecte.</li></ol></aside><p><strong>Ce que cette partie veut réellement vous apprendre.</strong></p>
+<ul>
+<li><em>Pourquoi ce sujet existe.</em> Un test fonctionnel ne voit que la réponse
+  HTTP. Le temps passé, la route retenue ou les collectors ne sont pas dans
+  le HTML : ils sont dans le <strong>profil</strong> enregistré pendant la requête.</li>
+<li><em>Le piège de fond.</em> « Profiler disponible » et « collecte active » sont
+  deux réglages distincts. <code>enableProfiler()</code> ne crée rien : elle demande une
+  collecte pour la <strong>requête suivante</strong>.</li>
+<li><em>Ce que l'auteur veut que vous compreniez.</em> Le <code>Profile</code> est un
+  <strong>enregistrement</strong>, pas le service vivant ; <code>false</code> et <code>null</code> n'ont pas le
+  même sens.</li>
+<li><em>Pourquoi c'est à l'examen.</em> <code>enableProfiler()</code> avant <code>request()</code>, les
+  valeurs de <code>getProfile()</code>, l'exception de <code>getCollector()</code>.</li>
+</ul>
+<p>Le profiler enregistre des mesures pendant le traitement d'une requête.
+Le <code>Profile</code> est cet enregistrement ; un collector en expose une partie,
+par exemple la durée. Ce n'est pas le service applicatif vivant.</p>
+<p>La configuration de test recommandée garde le profiler <strong>disponible</strong>, mais
+désactive la collecte systématique. <code>enableProfiler()</code> demande alors une
+collecte pour <strong>la requête suivante</strong>. <code>getProfile()</code> lit le profil associé à
+la réponse courante : il ne reconstitue pas les mesures d'une requête passée.</p>
+<p>Il faut distinguer le service qui collecte, le profil enregistré et
+l'interface web qui permet de le consulter. Le test lit les données du
+profil, sans devoir afficher la barre de debug. Un token de profil sert
+à identifier cet enregistrement ; ce n'est ni une authentification
+ni une protection CSRF.</p>
+<p>Trois objets à ne pas mélanger :</p>
+<pre class="highlight" tabindex="0"><code class="language-text">┌───────────────────┐   ┌───────────────────┐   ┌──────────────────────┐
+│ service profiler  │   │ Profile           │   │ interface web        │
+│ (collecte)        │──►│ (enregistrement)  │◄──│ (consultation)       │
+│ enabled / collect │   │ token + collectors│   │ barre de debug       │
+└───────────────────┘   └───────────────────┘   └──────────────────────┘
+        le test lit ici ───────────►│  (pas besoin de l'interface)</code></pre></section><section class="teaching-section" data-section="s-le-schema"><h2 id="s-le-schema" tabindex="-1">Le schéma</h2><aside class="section-digest" id="s-le-schema-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>La collecte ciblée réduit le coût.</li><li>Les tests peuvent activer seulement la Request utile.</li></ol></aside><p><strong>Où en est-on ?</strong> Début du cours : un seul schéma, qui montre l'ordre des
+opérations. La décision de mesurer précède l'appel HTTP ; ensuite on
+relit le profil depuis la réponse.</p>
+<p>La décision de mesurer précède l'appel HTTP. La présence du profil est
+ensuite une précondition de l'assertion de mesure, pas une option à ignorer
+si le service manque :</p>
+<figure class="diagram" aria-labelledby="CRS-0x4v9jaz4cnq-3-diagram-0-title CRS-0x4v9jaz4cnq-3-diagram-0-description"><figcaption id="CRS-0x4v9jaz4cnq-3-diagram-0-title">Demander une collecte avant la requête mesurée</figcaption><p id="CRS-0x4v9jaz4cnq-3-diagram-0-description">Avec le service profiler présent et collect désactivé, le test appelle enableProfiler avant request. Le traitement enregistre un profil, que getProfile relit depuis la réponse. Le test vérifie sa présence avant de consulter le collector time. Le dessin suppose que la configuration autorise la collecte de cette requête.</p><div class="mermaid" hidden>---
+title: Quand un test obtient-il un profil ?
+---
+flowchart TD
+  accTitle: Demander une collecte avant la requête mesurée
+  accDescr: Avec le service profiler présent et collect désactivé, le test appelle enableProfiler avant request. Le traitement enregistre un profil, que getProfile relit depuis la réponse. Le test vérifie sa présence avant de consulter le collector time. Le dessin suppose que la configuration autorise la collecte de cette requête.
+  T[&quot;Test : enableProfiler&quot;] --&gt;|&quot;arme la prochaine collecte&quot;| R[&quot;request de la page&quot;]
+  R --&gt;|&quot;traitement et collecte&quot;| P[(&quot;Profil de la réponse&quot;)]
+  P --&gt;|&quot;getProfile&quot;| Q{&quot;Profil présent ?&quot;}
+  Q --&gt;|&quot;oui : getCollector time&quot;| M[&quot;Lire la durée&quot;]
+  Q --&gt;|&quot;non&quot;| F([&quot;Échec du test de mesure&quot;])
+  classDef action fill:#e0f2fe,stroke:#075985,color:#0c4a6e
+  classDef choice fill:#fef3c7,stroke:#92400e,color:#78350f
+  classDef result fill:#dcfce7,stroke:#166534,color:#14532d
+  class T,R,M action
+  class Q choice
+  class P,F result</div></figure>
+<p>Bleu : opérations du test ; vert : résultat observable ; losange ambre :
+vérification. Ce parcours suppose un service profiler disponible, une réponse
+profilable et aucune restriction supplémentaire de collecte. Sans nouvelle
+activation, la requête suivante revient au réglage <code>collect: false</code>.</p></section><section class="teaching-section" data-section="s-l-exemple"><h2 id="s-l-exemple" tabindex="-1">L&#x27;exemple</h2><p class="teaching-label example"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="code" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6L2 12L8 18M16 6L22 12L16 18M14 3L10 21"></path></svg> <strong>Exemple concret</strong></p><aside class="section-digest" id="s-l-exemple-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>La collecte ne se reconstruit pas après coup.</li><li>Cibler explicitement la prochaine Request.</li></ol></aside><p><strong>Où en est-on ?</strong> Le schéma est posé ; voici le code correspondant, ligne
+par ligne dans l'ordre du schéma : armer, requêter, relire, mesurer.</p>
+<p>Dans une méthode de <code>WebTestCase</code>, avec Symfony 8.0, PHPUnit 11.5,
+la route <code>blog_show</code>, le catalogue de test et le collector <code>time</code>
+correctement instrumenté :</p>
+<pre class="highlight" tabindex="0"><code class="language-php">$client = static::createClient();
+$client-&gt;enableProfiler();                    // la Request suivante seulement
+$client-&gt;request('GET', '/blog/42');
+self::assertResponseStatusCodeSame(200);
+self::assertRouteSame('blog_show');
+
+$profile = $client-&gt;getProfile();
+$this-&gt;assertInstanceOf(
+    \Symfony\Component\HttpKernel\Profiler\Profile::class,
+    $profile,
+    'Ce test exige un profil : vérifier la configuration de collecte.',
+);
+$this-&gt;assertLessThan(
+    500,
+    $profile-&gt;getCollector('time')-&gt;getDuration(),
+    sprintf('Budget dépassé (token %s)', $profile-&gt;getToken()),
+);</code></pre>
+<p>Dans une méthode de <code>WebTestCase</code>, avec le collector <code>time</code> disponible, ce
+test exige une durée inférieure à <strong>500 ms</strong>. Un profil absent fait échouer
+le test au lieu de sauter silencieusement l'assertion. Ce seuil est un exemple
+de budget local, pas une garantie de performance Symfony ; sa stabilité dépend
+de l'environnement d'exécution.</p>
+<p>Le statut et la route évitent notamment de déclarer rapide une réponse
+404 reçue par erreur. Établir le budget avec un environnement, des données
+et un état de cache contrôlés : la charge de la CI et l'instrumentation
+peuvent faire varier la mesure. Ce test n'est pas un benchmark du réseau
+ni du temps d'affichage dans un navigateur.</p>
+<p><strong>Pourquoi l'assertion d'instance ?</strong> Sans elle, un profil absent produirait
+une erreur obscure sur <code>null</code> ou <code>false</code>, ou pire, un test qui ne mesure rien.
+L'assertion transforme l'absence de mesure en échec lisible.</p></section><section class="teaching-section" data-section="s-deux-reglages-pas-un"><span class="outcome-anchor" id="out-OUT-r3rw0s0swgpy" tabindex="-1"></span><span class="outcome-anchor" id="out-OUT-bbrw7hnswytn" tabindex="-1"></span><h2 id="s-deux-reglages-pas-un" tabindex="-1">Deux réglages, pas un</h2><aside class="section-digest" id="s-deux-reglages-pas-un-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Le helper ne remplace pas la configuration.</li><li>Un service absent reste absent.</li></ol></aside><p><strong>Où en est-on ?</strong> Première étape sur deux : pourquoi <code>enableProfiler()</code> ne
+suffit-elle pas toujours ? Parce qu'elle suppose que le service <code>profiler</code>
+existe déjà, et que c'est la configuration qui le crée.</p>
+<div class="admonition info">
+<p class="admonition-title">🌍 In Real Life</p>
+<p><strong>La situation</strong> : le restaurant possède un chronomètre de contrôle, mais l'observateur ne déclenche la mesure que pour le service choisi.</p>
+<p><strong>L’équivalent dans Symfony</strong> : instrument disponible → service profiler configuré ; déclenchement ciblé → <code>enableProfiler()</code> avant la prochaine requête <code>/blog/42</code>.</p>
+<p><strong>Retour à la réalité technique</strong> : demander la collecte ne crée pas un profiler absent. L'activation ciblée concerne la requête suivante ; contrôler ensuite la présence du Profile évite de traiter l'absence de mesure comme une réussite.</p>
+<p><strong>🧠 Comment le mémoriser</strong> : « Installer l'instrument, puis déclencher. » Image mentale : chronomètre présent mais arrêté. Question-réflexe : le service existe-t-il et la collecte a-t-elle précédé cette requête ?</p>
+<p><strong>⚠️ À ne pas confondre</strong> : disponibilité du profiler et collecte systématique.</p>
+</div>
+<p>La configuration rend le service disponible lors de la préparation
+de l'application ; le test choisit ensuite la requête à observer :</p>
+<pre class="highlight" tabindex="0"><code class="language-yaml">when@test:
+    framework:
+        profiler: { enabled: true, collect: false }</code></pre>
+<ul>
+<li><code>enabled</code> crée le service <code>profiler</code> ; <code>collect</code> décide si chaque Request est
+  profilée. <code>collect: false</code> évite le coût d'une collecte systématique,
+  sans promettre un surcoût global exactement nul.</li>
+<li><strong><code>enableProfiler()</code> n'active pas le profiler</strong> : sans service <code>profiler</code>,
+  l'appel ne fait rien. Elle active la <strong>collecte</strong>, pour la Request suivante.</li>
+</ul>
+<p>Dans <code>KernelBrowser</code>, le helper pose un drapeau si le service existe.
+Avant le traitement suivant, le client consomme ce drapeau et active
+le profiler. Le cycle normal de reboot ou de reset rétablit ensuite
+la politique initiale. Il ne relance pas les extensions du conteneur
+pour installer à la volée un profiler absent.</p>
+<p><strong>Pourquoi un drapeau ?</strong> Le client ne profile pas immédiatement : il mémorise
+« la prochaine fois » et, juste avant de traiter la requête, appelle
+<code>profiler-&gt;enable()</code> puis remet le drapeau à <code>false</code>. C'est ce qui rend
+l'activation valable pour <strong>une seule</strong> requête.</p>
+<p>Le tableau décrit ce parcours normal, sans restriction supplémentaire
+de collecte ni échec du stockage du profil :</p>
+<table>
+<thead>
+<tr>
+<th>Configuration</th>
+<th>Request</th>
+<th><code>getProfile()</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>service profiler absent (<code>enabled: false</code>)</td>
+<td>après <code>enableProfiler()</code></td>
+<td><code>false</code></td>
+</tr>
+<tr>
+<td><code>enabled: true, collect: false</code></td>
+<td>sans <code>enableProfiler()</code></td>
+<td><code>null</code></td>
+</tr>
+<tr>
+<td>idem</td>
+<td>juste après <code>enableProfiler()</code></td>
+<td>un <code>Profile</code></td>
+</tr>
+<tr>
+<td>idem</td>
+<td>la Request suivante</td>
+<td><code>null</code></td>
+</tr>
+<tr>
+<td><code>enabled: true, collect: true</code></td>
+<td>chacune</td>
+<td>un <code>Profile</code></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><code>false</code> = pas de profiler (ou pas encore de Response, juste après
+  <code>createClient()</code>) ; <code>null</code> = aucun profil chargé pour cette Response,
+  par exemple parce qu'elle n'a pas été collectée.</li>
+<li><code>enableProfiler()</code> appelée <strong>après</strong> la Request ne profile rien après coup :
+  <code>null</code>, puis un <code>Profile</code> à la Request suivante.</li>
+</ul>
+<p>Plus précisément, le chargement lit <code>X-Debug-Token</code> sur la réponse,
+puis utilise ce token pour lire le stockage. Sans ce header, le résultat
+est <code>null</code> ; un profil devenu introuvable peut aussi manquer à la lecture.
+<code>null</code> ne prouve donc pas universellement que la collecte n'a jamais eu lieu.
+Après une redirection suivie, la réponse courante peut être celle de
+destination : lire le profil au moment voulu plutôt que mesurer une autre page.</p>
+<pre class="highlight" tabindex="0"><code class="language-text">getProfile()
+  ├─ pas de Response, ou pas de service profiler  → false
+  └─ sinon loadProfileFromResponse(Response)
+        ├─ pas de X-Debug-Token / profil introuvable → null
+        └─ profil trouvé                              → Profile</code></pre></section><section class="teaching-section" data-section="s-lire-un-collector"><h2 id="s-lire-un-collector" tabindex="-1">Lire un collector</h2><aside class="section-digest" id="s-lire-un-collector-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Les collectors dépendent des fonctionnalités actives.</li><li>Un nom inconnu peut lever une exception.</li></ol></aside><p><strong>Où en est-on ?</strong> Deuxième étape : on a un <code>Profile</code> ; comment en extraire
+une métrique ? Par le <strong>nom du collector</strong>, pas par un service du conteneur.</p>
+<div class="admonition info">
+<p class="admonition-title">🌍 In Real Life</p>
+<p><strong>La situation</strong> : après le service, le contrôleur consulte la feuille des durées et celle des commandes ; il ne demande pas à la feuille de refaire le travail du serveur.</p>
+<p><strong>L’équivalent dans Symfony</strong> : dossier d'observation → Profile ; feuille spécialisée → collector nommé ; mesure inscrite → donnée de la requête enregistrée.</p>
+<p><strong>Retour à la réalité technique</strong> : le collector du profil expose l'observation conservée, pas le service applicatif vivant. Les noms disponibles dépendent de l'instrumentation ; une durée mesurée dépend aussi de l'environnement du test.</p>
+<p><strong>🧠 Comment le mémoriser</strong> : « Lire la trace, pas commander au service. » Image mentale : carnet daté après le repas. Question-réflexe : ce collector existe-t-il et quelle unité expose-t-il ?</p>
+<p><strong>⚠️ À ne pas confondre</strong> : nom de collector, identifiant de service et token d'authentification.</p>
+</div>
+<p>Après avoir exigé un <code>Profile</code>, choisir la métrique par le <strong>nom du collector</strong>
+enregistré. Ce nom n'est pas nécessairement l'identifiant d'un service
+applicatif dans le conteneur :</p>
+<pre class="highlight" tabindex="0"><code class="language-php">$profile-&gt;getCollector('time')-&gt;getDuration();   // un float, en millisecondes
+$profile-&gt;getCollector('request')-&gt;getRoute();
+$profile-&gt;getToken();                             // pour retrouver la Request dans le profiler web</code></pre>
+<ul>
+<li>La liste des collectors dépend des bundles installés (<code>request</code>, <code>time</code>,
+  <code>memory</code>…).</li>
+<li>Un nom inconnu : <code>InvalidArgumentException</code>, « Collector "nope" does not
+  exist. » ; <code>hasCollector('nope')</code> rend <code>false</code>.</li>
+<li>La documentation : un functional test teste <strong>d'abord la Response</strong> ; le
+  profiler sert quand la métrique est le sujet du test.</li>
+</ul>
+<p>Le profiler place des clones de collectors dans le profil lors de la collecte.
+Récupérer un service vivant par <code>getContainer()-&gt;get(...)</code> ne revient pas
+à relire cette observation. Pour un collector propre à l'application,
+par exemple <code>app.hit</code>, exiger sa présence avec <code>hasCollector()</code> si
+le test en dépend, puis employer son API de données.</p>
+<p>Une absence de profil ou de collector n'est pas une mesure égale à zéro.
+Même <code>time-&gt;getDuration()</code> peut rendre <code>0</code> si son événement de section
+n'est pas disponible : vérifier l'instrumentation avant d'interpréter
+ce résultat comme une page instantanée. Le token placé dans le message
+d'échec aide à retrouver les données, dont l'accès doit rester protégé.</p>
+<table>
+<thead>
+<tr>
+<th>Besoin</th>
+<th>Outil</th>
+<th>Pourquoi</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Le contenu rendu, le statut</td>
+<td>assertions sur la Response</td>
+<td>cas général, d'abord</td>
+</tr>
+<tr>
+<td>Une durée, une route retenue</td>
+<td>collector du <code>Profile</code></td>
+<td>donnée absente du HTML</td>
+</tr>
+<tr>
+<td>Un service vivant à manipuler</td>
+<td>conteneur de test</td>
+<td>autre cours du module</td>
+</tr>
+</tbody>
+</table></section><section class="teaching-section" data-section="s-pieges-d-examen"><h2 id="s-pieges-d-examen" tabindex="-1">Pièges d&#x27;examen</h2><p class="teaching-label pitfall"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="warning" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3L23 21H1L12 3ZM12 9V14M12 17V18"></path></svg> <strong>Piège à éviter</strong></p><aside class="section-digest" id="s-pieges-d-examen-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Tester la présence avant lecture.</li><li>Absence de service et absence de collecte sont distinctes.</li></ol></aside><ul class="pitfall-list"><li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : enableProfiler() n&#x27;active pas le profiler</summary><p><strong><code>enableProfiler()</code> n'active pas le profiler</strong> ; elle active la collecte.
+<em>Pourquoi on se trompe : le nom de la method suggère qu'elle « allume » tout.</em></p></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : La collecte activée par enableProfiler() ne vaut que pour la Request suivante.</summary><p><strong>La collecte activée par <code>enableProfiler()</code> ne vaut que pour la Request suivante.</strong>
+<em>Pourquoi on se trompe : on imagine un interrupteur qui reste allumé.</em></p></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : getProfile() peut rendre false ou null</summary><p><strong><code>getProfile()</code> peut rendre <code>false</code> ou <code>null</code></strong> — le tester. <code>false</code> : pas
+de profiler ou de réponse ; <code>null</code> : aucun profil chargé pour cette réponse.
+<em>Pourquoi on se trompe : les deux valeurs sont « fausses » en PHP, donc on les
+confond.</em></p></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : collect: true collecte à chaque Request</summary><p><strong><code>collect: true</code> collecte à chaque Request</strong>, sans <code>enableProfiler()</code>.</p></details></li></ul></section><section class="teaching-section" data-section="s-fiche-express"><h2 id="s-fiche-express" tabindex="-1">Fiche express</h2><p class="teaching-label essential"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="book" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5C9 3 5 3 2 4V20C5 19 9 19 12 21C15 19 19 19 22 20V4C19 3 15 3 12 5V21M5 8H8M5 12H8M16 8H19M16 12H19"></path></svg> <strong>À mémoriser</strong></p><aside class="section-digest" id="s-fiche-express-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Le profiler sert aux métriques ciblées.</li><li>Il ne remplace pas les assertions fonctionnelles.</li></ol></aside><p>Le test fonctionnel dit si l'article attendu a été rendu ; le test de
+profil dit ce que l'instrumentation a observé pendant cette requête.
+Ne pas transformer l'absence de mesure en réussite silencieuse.</p>
+<p><strong>🧠 À retenir pour la certification :</strong></p>
+<ul>
+<li>Test : <strong><code>enabled: true, collect: false</code></strong>.</li>
+<li><strong><code>enableProfiler()</code></strong> active la <strong>collecte</strong>, pas le profiler.</li>
+<li>Pour <strong>la Request suivante</strong> seulement, donc <strong>avant</strong> <code>request()</code>.</li>
+<li><strong><code>false</code></strong> : pas de profiler ou pas de Response ; <strong><code>null</code></strong> : aucun profil chargé.</li>
+<li><strong><code>collect: true</code></strong> : chaque Request profilée.</li>
+<li><strong><code>getCollector()</code></strong> pour la métrique, <strong><code>getToken()</code></strong> pour la retrouver.</li>
+</ul>
+<p>Moyen mnémotechnique : <strong>« Activé par config, collecté sur demande »</strong>.</p>
+<p>Phrase de mémorisation : <em>la config installe le chronomètre, enableProfiler()
+le déclenche pour la prochaine requête, et le Profile garde la trace.</em></p>
+<pre class="highlight" tabindex="0"><code class="language-text">config : enabled: true, collect: false
+enableProfiler() AVANT la Request (une seule)
+getProfile() : false = pas de service ou de réponse, null = pas de profil
+collect: true = toutes ; getCollector('time')-&gt;getDuration() ; getToken()</code></pre>
+<p>Le cours <a href="course-CRS-g8v45328cg95.html">accès aux objets du framework</a>
+traite l'autre besoin : obtenir les services réels du test, plutôt que
+relire leurs données collectées.</p></section><section class="official-sources"><h2 id="reader-sources" tabindex="-1">Sources officielles et compléments</h2><ul><li><a href="https://symfony.com/doc/8.0/components/http_kernel.html">Symfony 8.0 — HttpKernel</a></li><li><a href="https://symfony.com/doc/8.0/reference/configuration/framework.html">Symfony 8.0 — reference / configuration / framework</a></li><li><a href="https://symfony.com/doc/8.0/testing/profiling.html">Symfony 8.0 — testing / profiling</a></li></ul></section><section id="course-recalls" aria-labelledby="course-recalls-title" tabindex="-1"><h2 id="course-recalls-title">Rappels et liens avec les autres cours</h2><div data-recall-group="other"><h3>Rappels des cours précédents / autres modules</h3><ul><li data-recall-course="CRS-k5wg55q2mg0p" data-recall-kind="previous_course"><p class="recall-provenance">Module 13 — Tests automatisés · Cours « Client object »</p><p>Le client est simulé. Un comportement JavaScript nécessite un autre niveau de test.</p><p><a href="#cards-previous">Rappel : <span lang="en">Does KernelBrowser execute JavaScript?</span></a></p></li></ul></div></section><nav class="course-sequence" aria-label="Ordre de lecture"><a rel="prev" href="course-CRS-zg5jg6hqp2mj.html" aria-label="Précédent : Crawler object (CssSelector and DomCrawler components) — Module 13 — Tests automatisés">Précédent : Crawler object (CssSelector and DomCrawler components)</a> <a href="lot-13.html">Sommaire : Module 13 — Tests automatisés</a> <a rel="next" href="course-CRS-g8v45328cg95.html" aria-label="Suivant : Framework objects access — Module 13 — Tests automatisés">Suivant : Framework objects access</a></nav><p class="course-practice-entry"><a class="button" href="#view-quiz">Fin du cours — s’entraîner avec le Quiz</a></p></div><div id="view-flashcards" data-course-panel role="region" aria-labelledby="view-flashcards-title"><h2 id="view-flashcards-title">Flashcards</h2><p lang="en">Answer before revealing each card.</p><p>Ces cartes ne mesurent pas une maîtrise notée.</p><div id="cards-s-l-essentiel-1" data-card-section="s-l-essentiel"><h3><a href="#s-l-essentiel">Revoir : L&#x27;essentiel</a></h3><div class="reader-cards"><details class="reader-card" id="B-0x4v9jaz4cnq-01"><summary lang="en">What does client-&gt;enableProfiler() enable?</summary><p lang="en">Collection for the next Request, provided the profiler service is enabled.</p><p lang="fr">Activer le service et collecter sont deux réglages. Le helper agit sur la collecte.</p><a href="course-CRS-0x4v9jaz4cnq.html#out-OUT-r3rw0s0swgpy">Revoir le passage précis</a></details></div></div><div id="cards-s-le-schema-2" data-card-section="s-le-schema"><h3><a href="#s-le-schema">Revoir : Le schéma</a></h3><div class="reader-cards"><details class="reader-card" id="B-0x4v9jaz4cnq-02"><summary lang="en">Why use enabled: true with collect: false in tests?</summary><p lang="en">Keep profiler access available without collecting every Request.</p><p lang="fr">La collecte ciblée réduit le coût. Les tests peuvent activer seulement la Request utile.</p><a href="course-CRS-0x4v9jaz4cnq.html#out-OUT-r3rw0s0swgpy">Revoir le passage précis</a></details></div></div><div id="cards-s-l-exemple-3" data-card-section="s-l-exemple"><h3><a href="#s-l-exemple">Revoir : L&#x27;exemple</a></h3><div class="reader-cards"><details class="reader-card" id="B-0x4v9jaz4cnq-03"><summary lang="en">When should enableProfiler() be called relative to request()?</summary><p lang="en">Before the Request to be profiled.</p><p lang="fr">La collecte ne se reconstruit pas après coup. Cibler explicitement la prochaine Request.</p><a href="course-CRS-0x4v9jaz4cnq.html#out-OUT-bbrw7hnswytn">Revoir le passage précis</a></details></div></div><div id="cards-s-deux-reglages-pas-un-4" data-card-section="s-deux-reglages-pas-un"><h3><a href="#s-deux-reglages-pas-un">Revoir : Deux réglages, pas un</a></h3><div class="reader-cards"><details class="reader-card" id="B-0x4v9jaz4cnq-04"><summary lang="en">Will enableProfiler() create a missing profiler service?</summary><p lang="en">No. Configuration must enable the service first.</p><p lang="fr">Le helper ne remplace pas la configuration. Un service absent reste absent.</p><a href="course-CRS-0x4v9jaz4cnq.html#out-OUT-r3rw0s0swgpy">Revoir le passage précis</a></details></div></div><div id="cards-s-lire-un-collector-5" data-card-section="s-lire-un-collector"><h3><a href="#s-lire-un-collector">Revoir : Lire un collector</a></h3><div class="reader-cards"><details class="reader-card" id="B-0x4v9jaz4cnq-05"><summary lang="en">How can a test avoid requesting a collector that is unavailable?</summary><p lang="en">Check hasCollector() before getCollector().</p><p lang="fr">Les collectors dépendent des fonctionnalités actives. Un nom inconnu peut lever une exception.</p><a href="course-CRS-0x4v9jaz4cnq.html#out-OUT-r3rw0s0swgpy">Revoir le passage précis</a></details></div></div><div id="cards-s-pieges-d-examen-6" data-card-section="s-pieges-d-examen"><h3><a href="#s-pieges-d-examen">Revoir : Pièges d&#x27;examen</a></h3><div class="reader-cards"><details class="reader-card" id="B-0x4v9jaz4cnq-06"><summary lang="en">Can getProfile() be assumed to return a Profile object?</summary><p lang="en">No. It may return false or null when no usable profile exists.</p><p lang="fr">Tester la présence avant lecture. Absence de service et absence de collecte sont distinctes.</p><a href="course-CRS-0x4v9jaz4cnq.html#out-OUT-bbrw7hnswytn">Revoir le passage précis</a></details></div></div><div id="cards-s-fiche-express-7" data-card-section="s-fiche-express"><h3><a href="#s-fiche-express">Revoir : Fiche express</a></h3><div class="reader-cards"><details class="reader-card" id="B-0x4v9jaz4cnq-07"><summary lang="en">What should an ordinary functional test prioritize over profiler metrics?</summary><p lang="en">The Response and user-visible behavior.</p><p lang="fr">Le profiler sert aux métriques ciblées. Il ne remplace pas les assertions fonctionnelles.</p><a href="course-CRS-0x4v9jaz4cnq.html#out-OUT-r3rw0s0swgpy">Revoir le passage précis</a></details></div></div><div id="cards-previous"><p class="recall-provenance">Module 13 — Tests automatisés · Cours « Client object »</p><aside class="checkpoint"><h2>Rappel d’un cours antérieur</h2><p>Avant de poursuivre : Client object.</p><details class="corpus-correction"><summary lang="en">Does KernelBrowser execute JavaScript?</summary><p lang="en">No. It simulates Requests and browser state without a real JavaScript engine.</p><p>Le client est simulé. Un comportement JavaScript nécessite un autre niveau de test.</p><a href="course-CRS-k5wg55q2mg0p.html#out-OUT-cd7mwe96kqaf">Relire la correction dans le cours antérieur</a></details></aside></div></div><div id="view-quiz" data-course-panel role="region" aria-labelledby="view-quiz-title"><aside class="revision-context"><p><strong>Avant le quiz :</strong> Le test de /blog/42 vérifie maintenant le statut et le contenu. Il peut pourtant rester vert après une régression du travail serveur. Pour un test ciblé sur une métrique, le profiler conserve les données recueillies pendant cette requête ; les en-têtes et le HTML ne suffisent pas à les déduire.</p><p>Quelle donnée entre, quelle responsabilité agit et quelle condition change le résultat ? Pour chaque correction, vérifiez ces conditions dans <a href="course-CRS-0x4v9jaz4cnq.html#s-objectif">le passage enseigné</a>, sans supposer que toutes les branches du blog sont exécutées.</p></aside><h2 id="view-quiz-title">Quiz</h2><p class="quiz-size" lang="en">4 eligible learning questions · 4 per session. Repeating a question does not demonstrate mastery.</p><p id="course-quiz-status" role="status">Quiz interactif non chargé. Démarrez après chargement de la banque locale.</p><div id="course-quiz-controls" class="assessment-main" hidden><div id="course-quiz-assessment-controls" hidden><select id="course-quiz-assessment-mode" aria-label="Mode du quiz" hidden><option value="learning">Entraînement</option></select><p id="course-quiz-training-scope"></p><button id="course-quiz-start-assessment" type="button" lang="en">Start practice</button><button id="course-quiz-finish-assessment" type="button" lang="en" hidden>End session</button></div><p id="course-quiz-assessment-error" role="alert"></p><p id="course-quiz-assessment-timer" hidden></p><p id="course-quiz-session-progress" class="quiz-progress" role="status" lang="en"></p><div id="course-quiz-assessment-app" tabindex="-1"></div><nav id="course-quiz-session-navigation" aria-label="Questions du cours"></nav><div id="course-quiz-learning-overview" aria-live="polite"></div></div><div id="course-quiz-native"><p>Sans JavaScript ou si le chargement échoue : aucune tentative notée. Les <a href="#view-flashcards">flashcards du cours</a> restent disponibles.</p><details class="course-quiz-fallback" data-question-id="L-0x4v9jaz4cnq-base-v1"><summary lang="en">What does client-&gt;enableProfiler() enable?</summary><p>Correction de consultation — non notée.</p><p>Activer le service et collecter sont deux réglages. Le helper agit sur la collecte.</p><ul><li><strong lang="en">Distractor: Installation of the profiler service when it is absent.</strong><p>Le helper de collecte ne crée pas le service désactivé.</p></li><li><strong lang="en">Distractor: Collection for every future request, regardless of configuration.</strong><p>Le helper concerne la prochaine Request et dépend du service activé.</p></li><li><strong lang="en">Correct: Collection for the next request, if the profiler service is enabled.</strong><p>Activer le service et collecter sont deux réglages. Le helper agit sur la collecte.</p></li></ul><a href="course-CRS-0x4v9jaz4cnq.html#out-OUT-r3rw0s0swgpy">Relire le passage exact</a></details></div></div></div></div><details class="transfer-panel"><summary>Sauvegarde et transfert de progression</summary><p id="reading-status" role="status">Sans JavaScript : lecture libre ; progression non enregistrée.</p><p><a href="assessment.html#overview-title">Lecture, réussites immédiates et différées</a></p><p>Transfert manuel — aucune synchronisation automatique</p><p id="persistence-status" role="status"></p><button type="button" class="secondary" id="export-progress">Exporter ma progression</button><label for="import-progress">Choisir un JSON pour fusionner ma progression (sans remplacement)</label><input type="file" id="import-progress" accept="application/json,.json"><p id="transfer-status" role="status"></p></details></main><footer class="site-footer"><a href="catalogue.html">Catalogue</a> <a href="sources.html">Sources et attribution</a> <a href="#contenu">Haut de page</a></footer></body></html>

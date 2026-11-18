@@ -1,0 +1,279 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; connect-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Security Core, CSRF and PasswordHasher components — Symfony 8 Preparation</title><link rel="stylesheet" href="styles.css"><link rel="stylesheet" href="reader.css"><script src="mermaid.min.js" defer></script><script src="mermaid-init.js" defer></script><link rel="stylesheet" href="assessment.css"><script src="fixed-exams-data.js" defer></script><script src="fixed-exams.js" defer></script><script src="learning-state.js" defer></script><script src="guide.js" defer></script><script src="reader-catalog.js" defer></script><script src="reader.js" defer></script><script src="site-state.js" defer></script><script src="assessment.js" defer></script><script src="course-views.js" defer></script><link rel="stylesheet" href="syntax-highlight.css"><script src="prism-syntax.js" defer></script><script src="syntax-highlight.js" defer></script></head><body data-course-id="CRS-awb7sd999c5j"><a class="skip" href="#contenu">Aller au contenu</a><header class="site-header"><a class="brand" href="index.html">S8 Preparation</a><nav aria-label="Navigation principale"><a href="index.html">Accueil</a> <a href="catalogue.html">Parcours</a> <a href="assessment.html?mode=review">Réviser</a> <a href="examens.html">Examens blancs</a> <a href="jour-j.html">Jour J</a></nav></header><main id="contenu" tabindex="-1" class="corpus-reader"><nav class="breadcrumb" aria-label="Fil d’Ariane"><a href="index.html">Accueil</a> <span aria-hidden="true">›</span> <a href="catalogue.html">Parcours</a> <span aria-hidden="true">›</span> <a href="lot-10.html">Module 10 — Sécurité</a> <span aria-hidden="true">›</span> <span aria-current="page">Security Core, CSRF and PasswordHasher components</span></nav><h1>Security Core, CSRF and PasswordHasher components</h1><p class="muted">Symfony 8.0 · API PHP ≤ 8.4 · Twig ≤ 3.22. Préparation indépendante.</p><p class="revision-status">Rédaction narrative P11 : projection nouvelle, non couverte par les décisions historiques P10. Aucune approbation officielle ni garantie de réussite.</p><aside class="narrative-context" aria-label="Repères de lecture"><p><strong>Prérequis de lecture :</strong> <a href="course-CRS-a669jpap5zf2.html">The response</a> · <a href="course-CRS-w6yfxm6ad4zy.html">Services autowiring</a> · <a href="course-CRS-2hpcy2rscq7m.html">Event dispatcher and kernel events</a></p><p><strong>Concepts voisins :</strong> <a href="course-CRS-y3g0v9nmne3t.html">Voters and voting strategies</a> — Distinguer identité et décision sur l’article. <a href="lot-10.html">Comparer les responsabilités dans ce module</a> · <a href="carte-composants.html">Situer cette responsabilité dans le blog</a> · <a href="glossaire.html">Distinguer les termes voisins</a></p><p><a href="ordre-lecture.html">Retrouver les 163 cours dans le parcours recommandé</a>. Ce repère ne modifie ni votre historique ni votre progression.</p></aside><div class="course-layout"><details class="lot-course-menu"><summary>Cours du module · 12 cours</summary><nav aria-label="Cours du module"><a class="lot-context" href="lot-10.html">Module 10 — Sécurité</a><ol><li><a href="course-CRS-awb7sd999c5j.html" aria-current="page">Security Core, CSRF and PasswordHasher components</a></li><li><a href="course-CRS-rdzx4ka72saj.html">Authentication</a></li><li><a href="course-CRS-8hwpzyk1hrq9.html">Authorization</a></li><li><a href="course-CRS-yvhg325ax38y.html">Configuration</a></li><li><a href="course-CRS-enbbsykx22xe.html">Providers</a></li><li><a href="course-CRS-x5frtpg07mmd.html">Firewalls</a></li><li><a href="course-CRS-n9ngfssrq1bt.html">Users</a></li><li><a href="course-CRS-g4sth72ww979.html">Password hashers</a></li><li><a href="course-CRS-2s6e4qgkcqza.html">Roles</a></li><li><a href="course-CRS-2ec5yksjfm9s.html">Access Control Rules</a></li><li><a href="course-CRS-6gc45etcssfb.html">Authenticators, Passports and Badges</a></li><li><a href="course-CRS-y3g0v9nmne3t.html">Voters and voting strategies</a></li></ol><a href="lot-10.html#view-quiz">Quiz du module</a></nav></details><aside class="course-section-menu" aria-label="Sommaire du cours"><nav class="course-actions" aria-label="Activités du cours"><a id="tab-course" href="#view-course">Cours</a><a id="tab-flashcards" href="#view-flashcards">Flashcards</a><a id="tab-quiz" href="#view-quiz">Quiz</a></nav><details class="course-section-disclosure"><summary id="course-sections">Sections du cours</summary><nav aria-label="Sections du cours"><ul><li><a href="#s-objectif">Objectif</a></li><li><a href="#s-l-essentiel">L&#x27;essentiel</a></li><li><a href="#s-le-schema">Le schéma</a></li><li><a href="#s-l-exemple">L&#x27;exemple</a></li><li><a href="#s-trois-components-trois-responsabilites">Trois components, trois responsabilités</a></li><li><a href="#s-qui-depend-de-qui">Qui dépend de qui</a></li><li><a href="#s-pourquoi-la-separation-compte">Pourquoi la séparation compte</a></li><li><a href="#s-ce-qui-vit-dans-security-core">Ce qui vit dans `security-core`</a></li><li><a href="#s-pieges-d-examen">Pièges d&#x27;examen</a></li><li><a href="#s-fiche-express">Fiche express</a></li><li><a href="#reader-objectives">Objectifs d’apprentissage</a></li><li><a href="#reader-sources">Sources officielles et compléments</a></li><li><a href="#course-recalls">Rappels et liens avec les autres cours</a></li></ul></nav><nav aria-label="Flashcards par section"><a href="#view-flashcards">Flashcards par section</a><ul><li><a href="#cards-s-l-essentiel-1">L&#x27;essentiel</a></li><li><a href="#cards-s-le-schema-2">Le schéma</a></li><li><a href="#cards-s-l-exemple-3">L&#x27;exemple</a></li><li><a href="#cards-s-trois-components-trois-responsabilites-4">Trois components, trois responsabilités</a></li><li><a href="#cards-s-qui-depend-de-qui-5">Qui dépend de qui</a></li><li><a href="#cards-s-pourquoi-la-separation-compte-6">Pourquoi la séparation compte</a></li><li><a href="#cards-s-ce-qui-vit-dans-security-core-7">Ce qui vit dans `security-core`</a></li><li><a href="#cards-s-pieges-d-examen-8">Pièges d&#x27;examen</a></li><li><a href="#cards-s-fiche-express-9">Fiche express</a></li><li><a href="#cards-previous">Module 11 — Messenger · Cours « Retries and failures » · Rappel : <span lang="en">Are synchronous handler failures automatically retried by Messenger workers?</span></a></li></ul></nav><nav aria-label="Retour au module"><a href="lot-10.html">Tous les cours du module</a></nav></details><p class="local-quiz-count">4 questions disponibles · 4 par session Quiz</p></aside><div class="course-content"><div id="view-course" data-course-panel role="region" aria-labelledby="view-course-title"><h2 id="view-course-title">Cours</h2><p class="course-introduction"><a href="#s-objectif">Introduction</a> · <a href="#course-sections">Sections du cours</a></p><h2 id="reader-objectives" tabindex="-1">Objectifs d’apprentissage</h2><ul><li><a href="course-CRS-awb7sd999c5j.html#out-OUT-tw22dh0mnngy">Attribuer une responsabilité au bon component</a></li><li><a href="course-CRS-awb7sd999c5j.html#out-OUT-3xr6hfb46rq2">Énoncer que password-hasher s&#x27;utilise seul et que security-csrf se passe de firewall</a></li><li><a href="course-CRS-awb7sd999c5j.html#out-OUT-sk1ndg394haz">Situer security-core hors de toute dependency à HttpFoundation</a></li></ul><aside class="pedagogy-legend" aria-label="Repères pédagogiques"><p><strong>Repères pédagogiques</strong></p><p>Ces repères décrivent le rôle du bloc, pas une fréquence officielle à l’examen.</p><p class="teaching-label essential"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="brain" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5C12 1 6 1 6 5C2 5 1 10 4 12C1 15 3 19 6 19C6 23 12 23 12 19V5M12 5C12 1 18 1 18 5C22 5 23 10 20 12C23 15 21 19 18 19C18 23 12 23 12 19M6 5C6 8 8 9 9 9M4 12H7L9 14M6 19V16M18 5C18 8 16 9 15 9M20 12H17L15 14M18 19V16"></path></svg> <strong>À comprendre</strong></p><p class="teaching-label essential"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="book" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5C9 3 5 3 2 4V20C5 19 9 19 12 21C15 19 19 19 22 20V4C19 3 15 3 12 5V21M5 8H8M5 12H8M16 8H19M16 12H19"></path></svg> <strong>À mémoriser</strong></p><p class="teaching-label example"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="code" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6L2 12L8 18M16 6L22 12L16 18M14 3L10 21"></path></svg> <strong>Exemple concret</strong></p><p class="teaching-label pitfall"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="warning" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3L23 21H1L12 3ZM12 9V14M12 17V18"></path></svg> <strong>Piège à éviter</strong></p><p class="teaching-label nuance"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="balance" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3V21M7 21H17M3 7L21 5M5 7L1 15H9L5 7M19 6L15 14H23L19 6M1 15Q5 20 9 15M15 14Q19 19 23 14"></path></svg> <strong>Nuance à connaître</strong></p><p>Précision, exception ou condition d’application d’une règle.</p></aside><section class="teaching-section" data-section="s-objectif"><h2 id="s-objectif" tabindex="-1">Objectif</h2><p><code>GET /blog/42</code> affiche déjà un article public. Ajouter une inscription, un form
+de commentaire ou un droit de modification introduit trois problèmes différents.
+Avant de configurer un firewall, identifions le package qui répond à chacun :
+vérifier un password, protéger une soumission contre une action forgée, décider
+d'un droit. Une dependency installée n'implique pas que tous ces mécanismes
+s'exécutent à chaque lecture de l'article.</p>
+<p>Question du cours : <strong>quel package résout quel problème, et lequel exige
+lequel à l'installation ?</strong></p></section><section class="teaching-section" data-section="s-l-essentiel"><h2 id="s-l-essentiel" tabindex="-1">L&#x27;essentiel</h2><p class="teaching-label essential"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="brain" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5C12 1 6 1 6 5C2 5 1 10 4 12C1 15 3 19 6 19C6 23 12 23 12 19V5M12 5C12 1 18 1 18 5C22 5 23 10 20 12C23 15 21 19 18 19C18 23 12 23 12 19M6 5C6 8 8 9 9 9M4 12H7L9 14M6 19V16M18 5C18 8 16 9 15 9M20 12H17L15 14M18 19V16"></path></svg> <strong>À comprendre</strong></p><aside class="section-digest" id="s-l-essentiel-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Le hash a son propre component.</li><li>Un firewall n&#x27;est pas nécessaire pour hacher.</li></ol></aside><p><strong>Ce que cette partie veut réellement vous apprendre.</strong></p>
+<ul>
+<li><em>Pourquoi ce sujet existe.</em> « Sécuriser le site » est trop vague : il y a
+  trois problèmes distincts (secret, soumission, droit), donc trois packages.</li>
+<li><em>Le piège de fond.</em> Confondre <strong>dépendance Composer</strong> (ce qui est livré) et
+  <strong>exécution</strong> (ce qui tourne à chaque requête).</li>
+<li><em>Ce que l'auteur veut que vous compreniez.</em> Seul <code>password-hasher</code> est
+  vraiment autonome ; <code>security-csrf</code> tire <code>security-core</code>, qui tire
+  <code>password-hasher</code>.</li>
+<li><em>Pourquoi c'est à l'examen.</em> Les questions portent sur « qui requiert qui »,
+  sur l'absence de HTTP dans <code>security-core</code> et sur le contenu de <code>security-http</code>.</li>
+</ul>
+<p>À l'inscription, un <strong>hash</strong> permet de vérifier ensuite le password sans
+conserver sa valeur en clair. Ce n'est pas un chiffrement réversible : on
+vérifie un password candidat, on ne déchiffre pas le hash pour retrouver le
+password initial. Lors d'une soumission, un <strong>token CSRF</strong> participe
+à la protection contre une action qu'un autre site ferait envoyer au navigateur.
+Pour modifier l'article 42, l'<strong>authorization</strong> décide si l'identité courante
+possède le droit demandé ; elle ne se réduit ni au hash ni au contrôle CSRF.</p>
+<p>Ces responsabilités vivent dans des packages distincts. Hacher un password ou
+protéger un form <strong>n'exige pas</strong> le système d'authentication complet — mais
+indépendance fonctionnelle ne signifie pas absence de dependencies Composer.
+Commençons par cette frontière d'installation avant de suivre les objets.</p>
+<pre class="highlight" tabindex="0"><code class="language-text"> PROBLÈME                     OUTIL                    PACKAGE
+ « ce mot de passe est-il     hash / vérification      password-hasher
+   le bon ? »
+ « cette soumission vient     token CSRF               security-csrf
+   bien de MON formulaire ? »
+ « a-t-il le droit de ... ? » voters + décision        security-core</code></pre></section><section class="teaching-section" data-section="s-le-schema"><h2 id="s-le-schema" tabindex="-1">Le schéma</h2><aside class="section-digest" id="s-le-schema-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Le modèle et HTTP sont séparés.</li><li>SecurityBundle configure leur intégration.</li></ol></aside><p><strong>Où en est-on ?</strong> Carte du cours : on regarde les packages, pas encore les
+objets. Pour choisir les packages du form de commentaire, lire chaque flèche
+comme « exige ce package », et non comme « appelle ensuite ce mécanisme ».</p>
+<figure class="diagram" aria-labelledby="CRS-awb7sd999c5j-3-diagram-0-title CRS-awb7sd999c5j-3-diagram-0-description"><figcaption id="CRS-awb7sd999c5j-3-diagram-0-title">Les dependencies entre les packages de sécurité de Symfony 8.0</figcaption><p id="CRS-awb7sd999c5j-3-diagram-0-description">password-hasher ne dépend d&#x27;aucun autre package de sécurité. security-core dépend de password-hasher. security-csrf dépend de security-core. security-http dépend de security-core et des packages HTTP. SecurityBundle dépend des quatre et câble le tout dans le framework.</p><div class="mermaid" hidden>---
+title: Qui dépend de qui, en Symfony 8.0
+---
+flowchart TD
+  accTitle: Les dependencies entre les packages de sécurité de Symfony 8.0
+  accDescr: password-hasher ne dépend d&#x27;aucun autre package de sécurité. security-core dépend de password-hasher. security-csrf dépend de security-core. security-http dépend de security-core et des packages HTTP. SecurityBundle dépend des quatre et câble le tout dans le framework.
+  PH[&quot;password-hasher : le hash&quot;]
+  SC[&quot;security-core : décisions et identité&quot;] -.-&gt;|&quot;require&quot;| PH
+  CS[&quot;security-csrf : jetons CSRF&quot;] -.-&gt;|&quot;require&quot;| SC
+  SH[&quot;security-http : authentication HTTP&quot;] -.-&gt;|&quot;require&quot;| SC
+  SB[&quot;SecurityBundle : câblage&quot;] -.-&gt;|&quot;require&quot;| SH
+  SB -.-&gt;|&quot;require&quot;| CS
+  classDef package fill:#e0f2fe,stroke:#075985,color:#0c4a6e
+  classDef integration fill:#f1f5f9,stroke:#475569,color:#1e293b
+  class PH,SC,CS,SH package
+  class SB integration</div></figure>
+<p>Bleu : packages fonctionnels ; gris : intégration. Les pointillés signifient
+<strong>dépendances Composer</strong>, jamais ordre d'appel. Vue réduite aux chemins utiles :
+les dépendances directes redondantes de SecurityBundle et les composants HTTP
+sont détaillés dans le tableau, pas toutes redessinées.</p>
+<p>Une command CLI préparant les comptes des auteurs peut hacher leurs passwords
+sans démarrer de firewall. Le form public de commentaire peut vérifier un token
+CSRF sans connecter un user. Ce sont deux usages séparés : produire un hash ne
+vérifie pas encore un password, et vérifier un token CSRF n'identifie pas
+l'auteur du commentaire. Aucun des deux n'accorde à lui seul un droit métier.</p>
+<pre class="highlight" tabindex="0"><code class="language-text">password-hasher ◄── security-core ◄── security-csrf
+                         ▲
+                         └──────── security-http ◄── SecurityBundle
+                                                      (+ csrf, + hasher)
+Flèche = « exige ». Ce n'est PAS l'ordre d'appel pendant une requête.</code></pre></section><section class="teaching-section" data-section="s-l-exemple"><h2 id="s-l-exemple" tabindex="-1">L&#x27;exemple</h2><p class="teaching-label example"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="code" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6L2 12L8 18M16 6L22 12L16 18M14 3L10 21"></path></svg> <strong>Exemple concret</strong></p><aside class="section-digest" id="s-l-exemple-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Le token CSRF vérifie l&#x27;intention de soumission.</li><li>Il ne prouve pas une identité utilisateur.</li></ol></aside><p><strong>Où en est-on ?</strong> Trois commandes Composer <strong>alternatives</strong>. La question :
+« que me livre chacune ? » Pas « qu'est-ce qui s'exécute ? ».</p>
+<p>Voici trois choix alternatifs de package, pas trois étapes à rejouer pendant
+<code>GET /blog/42</code>. Les flèches indiquent le résultat d'installation attendu parmi
+les packages de sécurité ; ce bloc est un mémo, pas une sortie de terminal.
+Le cours cible Symfony 8.0 avec PHP 8.4.</p>
+<pre class="highlight" tabindex="0"><code class="language-text">composer require symfony/password-hasher:"8.0.*"
+   → le hash, seul
+composer require symfony/security-csrf:"8.0.*"
+   → les tokens CSRF, + security-core, + password-hasher
+composer require symfony/security-bundle:"8.0.*"
+   → tout : core, csrf, http, password-hasher, configuration</code></pre>
+<p>Le choix du package principal ne verrouille pas à lui seul toutes ses
+dependencies transitives sur 8.0 : elles suivent les contraintes du projet.
+Une fois l'installation comprise, il reste à attribuer les responsabilités
+aux objets que l'application utilisera.</p>
+<table>
+<thead>
+<tr>
+<th>Commande</th>
+<th>Ce qui arrive en plus</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>require symfony/password-hasher</code></td>
+<td>rien d'autre</td>
+</tr>
+<tr>
+<td><code>require symfony/security-csrf</code></td>
+<td><code>security-core</code>, puis <code>password-hasher</code></td>
+</tr>
+<tr>
+<td><code>require symfony/security-bundle</code></td>
+<td>core, csrf, http, hasher + <code>security:</code></td>
+</tr>
+</tbody>
+</table></section><section class="teaching-section" data-section="s-trois-components-trois-responsabilites"><span class="outcome-anchor" id="out-OUT-tw22dh0mnngy" tabindex="-1"></span><h2 id="s-trois-components-trois-responsabilites" tabindex="-1">Trois components, trois responsabilités</h2><aside class="section-digest" id="s-trois-components-trois-responsabilites-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Security Core porte le modèle d&#x27;accès.</li><li>PasswordHasher et CSRF ont des responsabilités distinctes.</li></ol></aside><p><strong>Où en est-on ?</strong> Étape 1 sur 4 : attribuer <strong>un problème à un package</strong>.
+Le but : savoir, devant un besoin, quel package nommer.</p>
+<div class="admonition info">
+<p class="admonition-title">🌍 In Real Life</p>
+<p><strong>La situation</strong> : au restaurant du blog, vérifier un secret, contrôler un bon de commande et autoriser une modification sont trois tâches.</p>
+<p><strong>L’équivalent dans Symfony</strong> : vérificateur de secret → PasswordHasher ; contrôle du bon → CSRF ; décision sur la modification du billet 42 → autorisation de Security Core.</p>
+<p><strong>Retour à la réalité technique</strong> : un hash vérifie un mot de passe sans le déchiffrer. Un token CSRF lutte contre une soumission forgée, sans identifier son auteur ni lui accorder un droit. Ces contrôles exigent leurs appels ou intégrations.</p>
+<p><strong>🧠 Comment le mémoriser</strong> : « Trois questions, trois outils. » Image mentale : trois tampons distincts sur le comptoir. Question-réflexe : vérifie-t-on un secret, une soumission ou un droit ?</p>
+<p><strong>⚠️ À ne pas confondre</strong> : être connecté ne rend pas un token CSRF invalide acceptable.</p>
+</div>
+<p>Le besoin « sécuriser le blog » est trop large pour choisir une class. Partir
+de l'entrée et du résultat attendus : password en clair → hash ou vérification ;
+token soumis → validité CSRF ; identité et action sur l'article → décision d'accès.</p>
+<table>
+<thead>
+<tr>
+<th>Package</th>
+<th>Ce qu'il fournit</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>symfony/security-core</code></td>
+<td>le modèle : <code>UserInterface</code>, tokens, voters, décision d'accès, hiérarchie des roles</td>
+</tr>
+<tr>
+<td><code>symfony/security-csrf</code></td>
+<td>la génération et la vérification de tokens CSRF</td>
+</tr>
+<tr>
+<td><code>symfony/password-hasher</code></td>
+<td>le hash et la vérification des passwords</td>
+</tr>
+</tbody>
+</table>
+<p>S'y ajoutent <code>security-http</code>, qui branche le modèle sur la Request HTTP —
+firewalls, authenticators, entry points —, et <code>SecurityBundle</code>, qui câble le
+tout dans le framework et expose la key <code>security:</code>. Un <strong>firewall</strong> sélectionne
+la configuration de sécurité applicable à une Request ; un <strong>authenticator</strong>
+traite une tentative d'authentication. Ils ne sont pas des synonymes de voter :
+le <strong>voter</strong> se prononce sur un droit. Cette séparation explique les dependencies
+du tableau suivant.</p></section><section class="teaching-section" data-section="s-qui-depend-de-qui"><span class="outcome-anchor" id="out-OUT-sk1ndg394haz" tabindex="-1"></span><h2 id="s-qui-depend-de-qui" tabindex="-1">Qui dépend de qui</h2><aside class="section-digest" id="s-qui-depend-de-qui-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Autonomie d&#x27;usage ne signifie pas absence de dependency.</li><li>La chaîne de packages reste explicite.</li></ol></aside><p><strong>Où en est-on ?</strong> Étape 2 sur 4 : on lit les <code>composer.json</code> de la branche 8.0.
+Question : installer un package, qu'est-ce que cela <strong>apporte réellement</strong> ?</p>
+<div class="admonition info">
+<p class="admonition-title">🌍 In Real Life</p>
+<p><strong>La situation</strong> : acheter un équipement du restaurant peut imposer ses accessoires, sans obliger à tous les utiliser pour chaque commande.</p>
+<p><strong>L’équivalent dans Symfony</strong> : liste des accessoires requis → dépendances Composer ; équipement effectivement utilisé → classes et services appelés.</p>
+<p><strong>Retour à la réalité technique</strong> : en Symfony 8.0, <code>security-csrf</code> requiert <code>security-core</code>, qui requiert <code>password-hasher</code>. Cette installation n'active pas à elle seule un firewall pour <code>GET /blog/42</code>.</p>
+<p><strong>🧠 Comment le mémoriser</strong> : « Livré n'est pas activé. » Image mentale : un carton encore fermé près du comptoir. Question-réflexe : parle-t-on d'installation ou d'exécution ?</p>
+<p><strong>⚠️ À ne pas confondre</strong> : dépendance de package et ordre des opérations HTTP.</p>
+</div>
+<p>Le form de commentaire n'a pas besoin de connecter son visiteur. Pourtant,
+installer son support CSRF apporte aussi le modèle de sécurité. Ce n'est pas
+un firewall implicite : c'est une dependency de code, visible dans les
+<code>composer.json</code> de la branche 8.0 :</p>
+<table>
+<thead>
+<tr>
+<th>Package</th>
+<th><code>require</code> (hors PHP et contrats)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>password-hasher</code></td>
+<td><strong>rien</strong></td>
+</tr>
+<tr>
+<td><code>security-core</code></td>
+<td><code>password-hasher</code></td>
+</tr>
+<tr>
+<td><code>security-csrf</code></td>
+<td><code>security-core</code></td>
+</tr>
+<tr>
+<td><code>security-http</code></td>
+<td><code>security-core</code>, <code>http-foundation</code>, <code>http-kernel</code>, <code>property-access</code></td>
+</tr>
+<tr>
+<td><code>SecurityBundle</code></td>
+<td>les quatre, plus le framework</td>
+</tr>
+</tbody>
+</table>
+<p><code>require symfony/password-hasher</code> n'installe donc que lui ;
+<code>require symfony/security-csrf</code> tire aussi <code>security-core</code> et
+<code>password-hasher</code>, pour une raison modeste : <code>security-csrf</code> lève les
+exceptions de <code>security-core</code>.</p>
+<p><strong>Pourquoi <code>security-core</code> exige-t-il <code>password-hasher</code> ?</strong> Le modèle de
+sécurité manipule des passwords hachés (interface de user avec password) : le
+hasher est donc une brique de base, pas une option.</p>
+<p>À l'examen, distinguer donc « le package est installé » de « l'application
+active un mécanisme ». La présence de <code>password-hasher</code> par dependency ne fait
+pas hacher un password lors de chaque consultation de l'article.</p></section><section class="teaching-section" data-section="s-pourquoi-la-separation-compte"><span class="outcome-anchor" id="out-OUT-3xr6hfb46rq2" tabindex="-1"></span><h2 id="s-pourquoi-la-separation-compte" tabindex="-1">Pourquoi la séparation compte</h2><aside class="section-digest" id="s-pourquoi-la-separation-compte-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Le hash est utilisable séparément.</li><li>L&#x27;authentication ajoute un autre traitement.</li></ol></aside><p><strong>Où en est-on ?</strong> Étape 3 sur 4 : à quoi sert concrètement cette séparation ?
+Deux cas : une commande console et un formulaire public, <strong>sans firewall</strong>.</p>
+<p>La command de préparation des comptes n'a pas de Request à authentifier.
+<code>PasswordHasherFactory</code> choisit un hasher à partir de sa configuration ; avec
+<code>auto</code> et les options par défaut de Symfony 8.0, le hasher natif produit un
+hash bcrypt <code>$2y$13$…</code>. Vérifier ensuite le password correct donne <code>true</code>,
+un autre donne <code>false</code>. Cette opération n'exige ni firewall ni class de
+<code>security-core</code> chargée. Le préfixe et le coût décrivent ici cette configuration,
+pas un engagement sur toutes les versions futures ou toutes les options.</p>
+<p>De son côté, le form de commentaire peut utiliser <code>security-csrf</code> <strong>sans
+firewall</strong>. Dans le mécanisme avec stockage de <code>CsrfTokenManager</code>, un identifiant
+de token désigne la valeur attendue ; le manager contrôle la valeur soumise
+contre celle du stockage. Un token absent ou incorrect échoue, même si le
+visiteur est connecté. Le component Form sait intégrer cette protection ;
+installer le package seul ne protège pas automatiquement tout form HTML.</p>
+<p>Aucun de ces packages ne dépend de Doctrine ni d'une base de données. Le
+stockage des comptes est un autre choix. Pour décider qui peut modifier
+l'article après l'authentication, passons maintenant au modèle de <code>security-core</code>.</p>
+<pre class="highlight" tabindex="0"><code class="language-text">Commande « créer auteur »          Formulaire de commentaire
+  password en clair                   token soumis + identifiant
+        │                                   │
+        ▼                                   ▼
+  PasswordHasher                       CsrfTokenManager
+  hash $2y$13$...  ou  true/false      token valide ?  oui / non
+  (aucun firewall)                     (aucun login requis)</code></pre></section><section class="teaching-section" data-section="s-ce-qui-vit-dans-security-core"><h2 id="s-ce-qui-vit-dans-security-core" tabindex="-1">Ce qui vit dans `security-core`</h2><aside class="section-digest" id="s-ce-qui-vit-dans-security-core-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Les voters portent une décision d&#x27;accès.</li><li>La console peut utiliser ce modèle sans Request.</li></ol></aside><p><strong>Où en est-on ?</strong> Étape 4 sur 4 : on ouvre <code>security-core</code>. Question : quels
+objets modélisent « cette identité peut-elle faire cela ? »</p>
+<div class="admonition info">
+<p class="admonition-title">🌍 In Real Life</p>
+<p><strong>La situation</strong> : avant de modifier la fiche du plat 42, un responsable consulte l'identité de l'employé et les avis des personnes compétentes.</p>
+<p><strong>L’équivalent dans Symfony</strong> : identité → <code>UserInterface</code> ; dossier de sécurité courant → token ; avis → voters ; règle de décision → <code>AccessDecisionManager</code>.</p>
+<p><strong>Retour à la réalité technique</strong> : ces objets modélisent une décision d'accès. Le contrôle doit être appelé avec le contexte approprié ; le même modèle peut servir à la commande d'administration du blog, sans requête HTTP.</p>
+<p><strong>🧠 Comment le mémoriser</strong> : « Un dossier, des avis, une décision. » Image mentale : le dossier 42 sur une table de réunion. Question-réflexe : qui fournit le contexte et qui combine les votes ?</p>
+<p><strong>⚠️ À ne pas confondre</strong> : token de sécurité et token CSRF du formulaire.</p>
+</div>
+<p>Pour demander « cette identité peut-elle modifier l'article 42 ? », les
+responsabilités se répartissent ainsi :</p>
+<ul>
+<li><code>UserInterface</code> décrit le contrat de l'identité, pas son stockage en base ;</li>
+<li>le <strong>token de sécurité</strong> (<code>TokenInterface</code>) porte le contexte de sécurité ;
+  ce n'est pas le token CSRF soumis par un form ;</li>
+<li>les <strong>voters</strong> examinent le droit demandé ; <code>AccessDecisionManager</code> combine
+  leurs votes selon une strategy ;</li>
+<li>la <strong>hiérarchie des roles</strong> exprime les roles hérités.</li>
+</ul>
+<p>Il ne <strong>dépend</strong> pas de HTTP : <code>http-foundation</code> n'y figure qu'en
+<code>require-dev</code>. Quelques classes optionnelles s'en servent quand il est
+présent, comme <code>UsageTrackingTokenStorage</code> pour la session. Une décision
+d'accès se prend donc aussi en console ou dans un worker, à condition que
+l'application fournisse le contexte de sécurité nécessaire. Le token du
+navigateur n'est pas transporté automatiquement avec un message Messenger.</p></section><section class="teaching-section" data-section="s-pieges-d-examen"><h2 id="s-pieges-d-examen" tabindex="-1">Pièges d&#x27;examen</h2><p class="teaching-label pitfall"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="warning" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3L23 21H1L12 3ZM12 9V14M12 17V18"></path></svg> <strong>Piège à éviter</strong></p><aside class="section-digest" id="s-pieges-d-examen-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Ne pas confondre modèle et intégration HTTP.</li><li>Le firewall est lié à la Request.</li></ol></aside><ul class="pitfall-list"><li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : Le hash n&#x27;est pas dans security-core</summary><p><strong>Le hash n'est pas dans <code>security-core</code></strong> : préparer le password du nouvel
+auteur relève de <code>password-hasher</code> — dont <code>security-core</code> dépend.
+<em>Pourquoi on se trompe : le hash semble faire partie du « modèle de sécurité ».</em></p></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : La protection CSRF n&#x27;est pas liée à l&#x27;authentication</summary><p><strong>La protection CSRF n'est pas liée à l'authentication</strong> : le commentaire
+public peut la demander sans firewall. Mais <code>security-csrf</code> n'est pas un
+package isolé : il installe <code>security-core</code>.
+<em>Pourquoi on se trompe : « sans firewall » est entendu comme « sans dépendance ».</em></p></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : Seul password-hasher s&#x27;installe vraiment seul</summary><p><strong>Seul <code>password-hasher</code> s'installe vraiment seul</strong> parmi ces trois packages :
+ne pas confondre l'autonomie de la command de hash avec celle du package CSRF.
+<em>Pourquoi on se trompe : les trois packages paraissent symétriques.</em></p></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : security-core ne dépend pas de HTTP.</summary><p><strong><code>security-core</code> ne dépend pas de HTTP.</strong> Réutiliser une décision d'accès
+hors du navigateur n'impose donc pas un firewall ; firewalls et authenticators
+appartiennent à <code>security-http</code>, pas au modèle.
+<em>Pourquoi on se trompe : on associe « sécurité » à « requête HTTP ».</em></p></details></li></ul></section><section class="teaching-section" data-section="s-fiche-express"><h2 id="s-fiche-express" tabindex="-1">Fiche express</h2><p class="teaching-label essential"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="book" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5C9 3 5 3 2 4V20C5 19 9 19 12 21C15 19 19 19 22 20V4C19 3 15 3 12 5V21M5 8H8M5 12H8M16 8H19M16 12H19"></path></svg> <strong>À mémoriser</strong></p><aside class="section-digest" id="s-fiche-express-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Le bundle assemble les components.</li><li>La key security configure cette intégration.</li></ol></aside><p>Avant de passer à l'authentication, vérifier qu'on sait distinguer les trois
+besoins rencontrés autour de l'article 42 : préparer le compte, contrôler une
+soumission, décider d'un droit.</p>
+<p><strong>🧠 À retenir pour la certification :</strong></p>
+<ul>
+<li><strong><code>password-hasher</code></strong> : le hash, <strong>sans aucune dependency</strong> de sécurité.</li>
+<li><strong><code>security-core</code></strong> : user, tokens, voters, roles — <strong>sans HTTP</strong> ; dépend
+  de <code>password-hasher</code>.</li>
+<li><strong><code>security-csrf</code></strong> : tokens CSRF <strong>sans firewall</strong> ; dépend de
+  <code>security-core</code>.</li>
+<li><strong><code>security-http</code></strong> : firewalls, authenticators, la Request.</li>
+<li><strong><code>SecurityBundle</code></strong> : les quatre + la configuration <code>security:</code>.</li>
+</ul>
+<p>Moyen mnémotechnique :
+<strong>« Hacher seul, protéger sans compte, contrôler avec le core »</strong>.</p>
+<pre class="highlight" tabindex="0"><code class="language-text">password-hasher &lt;- security-core &lt;- security-csrf
+                   security-core &lt;- security-http &lt;- SecurityBundle
+                                                     (+ csrf + hasher)</code></pre></section><section class="official-sources"><h2 id="reader-sources" tabindex="-1">Sources officielles et compléments</h2><ul><li><a href="https://symfony.com/doc/8.0/security.html">Symfony 8.0 — Security</a></li><li><a href="https://symfony.com/doc/8.0/security/passwords.html">Symfony 8.0 — PasswordHasher</a></li></ul></section><section id="course-recalls" aria-labelledby="course-recalls-title" tabindex="-1"><h2 id="course-recalls-title">Rappels et liens avec les autres cours</h2><div data-recall-group="other"><h3>Rappels des cours précédents / autres modules</h3><ul><li data-recall-course="CRS-hgkzgm1dh3my" data-recall-kind="previous_course"><p class="recall-provenance">Module 11 — Messenger · Cours « Retries and failures »</p><p>Le worker n&#x27;intervient pas dans le dispatch direct. Le caller reçoit l&#x27;échec.</p><p><a href="#cards-previous">Rappel : <span lang="en">Are synchronous handler failures automatically retried by Messenger workers?</span></a></p></li></ul></div></section><nav class="course-sequence" aria-label="Ordre de lecture"><a rel="prev" href="course-CRS-h9bfar3cxyet.html" aria-label="Précédent : Middleware — Module 11 — Messenger">Précédent : Middleware</a> <a href="lot-10.html">Sommaire : Module 10 — Sécurité</a> <a rel="next" href="course-CRS-n9ngfssrq1bt.html" aria-label="Suivant : Users — Module 10 — Sécurité">Suivant : Users</a></nav><p class="course-practice-entry"><a class="button" href="#view-quiz">Fin du cours — s’entraîner avec le Quiz</a></p></div><div id="view-flashcards" data-course-panel role="region" aria-labelledby="view-flashcards-title"><h2 id="view-flashcards-title">Flashcards</h2><p lang="en">Answer before revealing each card.</p><p>Ces cartes ne mesurent pas une maîtrise notée.</p><div id="cards-s-l-essentiel-1" data-card-section="s-l-essentiel"><h3><a href="#s-l-essentiel">Revoir : L&#x27;essentiel</a></h3><div class="reader-cards"><details class="reader-card" id="B-awb7sd999c5j-01"><summary lang="en">Which component hashes and verifies passwords independently of HTTP authentication?</summary><p lang="en">PasswordHasher.</p><p lang="fr">Le hash a son propre component. Un firewall n&#x27;est pas nécessaire pour hacher.</p><a href="course-CRS-awb7sd999c5j.html#out-OUT-3xr6hfb46rq2">Revoir le passage précis</a></details></div></div><div id="cards-s-le-schema-2" data-card-section="s-le-schema"><h3><a href="#s-le-schema">Revoir : Le schéma</a></h3><div class="reader-cards"><details class="reader-card" id="B-awb7sd999c5j-02"><summary lang="en">Which component connects the security model to HTTP Requests?</summary><p lang="en">Security Http, integrated into the framework by SecurityBundle.</p><p lang="fr">Le modèle et HTTP sont séparés. SecurityBundle configure leur intégration.</p><a href="course-CRS-awb7sd999c5j.html#out-OUT-tw22dh0mnngy">Revoir le passage précis</a></details></div></div><div id="cards-s-l-exemple-3" data-card-section="s-l-exemple"><h3><a href="#s-l-exemple">Revoir : L&#x27;exemple</a></h3><div class="reader-cards"><details class="reader-card" id="B-awb7sd999c5j-03"><summary lang="en">Can a form use Symfony CSRF protection without configuring a firewall?</summary><p lang="en">Yes. CSRF token validation is independent of authentication.</p><p lang="fr">Le token CSRF vérifie l&#x27;intention de soumission. Il ne prouve pas une identité utilisateur.</p><a href="course-CRS-awb7sd999c5j.html#out-OUT-3xr6hfb46rq2">Revoir le passage précis</a></details></div></div><div id="cards-s-trois-components-trois-responsabilites-4" data-card-section="s-trois-components-trois-responsabilites"><h3><a href="#s-trois-components-trois-responsabilites">Revoir : Trois components, trois responsabilités</a></h3><div class="reader-cards"><details class="reader-card" id="B-awb7sd999c5j-04"><summary lang="en">Which component owns users, security tokens, voters and role hierarchy?</summary><p lang="en">Security Core.</p><p lang="fr">Security Core porte le modèle d&#x27;accès. PasswordHasher et CSRF ont des responsabilités distinctes.</p><a href="course-CRS-awb7sd999c5j.html#out-OUT-tw22dh0mnngy">Revoir le passage précis</a></details></div></div><div id="cards-s-qui-depend-de-qui-5" data-card-section="s-qui-depend-de-qui"><h3><a href="#s-qui-depend-de-qui">Revoir : Qui dépend de qui</a></h3><div class="reader-cards"><details class="reader-card" id="B-awb7sd999c5j-05"><summary lang="en">Does security-csrf have no security dependencies?</summary><p lang="en">No. It depends on security-core, which depends on password-hasher.</p><p lang="fr">Autonomie d&#x27;usage ne signifie pas absence de dependency. La chaîne de packages reste explicite.</p><a href="course-CRS-awb7sd999c5j.html#out-OUT-sk1ndg394haz">Revoir le passage précis</a></details></div></div><div id="cards-s-pourquoi-la-separation-compte-6" data-card-section="s-pourquoi-la-separation-compte"><h3><a href="#s-pourquoi-la-separation-compte">Revoir : Pourquoi la séparation compte</a></h3><div class="reader-cards"><details class="reader-card" id="B-awb7sd999c5j-06"><summary lang="en">Does hashing a password require a configured authentication system?</summary><p lang="en">No. PasswordHasher can be used on its own.</p><p lang="fr">Le hash est utilisable séparément. L&#x27;authentication ajoute un autre traitement.</p><a href="course-CRS-awb7sd999c5j.html#out-OUT-3xr6hfb46rq2">Revoir le passage précis</a></details></div></div><div id="cards-s-ce-qui-vit-dans-security-core-7" data-card-section="s-ce-qui-vit-dans-security-core"><h3><a href="#s-ce-qui-vit-dans-security-core">Revoir : Ce qui vit dans `security-core`</a></h3><div class="reader-cards"><details class="reader-card" id="B-awb7sd999c5j-07"><summary lang="en">Can an access decision be made outside an HTTP Request?</summary><p lang="en">Yes. Security Core&#x27;s voter and decision model does not require the HTTP firewall layer.</p><p lang="fr">Les voters portent une décision d&#x27;accès. La console peut utiliser ce modèle sans Request.</p><a href="course-CRS-awb7sd999c5j.html#out-OUT-sk1ndg394haz">Revoir le passage précis</a></details></div></div><div id="cards-s-pieges-d-examen-8" data-card-section="s-pieges-d-examen"><h3><a href="#s-pieges-d-examen">Revoir : Pièges d&#x27;examen</a></h3><div class="reader-cards"><details class="reader-card" id="B-awb7sd999c5j-08"><summary lang="en">Are firewalls implemented by Security Core itself?</summary><p lang="en">No. The HTTP integration belongs to Security Http.</p><p lang="fr">Ne pas confondre modèle et intégration HTTP. Le firewall est lié à la Request.</p><a href="course-CRS-awb7sd999c5j.html#out-OUT-3xr6hfb46rq2">Revoir le passage précis</a></details></div></div><div id="cards-s-fiche-express-9" data-card-section="s-fiche-express"><h3><a href="#s-fiche-express">Revoir : Fiche express</a></h3><div class="reader-cards"><details class="reader-card" id="B-awb7sd999c5j-09"><summary lang="en">Which framework integration exposes the security configuration tree?</summary><p lang="en">SecurityBundle.</p><p lang="fr">Le bundle assemble les components. La key security configure cette intégration.</p><a href="course-CRS-awb7sd999c5j.html#out-OUT-tw22dh0mnngy">Revoir le passage précis</a></details></div></div><div id="cards-previous"><p class="recall-provenance">Module 11 — Messenger · Cours « Retries and failures »</p><aside class="checkpoint"><h2>Rappel d’un cours antérieur</h2><p>Avant de poursuivre : Retries and failures.</p><details class="corpus-correction"><summary lang="en">Are synchronous handler failures automatically retried by Messenger workers?</summary><p lang="en">No. Direct synchronous dispatch throws HandlerFailedException back to the caller.</p><p>Le worker n&#x27;intervient pas dans le dispatch direct. Le caller reçoit l&#x27;échec.</p><a href="course-CRS-hgkzgm1dh3my.html#out-OUT-jd6ca4q02538">Relire la correction dans le cours antérieur</a></details></aside></div></div><div id="view-quiz" data-course-panel role="region" aria-labelledby="view-quiz-title"><aside class="revision-context"><p><strong>Avant le quiz :</strong> GET /blog/42 affiche déjà un article public. Ajouter une inscription, un form de commentaire ou un droit de modification introduit trois problèmes différents. Avant de configurer un firewall, identifions le package qui répond à chacun : vérifier un password, protéger une soumission contre une action forgée, décider d&#x27;un droit. Une dependency installée n&#x27;implique pas que tous ces mécanismes s&#x27;exécutent à chaque lecture de l&#x27;article.</p><p>Quelle donnée entre, quelle responsabilité agit et quelle condition change le résultat ? Pour chaque correction, vérifiez ces conditions dans <a href="course-CRS-awb7sd999c5j.html#s-objectif">le passage enseigné</a>, sans supposer que toutes les branches du blog sont exécutées.</p></aside><h2 id="view-quiz-title">Quiz</h2><p class="quiz-size" lang="en">4 eligible learning questions · 4 per session. Repeating a question does not demonstrate mastery.</p><p id="course-quiz-status" role="status">Quiz interactif non chargé. Démarrez après chargement de la banque locale.</p><div id="course-quiz-controls" class="assessment-main" hidden><div id="course-quiz-assessment-controls" hidden><select id="course-quiz-assessment-mode" aria-label="Mode du quiz" hidden><option value="learning">Entraînement</option></select><p id="course-quiz-training-scope"></p><button id="course-quiz-start-assessment" type="button" lang="en">Start practice</button><button id="course-quiz-finish-assessment" type="button" lang="en" hidden>End session</button></div><p id="course-quiz-assessment-error" role="alert"></p><p id="course-quiz-assessment-timer" hidden></p><p id="course-quiz-session-progress" class="quiz-progress" role="status" lang="en"></p><div id="course-quiz-assessment-app" tabindex="-1"></div><nav id="course-quiz-session-navigation" aria-label="Questions du cours"></nav><div id="course-quiz-learning-overview" aria-live="polite"></div></div><div id="course-quiz-native"><p>Sans JavaScript ou si le chargement échoue : aucune tentative notée. Les <a href="#view-flashcards">flashcards du cours</a> restent disponibles.</p><details class="course-quiz-fallback" data-question-id="L-awb7sd999c5j-base-v1"><summary lang="en">Which component hashes and verifies passwords independently of HTTP authentication?</summary><p>Correction de consultation — non notée.</p><p>Le hash a son propre component. Un firewall n&#x27;est pas nécessaire pour hacher.</p><ul><li><strong lang="en">Distractor: The HTTP firewall.</strong><p>Le hash peut être utilisé indépendamment de l&#x27;authentification HTTP.</p></li><li><strong lang="en">Correct: PasswordHasher.</strong><p>Le hash a son propre component. Un firewall n&#x27;est pas nécessaire pour hacher.</p></li><li><strong lang="en">Distractor: Security CSRF.</strong><p>CSRF protège contre des Requests forgées ; il ne hache pas les passwords.</p></li></ul><a href="course-CRS-awb7sd999c5j.html#out-OUT-3xr6hfb46rq2">Relire le passage exact</a></details></div></div></div></div><details class="transfer-panel"><summary>Sauvegarde et transfert de progression</summary><p id="reading-status" role="status">Sans JavaScript : lecture libre ; progression non enregistrée.</p><p><a href="assessment.html#overview-title">Lecture, réussites immédiates et différées</a></p><p>Transfert manuel — aucune synchronisation automatique</p><p id="persistence-status" role="status"></p><button type="button" class="secondary" id="export-progress">Exporter ma progression</button><label for="import-progress">Choisir un JSON pour fusionner ma progression (sans remplacement)</label><input type="file" id="import-progress" accept="application/json,.json"><p id="transfer-status" role="status"></p></details></main><footer class="site-footer"><a href="catalogue.html">Catalogue</a> <a href="sources.html">Sources et attribution</a> <a href="#contenu">Haut de page</a></footer></body></html>

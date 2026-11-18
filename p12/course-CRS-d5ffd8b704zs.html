@@ -1,0 +1,440 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; connect-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Argument value resolvers — Symfony 8 Preparation</title><link rel="stylesheet" href="styles.css"><link rel="stylesheet" href="reader.css"><script src="mermaid.min.js" defer></script><script src="mermaid-init.js" defer></script><link rel="stylesheet" href="assessment.css"><script src="fixed-exams-data.js" defer></script><script src="fixed-exams.js" defer></script><script src="learning-state.js" defer></script><script src="guide.js" defer></script><script src="reader-catalog.js" defer></script><script src="reader.js" defer></script><script src="site-state.js" defer></script><script src="assessment.js" defer></script><script src="course-views.js" defer></script><link rel="stylesheet" href="syntax-highlight.css"><script src="prism-syntax.js" defer></script><script src="syntax-highlight.js" defer></script></head><body data-course-id="CRS-d5ffd8b704zs"><a class="skip" href="#contenu">Aller au contenu</a><header class="site-header"><a class="brand" href="index.html">S8 Preparation</a><nav aria-label="Navigation principale"><a href="index.html">Accueil</a> <a href="catalogue.html">Parcours</a> <a href="assessment.html?mode=review">Réviser</a> <a href="examens.html">Examens blancs</a> <a href="jour-j.html">Jour J</a></nav></header><main id="contenu" tabindex="-1" class="corpus-reader"><nav class="breadcrumb" aria-label="Fil d’Ariane"><a href="index.html">Accueil</a> <span aria-hidden="true">›</span> <a href="catalogue.html">Parcours</a> <span aria-hidden="true">›</span> <a href="lot-04.html">Module 04 — Contrôleurs</a> <span aria-hidden="true">›</span> <span aria-current="page">Argument value resolvers</span></nav><h1>Argument value resolvers</h1><p class="muted">Symfony 8.0 · API PHP ≤ 8.4 · Twig ≤ 3.22. Préparation indépendante.</p><p class="revision-status">Rédaction narrative P11 : projection nouvelle, non couverte par les décisions historiques P10. Aucune approbation officielle ni garantie de réussite.</p><aside class="narrative-context" aria-label="Repères de lecture"><p><strong>Prérequis de lecture :</strong> <a href="course-CRS-ea3twt9jcan2.html">The request</a></p><p><strong>Concepts voisins :</strong> <a href="course-CRS-kqq96z5y9r2f.html">Configuration (YAML and PHP attributes)</a> — Retrouver la route avant le callable. <a href="lot-04.html">Comparer les responsabilités dans ce module</a> · <a href="carte-composants.html">Situer cette responsabilité dans le blog</a> · <a href="glossaire.html">Distinguer les termes voisins</a></p><p><a href="ordre-lecture.html">Retrouver les 163 cours dans le parcours recommandé</a>. Ce repère ne modifie ni votre historique ni votre progression.</p></aside><div class="course-layout"><details class="lot-course-menu"><summary>Cours du module · 14 cours</summary><nav aria-label="Cours du module"><a class="lot-context" href="lot-04.html">Module 04 — Contrôleurs</a><ol><li><a href="course-CRS-tygmreqkkds3.html">HttpKernel component and FrameworkBundle</a></li><li><a href="course-CRS-9fz4erg0wmbq.html">Naming conventions</a></li><li><a href="course-CRS-h8s87edcx8ae.html">The base AbstractController class</a></li><li><a href="course-CRS-ea3twt9jcan2.html">The request</a></li><li><a href="course-CRS-a669jpap5zf2.html">The response</a></li><li><a href="course-CRS-thmkagkjcvh3.html">The cookies</a></li><li><a href="course-CRS-a51fqgqynr2d.html">The session</a></li><li><a href="course-CRS-ak7sdgcdjb7e.html">The flash messages</a></li><li><a href="course-CRS-7zy5ndjgnpk1.html">HTTP redirects</a></li><li><a href="course-CRS-fd24qxy0x1s6.html">Internal redirects</a></li><li><a href="course-CRS-p57qsnnfpd2a.html">Generate 404 pages</a></li><li><a href="course-CRS-5pns7nw7612s.html">File upload</a></li><li><a href="course-CRS-zmg0wrxvqqdq.html">Built-in internal controllers</a></li><li><a href="course-CRS-d5ffd8b704zs.html" aria-current="page">Argument value resolvers</a></li></ol><a href="lot-04.html#view-quiz">Quiz du module</a></nav></details><aside class="course-section-menu" aria-label="Sommaire du cours"><nav class="course-actions" aria-label="Activités du cours"><a id="tab-course" href="#view-course">Cours</a><a id="tab-flashcards" href="#view-flashcards">Flashcards</a><a id="tab-quiz" href="#view-quiz">Quiz</a></nav><details class="course-section-disclosure"><summary id="course-sections">Sections du cours</summary><nav aria-label="Sections du cours"><ul><li><a href="#s-objectif">Objectif</a></li><li><a href="#s-l-essentiel">L&#x27;essentiel</a></li><li><a href="#s-le-schema">Le schéma</a></li><li><a href="#s-l-exemple-un-resolver-maison">L&#x27;exemple : un resolver maison</a></li><li><a href="#s-le-contrat">Le contrat</a></li><li><a href="#s-ce-que-fait-argumentresolver">Ce que fait `ArgumentResolver`</a></li><li><a href="#s-l-ordre">L&#x27;ordre</a></li><li><a href="#s-le-catalogue">Le catalogue</a></li><li><a href="#s-les-resolvers-cibles">Les resolvers ciblés</a></li><li><a href="#s-pieges-d-examen">Pièges d&#x27;examen</a></li><li><a href="#s-application">Application</a></li><li><a href="#s-fiche-express">Fiche express</a></li><li><a href="#s-sources-officielles">Sources officielles</a></li><li><a href="#reader-objectives">Objectifs d’apprentissage</a></li><li><a href="#course-recalls">Rappels et liens avec les autres cours</a></li></ul></nav><nav aria-label="Flashcards par section"><a href="#view-flashcards">Flashcards par section</a><ul><li><a href="#cards-s-l-essentiel-1">L&#x27;essentiel</a></li><li><a href="#cards-s-le-schema-2">Le schéma</a></li><li><a href="#cards-s-l-exemple-un-resolver-maison-3">L&#x27;exemple : un resolver maison</a></li><li><a href="#cards-s-le-contrat-4">Le contrat</a></li><li><a href="#cards-s-ce-que-fait-argumentresolver-5">Ce que fait `ArgumentResolver`</a></li><li><a href="#cards-s-l-ordre-6">L&#x27;ordre</a></li><li><a href="#cards-s-le-catalogue-7">Le catalogue</a></li><li><a href="#cards-s-les-resolvers-cibles-8">Les resolvers ciblés</a></li><li><a href="#cards-s-pieges-d-examen-9">Pièges d&#x27;examen</a></li><li><a href="#cards-s-application-10">Application</a></li><li><a href="#cards-s-fiche-express-11">Fiche express</a></li><li><a href="#cards-previous">Module 05 — Routage · Cours « Restrict URL parameters » · Rappel : <span lang="en">Must an omitted parameter&#x27;s default satisfy its URL requirement?</span></a></li></ul></nav><nav aria-label="Retour au module"><a href="lot-04.html">Tous les cours du module</a></nav></details><p class="local-quiz-count">8 questions disponibles · 8 par session Quiz</p></aside><div class="course-content"><div id="view-course" data-course-panel role="region" aria-labelledby="view-course-title"><h2 id="view-course-title">Cours</h2><p class="course-introduction"><a href="#s-objectif">Introduction</a> · <a href="#course-sections">Sections du cours</a></p><h2 id="reader-objectives" tabindex="-1">Objectifs d’apprentissage</h2><ul><li><a href="course-CRS-d5ffd8b704zs.html#out-OUT-np4jrjh0phfs">Énoncer le contrat de ValueResolverInterface::resolve et son return type</a></li><li><a href="course-CRS-d5ffd8b704zs.html#out-OUT-5kafbd3d9nt8">Expliquer la sélection par priority et l&#x27;arrêt au premier resolver servi</a></li><li><a href="course-CRS-d5ffd8b704zs.html#out-OUT-mtg83g8mv3bb">Justifier l&#x27;ordre entre SessionValueResolver et DefaultValueResolver</a></li><li><a href="course-CRS-d5ffd8b704zs.html#out-OUT-cbtvxgfkskae">Associer chaque resolver intégré à ce qu&#x27;il remplit</a></li><li><a href="course-CRS-d5ffd8b704zs.html#out-OUT-ynyxk5m0hyzd">Distinguer un resolver cible d&#x27;un resolver ordinaire</a></li><li><a href="course-CRS-d5ffd8b704zs.html#out-OUT-chxt3emfrcjg">Énoncer le statut retourne pour une valeur d&#x27;enum invalide</a></li></ul><aside class="pedagogy-legend" aria-label="Repères pédagogiques"><p><strong>Repères pédagogiques</strong></p><p>Ces repères décrivent le rôle du bloc, pas une fréquence officielle à l’examen.</p><p class="teaching-label essential"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="brain" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5C12 1 6 1 6 5C2 5 1 10 4 12C1 15 3 19 6 19C6 23 12 23 12 19V5M12 5C12 1 18 1 18 5C22 5 23 10 20 12C23 15 21 19 18 19C18 23 12 23 12 19M6 5C6 8 8 9 9 9M4 12H7L9 14M6 19V16M18 5C18 8 16 9 15 9M20 12H17L15 14M18 19V16"></path></svg> <strong>À comprendre</strong></p><p class="teaching-label essential"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="book" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5C9 3 5 3 2 4V20C5 19 9 19 12 21C15 19 19 19 22 20V4C19 3 15 3 12 5V21M5 8H8M5 12H8M16 8H19M16 12H19"></path></svg> <strong>À mémoriser</strong></p><p class="teaching-label example"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="code" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6L2 12L8 18M16 6L22 12L16 18M14 3L10 21"></path></svg> <strong>Exemple concret</strong></p><p class="teaching-label pitfall"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="warning" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3L23 21H1L12 3ZM12 9V14M12 17V18"></path></svg> <strong>Piège à éviter</strong></p><p class="teaching-label nuance"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="balance" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3V21M7 21H17M3 7L21 5M5 7L1 15H9L5 7M19 6L15 14H23L19 6M1 15Q5 20 9 15M15 14Q19 19 23 14"></path></svg> <strong>Nuance à connaître</strong></p><p>Précision, exception ou condition d’application d’une règle.</p></aside><section class="teaching-section" data-section="s-objectif"><h2 id="s-objectif" tabindex="-1">Objectif</h2><p>Pour <code>GET /blog/42</code>, la Request porte déjà <code>id = '42'</code> et
+<code>_controller = App\Controller\BlogController::show</code>. Le callable est connu ;
+il reste à fournir son identifiant, la Request et son service <code>ArticleCatalog</code>.
+Ces trois valeurs n'ont pas la même origine.</p>
+<p>Comprendre le mécanisme qui remplit les arguments d'un controller : qui décide,
+dans quel ordre, et comment s'y insérer. C'est ce mécanisme qui explique
+pourquoi typer <code>Request</code>, <code>SessionInterface</code> ou une enum suffit.</p>
+<p>Question fil rouge : <strong>quand j'écris <code>show(Request $request, int $id,
+ArticleCatalog $catalog)</code>, qui fabrique chacune de ces trois valeurs, et dans
+quel ordre ?</strong> La réponse tient en une phrase : une chaîne de petits
+spécialistes interrogés un par un pour <em>chaque</em> argument.</p></section><section class="teaching-section" data-section="s-l-essentiel"><h2 id="s-l-essentiel" tabindex="-1">L&#x27;essentiel</h2><p class="teaching-label essential"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="brain" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5C12 1 6 1 6 5C2 5 1 10 4 12C1 15 3 19 6 19C6 23 12 23 12 19V5M12 5C12 1 18 1 18 5C22 5 23 10 20 12C23 15 21 19 18 19C18 23 12 23 12 19M6 5C6 8 8 9 9 9M4 12H7L9 14M6 19V16M18 5C18 8 16 9 15 9M20 12H17L15 14M18 19V16"></path></svg> <strong>À comprendre</strong></p><aside class="section-digest" id="s-l-essentiel-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>La priority détermine l&#x27;ordre d&#x27;essai.</li><li>Un default resolver doit laisser les resolvers spécialisés agir d&#x27;abord.</li></ol></aside><p><strong>Ce que cette partie veut réellement vous apprendre.</strong></p>
+<ul>
+<li><em>Pourquoi ce mécanisme existe.</em> Le routeur a trouvé le callable
+  (<a>The request</a> : <code>_controller</code> et <code>id</code> sont des
+  attributs de la Request), mais PHP ne sait pas appeler <code>show()</code> sans
+  arguments. Sans mécanisme, chaque action devrait lire la Request à la main.
+  Le noyau délègue ce travail de « remplissage de cases » à <code>ArgumentResolver</code>.</li>
+<li><em>Le piège de fond.</em> On croit que la signature est « magique ». Elle ne l'est
+  pas : chaque type reconnu correspond à un resolver précis, enregistré avec
+  une priorité précise.</li>
+<li><em>Ce que l'auteur veut que vous compreniez.</em> Qui décide (<code>ArgumentResolver</code>),
+  dans quel ordre (priorités des services tagués), comment un resolver
+  <em>décline</em> (iterable vide) ou <em>répond</em> (une valeur), et comment s'y insérer
+  (resolver maison, <code>#[ValueResolver]</code>, resolvers ciblés).</li>
+<li><em>Pourquoi c'est à l'examen.</em> Le nombre de resolvers de la chaîne épinglée,
+  les exceptions (<code>InvalidArgumentException</code>, <code>RuntimeException</code>,
+  <code>LogicException</code>) et les codes 404/422/400/415 sont des questions classiques.</li>
+</ul>
+<p>En résumé : <strong>HttpKernel appelle <code>ArgumentResolver</code>, qui interroge les value resolvers</strong>.
+Pour chaque argument, le premier resolver de la chaîne configurée qui produit
+une valeur termine la recherche ; si aucun n'en fournit, la résolution échoue.
+Les resolvers ne s'appellent pas entre eux. Les mappings ciblés décrits plus
+bas choisissent explicitement une source ; leurs statuts 404/422 ne sont pas
+une règle universelle applicable à toute URL ou tout body invalide.</p>
+<p>Ce cours prolonge <a>The base AbstractController class</a> (le
+contrôleur reçoit ses arguments) et prépare
+<a>HttpKernel component and FrameworkBundle</a> (où se situe
+ce mécanisme dans la séquence du noyau).</p></section><section class="teaching-section" data-section="s-le-schema"><h2 id="s-le-schema" tabindex="-1">Le schéma</h2><aside class="section-digest" id="s-le-schema-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Le premier résultat arrête la recherche.</li><li>Plusieurs valeurs exigent un argument variadique.</li></ol></aside><p><strong>Où en est-on ?</strong> Le cours avance du plus général au plus précis : <em>le schéma</em>
+(la chaîne en une image), <em>l'exemple</em> (un resolver maison), <em>le contrat</em> (ce
+que <code>resolve()</code> rend), <em>ce que fait <code>ArgumentResolver</code></em> (la boucle), <em>l'ordre</em>
+(les priorités), <em>le catalogue</em> (les resolvers fournis), <em>les resolvers ciblés</em>
+(ceux qui n'agissent que sur demande). Le premier schéma ci-dessous répond à :
+« comment une case est-elle remplie ? ».</p>
+<pre class="highlight" tabindex="0"><code class="language-text">Pour CHAQUE argument de la signature
+   resolver 1 ── iterable vide ──► resolver 2 ── iterable vide ──► … ──► resolver N
+        │                              │                                    │
+   une valeur                      une valeur                       toujours vide
+        ▼                              ▼                                    ▼
+   argument rempli               argument rempli               RuntimeException
+   (on passe au suivant)         (on passe au suivant)</code></pre>
+<figure class="diagram" aria-labelledby="CRS-d5ffd8b704zs-3-diagram-0-title CRS-d5ffd8b704zs-3-diagram-0-description"><figcaption id="CRS-d5ffd8b704zs-3-diagram-0-title">La suite des argument value resolvers et ses issues</figcaption><p id="CRS-d5ffd8b704zs-3-diagram-0-description">ArgumentResolver appelle un resolver pour un argument. Un iterable vide permet d&#x27;essayer le suivant ; une valeur, y compris null, résout l&#x27;argument. Plusieurs valeurs exigent un variadique. Sans résultat de toute la chaîne, une exception est levée.</p><div class="mermaid" hidden>---
+title: Comment chaque argument reçoit sa valeur
+---
+flowchart TD
+  accTitle: La suite des argument value resolvers et ses issues
+  accDescr: ArgumentResolver appelle un resolver pour un argument. Un iterable vide permet d&#x27;essayer le suivant ; une valeur, y compris null, résout l&#x27;argument. Plusieurs valeurs exigent un variadique. Sans résultat de toute la chaîne, une exception est levée.
+  A([&quot;ArgumentMetadata&quot;]) --&gt;|&quot;ArgumentResolver appelle resolve&quot;| PN[&quot;Resolver courant&quot;]
+  PN --&gt;|&quot;consommer son iterable&quot;| V{&quot;Nombre de valeurs ?&quot;}
+  V --&gt;|&quot;zéro et resolver suivant disponible&quot;| PN
+  V --&gt;|&quot;une valeur, ou plusieurs si variadique&quot;| NX([&quot;argument&lt;br/&gt;suivant&quot;])
+  V --&gt;|&quot;plusieurs, non variadique&quot;| E1[&quot;InvalidArgument&lt;br/&gt;Exception&quot;]
+  V --&gt;|&quot;zéro, chaîne épuisée&quot;| E2[&quot;RuntimeException&quot;]
+  classDef choice fill:#fef3c7,stroke:#b45309,color:#78350f
+  classDef operation fill:#e0f2fe,stroke:#0369a1,color:#0c4a6e
+  class V choice
+  class A,PN,NX,E1,E2 operation</div></figure>
+<p><strong>Où en est-on ?</strong> Le second schéma répond à une autre question : « comment
+<em>changer</em> la chaîne pour un argument ? » avec <code>#[ValueResolver]</code>.</p>
+<figure class="diagram" aria-labelledby="CRS-d5ffd8b704zs-3-diagram-1-title CRS-d5ffd8b704zs-3-diagram-1-description"><figcaption id="CRS-d5ffd8b704zs-3-diagram-1-title">#[ValueResolver] et les resolvers ciblés</figcaption><p id="CRS-d5ffd8b704zs-3-diagram-1-description">ValueResolver épingle X. ArgumentResolver essaie X, puis RequestAttributeValueResolver si X ne produit aucune valeur, puis DefaultValueResolver si nécessaire. Une valeur obtenue arrête les essais pour cet argument ; une chaîne épuisée échoue.</p><div class="mermaid" hidden>---
+title: Changer la suite des resolvers
+---
+flowchart TD
+  accTitle: #[ValueResolver] et les resolvers ciblés
+  accDescr: ValueResolver épingle X. ArgumentResolver essaie X, puis RequestAttributeValueResolver si X ne produit aucune valeur, puis DefaultValueResolver si nécessaire. Une valeur obtenue arrête les essais pour cet argument ; une chaîne épuisée échoue.
+  T[&quot;ValueResolver : épingler X&quot;] --&gt;|&quot;ArgumentResolver appelle&quot;| X[&quot;X : resolve&quot;]
+  X --&gt;|&quot;si iterable vide : essayer&quot;| A[&quot;RequestAttributeValueResolver&quot;]
+  A --&gt;|&quot;si iterable vide : essayer&quot;| C[&quot;DefaultValueResolver&quot;]
+  classDef config fill:#fef3c7,stroke:#b45309,color:#78350f
+  classDef operation fill:#e0f2fe,stroke:#0369a1,color:#0c4a6e
+  class T config
+  class X,A,C operation</div></figure><p>
+Bleu = appels orchestrés par <code>ArgumentResolver</code>, ambre = décision/configuration.
+Les resolvers ne s'appellent pas entre eux. <code>yield null</code> fournit une valeur ;
+un <code>return</code> sans <code>yield</code> exécuté n'en fournit aucune.</p>
+<p>Lecture : sans <code>#[ValueResolver]</code>, la chaîne contient <em>tous</em> les resolvers
+tagués, triés par priorité. Avec lui, elle se réduit à <strong>trois</strong> éléments :
+l'épinglé, puis <code>RequestAttributeValueResolver</code>, puis <code>DefaultValueResolver</code>.</p></section><section class="teaching-section" data-section="s-l-exemple-un-resolver-maison"><h2 id="s-l-exemple-un-resolver-maison" tabindex="-1">L&#x27;exemple : un resolver maison</h2><p class="teaching-label example"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="code" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6L2 12L8 18M16 6L22 12L16 18M14 3L10 21"></path></svg> <strong>Exemple concret</strong></p><aside class="section-digest" id="s-l-exemple-un-resolver-maison-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Un generator convient au contrat iterable.</li><li>Un iterable vide signifie que ce resolver passe la main.</li></ol></aside><p><strong>Où en est-on ?</strong> Avant la théorie, un cas concret : écrire le plus petit
+resolver utile. Il montre déjà les deux comportements clés : <em>répondre</em> (un
+<code>yield</code>) et <em>décliner</em> (un <code>return</code> sans valeur).</p>
+<p>Le blog veut transmettre une valeur métier <code>Locale</code>, plutôt qu'obliger
+chaque action à lire la Request. Le resolver ci-dessous ne répond qu'à ce
+type : pour <code>$id</code> ou <code>ArticleCatalog</code>, il ne produit rien et laisse
+<code>ArgumentResolver</code> poursuivre. <code>Locale</code> est ici un objet applicatif supposé
+défini avec un constructeur acceptant la locale ; ce n'est pas une API Symfony.</p>
+<pre class="highlight" tabindex="0"><code class="language-php">final class CurrentLocaleResolver implements ValueResolverInterface
+{
+    public function resolve(Request $request, ArgumentMetadata $argument): iterable
+    {
+        if (Locale::class !== $argument-&gt;getType()) {
+            return;   // rien produit : le resolver suivant essaie
+        }
+
+        yield new Locale($request-&gt;getLocale());
+    }
+}</code></pre>
+<p>Pourquoi <code>return;</code> et pas <code>return null;</code> ? Parce que la méthode est un
+<em>generator</em> (elle contient <code>yield</code>) : un <code>return</code> exécuté avant tout <code>yield</code>
+produit un iterable <strong>vide</strong>, donc « pas moi ». Un <code>yield null</code>, lui, produit
+une valeur : <code>null</code>. C'est la confusion la plus fréquente.</p>
+<pre class="highlight" tabindex="0"><code class="language-text">return;                  → []        → 0 valeur  → le suivant essaie
+yield null;              → [null]    → 1 valeur  → l'argument vaut null
+yield [];                → [[]]      → 1 valeur  → l'argument vaut un tableau vide</code></pre>
+<div class="admonition info">
+<p class="admonition-title">🌍 In Real Life</p>
+<p><strong>La situation</strong> : au restaurant, un poste prépare la fiche de langue du service. Si on lui demande un numéro de commande ou un catalogue, il ne propose rien.</p>
+<p><strong>L’équivalent dans Symfony</strong> : spécialité du poste → vérification de <code>ArgumentMetadata::getType()</code> ; langue du bon → <code>Request::getLocale()</code> ; fiche produite → objet applicatif <code>Locale</code> fourni par <code>yield</code>.</p>
+<p><strong>Retour à la réalité technique</strong> : ce resolver doit être enregistré pour être interrogé. Son générateur ne produit aucune valeur pour les autres types ; <code>ArgumentResolver</code> peut alors essayer un autre candidat. <code>Locale</code> désigne ici la classe du projet, pas une classe fournie automatiquement par Symfony.</p>
+<p><strong>🧠 Comment le mémoriser</strong> : « Une spécialité précise, un refus sans valeur. » Image mentale : poste langue laissant passer les demandes de catalogue. Question-réflexe : « Mon resolver reconnaît-il exactement cet argument avant de produire quelque chose ? »</p>
+<p><strong>⚠️ À ne pas confondre</strong> : un générateur vide décline ; <code>yield null</code> fournit déjà une valeur.</p>
+</div></section><section class="teaching-section" data-section="s-le-contrat"><span class="outcome-anchor" id="out-OUT-np4jrjh0phfs" tabindex="-1"></span><h2 id="s-le-contrat" tabindex="-1">Le contrat</h2><p><strong>Où en est-on ?</strong> Étape 1 : <em>que reçoit et que rend un resolver ?</em> On définit
+le vocabulaire (<code>ValueResolverInterface</code>, <code>ArgumentMetadata</code>, <code>iterable</code>)
+après avoir vu le mécanisme dans l'exemple.</p>
+<p>Quand il examine <code>$id</code>, <code>ArgumentResolver</code> possède deux entrées distinctes :
+la Request avec ses attributs et les métadonnées de la signature de <code>show()</code>.
+Un resolver compare ces informations, puis produit une ou plusieurs valeurs
+dans un iterable. Pour un identifiant ordinaire, produire <code>['42']</code> signifie
+« un argument trouvé » ; produire <code>[]</code> signifie « chercher ailleurs »,
+pas « appeler le contrôleur avec un tableau vide ».</p>
+<p>Chaque resolver implémente <code>ValueResolverInterface</code> et sa method unique
+<code>resolve(Request $request, ArgumentMetadata $argument): iterable</code>.
+<code>ArgumentMetadata</code> porte ce que la signature déclare : nom, type, variadicité,
+default value, attributes. La documentation dit « toujours un array » — vide,
+à un élément, à plusieurs pour un variadique ; le type est <code>iterable</code>, et un
+generator fonctionne. Retourner la valeur elle-même est l'erreur classique.</p>
+<pre class="highlight" tabindex="0"><code class="language-text">resolve(Request, ArgumentMetadata) : iterable
+   entrées                                  sortie
+   ├─ Request : attributs (id = '42')       ├─ []          → décline
+   └─ ArgumentMetadata :                    ├─ ['42']      → une valeur
+        nom, type, variadique,              └─ ['a','b']   → plusieurs :
+        default value, attributes                              variadique seulement</code></pre>
+<p>Vérifié dans <code>ArgumentResolver::getArguments()</code> (8.0) : la boucle parcourt
+<code>$resolver-&gt;resolve($request, $metadata)</code> avec un <code>foreach</code> ; une seconde
+valeur pour un argument non variadique déclenche
+<code>\InvalidArgumentException</code> (« must yield at most one value for non-variadic
+arguments ») ; si la chaîne est épuisée, une <code>\RuntimeException</code> indique que le
+controller requiert un argument « that could not be resolved ».</p>
+<div class="admonition info">
+<p class="admonition-title">🌍 In Real Life</p>
+<p><strong>La situation</strong> : pour remplir une case du bon, le coordinateur reçoit une liste de propositions. Une liste vide signifie « aucune proposition », pas « proposer une liste vide ».</p>
+<p><strong>L’équivalent dans Symfony</strong> : description de la case → <code>ArgumentMetadata</code> ; bon disponible → <code>Request</code> ; propositions → iterable retourné par <code>resolve()</code>.</p>
+<p><strong>Retour à la réalité technique</strong> : <code>[]</code> contient zéro valeur ; <code>[null]</code> en contient une ; <code>[[]]</code> fournit une valeur qui est elle-même un tableau vide. Le contrat porte sur un <code>iterable</code>, donc tableau et générateur conviennent. Plusieurs valeurs ne conviennent qu’à un argument variadique.</p>
+<p><strong>🧠 Comment le mémoriser</strong> : « Compter les propositions, pas leur contenu. » Image mentale : panier vide, panier avec une étiquette <code>null</code>, panier contenant un petit panier vide. Question-réflexe : « Combien de valeurs cet iterable produit-il réellement ? »</p>
+<p><strong>⚠️ À ne pas confondre</strong> : l’enveloppe iterable n’est pas nécessairement la valeur de l’argument.</p>
+</div></section><section class="teaching-section" data-section="s-ce-que-fait-argumentresolver"><span class="outcome-anchor" id="out-OUT-5kafbd3d9nt8" tabindex="-1"></span><h2 id="s-ce-que-fait-argumentresolver" tabindex="-1">Ce que fait `ArgumentResolver`</h2><p><strong>Où en est-on ?</strong> Étape 2 : <em>la boucle.</em> On a vu un resolver isolé ; voyons
+qui les appelle, et jusqu'où va « arrêter la recherche ».</p>
+<p>Supposons <code>show(Request $request, int $id, ArticleCatalog $catalog)</code>.
+La résolution de <code>$request</code> ne doit pas arrêter celle de <code>$id</code> et de
+<code>$catalog</code> : l'arrêt concerne seulement la chaîne de candidats pour
+l'argument courant. Une fois la liste complète obtenue, HttpKernel
+diffuse <code>kernel.controller_arguments</code>, récupère ses éventuelles modifications
+du callable et des valeurs, puis appelle l'action.</p>
+<p>Le premier resolver qui produit une valeur <strong>arrête</strong> la chaîne de resolvers ; deux valeurs
+pour un argument non variadique lèvent une <code>InvalidArgumentException</code>. Un array
+vide passe la main sans erreur : seul l'échec de <strong>toute</strong> la chaîne de resolvers lève.</p>
+<pre class="highlight" tabindex="0"><code class="language-text">show(Request $request, int $id, ArticleCatalog $catalog)
+   │
+   ├─ $request  → chaîne de candidats → RequestValueResolver répond   ┐
+   ├─ $id       → chaîne de candidats → RequestAttributeValueResolver ├─ 3 boucles
+   └─ $catalog  → chaîne de candidats → ServiceValueResolver répond   ┘ indépendantes
+   │
+   ▼ liste complète [Request, 42, ArticleCatalog]
+   kernel.controller_arguments (peut modifier callable et valeurs)
+   ▼
+   appel de show(...)</code></pre>
+<p>Trois niveaux d'arrêt à ne pas confondre :</p>
+<table>
+<thead>
+<tr>
+<th>Niveau</th>
+<th>Ce qui s'arrête</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Candidat</td>
+<td>un resolver qui décline cède la main au suivant</td>
+</tr>
+<tr>
+<td>Argument</td>
+<td>le premier resolver qui produit une valeur termine la chaîne de <strong>cet</strong> argument</td>
+</tr>
+<tr>
+<td>Appel</td>
+<td>seule une exception (aucun resolver, valeurs multiples…) empêche l'appel</td>
+</tr>
+</tbody>
+</table>
+<p>Rappel de rôle : <code>ControllerResolver</code> choisit le callable, <code>ArgumentResolver</code>
+prépare les valeurs, HttpKernel appelle (voir
+<a>HttpKernel component and FrameworkBundle</a>).</p>
+<div class="admonition info">
+<p class="admonition-title">🌍 In Real Life</p>
+<p><strong>La situation</strong> : le responsable fait préparer trois renseignements pour un poste : le bon, son numéro et le catalogue. Trouver le bon ne dispense pas de préparer les deux autres.</p>
+<p><strong>L’équivalent dans Symfony</strong> : liste des besoins → signature du callable ; recherche pour chaque besoin → boucle d’<code>ArgumentResolver</code> ; propositions successives → value resolvers ; dossier complet remis au responsable → liste d’arguments retournée à HttpKernel.</p>
+<p><strong>Retour à la réalité technique</strong> : un resolver productif termine la recherche pour l’argument courant, pas pour toute l’action. L’iterable reste consommé et des valeurs multiples non variadiques échouent. Un resolver peut aussi lever sa propre exception. Ensuite <code>kernel.controller_arguments</code> peut encore modifier callable et valeurs avant l’appel.</p>
+<p><strong>🧠 Comment le mémoriser</strong> : « Une case remplie, puis la suivante. » Image mentale : trois cases cochées séparément. Question-réflexe : « L’arrêt concerne-t-il ce candidat, cet argument ou l’appel entier ? »</p>
+<p><strong>⚠️ À ne pas confondre</strong> : <code>ControllerResolver</code> choisit le callable ; <code>ArgumentResolver</code> prépare les valeurs ; HttpKernel appelle.</p>
+</div><aside class="enrichment" aria-label="Autre explication"><p>Une file de traducteurs spécialisés examine le type demandé. Produire zéro valeur signifie « je passe la main », pas « je fournis null » : yield null est déjà une valeur et arrête la recherche.</p></aside></section><section class="teaching-section" data-section="s-l-ordre"><span class="outcome-anchor" id="out-OUT-mtg83g8mv3bb" tabindex="-1"></span><h2 id="s-l-ordre" tabindex="-1">L&#x27;ordre</h2><p><strong>Où en est-on ?</strong> Étape 3 : <em>qui passe en premier ?</em> Quand deux resolvers
+pourraient répondre, l'ordre décide. Cet ordre ne vient pas du code PHP du
+resolver mais de la <strong>priorité</strong> de son tag de service.</p>
+<p>La valeur <code>id</code> de <code>/blog/42</code> pourrait intéresser un resolver personnalisé
+et le resolver d'attributs. Leur ordre détermine lequel fournit l'argument.
+Les priorités appartiennent au câblage des services, pas au type PHP de la
+valeur ; vérifie donc le correctif utilisé avant de comparer des nombres.</p>
+<p>Les services tagués <code>controller.argument_value_resolver</code> sont triés par
+<strong>priority</strong>, fixée par FrameworkBundle. En <strong>v8.0.0</strong>, attributs, enum et date
+sont à 100, Request/Session à 50, services à -50, défaut à -100 et variadique
+à -150. Des versions correctives 8.0 ont remonté Request/Session à 120 :
+ne pas mélanger deux câblages. <code>SessionValueResolver</code> passe avant le défaut :
+la session s'il y en a une, puis un défaut nullable si prévu. Un resolver maison qui lit
+les attributes se place à <code>100</code> ou plus. La documentation écrit
+<code>SessionInterface $session = null</code> ; PHP 8.4 déprécie ce nullable implicite :
+écrire <code>?SessionInterface $session = null</code>.</p>
+<pre class="highlight" tabindex="0"><code class="language-text">priorité décroissante : on essaie d'abord les valeurs les plus hautes
+
+  120 (branche 8.0 actuelle)   Request, Session     ← 50 en v8.0.0
+  100                          attributs de route, enum, date (et uid)
+   ..  votre resolver maison : 100 ou plus s'il lit les attributes
+  -50                          services (locator de l'action)
+ -100                          valeur par défaut (DefaultValueResolver)
+ -150                          variadique</code></pre>
+<p>Vérifié dans <code>web.php</code> (branche 8.0) : le commentaire du code indique que
+Request et Session passent <strong>avant</strong> le resolver d'entités de DoctrineBundle
+(priorité 110), d'où la valeur 120 ; la table ci-dessus conserve les nombres
+de la source (v8.0.0) <em>et</em> signale cette évolution. Tous les resolvers
+<code>controller.argument_value_resolver</code> portent aussi un <code>name</code> (leur FQCN), ce qui
+rend possible l'épinglage par <code>#[ValueResolver]</code>.</p>
+<p>Pourquoi le défaut est-il presque en dernier ? Parce qu'il ne doit servir que
+si <strong>personne</strong> n'a rien trouvé : <code>?SessionInterface $session = null</code> reçoit
+d'abord la session réelle (50 ou 120 contre -100), et <code>null</code> seulement sans
+session.</p>
+<div class="admonition info">
+<p class="admonition-title">🌍 In Real Life</p>
+<p><strong>La situation</strong> : deux postes savent renseigner le numéro du bon. Le responsable consulte d’abord celui placé en tête de la liste de service.</p>
+<p><strong>L’équivalent dans Symfony</strong> : ordre de consultation → priorités des services tagués <code>controller.argument_value_resolver</code> ; premier poste productif → resolver dont les valeurs sont retenues pour cet argument.</p>
+<p><strong>Retour à la réalité technique</strong> : les priorités appartiennent à la configuration, pas à une propriété de la valeur <code>42</code>. Un resolver consulté tôt peut décliner en produisant un iterable vide. Les nombres documentés ici distinguent v8.0.0 de correctifs ultérieurs ; une égalité de priorité ne garantit pas à elle seule que votre service passe avant un autre.</p>
+<p><strong>🧠 Comment le mémoriser</strong> : « Prioritaire pour essayer, pas obligé de fournir. » Image mentale : liste ordonnée avec une case « sans proposition ». Question-réflexe : « Quel ordre réel mon câblage et ma version donnent-ils aux candidats ? »</p>
+<p><strong>⚠️ À ne pas confondre</strong> : priorité d’essai et validation de la valeur sont indépendantes.</p>
+</div></section><section class="teaching-section" data-section="s-le-catalogue"><span class="outcome-anchor" id="out-OUT-cbtvxgfkskae" tabindex="-1"></span><span class="outcome-anchor" id="out-OUT-chxt3emfrcjg" tabindex="-1"></span><h2 id="s-le-catalogue" tabindex="-1">Le catalogue</h2><aside class="section-digest" id="s-le-catalogue-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Le nom relie route attribute et argument.</li><li>RequestValueResolver utilise le type Request.</li></ol></aside><p><strong>Où en est-on ?</strong> Étape 4 : <em>qui sont les spécialistes fournis ?</em> On passe de
+l'ordre à l'inventaire, en repartant du scénario <code>show()</code>.</p>
+<p>Dans le scénario principal, <code>RequestValueResolver</code> fournit la Request,
+<code>RequestAttributeValueResolver</code> trouve <code>id</code> et <code>ServiceValueResolver</code> consulte
+le locator préparé pour l'action afin d'obtenir <code>ArticleCatalog</code>. Ce dernier
+lit des <code>ArticleView</code> en mémoire : 42 existe, 999 manque. La présence d'un
+type d'objet dans une signature ne signifie pas que Routing charge une entité.</p>
+<p>Une intégration Doctrine configurée peut résoudre une entité avant l’action ; ce comportement appartient au bridge, pas à HttpKernel seul, et l’ORM reste hors du programme étudié.</p>
+<p>Cette variante exige le mapping approprié et se situe pendant la résolution,
+contrairement à la lecture explicite du catalogue dans l'action. Ce sont
+deux variantes, pas deux lectures obligatoires.</p>
+<table>
+<thead>
+<tr>
+<th>Resolver</th>
+<th>Ce qu'il remplit</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>RequestAttributeValueResolver</code></td>
+<td>un argument qui porte le nom d'un attribute — les parameters de route</td>
+</tr>
+<tr>
+<td><code>RequestValueResolver</code></td>
+<td>un argument typé <code>Request</code> ou une sous-classe</td>
+</tr>
+<tr>
+<td><code>SessionValueResolver</code></td>
+<td>un argument typé <code>SessionInterface</code></td>
+</tr>
+<tr>
+<td><code>BackedEnumValueResolver</code></td>
+<td>un cas d'enum adossée</td>
+</tr>
+<tr>
+<td><code>DateTimeValueResolver</code></td>
+<td>un <code>\DateTimeInterface</code> — un <code>DateTimeImmutable</code> si le type est l'interface</td>
+</tr>
+<tr>
+<td><code>ServiceValueResolver</code></td>
+<td>un service du locator propre à l'action</td>
+</tr>
+<tr>
+<td><code>DefaultValueResolver</code></td>
+<td>la default value, ou <code>null</code> pour un type nullable</td>
+</tr>
+<tr>
+<td><code>VariadicValueResolver</code></td>
+<td>un argument variadique depuis un attribute array</td>
+</tr>
+</tbody>
+</table>
+<p>Une valeur invalide venue de l'URL donne <strong>404</strong> pour une enum ou une date.
+Un <code>Request</code> mal importé reçoit « Looks like you required a Request object
+with the wrong class name ».</p>
+<p>Comment lire ce tableau : l'<em>argument</em> se reconnaît à son <strong>nom</strong> (<code>$id</code> ↔
+attribut <code>id</code>) ou à son <strong>type</strong> (<code>Request</code>, <code>SessionInterface</code>, une enum…).
+Aucun resolver ne « devine » : chacun a une condition de prise en charge.
+(Le framework en fournit d'autres, comme celui des <code>Uid</code>, hors du périmètre de ce
+tableau.)</p>
+<pre class="highlight" tabindex="0"><code class="language-text">Ce que je vois dans la signature         Qui répond
+$id          (nom = attribut de route)   RequestAttributeValueResolver
+Request $r                               RequestValueResolver
+SessionInterface $s                      SessionValueResolver
+Status $status  (enum adossée)           BackedEnumValueResolver  → 404 si invalide
+\DateTimeInterface $d                    DateTimeValueResolver    → 404 si invalide
+ArticleCatalog $c  (service de l'action) ServiceValueResolver
+int $page = 1                            DefaultValueResolver
+string ...$tags                          VariadicValueResolver</code></pre>
+<div class="admonition info">
+<p class="admonition-title">🌍 In Real Life</p>
+<p><strong>La situation</strong> : le poste reçoit le bon, une référence extraite du bon et un outil pour consulter le catalogue. Recevoir l’outil ne signifie pas avoir déjà trouvé l’article.</p>
+<p><strong>L’équivalent dans Symfony</strong> : bon → <code>RequestValueResolver</code> ; référence → <code>RequestAttributeValueResolver</code> ; outil disponible → <code>ServiceValueResolver</code> et locator de l’action ; consultation → appel explicite à <code>ArticleCatalog</code>.</p>
+<p><strong>Retour à la réalité technique</strong> : chaque resolver a une condition de prise en charge ; le tableau n’annonce pas leur exécution à chaque requête. La variante qui fournit directement une entité exige une intégration et un mapping configurés et intervient avant l’action. Elle ne s’ajoute pas obligatoirement à la lecture explicite.</p>
+<p><strong>🧠 Comment le mémoriser</strong> : « Recevoir le catalogue n’est pas lire la fiche. » Image mentale : catalogue fermé à côté du bon 42. Question-réflexe : « Reçoit-on un service de lecture ou un objet métier déjà obtenu ? »</p>
+<p><strong>⚠️ À ne pas confondre</strong> : type d’objet dans la signature ne signifie pas chargement ORM automatique par Routing.</p>
+</div></section><section class="teaching-section" data-section="s-les-resolvers-cibles"><span class="outcome-anchor" id="out-OUT-ynyxk5m0hyzd" tabindex="-1"></span><h2 id="s-les-resolvers-cibles" tabindex="-1">Les resolvers ciblés</h2><aside class="section-digest" id="s-les-resolvers-cibles-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Distinguer décodage, format et validation.</li><li>Un targeted resolver ne s&#x27;exécute que lorsqu&#x27;il est sélectionné.</li></ol></aside><p><strong>Où en est-on ?</strong> Étape 5 : <em>ceux qui n'agissent que sur demande.</em> Jusqu'ici
+tous les resolvers étaient dans la chaîne par défaut. Les resolvers <em>ciblés</em>
+sont hors chaîne : un attribut PHP sur l'argument les convoque.</p>
+<p>L'affichage simple de l'article n'a pas besoin de transformer un body.
+Pour <code>POST /inscription</code>, en revanche, <code>#[MapRequestPayload]</code> peut désigner
+le mapping vers <code>SignupData</code>, avec les intégrations nécessaires de
+sérialisation et validation. Une entrée illisible échoue avant l'évaluation
+des contraintes ; une entrée décodée mais invalide échoue à une autre étape.
+C'est pourquoi le tableau ne suffit pas sans les distinctions 400/415 qui
+le suivent.</p>
+<p><code>RequestPayloadValueResolver</code> et <code>QueryParameterValueResolver</code> portent le tag
+<code>controller.targeted_value_resolver</code> : hors de la chaîne de resolvers, ils ne s'exécutent
+que si un attribute les désigne.</p>
+<p><code>#[ValueResolver]</code> épingle un resolver par son nom — le FQCN pour ceux du
+framework. La chaîne de resolvers compte alors <strong>trois</strong> éléments : l'épinglé,
+<code>RequestAttributeValueResolver</code>, <code>DefaultValueResolver</code> ; la documentation ne
+cite que le dernier. Deux épinglés sur un argument lèvent une
+<code>LogicException</code> ; <code>disabled: true</code> en saute un.</p>
+<table>
+<thead>
+<tr>
+<th>Attribute</th>
+<th>Source</th>
+<th>Échec par défaut</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>#[MapQueryParameter]</code></td>
+<td>un parameter de la query string</td>
+<td><strong>404</strong></td>
+</tr>
+<tr>
+<td><code>#[MapQueryString]</code></td>
+<td>la query string, vers un object</td>
+<td><strong>404</strong></td>
+</tr>
+<tr>
+<td><code>#[MapRequestPayload]</code></td>
+<td>le body, vers un object</td>
+<td><strong>422</strong></td>
+</tr>
+<tr>
+<td><code>#[MapUploadedFile]</code></td>
+<td>un file téléversé</td>
+<td><strong>422</strong></td>
+</tr>
+</tbody>
+</table>
+<p>Un body illisible — JSON malformé — donne <strong>400</strong>, un format sans decoder
+<strong>415</strong> ; <code>validationFailedStatusCode</code> change le 422, pas ceux-là.
+<code>#[MapQueryParameter]</code> accepte <code>filter</code>, <code>flags</code> et <code>options</code> : avec
+<code>FILTER_NULL_ON_FAILURE</code>, une valeur invalide devient <code>null</code> au lieu de lever.</p>
+<p>Le raisonnement en trois étapes pour un payload — chacune a son propre échec :</p>
+<pre class="highlight" tabindex="0"><code class="language-text">POST /inscription  (body)
+   ├─ 1. lire / décoder le body   ── illisible (JSON cassé) ──► 400
+   │                              ── format sans decoder ─────► 415
+   ├─ 2. mapper vers SignupData   (serializer)
+   └─ 3. valider les contraintes  ── échec ───────────────────► 422 (par défaut)</code></pre>
+<p><code>validationFailedStatusCode</code> ne touche que l'étape 3. Pour l'épinglage :
+<code>#[ValueResolver]</code> à deux endroits sur le même argument est une erreur de
+configuration (<code>LogicException</code>, « You can only pin one resolver per
+argument »), alors qu'<code>disabled: true</code> retire simplement un resolver de la
+chaîne. Un nom introuvable lève <code>ResolverNotFoundException</code>. Voir aussi
+<a>File upload</a> pour <code>#[MapUploadedFile]</code>.</p>
+<div class="admonition info">
+<p class="admonition-title">🌍 In Real Life</p>
+<p><strong>La situation</strong> : pour l’inscription au blog, un dossier porte une consigne explicite : utiliser les champs reçus pour préparer la fiche d’inscription, puis contrôler ses règles.</p>
+<p><strong>L’équivalent dans Symfony</strong> : consigne sur le dossier → attribut PHP ciblant un resolver ; fiche construite → mapping vers <code>SignupData</code> ; contrôle → intégration Validator configurée. L’absence de consigne n’active pas ce traitement sur chaque GET.</p>
+<p><strong>Retour à la réalité technique</strong> : <code>#[ValueResolver]</code> sélectionne une chaîne ciblée avec les replis décrits ci-dessus. Pour le payload, convertir et valider sont deux opérations : JSON malformé → 400, format non pris en charge → 415, échec de validation → 422 par défaut. Ces codes ne résument pas toutes les erreurs possibles.</p>
+<p><strong>🧠 Comment le mémoriser</strong> : « Une consigne choisit la source ; une règle contrôle les données. » Image mentale : fiche marquée « payload », puis tampon de contrôle séparé. Question-réflexe : « L’échec vient-il du format, du mapping ou des contraintes ? »</p>
+<p><strong>⚠️ À ne pas confondre</strong> : désérialisation, validation et autorisation restent distinctes.</p>
+</div></section><section class="teaching-section" data-section="s-pieges-d-examen"><h2 id="s-pieges-d-examen" tabindex="-1">Pièges d&#x27;examen</h2><p class="teaching-label pitfall"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="warning" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3L23 21H1L12 3ZM12 9V14M12 17V18"></path></svg> <strong>Piège à éviter</strong></p><details class="pitfall-explanation"><summary>Voir l’explication : arrête</summary><ul>
+<li>La documentation dit « toujours un array » ; le type est <code>iterable</code>.
+  <em>Pourquoi on se trompe : la doc simplifie, et un tableau est l'exemple usuel.</em></li>
+<li>Un array vide passe la main ; si aucun resolver ne fournit de valeur, une
+  <code>RuntimeException</code> est levée. <em>Pourquoi on se trompe : un resolver vide
+  ressemble à une erreur, alors que c'est un simple « pas moi ».</em></li>
+<li>Le premier resolver qui fournit une valeur <strong>arrête</strong> la chaîne de resolvers.
+  <em>Pourquoi on se trompe : on croit que l'arrêt vaut pour toute l'action.</em></li>
+<li>Les conversions enum/date de l'URL décrites ici échouent en <strong>404</strong> ;
+  ce n'est pas le statut universel de toute entrée invalide.
+  <em>Pourquoi on se trompe : on généralise un cas à tous.</em></li>
+<li><code>#[MapQueryParameter]</code> échoue en <strong>404</strong>, <code>#[MapRequestPayload]</code> en <strong>422</strong>.
+  <em>Pourquoi on se trompe : les deux « mappent une entrée », donc on suppose le même code.</em></li>
+<li>Un JSON malformé donne <strong>400</strong>, pas 422 : il n'y a rien à valider.
+  <em>Pourquoi on se trompe : 422 semble être « le code des mauvaises données ».</em></li>
+<li>Un resolver ciblé ne s'exécute pas sans son attribute.
+  <em>Pourquoi on se trompe : on le croit dans la chaîne par défaut.</em></li>
+<li><code>SessionInterface $session = null</code> est déprécié en PHP 8.4.
+  <em>Pourquoi on se trompe : la doc historique écrit encore cette forme.</em></li>
+</ul></details></section><section class="teaching-section" data-section="s-application"><h2 id="s-application" tabindex="-1">Application</h2><aside class="section-digest" id="s-application-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>La priority détermine l&#x27;ordre d&#x27;essai.</li><li>Un default resolver doit laisser les resolvers spécialisés agir d&#x27;abord.</li><li>Le nom relie route attribute et argument.</li><li>RequestValueResolver utilise le type Request.</li></ol></aside>
+
+
+
+</section><section class="teaching-section" data-section="s-fiche-express"><h2 id="s-fiche-express" tabindex="-1">Fiche express</h2><p class="teaching-label essential"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="book" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5C9 3 5 3 2 4V20C5 19 9 19 12 21C15 19 19 19 22 20V4C19 3 15 3 12 5V21M5 8H8M5 12H8M16 8H19M16 12H19"></path></svg> <strong>À mémoriser</strong></p><p><strong>🧠 À retenir pour la certification :</strong></p>
+<p><strong>Si tu dois retenir seulement 7 choses :</strong></p>
+<ul>
+<li><code>resolve()</code> rend un <strong><code>iterable</code></strong> : vide = « pas moi ».</li>
+<li>Premier resolver qui fournit → <strong>gagne</strong> ; aucun → <code>RuntimeException</code>.</li>
+<li>Priorités de <strong>v8.0.0</strong> : <strong>100</strong> attributs, <strong>50</strong> Request/Session, <strong>−100</strong> défaut.</li>
+<li>Valeur d'URL invalide (enum, date) → <strong>404</strong>.</li>
+<li>Ciblés : <strong>payload</strong> et <strong>query parameter</strong>, seulement sur attribute.</li>
+<li><code>#[ValueResolver]</code> → épinglé + attributes + défaut ; deux épinglés → exception.</li>
+</ul>
+<p>Phrase de mémorisation complète : <strong>« Pour chaque case de la signature, les
+spécialistes passent par priorité ; le premier qui répond gagne, un tableau vide
+veut dire "pas moi", et si personne ne répond, c'est une erreur. »</strong></p></section><section class="teaching-section" data-section="s-sources-officielles"><h2 id="s-sources-officielles" tabindex="-1">Sources officielles</h2><ul>
+<li><a href="https://symfony.com/doc/8.0/controller/value_resolver.html">Value resolvers</a></li>
+<li><a href="https://symfony.com/doc/8.0/controller.html">Controller : mapping automatique de la Request</a></li>
+<li><a href="https://symfony.com/doc/8.0/components/http_kernel.html"><code>ArgumentResolver</code></a></li>
+<li><a href="https://symfony.com/doc/8.0/reference/configuration/framework.html"><code>web.php</code> (FrameworkBundle)</a></li>
+<li><a href="https://symfony.com/doc/8.0/components/http_kernel.html"><code>MapQueryParameter</code></a></li>
+</ul></section><section id="course-recalls" aria-labelledby="course-recalls-title" tabindex="-1"><h2 id="course-recalls-title">Rappels et liens avec les autres cours</h2><div data-recall-group="current"><h3>Rappels du cours actuel</h3><ul><li data-recall-course="CRS-d5ffd8b704zs" data-recall-kind="digest_reference"><p class="recall-provenance">Module 04 — Contrôleurs · Cours « Argument value resolvers »</p><p class="digest-reference"><a href="#s-l-exemple-un-resolver-maison-digest">Revoir la règle : Un generator convient au contrat iterable.</a></p></li><li data-recall-course="CRS-d5ffd8b704zs" data-recall-kind="digest_reference"><p class="recall-provenance">Module 04 — Contrôleurs · Cours « Argument value resolvers »</p><p class="digest-reference"><a href="#s-le-schema-digest">Revoir la règle : Le premier résultat arrête la recherche.</a></p></li><li data-recall-course="CRS-d5ffd8b704zs" data-recall-kind="digest_reference"><p class="recall-provenance">Module 04 — Contrôleurs · Cours « Argument value resolvers »</p><p class="digest-reference"><a href="#s-l-essentiel-digest">Revoir la règle : La priority détermine l&#x27;ordre d&#x27;essai.</a></p></li><li data-recall-course="CRS-d5ffd8b704zs" data-recall-kind="digest_reference"><p class="recall-provenance">Module 04 — Contrôleurs · Cours « Argument value resolvers »</p><p class="digest-reference"><a href="#s-les-resolvers-cibles-digest">Revoir la règle : Distinguer décodage, format et validation.</a></p></li><li><nav aria-label="Flashcards de l’application"><ul><li data-recall-course="CRS-d5ffd8b704zs" data-recall-kind="application"><p class="recall-provenance">Module 04 — Contrôleurs · Cours « Argument value resolvers »</p><a href="#A-d5ffd8b704zs-65c42c80d9-03">Flashcard : La priority détermine l&#x27;ordre d&#x27;essai. Un default resolver doit laisser les resolvers spécialisés agir d&#x27;abord.</a></li><li data-recall-course="CRS-d5ffd8b704zs" data-recall-kind="application"><p class="recall-provenance">Module 04 — Contrôleurs · Cours « Argument value resolvers »</p><a href="#A-d5ffd8b704zs-d7925792cb-04">Flashcard : Le nom relie route attribute et argument. RequestValueResolver utilise le type Request.</a></li></ul></nav></li></ul></div><div data-recall-group="other"><h3>Rappels des cours précédents / autres modules</h3><ul><li data-recall-course="CRS-wg3j0t5pm7w1" data-recall-kind="previous_course"><p class="recall-provenance">Module 05 — Routage · Cours « Restrict URL parameters »</p><p>Le requirement filtre la valeur entrante. La génération contrôle les valeurs fournies selon strict_requirements.</p><p><a href="#cards-previous">Rappel : <span lang="en">Must an omitted parameter&#x27;s default satisfy its URL requirement?</span></a></p></li></ul></div></section><nav class="course-sequence" aria-label="Ordre de lecture"><a rel="prev" href="course-CRS-ea3twt9jcan2.html" aria-label="Précédent : The request — Module 04 — Contrôleurs">Précédent : The request</a> <a href="lot-04.html">Sommaire : Module 04 — Contrôleurs</a> <a rel="next" href="course-CRS-a669jpap5zf2.html" aria-label="Suivant : The response — Module 04 — Contrôleurs">Suivant : The response</a></nav><p class="course-practice-entry"><a class="button" href="#view-quiz">Fin du cours — s’entraîner avec le Quiz</a></p></div><div id="view-flashcards" data-course-panel role="region" aria-labelledby="view-flashcards-title"><h2 id="view-flashcards-title">Flashcards</h2><p lang="en">Answer before revealing each card.</p><p>Ces cartes ne mesurent pas une maîtrise notée.</p><div id="cards-s-l-essentiel-1" data-card-section="s-l-essentiel"><h3><a href="#s-l-essentiel">Revoir : L&#x27;essentiel</a></h3><div class="reader-cards"><details class="reader-card" id="A-d5ffd8b704zs-65c42c80d9-03"><summary lang="en">How are ordinary argument resolver services ordered?</summary><p lang="en">By priority on the controller.argument_value_resolver tag.</p><p lang="fr">La priority détermine l&#x27;ordre d&#x27;essai. Un default resolver doit laisser les resolvers spécialisés agir d&#x27;abord.</p><a href="course-CRS-d5ffd8b704zs.html#out-OUT-mtg83g8mv3bb">Revoir le passage précis</a></details></div></div><div id="cards-s-le-schema-2" data-card-section="s-le-schema"><h3><a href="#s-le-schema">Revoir : Le schéma</a></h3><div class="reader-cards"><details class="reader-card" id="A-d5ffd8b704zs-6e0103f6cc-02"><summary lang="en">When does argument resolution stop trying ordinary resolvers?</summary><p lang="en">When the first resolver yields a value for that argument.</p><p lang="fr">Le premier résultat arrête la recherche. Plusieurs valeurs exigent un argument variadique.</p><a href="course-CRS-d5ffd8b704zs.html#out-OUT-5kafbd3d9nt8">Revoir le passage précis</a></details></div></div><div id="cards-s-l-exemple-un-resolver-maison-3" data-card-section="s-l-exemple-un-resolver-maison"><h3><a href="#s-l-exemple-un-resolver-maison">Revoir : L&#x27;exemple : un resolver maison</a></h3><div class="reader-cards"><details class="reader-card" id="A-d5ffd8b704zs-dabd4714a5-01"><summary lang="en">What must ValueResolverInterface::resolve() return?</summary><p lang="en">An iterable of values, not the resolved value directly.</p><p lang="fr">Un generator convient au contrat iterable. Un iterable vide signifie que ce resolver passe la main.</p><a href="course-CRS-d5ffd8b704zs.html#out-OUT-np4jrjh0phfs">Revoir le passage précis</a></details></div></div><div id="cards-s-le-contrat-4" data-card-section="s-le-contrat"><h3><a href="#s-le-contrat">Revoir : Le contrat</a></h3><div class="reader-cards"><p class="reader-card-reference" id="A-d5ffd8b704zs-dd4629ecb9-01">Rappel déjà proposé : <a lang="en" href="#A-d5ffd8b704zs-dabd4714a5-01">What must ValueResolverInterface::resolve() return?</a> · <a href="course-CRS-d5ffd8b704zs.html#out-OUT-np4jrjh0phfs">Passage canonique</a></p></div></div><div id="cards-s-ce-que-fait-argumentresolver-5" data-card-section="s-ce-que-fait-argumentresolver"><h3><a href="#s-ce-que-fait-argumentresolver">Revoir : Ce que fait `ArgumentResolver`</a></h3><div class="reader-cards"><p class="reader-card-reference" id="A-d5ffd8b704zs-a6fa5bd0f9-02">Rappel déjà proposé : <a lang="en" href="#A-d5ffd8b704zs-6e0103f6cc-02">When does argument resolution stop trying ordinary resolvers?</a> · <a href="course-CRS-d5ffd8b704zs.html#out-OUT-5kafbd3d9nt8">Passage canonique</a></p></div></div><div id="cards-s-l-ordre-6" data-card-section="s-l-ordre"><h3><a href="#s-l-ordre">Revoir : L&#x27;ordre</a></h3><div class="reader-cards"><p class="reader-card-reference" id="A-d5ffd8b704zs-bd2f230735-03">Rappel déjà proposé : <a lang="en" href="#A-d5ffd8b704zs-65c42c80d9-03">How are ordinary argument resolver services ordered?</a> · <a href="course-CRS-d5ffd8b704zs.html#out-OUT-mtg83g8mv3bb">Passage canonique</a></p></div></div><div id="cards-s-le-catalogue-7" data-card-section="s-le-catalogue"><h3><a href="#s-le-catalogue">Revoir : Le catalogue</a></h3><div class="reader-cards"><details class="reader-card" id="A-d5ffd8b704zs-d7925792cb-04"><summary lang="en">Which resolver reads an argument with the same name as a route attribute?</summary><p lang="en">RequestAttributeValueResolver.</p><p lang="fr">Le nom relie route attribute et argument. RequestValueResolver utilise le type Request.</p><a href="course-CRS-d5ffd8b704zs.html#out-OUT-cbtvxgfkskae">Revoir le passage précis</a></details><details class="reader-card" id="INT-029"><summary lang="en">Which status does an invalid URL value for a backed-enum controller argument produce?</summary><p lang="en">404.</p><p lang="fr">Le resolver ne transmet pas une valeur d’enum invalide au controller.</p><a href="course-CRS-d5ffd8b704zs.html#out-OUT-chxt3emfrcjg">Revoir le passage précis</a></details></div></div><div id="cards-s-les-resolvers-cibles-8" data-card-section="s-les-resolvers-cibles"><h3><a href="#s-les-resolvers-cibles">Revoir : Les resolvers ciblés</a></h3><div class="reader-cards"><details class="reader-card" id="A-d5ffd8b704zs-27f6b1f8c3-05"><summary lang="en">Does MapRequestPayload turn malformed JSON into the normal validation status 422?</summary><p lang="en">No. Malformed JSON is 400; unsupported format is 415; validation failure defaults to 422.</p><p lang="fr">Distinguer décodage, format et validation. Un targeted resolver ne s&#x27;exécute que lorsqu&#x27;il est sélectionné.</p><a href="course-CRS-d5ffd8b704zs.html#out-OUT-ynyxk5m0hyzd">Revoir le passage précis</a></details></div></div><div id="cards-s-pieges-d-examen-9" data-card-section="s-pieges-d-examen"><h3><a href="#s-pieges-d-examen">Revoir : Pièges d&#x27;examen</a></h3><div class="reader-cards"><p class="reader-card-reference" id="A-d5ffd8b704zs-596d5af532-05">Rappel déjà proposé : <a lang="en" href="#A-d5ffd8b704zs-27f6b1f8c3-05">Does MapRequestPayload turn malformed JSON into the normal validation status 422?</a> · <a href="course-CRS-d5ffd8b704zs.html#out-OUT-ynyxk5m0hyzd">Passage canonique</a></p></div></div><div id="cards-s-application-10" data-card-section="s-application"><h3><a href="#s-application">Revoir : Application</a></h3><div class="reader-cards"><p class="reader-card-reference" id="A-d5ffd8b704zs-e7ad522ea3-03">Rappel déjà proposé : <a lang="en" href="#A-d5ffd8b704zs-65c42c80d9-03">How are ordinary argument resolver services ordered?</a> · <a href="course-CRS-d5ffd8b704zs.html#out-OUT-mtg83g8mv3bb">Passage canonique</a></p><p class="reader-card-reference" id="A-d5ffd8b704zs-e7ad522ea3-04">Rappel déjà proposé : <a lang="en" href="#A-d5ffd8b704zs-d7925792cb-04">Which resolver reads an argument with the same name as a route attribute?</a> · <a href="course-CRS-d5ffd8b704zs.html#out-OUT-cbtvxgfkskae">Passage canonique</a></p></div></div><div id="cards-s-fiche-express-11" data-card-section="s-fiche-express"><h3><a href="#s-fiche-express">Revoir : Fiche express</a></h3><div class="reader-cards"><p class="reader-card-reference" id="A-d5ffd8b704zs-b11e58e15e-01">Rappel déjà proposé : <a lang="en" href="#A-d5ffd8b704zs-dabd4714a5-01">What must ValueResolverInterface::resolve() return?</a> · <a href="course-CRS-d5ffd8b704zs.html#out-OUT-np4jrjh0phfs">Passage canonique</a></p></div></div><div id="cards-previous"><p class="recall-provenance">Module 05 — Routage · Cours « Restrict URL parameters »</p><aside class="checkpoint"><h2>Rappel d’un cours antérieur</h2><p>Avant de poursuivre : Restrict URL parameters.</p><details class="corpus-correction"><summary lang="en">Must an omitted parameter&#x27;s default satisfy its URL requirement?</summary><p lang="en">No. The default does not come from the incoming URL.</p><p>Le requirement filtre la valeur entrante. La génération contrôle les valeurs fournies selon strict_requirements.</p><a href="course-CRS-wg3j0t5pm7w1.html#out-OUT-6m9a09sd49jg">Relire la correction dans le cours antérieur</a></details></aside></div></div><div id="view-quiz" data-course-panel role="region" aria-labelledby="view-quiz-title"><aside class="revision-context"><p><strong>Avant le quiz :</strong> Pour GET /blog/42, la Request porte déjà id = &#x27;42&#x27; et _controller = App\Controller\BlogController::show. Le callable est connu ; il reste à fournir son identifiant, la Request et son service ArticleCatalog. Ces trois valeurs n&#x27;ont pas la même origine.</p><p>Quelle donnée entre, quelle responsabilité agit et quelle condition change le résultat ? Pour chaque correction, vérifiez ces conditions dans <a href="course-CRS-d5ffd8b704zs.html#s-objectif">le passage enseigné</a>, sans supposer que toutes les branches du blog sont exécutées.</p></aside><h2 id="view-quiz-title">Quiz</h2><p class="quiz-size" lang="en">8 eligible learning questions · 8 per session. Repeating a question does not demonstrate mastery.</p><p id="course-quiz-status" role="status">Quiz interactif non chargé. Démarrez après chargement de la banque locale.</p><div id="course-quiz-controls" class="assessment-main" hidden><div id="course-quiz-assessment-controls" hidden><select id="course-quiz-assessment-mode" aria-label="Mode du quiz" hidden><option value="learning">Entraînement</option></select><p id="course-quiz-training-scope"></p><button id="course-quiz-start-assessment" type="button" lang="en">Start practice</button><button id="course-quiz-finish-assessment" type="button" lang="en" hidden>End session</button></div><p id="course-quiz-assessment-error" role="alert"></p><p id="course-quiz-assessment-timer" hidden></p><p id="course-quiz-session-progress" class="quiz-progress" role="status" lang="en"></p><div id="course-quiz-assessment-app" tabindex="-1"></div><nav id="course-quiz-session-navigation" aria-label="Questions du cours"></nav><div id="course-quiz-learning-overview" aria-live="polite"></div></div><div id="course-quiz-native"><p>Sans JavaScript ou si le chargement échoue : aucune tentative notée. Les <a href="#view-flashcards">flashcards du cours</a> restent disponibles.</p><details class="course-quiz-fallback" data-question-id="L-d5ffd8b704zs-base-v1"><summary lang="en">RADIO — Select one answer. How are ordinary argument resolver services ordered?</summary><p>Correction de consultation — non notée.</p><p>La priority détermine l&#x27;ordre d&#x27;essai. Un default resolver doit laisser les resolvers spécialisés agir d&#x27;abord.</p><ul><li><strong lang="en">Distractor: By the alphabetical order of their service identifiers.</strong><p>La priority détermine l&#x27;ordre d&#x27;essai, pas le nom du service.</p></li><li><strong lang="en">Distractor: By the position of the argument in the controller signature only.</strong><p>La position de l&#x27;argument ne définit pas l&#x27;ordre des services resolver.</p></li><li><strong lang="en">Correct: By priority on controller.argument_value_resolver tags.</strong><p>La priority détermine l&#x27;ordre d&#x27;essai. Un default resolver doit laisser les resolvers spécialisés agir d&#x27;abord.</p></li></ul><a href="course-CRS-d5ffd8b704zs.html#out-OUT-mtg83g8mv3bb">Relire le passage exact</a><a href="course-CRS-d5ffd8b704zs.html#s-l-ordre">Relire la correction précise</a></details></div></div></div></div><details class="transfer-panel"><summary>Sauvegarde et transfert de progression</summary><p id="reading-status" role="status">Sans JavaScript : lecture libre ; progression non enregistrée.</p><p><a href="assessment.html#overview-title">Lecture, réussites immédiates et différées</a></p><p>Transfert manuel — aucune synchronisation automatique</p><p id="persistence-status" role="status"></p><button type="button" class="secondary" id="export-progress">Exporter ma progression</button><label for="import-progress">Choisir un JSON pour fusionner ma progression (sans remplacement)</label><input type="file" id="import-progress" accept="application/json,.json"><p id="transfer-status" role="status"></p></details></main><footer class="site-footer"><a href="catalogue.html">Catalogue</a> <a href="sources.html">Sources et attribution</a> <a href="#contenu">Haut de page</a></footer></body></html>

@@ -1,0 +1,327 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; connect-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Naming conventions — Symfony 8 Preparation</title><link rel="stylesheet" href="styles.css"><link rel="stylesheet" href="reader.css"><script src="mermaid.min.js" defer></script><script src="mermaid-init.js" defer></script><link rel="stylesheet" href="assessment.css"><script src="fixed-exams-data.js" defer></script><script src="fixed-exams.js" defer></script><script src="learning-state.js" defer></script><script src="guide.js" defer></script><script src="reader-catalog.js" defer></script><script src="reader.js" defer></script><script src="site-state.js" defer></script><script src="assessment.js" defer></script><script src="course-views.js" defer></script><link rel="stylesheet" href="syntax-highlight.css"><script src="prism-syntax.js" defer></script><script src="syntax-highlight.js" defer></script></head><body data-course-id="CRS-9fz4erg0wmbq"><a class="skip" href="#contenu">Aller au contenu</a><header class="site-header"><a class="brand" href="index.html">S8 Preparation</a><nav aria-label="Navigation principale"><a href="index.html">Accueil</a> <a href="catalogue.html">Parcours</a> <a href="assessment.html?mode=review">Réviser</a> <a href="examens.html">Examens blancs</a> <a href="jour-j.html">Jour J</a></nav></header><main id="contenu" tabindex="-1" class="corpus-reader"><nav class="breadcrumb" aria-label="Fil d’Ariane"><a href="index.html">Accueil</a> <span aria-hidden="true">›</span> <a href="catalogue.html">Parcours</a> <span aria-hidden="true">›</span> <a href="lot-04.html">Module 04 — Contrôleurs</a> <span aria-hidden="true">›</span> <span aria-current="page">Naming conventions</span></nav><h1>Naming conventions</h1><p class="muted">Symfony 8.0 · API PHP ≤ 8.4 · Twig ≤ 3.22. Préparation indépendante.</p><p class="revision-status">Rédaction narrative P11 : projection nouvelle, non couverte par les décisions historiques P10. Aucune approbation officielle ni garantie de réussite.</p><aside class="narrative-context" aria-label="Repères de lecture"><p><strong>Prérequis de lecture :</strong> <a href="course-CRS-h8s87edcx8ae.html">The base AbstractController class</a></p><p><strong>Concepts voisins :</strong> <a href="course-CRS-kqq96z5y9r2f.html">Configuration (YAML and PHP attributes)</a> — Retrouver la route avant le callable. <a href="lot-04.html">Comparer les responsabilités dans ce module</a> · <a href="carte-composants.html">Situer cette responsabilité dans le blog</a> · <a href="glossaire.html">Distinguer les termes voisins</a></p><p><a href="ordre-lecture.html">Retrouver les 163 cours dans le parcours recommandé</a>. Ce repère ne modifie ni votre historique ni votre progression.</p></aside><div class="course-layout"><details class="lot-course-menu"><summary>Cours du module · 14 cours</summary><nav aria-label="Cours du module"><a class="lot-context" href="lot-04.html">Module 04 — Contrôleurs</a><ol><li><a href="course-CRS-tygmreqkkds3.html">HttpKernel component and FrameworkBundle</a></li><li><a href="course-CRS-9fz4erg0wmbq.html" aria-current="page">Naming conventions</a></li><li><a href="course-CRS-h8s87edcx8ae.html">The base AbstractController class</a></li><li><a href="course-CRS-ea3twt9jcan2.html">The request</a></li><li><a href="course-CRS-a669jpap5zf2.html">The response</a></li><li><a href="course-CRS-thmkagkjcvh3.html">The cookies</a></li><li><a href="course-CRS-a51fqgqynr2d.html">The session</a></li><li><a href="course-CRS-ak7sdgcdjb7e.html">The flash messages</a></li><li><a href="course-CRS-7zy5ndjgnpk1.html">HTTP redirects</a></li><li><a href="course-CRS-fd24qxy0x1s6.html">Internal redirects</a></li><li><a href="course-CRS-p57qsnnfpd2a.html">Generate 404 pages</a></li><li><a href="course-CRS-5pns7nw7612s.html">File upload</a></li><li><a href="course-CRS-zmg0wrxvqqdq.html">Built-in internal controllers</a></li><li><a href="course-CRS-d5ffd8b704zs.html">Argument value resolvers</a></li></ol><a href="lot-04.html#view-quiz">Quiz du module</a></nav></details><aside class="course-section-menu" aria-label="Sommaire du cours"><nav class="course-actions" aria-label="Activités du cours"><a id="tab-course" href="#view-course">Cours</a><a id="tab-flashcards" href="#view-flashcards">Flashcards</a><a id="tab-quiz" href="#view-quiz">Quiz</a></nav><details class="course-section-disclosure"><summary id="course-sections">Sections du cours</summary><nav aria-label="Sections du cours"><ul><li><a href="#s-objectif">Objectif</a></li><li><a href="#s-l-essentiel">L&#x27;essentiel</a></li><li><a href="#s-le-schema">Le schéma</a></li><li><a href="#s-l-exemple-une-route-sans-nom">L&#x27;exemple : une route sans nom</a></li><li><a href="#s-rien-n-est-impose-presque">Rien n&#x27;est imposé, presque</a></li><li><a href="#s-le-format-controller">Le format `_controller`</a></li><li><a href="#s-le-route-name-et-qui-le-genere">Le route name, et qui le génère</a><ul><li><a href="#s-le-route-name-et-qui-le-genere-nested-couche-1-le-component-routing">Couche 1 : le component Routing</a></li><li><a href="#s-le-route-name-et-qui-le-genere-nested-couche-2-frameworkbundle">Couche 2 : FrameworkBundle</a></li><li><a href="#s-le-route-name-et-qui-le-genere-nested-prefixe-de-classe-index-et-alias">Préfixe de classe, index et alias</a></li></ul></li><li><a href="#s-pieges-d-examen">Pièges d&#x27;examen</a></li><li><a href="#s-application">Application</a></li><li><a href="#s-fiche-express">Fiche express</a></li><li><a href="#s-sources-officielles">Sources officielles</a></li><li><a href="#reader-objectives">Objectifs d’apprentissage</a></li><li><a href="#course-recalls">Rappels et liens avec les autres cours</a></li></ul></nav><nav aria-label="Flashcards par section"><a href="#view-flashcards">Flashcards par section</a><ul><li><a href="#cards-s-l-essentiel-1">L&#x27;essentiel</a></li><li><a href="#cards-s-le-schema-2">Le schéma</a></li><li><a href="#cards-s-l-exemple-une-route-sans-nom-3">L&#x27;exemple : une route sans nom</a></li><li><a href="#cards-s-rien-n-est-impose-presque-4">Rien n&#x27;est imposé, presque</a></li><li><a href="#cards-s-le-format-controller-5">Le format `_controller`</a></li><li><a href="#cards-s-le-route-name-et-qui-le-genere-6">Le route name, et qui le génère</a></li><li><a href="#cards-s-pieges-d-examen-7">Pièges d&#x27;examen</a></li><li><a href="#cards-s-application-8">Application</a></li><li><a href="#cards-s-fiche-express-9">Fiche express</a></li><li><a href="#cards-previous">Module 03 — Architecture Symfony · Cours « Framework interoperability and PSRs » · Rappel : <span lang="en">Does Composer provide list only PSR implementations?</span></a></li></ul></nav><nav aria-label="Retour au module"><a href="lot-04.html">Tous les cours du module</a></nav></details><p class="local-quiz-count">4 questions disponibles · 4 par session Quiz</p></aside><div class="course-content"><div id="view-course" data-course-panel role="region" aria-labelledby="view-course-title"><h2 id="view-course-title">Cours</h2><p class="course-introduction"><a href="#s-objectif">Introduction</a> · <a href="#course-sections">Sections du cours</a></p><h2 id="reader-objectives" tabindex="-1">Objectifs d’apprentissage</h2><ul><li><a href="course-CRS-9fz4erg0wmbq.html#out-OUT-kym7hw6vad3k">Énoncer que le suffixe Controller est une convention et non une constraint</a></li><li><a href="course-CRS-9fz4erg0wmbq.html#out-OUT-fzeda7ytt9hf">Écrire la notation _controller pour une method et pour une class invocable</a></li><li><a href="course-CRS-9fz4erg0wmbq.html#out-OUT-j9vdv1qav4by">Énoncer ce qui se passe lorsque l&#x27;option name d&#x27;une route est omise</a></li></ul><aside class="pedagogy-legend" aria-label="Repères pédagogiques"><p><strong>Repères pédagogiques</strong></p><p>Ces repères décrivent le rôle du bloc, pas une fréquence officielle à l’examen.</p><p class="teaching-label essential"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="brain" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5C12 1 6 1 6 5C2 5 1 10 4 12C1 15 3 19 6 19C6 23 12 23 12 19V5M12 5C12 1 18 1 18 5C22 5 23 10 20 12C23 15 21 19 18 19C18 23 12 23 12 19M6 5C6 8 8 9 9 9M4 12H7L9 14M6 19V16M18 5C18 8 16 9 15 9M20 12H17L15 14M18 19V16"></path></svg> <strong>À comprendre</strong></p><p class="teaching-label essential"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="book" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5C9 3 5 3 2 4V20C5 19 9 19 12 21C15 19 19 19 22 20V4C19 3 15 3 12 5V21M5 8H8M5 12H8M16 8H19M16 12H19"></path></svg> <strong>À mémoriser</strong></p><p class="teaching-label example"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="code" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6L2 12L8 18M16 6L22 12L16 18M14 3L10 21"></path></svg> <strong>Exemple concret</strong></p><p class="teaching-label pitfall"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="warning" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3L23 21H1L12 3ZM12 9V14M12 17V18"></path></svg> <strong>Piège à éviter</strong></p><p class="teaching-label nuance"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="balance" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3V21M7 21H17M3 7L21 5M5 7L1 15H9L5 7M19 6L15 14H23L19 6M1 15Q5 20 9 15M15 14Q19 19 23 14"></path></svg> <strong>Nuance à connaître</strong></p><p>Précision, exception ou condition d’application d’une règle.</p></aside><section class="teaching-section" data-section="s-objectif"><h2 id="s-objectif" tabindex="-1">Objectif</h2><p>Pour afficher l'article 42, nous nommons trois choses différentes :
+le chemin <code>/blog/42</code>, la route <code>blog_show</code> et le callable
+<code>App\Controller\BlogController::show</code>. Un lien utilise le nom de route ;
+l'exécution utilise le callable. Les conventions rendent ces choix lisibles,
+elles ne remplacent pas leur configuration.</p>
+<p>Connaître les conventions propres aux controllers, et savoir lesquelles sont
+<strong>obligatoires</strong>. Les conventions générales du framework — casse, préfixes
+<code>Abstract</code>, suffixes <code>Interface</code> et <code>Trait</code> — sont traitées dans le Module 03 — Architecture Symfony.</p>
+<p>Question fil rouge : <strong>quand je n'écris pas un nom, qui l'invente, et d'après
+quelle règle exacte ?</strong></p></section><section class="teaching-section" data-section="s-l-essentiel"><h2 id="s-l-essentiel" tabindex="-1">L&#x27;essentiel</h2><p class="teaching-label essential"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="brain" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5C12 1 6 1 6 5C2 5 1 10 4 12C1 15 3 19 6 19C6 23 12 23 12 19V5M12 5C12 1 18 1 18 5C22 5 23 10 20 12C23 15 21 19 18 19C18 23 12 23 12 19M6 5C6 8 8 9 9 9M4 12H7L9 14M6 19V16M18 5C18 8 16 9 15 9M20 12H17L15 14M18 19V16"></path></svg> <strong>À comprendre</strong></p><aside class="section-digest" id="s-l-essentiel-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Le nom généré n&#x27;est pas une conversion générale en snake_case.</li><li>Pour une même méthode, seuls les noms générés reçoivent les suffixes _1, _2 à partir du deuxième nom généré ; des noms explicites identiques peuvent se remplacer dans la collection.</li></ol></aside><p><strong>Ce que cette partie veut réellement vous apprendre.</strong></p>
+<ul>
+<li><em>Pourquoi ce sujet existe.</em> Symfony a besoin de trois identifiants pour un
+  même écran : un <strong>chemin</strong> (pour le navigateur), un <strong>nom de route</strong> (pour
+  générer des liens) et un <strong>callable</strong> (pour exécuter le code). Comme on
+  écrit rarement les trois à la main, il existe des conventions et des règles
+  de génération automatique.</li>
+<li><em>Le piège de fond.</em> « Convention » ne veut pas dire « obligation ».
+  Presque tout est libre ; une seule chose est obligatoire : l'unicité du nom
+  de route.</li>
+<li><em>Ce que l'auteur veut que vous compreniez.</em> Le nom de route généré est
+  <strong>calculé en deux couches</strong> : le component Routing produit un nom long, puis
+  FrameworkBundle le raccourcit. L'examen vous demande de refaire ce calcul.</li>
+<li><em>Pourquoi c'est à l'examen.</em> Calculer <code>app_lucky_number</code> à partir de
+  <code>App\Controller\LuckyController::number</code>, savoir que <code>_1</code> ne concerne que
+  les noms générés, et distinguer ce qui est obligatoire de ce qui ne l'est pas.</li>
+</ul>
+<p>En résumé : presque rien n'est imposé à un controller : le suffixe <code>Controller</code>, la class de
+base, l'absence de suffixe <code>Action</code> sont des conventions. <strong>Une seule
+obligation</strong> : un route name unique. Quand on l'omet, Symfony le génère en deux
+couches — le component, puis FrameworkBundle qui le raccourcit — et c'est ce
+nom généré que l'examen fait calculer.</p>
+<p>Les routes elles-mêmes (attributs <code>#[Route]</code>, paramètres, génération d'URL)
+sont l'objet du module Routing ; ce cours ne traite que les <strong>noms</strong>.</p></section><section class="teaching-section" data-section="s-le-schema"><h2 id="s-le-schema" tabindex="-1">Le schéma</h2><aside class="section-digest" id="s-le-schema-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>_controller identifie le callable cible.</li><li>Une class invocable peut omettre ::__invoke.</li></ol></aside><p><strong>Où en est-on ?</strong> Le cours suit trois questions : <em>qu'est-ce qui est
+obligatoire ?</em> (« Rien n'est imposé, presque »), <em>comment Symfony retrouve-t-il
+le code à exécuter ?</em> (« Le format <code>_controller</code> »), <em>comment une route sans
+nom en reçoit-elle un ?</em> (« Le route name »). Le schéma ci-dessous répond à la
+troisième, la plus technique, en suivant la transformation du nom.</p>
+<pre class="highlight" tabindex="0"><code class="language-text">Trois noms pour un même écran « article 42 »
+   ├─ chemin        /blog/42                         → matching de l'URL
+   ├─ nom de route  blog_show                        → génération de liens
+   └─ callable      App\Controller\BlogController::show  → exécution (_controller)</code></pre>
+<figure class="diagram" aria-labelledby="CRS-9fz4erg0wmbq-3-diagram-0-title CRS-9fz4erg0wmbq-3-diagram-0-description"><figcaption id="CRS-9fz4erg0wmbq-3-diagram-0-title">Les noms de controller, de route générée et de template</figcaption><p id="CRS-9fz4erg0wmbq-3-diagram-0-description">Le _controller s&#x27;écrit App\Controller\BlogController::show, ou App\Controller\ShowPage pour une class invocable. Le component génère le route name en remplaçant les antislashs par des soulignés, puis en ajoutant _ et la method, en minuscules : app_controller_luckycontroller_number. FrameworkBundle retire controller_ et bundle_, un suffixe action et les doubles soulignés : app_lucky_number. Parmi les routes sans name explicite d&#x27;une même method, le deuxième nom généré reçoit _1, le troisième _2 ; les noms explicites ne reçoivent pas ces suffixes et peuvent entrer en collision. Un name sur la class sert de préfixe ; l&#x27;alias FQCN::method n&#x27;existe que pour une method à une seule route. Un template s&#x27;écrit en snake_case avec deux extensions, le format puis l&#x27;engine : index.html.twig.</p><div class="mermaid" hidden>---
+title: Du _controller au nom de la route
+---
+flowchart TD
+  accTitle: Les noms de controller, de route générée et de template
+  accDescr: Le _controller s&#x27;écrit App\Controller\BlogController::show, ou App\Controller\ShowPage pour une class invocable. Le component génère le route name en remplaçant les antislashs par des soulignés, puis en ajoutant _ et la method, en minuscules : app_controller_luckycontroller_number. FrameworkBundle retire controller_ et bundle_, un suffixe action et les doubles soulignés : app_lucky_number. Parmi les routes sans name explicite d&#x27;une même method, le deuxième nom généré reçoit _1, le troisième _2 ; les noms explicites ne reçoivent pas ces suffixes et peuvent entrer en collision. Un name sur la class sert de préfixe ; l&#x27;alias FQCN::method n&#x27;existe que pour une method à une seule route. Un template s&#x27;écrit en snake_case avec deux extensions, le format puis l&#x27;engine : index.html.twig.
+  C[&quot;App\Controller\LuckyController::number&quot;]
+  C --&gt;|&quot;nom sans déclaration explicite&quot;| N1[&quot;Component : nom long&quot;]
+  N1 --&gt;|&quot;normalisation par le loader du bundle&quot;| N2[&quot;app_lucky_number&quot;]
+  N2 --&gt;|&quot;préfixe éventuel de classe&quot;| N3([&quot;Nom final de route&quot;])
+  classDef operation fill:#e0f2fe,stroke:#0369a1,color:#0c4a6e
+  classDef result fill:#dcfce7,stroke:#15803d,color:#14532d
+  class C,N1,N2 operation
+  class N3 result</div></figure><p>
+Bleu = calcul du nom, vert = identifiant utilisé pour générer une URL.
+Le dessin n'est pas une chaîne d'appels HTTP : ces noms sont déterminés au
+chargement des routes. L'exemple du tableau détaille les suffixes et alias.
+Un nom explicite stable évite qu'un renommage PHP casse les liens.</p></section><section class="teaching-section" data-section="s-l-exemple-une-route-sans-nom"><h2 id="s-l-exemple-une-route-sans-nom" tabindex="-1">L&#x27;exemple : une route sans nom</h2><p class="teaching-label example"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="code" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6L2 12L8 18M16 6L22 12L16 18M14 3L10 21"></path></svg> <strong>Exemple concret</strong></p><aside class="section-digest" id="s-l-exemple-une-route-sans-nom-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Sans name explicite, le loader construit un route name depuis la class et la method.</li><li>FrameworkBundle raccourcit le nom ; ici le résultat est app_lucky_number.</li></ol></aside><p><strong>Où en est-on ?</strong> Avant les règles, un cas minimal : une route <strong>sans</strong> <code>name</code>,
+dont on veut deviner le nom généré.</p>
+<p>L'exemple réduit le problème à une action qui renvoie <code>42</code>, sans accès
+aux données. Avant toute requête, le loader calcule <code>app_lucky_number</code>.
+Lors du matching, le chemin sélectionnera la route ; ce nom calculé servira
+notamment à retrouver la même route pour générer un lien.</p>
+<pre class="highlight" tabindex="0"><code class="language-php">namespace App\Controller;
+
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Attribute\Route;
+
+final class LuckyController extends AbstractController
+{
+    #[Route('/lucky/number')]
+    public function number(): Response   // nom généré : app_lucky_number
+    {
+        return new Response('42');
+    }
+}</code></pre>
+<p>Le calcul, pas à pas (détaillé plus bas) :</p>
+<pre class="highlight" tabindex="0"><code class="language-text">App\Controller\LuckyController::number
+  1. \ → _  et  + "_" + méthode       app_controller_luckycontroller_number
+  2. tout en minuscules               (déjà fait ci-dessus)
+  3. FrameworkBundle retire controller_ → app_lucky_number</code></pre>
+<div class="admonition info">
+<p class="admonition-title">🌍 In Real Life</p>
+<p><strong>La situation</strong> : une fiche du restaurant n’a pas reçu de référence manuelle ; le secrétariat en fabrique une à partir du poste et de l’opération décrits.</p>
+<p><strong>L’équivalent dans Symfony</strong> : fiche sans référence → <code>#[Route('/lucky/number')]</code> sans <code>name</code> ; référence calculée → <code>app_lucky_number</code> avec le loader FrameworkBundle ; consultation de la fiche → génération d’URL par son nom.</p>
+<p><strong>Retour à la réalité technique</strong> : le nom est établi au chargement des routes, pas par le contrôleur à chaque requête. Le contenu <code>'42'</code> de la <code>Response</code> ne participe pas à ce calcul. Le chemin et le nom de route restent deux valeurs distinctes.</p>
+<p><strong>🧠 Comment le mémoriser</strong> : « Sans nom écrit, un nom calculé. » Image mentale : tampon de référence sur une fiche déjà décrite. Question-réflexe : « Le nom vient-il d’un <code>name</code> explicite ou du loader utilisé ? »</p>
+<p><strong>⚠️ À ne pas confondre</strong> : charger la configuration des routes n’est pas charger un article.</p>
+</div></section><section class="teaching-section" data-section="s-rien-n-est-impose-presque"><span class="outcome-anchor" id="out-OUT-kym7hw6vad3k" tabindex="-1"></span><h2 id="s-rien-n-est-impose-presque" tabindex="-1">Rien n&#x27;est imposé, presque</h2><aside class="section-digest" id="s-rien-n-est-impose-presque-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Un controller est un callable.</li><li>Les route names doivent en revanche être uniques.</li></ol></aside><p><strong>Où en est-on ?</strong> Question 1 sur 3 : <em>qu'est-ce que je suis obligé de faire ?</em>
+Pourquoi la poser d'abord ? Parce qu'au QCM, la tentation est de croire que les
+conventions (suffixe, classe de base) sont des règles du framework.</p>
+<p>Nous pourrions appeler la classe du blog <code>ShowArticle</code> et la rendre invocable :
+ce choix ne change pas le contrat HTTP. En revanche, réutiliser <code>blog_show</code>
+pour une autre route peut écraser la première définition et changer la
+destination des liens. Le tableau distingue donc conventions de lisibilité
+et nécessité d'un identifiant non ambigu, pas toutes les obligations PHP
+d'un callable valide.</p>
+<table>
+<thead>
+<tr>
+<th>Élément</th>
+<th>Convention</th>
+<th>Obligatoire ?</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>class de controller</td>
+<td>suffixe <code>Controller</code></td>
+<td>non</td>
+</tr>
+<tr>
+<td>method d'action</td>
+<td>aucun suffixe <code>Action</code></td>
+<td>non — mais le suffixe reste reconnu</td>
+</tr>
+<tr>
+<td>class de base</td>
+<td>étendre <code>AbstractController</code></td>
+<td>non</td>
+</tr>
+<tr>
+<td>template</td>
+<td><code>snake_case</code>, deux extensions</td>
+<td>non</td>
+</tr>
+<tr>
+<td>route name</td>
+<td>unique dans l'application</td>
+<td><strong>oui</strong></td>
+</tr>
+</tbody>
+</table>
+<p>Le template porte deux extensions : <code>index.html.twig</code>, la première étant le
+format produit.
+Cette convention ne fixe pas à elle seule le <code>Content-Type</code> de la Response.
+De même, l'unicité d'un nom de route est une exigence de conception : ne pas
+compter sur une exception systématique pour détecter les noms écrasés au chargement.</p>
+<p>Décomposition d'un nom de template :</p>
+<pre class="highlight" tabindex="0"><code class="language-text">   blog/index.html.twig
+          │     │    │
+          │     │    └── engine : Twig le rend
+          │     └─────── format produit : HTML
+          └───────────── nom en snake_case</code></pre>
+<p>Pourquoi donc une seule obligation ? Parce qu'un <strong>nom de route</strong> est une clé
+dans une collection : deux routes de même nom ne peuvent pas coexister, la
+seconde remplace la première et tous les liens générés changent de cible. Un
+suffixe <code>Controller</code> ou une classe de base ne sont que du confort de lecture.</p>
+<div class="admonition info">
+<p class="admonition-title">🌍 In Real Life</p>
+<p><strong>La situation</strong> : les postes du restaurant peuvent avoir des intitulés variés, mais deux fiches du registre ne doivent pas partager la même référence.</p>
+<p><strong>L’équivalent dans Symfony</strong> : intitulé lisible → convention du suffixe <code>Controller</code> ; référence de fiche → nom de route ; nouvelle fiche sous la même référence → définition susceptible de remplacer l’ancienne.</p>
+<p><strong>Retour à la réalité technique</strong> : les conventions de nommage ne dispensent pas d’un callable PHP valide ni d’une configuration correcte. L’unicité des noms évite l’écrasement dans la collection ; elle ne signifie pas qu’un doublon provoquera toujours une exception. Les extensions du template sont une convention, pas un en-tête HTTP.</p>
+<p><strong>🧠 Comment le mémoriser</strong> : « L’intitulé aide ; la référence identifie. » Image mentale : deux fiches disputant une même case. Question-réflexe : « Est-ce une convention de lecture ou une clé de configuration ? »</p>
+<p><strong>⚠️ À ne pas confondre</strong> : <code>index.html.twig</code> ne fixe pas à lui seul le <code>Content-Type</code>.</p>
+</div></section><section class="teaching-section" data-section="s-le-format-controller"><span class="outcome-anchor" id="out-OUT-fzeda7ytt9hf" tabindex="-1"></span><h2 id="s-le-format-controller" tabindex="-1">Le format `_controller`</h2><p><strong>Où en est-on ?</strong> Question 2 sur 3 : <em>comment Symfony passe-t-il du nom de route
+au code à exécuter ?</em> Le pont, c'est l'attribut de Request <code>_controller</code>.</p>
+<p>Après le matching de <code>/blog/42</code>, <code>_controller</code> désigne l'action, tandis
+que <code>id</code> vaut encore une donnée de la Request. Le <code>ControllerResolver</code>
+transforme la désignation en callable utilisable, éventuellement en récupérant
+un contrôleur enregistré comme service. Ce n'est qu'ensuite que
+l'<code>ArgumentResolver</code> prépare les valeurs de <code>show()</code>. Ni le nom de la route
+ni son suffixe <code>Controller</code> ne chargent l'article en base.</p>
+<p><code>App\Controller\BlogController::show</code> : class pleinement qualifiée, <code>::</code>, nom
+de method — la string que le router dépose dans l'attribute <code>_controller</code>. Pour
+une class <strong>invocable</strong>, la class seule suffit.</p>
+<pre class="highlight" tabindex="0"><code class="language-text">GET /blog/42
+   │ Router : route reconnue → attributes
+   │     _route      = blog_show
+   │     _controller = App\Controller\BlogController::show
+   │     id          = "42"
+   ▼
+ControllerResolver : _controller → callable
+   ▼
+ArgumentResolver   : prépare les arguments de show()
+   ▼
+show(...) est appelé</code></pre>
+<p>Vérifié dans <code>AttributeRouteControllerLoader::configureRoute()</code> (8.0) : si la
+méthode est <code>__invoke</code>, le défaut <code>_controller</code> vaut <code>Classe::class</code> seule ;
+sinon <code>Classe::méthode</code>. C'est exactement la règle « classe invocable → classe
+seule ».</p>
+<div class="admonition info">
+<p class="admonition-title">🌍 In Real Life</p>
+<p><strong>La situation</strong> : le bon 42 indique « poste desserts, préparer ». Cette indication permet de trouver qui appeler ; elle n’est ni la personne ni les ingrédients.</p>
+<p><strong>L’équivalent dans Symfony</strong> : désignation écrite → <code>_controller</code> ; poste effectivement trouvé → callable fourni par <code>ControllerResolver</code> ; informations préparées séparément → arguments fournis par <code>ArgumentResolver</code>.</p>
+<p><strong>Retour à la réalité technique</strong> : la chaîne <code>App\Controller\BlogController::show</code> désigne classe et méthode ; une classe invocable peut être désignée seule. HttpKernel demande ces résolutions puis invoque l’action. La syntaxe avec <code>::</code> n’impose pas une méthode statique : un contrôleur-service peut être obtenu par l’intégration conteneur.</p>
+<p><strong>🧠 Comment le mémoriser</strong> : « Une adresse d’appel n’est pas un appel. » Image mentale : nom du poste sur le bon, avant toute préparation. Question-réflexe : « Ai-je une désignation, un callable ou son résultat ? »</p>
+<p><strong>⚠️ À ne pas confondre</strong> : <code>_route</code>, <code>_controller</code> et <code>id</code> ne désignent pas la même chose ; aucun suffixe ne charge une entité.</p>
+</div><aside class="enrichment" aria-label="Autre explication"><p>Un standard téléphonique a besoin d'une extension qui répond, pas d'un intitulé de poste particulier. Le ControllerResolver cherche un callable ; le suffixe Controller améliore surtout la lecture humaine.</p></aside></section><section class="teaching-section" data-section="s-le-route-name-et-qui-le-genere"><span class="outcome-anchor" id="out-OUT-j9vdv1qav4by" tabindex="-1"></span><h2 id="s-le-route-name-et-qui-le-genere" tabindex="-1">Le route name, et qui le génère</h2><p><strong>Où en est-on ?</strong> Question 3 sur 3, la plus calculatoire : <em>quel nom reçoit une
+route sans <code>name</code> ?</em> Rappel : si vous écrivez <code>name: 'blog_show'</code>, tout ce qui
+suit est ignoré.</p>
+<p>Si nous omettons <code>name</code> sur <code>BlogController::show</code>, les liens dépendent
+d'un nom dérivé de PHP. Renommer la méthode peut donc casser la génération
+d'URL alors que le chemin <code>/blog/{id}</code> reste identique. Un nom explicite
+<code>blog_show</code> sépare ce contrat de navigation du nom de la méthode ; les règles
+ci-dessous expliquent exactement le cas où ce nom explicite manque.</p>
+<h3 tabindex="-1" id="s-le-route-name-et-qui-le-genere-nested-couche-1-le-component-routing">Couche 1 : le component Routing</h3>
+<p>Le component Routing, dans <code>AttributeClassLoader::getDefaultRouteName()</code>,
+remplace les <code>\</code> par des <code>_</code>, ajoute <code>_</code> et le nom de la method, met le tout
+<strong>en minuscules</strong>, puis ajoute <code>_</code> et <code>defaultRouteIndex</code> à partir du
+deuxième nom généré pour une même method. Une route au nom explicite
+n'appelle pas ce calcul et n'incrémente pas cet index.</p>
+<h3 tabindex="-1" id="s-le-route-name-et-qui-le-genere-nested-couche-2-frameworkbundle">Couche 2 : FrameworkBundle</h3>
+<p><code>AttributeRouteControllerLoader</code>, de
+FrameworkBundle, retire ensuite les segments <code>bundle_</code> et <code>controller_</code>, un
+suffixe <code>action</code>, et les <code>__</code> restants.</p>
+<p>Vérifié dans le code 8.0 : l'expression utilisée est
+<code>preg_replace('/(bundle|controller)_/', '_', …)</code>, puis, si la méthode se
+termine par <code>Action</code> ou <code>_action</code>, <code>preg_replace('/action(_\d+)?$/', '\\1', …)</code>
+(l'index <code>_1</code> éventuel est conservé), et enfin <code>str_replace('__', '_', …)</code>.
+Conséquence : <code>controller_</code> est retiré <strong>partout dans la chaîne</strong>, y compris
+à la fin d'un mot (<code>blogcontroller_</code> → <code>blog_</code>), ce qui explique que
+<code>luckycontroller_number</code> devienne <code>lucky_number</code>.</p>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Component seul</th>
+<th>Avec FrameworkBundle</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>LuckyController::number</code></td>
+<td><code>app_controller_luckycontroller_number</code></td>
+<td><code>app_lucky_number</code></td>
+</tr>
+<tr>
+<td><code>BlogController::showAction</code></td>
+<td><code>app_controller_blogcontroller_showaction</code></td>
+<td><code>app_blog_show</code></td>
+</tr>
+<tr>
+<td>deuxième route sans nom explicite de la même method</td>
+<td>suffixe <code>_1</code></td>
+<td><code>app_lucky_number_1</code></td>
+</tr>
+</tbody>
+</table>
+<p>Rien ne découpe le <code>CamelCase</code> : <code>LuckyController</code> devient <code>luckycontroller</code>.
+Un <code>name</code> porté par la class est préfixé. Une method qui ne déclare qu'une
+route reçoit en plus l'alias <code>App\Controller\LuckyController::number</code>.</p>
+<p>Calcul détaillé de <code>BlogController::showAction</code> :</p>
+<pre class="highlight" tabindex="0"><code class="language-text">App\Controller\BlogController::showAction
+  1. \ → _ , + _méthode, minuscules   app_controller_blogcontroller_showaction
+  2. retrait de « controller_ »       app__blog_showaction   (deux fois)
+  3. suffixe action retiré            app__blog_show
+  4. __ → _                           app_blog_show</code></pre>
+<p>Comparaison des deux couches :</p>
+<pre class="highlight" tabindex="0"><code class="language-text">┌──────────────────────────────────────┐ ┌──────────────────────────────────────┐
+│     COMPONENT Routing seul           │ │   AVEC FrameworkBundle (Symfony)     │
+├──────────────────────────────────────┤ ├──────────────────────────────────────┤
+│ \ → _, + méthode, minuscules         │ │ idem, PUIS retire bundle_/controller_│
+│ index _1, _2 pour les noms générés   │ │ retire le suffixe action, __ → _     │
+│ app_controller_luckycontroller_number│ │ app_lucky_number                     │
+└──────────────────────────────────────┘ └──────────────────────────────────────┘</code></pre>
+<h3 tabindex="-1" id="s-le-route-name-et-qui-le-genere-nested-prefixe-de-classe-index-et-alias">Préfixe de classe, index et alias</h3>
+<ul>
+<li>Un <code>name</code> sur la class est un <strong>préfixe</strong> posé devant le nom généré complet
+  (voir Question 2).</li>
+<li><code>_1</code>, <code>_2</code> : uniquement pour les <strong>noms générés</strong> d'une même méthode ; un
+  nom explicite n'incrémente rien.</li>
+<li>L'alias <code>FQCN::méthode</code> n'est ajouté que si la méthode ne porte qu'une route.</li>
+</ul>
+<div class="admonition info">
+<p class="admonition-title">🌍 In Real Life</p>
+<p><strong>La situation</strong> : le registre peut fabriquer une référence à partir d’un intitulé long, puis la raccourcir selon les règles de l’établissement. Renommer l’intitulé change alors la référence calculée.</p>
+<p><strong>L’équivalent dans Symfony</strong> : première référence → calcul de <code>AttributeClassLoader</code> ; raccourcissement → loader FrameworkBundle ; référence choisie indépendamment → <code>name: 'blog_show'</code>.</p>
+<p><strong>Retour à la réalité technique</strong> : le tableau décrit des règles précises, pas une conversion générale de CamelCase en snake_case. Le calcul concerne les noms par défaut ; préfixes et index éventuels restent à prendre en compte. Un alias classe/méthode suppose ici une seule route sur la méthode.</p>
+<p><strong>🧠 Comment le mémoriser</strong> : « Un nom calculé suit son origine. » Image mentale : référence automatique attachée à l’étiquette PHP. Question-réflexe : « Un renommage de méthode modifierait-il les liens générés par ce nom ? »</p>
+<p><strong>⚠️ À ne pas confondre</strong> : le nom explicite stabilise l’identifiant de navigation, pas toutes les autres configurations du contrôleur.</p>
+</div><div class="retained-answer-context">
+<p><strong>Repère de l’exemple :</strong></p>
+<p lang="en"><strong>Question:</strong> What route name is generated for App\Controller\LuckyController::number() in the example?</p>
+<p lang="en"><strong>Answer:</strong> app_lucky_number.</p>
+<p>Sans name explicite, le loader construit un route name depuis la class et la method. FrameworkBundle raccourcit le nom ; ici le résultat est app_lucky_number.</p>
+</div></section><section class="teaching-section" data-section="s-pieges-d-examen"><h2 id="s-pieges-d-examen" tabindex="-1">Pièges d&#x27;examen</h2><p class="teaching-label pitfall"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="warning" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3L23 21H1L12 3ZM12 9V14M12 17V18"></path></svg> <strong>Piège à éviter</strong></p><ul class="pitfall-list"><li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : Le suffixe Controller est une convention, pas une constraint</summary><p><strong>Le suffixe <code>Controller</code> est une convention, pas une constraint</strong> — pas plus
+qu'étendre une class de base ne l'est. <em>Pourquoi on se trompe : tous les
+exemples de la documentation utilisent ce suffixe, on le prend pour une règle.</em></p></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : Le nom généré n&#x27;est pas du snake_case.</summary><p><strong>Le nom généré n'est pas du <code>snake_case</code>.</strong> Rien ne découpe le <code>CamelCase</code> :
+<code>LuckyController</code> devient <code>luckycontroller</code>, pas <code>lucky_controller</code>. La lisibilité
+de <code>app_lucky_number</code> vient du <strong>retrait</strong> du segment <code>controller_</code>, pas d'une
+conversion de casse. Le <code>snake_case</code> est recommandé pour les <strong>templates</strong>.
+<em>Pourquoi on se trompe : le résultat final ressemble à du snake_case.</em></p></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : Sans FrameworkBundle, le nom généré reste celui du component.</summary><p><strong>Sans FrameworkBundle, le nom généré reste celui du component.</strong> Le nom court
+est un apport du bundle. <em>Pourquoi on se trompe : on pense que le component
+produit déjà le nom court.</em></p></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : Les suffixes _1, _2 concernent les noms générés, pas les noms explicites.</summary><p><strong>Les suffixes <code>_1</code>, <code>_2</code> concernent les noms générés, pas les noms explicites.</strong>
+Pour une même méthode, le deuxième nom généré reçoit <code>_1</code>, le troisième <code>_2</code>.
+Deux routes portant le même nom explicite ne sont pas renommées ainsi :
+l'ajout dans la collection peut remplacer la route précédente. <em>Pourquoi on se
+trompe : on imagine un anti-doublon automatique.</em></p></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : Le suffixe Action n&#x27;est plus utilisé, mais il est encore reconnu</summary><p><strong>Le suffixe <code>Action</code> n'est plus utilisé, mais il est encore reconnu</strong> : le
+loader du bundle le retire du nom généré. <em>Pourquoi on se trompe : « n'est plus
+utilisé » est lu comme « n'est plus géré ».</em></p></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : _controller ne charge rien.</summary><p><strong><code>_controller</code> ne charge rien.</strong> C'est une désignation (<code>FQCN::méthode</code>) ; c'est
+le <code>ControllerResolver</code> qui la transforme en callable. <em>Pourquoi on se trompe :
+on confond la chaîne et ce qu'elle désigne.</em></p></details></li></ul></section><section class="teaching-section" data-section="s-application"><h2 id="s-application" tabindex="-1">Application</h2><aside class="section-digest" id="s-application-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Le nom généré n&#x27;est pas une conversion générale en snake_case.</li><li>Pour une même méthode, seuls les noms générés reçoivent les suffixes _1, _2 à partir du deuxième nom généré ; des noms explicites identiques peuvent se remplacer dans la collection.</li><li>Un controller est un callable.</li><li>Les route names doivent en revanche être uniques.</li></ol></aside>
+
+
+
+</section><section class="teaching-section" data-section="s-fiche-express"><h2 id="s-fiche-express" tabindex="-1">Fiche express</h2><p class="teaching-label essential"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="book" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5C9 3 5 3 2 4V20C5 19 9 19 12 21C15 19 19 19 22 20V4C19 3 15 3 12 5V21M5 8H8M5 12H8M16 8H19M16 12H19"></path></svg> <strong>À mémoriser</strong></p><p><strong>🧠 À retenir pour la certification :</strong></p>
+<ul>
+<li><strong>Une seule obligation</strong> : un route name unique.</li>
+<li><code>Controller</code>, <code>AbstractController</code>, pas d'<code>Action</code> : des <strong>conventions</strong>.</li>
+<li><code>_controller</code> = <code>FQCN::méthode</code>, ou le <strong>FQCN seul</strong> si invocable.</li>
+<li>Nom généré : component en <strong>minuscules</strong>, sans découpe du CamelCase.</li>
+<li>FrameworkBundle retire <strong><code>controller_</code></strong> et <code>action</code> → <code>app_lucky_number</code>.</li>
+<li>Deuxième <strong>nom généré</strong> de la méthode : <strong><code>_1</code></strong>, puis <strong><code>_2</code></strong> ;
+  aucun de ces suffixes pour les noms explicites. Alias FQCN seulement
+  pour <strong>une</strong> route.</li>
+</ul>
+<p>Repère de révision : <strong>« Nom implicite : calcul du component, puis
+normalisation du bundle »</strong>. Un nom explicite peut contenir <code>controller</code> ;
+sa seule orthographe ne permet pas de déduire le loader utilisé.</p>
+<p>Phrase de mémorisation complète : <strong>« Je ne suis obligé qu'à un nom de route
+unique ; sans nom, le component en fabrique un long en minuscules et
+FrameworkBundle y retire <code>controller_</code> et <code>action</code>. »</strong></p></section><section class="teaching-section" data-section="s-sources-officielles"><h2 id="s-sources-officielles" tabindex="-1">Sources officielles</h2><ul>
+<li><a href="https://symfony.com/doc/8.0/controller.html">Controller, section « A Basic Controller »</a></li>
+<li><a href="https://symfony.com/doc/8.0/routing.html">Routing, génération d'URL et alias de route</a></li>
+<li><a href="https://symfony.com/doc/8.0/routing.html"><code>AttributeClassLoader</code> (component Routing)</a></li>
+<li><a href="https://symfony.com/doc/8.0/reference/configuration/framework.html"><code>AttributeRouteControllerLoader</code> (FrameworkBundle)</a></li>
+<li><a href="https://symfony.com/doc/8.0/templates.html">Templates, section « Template Naming »</a></li>
+</ul></section><section id="course-recalls" aria-labelledby="course-recalls-title" tabindex="-1"><h2 id="course-recalls-title">Rappels et liens avec les autres cours</h2><div data-recall-group="current"><h3>Rappels du cours actuel</h3><ul><li data-recall-course="CRS-9fz4erg0wmbq" data-recall-kind="digest_reference"><p class="recall-provenance">Module 04 — Contrôleurs · Cours « Naming conventions »</p><p class="digest-reference"><a href="#s-le-schema-digest">Revoir la règle : _controller identifie le callable cible.</a></p></li><li data-recall-course="CRS-9fz4erg0wmbq" data-recall-kind="digest_reference"><p class="recall-provenance">Module 04 — Contrôleurs · Cours « Naming conventions »</p><p class="digest-reference"><a href="#s-l-essentiel-digest">Revoir la règle : Le nom généré n&#x27;est pas une conversion générale en snake_case.</a></p></li><li><nav aria-label="Flashcards de l’application"><ul><li data-recall-course="CRS-9fz4erg0wmbq" data-recall-kind="application"><p class="recall-provenance">Module 04 — Contrôleurs · Cours « Naming conventions »</p><a href="#A-9fz4erg0wmbq-65c42c80d9-03">Flashcard : Le nom généré n&#x27;est pas une conversion générale en snake_case. Pour une même méthode, seuls les noms générés reçoivent les suffixes _1, _2 à partir du deuxième nom généré ; des noms explicites identiques peuvent se remplacer dans la collection.</a></li><li data-recall-course="CRS-9fz4erg0wmbq" data-recall-kind="application"><p class="recall-provenance">Module 04 — Contrôleurs · Cours « Naming conventions »</p><a href="#A-9fz4erg0wmbq-4d67c3f988-01">Flashcard : Un controller est un callable. Les route names doivent en revanche être uniques.</a></li></ul></nav></li><li data-recall-course="CRS-9fz4erg0wmbq" data-recall-kind="digest_reference"><p class="recall-provenance">Module 04 — Contrôleurs · Cours « Naming conventions »</p><p class="digest-reference"><a href="#s-rien-n-est-impose-presque-digest">Revoir la règle : Un controller est un callable.</a></p></li></ul></div><div data-recall-group="other"><h3>Rappels des cours précédents / autres modules</h3><ul><li data-recall-course="CRS-f74jcpnrrkhz" data-recall-kind="previous_course"><p class="recall-provenance">Module 03 — Architecture Symfony · Cours « Framework interoperability and PSRs »</p><p>provide déclare des capacités virtuelles. Une entrée n&#x27;est pas nécessairement une PSR.</p><p><a href="#cards-previous">Rappel : <span lang="en">Does Composer provide list only PSR implementations?</span></a></p></li></ul></div></section><nav class="course-sequence" aria-label="Ordre de lecture"><a rel="prev" href="course-CRS-9g4qrgfs7nm4.html" aria-label="Précédent : Naming conventions — Module 03 — Architecture Symfony">Précédent : Naming conventions</a> <a href="lot-04.html">Sommaire : Module 04 — Contrôleurs</a> <a rel="next" href="course-CRS-thmkagkjcvh3.html" aria-label="Suivant : The cookies — Module 04 — Contrôleurs">Suivant : The cookies</a></nav><p class="course-practice-entry"><a class="button" href="#view-quiz">Fin du cours — s’entraîner avec le Quiz</a></p></div><div id="view-flashcards" data-course-panel role="region" aria-labelledby="view-flashcards-title"><h2 id="view-flashcards-title">Flashcards</h2><p lang="en">Answer before revealing each card.</p><p>Ces cartes ne mesurent pas une maîtrise notée.</p><div id="cards-s-l-essentiel-1" data-card-section="s-l-essentiel"><h3><a href="#s-l-essentiel">Revoir : L&#x27;essentiel</a></h3><div class="reader-cards"><details class="reader-card" id="A-9fz4erg0wmbq-65c42c80d9-03"><summary lang="en">Does route-name generation split CamelCase words into snake_case?</summary><p lang="en">No. It lowercases and transforms class/method names; FrameworkBundle removes conventional segments.</p><p lang="fr">Le nom généré n&#x27;est pas une conversion générale en snake_case. Pour une même méthode, seuls les noms générés reçoivent les suffixes _1, _2 à partir du deuxième nom généré ; des noms explicites identiques peuvent se remplacer dans la collection.</p><a href="course-CRS-9fz4erg0wmbq.html#out-OUT-j9vdv1qav4by">Revoir le passage précis</a></details></div></div><div id="cards-s-le-schema-2" data-card-section="s-le-schema"><h3><a href="#s-le-schema">Revoir : Le schéma</a></h3><div class="reader-cards"><details class="reader-card" id="A-9fz4erg0wmbq-6e0103f6cc-02"><summary lang="en">How is a controller method commonly represented in _controller?</summary><p lang="en">As a fully qualified class name followed by ::method; an invokable class may use its class name alone.</p><p lang="fr">_controller identifie le callable cible. Une class invocable peut omettre ::__invoke.</p><a href="course-CRS-9fz4erg0wmbq.html#out-OUT-fzeda7ytt9hf">Revoir le passage précis</a></details></div></div><div id="cards-s-l-exemple-une-route-sans-nom-3" data-card-section="s-l-exemple-une-route-sans-nom"><h3><a href="#s-l-exemple-une-route-sans-nom">Revoir : L&#x27;exemple : une route sans nom</a></h3><div class="reader-cards"><details class="reader-card" id="A-9fz4erg0wmbq-c2292a34be-01"><summary lang="en">What route name is generated for App\Controller\LuckyController::number() in the example?</summary><p lang="en">app_lucky_number.</p><p lang="fr">Sans name explicite, le loader construit un route name depuis la class et la method. FrameworkBundle raccourcit le nom ; ici le résultat est app_lucky_number.</p><a href="course-CRS-9fz4erg0wmbq.html#out-OUT-j9vdv1qav4by">Revoir le passage précis</a></details></div></div><div id="cards-s-rien-n-est-impose-presque-4" data-card-section="s-rien-n-est-impose-presque"><h3><a href="#s-rien-n-est-impose-presque">Revoir : Rien n&#x27;est imposé, presque</a></h3><div class="reader-cards"><details class="reader-card" id="A-9fz4erg0wmbq-4d67c3f988-01"><summary lang="en">Must a controller extend AbstractController or have a Controller suffix?</summary><p lang="en">No. Both are conventions or conveniences, not requirements.</p><p lang="fr">Un controller est un callable. Les route names doivent en revanche être uniques.</p><a href="course-CRS-9fz4erg0wmbq.html#out-OUT-kym7hw6vad3k">Revoir le passage précis</a></details></div></div><div id="cards-s-le-format-controller-5" data-card-section="s-le-format-controller"><h3><a href="#s-le-format-controller">Revoir : Le format `_controller`</a></h3><div class="reader-cards"><p class="reader-card-reference" id="A-9fz4erg0wmbq-cb738d38ba-02">Rappel déjà proposé : <a lang="en" href="#A-9fz4erg0wmbq-6e0103f6cc-02">How is a controller method commonly represented in _controller?</a> · <a href="course-CRS-9fz4erg0wmbq.html#out-OUT-fzeda7ytt9hf">Passage canonique</a></p></div></div><div id="cards-s-le-route-name-et-qui-le-genere-6" data-card-section="s-le-route-name-et-qui-le-genere"><h3><a href="#s-le-route-name-et-qui-le-genere">Revoir : Le route name, et qui le génère</a></h3><div class="reader-cards"><p class="reader-card-reference" id="A-9fz4erg0wmbq-5c6a10cf51-03">Rappel déjà proposé : <a lang="en" href="#A-9fz4erg0wmbq-65c42c80d9-03">Does route-name generation split CamelCase words into snake_case?</a> · <a href="course-CRS-9fz4erg0wmbq.html#out-OUT-j9vdv1qav4by">Passage canonique</a></p></div></div><div id="cards-s-pieges-d-examen-7" data-card-section="s-pieges-d-examen"><h3><a href="#s-pieges-d-examen">Revoir : Pièges d&#x27;examen</a></h3><div class="reader-cards"><p class="reader-card-reference" id="A-9fz4erg0wmbq-596d5af532-03">Rappel déjà proposé : <a lang="en" href="#A-9fz4erg0wmbq-65c42c80d9-03">Does route-name generation split CamelCase words into snake_case?</a> · <a href="course-CRS-9fz4erg0wmbq.html#out-OUT-j9vdv1qav4by">Passage canonique</a></p></div></div><div id="cards-s-application-8" data-card-section="s-application"><h3><a href="#s-application">Revoir : Application</a></h3><div class="reader-cards"><p class="reader-card-reference" id="A-9fz4erg0wmbq-e7ad522ea3-03">Rappel déjà proposé : <a lang="en" href="#A-9fz4erg0wmbq-65c42c80d9-03">Does route-name generation split CamelCase words into snake_case?</a> · <a href="course-CRS-9fz4erg0wmbq.html#out-OUT-j9vdv1qav4by">Passage canonique</a></p><p class="reader-card-reference" id="A-9fz4erg0wmbq-e7ad522ea3-01">Rappel déjà proposé : <a lang="en" href="#A-9fz4erg0wmbq-4d67c3f988-01">Must a controller extend AbstractController or have a Controller suffix?</a> · <a href="course-CRS-9fz4erg0wmbq.html#out-OUT-kym7hw6vad3k">Passage canonique</a></p></div></div><div id="cards-s-fiche-express-9" data-card-section="s-fiche-express"><h3><a href="#s-fiche-express">Revoir : Fiche express</a></h3><div class="reader-cards"><p class="reader-card-reference" id="A-9fz4erg0wmbq-b11e58e15e-01">Rappel déjà proposé : <a lang="en" href="#A-9fz4erg0wmbq-4d67c3f988-01">Must a controller extend AbstractController or have a Controller suffix?</a> · <a href="course-CRS-9fz4erg0wmbq.html#out-OUT-kym7hw6vad3k">Passage canonique</a></p></div></div><div id="cards-previous"><p class="recall-provenance">Module 03 — Architecture Symfony · Cours « Framework interoperability and PSRs »</p><aside class="checkpoint"><h2>Rappel d’un cours antérieur</h2><p>Avant de poursuivre : Framework interoperability and PSRs.</p><details class="corpus-correction"><summary lang="en">Does Composer provide list only PSR implementations?</summary><p lang="en">No. Symfony contracts and HTTP-client interoperability contracts also appear.</p><p>provide déclare des capacités virtuelles. Une entrée n&#x27;est pas nécessairement une PSR.</p><a href="course-CRS-f74jcpnrrkhz.html#out-OUT-t5v0mavn0je1">Relire la correction dans le cours antérieur</a></details></aside></div></div><div id="view-quiz" data-course-panel role="region" aria-labelledby="view-quiz-title"><aside class="revision-context"><p><strong>Avant le quiz :</strong> Pour afficher l&#x27;article 42, nous nommons trois choses différentes : le chemin /blog/42, la route blog_show et le callable App\Controller\BlogController::show. Un lien utilise le nom de route ; l&#x27;exécution utilise le callable. Les conventions rendent ces choix lisibles, elles ne remplacent pas leur configuration.</p><p>Quelle donnée entre, quelle responsabilité agit et quelle condition change le résultat ? Pour chaque correction, vérifiez ces conditions dans <a href="course-CRS-9fz4erg0wmbq.html#s-objectif">le passage enseigné</a>, sans supposer que toutes les branches du blog sont exécutées.</p></aside><h2 id="view-quiz-title">Quiz</h2><p class="quiz-size" lang="en">4 eligible learning questions · 4 per session. Repeating a question does not demonstrate mastery.</p><p id="course-quiz-status" role="status">Quiz interactif non chargé. Démarrez après chargement de la banque locale.</p><div id="course-quiz-controls" class="assessment-main" hidden><div id="course-quiz-assessment-controls" hidden><select id="course-quiz-assessment-mode" aria-label="Mode du quiz" hidden><option value="learning">Entraînement</option></select><p id="course-quiz-training-scope"></p><button id="course-quiz-start-assessment" type="button" lang="en">Start practice</button><button id="course-quiz-finish-assessment" type="button" lang="en" hidden>End session</button></div><p id="course-quiz-assessment-error" role="alert"></p><p id="course-quiz-assessment-timer" hidden></p><p id="course-quiz-session-progress" class="quiz-progress" role="status" lang="en"></p><div id="course-quiz-assessment-app" tabindex="-1"></div><nav id="course-quiz-session-navigation" aria-label="Questions du cours"></nav><div id="course-quiz-learning-overview" aria-live="polite"></div></div><div id="course-quiz-native"><p>Sans JavaScript ou si le chargement échoue : aucune tentative notée. Les <a href="#view-flashcards">flashcards du cours</a> restent disponibles.</p><details class="course-quiz-fallback" data-question-id="L-9fz4erg0wmbq-base-v1"><summary lang="en">RADIO — Select one answer. Does route-name generation split CamelCase words into snake_case?</summary><p>Correction de consultation — non notée.</p><p>Le nom généré n&#x27;est pas une conversion générale en snake_case. Plusieurs routes d&#x27;une method reçoivent des suffixes distincts.</p><ul><li><strong lang="en">Distractor: Yes; every uppercase boundary becomes an underscore.</strong><p>La génération de nom n&#x27;est pas cette conversion générale.</p></li><li><strong lang="en">Distractor: No; generated names preserve every uppercase letter.</strong><p>La génération applique notamment une mise en minuscules.</p></li><li><strong lang="en">Correct: No; lowercasing is not general CamelCase-to-snake_case conversion.</strong><p>Le nom généré n&#x27;est pas une conversion générale en snake_case. Plusieurs routes d&#x27;une method reçoivent des suffixes distincts.</p></li></ul><a href="course-CRS-9fz4erg0wmbq.html#out-OUT-j9vdv1qav4by">Relire le passage exact</a><a href="course-CRS-9fz4erg0wmbq.html#s-le-route-name-et-qui-le-genere">Relire la correction précise</a></details></div></div></div></div><details class="transfer-panel"><summary>Sauvegarde et transfert de progression</summary><p id="reading-status" role="status">Sans JavaScript : lecture libre ; progression non enregistrée.</p><p><a href="assessment.html#overview-title">Lecture, réussites immédiates et différées</a></p><p>Transfert manuel — aucune synchronisation automatique</p><p id="persistence-status" role="status"></p><button type="button" class="secondary" id="export-progress">Exporter ma progression</button><label for="import-progress">Choisir un JSON pour fusionner ma progression (sans remplacement)</label><input type="file" id="import-progress" accept="application/json,.json"><p id="transfer-status" role="status"></p></details></main><footer class="site-footer"><a href="catalogue.html">Catalogue</a> <a href="sources.html">Sources et attribution</a> <a href="#contenu">Haut de page</a></footer></body></html>

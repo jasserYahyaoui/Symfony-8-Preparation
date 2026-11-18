@@ -1,0 +1,367 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; connect-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Access Control Rules — Symfony 8 Preparation</title><link rel="stylesheet" href="styles.css"><link rel="stylesheet" href="reader.css"><script src="mermaid.min.js" defer></script><script src="mermaid-init.js" defer></script><link rel="stylesheet" href="assessment.css"><script src="fixed-exams-data.js" defer></script><script src="fixed-exams.js" defer></script><script src="learning-state.js" defer></script><script src="guide.js" defer></script><script src="reader-catalog.js" defer></script><script src="reader.js" defer></script><script src="site-state.js" defer></script><script src="assessment.js" defer></script><script src="course-views.js" defer></script><link rel="stylesheet" href="syntax-highlight.css"><script src="prism-syntax.js" defer></script><script src="syntax-highlight.js" defer></script></head><body data-course-id="CRS-2ec5yksjfm9s"><a class="skip" href="#contenu">Aller au contenu</a><header class="site-header"><a class="brand" href="index.html">S8 Preparation</a><nav aria-label="Navigation principale"><a href="index.html">Accueil</a> <a href="catalogue.html">Parcours</a> <a href="assessment.html?mode=review">Réviser</a> <a href="examens.html">Examens blancs</a> <a href="jour-j.html">Jour J</a></nav></header><main id="contenu" tabindex="-1" class="corpus-reader"><nav class="breadcrumb" aria-label="Fil d’Ariane"><a href="index.html">Accueil</a> <span aria-hidden="true">›</span> <a href="catalogue.html">Parcours</a> <span aria-hidden="true">›</span> <a href="lot-10.html">Module 10 — Sécurité</a> <span aria-hidden="true">›</span> <span aria-current="page">Access Control Rules</span></nav><h1>Access Control Rules</h1><p class="muted">Symfony 8.0 · API PHP ≤ 8.4 · Twig ≤ 3.22. Préparation indépendante.</p><p class="revision-status">Rédaction narrative P11 : projection nouvelle, non couverte par les décisions historiques P10. Aucune approbation officielle ni garantie de réussite.</p><aside class="narrative-context" aria-label="Repères de lecture"><p><strong>Prérequis de lecture :</strong> <a href="course-CRS-rdzx4ka72saj.html">Authentication</a> · <a href="course-CRS-8hwpzyk1hrq9.html">Authorization</a></p><p><strong>Concepts voisins :</strong> <a href="course-CRS-y3g0v9nmne3t.html">Voters and voting strategies</a> — Distinguer identité et décision sur l’article. <a href="lot-10.html">Comparer les responsabilités dans ce module</a> · <a href="carte-composants.html">Situer cette responsabilité dans le blog</a> · <a href="glossaire.html">Distinguer les termes voisins</a></p><p><a href="ordre-lecture.html">Retrouver les 163 cours dans le parcours recommandé</a>. Ce repère ne modifie ni votre historique ni votre progression.</p></aside><div class="course-layout"><details class="lot-course-menu"><summary>Cours du module · 12 cours</summary><nav aria-label="Cours du module"><a class="lot-context" href="lot-10.html">Module 10 — Sécurité</a><ol><li><a href="course-CRS-awb7sd999c5j.html">Security Core, CSRF and PasswordHasher components</a></li><li><a href="course-CRS-rdzx4ka72saj.html">Authentication</a></li><li><a href="course-CRS-8hwpzyk1hrq9.html">Authorization</a></li><li><a href="course-CRS-yvhg325ax38y.html">Configuration</a></li><li><a href="course-CRS-enbbsykx22xe.html">Providers</a></li><li><a href="course-CRS-x5frtpg07mmd.html">Firewalls</a></li><li><a href="course-CRS-n9ngfssrq1bt.html">Users</a></li><li><a href="course-CRS-g4sth72ww979.html">Password hashers</a></li><li><a href="course-CRS-2s6e4qgkcqza.html">Roles</a></li><li><a href="course-CRS-2ec5yksjfm9s.html" aria-current="page">Access Control Rules</a></li><li><a href="course-CRS-6gc45etcssfb.html">Authenticators, Passports and Badges</a></li><li><a href="course-CRS-y3g0v9nmne3t.html">Voters and voting strategies</a></li></ol><a href="lot-10.html#view-quiz">Quiz du module</a></nav></details><aside class="course-section-menu" aria-label="Sommaire du cours"><nav class="course-actions" aria-label="Activités du cours"><a id="tab-course" href="#view-course">Cours</a><a id="tab-flashcards" href="#view-flashcards">Flashcards</a><a id="tab-quiz" href="#view-quiz">Quiz</a></nav><details class="course-section-disclosure"><summary id="course-sections">Sections du cours</summary><nav aria-label="Sections du cours"><ul><li><a href="#s-objectif">Objectif</a></li><li><a href="#s-l-essentiel">L&#x27;essentiel</a></li><li><a href="#s-le-schema">Le schéma</a></li><li><a href="#s-l-exemple">L&#x27;exemple</a></li><li><a href="#s-la-regle">La règle</a></li><li><a href="#s-ce-qui-fait-correspondre-une-regle">Ce qui fait correspondre une règle</a></li><li><a href="#s-ce-que-la-regle-exige">Ce que la règle exige</a></li><li><a href="#s-ce-que-cela-ne-fait-pas">Ce que cela ne fait pas</a></li><li><a href="#s-pieges-d-examen">Pièges d&#x27;examen</a></li><li><a href="#s-fiche-express">Fiche express</a></li><li><a href="#reader-objectives">Objectifs d’apprentissage</a></li><li><a href="#reader-sources">Sources officielles et compléments</a></li><li><a href="#course-recalls">Rappels et liens avec les autres cours</a></li></ul></nav><nav aria-label="Flashcards par section"><a href="#view-flashcards">Flashcards par section</a><ul><li><a href="#cards-s-l-essentiel-1">L&#x27;essentiel</a></li><li><a href="#cards-s-le-schema-2">Le schéma</a></li><li><a href="#cards-s-l-exemple-3">L&#x27;exemple</a></li><li><a href="#cards-s-la-regle-4">La règle</a></li><li><a href="#cards-s-ce-qui-fait-correspondre-une-regle-5">Ce qui fait correspondre une règle</a></li><li><a href="#cards-s-ce-que-la-regle-exige-6">Ce que la règle exige</a></li><li><a href="#cards-s-ce-que-cela-ne-fait-pas-7">Ce que cela ne fait pas</a></li><li><a href="#cards-s-pieges-d-examen-8">Pièges d&#x27;examen</a></li><li><a href="#cards-s-fiche-express-9">Fiche express</a></li><li><a href="#cards-previous">Module 10 — Sécurité · Cours « Providers » · Rappel : <span lang="en">What are a user provider&#x27;s main responsibilities?</span></a></li></ul></nav><nav aria-label="Retour au module"><a href="lot-10.html">Tous les cours du module</a></nav></details><p class="local-quiz-count">6 questions disponibles · 6 par session Quiz</p></aside><div class="course-content"><div id="view-course" data-course-panel role="region" aria-labelledby="view-course-title"><h2 id="view-course-title">Cours</h2><p class="course-introduction"><a href="#s-objectif">Introduction</a> · <a href="#course-sections">Sections du cours</a></p><h2 id="reader-objectives" tabindex="-1">Objectifs d’apprentissage</h2><ul><li><a href="course-CRS-2ec5yksjfm9s.html#out-OUT-4qv0jc2jpj0p">Ordonner les règles du plus spécifique au plus général</a></li><li><a href="course-CRS-2ec5yksjfm9s.html#out-OUT-r720vgm95xv3">Énoncer que seule la première règle s&#x27;applique</a></li><li><a href="course-CRS-2ec5yksjfm9s.html#out-OUT-skkmfs49mpzn">Reconnaître path comme une expression régulière</a></li><li><a href="course-CRS-2ec5yksjfm9s.html#out-OUT-d444cz9yek59">Énoncer la limite face à une règle portant sur un object</a></li></ul><aside class="pedagogy-legend" aria-label="Repères pédagogiques"><p><strong>Repères pédagogiques</strong></p><p>Ces repères décrivent le rôle du bloc, pas une fréquence officielle à l’examen.</p><p class="teaching-label essential"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="brain" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5C12 1 6 1 6 5C2 5 1 10 4 12C1 15 3 19 6 19C6 23 12 23 12 19V5M12 5C12 1 18 1 18 5C22 5 23 10 20 12C23 15 21 19 18 19C18 23 12 23 12 19M6 5C6 8 8 9 9 9M4 12H7L9 14M6 19V16M18 5C18 8 16 9 15 9M20 12H17L15 14M18 19V16"></path></svg> <strong>À comprendre</strong></p><p class="teaching-label essential"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="book" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5C9 3 5 3 2 4V20C5 19 9 19 12 21C15 19 19 19 22 20V4C19 3 15 3 12 5V21M5 8H8M5 12H8M16 8H19M16 12H19"></path></svg> <strong>À mémoriser</strong></p><p class="teaching-label example"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="code" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6L2 12L8 18M16 6L22 12L16 18M14 3L10 21"></path></svg> <strong>Exemple concret</strong></p><p class="teaching-label pitfall"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="warning" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3L23 21H1L12 3ZM12 9V14M12 17V18"></path></svg> <strong>Piège à éviter</strong></p><p class="teaching-label nuance"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="balance" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3V21M7 21H17M3 7L21 5M5 7L1 15H9L5 7M19 6L15 14H23L19 6M1 15Q5 20 9 15M15 14Q19 19 23 14"></path></svg> <strong>Nuance à connaître</strong></p><p>Précision, exception ou condition d’application d’une règle.</p></aside><section class="teaching-section" data-section="s-objectif"><h2 id="s-objectif" tabindex="-1">Objectif</h2><p>Le bon firewall traite <code>/blog/42</code>. Nous voulons maintenant garder cette
+lecture publique et réserver l'écran d'édition aux rédacteurs.
+La règle doit sélectionner la bonne requête avant que ses exigences
+soient évaluées ; un mauvais ordre peut rendre la restriction inaccessible.</p>
+<p>Question du cours : <strong>sur <code>GET /blog/42/edit</code>, quelle règle <code>access_control</code> est
+choisie, qu'exige-t-elle, et que ne contrôle-t-elle pas ?</strong></p></section><section class="teaching-section" data-section="s-l-essentiel"><h2 id="s-l-essentiel" tabindex="-1">L&#x27;essentiel</h2><p class="teaching-label essential"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="brain" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5C12 1 6 1 6 5C2 5 1 10 4 12C1 15 3 19 6 19C6 23 12 23 12 19V5M12 5C12 1 18 1 18 5C22 5 23 10 20 12C23 15 21 19 18 19C18 23 12 23 12 19M6 5C6 8 8 9 9 9M4 12H7L9 14M6 19V16M18 5C18 8 16 9 15 9M20 12H17L15 14M18 19V16"></path></svg> <strong>À comprendre</strong></p><aside class="section-digest" id="s-l-essentiel-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>L&#x27;ordre sélectionne une seule règle.</li><li>Les règles suivantes ne renforcent pas la première.</li></ol></aside><p><strong>Ce que cette partie veut réellement vous apprendre.</strong></p>
+<ul>
+<li><em>Pourquoi ce sujet existe.</em> Le firewall dit <strong>comment</strong> s'authentifier ;
+  <code>access_control</code> dit <strong>ce qu'il faut</strong> pour atteindre une URL. C'est le
+  portier de la porte d'entrée, pas du contenu.</li>
+<li><em>Le piège de fond.</em> Deux questions distinctes se cachent derrière une règle :
+  <strong>quelle règle correspond ?</strong> (sélection) puis <strong>ses exigences sont-elles
+  satisfaites ?</strong> (décision). Un non-match n'est pas un refus.</li>
+<li><em>Ce que l'auteur veut que vous compreniez.</em> Seule la <strong>première</strong> règle
+  correspondante compte ; l'ordre est donc du plus spécifique au plus général.</li>
+<li><em>Pourquoi c'est à l'examen.</em> <code>request_matcher</code> exclusif, <code>ips</code> qui ne fait
+  que « correspondre », <code>roles</code> + <code>allow_if</code> selon la strategy, 301 de
+  <code>requires_channel</code>, Request comme sujet.</li>
+</ul>
+<p><code>access_control</code> choisit une règle d'accès à partir de la requête : chemin,
+méthode HTTP, adresse IP ou autres critères. Il faut distinguer deux questions :
+<strong>quelle règle correspond ?</strong>, puis <strong>ses exigences sont-elles satisfaites ?</strong></p>
+<p>Seule la première règle correspondante s'applique. Un échec d'autorisation ne
+fait pas essayer la règle suivante. À l'inverse, une IP ou une méthode qui ne
+correspond pas fait poursuivre la recherche : ce n'est pas encore un refus.</p>
+<p><strong>Pourquoi le sujet est-il la Request ?</strong> Les matchers et la carte des accès
+sont préparés dans le container. Pendant la requête, la carte retourne les
+attributs de la première correspondance ; <code>AccessListener</code> les soumet à la
+décision avec <strong>la Request pour sujet</strong>, pas avec l'article automatiquement
+chargé.</p></section><section class="teaching-section" data-section="s-le-schema"><h2 id="s-le-schema" tabindex="-1">Le schéma</h2><aside class="section-digest" id="s-le-schema-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>La règle générale peut masquer les exceptions.</li><li>L&#x27;ordre exprime la priorité réelle.</li></ol></aside><p><strong>Où en est-on ?</strong> Carte du cours : deux graphes enchaînés. Le premier
+<strong>sélectionne</strong> une règle ; le second <strong>applique</strong> ses exigences. Les parties
+suivantes détaillent chaque case dans cet ordre.</p>
+<p>Le premier graphe sélectionne ; le second applique. Un accord n'est pas
+encore le HTML de l'article et un non-match n'est pas encore un refus :
+ces distinctions expliquent les résultats du prochain exemple.</p>
+<figure class="diagram" aria-labelledby="CRS-2ec5yksjfm9s-3-diagram-0-title CRS-2ec5yksjfm9s-3-diagram-0-description"><figcaption id="CRS-2ec5yksjfm9s-3-diagram-0-title">Comment access_control choisit la règle d&#x27;une Request</figcaption><p id="CRS-2ec5yksjfm9s-3-diagram-0-description">Les règles sont lues dans l&#x27;ordre, et la première qui correspond, tous critères réunis, est la seule appliquée. Si aucune ne correspond, access_control ne restreint rien. Si la règle exige un canal, requires_channel, que la Request ne respecte pas, la Response est un redirect 301. Sinon les exigences de la règle sont examinées.</p><div class="mermaid" hidden>---
+title: Quelle règle s&#x27;applique
+---
+flowchart TD
+  accTitle: Comment access_control choisit la règle d&#x27;une Request
+  accDescr: Les règles sont lues dans l&#x27;ordre, et la première qui correspond, tous critères réunis, est la seule appliquée. Si aucune ne correspond, access_control ne restreint rien. Si la règle exige un canal, requires_channel, que la Request ne respecte pas, la Response est un redirect 301. Sinon les exigences de la règle sont examinées.
+  R([&quot;règles, dans l&#x27;ordre&quot;]) --&gt;|&quot;compare les critères&quot;| MATCH{&quot;une règle correspond ?&quot;}
+  MATCH --&gt;|&quot;aucune&quot;| FREE([&quot;Pas de restriction par cette liste&quot;])
+  MATCH --&gt;|&quot;la première&quot;| CH{&quot;canal requis respecté ?&quot;}
+  CH --&gt;|&quot;non&quot;| R301([&quot;redirect 301&quot;])
+  CH --&gt;|&quot;oui&quot;| NEXT([&quot;ses exigences&quot;])
+  classDef decision fill:#fef3c7,stroke:#92400e,color:#78350f
+  classDef result fill:#dcfce7,stroke:#166534,color:#14532d
+  class MATCH,CH decision
+  class R,FREE,R301,NEXT result</div></figure>
+<p>Le second graphe prend le relais à la case « ses exigences » :</p>
+<figure class="diagram" aria-labelledby="CRS-2ec5yksjfm9s-3-diagram-1-title CRS-2ec5yksjfm9s-3-diagram-1-description"><figcaption id="CRS-2ec5yksjfm9s-3-diagram-1-title">Comment access_control applique les exigences d&#x27;une règle</figcaption><p id="CRS-2ec5yksjfm9s-3-diagram-1-description">Une règle sans roles ni allow_if n&#x27;ajoute pas d&#x27;exigence d&#x27;autorisation. Sinon ces attributes sont passés à decide avec la Request pour sujet. Un accord laisse continuer cette étape. Un refus produit une AccessDeniedException : un utilisateur pleinement authentifié reçoit normalement 403, tandis qu&#x27;une authentification à commencer ou renforcer peut passer par l&#x27;entry point configuré.</p><div class="mermaid" hidden>---
+title: Ce que la règle exige
+---
+flowchart TD
+  accTitle: Comment access_control applique les exigences d&#x27;une règle
+  accDescr: Une règle sans roles ni allow_if n&#x27;ajoute pas d&#x27;exigence d&#x27;autorisation. Sinon ces attributes sont passés à decide avec la Request pour sujet. Un accord laisse continuer cette étape. Un refus produit une AccessDeniedException : un utilisateur pleinement authentifié reçoit normalement 403, tandis qu&#x27;une authentification à commencer ou renforcer peut passer par l&#x27;entry point configuré.
+  ATTR{&quot;roles ou allow_if ?&quot;} --&gt;|&quot;non&quot;| PASS([&quot;la Request continue&quot;])
+  ATTR --&gt;|&quot;oui&quot;| DEC{&quot;decide(), selon la strategy&quot;}
+  DEC --&gt;|&quot;accordé&quot;| GO([&quot;la Request continue&quot;])
+  DEC --&gt;|&quot;refusé&quot;| DENY([&quot;refus : 403, ou entry point&quot;])
+  classDef decision fill:#fef3c7,stroke:#92400e,color:#78350f
+  classDef result fill:#dcfce7,stroke:#166534,color:#14532d
+  class ATTR,DEC decision
+  class PASS,GO,DENY result</div></figure>
+<p>Les losanges ambre sont des décisions ; les formes vertes sont les résultats
+de cette étape. Ces vues ne décrivent que <code>access_control</code> : une route absente,
+un attribut de controller ou un voter métier peut encore refuser la requête.
+L'entry point dépend de l'authentification configurée, par exemple un 401
+HTTP Basic ou une redirection vers un formulaire de connexion.</p></section><section class="teaching-section" data-section="s-l-exemple"><h2 id="s-l-exemple" tabindex="-1">L&#x27;exemple</h2><p class="teaching-label example"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="code" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6L2 12L8 18M16 6L22 12L16 18M14 3L10 21"></path></svg> <strong>Exemple concret</strong></p><aside class="section-digest" id="s-l-exemple-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Une règle plus précise n&#x27;a pas de priorité automatique.</li><li>La position dans la liste décide.</li></ol></aside><p><strong>Où en est-on ?</strong> Du code minimal d'abord : deux règles qui séparent l'écran
+d'édition des pages publiques. Regardons <strong>quelle règle gagne pour chaque URL</strong>.</p>
+<p>Avec un firewall actif et les voters usuels, ce fragment distingue
+l'écran d'édition et les pages publiques du blog :</p>
+<pre class="highlight" tabindex="0"><code class="language-yaml">security:
+    access_control:
+        - { path: '^/blog/[0-9]+/edit$', roles: ROLE_EDITOR }
+        - { path: '^/blog(?:/|$)', roles: PUBLIC_ACCESS }</code></pre>
+<p><code>GET /blog/42</code> sélectionne la seconde règle. <code>/blog/42/edit</code> sélectionne
+la première, même si Alice n'a pas le rôle demandé : un refus ne retente
+pas la règle publique. Inverser les lignes annulerait cette restriction
+à ce niveau. L'autorisation sur l'article reste un contrôle serveur distinct.</p>
+<table>
+<thead>
+<tr>
+<th>URL</th>
+<th>Règle choisie</th>
+<th>Exigence</th>
+<th>Alice sans <code>ROLE_EDITOR</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>/blog/42</code></td>
+<td>2 (<code>PUBLIC_ACCESS</code>)</td>
+<td>aucune</td>
+<td>accès</td>
+</tr>
+<tr>
+<td><code>/blog/42/edit</code></td>
+<td>1 (<code>ROLE_EDITOR</code>)</td>
+<td><code>ROLE_EDITOR</code></td>
+<td>refus (pas de repli sur la règle 2)</td>
+</tr>
+</tbody>
+</table>
+<p>L'exemple d'administration suivant conserve les autres critères :</p>
+<pre class="highlight" tabindex="0"><code class="language-yaml">security:
+    access_control:
+        - { path: '^/admin/users', roles: ROLE_SUPER_ADMIN }   # le plus précis d'abord
+        - { path: '^/admin', roles: ROLE_ADMIN }
+        - { path: '^/internal', roles: PUBLIC_ACCESS, ips: [127.0.0.1, ::1] }
+        - { path: '^/internal', roles: ROLE_NO_ACCESS }          # tous les autres</code></pre></section><section class="teaching-section" data-section="s-la-regle"><span class="outcome-anchor" id="out-OUT-4qv0jc2jpj0p" tabindex="-1"></span><span class="outcome-anchor" id="out-OUT-r720vgm95xv3" tabindex="-1"></span><h2 id="s-la-regle" tabindex="-1">La règle</h2><aside class="section-digest" id="s-la-regle-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>L&#x27;absence de match n&#x27;est pas un refus.</li><li>Les controllers et voters peuvent toujours contrôler l&#x27;accès.</li></ol></aside><p><strong>Où en est-on ?</strong> Étape 1 sur 4 : le principe d'ordre. Pourquoi le plus
+spécifique doit-il venir en premier ? Parce que Symfony s'arrête à la <strong>première</strong>
+correspondance, sans chercher mieux.</p>
+<p>Dans une règle <code>route: blog_show</code>, la valeur vise le <strong>nom</strong> de route,
+pas sa forme <code>/blog/{id}</code>. Un changement de nom et un changement de chemin
+ne demandent donc pas les mêmes vérifications de configuration.</p>
+<ul>
+<li>Les règles sont évaluées <strong>dans l'ordre</strong> ; <strong>seule la première qui
+  correspond</strong> est appliquée.</li>
+<li>D'où l'écriture <strong>du plus spécifique au plus général</strong> : avec <code>^/admin</code> avant
+  <code>^/admin/users</code>, un utilisateur ayant <code>ROLE_SUPER_ADMIN</code> mais ni <code>ROLE_ADMIN</code>
+  ni hiérarchie se voit refuser l'accès à cette étape ; <code>ROLE_ADMIN</code> obtient
+  l'accord de cette règle — sans erreur de configuration. Le statut HTTP
+  final dépend ensuite du traitement de la requête ou du refus.</li>
+<li>Une URL qu'<strong>aucune</strong> règle ne couvre n'est pas restreinte <strong>par cette liste</strong>.</li>
+</ul>
+<p>Avant / après, pour <code>/admin/users</code> :</p>
+<pre class="highlight" tabindex="0"><code class="language-text">MAUVAIS ORDRE                        BON ORDRE
+1. ^/admin       → ROLE_ADMIN ←gagne 1. ^/admin/users → ROLE_SUPER_ADMIN ←gagne
+2. ^/admin/users → ROLE_SUPER_ADMIN  2. ^/admin       → ROLE_ADMIN
+   (jamais atteinte)
+
+super-admin sans ROLE_ADMIN : refusé super-admin : accepté</code></pre></section><section class="teaching-section" data-section="s-ce-qui-fait-correspondre-une-regle"><span class="outcome-anchor" id="out-OUT-skkmfs49mpzn" tabindex="-1"></span><h2 id="s-ce-qui-fait-correspondre-une-regle" tabindex="-1">Ce qui fait correspondre une règle</h2><aside class="section-digest" id="s-ce-qui-fait-correspondre-une-regle-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>ips sélectionne la règle.</li><li>Ajouter un fallback si les autres clients doivent être refusés.</li></ol></aside><p><strong>Où en est-on ?</strong> Étape 2 sur 4 : on a vu que la première correspondance
+gagne. Mais <strong>qu'est-ce qui fait « correspondre » ?</strong> Chaque clé de la règle
+est un critère de sélection, pas une interdiction.</p>
+<div class="admonition info">
+<p class="admonition-title">🌍 In Real Life</p>
+<p><strong>La situation</strong> : au restaurant, une fiche de consigne concerne les livraisons du matin. Une livraison du soir n'est pas refusée par cette fiche : il faut chercher la consigne suivante.</p>
+<p><strong>L’équivalent dans Symfony</strong> : catégorie de demande → critères <code>path</code>, <code>methods</code>, <code>ips</code> ; fiche sélectionnée → première règle correspondante ; contrôle après sélection → exigences de cette règle.</p>
+<p><strong>Retour à la réalité technique</strong> : tous les critères configurés doivent correspondre, avec les alternatives prévues dans leurs listes. Un GET hors d'une règle POST ou une IP hors de sa liste poursuit la recherche ; ce non-match n'impose ni refus ni statut HTTP.</p>
+<p><strong>🧠 Comment le mémoriser</strong> : « Hors de la fiche n'est pas hors du restaurant. » Image mentale : demande passant à la fiche suivante. Question-réflexe : ai-je sélectionné une règle ou réellement refusé l'accès au blog ?</p>
+<p><strong>⚠️ À ne pas confondre</strong> : filtre de sélection et liste d'autorisation complète.</p>
+</div>
+<table>
+<thead>
+<tr>
+<th>Key</th>
+<th>Ce qu'elle contraint</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>path</code>, <code>host</code></td>
+<td>le path, le host — expressions régulières, <code>path</code> sans la query string</td>
+</tr>
+<tr>
+<td><code>ips</code> (ou <code>ip</code>)</td>
+<td>l'adresse du client, masques acceptés</td>
+</tr>
+<tr>
+<td><code>port</code>, <code>methods</code></td>
+<td>le port, les methods HTTP</td>
+</tr>
+<tr>
+<td><code>route</code></td>
+<td>le nom de la route</td>
+</tr>
+<tr>
+<td><code>attributes</code></td>
+<td>des attributes de la Request</td>
+</tr>
+<tr>
+<td><code>request_matcher</code></td>
+<td>un service <code>RequestMatcherInterface</code></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>Tous les critères d'une règle doivent correspondre.</li>
+<li><code>request_matcher</code> remplace les autres <strong>critères de correspondance</strong> :
+  il peut être accompagné d'exigences comme <code>roles</code>, mais pas de <code>path</code>
+  ou <code>methods</code>. Une telle combinaison de critères est
+  refusée (<code>InvalidConfigurationException</code>, « should not be specified alongside
+  other options »).</li>
+<li><code>methods: [POST]</code> est un critère : un <code>GET</code> ne correspond pas à cette règle,
+  donc passe à la suivante ; cela n'impose ni un 200 ni un 405.</li>
+<li><code>ips</code> <strong>fait correspondre</strong>, il ne restreint pas : une Request d'ailleurs
+  passe à la règle suivante. Pour fermer la zone, une seconde règle sur le même
+  path exige <code>ROLE_NO_ACCESS</code>, un role que personne n'a.</li>
+</ul>
+<p><code>ROLE_NO_ACCESS</code> n'est pas un mot réservé signifiant « refuser » :
+ce modèle suppose que personne ne reçoit ce rôle, ni directement ni
+par hiérarchie, et qu'aucun autre voter n'accorde la demande.
+<code>/blog/42?preview=1</code> a le même path que <code>/blog/42</code> ; une condition sur
+<code>preview</code> ne se place pas dans la regex du path.</p>
+<p><strong>Pourquoi <code>ips</code> seul ne ferme-t-il pas <code>/internal</code> ?</strong> Parce que c'est un
+critère de <strong>sélection</strong> : une IP extérieure ne correspond simplement pas à la
+première règle, la recherche continue. Si aucune autre règle ne couvre
+<code>/internal</code>, rien n'est restreint.</p>
+<pre class="highlight" tabindex="0"><code class="language-text">GET /internal/x depuis 10.0.0.1, règles :
+  1. ^/internal, ips [127.0.0.1, ::1], PUBLIC_ACCESS
+        → IP différente : ne correspond pas
+  2. ^/internal, ROLE_NO_ACCESS
+        → correspond ; exige un rôle que personne n'a → refus
+Sans la règle 2 : aucune règle ne correspond → pas de restriction (accès !)</code></pre>
+<p>Pourquoi <code>request_matcher</code> est-il exclusif ? Le matcher personnalisé contient
+<strong>déjà</strong> toute la logique de correspondance ; accepter aussi <code>path</code> ou <code>ips</code>
+rendrait ambigu qui décide. Le code de <code>createAuthorization()</code> lève
+une <code>InvalidConfigurationException</code> dès qu'un autre critère l'accompagne.</p></section><section class="teaching-section" data-section="s-ce-que-la-regle-exige"><h2 id="s-ce-que-la-regle-exige" tabindex="-1">Ce que la règle exige</h2><aside class="section-digest" id="s-ce-que-la-regle-exige-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>La strategy affirmative agrège par accord suffisant.</li><li>Un role et une expression ne forment pas automatiquement un ET.</li></ol></aside><p><strong>Où en est-on ?</strong> Étape 3 sur 4 : la règle est sélectionnée. Que
+<strong>demande-t-elle</strong> maintenant ? <code>roles</code>, <code>allow_if</code>, <code>requires_channel</code> : voyons
+comment ces exigences sont combinées par la strategy de vote.</p>
+<div class="admonition info">
+<p class="admonition-title">🌍 In Real Life</p>
+<p><strong>La situation</strong> : le responsable du restaurant reçoit un avis sur l'habilitation et un autre sur une condition spéciale. Les placer côte à côte ne définit pas la manière de trancher.</p>
+<p><strong>L’équivalent dans Symfony</strong> : habilitation → attributs <code>roles</code> ; condition spéciale → expression <code>allow_if</code> ; règle d'agrégation → stratégie des votes.</p>
+<p><strong>Retour à la réalité technique</strong> : avec les voters standard et <code>affirmative</code>, un accord peut suffire malgré un autre refus. <code>unanimous</code> change l'agrégation des votes, mais ne transforme pas automatiquement une liste de rôles en obligation de les posséder tous.</p>
+<p><strong>🧠 Comment le mémoriser</strong> : « Deux avis ne signifient pas deux obligations cumulatives. » Image mentale : deux bulletins devant un règlement de décision. Question-réflexe : qui produit chaque vote et quelle stratégie les combine ?</p>
+<p><strong>⚠️ À ne pas confondre</strong> : combinaison des critères de correspondance et combinaison des exigences d'autorisation.</p>
+</div>
+<p><code>SecurityExtension</code> ajoute l'expression <code>allow_if</code> à la liste des
+attributs issus de <code>roles</code>. Ce sont donc les voters et la stratégie,
+pas la juxtaposition des clés YAML, qui définissent le résultat :</p>
+<ul>
+<li><code>roles</code> — passés comme attributes à <code>decide()</code>, avec la Request pour sujet ;</li>
+<li><code>allow_if</code> — une expression, <strong>ajoutée aux attributes</strong> ; elle voit la
+  Request sous <code>request</code> ;</li>
+<li><code>requires_channel: https</code> — une Request <code>http</code> reçoit un redirect <strong>301</strong>.</li>
+</ul>
+<p>Les exigences sont soumises <strong>ensemble</strong> à la strategy. Avec les voters
+standards de rôles et d'expressions, sans autre voter qui modifie la décision,
+le tableau décrit <strong>l'autorisation</strong>, pas le statut HTTP :</p>
+<table>
+<thead>
+<tr>
+<th>Règle</th>
+<th><code>affirmative</code> (défaut)</th>
+<th><code>unanimous</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>roles: [ROLE_ADMIN, ROLE_EDITOR]</code>, user <code>ROLE_EDITOR</code></td>
+<td>accordée</td>
+<td>accordée</td>
+</tr>
+<tr>
+<td><code>roles: ROLE_ADMIN</code> + <code>allow_if</code> vrai, user sans <code>ROLE_ADMIN</code></td>
+<td><strong>accordée</strong></td>
+<td>refusée</td>
+</tr>
+<tr>
+<td>même règle, visiteur anonyme</td>
+<td><strong>accordée</strong></td>
+<td>refusée</td>
+</tr>
+</tbody>
+</table>
+<p>Deux roles valent « l'un ou l'autre » : le même voter les examine. Un role et
+une expression relèvent de deux voters : « ou » en <code>affirmative</code>, « et » en
+<code>unanimous</code>.</p>
+<pre class="highlight" tabindex="0"><code class="language-text">attributes = [ ROLE_ADMIN , expression(allow_if) ]
+                  │                 │
+          RoleVoter vote       ExpressionVoter vote
+          (refuse : pas admin) (accorde : expression vraie)
+                  └────────┬────────┘
+   affirmative : un accord suffit  → ACCORDÉ
+   unanimous   : aucun refus admis → REFUSÉ</code></pre>
+<p>Pour exiger deux rôles simultanément, ne pas déduire un « et » du seul
+passage à <code>unanimous</code> : le voter de rôles peut déjà rendre un accord
+pour l'un des rôles de sa liste. Exprimer délibérément la conjonction
+dans une politique adaptée et tester chaque cas manquant.
+Le canal HTTPS concerne le transport de la requête, pas l'identité
+ni le chiffrement des données stockées.</p>
+<p>Un accord laisse continuer la Request : il ne construit pas une Response 200.
+Un refus déclenche le traitement d'une <code>AccessDeniedException</code>. Pour un
+utilisateur pleinement authentifié, le traitement standard conduit normalement
+à 403, sauf gestion du refus personnalisée. Si une authentification doit être
+commencée ou renforcée, l'entry point configuré peut répondre 401 (HTTP Basic)
+ou rediriger vers un formulaire de connexion. Un token remember-me n'est pas
+une authentification pleine pour cette décision.</p></section><section class="teaching-section" data-section="s-ce-que-cela-ne-fait-pas"><span class="outcome-anchor" id="out-OUT-d444cz9yek59" tabindex="-1"></span><h2 id="s-ce-que-cela-ne-fait-pas" tabindex="-1">Ce que cela ne fait pas</h2><aside class="section-digest" id="s-ce-que-cela-ne-fait-pas-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>La règle URL ne connaît pas l&#x27;object métier.</li><li>Le voter traite l&#x27;ownership.</li></ol></aside><p><strong>Où en est-on ?</strong> Étape 4 sur 4 : on connaît la mécanique. Reste sa
+<strong>limite</strong> : <code>access_control</code> voit la Request, pas l'objet métier. Qui contrôle
+le droit sur l'article 42 ?</p>
+<div class="admonition info">
+<p class="admonition-title">🌍 In Real Life</p>
+<p><strong>La situation</strong> : entrer dans le bureau de rédaction n'autorise pas Alice à modifier chaque manuscrit posé sur les tables.</p>
+<p><strong>L’équivalent dans Symfony</strong> : contrôle à l'entrée → <code>access_control</code> sur la Request ; manuscrit particulier → objet article ; droit de le modifier → voter métier recevant ce sujet.</p>
+<p><strong>Retour à la réalité technique</strong> : la règle d'accès ne charge pas automatiquement l'article 42. Le code ou un mécanisme de résolution configuré fournit cet objet, puis un contrôle adapté applique sa politique ; aucun stockage particulier n'est requis par ce principe.</p>
+<p><strong>🧠 Comment le mémoriser</strong> : « Entrer dans la salle n'est pas disposer de tous les dossiers. » Image mentale : porte ouverte, manuscrits avec auteurs distincts. Question-réflexe : où est contrôlé le droit sur cet article précis ?</p>
+<p><strong>⚠️ À ne pas confondre</strong> : permission sur la requête et permission sur l'objet métier.</p>
+</div>
+<p><code>access_control</code> décide depuis la <strong>Request</strong> et ne charge pas automatiquement
+l'objet métier : « l'auteur modifie son article » demande une politique
+recevant cet article. Un refus produit une
+<code>AccessDeniedException</code> : normalement 403 pour un utilisateur pleinement
+authentifié ; sinon l'entry point peut demander une authentification, y compris
+plus forte qu'une connexion restaurée par remember-me.</p>
+<p>Après l'accord sur <code>/blog/42/edit</code>, le contrôleur peut encore charger
+42 et transmettre ce sujet à <code>denyAccessUnlessGranted('POST_EDIT', $article)</code>.
+Un accord de cette liste ne transforme pas non plus l'article absent
+999 en article existant.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th><code>access_control</code></th>
+<th>Voter métier</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Sujet</td>
+<td>la <strong>Request</strong></td>
+<td>l'<strong>objet</strong> (article 42)</td>
+</tr>
+<tr>
+<td>Quand</td>
+<td>avant le contrôleur (<code>AccessListener</code>)</td>
+<td>dans le contrôleur / service</td>
+</tr>
+<tr>
+<td>Question</td>
+<td>« puis-je atteindre cette URL ? »</td>
+<td>« puis-je modifier <strong>cet</strong> article ? »</td>
+</tr>
+</tbody>
+</table></section><section class="teaching-section" data-section="s-pieges-d-examen"><h2 id="s-pieges-d-examen" tabindex="-1">Pièges d&#x27;examen</h2><p class="teaching-label pitfall"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="warning" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3L23 21H1L12 3ZM12 9V14M12 17V18"></path></svg> <strong>Piège à éviter</strong></p><aside class="section-digest" id="s-pieges-d-examen-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Le path exclut la query string.</li><li>Ne pas y placer une condition sur les parameters de query.</li></ol></aside><ul class="pitfall-list"><li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : Seule la première règle correspondante s&#x27;applique</summary><p><strong>Seule la première règle correspondante s'applique</strong> ; les autres ne sont pas
+cumulées. <em>Pourquoi on se trompe : on imagine un ensemble de règles qui se
+cumulent comme des filtres.</em></p></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : Du plus spécifique au plus général</summary><p><strong>Du plus spécifique au plus général</strong>, sinon la règle fine devient inatteignable.
+<em>Pourquoi on se trompe : on attend du système qu'il choisisse la règle la plus
+précise, comme certains routeurs.</em></p></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : path est une expression régulière</summary><p><strong><code>path</code> est une expression régulière</strong>, comparée sans la query string.
+<em>Pourquoi on se trompe : on met <code>?preview=1</code> dans la regex ; elle ne le voit
+jamais.</em></p></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : roles + allow_if accorde si l&#x27;un des deux suffit</summary><p><strong><code>roles</code> + <code>allow_if</code> accorde si l'un des deux suffit</strong>, avec la strategy par
+défaut. <em>Pourquoi on se trompe : deux clés YAML ressemblent à deux obligations.</em></p></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : Aucune règle ne correspond : aucune restriction par access_control</summary><p><strong>Aucune règle ne correspond : aucune restriction par <code>access_control</code></strong>,
+pas une autorisation universelle de l'application. <em>Pourquoi on se trompe :
+« pas de règle » ressemble à « tout refusé » ; c'est le contraire à ce niveau.</em></p></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : Le sujet d&#x27;access_control est la Request</summary><p><strong>Le sujet d'<code>access_control</code> est la Request</strong>, pas l'article :
+le chargement et la permission métier restent à traiter. <em>Pourquoi on se trompe :
+<code>/blog/42/edit</code> contient « 42 », donc on croit que l'article est évalué.</em></p></details></li></ul></section><section class="teaching-section" data-section="s-fiche-express"><h2 id="s-fiche-express" tabindex="-1">Fiche express</h2><p class="teaching-label essential"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="book" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5C9 3 5 3 2 4V20C5 19 9 19 12 21C15 19 19 19 22 20V4C19 3 15 3 12 5V21M5 8H8M5 12H8M16 8H19M16 12H19"></path></svg> <strong>À mémoriser</strong></p><aside class="section-digest" id="s-fiche-express-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Le matcher personnalisé remplace les critères intégrés.</li><li>Une combinaison est refusée.</li></ol></aside><p>La zone et le rôle sont contrôlés ; les
+<a href="course-CRS-y3g0v9nmne3t.html">voters métier</a> précisent maintenant
+la décision sur le sujet. Ne pas supprimer ce second contrôle parce
+que l'URL a déjà passé <code>access_control</code>.</p>
+<p><strong>🧠 À retenir pour la certification :</strong></p>
+<ul>
+<li><strong>Première règle qui correspond</strong>, et elle seule.</li>
+<li><strong>Du plus spécifique au plus général.</strong></li>
+<li><strong><code>path</code></strong> : regex, <strong>sans query string</strong>.</li>
+<li>Critères : <code>path</code>, <code>host</code>, <code>ips</code>, <code>port</code>, <code>methods</code>, <code>route</code>, <code>attributes</code> —
+  ou <strong><code>request_matcher</code> à leur place</strong>, avec les exigences séparées.</li>
+<li><strong><code>ips</code></strong> fait correspondre ; <strong><code>ROLE_NO_ACCESS</code></strong> n'est un refus
+  que si personne ne l'obtient et qu'aucun autre voter n'accorde.</li>
+<li><strong><code>roles</code> + <code>allow_if</code></strong> : « ou » en <code>affirmative</code>, « et » en <code>unanimous</code>.
+  Un accord laisse continuer la Request ; il ne garantit pas HTTP 200.</li>
+<li><strong>Canal non respecté</strong> avec <code>requires_channel</code> → <strong>301</strong>.</li>
+</ul>
+<p>Moyen mnémotechnique : <strong>« Le premier qui correspond, et la strategy
+tranche »</strong>.</p>
+<pre class="highlight" tabindex="0"><code class="language-text">access_control : première règle qui correspond (précis d'abord) ;
+path regex sans query ; ips = critère ; request_matcher remplace les critères ;
+roles + allow_if = strategy (affirmative : ou) ; accord = continuer,
+pas HTTP 200 garanti ; canal non respecté = 301 ;
+sujet Request, pas d'article automatiquement chargé</code></pre></section><section class="official-sources"><h2 id="reader-sources" tabindex="-1">Sources officielles et compléments</h2><ul><li><a href="https://symfony.com/doc/8.0/security.html">Symfony 8.0 — Security</a></li><li><a href="https://symfony.com/doc/8.0/security/access_control.html">Symfony 8.0 — security / access control</a></li></ul></section><section id="course-recalls" aria-labelledby="course-recalls-title" tabindex="-1"><h2 id="course-recalls-title">Rappels et liens avec les autres cours</h2><div data-recall-group="other"><h3>Rappels des cours précédents / autres modules</h3><ul><li data-recall-course="CRS-enbbsykx22xe" data-recall-kind="previous_course"><p class="recall-provenance">Module 10 — Sécurité · Cours « Providers »</p><p>Le provider charge et relit le user. supportsClass() décrit les classes prises en charge.</p><p><a href="#cards-previous">Rappel : <span lang="en">What are a user provider&#x27;s main responsibilities?</span></a></p></li></ul></div></section><nav class="course-sequence" aria-label="Ordre de lecture"><a rel="prev" href="course-CRS-2s6e4qgkcqza.html" aria-label="Précédent : Roles — Module 10 — Sécurité">Précédent : Roles</a> <a href="lot-10.html">Sommaire : Module 10 — Sécurité</a> <a rel="next" href="course-CRS-6gc45etcssfb.html" aria-label="Suivant : Authenticators, Passports and Badges — Module 10 — Sécurité">Suivant : Authenticators, Passports and Badges</a></nav><p class="course-practice-entry"><a class="button" href="#view-quiz">Fin du cours — s’entraîner avec le Quiz</a></p></div><div id="view-flashcards" data-course-panel role="region" aria-labelledby="view-flashcards-title"><h2 id="view-flashcards-title">Flashcards</h2><p lang="en">Answer before revealing each card.</p><p>Ces cartes ne mesurent pas une maîtrise notée.</p><div id="cards-s-l-essentiel-1" data-card-section="s-l-essentiel"><h3><a href="#s-l-essentiel">Revoir : L&#x27;essentiel</a></h3><div class="reader-cards"><details class="reader-card" id="B-2ec5yksjfm9s-01"><summary lang="en">Are all matching access_control rules combined?</summary><p lang="en">No. Only the first matching rule is applied.</p><p lang="fr">L&#x27;ordre sélectionne une seule règle. Les règles suivantes ne renforcent pas la première.</p><a href="course-CRS-2ec5yksjfm9s.html#out-OUT-r720vgm95xv3">Revoir le passage précis</a></details></div></div><div id="cards-s-le-schema-2" data-card-section="s-le-schema"><h3><a href="#s-le-schema">Revoir : Le schéma</a></h3><div class="reader-cards"><details class="reader-card" id="B-2ec5yksjfm9s-02"><summary lang="en">How should specific and general URL access rules be ordered?</summary><p lang="en">Specific rules first, general fallback rules last.</p><p lang="fr">La règle générale peut masquer les exceptions. L&#x27;ordre exprime la priorité réelle.</p><a href="course-CRS-2ec5yksjfm9s.html#out-OUT-4qv0jc2jpj0p">Revoir le passage précis</a></details></div></div><div id="cards-s-l-exemple-3" data-card-section="s-l-exemple"><h3><a href="#s-l-exemple">Revoir : L&#x27;exemple</a></h3><div class="reader-cards"><details class="reader-card" id="B-2ec5yksjfm9s-03"><summary lang="en">If a general admin rule matches before a stricter admin/users rule, which is enforced?</summary><p lang="en">The general admin rule.</p><p lang="fr">Une règle plus précise n&#x27;a pas de priorité automatique. La position dans la liste décide.</p><a href="course-CRS-2ec5yksjfm9s.html#out-OUT-4qv0jc2jpj0p">Revoir le passage précis</a></details></div></div><div id="cards-s-la-regle-4" data-card-section="s-la-regle"><h3><a href="#s-la-regle">Revoir : La règle</a></h3><div class="reader-cards"><details class="reader-card" id="B-2ec5yksjfm9s-04"><summary lang="en">What restriction does access_control impose when no rule matches?</summary><p lang="en">None from access_control; other authorization checks may still apply.</p><p lang="fr">L&#x27;absence de match n&#x27;est pas un refus. Les controllers et voters peuvent toujours contrôler l&#x27;accès.</p><a href="course-CRS-2ec5yksjfm9s.html#out-OUT-4qv0jc2jpj0p">Revoir le passage précis</a></details></div></div><div id="cards-s-ce-qui-fait-correspondre-une-regle-5" data-card-section="s-ce-qui-fait-correspondre-une-regle"><h3><a href="#s-ce-qui-fait-correspondre-une-regle">Revoir : Ce qui fait correspondre une règle</a></h3><div class="reader-cards"><details class="reader-card" id="B-2ec5yksjfm9s-05"><summary lang="en">Does an ips criterion itself deny clients outside the listed addresses?</summary><p lang="en">No. Those clients fail to match that rule and continue to later rules.</p><p lang="fr">ips sélectionne la règle. Ajouter un fallback si les autres clients doivent être refusés.</p><a href="course-CRS-2ec5yksjfm9s.html#out-OUT-skkmfs49mpzn">Revoir le passage précis</a></details></div></div><div id="cards-s-ce-que-la-regle-exige-6" data-card-section="s-ce-que-la-regle-exige"><h3><a href="#s-ce-que-la-regle-exige">Revoir : Ce que la règle exige</a></h3><div class="reader-cards"><details class="reader-card" id="B-2ec5yksjfm9s-06"><summary lang="en">Under the default affirmative strategy, must roles and allow_if both grant?</summary><p lang="en">No. A grant from either relevant voter can suffice.</p><p lang="fr">La strategy affirmative agrège par accord suffisant. Un role et une expression ne forment pas automatiquement un ET.</p><a href="course-CRS-2ec5yksjfm9s.html#out-OUT-skkmfs49mpzn">Revoir le passage précis</a></details></div></div><div id="cards-s-ce-que-cela-ne-fait-pas-7" data-card-section="s-ce-que-cela-ne-fait-pas"><h3><a href="#s-ce-que-cela-ne-fait-pas">Revoir : Ce que cela ne fait pas</a></h3><div class="reader-cards"><details class="reader-card" id="B-2ec5yksjfm9s-07"><summary lang="en">Can access_control decide whether a user owns a particular document?</summary><p lang="en">Not by URL matching alone; pass the document to an object voter.</p><p lang="fr">La règle URL ne connaît pas l&#x27;object métier. Le voter traite l&#x27;ownership.</p><a href="course-CRS-2ec5yksjfm9s.html#out-OUT-d444cz9yek59">Revoir le passage précis</a></details></div></div><div id="cards-s-pieges-d-examen-8" data-card-section="s-pieges-d-examen"><h3><a href="#s-pieges-d-examen">Revoir : Pièges d&#x27;examen</a></h3><div class="reader-cards"><details class="reader-card" id="B-2ec5yksjfm9s-08"><summary lang="en">Does access_control path matching include the query string?</summary><p lang="en">No. The regular expression matches the path.</p><p lang="fr">Le path exclut la query string. Ne pas y placer une condition sur les parameters de query.</p><a href="course-CRS-2ec5yksjfm9s.html#out-OUT-skkmfs49mpzn">Revoir le passage précis</a></details></div></div><div id="cards-s-fiche-express-9" data-card-section="s-fiche-express"><h3><a href="#s-fiche-express">Revoir : Fiche express</a></h3><div class="reader-cards"><details class="reader-card" id="B-2ec5yksjfm9s-09"><summary lang="en">Can request_matcher be combined with the built-in access_control matching criteria?</summary><p lang="en">No. Use the custom matcher instead of those criteria.</p><p lang="fr">Le matcher personnalisé remplace les critères intégrés. Une combinaison est refusée.</p><a href="course-CRS-2ec5yksjfm9s.html#out-OUT-skkmfs49mpzn">Revoir le passage précis</a></details></div></div><div id="cards-previous"><p class="recall-provenance">Module 10 — Sécurité · Cours « Providers »</p><aside class="checkpoint"><h2>Rappel d’un cours antérieur</h2><p>Avant de poursuivre : Providers.</p><details class="corpus-correction"><summary lang="en">What are a user provider&#x27;s main responsibilities?</summary><p lang="en">Load a user by identifier, refresh it, and report supported user classes.</p><p>Le provider charge et relit le user. supportsClass() décrit les classes prises en charge.</p><a href="course-CRS-enbbsykx22xe.html#out-OUT-58qtgyk785j9">Relire la correction dans le cours antérieur</a></details></aside></div></div><div id="view-quiz" data-course-panel role="region" aria-labelledby="view-quiz-title"><aside class="revision-context"><p><strong>Avant le quiz :</strong> Le bon firewall traite /blog/42. Nous voulons maintenant garder cette lecture publique et réserver l&#x27;écran d&#x27;édition aux rédacteurs. La règle doit sélectionner la bonne requête avant que ses exigences soient évaluées ; un mauvais ordre peut rendre la restriction inaccessible.</p><p>Quelle donnée entre, quelle responsabilité agit et quelle condition change le résultat ? Pour chaque correction, vérifiez ces conditions dans <a href="course-CRS-2ec5yksjfm9s.html#s-objectif">le passage enseigné</a>, sans supposer que toutes les branches du blog sont exécutées.</p></aside><h2 id="view-quiz-title">Quiz</h2><p class="quiz-size" lang="en">6 eligible learning questions · 6 per session. Repeating a question does not demonstrate mastery.</p><p id="course-quiz-status" role="status">Quiz interactif non chargé. Démarrez après chargement de la banque locale.</p><div id="course-quiz-controls" class="assessment-main" hidden><div id="course-quiz-assessment-controls" hidden><select id="course-quiz-assessment-mode" aria-label="Mode du quiz" hidden><option value="learning">Entraînement</option></select><p id="course-quiz-training-scope"></p><button id="course-quiz-start-assessment" type="button" lang="en">Start practice</button><button id="course-quiz-finish-assessment" type="button" lang="en" hidden>End session</button></div><p id="course-quiz-assessment-error" role="alert"></p><p id="course-quiz-assessment-timer" hidden></p><p id="course-quiz-session-progress" class="quiz-progress" role="status" lang="en"></p><div id="course-quiz-assessment-app" tabindex="-1"></div><nav id="course-quiz-session-navigation" aria-label="Questions du cours"></nav><div id="course-quiz-learning-overview" aria-live="polite"></div></div><div id="course-quiz-native"><p>Sans JavaScript ou si le chargement échoue : aucune tentative notée. Les <a href="#view-flashcards">flashcards du cours</a> restent disponibles.</p><details class="course-quiz-fallback" data-question-id="L-2ec5yksjfm9s-base-v1"><summary lang="en">Are all matching access_control rules combined?</summary><p>Correction de consultation — non notée.</p><p>L&#x27;ordre sélectionne une seule règle. Les règles suivantes ne renforcent pas la première.</p><ul><li><strong lang="en">Distractor: No; only the last matching rule is applied.</strong><p>L&#x27;ordre retient la première correspondance.</p></li><li><strong lang="en">Correct: No; only the first matching rule is applied.</strong><p>L&#x27;ordre sélectionne une seule règle. Les règles suivantes ne renforcent pas la première.</p></li><li><strong lang="en">Distractor: Yes; every matching rule adds another required restriction.</strong><p>Les règles suivantes ne renforcent pas celle déjà sélectionnée.</p></li></ul><a href="course-CRS-2ec5yksjfm9s.html#out-OUT-r720vgm95xv3">Relire le passage exact</a></details></div></div></div></div><details class="transfer-panel"><summary>Sauvegarde et transfert de progression</summary><p id="reading-status" role="status">Sans JavaScript : lecture libre ; progression non enregistrée.</p><p><a href="assessment.html#overview-title">Lecture, réussites immédiates et différées</a></p><p>Transfert manuel — aucune synchronisation automatique</p><p id="persistence-status" role="status"></p><button type="button" class="secondary" id="export-progress">Exporter ma progression</button><label for="import-progress">Choisir un JSON pour fusionner ma progression (sans remplacement)</label><input type="file" id="import-progress" accept="application/json,.json"><p id="transfer-status" role="status"></p></details></main><footer class="site-footer"><a href="catalogue.html">Catalogue</a> <a href="sources.html">Sources et attribution</a> <a href="#contenu">Haut de page</a></footer></body></html>

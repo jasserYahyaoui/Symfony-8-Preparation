@@ -1,0 +1,508 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; connect-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Form events — Symfony 8 Preparation</title><link rel="stylesheet" href="styles.css"><link rel="stylesheet" href="reader.css"><script src="mermaid.min.js" defer></script><script src="mermaid-init.js" defer></script><link rel="stylesheet" href="assessment.css"><script src="fixed-exams-data.js" defer></script><script src="fixed-exams.js" defer></script><script src="learning-state.js" defer></script><script src="guide.js" defer></script><script src="reader-catalog.js" defer></script><script src="reader.js" defer></script><script src="site-state.js" defer></script><script src="assessment.js" defer></script><script src="course-views.js" defer></script><link rel="stylesheet" href="syntax-highlight.css"><script src="prism-syntax.js" defer></script><script src="syntax-highlight.js" defer></script></head><body data-course-id="CRS-b2pn9zz55e4n"><a class="skip" href="#contenu">Aller au contenu</a><header class="site-header"><a class="brand" href="index.html">S8 Preparation</a><nav aria-label="Navigation principale"><a href="index.html">Accueil</a> <a href="catalogue.html">Parcours</a> <a href="assessment.html?mode=review">Réviser</a> <a href="examens.html">Examens blancs</a> <a href="jour-j.html">Jour J</a></nav></header><main id="contenu" tabindex="-1" class="corpus-reader"><nav class="breadcrumb" aria-label="Fil d’Ariane"><a href="index.html">Accueil</a> <span aria-hidden="true">›</span> <a href="catalogue.html">Parcours</a> <span aria-hidden="true">›</span> <a href="lot-07.html">Module 07 — Formulaires</a> <span aria-hidden="true">›</span> <span aria-current="page">Form events</span></nav><h1>Form events</h1><p class="muted">Symfony 8.0 · API PHP ≤ 8.4 · Twig ≤ 3.22. Préparation indépendante.</p><p class="revision-status">Rédaction narrative P11 : projection nouvelle, non couverte par les décisions historiques P10. Aucune approbation officielle ni garantie de réussite.</p><aside class="narrative-context" aria-label="Repères de lecture"><p><strong>Prérequis de lecture :</strong> <a href="course-CRS-nfkzx2s1n3r3.html">Forms handling</a></p><p><strong>Concepts voisins :</strong> <a href="course-CRS-ax2v94pgbk0g.html">PHP object validation</a> — Transformer une saisie n’est pas valider ses contraintes. <a href="lot-07.html">Comparer les responsabilités dans ce module</a> · <a href="carte-composants.html">Situer cette responsabilité dans le blog</a> · <a href="glossaire.html">Distinguer les termes voisins</a></p><p><a href="ordre-lecture.html">Retrouver les 163 cours dans le parcours recommandé</a>. Ce repère ne modifie ni votre historique ni votre progression.</p></aside><div class="course-layout"><details class="lot-course-menu"><summary>Cours du module · 13 cours</summary><nav aria-label="Cours du module"><a class="lot-context" href="lot-07.html">Module 07 — Formulaires</a><ol><li><a href="course-CRS-txp6tjhjtfy8.html">Form component</a></li><li><a href="course-CRS-8msvfwe13mpb.html">Forms creation</a></li><li><a href="course-CRS-nfkzx2s1n3r3.html">Forms handling</a></li><li><a href="course-CRS-f9pen0bdyrr9.html">Form types (built-in and custom)</a></li><li><a href="course-CRS-b5nj93xzz10b.html">Forms rendering with Twig</a></li><li><a href="course-CRS-r3xywnpwrwh7.html">Forms theming</a></li><li><a href="course-CRS-0yhqc0b1q7hz.html">CSRF protection</a></li><li><a href="course-CRS-cpvcczhj7bzx.html">Handling file upload</a></li><li><a href="course-CRS-zsgx3tvpy1kn.html">Built-in form types</a></li><li><a href="course-CRS-cj36gys6vatx.html">Data transformers</a></li><li><a href="course-CRS-b2pn9zz55e4n.html" aria-current="page">Form events</a></li><li><a href="course-CRS-k4ejsd624d1p.html">Form type extensions</a></li><li><a href="course-CRS-pchb259hnbh3.html">Form options (OptionsResolver component)</a></li></ol><a href="lot-07.html#view-quiz">Quiz du module</a></nav></details><aside class="course-section-menu" aria-label="Sommaire du cours"><nav class="course-actions" aria-label="Activités du cours"><a id="tab-course" href="#view-course">Cours</a><a id="tab-flashcards" href="#view-flashcards">Flashcards</a><a id="tab-quiz" href="#view-quiz">Quiz</a></nav><details class="course-section-disclosure"><summary id="course-sections">Sections du cours</summary><nav aria-label="Sections du cours"><ul><li><a href="#s-objectif">Objectif</a></li><li><a href="#s-l-essentiel">L&#x27;essentiel</a></li><li><a href="#s-le-schema">Le schéma</a></li><li><a href="#s-l-exemple-pays-et-region">L&#x27;exemple : pays et région</a></li><li><a href="#s-deux-moments-cinq-events">Deux moments, cinq events</a></li><li><a href="#s-ce-que-porte-chaque-event">Ce que porte chaque event</a></li><li><a href="#s-ce-que-dit-le-code-sur-le-verrouillage">Ce que dit le code sur le verrouillage</a></li><li><a href="#s-les-forms-imbriques">Les forms imbriqués</a></li><li><a href="#s-la-table-de-decision">La table de décision</a></li><li><a href="#s-comment-s-abonner">Comment s&#x27;abonner</a></li><li><a href="#s-pieges-d-examen">Pièges d&#x27;examen</a></li><li><a href="#s-application">Application</a></li><li><a href="#s-fiche-express">Fiche express</a></li><li><a href="#s-sources-officielles">Sources officielles</a></li><li><a href="#reader-objectives">Objectifs d’apprentissage</a></li><li><a href="#course-recalls">Rappels et liens avec les autres cours</a></li></ul></nav><nav aria-label="Flashcards par section"><a href="#view-flashcards">Flashcards par section</a><ul><li><a href="#cards-s-l-essentiel-1">L&#x27;essentiel</a></li><li><a href="#cards-s-le-schema-2">Le schéma</a></li><li><a href="#cards-s-l-exemple-pays-et-region-3">L&#x27;exemple : pays et région</a></li><li><a href="#cards-s-deux-moments-cinq-events-4">Deux moments, cinq events</a></li><li><a href="#cards-s-ce-que-porte-chaque-event-5">Ce que porte chaque event</a></li><li><a href="#cards-s-ce-que-dit-le-code-sur-le-verrouillage-6">Ce que dit le code sur le verrouillage</a></li><li><a href="#cards-s-les-forms-imbriques-7">Les forms imbriqués</a></li><li><a href="#cards-s-la-table-de-decision-8">La table de décision</a></li><li><a href="#cards-s-comment-s-abonner-9">Comment s&#x27;abonner</a></li><li><a href="#cards-s-pieges-d-examen-10">Pièges d&#x27;examen</a></li><li><a href="#cards-s-application-11">Application</a></li><li><a href="#cards-s-fiche-express-12">Fiche express</a></li><li><a href="#cards-previous">Module 07 — Formulaires · Cours « Handling file upload » · Rappel : <span lang="en">Why is an upload field often mapped=false when the model stores a filename?</span></a></li></ul></nav><nav aria-label="Retour au module"><a href="lot-07.html">Tous les cours du module</a></nav></details><p class="local-quiz-count">7 questions disponibles · 7 par session Quiz</p></aside><div class="course-content"><div id="view-course" data-course-panel role="region" aria-labelledby="view-course-title"><h2 id="view-course-title">Cours</h2><p class="course-introduction"><a href="#s-objectif">Introduction</a> · <a href="#course-sections">Sections du cours</a></p><h2 id="reader-objectives" tabindex="-1">Objectifs d’apprentissage</h2><ul><li><a href="course-CRS-b2pn9zz55e4n.html#out-OUT-v8srdqc4xxjy">Ordonner les cinq events en deux phases</a></li><li><a href="course-CRS-b2pn9zz55e4n.html#out-OUT-xj0demzqg8ct">Associer chaque event à la couche de donnée qu&#x27;il porte</a></li><li><a href="course-CRS-b2pn9zz55e4n.html#out-OUT-jz8pzthzk661">Énoncer à partir de quel event la structure est verrouillée</a></li><li><a href="course-CRS-b2pn9zz55e4n.html#out-OUT-eyj84n4wy8wg">Situer la validation sur POST_SUBMIT</a></li><li><a href="course-CRS-b2pn9zz55e4n.html#out-OUT-htmpmeg36syj">Ajouter un field dépendant au bon form</a></li><li><a href="course-CRS-b2pn9zz55e4n.html#out-OUT-0sq5c8vams1s">Choisir entre PRE_SET_DATA et PRE_SUBMIT selon l&#x27;origine de la donnée</a></li></ul><aside class="pedagogy-legend" aria-label="Repères pédagogiques"><p><strong>Repères pédagogiques</strong></p><p>Ces repères décrivent le rôle du bloc, pas une fréquence officielle à l’examen.</p><p class="teaching-label essential"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="brain" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5C12 1 6 1 6 5C2 5 1 10 4 12C1 15 3 19 6 19C6 23 12 23 12 19V5M12 5C12 1 18 1 18 5C22 5 23 10 20 12C23 15 21 19 18 19C18 23 12 23 12 19M6 5C6 8 8 9 9 9M4 12H7L9 14M6 19V16M18 5C18 8 16 9 15 9M20 12H17L15 14M18 19V16"></path></svg> <strong>À comprendre</strong></p><p class="teaching-label essential"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="book" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5C9 3 5 3 2 4V20C5 19 9 19 12 21C15 19 19 19 22 20V4C19 3 15 3 12 5V21M5 8H8M5 12H8M16 8H19M16 12H19"></path></svg> <strong>À mémoriser</strong></p><p class="teaching-label example"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="code" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6L2 12L8 18M16 6L22 12L16 18M14 3L10 21"></path></svg> <strong>Exemple concret</strong></p><p class="teaching-label pitfall"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="warning" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3L23 21H1L12 3ZM12 9V14M12 17V18"></path></svg> <strong>Piège à éviter</strong></p><p class="teaching-label nuance"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="balance" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3V21M7 21H17M3 7L21 5M5 7L1 15H9L5 7M19 6L15 14H23L19 6M1 15Q5 20 9 15M15 14Q19 19 23 14"></path></svg> <strong>Nuance à connaître</strong></p><p>Précision, exception ou condition d’application d’une règle.</p></aside><section class="teaching-section" data-section="s-objectif"><h2 id="s-objectif" tabindex="-1">Objectif</h2><p>L'inscription au blog propose maintenant un pays et une région. La liste
+des régions doit convenir à l'objet initial lors du GET, puis au pays
+réellement soumis lors du POST. Ces deux besoins surviennent à des moments
+différents du cycle de <strong>Form</strong>, distinct des événements <code>kernel.*</code>.</p>
+<p>Modifier un form pendant son cycle de vie : ajouter un field selon la
+donnée, assainir une valeur brute, réagir après la submission. C'est le
+mécanisme qui rend un form dynamique.</p>
+<p>Question centrale : <strong>à quel moment précis du cycle de vie d'un form puis-je
+agir, et que puis-je encore y faire à cet instant ?</strong></p></section><section class="teaching-section" data-section="s-l-essentiel"><h2 id="s-l-essentiel" tabindex="-1">L&#x27;essentiel</h2><p class="teaching-label essential"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="brain" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5C12 1 6 1 6 5C2 5 1 10 4 12C1 15 3 19 6 19C6 23 12 23 12 19V5M12 5C12 1 18 1 18 5C22 5 23 10 20 12C23 15 21 19 18 19C18 23 12 23 12 19M6 5C6 8 8 9 9 9M4 12H7L9 14M6 19V16M18 5C18 8 16 9 15 9M20 12H17L15 14M18 19V16"></path></svg> <strong>À comprendre</strong></p><aside class="section-digest" id="s-l-essentiel-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>PRE_SET_DATA concerne les données initiales.</li><li>PRE_SUBMIT précède les transformations de submission.</li></ol></aside><p><strong>Ce que cette partie veut réellement vous apprendre.</strong></p>
+<ul>
+<li><em>Pourquoi ce sujet existe.</em> Un form statique ne suffit pas quand un champ
+  dépend d'un autre (pays → région) ou quand une saisie doit être nettoyée
+  avant conversion. Il faut des <strong>points d'accroche</strong> dans le cycle.</li>
+<li><em>Le piège de fond.</em> Les cinq events ne portent <strong>pas la même donnée</strong> et ne
+  permettent <strong>pas les mêmes actions</strong> : ajouter un champ à <code>SUBMIT</code> « marche »
+  sans erreur mais ne sert à rien.</li>
+<li><em>Ce que l'auteur veut que vous compreniez.</em> L'ordre parent/enfant, le
+  marqueur « soumis » et la représentation de donnée propre à chaque event.</li>
+<li><em>Pourquoi c'est à l'examen.</em> Ordre des events, <code>$event-&gt;getData()</code> vs
+  <code>$form-&gt;getData()</code>, <code>AlreadySubmittedException</code>, dispatcher immuable.</li>
+</ul>
+<p><code>buildForm()</code> configure la structure et les listeners ; ce n'est pas le bon
+endroit pour réagir à chaque valeur soumise. Un <strong>event</strong> notifie un moment du
+cycle du formulaire et transporte la représentation pertinente de la donnée.
+Les <strong>cinq form events</strong> permettent d'intervenir : deux à la mise en
+place de la donnée initiale, trois à la submission. À chaque event, il faut
+savoir <strong>quelle donnée</strong> on reçoit et si l'on peut encore <strong>ajouter un
+field</strong>.</p></section><section class="teaching-section" data-section="s-le-schema"><h2 id="s-le-schema" tabindex="-1">Le schéma</h2><aside class="section-digest" id="s-le-schema-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>L&#x27;enfant termine avant le SUBMIT du parent.</li><li>Le parent peut ainsi traiter le field dépendant.</li></ol></aside><p><strong>Où en est-on ?</strong> Début du cours. Voici la vue d'ensemble de la chronologie.
+Question : dans quel ordre le parent et l'enfant traversent-ils leurs events ?</p>
+<pre class="highlight" tabindex="0"><code class="language-text">GET (affichage)                      POST (soumission)
+---------------                      -----------------
+PRE_SET_DATA   ─ donnée initiale     PRE_SUBMIT   ─ saisie brute
+POST_SET_DATA  ─ form initialisé     SUBMIT       ─ donnée normalisée
+                                     POST_SUBMIT  ─ après coup (validation)</code></pre>
+<figure class="diagram" aria-labelledby="CRS-b2pn9zz55e4n-3-diagram-0-title CRS-b2pn9zz55e4n-3-diagram-0-description"><figcaption id="CRS-b2pn9zz55e4n-3-diagram-0-title">L&#x27;ordre des events d&#x27;un form parent et de son enfant</figcaption><p id="CRS-b2pn9zz55e4n-3-diagram-0-description">Chemin sans échec de transformation : PRE_SUBMIT du parent, puis soumission complète de l&#x27;enfant, puis SUBMIT et POST_SUBMIT du parent. Un listener de POST_SUBMIT de l&#x27;enfant peut ajouter un champ au parent encore modifiable. L&#x27;ajout n&#x27;est pas automatique. ValidationListener agit au POST_SUBMIT de la racine.</p><div class="mermaid" hidden>---
+title: Soumettre l&#x27;enfant avant de terminer le parent
+---
+sequenceDiagram
+  accTitle: L&#x27;ordre des events d&#x27;un form parent et de son enfant
+  accDescr: Chemin sans échec de transformation : PRE_SUBMIT du parent, puis soumission complète de l&#x27;enfant, puis SUBMIT et POST_SUBMIT du parent. Un listener de POST_SUBMIT de l&#x27;enfant peut ajouter un champ au parent encore modifiable. L&#x27;ajout n&#x27;est pas automatique. ValidationListener agit au POST_SUBMIT de la racine.
+  participant P as parent
+  participant E as enfant
+  rect rgb(224, 242, 254)
+  P-&gt;&gt;P: PRE_SUBMIT
+  P-&gt;&gt;E: submit()
+  E-&gt;&gt;E: PRE_SUBMIT
+  E-&gt;&gt;E: SUBMIT
+  E-&gt;&gt;E: POST_SUBMIT
+  opt champ dépendant configuré
+    E-&gt;&gt;P: listener : add(region)
+  end
+  end
+  rect rgb(220, 252, 231)
+  P-&gt;&gt;P: SUBMIT
+  P-&gt;&gt;P: POST_SUBMIT (validation)
+  end</div></figure>
+<p>Zone bleue : le parent attend la soumission des enfants ; zone verte : il
+termine sa propre soumission. Le bloc optionnel est du code applicatif, pas
+un appel automatique de Form. La validation nécessite l'extension Validator ;
+le schéma suppose un formulaire activé et des transformations réussies.</p></section><section class="teaching-section" data-section="s-l-exemple-pays-et-region"><h2 id="s-l-exemple-pays-et-region" tabindex="-1">L&#x27;exemple : pays et région</h2><p class="teaching-label example"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="code" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6L2 12L8 18M16 6L22 12L16 18M14 3L10 21"></path></svg> <strong>Exemple concret</strong></p><aside class="section-digest" id="s-l-exemple-pays-et-region-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Le listener lit le pays transformé avec getForm()-&gt;getData().</li><li>Il ajoute region au parent qui peut toujours intégrer ce field, pas à l&#x27;enfant déjà soumis.</li></ol></aside><p><strong>Où en est-on ?</strong> On illustre avec un cas concret : un champ <code>region</code> dont les
+choix dépendent de <code>country</code>. Question : pourquoi faut-il <strong>deux</strong> listeners ?</p>
+<p><code>addRegion()</code> représente ici une méthode applicative qui ajoute au formulaire
+parent un champ aux choix adaptés ; elle doit être définie par le projet.
+Au premier affichage, elle lit le pays de l'adresse initiale. Lors de la
+soumission, elle lit le modèle du champ <code>country</code>, après sa transformation,
+avant que le parent ait terminé sa propre soumission.</p>
+<pre class="highlight" tabindex="0"><code class="language-php">$builder-&gt;add('country', ChoiceType::class, ['choices' =&gt; $countries]);
+
+$builder-&gt;addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) {
+    $address = $event-&gt;getData();                                 // l'object initial
+    $this-&gt;addRegion($event-&gt;getForm(), $address?-&gt;country);
+});
+
+$builder-&gt;get('country')-&gt;addEventListener(FormEvents::POST_SUBMIT, function (FormEvent $event) {
+    $country = $event-&gt;getForm()-&gt;getData();                      // le pays soumis
+    $this-&gt;addRegion($event-&gt;getForm()-&gt;getParent(), $country);   // au parent
+});</code></pre>
+<p>Pourquoi deux listeners ? Aux deux moments, la source du pays diffère :</p>
+<table>
+<thead>
+<tr>
+<th>Moment</th>
+<th>Où est le pays ?</th>
+<th>Listener</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>GET : affichage</td>
+<td>dans l'objet initial (<code>$event-&gt;getData()</code>)</td>
+<td><code>PRE_SET_DATA</code> du parent</td>
+</tr>
+<tr>
+<td>POST : soumission</td>
+<td>dans le champ <code>country</code> soumis (<code>getForm()-&gt;getData()</code>)</td>
+<td><code>POST_SUBMIT</code> de <code>country</code></td>
+</tr>
+</tbody>
+</table>
+<p>Ce que Symfony voit à la soumission : <code>country</code> est déjà soumis (donc lisible),
+mais le parent ne l'est pas encore (donc <code>add()</code> y reste permis et le nouveau
+champ <code>region</code> sera soumis avec la valeur de la Request).</p>
+<div class="admonition info">
+<p class="admonition-title">🌍 In Real Life</p>
+<p><strong>La situation</strong> : l'agent prépare la feuille des régions d'après le pays déjà connu. Si l'inscrit choisit un autre pays au dépôt, l'agent doit remplacer cette feuille ; la préparation initiale ne suffit plus.</p>
+<p><strong>L’équivalent dans Symfony</strong> : <code>PRE_SET_DATA</code> permet d'adapter le Form à l'adresse initiale. Le listener de <code>POST_SUBMIT</code> du champ <code>country</code> récupère ensuite le pays transformé et appelle le code applicatif qui ajoute <code>region</code> au parent.</p>
+<p><strong>Retour à la réalité technique</strong> : <code>addRegion()</code> n'est pas une fonction fournie automatiquement par Form. Le projet définit les choix et leur ajout. Il faut traiter les données absentes ou non transformables ; le choix d'une liste ne prouve pas la validité globale de l'inscription.</p>
+<p><strong>🧠 Comment le mémoriser</strong> : « Pays initial, pays reçu : deux occasions d'adapter. » Image mentale : deux feuilles de régions successives. Question-réflexe : ma liste dépend-elle de l'ancien pays ou de celui qui vient d'être soumis ?</p>
+<p><strong>⚠️ À ne pas confondre</strong> : adaptation serveur du Form et mise à jour instantanée du navigateur, qui demande un mécanisme client distinct.</p>
+</div></section><section class="teaching-section" data-section="s-deux-moments-cinq-events"><span class="outcome-anchor" id="out-OUT-v8srdqc4xxjy" tabindex="-1"></span><h2 id="s-deux-moments-cinq-events" tabindex="-1">Deux moments, cinq events</h2><p><strong>Où en est-on ?</strong> Étape 1 sur 6. On nomme les cinq events et on les range en
+deux pistes. Question « Pourquoi ? » : pourquoi ne pas tout faire dans
+<code>buildForm()</code> ?</p>
+<p>Construire la structure et initialiser les données ne sont pas synonymes.
+<code>Form</code> peut différer son <code>setData()</code> initial jusqu'à ce qu'une opération
+exige les données ; le builder peut aussi déclencher l'initialisation.
+Sur le chemin actif, <code>submit()</code> initialise les données si nécessaire avant
+de traiter la saisie. Ne déduis donc pas du nom <code>PRE_SET_DATA</code> qu'il appartient
+obligatoirement à l'entrée dans <code>buildForm()</code>.</p>
+<p>Le GET d'inscription peut parcourir les événements d'initialisation sans
+aucune soumission. Le POST parcourt les événements de soumission si le
+handler soumet effectivement le formulaire. La validation indiquée dans le
+tableau suppose l'extension Validator et son listener, pas Form isolé.</p>
+<table>
+<thead>
+<tr>
+<th>Event</th>
+<th>Phase</th>
+<th>Usage</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>PRE_SET_DATA</code></td>
+<td>mise en place</td>
+<td>modifier la donnée initiale, ajouter ou retirer des fields selon elle</td>
+</tr>
+<tr>
+<td><code>POST_SET_DATA</code></td>
+<td>mise en place</td>
+<td>décider en connaissant l'état complet (object neuf ou existant ?)</td>
+</tr>
+<tr>
+<td><code>PRE_SUBMIT</code></td>
+<td>submission</td>
+<td>assainir la donnée brute, ajouter des fields selon ce qui est envoyé</td>
+</tr>
+<tr>
+<td><code>SUBMIT</code></td>
+<td>submission</td>
+<td>modifier la norm data ; les enfants sont déjà soumis</td>
+</tr>
+<tr>
+<td><code>POST_SUBMIT</code></td>
+<td>submission</td>
+<td>réagir après coup ; <strong>la validation s'exécute ici</strong></td>
+</tr>
+</tbody>
+</table>
+<p>Pourquoi pas <code>buildForm()</code> ? <code>buildForm()</code> s'exécute <strong>une fois</strong>, à la
+construction, avant que la donnée ou la Request n'existent. Ce n'est donc pas là
+qu'on peut dépendre d'une valeur : on y <em>déclare</em> des listeners qui réagiront
+plus tard.</p>
+<p>Mnémo des noms : <code>PRE</code> = juste <strong>avant</strong> l'opération, <code>POST</code> = juste <strong>après</strong> ;
+<code>SET_DATA</code> = poser la donnée, <code>SUBMIT</code> = recevoir la saisie.</p>
+<div class="admonition info">
+<p class="admonition-title">🌍 In Real Life</p>
+<p><strong>La situation</strong> : un bureau prépare un dossier avant de recevoir les réponses. Ses annonces « dossier préparé » et « réponses traitées » ne décrivent pas la même opération, même si elles surviennent pendant une seule visite.</p>
+<p><strong>L’équivalent dans Symfony</strong> : <code>PRE_SET_DATA</code> et <code>POST_SET_DATA</code> encadrent l'initialisation ; <code>PRE_SUBMIT</code>, <code>SUBMIT</code> et <code>POST_SUBMIT</code> jalonnent la soumission. Les listeners interviennent au moment annoncé, au lieu de tenter de lire toutes les valeurs pendant <code>buildForm()</code>.</p>
+<p><strong>Retour à la réalité technique</strong> : initialiser les données n'est pas construire la structure ; cette initialisation peut être différée. Un affichage peut initialiser sans soumettre. Le trajet complet suppose un Form actif et des transformations réussies ; la validation intégrée exige l'extension Validator.</p>
+<p><strong>🧠 Comment le mémoriser</strong> : « Préparer le dossier n'est pas recevoir les réponses. » Image mentale : deux pistes, initialisation et soumission. Question-réflexe : à quelle opération mon événement appartient-il ?</p>
+<p><strong>⚠️ À ne pas confondre</strong> : événements du Form et événements HTTP <code>kernel.*</code>.</p>
+</div></section><section class="teaching-section" data-section="s-ce-que-porte-chaque-event"><span class="outcome-anchor" id="out-OUT-xj0demzqg8ct" tabindex="-1"></span><h2 id="s-ce-que-porte-chaque-event" tabindex="-1">Ce que porte chaque event</h2><aside class="section-digest" id="s-ce-que-porte-chaque-event-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Distinguer event data et form data.</li><li>Dans PRE_SET_DATA, lire les données sur l&#x27;event.</li></ol></aside><p><strong>Où en est-on ?</strong> Étape 2 sur 6. Chaque event transporte une <strong>représentation
+différente</strong> de la donnée. Question : pourquoi <code>$event-&gt;getData()</code> ne vaut pas
+toujours <code>$event-&gt;getForm()-&gt;getData()</code> ?</p>
+<p>Le pays envoyé par le navigateur et l'objet pays du modèle peuvent être
+deux représentations différentes. Pour choisir les régions à
+<code>POST_SUBMIT</code>, lis donc <code>$event-&gt;getForm()-&gt;getData()</code> si tu veux le
+modèle transformé ; <code>$event-&gt;getData()</code> porte alors la donnée de vue.
+Le petit transformateur <code>5 → 'n:5'</code> rend cette différence observable.</p>
+<p>Un field texte avec un model transformer entre l'int <code>5</code> et la string
+<code>'n:5'</code>, soumis avec <code>'n:7'</code> :</p>
+<table>
+<thead>
+<tr>
+<th>Event</th>
+<th><code>$event-&gt;getData()</code></th>
+<th><code>$event-&gt;getForm()-&gt;getData()</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>PRE_SET_DATA</code></td>
+<td><code>5</code> (modèle)</td>
+<td>interdit : <code>RuntimeException</code></td>
+</tr>
+<tr>
+<td><code>POST_SET_DATA</code></td>
+<td><code>5</code> (modèle)</td>
+<td><code>5</code></td>
+</tr>
+<tr>
+<td><code>PRE_SUBMIT</code></td>
+<td><code>'n:7'</code> (brut : strings, arrays, <code>UploadedFile</code>)</td>
+<td><code>5</code></td>
+</tr>
+<tr>
+<td><code>SUBMIT</code></td>
+<td><code>'n:7'</code> (norm data)</td>
+<td><code>5</code></td>
+</tr>
+<tr>
+<td><code>POST_SUBMIT</code></td>
+<td><code>'n:7'</code> (<strong>view data</strong>)</td>
+<td><code>7</code></td>
+</tr>
+</tbody>
+</table>
+<p>Dans <code>PRE_SET_DATA</code>, <code>$form-&gt;getData()</code> lève « A cycle was detected. Listeners
+to the PRE_SET_DATA event must not call getData() if the form data has not
+already been set. » : lire <code>$event-&gt;getData()</code>.</p>
+<p>Lecture du tableau pour la valeur soumise <code>'n:7'</code> :</p>
+<pre class="highlight" tabindex="0"><code class="language-text">saisie navigateur   'n:7'
+      │ PRE_SUBMIT   : event = 'n:7' brut ; le form vaut encore 5 (ancien)
+      │ (view → norm)
+      │ SUBMIT       : event = norm data ; le form vaut encore 5
+      │ (norm → model, transformer inverse : 'n:7' → 7)
+      │ POST_SUBMIT  : event = view data 'n:7' ; le form vaut 7 (nouveau modèle)</code></pre>
+<p>Pourquoi l'exception à <code>PRE_SET_DATA</code> ? Pendant cet event, <code>Form::setData()</code>
+est en cours (le code verrouille avec <code>lockSetData</code>). Relire <code>getData()</code> sur le
+form relancerait l'initialisation en boucle : Symfony lève donc une
+<code>RuntimeException</code> « A cycle was detected… » (vérifié dans <code>Form.php</code> 8.0). Lire
+la donnée de l'<strong>event</strong> évite la boucle.</p>
+<div class="admonition info">
+<p class="admonition-title">🌍 In Real Life</p>
+<p><strong>La situation</strong> : au bureau, un agent possède à la fois la fiche reçue, une transcription de travail et le dossier métier. Demander « la donnée » sans préciser le document peut donner la bonne information sous la mauvaise forme.</p>
+<p><strong>L’équivalent dans Symfony</strong> : l'événement transporte la représentation propre à sa phase : modèle à l'initialisation, saisie brute à <code>PRE_SUBMIT</code>, donnée normalisée à <code>SUBMIT</code>, donnée de vue à <code>POST_SUBMIT</code>. Le modèle final se lit alors sur le Form.</p>
+<p><strong>Retour à la réalité technique</strong> : <code>$event-&gt;getData()</code> et <code>$event-&gt;getForm()-&gt;getData()</code> ne sont pas interchangeables. Pendant l'initialisation encore inachevée, relire les données du Form peut réentrer dans <code>setData()</code> et provoquer l'exception de cycle ; lire celles de l'événement évite cette boucle.</p>
+<p><strong>🧠 Comment le mémoriser</strong> : « Même dossier, plusieurs représentations. » Image mentale : trois feuilles marquées brut, normalisé, modèle. Question-réflexe : quelle représentation cet événement fournit-il maintenant ?</p>
+<p><strong>⚠️ À ne pas confondre</strong> : donnée de vue et HTML rendu ; représentation normalisée et donnée déclarée valide.</p>
+</div></section><section class="teaching-section" data-section="s-ce-que-dit-le-code-sur-le-verrouillage"><span class="outcome-anchor" id="out-OUT-jz8pzthzk661" tabindex="-1"></span><h2 id="s-ce-que-dit-le-code-sur-le-verrouillage" tabindex="-1">Ce que dit le code sur le verrouillage</h2><aside class="section-digest" id="s-ce-que-dit-le-code-sur-le-verrouillage-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>L&#x27;ajout utile doit précéder la submission des enfants.</li><li>Une opération acceptée n&#x27;implique pas le traitement attendu.</li></ol></aside><p><strong>Où en est-on ?</strong> Étape 3 sur 6. On sait lire la donnée ; peut-on encore
+<strong>modifier la structure</strong> ? Question : pourquoi <code>add()</code> ne réagit-il pas pareil à
+<code>SUBMIT</code> et à <code>POST_SUBMIT</code> ?</p>
+<p>Ajouter le champ région trop tard peut sembler réussir tout en manquant
+son objectif. Au <code>SUBMIT</code> du parent, la boucle de soumission de ses enfants
+a déjà eu lieu ; l'ajout est encore accepté mais le nouveau champ n'est
+pas soumis avec eux. À <code>POST_SUBMIT</code>, le marqueur soumis interdit même
+l'ajout. Il faut donc distinguer « appel autorisé » et « saisie traitée ».</p>
+<p>Pour un formulaire <strong>composé</strong>, le verrou décisif de <code>Form::add()</code> est le
+marqueur « soumis » ; la méthode vérifie aussi qu'il peut contenir des enfants.
+<code>Form::submit()</code> pose ce marqueur <strong>après</strong> <code>SUBMIT</code> et <strong>avant</strong>
+<code>POST_SUBMIT</code>. Un listener du form racine ajoute <code>extra</code>, la Request envoyant
+<code>extra = 'sent'</code> :</p>
+<table>
+<thead>
+<tr>
+<th>Event</th>
+<th><code>add()</code></th>
+<th>Le field ajouté</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>PRE_SET_DATA</code>, <code>POST_SET_DATA</code>, <code>PRE_SUBMIT</code></td>
+<td>accepté</td>
+<td>soumis, donnée <code>'sent'</code></td>
+</tr>
+<tr>
+<td><code>SUBMIT</code></td>
+<td>accepté, <strong>sans erreur</strong></td>
+<td><strong>jamais soumis</strong></td>
+</tr>
+<tr>
+<td><code>POST_SUBMIT</code></td>
+<td><code>AlreadySubmittedException</code> : « You cannot add children to a submitted form. »</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<p>Chronologie interne de <code>Form::submit()</code> (vérifiée dans le code 8.0) :</p>
+<pre class="highlight" tabindex="0"><code class="language-text">submit()
+  ├─ PRE_SUBMIT dispatché          ← add() OK, champ pris en compte
+  ├─ boucle : submit() de chaque enfant déjà présent
+  ├─ transformations (view → norm → model)
+  ├─ SUBMIT dispatché              ← add() OK, mais boucle déjà passée
+  ├─ $this-&gt;submitted = true       ← marqueur posé ICI
+  └─ POST_SUBMIT dispatché         ← add() lève AlreadySubmittedException</code></pre>
+<p>Pourquoi « accepté mais jamais soumis » à <code>SUBMIT</code> ? <code>add()</code> ne regarde que le
+marqueur <code>submitted</code> (encore faux). Mais la boucle qui soumet les enfants a déjà
+tourné : le nouveau champ n'a donc reçu aucune valeur de la Request.</p>
+<div class="admonition info">
+<p class="admonition-title">🌍 In Real Life</p>
+<p><strong>La situation</strong> : après le passage de la collecte, on peut encore glisser une feuille dans un dossier ouvert, mais personne ne l'a collectée. Une fois le dossier scellé, même cet ajout est refusé.</p>
+<p><strong>L’équivalent dans Symfony</strong> : à <code>SUBMIT</code> du parent, la boucle des enfants est déjà passée : <code>add()</code> peut encore réussir sans soumettre le nouveau champ. À <code>POST_SUBMIT</code> de ce même Form, le marqueur soumis interdit l'ajout.</p>
+<p><strong>Retour à la réalité technique</strong> : pour le formulaire composé décrit ici, l'autorisation de modifier la structure ne garantit pas la prise en compte des données. Ajouter assez tôt, notamment à <code>PRE_SUBMIT</code>, permet au champ d'entrer dans le traitement prévu. Un formulaire simple ne peut pas contenir d'enfants.</p>
+<p><strong>🧠 Comment le mémoriser</strong> : « Porte ouverte ne signifie pas collecte à venir. » Image mentale : une feuille ajoutée après le passage du chariot. Question-réflexe : la boucle qui doit traiter ce champ est-elle déjà passée ?</p>
+<p><strong>⚠️ À ne pas confondre</strong> : absence d'exception et effet métier attendu.</p>
+</div><div class="retained-answer-context">
+<p><strong>Repère — Comment s'abonner :</strong></p>
+<p lang="en"><strong>Question:</strong> When should form listeners be registered?</p>
+<p lang="en"><strong>Answer:</strong> During form building, before the dispatcher becomes immutable.</p>
+<p>Le builder accepte listeners et subscribers. Après construction, le dispatcher ne s'étend plus.</p>
+</div></section><section class="teaching-section" data-section="s-les-forms-imbriques"><span class="outcome-anchor" id="out-OUT-eyj84n4wy8wg" tabindex="-1"></span><span class="outcome-anchor" id="out-OUT-htmpmeg36syj" tabindex="-1"></span><h2 id="s-les-forms-imbriques" tabindex="-1">Les forms imbriqués</h2><p><strong>Où en est-on ?</strong> Étape 4 sur 6. Jusqu'ici un seul form ; ici un parent et un
+enfant, chacun avec son propre marqueur « soumis ». Question : pourquoi ajouter
+<code>region</code> <strong>au parent</strong> et non à l'enfant ?</p>
+<p>Le listener de <code>country</code> exploite une fenêtre précise : cet enfant est déjà
+soumis mais le parent ne l'est pas encore. Ajouter <code>region</code> <strong>au parent</strong>
+permet au processus de soumission du parent de prendre ce champ en compte.
+Ajouter à l'enfant déjà soumis ne bénéficie pas de cette fenêtre.</p>
+<figure class="diagram" aria-labelledby="CRS-b2pn9zz55e4n-8-diagram-0-title CRS-b2pn9zz55e4n-8-diagram-0-description"><figcaption id="CRS-b2pn9zz55e4n-8-diagram-0-title">La donnée initiale descend vers l&#x27;enfant avant le dernier event du parent</figcaption><p id="CRS-b2pn9zz55e4n-8-diagram-0-description">Pour le parent et son enfant initialisés ensemble, le mapping intervient après PRE_SET_DATA du parent. L&#x27;enfant reçoit PRE_SET_DATA puis POST_SET_DATA. Le parent termine ensuite par POST_SET_DATA.</p><div class="mermaid" hidden>---
+title: Initialiser le parent et son enfant
+---
+flowchart TD
+  accTitle: La donnée initiale descend vers l&#x27;enfant avant le dernier event du parent
+  accDescr: Pour le parent et son enfant initialisés ensemble, le mapping intervient après PRE_SET_DATA du parent. L&#x27;enfant reçoit PRE_SET_DATA puis POST_SET_DATA. Le parent termine ensuite par POST_SET_DATA.
+  P1[&quot;Parent : PRE_SET_DATA&quot;] --&gt;|&quot;mapping vers l&#x27;enfant&quot;| C1[&quot;Enfant : PRE_SET_DATA&quot;]
+  C1 --&gt;|&quot;transformer et initialiser&quot;| C2[&quot;Enfant : POST_SET_DATA&quot;]
+  C2 --&gt;|&quot;mapping terminé&quot;| P2[&quot;Parent : POST_SET_DATA&quot;]
+  classDef parent fill:#e0f2fe,stroke:#0369a1,color:#0c4a6e
+  classDef child fill:#dcfce7,stroke:#15803d,color:#14532d
+  class P1,P2 parent
+  class C1,C2 child</div></figure>
+<ul>
+<li>L'enfant est soumis <strong>en entier</strong> avant le <code>SUBMIT</code> du parent : un field
+  dépendant s'ajoute <strong>au parent</strong>, depuis le <code>POST_SUBMIT</code> de l'enfant, et il
+  est soumis avec la valeur de la Request.</li>
+<li>La validation ne part que du <strong>form racine</strong> : <code>ValidationListener</code> écoute
+  le <code>POST_SUBMIT</code> de chaque form mais n'agit que si <code>isRoot()</code>. Dans le
+  <code>POST_SUBMIT</code> d'un enfant, cette validation globale n'a pas encore eu lieu ;
+  cela n'exclut pas des erreurs de transformation ou ajoutées par d'autres listeners.</li>
+</ul>
+<p>Comparaison des deux endroits possibles pour ajouter <code>region</code> :</p>
+<table>
+<thead>
+<tr>
+<th>Ajouter à…</th>
+<th>Depuis…</th>
+<th>Résultat</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>le <strong>parent</strong></td>
+<td><code>POST_SUBMIT</code> de l'enfant <code>country</code></td>
+<td>parent encore ouvert : <code>region</code> est soumis</td>
+</tr>
+<tr>
+<td>l'<strong>enfant</strong> <code>country</code></td>
+<td>son propre <code>POST_SUBMIT</code></td>
+<td>enfant déjà marqué soumis : exception</td>
+</tr>
+</tbody>
+</table>
+<p>Vérifié dans le code 8.0 : <code>ValidationListener</code> s'abonne à <code>POST_SUBMIT</code>
+(<code>getSubscribedEvents()</code>) et <code>validateForm()</code> ne valide que si
+<code>$form-&gt;isRoot()</code>.</p>
+<div class="admonition info">
+<p class="admonition-title">🌍 In Real Life</p>
+<p><strong>La situation</strong> : une petite chemise « pays » est terminée alors que le grand dossier d'inscription reste ouvert. Son résultat permet d'ajouter la bonne fiche « région » au grand dossier, pas de rouvrir la petite chemise.</p>
+<p><strong>L’équivalent dans Symfony</strong> : le <code>POST_SUBMIT</code> de <code>country</code> survient avant le <code>SUBMIT</code> du parent. Le listener ajoute donc le champ dépendant au parent encore modifiable ; le processus de soumission de celui-ci peut le prendre en compte.</p>
+<p><strong>Retour à la réalité technique</strong> : les états soumis appartiennent à chaque instance Form. « Après l'enfant » ne signifie pas « après le parent ». Avec l'intégration Validator, le listener de validation globale agit au <code>POST_SUBMIT</code> de la racine ; les erreurs de transformation peuvent déjà exister auparavant.</p>
+<p><strong>🧠 Comment le mémoriser</strong> : « Enfant fermé, parent encore ouvert. » Image mentale : une chemise fermée dans un classeur ouvert. Question-réflexe : quel Form est déjà soumis et lequel recevra le nouveau champ ?</p>
+<p><strong>⚠️ À ne pas confondre</strong> : fin du traitement d'un enfant et validité de l'ensemble.</p>
+</div><aside class="enrichment" aria-label="Autre explication"><p>Les points de contrôle d'un dossier enfant se terminent avant ceux du parent. Un POST_SUBMIT de l'enfant peut donc compléter le parent ; cela ne signifie pas qu'il peut modifier la structure de l'enfant déjà soumis.</p></aside><div class="retained-answer-context">
+<p><strong>Repère de l’exemple :</strong></p>
+<p lang="en"><strong>Question:</strong> Where does the country POST_SUBMIT listener add the dependent region field?</p>
+<p lang="en"><strong>Answer:</strong> To the parent form, not to the already-submitted country child.</p>
+<p>Le listener lit le pays transformé avec getForm()-&gt;getData(). Il ajoute region au parent qui peut toujours intégrer ce field, pas à l'enfant déjà soumis.</p>
+</div></section><section class="teaching-section" data-section="s-la-table-de-decision"><span class="outcome-anchor" id="out-OUT-0sq5c8vams1s" tabindex="-1"></span><h2 id="s-la-table-de-decision" tabindex="-1">La table de décision</h2><aside class="section-digest" id="s-la-table-de-decision-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>PRE_SUBMIT agit sur les données brutes.</li><li>SUBMIT agit sur norm data.</li></ol></aside><p><strong>Où en est-on ?</strong> Étape 5 sur 6. On rassemble tout en un outil de choix.
+Question : quel event pour quel besoin ?</p>
+<p>Pour chaque adaptation de l'inscription, choisis d'abord l'information
+nécessaire : adresse initiale, saisie brute ou pays transformé. Ensuite,
+vérifie quel formulaire reste modifiable. Cette double question explique
+pourquoi un même besoin visuel peut nécessiter un listener d'initialisation
+et un listener de soumission.</p>
+<table>
+<thead>
+<tr>
+<th>Besoin</th>
+<th>Event</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>modifier la donnée initiale ; adapter la structure à elle</td>
+<td><code>PRE_SET_DATA</code> (ou <code>POST_SET_DATA</code>)</td>
+</tr>
+<tr>
+<td>assainir la donnée brute soumise</td>
+<td><code>PRE_SUBMIT</code></td>
+</tr>
+<tr>
+<td>ajouter des fields d'après la valeur soumise</td>
+<td><code>PRE_SUBMIT</code> sur le <strong>parent</strong>, ou <code>POST_SUBMIT</code> sur l'<strong>enfant</strong></td>
+</tr>
+<tr>
+<td>modifier la norm data</td>
+<td><code>SUBMIT</code></td>
+</tr>
+<tr>
+<td>réagir après coup, journaliser</td>
+<td><code>POST_SUBMIT</code></td>
+</tr>
+</tbody>
+</table>
+<p>La question qui tranche : réagit-on à la donnée <strong>initiale</strong> (l'object) ou à la
+donnée <strong>soumise</strong> (la Request) ?</p>
+<pre class="highlight" tabindex="0"><code class="language-text">Besoin ?
+  ├─ dépend de l'objet initial ─────────────► PRE_SET_DATA / POST_SET_DATA
+  └─ dépend de ce qui est envoyé
+        ├─ nettoyer la saisie brute ────────► PRE_SUBMIT
+        ├─ ajouter un champ ────────────────► PRE_SUBMIT (parent)
+        │                                     ou POST_SUBMIT (enfant → parent)
+        ├─ toucher la donnée normalisée ────► SUBMIT
+        └─ réagir / journaliser ────────────► POST_SUBMIT</code></pre></section><section class="teaching-section" data-section="s-comment-s-abonner"><h2 id="s-comment-s-abonner" tabindex="-1">Comment s&#x27;abonner</h2><aside class="section-digest" id="s-comment-s-abonner-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Le builder accepte listeners et subscribers.</li><li>Après construction, le dispatcher ne s&#x27;étend plus.</li></ol></aside><p><strong>Où en est-on ?</strong> Étape 6 sur 6, la dernière. On sait <em>quand</em> agir ; comment
+brancher le code ? Question : pourquoi les listeners se déclarent-ils pendant
+<code>buildForm()</code> seulement ?</p>
+<p>Le builder configure les callbacks avant que les données ne les activent.
+Un subscriber réutilisable reste une classe avec des méthodes de traitement
+et une déclaration d'abonnements, pas seulement une configuration.
+Il s'abonne au dispatcher du formulaire ; cela ne l'enregistre pas comme
+listener de <code>kernel.request</code> pour chaque visite de <code>/blog/42</code>.</p>
+<p><code>$builder-&gt;addEventListener(FormEvents::PRE_SET_DATA, $callable)</code> pour un cas
+local, ou une class <code>EventSubscriberInterface</code>, réutilisable. Les listeners se
+déclarent pendant <code>buildForm()</code> : ensuite, le dispatcher est un
+<code>ImmutableEventDispatcher</code>, et <code>addListener()</code> lève une
+<code>BadMethodCallException</code>.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th><code>addEventListener()</code></th>
+<th>Subscriber</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Forme</td>
+<td>un callable</td>
+<td>une classe <code>EventSubscriberInterface</code></td>
+</tr>
+<tr>
+<td>Réutilisable</td>
+<td>non (local)</td>
+<td>oui</td>
+</tr>
+<tr>
+<td>Où l'enregistrer</td>
+<td><code>buildForm()</code></td>
+<td><code>$builder-&gt;addEventSubscriber(...)</code> dans <code>buildForm()</code></td>
+</tr>
+</tbody>
+</table>
+<p>Pourquoi l'immutabilité ? Une fois le form construit, le dispatcher est figé
+(<code>ImmutableEventDispatcher</code>) pour que la liste des réactions ne change pas en
+plein cycle de vie. Modifier la <strong>structure</strong> (ajouter un champ) reste permis aux
+phases autorisées ; ajouter un <strong>listener</strong> ne l'est plus.</p>
+<div class="admonition info">
+<p class="admonition-title">🌍 In Real Life</p>
+<p><strong>La situation</strong> : avant l'ouverture du bureau, on prépare la liste des agents à prévenir à chaque étape. Un protocole réutilisable regroupe plusieurs consignes ; il ne s'exécute pas simplement parce qu'il existe dans une armoire.</p>
+<p><strong>L’équivalent dans Symfony</strong> : <code>addEventListener()</code> associe un callable à un événement du Form ; un subscriber regroupe des méthodes et leurs abonnements. Le builder enregistre ces réactions avant que le formulaire utilise son dispatcher immuable.</p>
+<p><strong>Retour à la réalité technique</strong> : il faut brancher le subscriber au formulaire concerné. Le dispatcher final refuse l'ajout tardif de listeners ; cette immutabilité des abonnements n'interdit pas les modifications de champs autorisées aux phases précédentes.</p>
+<p><strong>🧠 Comment le mémoriser</strong> : « Prévoir les réactions avant d'ouvrir le dossier. » Image mentale : une liste d'appels fixée au mur avant l'accueil. Question-réflexe : ai-je enregistré ce callback sur le bon dispatcher, au moment de la construction ?</p>
+<p><strong>⚠️ À ne pas confondre</strong> : subscriber du Form et service écoutant les événements du kernel ; enregistrer un callback et l'exécuter.</p>
+</div></section><section class="teaching-section" data-section="s-pieges-d-examen"><h2 id="s-pieges-d-examen" tabindex="-1">Pièges d&#x27;examen</h2><p class="teaching-label pitfall"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="warning" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3L23 21H1L12 3ZM12 9V14M12 17V18"></path></svg> <strong>Piège à éviter</strong></p><details class="pitfall-explanation"><summary>Voir l’explication : brute</summary><ul>
+<li><code>PRE_SUBMIT</code> reçoit la donnée <strong>brute</strong> : strings, arrays, files
+  téléversés — pas d'object du modèle. <em>Pourquoi on se trompe : le nom du form
+  évoque un objet, mais rien n'est encore converti.</em></li>
+<li><strong>À <code>SUBMIT</code>, <code>add()</code> ne lève rien</strong>, mais le field ajouté n'est jamais
+  soumis ; l'exception n'arrive qu'à <code>POST_SUBMIT</code>. <em>Pourquoi on se trompe :
+  l'absence d'erreur laisse croire que ça fonctionne.</em></li>
+<li><strong><code>POST_SUBMIT</code> porte la view data</strong> ; le modèle est sur le form. <em>Pourquoi on
+  se trompe : « post » suggère que tout est converti en modèle.</em></li>
+<li>Dans <code>PRE_SET_DATA</code>, <strong><code>$form-&gt;getData()</code> lève une exception</strong> : lire
+  <code>$event-&gt;getData()</code>. <em>Pourquoi on se trompe : <code>$form-&gt;getData()</code> est le réflexe
+  partout ailleurs.</em></li>
+<li>La validation s'exécute sur le <code>POST_SUBMIT</code> de la <strong>racine</strong>, pas avant.
+  <em>Pourquoi on se trompe : on la croit déclenchée par <code>isValid()</code>.</em></li>
+<li>Un field dépendant s'ajoute au <strong>parent</strong>. <em>Pourquoi on se trompe : on
+  l'ajoute naturellement à l'enfant qui déclenche le listener.</em></li>
+</ul></details></section><section class="teaching-section" data-section="s-application"><h2 id="s-application" tabindex="-1">Application</h2><aside class="section-digest" id="s-application-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>L&#x27;enfant termine avant le SUBMIT du parent.</li><li>Le parent peut ainsi traiter le field dépendant.</li><li>PRE_SET_DATA concerne les données initiales.</li><li>PRE_SUBMIT précède les transformations de submission.</li></ol></aside>
+
+
+
+</section><section class="teaching-section" data-section="s-fiche-express"><h2 id="s-fiche-express" tabindex="-1">Fiche express</h2><p class="teaching-label essential"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="book" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5C9 3 5 3 2 4V20C5 19 9 19 12 21C15 19 19 19 22 20V4C19 3 15 3 12 5V21M5 8H8M5 12H8M16 8H19M16 12H19"></path></svg> <strong>À mémoriser</strong></p><p><strong>🧠 À retenir pour la certification :</strong></p>
+<ul>
+<li><strong>Cinq events</strong> : <code>PRE_SET_DATA</code>, <code>POST_SET_DATA</code>, <code>PRE_SUBMIT</code>, <code>SUBMIT</code>,
+  <code>POST_SUBMIT</code>.</li>
+<li>Données : <strong>modèle, modèle, Request, normalisée, vue</strong>.</li>
+<li><code>PRE_SET_DATA</code> : lire <strong><code>$event-&gt;getData()</code></strong> ; <code>$form-&gt;getData()</code> lève une
+  exception.</li>
+<li><code>add()</code> sur un formulaire composé : OK jusqu'à <code>PRE_SUBMIT</code> ;
+  <strong>ajout accepté mais non soumis à <code>SUBMIT</code></strong> ; <strong>exception à
+  <code>POST_SUBMIT</code></strong>.</li>
+<li>L'enfant est <strong>soumis en entier</strong> avant le <code>SUBMIT</code> du parent.</li>
+<li>Field dépendant : <strong>ajouté au parent</strong> depuis le <code>POST_SUBMIT</code> de l'enfant.</li>
+<li>Validation : <strong><code>POST_SUBMIT</code> de la racine</strong> ; dispatcher immuable après
+  <code>buildForm()</code>.</li>
+</ul>
+<p>Moyen mnémotechnique : <strong>« Poser, compléter, recevoir, normaliser,
+conclure »</strong>.</p>
+<p>Phrase de mémorisation : <strong>« Pour agir sur un form, je demande d'abord quelle
+donnée l'event porte et quel form est déjà soumis : l'enfant se ferme avant le
+parent, et je complète toujours le parent. »</strong></p></section><section class="teaching-section" data-section="s-sources-officielles"><h2 id="s-sources-officielles" tabindex="-1">Sources officielles</h2><ul>
+<li><a href="https://symfony.com/doc/8.0/form/events.html">Form Events</a></li>
+<li><a href="https://symfony.com/doc/8.0/forms.html">Form 8.0, <code>Form</code></a> : <code>submit()</code>, <code>add()</code>, <code>remove()</code>, <code>getData()</code></li>
+<li><a href="https://symfony.com/doc/8.0/forms.html">Form 8.0, <code>ValidationListener</code></a></li>
+</ul></section><section id="course-recalls" aria-labelledby="course-recalls-title" tabindex="-1"><h2 id="course-recalls-title">Rappels et liens avec les autres cours</h2><div data-recall-group="current"><h3>Rappels du cours actuel</h3><ul><li data-recall-course="CRS-b2pn9zz55e4n" data-recall-kind="digest_reference"><p class="recall-provenance">Module 07 — Formulaires · Cours « Form events »</p><p class="digest-reference"><a href="#s-l-essentiel-digest">Revoir la règle : PRE_SET_DATA concerne les données initiales.</a></p></li><li data-recall-course="CRS-b2pn9zz55e4n" data-recall-kind="digest_reference"><p class="recall-provenance">Module 07 — Formulaires · Cours « Form events »</p><p class="digest-reference"><a href="#s-le-schema-digest">Revoir la règle : L&#x27;enfant termine avant le SUBMIT du parent.</a></p></li><li><nav aria-label="Flashcards de l’application"><ul><li data-recall-course="CRS-b2pn9zz55e4n" data-recall-kind="application"><p class="recall-provenance">Module 07 — Formulaires · Cours « Form events »</p><a href="#A-b2pn9zz55e4n-6e0103f6cc-04">Flashcard : L&#x27;enfant termine avant le SUBMIT du parent. Le parent peut ainsi traiter le field dépendant.</a></li><li data-recall-course="CRS-b2pn9zz55e4n" data-recall-kind="application"><p class="recall-provenance">Module 07 — Formulaires · Cours « Form events »</p><a href="#A-b2pn9zz55e4n-65c42c80d9-01">Flashcard : PRE_SET_DATA concerne les données initiales. PRE_SUBMIT précède les transformations de submission.</a></li></ul></nav></li></ul></div><div data-recall-group="other"><h3>Rappels des cours précédents / autres modules</h3><ul><li data-recall-course="CRS-cpvcczhj7bzx" data-recall-kind="previous_course"><p class="recall-provenance">Module 07 — Formulaires · Cours « Handling file upload »</p><p>Séparer le file temporaire et sa référence persistante. Appliquer les constraints directement au field non mappé.</p><p><a href="#cards-previous">Rappel : <span lang="en">Why is an upload field often mapped=false when the model stores a filename?</span></a></p></li></ul></div></section><nav class="course-sequence" aria-label="Ordre de lecture"><a rel="prev" href="course-CRS-zsgx3tvpy1kn.html" aria-label="Précédent : Built-in form types — Module 07 — Formulaires">Précédent : Built-in form types</a> <a href="lot-07.html">Sommaire : Module 07 — Formulaires</a> <a rel="next" href="course-CRS-k4ejsd624d1p.html" aria-label="Suivant : Form type extensions — Module 07 — Formulaires">Suivant : Form type extensions</a></nav><p class="course-practice-entry"><a class="button" href="#view-quiz">Fin du cours — s’entraîner avec le Quiz</a></p></div><div id="view-flashcards" data-course-panel role="region" aria-labelledby="view-flashcards-title"><h2 id="view-flashcards-title">Flashcards</h2><p lang="en">Answer before revealing each card.</p><p>Ces cartes ne mesurent pas une maîtrise notée.</p><div id="cards-s-l-essentiel-1" data-card-section="s-l-essentiel"><h3><a href="#s-l-essentiel">Revoir : L&#x27;essentiel</a></h3><div class="reader-cards"><details class="reader-card" id="A-b2pn9zz55e4n-65c42c80d9-01"><summary lang="en">Which form event receives raw submitted input?</summary><p lang="en">PRE_SUBMIT.</p><p lang="fr">PRE_SET_DATA concerne les données initiales. PRE_SUBMIT précède les transformations de submission.</p><a href="course-CRS-b2pn9zz55e4n.html#out-OUT-v8srdqc4xxjy">Revoir le passage précis</a></details></div></div><div id="cards-s-le-schema-2" data-card-section="s-le-schema"><h3><a href="#s-le-schema">Revoir : Le schéma</a></h3><div class="reader-cards"><details class="reader-card" id="A-b2pn9zz55e4n-6e0103f6cc-04"><summary lang="en">Where should a dependent sibling field be added from a child&#x27;s POST_SUBMIT listener?</summary><p lang="en">To the parent form.</p><p lang="fr">L&#x27;enfant termine avant le SUBMIT du parent. Le parent peut ainsi traiter le field dépendant.</p><a href="course-CRS-b2pn9zz55e4n.html#out-OUT-eyj84n4wy8wg">Revoir le passage précis</a></details></div></div><div id="cards-s-l-exemple-pays-et-region-3" data-card-section="s-l-exemple-pays-et-region"><h3><a href="#s-l-exemple-pays-et-region">Revoir : L&#x27;exemple : pays et région</a></h3><div class="reader-cards"><details class="reader-card" id="A-b2pn9zz55e4n-369eba97ca-02"><summary lang="en">Where does the country POST_SUBMIT listener add the dependent region field?</summary><p lang="en">To the parent form, not to the already-submitted country child.</p><p lang="fr">Le listener lit le pays transformé avec getForm()-&gt;getData(). Il ajoute region au parent qui peut toujours intégrer ce field, pas à l&#x27;enfant déjà soumis.</p><a href="course-CRS-b2pn9zz55e4n.html#out-OUT-eyj84n4wy8wg">Revoir le passage précis</a></details></div></div><div id="cards-s-deux-moments-cinq-events-4" data-card-section="s-deux-moments-cinq-events"><h3><a href="#s-deux-moments-cinq-events">Revoir : Deux moments, cinq events</a></h3><div class="reader-cards"><p class="reader-card-reference" id="A-b2pn9zz55e4n-febf29dde9-01">Rappel déjà proposé : <a lang="en" href="#A-b2pn9zz55e4n-65c42c80d9-01">Which form event receives raw submitted input?</a> · <a href="course-CRS-b2pn9zz55e4n.html#out-OUT-v8srdqc4xxjy">Passage canonique</a></p></div></div><div id="cards-s-ce-que-porte-chaque-event-5" data-card-section="s-ce-que-porte-chaque-event"><h3><a href="#s-ce-que-porte-chaque-event">Revoir : Ce que porte chaque event</a></h3><div class="reader-cards"><details class="reader-card" id="A-b2pn9zz55e4n-8fde937b5b-02"><summary lang="en">Does POST_SUBMIT event data necessarily equal model data?</summary><p lang="en">No. It carries view data; getForm()-&gt;getData() reads the model.</p><p lang="fr">Distinguer event data et form data. Dans PRE_SET_DATA, lire les données sur l&#x27;event.</p><a href="course-CRS-b2pn9zz55e4n.html#out-OUT-xj0demzqg8ct">Revoir le passage précis</a></details></div></div><div id="cards-s-ce-que-dit-le-code-sur-le-verrouillage-6" data-card-section="s-ce-que-dit-le-code-sur-le-verrouillage"><h3><a href="#s-ce-que-dit-le-code-sur-le-verrouillage">Revoir : Ce que dit le code sur le verrouillage</a></h3><div class="reader-cards"><details class="reader-card" id="A-b2pn9zz55e4n-37ae18b37f-03"><summary lang="en">Is adding a root field during SUBMIT a reliable way to submit that field?</summary><p lang="en">No. It may be added but is too late to be submitted; POST_SUBMIT rejects the addition.</p><p lang="fr">L&#x27;ajout utile doit précéder la submission des enfants. Une opération acceptée n&#x27;implique pas le traitement attendu.</p><a href="course-CRS-b2pn9zz55e4n.html#out-OUT-jz8pzthzk661">Revoir le passage précis</a></details></div></div><div id="cards-s-les-forms-imbriques-7" data-card-section="s-les-forms-imbriques"><h3><a href="#s-les-forms-imbriques">Revoir : Les forms imbriqués</a></h3><div class="reader-cards"><p class="reader-card-reference" id="A-b2pn9zz55e4n-aab67356e5-04">Rappel déjà proposé : <a lang="en" href="#A-b2pn9zz55e4n-6e0103f6cc-04">Where should a dependent sibling field be added from a child&#x27;s POST_SUBMIT listener?</a> · <a href="course-CRS-b2pn9zz55e4n.html#out-OUT-eyj84n4wy8wg">Passage canonique</a></p></div></div><div id="cards-s-la-table-de-decision-8" data-card-section="s-la-table-de-decision"><h3><a href="#s-la-table-de-decision">Revoir : La table de décision</a></h3><div class="reader-cards"><details class="reader-card" id="A-b2pn9zz55e4n-29fa373721-05"><summary lang="en">Which event should modify normalized submitted data?</summary><p lang="en">SUBMIT.</p><p lang="fr">PRE_SUBMIT agit sur les données brutes. SUBMIT agit sur norm data.</p><a href="course-CRS-b2pn9zz55e4n.html#out-OUT-0sq5c8vams1s">Revoir le passage précis</a></details></div></div><div id="cards-s-comment-s-abonner-9" data-card-section="s-comment-s-abonner"><h3><a href="#s-comment-s-abonner">Revoir : Comment s&#x27;abonner</a></h3><div class="reader-cards"><details class="reader-card" id="A-b2pn9zz55e4n-5a25aa858a-06"><summary lang="en">When should form listeners be registered?</summary><p lang="en">During form building, before the dispatcher becomes immutable.</p><p lang="fr">Le builder accepte listeners et subscribers. Après construction, le dispatcher ne s&#x27;étend plus.</p><a href="course-CRS-b2pn9zz55e4n.html#out-OUT-jz8pzthzk661">Revoir le passage précis</a></details></div></div><div id="cards-s-pieges-d-examen-10" data-card-section="s-pieges-d-examen"><h3><a href="#s-pieges-d-examen">Revoir : Pièges d&#x27;examen</a></h3><div class="reader-cards"><p class="reader-card-reference" id="A-b2pn9zz55e4n-596d5af532-04">Rappel déjà proposé : <a lang="en" href="#A-b2pn9zz55e4n-6e0103f6cc-04">Where should a dependent sibling field be added from a child&#x27;s POST_SUBMIT listener?</a> · <a href="course-CRS-b2pn9zz55e4n.html#out-OUT-eyj84n4wy8wg">Passage canonique</a></p></div></div><div id="cards-s-application-11" data-card-section="s-application"><h3><a href="#s-application">Revoir : Application</a></h3><div class="reader-cards"><p class="reader-card-reference" id="A-b2pn9zz55e4n-e7ad522ea3-04">Rappel déjà proposé : <a lang="en" href="#A-b2pn9zz55e4n-6e0103f6cc-04">Where should a dependent sibling field be added from a child&#x27;s POST_SUBMIT listener?</a> · <a href="course-CRS-b2pn9zz55e4n.html#out-OUT-eyj84n4wy8wg">Passage canonique</a></p><p class="reader-card-reference" id="A-b2pn9zz55e4n-e7ad522ea3-01">Rappel déjà proposé : <a lang="en" href="#A-b2pn9zz55e4n-65c42c80d9-01">Which form event receives raw submitted input?</a> · <a href="course-CRS-b2pn9zz55e4n.html#out-OUT-v8srdqc4xxjy">Passage canonique</a></p></div></div><div id="cards-s-fiche-express-12" data-card-section="s-fiche-express"><h3><a href="#s-fiche-express">Revoir : Fiche express</a></h3><div class="reader-cards"><p class="reader-card-reference" id="A-b2pn9zz55e4n-b11e58e15e-04">Rappel déjà proposé : <a lang="en" href="#A-b2pn9zz55e4n-6e0103f6cc-04">Where should a dependent sibling field be added from a child&#x27;s POST_SUBMIT listener?</a> · <a href="course-CRS-b2pn9zz55e4n.html#out-OUT-eyj84n4wy8wg">Passage canonique</a></p></div></div><div id="cards-previous"><p class="recall-provenance">Module 07 — Formulaires · Cours « Handling file upload »</p><aside class="checkpoint"><h2>Rappel d’un cours antérieur</h2><p>Avant de poursuivre : Handling file upload.</p><details class="corpus-correction"><summary lang="en">Why is an upload field often mapped=false when the model stores a filename?</summary><p lang="en">The UploadedFile is not the final stored filename.</p><p>Séparer le file temporaire et sa référence persistante. Appliquer les constraints directement au field non mappé.</p><a href="course-CRS-cpvcczhj7bzx.html#out-OUT-9qanndr176yx">Relire la correction dans le cours antérieur</a></details></aside></div></div><div id="view-quiz" data-course-panel role="region" aria-labelledby="view-quiz-title"><aside class="revision-context"><p><strong>Avant le quiz :</strong> L&#x27;inscription au blog propose maintenant un pays et une région. La liste des régions doit convenir à l&#x27;objet initial lors du GET, puis au pays réellement soumis lors du POST. Ces deux besoins surviennent à des moments différents du cycle de Form, distinct des événements kernel.*.</p><p>Quelle donnée entre, quelle responsabilité agit et quelle condition change le résultat ? Pour chaque correction, vérifiez ces conditions dans <a href="course-CRS-b2pn9zz55e4n.html#s-objectif">le passage enseigné</a>, sans supposer que toutes les branches du blog sont exécutées.</p></aside><h2 id="view-quiz-title">Quiz</h2><p class="quiz-size" lang="en">7 eligible learning questions · 7 per session. Repeating a question does not demonstrate mastery.</p><p id="course-quiz-status" role="status">Quiz interactif non chargé. Démarrez après chargement de la banque locale.</p><div id="course-quiz-controls" class="assessment-main" hidden><div id="course-quiz-assessment-controls" hidden><select id="course-quiz-assessment-mode" aria-label="Mode du quiz" hidden><option value="learning">Entraînement</option></select><p id="course-quiz-training-scope"></p><button id="course-quiz-start-assessment" type="button" lang="en">Start practice</button><button id="course-quiz-finish-assessment" type="button" lang="en" hidden>End session</button></div><p id="course-quiz-assessment-error" role="alert"></p><p id="course-quiz-assessment-timer" hidden></p><p id="course-quiz-session-progress" class="quiz-progress" role="status" lang="en"></p><div id="course-quiz-assessment-app" tabindex="-1"></div><nav id="course-quiz-session-navigation" aria-label="Questions du cours"></nav><div id="course-quiz-learning-overview" aria-live="polite"></div></div><div id="course-quiz-native"><p>Sans JavaScript ou si le chargement échoue : aucune tentative notée. Les <a href="#view-flashcards">flashcards du cours</a> restent disponibles.</p><details class="course-quiz-fallback" data-question-id="L-b2pn9zz55e4n-base-v1"><summary lang="en">RADIO — Select one answer. Which form event receives raw submitted input?</summary><p>Correction de consultation — non notée.</p><p>PRE_SET_DATA concerne les données initiales. PRE_SUBMIT précède les transformations de submission.</p><ul><li><strong lang="en">Distractor: SUBMIT.</strong><p>SUBMIT travaille sur les données normalisées après transformation.</p></li><li><strong lang="en">Correct: PRE_SUBMIT.</strong><p>PRE_SET_DATA concerne les données initiales. PRE_SUBMIT précède les transformations de submission.</p></li><li><strong lang="en">Distractor: PRE_SET_DATA.</strong><p>PRE_SET_DATA reçoit les données initiales, pas les données brutes soumises.</p></li></ul><a href="course-CRS-b2pn9zz55e4n.html#out-OUT-v8srdqc4xxjy">Relire le passage exact</a><a href="course-CRS-b2pn9zz55e4n.html#s-deux-moments-cinq-events">Relire la correction précise</a></details></div></div></div></div><details class="transfer-panel"><summary>Sauvegarde et transfert de progression</summary><p id="reading-status" role="status">Sans JavaScript : lecture libre ; progression non enregistrée.</p><p><a href="assessment.html#overview-title">Lecture, réussites immédiates et différées</a></p><p>Transfert manuel — aucune synchronisation automatique</p><p id="persistence-status" role="status"></p><button type="button" class="secondary" id="export-progress">Exporter ma progression</button><label for="import-progress">Choisir un JSON pour fusionner ma progression (sans remplacement)</label><input type="file" id="import-progress" accept="application/json,.json"><p id="transfer-status" role="status"></p></details></main><footer class="site-footer"><a href="catalogue.html">Catalogue</a> <a href="sources.html">Sources et attribution</a> <a href="#contenu">Haut de page</a></footer></body></html>

@@ -1,0 +1,468 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; connect-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'"><meta name="viewport" content="width=device-width, initial-scale=1"><title>TwigBundle — Symfony 8 Preparation</title><link rel="stylesheet" href="styles.css"><link rel="stylesheet" href="reader.css"><script src="mermaid.min.js" defer></script><script src="mermaid-init.js" defer></script><link rel="stylesheet" href="assessment.css"><script src="fixed-exams-data.js" defer></script><script src="fixed-exams.js" defer></script><script src="learning-state.js" defer></script><script src="guide.js" defer></script><script src="reader-catalog.js" defer></script><script src="reader.js" defer></script><script src="site-state.js" defer></script><script src="assessment.js" defer></script><script src="course-views.js" defer></script><link rel="stylesheet" href="syntax-highlight.css"><script src="prism-syntax.js" defer></script><script src="syntax-highlight.js" defer></script></head><body data-course-id="CRS-2bj91rj9kvj0"><a class="skip" href="#contenu">Aller au contenu</a><header class="site-header"><a class="brand" href="index.html">S8 Preparation</a><nav aria-label="Navigation principale"><a href="index.html">Accueil</a> <a href="catalogue.html">Parcours</a> <a href="assessment.html?mode=review">Réviser</a> <a href="examens.html">Examens blancs</a> <a href="jour-j.html">Jour J</a></nav></header><main id="contenu" tabindex="-1" class="corpus-reader"><nav class="breadcrumb" aria-label="Fil d’Ariane"><a href="index.html">Accueil</a> <span aria-hidden="true">›</span> <a href="catalogue.html">Parcours</a> <span aria-hidden="true">›</span> <a href="lot-06.html">Module 06 — Templates avec Twig</a> <span aria-hidden="true">›</span> <span aria-current="page">TwigBundle</span></nav><h1>TwigBundle</h1><p class="muted">Symfony 8.0 · API PHP ≤ 8.4 · Twig ≤ 3.22. Préparation indépendante.</p><p class="revision-status">Rédaction narrative P11 : projection nouvelle, non couverte par les décisions historiques P10. Aucune approbation officielle ni garantie de réussite.</p><aside class="narrative-context" aria-label="Repères de lecture"><p><strong>Prérequis de lecture :</strong> <a href="course-CRS-h8s87edcx8ae.html">The base AbstractController class</a></p><p><strong>Concepts voisins :</strong> <a href="course-CRS-a669jpap5zf2.html">The response</a> — Le contenu rendu doit encore devenir une Response. <a href="lot-06.html">Comparer les responsabilités dans ce module</a> · <a href="carte-composants.html">Situer cette responsabilité dans le blog</a> · <a href="glossaire.html">Distinguer les termes voisins</a></p><p><a href="ordre-lecture.html">Retrouver les 163 cours dans le parcours recommandé</a>. Ce repère ne modifie ni votre historique ni votre progression.</p></aside><div class="course-layout"><details class="lot-course-menu"><summary>Cours du module · 14 cours</summary><nav aria-label="Cours du module"><a class="lot-context" href="lot-06.html">Module 06 — Templates avec Twig</a><ol><li><a href="course-CRS-2bj91rj9kvj0.html" aria-current="page">TwigBundle</a></li><li><a href="course-CRS-x2f8reencvcs.html">Twig syntax up to 3.22 version</a></li><li><a href="course-CRS-w82wtddwhexg.html">Auto escaping</a></li><li><a href="course-CRS-k3v3wrt0hmtx.html">Template inheritance</a></li><li><a href="course-CRS-r56yzzb4pye2.html">Global variables</a></li><li><a href="course-CRS-306ppg4454wj.html">Filters and functions</a></li><li><a href="course-CRS-w83y6pfa5edn.html">Template includes</a></li><li><a href="course-CRS-zbnzvqkhjknh.html">Loops and conditions</a></li><li><a href="course-CRS-dpbpbgwjey5c.html">URLs generation</a></li><li><a href="course-CRS-yw6c5hq2mbax.html">Controller rendering</a></li><li><a href="course-CRS-q18xc1k4yvb9.html">Translations and pluralization</a></li><li><a href="course-CRS-dfyab4kpcapw.html">String interpolation</a></li><li><a href="course-CRS-ym86ptkhfgap.html">Assets management</a></li><li><a href="course-CRS-vx5kvfhs0p0s.html">Debugging variables</a></li></ol><a href="lot-06.html#view-quiz">Quiz du module</a></nav></details><aside class="course-section-menu" aria-label="Sommaire du cours"><nav class="course-actions" aria-label="Activités du cours"><a id="tab-course" href="#view-course">Cours</a><a id="tab-flashcards" href="#view-flashcards">Flashcards</a><a id="tab-quiz" href="#view-quiz">Quiz</a></nav><details class="course-section-disclosure"><summary id="course-sections">Sections du cours</summary><nav aria-label="Sections du cours"><ul><li><a href="#s-objectif">Objectif</a></li><li><a href="#s-l-essentiel">L&#x27;essentiel</a></li><li><a href="#s-le-schema">Le schéma</a></li><li><a href="#s-l-exemple">L&#x27;exemple</a></li><li><a href="#s-trois-packages-trois-roles">Trois packages, trois roles</a></li><li><a href="#s-ou-vivent-les-templates">Où vivent les templates</a></li><li><a href="#s-surcharger-le-template-d-un-bundle">Surcharger le template d&#x27;un bundle</a></li><li><a href="#s-les-options-qui-changent-le-comportement">Les options qui changent le comportement</a></li><li><a href="#s-les-commands">Les commands</a></li><li><a href="#s-pieges-d-examen">Pièges d&#x27;examen</a></li><li><a href="#s-application">Application</a></li><li><a href="#s-fiche-express">Fiche express</a></li><li><a href="#s-sources-officielles">Sources officielles</a></li><li><a href="#reader-objectives">Objectifs d’apprentissage</a></li><li><a href="#course-recalls">Rappels et liens avec les autres cours</a></li></ul></nav><nav aria-label="Flashcards par section"><a href="#view-flashcards">Flashcards par section</a><ul><li><a href="#cards-s-l-essentiel-1">L&#x27;essentiel</a></li><li><a href="#cards-s-le-schema-2">Le schéma</a></li><li><a href="#cards-s-l-exemple-3">L&#x27;exemple</a></li><li><a href="#cards-s-trois-packages-trois-roles-4">Trois packages, trois roles</a></li><li><a href="#cards-s-ou-vivent-les-templates-5">Où vivent les templates</a></li><li><a href="#cards-s-surcharger-le-template-d-un-bundle-6">Surcharger le template d&#x27;un bundle</a></li><li><a href="#cards-s-les-options-qui-changent-le-comportement-7">Les options qui changent le comportement</a></li><li><a href="#cards-s-les-commands-8">Les commands</a></li><li><a href="#cards-s-pieges-d-examen-9">Pièges d&#x27;examen</a></li><li><a href="#cards-s-application-10">Application</a></li><li><a href="#cards-s-fiche-express-11">Fiche express</a></li><li><a href="#cards-previous">Module 04 — Contrôleurs · Cours « The response » · Rappel : <span lang="en">What happens if a controller returns a string instead of a Response?</span></a></li></ul></nav><nav aria-label="Retour au module"><a href="lot-06.html">Tous les cours du module</a></nav></details><p class="local-quiz-count">6 questions disponibles · 6 par session Quiz</p></aside><div class="course-content"><div id="view-course" data-course-panel role="region" aria-labelledby="view-course-title"><h2 id="view-course-title">Cours</h2><p class="course-introduction"><a href="#s-objectif">Introduction</a> · <a href="#course-sections">Sections du cours</a></p><h2 id="reader-objectives" tabindex="-1">Objectifs d’apprentissage</h2><ul><li><a href="course-CRS-2bj91rj9kvj0.html#out-OUT-xw5hbxewf5xf">Distinguer twig/twig, le bridge Twig et TwigBundle</a></li><li><a href="course-CRS-2bj91rj9kvj0.html#out-OUT-fe5bp6xb3w5m">Localiser les templates par défaut et changer ce directory</a></li><li><a href="course-CRS-2bj91rj9kvj0.html#out-OUT-4hq67myssdj1">Référencer un template de bundle par son namespace</a></li><li><a href="course-CRS-2bj91rj9kvj0.html#out-OUT-eqrycamdmt25">Énoncer l&#x27;effet de strict_variables</a></li><li><a href="course-CRS-2bj91rj9kvj0.html#out-OUT-kd4ywvpax765">Citer debug:twig et lint:twig</a></li></ul><aside class="pedagogy-legend" aria-label="Repères pédagogiques"><p><strong>Repères pédagogiques</strong></p><p>Ces repères décrivent le rôle du bloc, pas une fréquence officielle à l’examen.</p><p class="teaching-label essential"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="brain" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5C12 1 6 1 6 5C2 5 1 10 4 12C1 15 3 19 6 19C6 23 12 23 12 19V5M12 5C12 1 18 1 18 5C22 5 23 10 20 12C23 15 21 19 18 19C18 23 12 23 12 19M6 5C6 8 8 9 9 9M4 12H7L9 14M6 19V16M18 5C18 8 16 9 15 9M20 12H17L15 14M18 19V16"></path></svg> <strong>À comprendre</strong></p><p class="teaching-label essential"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="book" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5C9 3 5 3 2 4V20C5 19 9 19 12 21C15 19 19 19 22 20V4C19 3 15 3 12 5V21M5 8H8M5 12H8M16 8H19M16 12H19"></path></svg> <strong>À mémoriser</strong></p><p class="teaching-label example"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="code" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6L2 12L8 18M16 6L22 12L16 18M14 3L10 21"></path></svg> <strong>Exemple concret</strong></p><p class="teaching-label pitfall"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="warning" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3L23 21H1L12 3ZM12 9V14M12 17V18"></path></svg> <strong>Piège à éviter</strong></p><p class="teaching-label nuance"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="balance" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3V21M7 21H17M3 7L21 5M5 7L1 15H9L5 7M19 6L15 14H23L19 6M1 15Q5 20 9 15M15 14Q19 19 23 14"></path></svg> <strong>Nuance à connaître</strong></p><p>Précision, exception ou condition d’application d’une règle.</p></aside><section class="teaching-section" data-section="s-objectif"><h2 id="s-objectif" tabindex="-1">Objectif</h2><p>Sur <code>GET /blog/42</code>, le contrôleur veut afficher un article avec un template
+Twig. Trois questions se posent alors : <strong>qui</strong> compile ce template, <strong>où</strong>
+Symfony le cherche, et <strong>quels réglages</strong> de <code>config/packages/twig.yaml</code> changent
+le résultat ? Ce cours répond à ces trois questions.</p>
+<p>Il faut savoir ce que TwigBundle ajoute à Twig, où il cherche les templates, et
+quelles options de configuration comptent. La distinction component / bridge /
+bundle est traitée dans le Module 03 — Architecture Symfony.</p></section><section class="teaching-section" data-section="s-l-essentiel"><h2 id="s-l-essentiel" tabindex="-1">L&#x27;essentiel</h2><p class="teaching-label essential"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="brain" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5C12 1 6 1 6 5C2 5 1 10 4 12C1 15 3 19 6 19C6 23 12 23 12 19V5M12 5C12 1 18 1 18 5C22 5 23 10 20 12C23 15 21 19 18 19C18 23 12 23 12 19M6 5C6 8 8 9 9 9M4 12H7L9 14M6 19V16M18 5C18 8 16 9 15 9M20 12H17L15 14M18 19V16"></path></svg> <strong>À comprendre</strong></p><aside class="section-digest" id="s-l-essentiel-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Distinguer engine et intégration du framework.</li><li>Le bundle expose paths, options et services.</li></ol></aside><p><strong>Ce que cette partie veut réellement vous apprendre.</strong></p>
+<ul>
+<li><em>Pourquoi ce sujet existe.</em> Twig est une bibliothèque PHP indépendante de
+  Symfony : elle ne sait ni où sont vos fichiers, ni ce qu'est une route, ni ce
+  qu'est un formulaire. Quelqu'un doit la <strong>brancher</strong> sur le framework.</li>
+<li><em>Ce que l'auteur veut que vous compreniez.</em> Ce « quelqu'un » est TwigBundle.
+  Il dit <strong>où</strong> chercher les templates, <strong>comment</strong> surcharger ceux d'un
+  bundle, et quelles <strong>options</strong> de <code>config/packages/twig.yaml</code> changent le
+  comportement.</li>
+<li><em>Le piège de fond.</em> Trois packages portent le mot « Twig » (engine, bridge,
+  bundle) et deux préfixes servent à nommer un template de bundle (<code>@Nom</code> et
+  <code>@!Nom</code>). Les confondre est la source des erreurs de QCM.</li>
+<li><em>Pourquoi c'est à l'examen.</em> Les questions portent sur le nom du namespace
+  (sans <code>Bundle</code>), le directory de surcharge (avec <code>Bundle</code>), le préfixe <code>@!</code>,
+  la valeur par défaut de <code>strict_variables</code> et ce que <code>debug:twig</code> /
+  <code>lint:twig</code> prouvent ou ne prouvent pas.</li>
+</ul>
+<p>Twig seul compile et rend un template. TwigBundle le branche sur Symfony : il
+dit <strong>où</strong> chercher les templates, <strong>comment</strong> surcharger ceux d'un bundle, et
+quelles <strong>options</strong> de <code>config/packages/twig.yaml</code> changent le comportement.</p></section><section class="teaching-section" data-section="s-le-schema"><h2 id="s-le-schema" tabindex="-1">Le schéma</h2><aside class="section-digest" id="s-le-schema-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>La surcharge prend priorité sur l&#x27;original.</li><li>@! permet de reprendre l&#x27;original sans récursion.</li></ol></aside><p><strong>Où en est-on ?</strong> Vue d'ensemble du cours : le schéma ci-dessous répond à la
+question centrale « quel fichier sert un template de bundle ? ». Il sera
+détaillé dans la section « Surcharger le template d'un bundle » ; les trois
+sections qui le précèdent (packages, emplacements) posent le vocabulaire
+nécessaire pour le lire.</p>
+<pre class="highlight" tabindex="0"><code class="language-text">Le cours en 5 étapes
+   ├─ 1. Qui fait quoi ?             → engine / bridge / bundle
+   ├─ 2. Où sont les templates ?     → templates/, twig.paths, @Namespace
+   ├─ 3. Comment surcharger ?        → templates/bundles/XxxBundle/, @!Xxx
+   ├─ 4. Quelles options comptent ?  → strict_variables, globals, form_themes…
+   └─ 5. Comment diagnostiquer ?     → debug:twig, lint:twig</code></pre>
+<figure class="diagram" aria-labelledby="CRS-2bj91rj9kvj0-3-diagram-0-title CRS-2bj91rj9kvj0-3-diagram-0-description"><figcaption id="CRS-2bj91rj9kvj0-3-diagram-0-title">Comment Twig résout un template de bundle surchargé ou non</figcaption><p id="CRS-2bj91rj9kvj0-3-diagram-0-description">Pour un nom en @AcmeBlog, Twig cherche d&#x27;abord dans templates/bundles/AcmeBlogBundle de l&#x27;application, puis dans le directory de templates du bundle ; le premier file trouvé gagne. Pour un nom en @!AcmeBlog, seul le directory du bundle est consulté. Une surcharge qui étend @!AcmeBlog atteint donc l&#x27;original ; une surcharge qui étendrait @AcmeBlog se retrouverait elle-même.</p><div class="mermaid" hidden>---
+title: Quel file sert un template de bundle
+---
+flowchart TD
+  accTitle: Comment Twig résout un template de bundle surchargé ou non
+  accDescr: Pour un nom en @AcmeBlog, Twig cherche d&#x27;abord dans templates/bundles/AcmeBlogBundle de l&#x27;application, puis dans le directory de templates du bundle ; le premier file trouvé gagne. Pour un nom en @!AcmeBlog, seul le directory du bundle est consulté. Une surcharge qui étend @!AcmeBlog atteint donc l&#x27;original ; une surcharge qui étendrait @AcmeBlog se retrouverait elle-même.
+  NAME{&quot;nom demandé&quot;} --&gt;|&quot;@AcmeBlog/…&quot;| APP{&quot;templates/bundles/AcmeBlogBundle/… existe ?&quot;}
+  APP --&gt;|&quot;oui&quot;| OVR([&quot;la surcharge de l&#x27;application&quot;])
+  APP --&gt;|&quot;non&quot;| BUNDLE([&quot;le template du bundle&quot;])
+  NAME --&gt;|&quot;@!AcmeBlog/…&quot;| BUNDLE
+  OVR -.-&gt;|&quot;extends &#x27;@!AcmeBlog/…&#x27;&quot;| BUNDLE
+  OVR -.-&gt;|&quot;extends &#x27;@AcmeBlog/…&#x27;&quot;| OVR
+  classDef decision fill:#fef3c7,stroke:#b45309,color:#78350f
+  classDef template fill:#dcfce7,stroke:#15803d,color:#14532d
+  class NAME,APP decision
+  class OVR,BUNDLE template</div></figure>
+<p>Les losanges ambre représentent les choix du loader ; les sorties vertes,
+les fichiers retenus. Les flèches pleines décrivent la recherche du fichier,
+les pointillés un <code>extends</code> Twig, pas un héritage PHP.
+La dernière flèche est un piège : la surcharge s'étend <strong>elle-même</strong>.
+Vue simplifiée pour les emplacements du bundle, sans chemin <code>twig.paths</code>
+personnalisé prioritaire ; si aucun fichier n'existe, le loader échoue.</p></section><section class="teaching-section" data-section="s-l-exemple"><h2 id="s-l-exemple" tabindex="-1">L&#x27;exemple</h2><p class="teaching-label example"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="code" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6L2 12L8 18M16 6L22 12L16 18M14 3L10 21"></path></svg> <strong>Exemple concret</strong></p><aside class="section-digest" id="s-l-exemple-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Le préfixe @! cible le template original, pas la surcharge.</li><li>parent() conserve le contenu du block parent après le bandeau ajouté.</li></ol></aside><p><strong>Où en est-on ?</strong> Avant le détail, un cas concret qui résume le mécanisme de
+surcharge (étape 3). On montre le code minimal, puis on dit ce que Twig voit.</p>
+<p>Le lecteur connecté consulte son profil depuis le blog. Si cette page
+vient d'un bundle, l'application peut ajouter son bandeau sans copier tout
+le template fourni. La surcharge ci-dessous reprend l'original par son
+nom dédié, puis laisse <code>parent()</code> insérer son block <code>body</code>.</p>
+<pre class="highlight" tabindex="0"><code class="language-twig">{# templates/bundles/AcmeBlogBundle/user/profile.html.twig #}
+{% extends '@!AcmeBlog/user/profile.html.twig' %}
+
+{% block body %}
+    &lt;p class="banner"&gt;Bienvenue&lt;/p&gt;
+    {{ parent() }}
+{% endblock %}</code></pre>
+<p><code>@AcmeBlog/user/profile.html.twig</code> rend désormais le bandeau puis le contenu
+d'origine ; <code>@!AcmeBlog/…</code> rend l'original seul.</p>
+<p>Ce que Twig voit, ligne par ligne :</p>
+<table>
+<thead>
+<tr>
+<th>Élément</th>
+<th>Ce que Twig fait</th>
+<th>Pourquoi</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Fichier placé dans <code>templates/bundles/AcmeBlogBundle/…</code></td>
+<td>il est trouvé <strong>en premier</strong> pour le nom <code>@AcmeBlog/…</code></td>
+<td>l'application a priorité sur le bundle</td>
+</tr>
+<tr>
+<td><code>extends '@!AcmeBlog/…'</code></td>
+<td>va chercher le fichier <strong>du bundle</strong></td>
+<td><code>@!</code> saute la surcharge</td>
+</tr>
+<tr>
+<td><code>{% block body %}</code></td>
+<td>remplace le block <code>body</code> du parent</td>
+<td>c'est l'héritage Twig</td>
+</tr>
+<tr>
+<td><code>{{ parent() }}</code></td>
+<td>insère le contenu du block <code>body</code> d'origine</td>
+<td>on enrichit au lieu de copier</td>
+</tr>
+</tbody>
+</table></section><section class="teaching-section" data-section="s-trois-packages-trois-roles"><span class="outcome-anchor" id="out-OUT-xw5hbxewf5xf" tabindex="-1"></span><h2 id="s-trois-packages-trois-roles" tabindex="-1">Trois packages, trois roles</h2><p><strong>Où en est-on ?</strong> Étape 1 sur 5 : avant de parler de chemins ou d'options, il
+faut savoir <strong>qui fait quoi</strong> quand on écrit <code>{{ path('blog_show') }}</code> dans un
+template. Trois packages collaborent ; chacun a un rôle.</p>
+<p>Quand <code>BlogController::show()</code> demande le rendu d'ArticleView, HttpKernel
+ne compile pas lui-même le template. Twig réalise ce rendu ; le bridge
+fournit les fonctions liées à Symfony et le bundle configure leurs services.
+Une Response HTML peut donc employer Twig, sans faire de Twig une étape
+obligatoire pour une redirection ou une réponse JSON.</p>
+<table>
+<thead>
+<tr>
+<th>Package</th>
+<th>Role</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>twig/twig</code></td>
+<td>l'engine : syntaxe, compiler, filters de base</td>
+</tr>
+<tr>
+<td><code>symfony/twig-bridge</code></td>
+<td>les extensions qui exposent les components : <code>path()</code>, <code>trans</code>, le rendu de form</td>
+</tr>
+<tr>
+<td><code>symfony/twig-bundle</code></td>
+<td>l'intégration : configuration, paths, services</td>
+</tr>
+</tbody>
+</table>
+<p><code>composer require symfony/twig-bundle</code> installe les trois : le bundle exige le
+bridge, qui exige <code>twig/twig</code>.</p>
+<p>Pourquoi trois packages et pas un seul ? Parce que chaque couche a un public
+différent :</p>
+<pre class="highlight" tabindex="0"><code class="language-text">┌──────────────────────┐ ┌──────────────────────┐ ┌──────────────────────┐
+│      twig/twig       │ │ symfony/twig-bridge  │ │ symfony/twig-bundle  │
+├──────────────────────┤ ├──────────────────────┤ ├──────────────────────┤
+│ Sert à               │ │ Sert à               │ │ Sert à               │
+│  compiler et rendre  │ │  exposer path(),     │ │  configurer, ranger  │
+│                      │ │  trans, forms        │ │  les paths, services │
+├──────────────────────┤ ├──────────────────────┤ ├──────────────────────┤
+│ Connaît Symfony ?    │ │ Connaît Symfony ?    │ │ Connaît Symfony ?    │
+│  non                 │ │  ses components      │ │  son container       │
+├──────────────────────┤ ├──────────────────────┤ ├──────────────────────┤
+│ Je l'installe ?      │ │ Je l'installe ?      │ │ Je l'installe ?      │
+│  tiré par les autres │ │  tiré par le bundle  │ │  composer require    │
+└──────────────────────┘ └──────────────────────┘ └──────────────────────┘</code></pre>
+<p>Pourquoi un seul <code>composer require</code> suffit-il ? Le bundle <strong>exige</strong> le bridge,
+qui <strong>exige</strong> l'engine : Composer remonte la chaîne de dépendances.</p>
+<div class="admonition info">
+<p class="admonition-title">🌍 In Real Life</p>
+<p><strong>La situation</strong> : l'atelier d'impression possède une machine de composition, des adaptateurs pour les outils de l'établissement et une installation qui relie le tout. Ce sont trois responsabilités, même si on commande l'ensemble en une fois.</p>
+<p><strong>L’équivalent dans Symfony</strong> : <code>twig/twig</code> compile et rend ; Twig Bridge fournit les extensions d'accès aux composants ; TwigBundle configure chemins, options et services dans Symfony.</p>
+<p><strong>Retour à la réalité technique</strong> : les dépendances installées ne rendent pas tous les composants optionnels disponibles sans configuration. HttpKernel n'est pas le compilateur Twig. Une réponse JSON ou une redirection n'impose pas de passer par ce moteur de templates.</p>
+<p><strong>🧠 Comment le mémoriser</strong> : « La machine compose, les adaptateurs relient, l'installation configure. » Image mentale : machine, prises adaptées et plan d'installation. Question-réflexe : mon problème concerne-t-il le moteur, une extension ou son intégration ?</p>
+<p><strong>⚠️ À ne pas confondre</strong> : moteur Twig, extensions Symfony et configuration du bundle.</p>
+</div></section><section class="teaching-section" data-section="s-ou-vivent-les-templates"><span class="outcome-anchor" id="out-OUT-fe5bp6xb3w5m" tabindex="-1"></span><h2 id="s-ou-vivent-les-templates" tabindex="-1">Où vivent les templates</h2><aside class="section-digest" id="s-ou-vivent-les-templates-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>default_path choisit le directory principal.</li><li>paths complète les emplacements disponibles.</li></ol></aside><p><strong>Où en est-on ?</strong> Étape 2 sur 5 : le contrôleur écrit
+<code>$this-&gt;render('blog/show.html.twig')</code>. Ce texte n'est pas un chemin de fichier.
+Il faut comprendre <strong>comment Twig le transforme en fichier réel</strong>.</p>
+<p>Le nom <code>blog/show.html.twig</code> désigne un template relatif aux chemins du
+loader, pas une URL et pas un chemin lu depuis le navigateur. Ajouter un
+namespace permet de distinguer deux espaces de templates sans changer
+la route <code>blog_show</code>. Le loader doit résoudre ce nom avant tout affichage.</p>
+<p>Le chemin d'exécution, du nom au fichier :</p>
+<pre class="highlight" tabindex="0"><code class="language-text">render('blog/show.html.twig')
+        ▼
+le loader parcourt ses chemins, dans l'ordre
+        ▼
+templates/blog/show.html.twig existe ?  → oui : c'est le fichier à compiler
+                                        → non : il essaie le chemin suivant
+        ▼
+aucun chemin ne contient le nom → LoaderError</code></pre>
+<ul>
+<li>Par défaut dans <code>templates/</code> : <code>twig.default_path</code> vaut
+  <code>%kernel.project_dir%/templates</code>.</li>
+<li><code>twig.paths</code> <strong>ajoute</strong> des directories ; la valeur est un namespace
+  facultatif. Sans namespace, le path rejoint l'espace principal ; avec, il se
+  référence en <code>@Nom/…</code>.</li>
+<li>Un bundle expose ses templates sous <code>@NomDuBundle/…</code> <strong>sans</strong> le suffixe
+  <code>Bundle</code> : <code>@AcmeBlog/user/profile.html.twig</code>.</li>
+</ul>
+<p>Code minimal, côté configuration :</p>
+<pre class="highlight" tabindex="0"><code class="language-yaml"># config/packages/twig.yaml
+twig:
+    paths:
+        '%kernel.project_dir%/extra': Admin   # → '@Admin/ns.html.twig'
+        '%kernel.project_dir%/shared': ~      # → 'ns.html.twig' (espace principal)</code></pre>
+<p>Avant / après, un même fichier, deux façons de l'appeler :</p>
+<pre class="highlight" tabindex="0"><code class="language-text">extra/ns.html.twig
+   avec namespace « Admin »  →  render('@Admin/ns.html.twig')
+   sans namespace            →  render('ns.html.twig')   (espace principal)</code></pre>
+<p>Pourquoi un namespace ? Deux dossiers peuvent contenir un <code>profile.html.twig</code>.
+Sans namespace, le premier dossier gagnerait toujours ; avec, on désigne celui
+qu'on veut.</p>
+<p>Comparaison de deux options proches :</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th><code>default_path</code></th>
+<th><code>paths</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Effet</td>
+<td><strong>remplace</strong> le directory principal</td>
+<td><strong>ajoute</strong> des directories</td>
+</tr>
+<tr>
+<td>Défaut</td>
+<td><code>%kernel.project_dir%/templates</code></td>
+<td>aucun</td>
+</tr>
+<tr>
+<td>Namespace</td>
+<td>non</td>
+<td>facultatif (<code>@Nom/…</code>)</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition info">
+<p class="admonition-title">🌍 In Real Life</p>
+<p><strong>La situation</strong> : l'imprimeur cherche un modèle dans des classeurs. Une étiquette de collection permet de distinguer deux modèles nommés « profil » ; elle n'est pas l'adresse publique du document imprimé.</p>
+<p><strong>L’équivalent dans Symfony</strong> : le loader résout un nom relatif dans ses chemins configurés. <code>default_path</code> désigne le répertoire principal ; <code>paths</code> ajoute des emplacements, avec éventuellement un namespace tel que <code>@AcmeBlog</code>.</p>
+<p><strong>Retour à la réalité technique</strong> : modifier l'option ne déplace pas physiquement les fichiers. Le namespace de bundle omet le suffixe <code>Bundle</code>, contrairement au répertoire de surcharge. Ce nom n'est ni une route ni une URL demandée par le navigateur.</p>
+<p><strong>🧠 Comment le mémoriser</strong> : « L'étiquette du classeur n'est pas l'adresse du lecteur. » Image mentale : modèle classé sous un namespace, document livré ailleurs. Question-réflexe : quel loader et quels chemins résolvent ce nom ?</p>
+<p><strong>⚠️ À ne pas confondre</strong> : nom logique de template, chemin de fichier et chemin HTTP.</p>
+</div></section><section class="teaching-section" data-section="s-surcharger-le-template-d-un-bundle"><span class="outcome-anchor" id="out-OUT-4hq67myssdj1" tabindex="-1"></span><h2 id="s-surcharger-le-template-d-un-bundle" tabindex="-1">Surcharger le template d&#x27;un bundle</h2><p><strong>Où en est-on ?</strong> Étape 3 sur 5 : on sait nommer un template ; on veut
+maintenant <strong>remplacer</strong> celui d'un bundle sans modifier <code>vendor/</code>. C'est la
+partie du schéma Mermaid vu plus haut.</p>
+<p>Au rendu du profil, le premier fichier trouvé devient l'entrée exécutée.
+Si cette entrée étend son propre nom public, le loader retrouve la même
+surcharge : aucun original ne termine la chaîne. Le préfixe <code>@!</code> sert
+précisément à poursuivre vers le template fourni par le bundle.</p>
+<p>Pour chaque bundle, deux emplacements, dans cet ordre — le premier gagne :</p>
+<ol>
+<li><code>templates/bundles/AcmeBlogBundle/</code> — le nom complet, suffixe compris ;</li>
+<li>le directory du bundle.</li>
+</ol>
+<p>L'original reste accessible sous <strong><code>@!AcmeBlog</code></strong>, ce qui permet à la surcharge
+de l'étendre. Étendre <code>@AcmeBlog/…</code> depuis la surcharge la fait s'étendre
+elle-même : le rendu entre dans une récursion. L'échec concret dépend du
+runtime et de ses limites ; l'épuisement mémoire est un symptôme possible,
+pas une garantie, et aucun message d'erreur unique ne caractérise ce cas.</p>
+<p>Pourquoi <code>@!AcmeBlog</code> existe-t-il ? Dans <code>TwigExtension</code>, chaque bundle est
+enregistré <strong>deux fois</strong> dans le loader : une fois sous le namespace <code>AcmeBlog</code>
+(l'application d'abord, le bundle ensuite) et une fois sous <code>!AcmeBlog</code>
+(le bundle seul). Le point d'exclamation n'est pas une syntaxe magique : c'est
+un second namespace, créé exactement pour pouvoir viser l'original.</p>
+<p>Pourquoi la récursion ? Déroulons une surcharge qui étend <code>@AcmeBlog</code> :</p>
+<pre class="highlight" tabindex="0"><code class="language-text">render('@AcmeBlog/user/profile.html.twig')
+   ▼
+le loader sert  templates/bundles/AcmeBlogBundle/user/profile.html.twig
+   ▼
+ce fichier dit  extends '@AcmeBlog/user/profile.html.twig'
+   ▼
+le loader sert le MÊME fichier (la surcharge gagne toujours)
+   ▼
+… et ainsi de suite : jamais d'original, la chaîne ne se termine pas</code></pre>
+<p>Comparaison des deux noms :</p>
+<pre class="highlight" tabindex="0"><code class="language-text">┌───────────────────────────────────┐ ┌───────────────────────────────────┐
+│          @AcmeBlog/…              │ │          @!AcmeBlog/…             │
+├───────────────────────────────────┤ ├───────────────────────────────────┤
+│ Cherche dans                      │ │ Cherche dans                      │
+│  1. templates/bundles/…Bundle/    │ │  le directory du bundle seul      │
+│  2. le directory du bundle        │ │                                   │
+├───────────────────────────────────┤ ├───────────────────────────────────┤
+│ Sert à                            │ │ Sert à                            │
+│  rendre la page (surcharge       │ │  étendre l'original depuis la     │
+│  d'abord si elle existe)          │ │  surcharge                        │
+├───────────────────────────────────┤ ├───────────────────────────────────┤
+│ Dans un extends de la surcharge   │ │ Dans un extends de la surcharge   │
+│  → récursion                      │ │  → atteint l'original             │
+└───────────────────────────────────┘ └───────────────────────────────────┘</code></pre>
+<div class="admonition info">
+<p class="admonition-title">🌍 In Real Life</p>
+<p><strong>La situation</strong> : une fiche de présentation locale remplace celle du fournisseur, mais veut réutiliser son texte. Si elle demande simplement « la fiche courante », elle se retrouve elle-même ; elle doit désigner l'original.</p>
+<p><strong>L’équivalent dans Symfony</strong> : dans la configuration décrite, le template d'application masque celui du bundle. <code>@!AcmeBlog/…</code> permet à la surcharge d'étendre l'original ; <code>parent()</code> reprend le bloc parent, pas un fichier choisi au hasard.</p>
+<p><strong>Retour à la réalité technique</strong> : les chemins personnalisés peuvent modifier la recherche ; le loader échoue si aucun fichier ne convient. Une référence à soi crée une récursion, dont l'échec concret dépend du runtime et de ses limites : un message mémoire n'en est pas une preuve suffisante.</p>
+<p><strong>🧠 Comment le mémoriser</strong> : « Demander l'original évite de se citer soi-même. » Image mentale : fiche locale pointant vers le classeur du fournisseur, pas vers son propre titre. Question-réflexe : mon <code>extends</code> résout-il un autre fichier ou encore cette surcharge ?</p>
+<p><strong>⚠️ À ne pas confondre</strong> : priorité de recherche, héritage Twig et héritage PHP.</p>
+</div><div class="retained-answer-context">
+<p><strong>Repère de l’exemple :</strong></p>
+<p lang="en"><strong>Question:</strong> How does the overriding Twig template add a banner while retaining the original body?</p>
+<p lang="en"><strong>Answer:</strong> It extends the original with @! and calls parent() inside its body block.</p>
+<p>Le préfixe @! cible le template original, pas la surcharge. parent() conserve le contenu du block parent après le bandeau ajouté.</p>
+</div></section><section class="teaching-section" data-section="s-les-options-qui-changent-le-comportement"><span class="outcome-anchor" id="out-OUT-eqrycamdmt25" tabindex="-1"></span><h2 id="s-les-options-qui-changent-le-comportement" tabindex="-1">Les options qui changent le comportement</h2><aside class="section-digest" id="s-les-options-qui-changent-le-comportement-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Une variable absente peut lever en debug.</li><li>default, defined et ?? permettent de gérer une absence prévue.</li></ol></aside><p><strong>Où en est-on ?</strong> Étape 4 sur 5 : le template est trouvé. Reste à régler
+<strong>comment il se comporte</strong> : où chercher, quelles variables communes, quel thème
+de formulaire, et que faire quand une variable manque.</p>
+<p>Une faute <code>artcile</code> dans le template peut sembler disparaître lorsque
+debug est désactivé : la donnée n'a pas été réparée, l'absence est seulement
+tolérée. Utilise un repli pour une donnée réellement facultative ; ne
+masque pas une erreur dans le contrat <code>article</code> fourni par <code>show()</code>.</p>
+<table>
+<thead>
+<tr>
+<th>Option</th>
+<th>Effet</th>
+<th>Défaut</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>default_path</code></td>
+<td>déplace le directory des templates</td>
+<td><code>templates/</code></td>
+</tr>
+<tr>
+<td><code>paths</code></td>
+<td>ajoute des directories, nommés ou non</td>
+<td>aucun</td>
+</tr>
+<tr>
+<td><code>globals</code></td>
+<td>variables disponibles dans <strong>tous</strong> les templates</td>
+<td>aucune</td>
+</tr>
+<tr>
+<td><code>form_themes</code></td>
+<td>theme de rendu des forms</td>
+<td><code>form_div_layout.html.twig</code></td>
+</tr>
+<tr>
+<td><code>strict_variables</code></td>
+<td>variable inexistante : erreur au lieu de <code>null</code></td>
+<td><code>%kernel.debug%</code></td>
+</tr>
+</tbody>
+</table>
+<p>Par défaut, <code>strict_variables</code> suit <strong><code>kernel.debug</code></strong>, pas le nom de
+l'environnement. Avec debug activé, <code>{{ typo }}</code> lève une <code>RuntimeError</code> si la
+variable manque ; sans debug, il rend une chaîne vide. C'est habituellement
+le contraste dev/prod, mais on peut configurer ces valeurs autrement.
+<code>typo|default('x')</code>, <code>typo is defined</code> et <code>user.name ?? 'anon'</code> traitent
+explicitement l'absence de donnée, même en mode strict.</p>
+<p>Dans <code>globals</code>, <code>'@id'</code> désigne un <strong>service</strong> ; <code>'@@texte'</code> produit la string
+<code>@texte</code>.</p>
+<p>Pourquoi <code>strict_variables</code> suit-il <code>kernel.debug</code> ? En développement, une
+faute de frappe doit <strong>faire mal tout de suite</strong> ; en production, on préfère ne
+pas casser une page pour une variable absente. Le défaut vient de
+<code>Configuration.php</code> : <code>defaultValue('%kernel.debug%')</code>.</p>
+<p>Code minimal :</p>
+<pre class="highlight" tabindex="0"><code class="language-yaml">twig:
+    strict_variables: true
+    globals:
+        site_name: 'Mon blog'          # string simple
+        clock: '@app.clock'            # le SERVICE app.clock
+        mail: '@@contact'              # la string littérale "@contact"</code></pre>
+<p>Ce que Twig fait face à <code>{{ typo }}</code> selon la configuration :</p>
+<pre class="highlight" tabindex="0"><code class="language-text">{{ typo }}  (variable absente)
+   ├─ strict_variables = true   → RuntimeError
+   └─ strict_variables = false  → chaîne vide (null affiché vide)
+
+{{ typo|default('x') }}  → 'x' dans les deux cas
+{{ typo is defined }}    → false dans les deux cas
+{{ typo ?? 'x' }}        → 'x' dans les deux cas</code></pre>
+<p>Pourquoi la mauvaise réponse est plausible : on croit que « prod » désactive
+toujours le mode strict. En réalité l'option suit <strong><code>kernel.debug</code></strong>, et on peut
+la fixer à la main : le nom de l'environnement n'intervient pas.</p>
+<div class="admonition info">
+<p class="admonition-title">🌍 In Real Life</p>
+<p><strong>La situation</strong> : l'atelier choisit les classeurs à consulter, les informations communes aux imprimés et leur présentation. Une règle distincte décide si une case manquante bloque le travail ou reste vide.</p>
+<p><strong>L’équivalent dans Symfony</strong> : chemins, <code>globals</code> et <code>form_themes</code> pilotent des aspects différents du rendu. <code>strict_variables</code> gouverne les accès aux données absentes ; sa valeur par défaut suit <code>kernel.debug</code>, pas le simple nom « dev » ou « prod ».</p>
+<p><strong>Retour à la réalité technique</strong> : une absence tolérée ne corrige pas une faute de variable. <code>default</code>, <code>is defined</code> et <code>??</code> traitent explicitement l'absence, mais leurs critères ne sont pas interchangeables, notamment pour <code>false</code> ou une valeur vide. Dans les globals configurées, <code>@id</code> référence un service et <code>@@texte</code> conserve un <code>@</code> littéral.</p>
+<p><strong>🧠 Comment le mémoriser</strong> : « Changer la tolérance ne remplit pas la case. » Image mentale : case vide sous deux règlements, bloquant ou permissif. Question-réflexe : donnée facultative, faute de nom ou mauvais réglage de strictness ?</p>
+<p><strong>⚠️ À ne pas confondre</strong> : configuration de rendu, validité des données et valeurs de repli.</p>
+</div></section><section class="teaching-section" data-section="s-les-commands"><span class="outcome-anchor" id="out-OUT-kd4ywvpax765" tabindex="-1"></span><h2 id="s-les-commands" tabindex="-1">Les commands</h2><aside class="section-digest" id="s-les-commands-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>lint:twig détecte les erreurs de syntaxe.</li><li>debug:twig inventorie les extensions et paths disponibles.</li></ol></aside><p><strong>Où en est-on ?</strong> Étape 5 sur 5 : quand « ça ne marche pas », on diagnostique
+dans l'ordre du chemin d'exécution : <strong>résolution</strong> (quel fichier ?), puis
+<strong>compilation</strong> (la syntaxe est-elle valide ?), puis <strong>exécution</strong> (les données
+sont-elles là ?). Deux commandes couvrent les deux premières.</p>
+<p>Si le bandeau n'apparaît pas, cherche d'abord quel fichier le loader choisit
+avec <code>debug:twig</code>. Si ce fichier est le bon mais ne compile pas, utilise
+le lint. Un lint réussi ne rend pas ArticleView : il ne prouve ni la présence
+de <code>article</code> au runtime ni la validité des liens générés pendant le rendu.</p>
+<ul>
+<li><code>debug:twig</code> — filters, functions, tests, globales et paths ; avec un nom de
+  template, le file qui le sert : « Matched File », puis les « Overridden
+  Files » qu'il masque ; <code>--filter</code> restreint la liste.</li>
+<li><code>lint:twig</code> — vérifie la syntaxe sans rendre, et sort avec le code <code>1</code> en cas
+  d'erreur ; <code>--show-deprecations</code> traite les deprecations comme des erreurs.</li>
+</ul>
+<pre class="highlight" tabindex="0"><code class="language-text">php bin/console debug:twig @AcmeBlog/user/profile.html.twig
+   ▼
+Matched File      → templates/bundles/AcmeBlogBundle/user/profile.html.twig
+Overridden Files  → vendor/…/AcmeBlogBundle/…/user/profile.html.twig  (masqué)</code></pre>
+<table>
+<thead>
+<tr>
+<th>Question</th>
+<th>Commande</th>
+<th>Ce qu'elle prouve</th>
+<th>Ce qu'elle ne prouve pas</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Quel fichier est servi ?</td>
+<td><code>debug:twig &lt;nom&gt;</code></td>
+<td>résolution du nom</td>
+<td>que le template compile</td>
+</tr>
+<tr>
+<td>La syntaxe est-elle valide ?</td>
+<td><code>lint:twig</code></td>
+<td>compilation possible</td>
+<td>que <code>article</code> existe au runtime</td>
+</tr>
+<tr>
+<td>Le rendu est-il correct ?</td>
+<td>un test de rendu</td>
+<td>exécution avec données</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition info">
+<p class="admonition-title">🌍 In Real Life</p>
+<p><strong>La situation</strong> : avant d'imprimer, on vérifie quel modèle a été sorti du classeur, puis si ses instructions sont lisibles. Ces contrôles ne prouvent pas que les données du client rempliront correctement chaque case.</p>
+<p><strong>L’équivalent dans Symfony</strong> : <code>debug:twig</code> expose l'environnement et le fichier résolu, avec ceux qu'il masque. <code>lint:twig</code> contrôle la syntaxe sans exécuter le rendu ; <code>--show-deprecations</code> rend aussi les dépréciations bloquantes pour ce contrôle.</p>
+<p><strong>Retour à la réalité technique</strong> : un lint réussi ne prouve ni la présence runtime de <code>article</code>, ni le succès de <code>path()</code>, ni la réponse finale. Le code de sortie concerne la commande. Ces outils complètent un test de rendu, ils ne le remplacent pas.</p>
+<p><strong>🧠 Comment le mémoriser</strong> : « Bon modèle, syntaxe correcte, rendu encore à vérifier. » Image mentale : modèle identifié et relu, cases client encore vides. Question-réflexe : ai-je contrôlé la résolution, la compilation ou l'exécution avec de vraies données ?</p>
+<p><strong>⚠️ À ne pas confondre</strong> : inspection de l'environnement Twig, lint et test de rendu.</p>
+</div></section><section class="teaching-section" data-section="s-pieges-d-examen"><h2 id="s-pieges-d-examen" tabindex="-1">Pièges d&#x27;examen</h2><p class="teaching-label pitfall"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="warning" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3L23 21H1L12 3ZM12 9V14M12 17V18"></path></svg> <strong>Piège à éviter</strong></p><ul class="pitfall-list"><li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : Trois packages, un seul à installer.</summary><p><strong>Trois packages, un seul à installer.</strong> L'engine, le bridge et le bundle sont
+distincts : le bundle tire les deux autres et expose la configuration Symfony
+sous <code>twig:</code>. Twig reste configurable sans le bundle, directement via son
+<code>Environment</code> et ses loaders. <em>Pourquoi on se trompe : on lit « twig/twig » et
+« symfony/twig-bundle » comme deux alternatives, alors que l'un dépend de l'autre.</em></p></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : Le nom d&#x27;espace d&#x27;un bundle perd son suffixe ; le directory de surcharge le garde.</summary><p><strong>Le nom d'espace d'un bundle perd son suffixe ; le directory de surcharge le
+garde.</strong> <code>@AcmeBlog/...</code> d'un côté, <code>templates/bundles/AcmeBlogBundle/</code> de
+l'autre. <em>Pourquoi on se trompe : les deux noms désignent le même bundle, on
+suppose donc qu'ils s'écrivent pareil ; <code>normalizeBundleName</code> ne retire le
+suffixe que pour le namespace.</em></p></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : strict_variables n&#x27;a pas la même valeur partout.</summary><p><strong><code>strict_variables</code> n'a pas la même valeur partout.</strong> Par défaut elle vaut
+<code>kernel.debug</code>. <em>Pourquoi on se trompe : on l'associe au nom de l'environnement
+(« dev » / « prod ») alors que c'est le drapeau debug qui compte.</em></p></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : Le directory par défaut se change, mais on peut aussi en ajouter.</summary><p><strong>Le directory par défaut se change, mais on peut aussi en ajouter.</strong> Ce sont
+deux options différentes : l'une remplace, l'autre complète. <em>Pourquoi on se
+trompe : les deux parlent de « directories de templates ».</em></p></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : @AcmeBlog et @!AcmeBlog ne sont pas interchangeables dans un extends de surcharge.</summary><p><strong><code>@AcmeBlog</code> et <code>@!AcmeBlog</code> ne sont pas interchangeables dans un <code>extends</code> de
+surcharge.</strong> Le premier boucle sur la surcharge, le second atteint l'original.
+<em>Pourquoi on se trompe : le point d'exclamation ressemble à une négation et on
+ne devine pas qu'il désigne le namespace « bundle seul ».</em></p></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : Un lint:twig vert n&#x27;est pas un rendu réussi.</summary><p><strong>Un <code>lint:twig</code> vert n'est pas un rendu réussi.</strong> Il valide la syntaxe, rien de
+plus. <em>Pourquoi on se trompe : « vert » évoque « tout fonctionne ».</em></p></details></li></ul></section><section class="teaching-section" data-section="s-application"><h2 id="s-application" tabindex="-1">Application</h2><aside class="section-digest" id="s-application-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>lint:twig détecte les erreurs de syntaxe.</li><li>debug:twig inventorie les extensions et paths disponibles.</li><li>La surcharge prend priorité sur l&#x27;original.</li><li>@! permet de reprendre l&#x27;original sans récursion.</li></ol></aside>
+
+
+
+</section><section class="teaching-section" data-section="s-fiche-express"><h2 id="s-fiche-express" tabindex="-1">Fiche express</h2><p class="teaching-label essential"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="book" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5C9 3 5 3 2 4V20C5 19 9 19 12 21C15 19 19 19 22 20V4C19 3 15 3 12 5V21M5 8H8M5 12H8M16 8H19M16 12H19"></path></svg> <strong>À mémoriser</strong></p><p><strong>🧠 À retenir pour la certification :</strong></p>
+<ul>
+<li><strong>Engine, bridge, bundle</strong> : le bundle tire les deux autres et configure.</li>
+<li><strong><code>default_path</code></strong> remplace <code>templates/</code> ; <strong><code>paths</code></strong> ajoute.</li>
+<li>Namespace de bundle sans suffixe (<code>@AcmeBlog</code>) ; surcharge dans <strong><code>templates/bundles/AcmeBlogBundle/</code></strong> ; original : <strong><code>@!AcmeBlog</code></strong>.</li>
+<li><strong><code>strict_variables</code></strong> = <code>%kernel.debug%</code> ; <code>default</code>, <code>is defined</code>, <code>??</code>
+  passent toujours.</li>
+<li><strong><code>globals</code></strong> : <code>@</code> service, <code>@@</code> littéral.</li>
+<li><strong><code>debug:twig &lt;nom&gt;</code></strong> dit qui sert ; <strong><code>lint:twig</code></strong> sort en 1 sur erreur.</li>
+</ul>
+<p>Moyen mnémotechnique : <strong>« la surcharge d'abord, le bang pour l'original »</strong>.</p>
+<pre class="highlight" tabindex="0"><code class="language-text">twig/twig ← twig-bridge ← twig-bundle (configure) ; templates/ + paths (@Nom) ;
+@AcmeBlog = surcharge puis bundle ; @!AcmeBlog = bundle ;
+strict_variables = kernel.debug</code></pre></section><section class="teaching-section" data-section="s-sources-officielles"><h2 id="s-sources-officielles" tabindex="-1">Sources officielles</h2><ul>
+<li><a href="https://symfony.com/doc/8.0/templates.html">Symfony 8.0 — templates</a></li>
+</ul></section><section id="course-recalls" aria-labelledby="course-recalls-title" tabindex="-1"><h2 id="course-recalls-title">Rappels et liens avec les autres cours</h2><div data-recall-group="current"><h3>Rappels du cours actuel</h3><ul><li data-recall-course="CRS-2bj91rj9kvj0" data-recall-kind="digest_reference"><p class="recall-provenance">Module 06 — Templates avec Twig · Cours « TwigBundle »</p><p class="digest-reference"><a href="#s-l-essentiel-digest">Revoir la règle : Distinguer engine et intégration du framework.</a></p></li><li data-recall-course="CRS-2bj91rj9kvj0" data-recall-kind="digest_reference"><p class="recall-provenance">Module 06 — Templates avec Twig · Cours « TwigBundle »</p><p class="digest-reference"><a href="#s-le-schema-digest">Revoir la règle : La surcharge prend priorité sur l&#x27;original.</a></p></li><li><nav aria-label="Flashcards de l’application"><ul><li data-recall-course="CRS-2bj91rj9kvj0" data-recall-kind="application"><p class="recall-provenance">Module 06 — Templates avec Twig · Cours « TwigBundle »</p><a href="#A-2bj91rj9kvj0-dfa23f1835-05">Flashcard : lint:twig détecte les erreurs de syntaxe. debug:twig inventorie les extensions et paths disponibles.</a></li><li data-recall-course="CRS-2bj91rj9kvj0" data-recall-kind="application"><p class="recall-provenance">Module 06 — Templates avec Twig · Cours « TwigBundle »</p><a href="#A-2bj91rj9kvj0-6e0103f6cc-03">Flashcard : La surcharge prend priorité sur l&#x27;original. @! permet de reprendre l&#x27;original sans récursion.</a></li></ul></nav></li><li data-recall-course="CRS-2bj91rj9kvj0" data-recall-kind="digest_reference"><p class="recall-provenance">Module 06 — Templates avec Twig · Cours « TwigBundle »</p><p class="digest-reference"><a href="#s-les-options-qui-changent-le-comportement-digest">Revoir la règle : Une variable absente peut lever en debug.</a></p></li></ul></div><div data-recall-group="other"><h3>Rappels des cours précédents / autres modules</h3><ul><li data-recall-course="CRS-a669jpap5zf2" data-recall-kind="previous_course"><p class="recall-provenance">Module 04 — Contrôleurs · Cours « The response »</p><p>Le contrat final exige une Response. Une string seule n&#x27;est pas une Response.</p><p><a href="#cards-previous">Rappel : <span lang="en">What happens if a controller returns a string instead of a Response?</span></a></p></li></ul></div></section><nav class="course-sequence" aria-label="Ordre de lecture"><a rel="prev" href="course-CRS-h8s87edcx8ae.html" aria-label="Précédent : The base AbstractController class — Module 04 — Contrôleurs">Précédent : The base AbstractController class</a> <a href="lot-06.html">Sommaire : Module 06 — Templates avec Twig</a> <a rel="next" href="course-CRS-x2f8reencvcs.html" aria-label="Suivant : Twig syntax up to 3.22 version — Module 06 — Templates avec Twig">Suivant : Twig syntax up to 3.22 version</a></nav><p class="course-practice-entry"><a class="button" href="#view-quiz">Fin du cours — s’entraîner avec le Quiz</a></p></div><div id="view-flashcards" data-course-panel role="region" aria-labelledby="view-flashcards-title"><h2 id="view-flashcards-title">Flashcards</h2><p lang="en">Answer before revealing each card.</p><p>Ces cartes ne mesurent pas une maîtrise notée.</p><div id="cards-s-l-essentiel-1" data-card-section="s-l-essentiel"><h3><a href="#s-l-essentiel">Revoir : L&#x27;essentiel</a></h3><div class="reader-cards"><details class="reader-card" id="A-2bj91rj9kvj0-65c42c80d9-01"><summary lang="en">Which package configures Twig services in Symfony?</summary><p lang="en">TwigBundle; twig/twig supplies the engine.</p><p lang="fr">Distinguer engine et intégration du framework. Le bundle expose paths, options et services.</p><a href="course-CRS-2bj91rj9kvj0.html#out-OUT-xw5hbxewf5xf">Revoir le passage précis</a></details></div></div><div id="cards-s-le-schema-2" data-card-section="s-le-schema"><h3><a href="#s-le-schema">Revoir : Le schéma</a></h3><div class="reader-cards"><details class="reader-card" id="A-2bj91rj9kvj0-6e0103f6cc-03"><summary lang="en">Which namespace prefix bypasses a template override?</summary><p lang="en">@! followed by the bundle&#x27;s Twig namespace.</p><p lang="fr">La surcharge prend priorité sur l&#x27;original. @! permet de reprendre l&#x27;original sans récursion.</p><a href="course-CRS-2bj91rj9kvj0.html#out-OUT-4hq67myssdj1">Revoir le passage précis</a></details></div></div><div id="cards-s-l-exemple-3" data-card-section="s-l-exemple"><h3><a href="#s-l-exemple">Revoir : L&#x27;exemple</a></h3><div class="reader-cards"><details class="reader-card" id="A-2bj91rj9kvj0-88b6fbd62c-05"><summary lang="en">How does the overriding Twig template add a banner while retaining the original body?</summary><p lang="en">It extends the original with @! and calls parent() inside its body block.</p><p lang="fr">Le préfixe @! cible le template original, pas la surcharge. parent() conserve le contenu du block parent après le bandeau ajouté.</p><a href="course-CRS-2bj91rj9kvj0.html#out-OUT-4hq67myssdj1">Revoir le passage précis</a></details></div></div><div id="cards-s-trois-packages-trois-roles-4" data-card-section="s-trois-packages-trois-roles"><h3><a href="#s-trois-packages-trois-roles">Revoir : Trois packages, trois roles</a></h3><div class="reader-cards"><p class="reader-card-reference" id="A-2bj91rj9kvj0-d7fc784c71-01">Rappel déjà proposé : <a lang="en" href="#A-2bj91rj9kvj0-65c42c80d9-01">Which package configures Twig services in Symfony?</a> · <a href="course-CRS-2bj91rj9kvj0.html#out-OUT-xw5hbxewf5xf">Passage canonique</a></p></div></div><div id="cards-s-ou-vivent-les-templates-5" data-card-section="s-ou-vivent-les-templates"><h3><a href="#s-ou-vivent-les-templates">Revoir : Où vivent les templates</a></h3><div class="reader-cards"><details class="reader-card" id="A-2bj91rj9kvj0-bcdb17476c-02"><summary lang="en">How do twig.default_path and twig.paths differ?</summary><p lang="en">default_path sets the main template directory; paths adds directories and optional namespaces.</p><p lang="fr">default_path choisit le directory principal. paths complète les emplacements disponibles.</p><a href="course-CRS-2bj91rj9kvj0.html#out-OUT-fe5bp6xb3w5m">Revoir le passage précis</a></details></div></div><div id="cards-s-surcharger-le-template-d-un-bundle-6" data-card-section="s-surcharger-le-template-d-un-bundle"><h3><a href="#s-surcharger-le-template-d-un-bundle">Revoir : Surcharger le template d&#x27;un bundle</a></h3><div class="reader-cards"><p class="reader-card-reference" id="A-2bj91rj9kvj0-f139eeda06-03">Rappel déjà proposé : <a lang="en" href="#A-2bj91rj9kvj0-6e0103f6cc-03">Which namespace prefix bypasses a template override?</a> · <a href="course-CRS-2bj91rj9kvj0.html#out-OUT-4hq67myssdj1">Passage canonique</a></p></div></div><div id="cards-s-les-options-qui-changent-le-comportement-7" data-card-section="s-les-options-qui-changent-le-comportement"><h3><a href="#s-les-options-qui-changent-le-comportement">Revoir : Les options qui changent le comportement</a></h3><div class="reader-cards"><details class="reader-card" id="A-2bj91rj9kvj0-6f2a931a0b-04"><summary lang="en">What controls the default strict_variables setting in TwigBundle?</summary><p lang="en">kernel.debug.</p><p lang="fr">Une variable absente peut lever en debug. default, defined et ?? permettent de gérer une absence prévue.</p><a href="course-CRS-2bj91rj9kvj0.html#out-OUT-eqrycamdmt25">Revoir le passage précis</a></details></div></div><div id="cards-s-les-commands-8" data-card-section="s-les-commands"><h3><a href="#s-les-commands">Revoir : Les commands</a></h3><div class="reader-cards"><details class="reader-card" id="A-2bj91rj9kvj0-dfa23f1835-05"><summary lang="en">Does lint:twig render templates to validate runtime variables?</summary><p lang="en">No. It checks syntax without rendering.</p><p lang="fr">lint:twig détecte les erreurs de syntaxe. debug:twig inventorie les extensions et paths disponibles.</p><a href="course-CRS-2bj91rj9kvj0.html#out-OUT-kd4ywvpax765">Revoir le passage précis</a></details></div></div><div id="cards-s-pieges-d-examen-9" data-card-section="s-pieges-d-examen"><h3><a href="#s-pieges-d-examen">Revoir : Pièges d&#x27;examen</a></h3><div class="reader-cards"><p class="reader-card-reference" id="A-2bj91rj9kvj0-596d5af532-01">Rappel déjà proposé : <a lang="en" href="#A-2bj91rj9kvj0-65c42c80d9-01">Which package configures Twig services in Symfony?</a> · <a href="course-CRS-2bj91rj9kvj0.html#out-OUT-xw5hbxewf5xf">Passage canonique</a></p></div></div><div id="cards-s-application-10" data-card-section="s-application"><h3><a href="#s-application">Revoir : Application</a></h3><div class="reader-cards"><p class="reader-card-reference" id="A-2bj91rj9kvj0-e7ad522ea3-05">Rappel déjà proposé : <a lang="en" href="#A-2bj91rj9kvj0-dfa23f1835-05">Does lint:twig render templates to validate runtime variables?</a> · <a href="course-CRS-2bj91rj9kvj0.html#out-OUT-kd4ywvpax765">Passage canonique</a></p><p class="reader-card-reference" id="A-2bj91rj9kvj0-e7ad522ea3-03">Rappel déjà proposé : <a lang="en" href="#A-2bj91rj9kvj0-6e0103f6cc-03">Which namespace prefix bypasses a template override?</a> · <a href="course-CRS-2bj91rj9kvj0.html#out-OUT-4hq67myssdj1">Passage canonique</a></p></div></div><div id="cards-s-fiche-express-11" data-card-section="s-fiche-express"><h3><a href="#s-fiche-express">Revoir : Fiche express</a></h3><div class="reader-cards"><p class="reader-card-reference" id="A-2bj91rj9kvj0-b11e58e15e-04">Rappel déjà proposé : <a lang="en" href="#A-2bj91rj9kvj0-6f2a931a0b-04">What controls the default strict_variables setting in TwigBundle?</a> · <a href="course-CRS-2bj91rj9kvj0.html#out-OUT-eqrycamdmt25">Passage canonique</a></p></div></div><div id="cards-previous"><p class="recall-provenance">Module 04 — Contrôleurs · Cours « The response »</p><aside class="checkpoint"><h2>Rappel d’un cours antérieur</h2><p>Avant de poursuivre : The response.</p><details class="corpus-correction"><summary lang="en">What happens if a controller returns a string instead of a Response?</summary><p lang="en">kernel.view gets an opportunity to convert it; otherwise handling fails.</p><p>Le contrat final exige une Response. Une string seule n&#x27;est pas une Response.</p><a href="course-CRS-a669jpap5zf2.html#out-OUT-4wrmsr0a1xvb">Relire la correction dans le cours antérieur</a></details></aside></div></div><div id="view-quiz" data-course-panel role="region" aria-labelledby="view-quiz-title"><aside class="revision-context"><p><strong>Avant le quiz :</strong> Sur GET /blog/42, le contrôleur veut afficher un article avec un template Twig. Trois questions se posent alors : qui compile ce template, où Symfony le cherche, et quels réglages de config/packages/twig.yaml changent le résultat ? Ce cours répond à ces trois questions.</p><p>Quelle donnée entre, quelle responsabilité agit et quelle condition change le résultat ? Pour chaque correction, vérifiez ces conditions dans <a href="course-CRS-2bj91rj9kvj0.html#s-objectif">le passage enseigné</a>, sans supposer que toutes les branches du blog sont exécutées.</p></aside><h2 id="view-quiz-title">Quiz</h2><p class="quiz-size" lang="en">6 eligible learning questions · 6 per session. Repeating a question does not demonstrate mastery.</p><p id="course-quiz-status" role="status">Quiz interactif non chargé. Démarrez après chargement de la banque locale.</p><div id="course-quiz-controls" class="assessment-main" hidden><div id="course-quiz-assessment-controls" hidden><select id="course-quiz-assessment-mode" aria-label="Mode du quiz" hidden><option value="learning">Entraînement</option></select><p id="course-quiz-training-scope"></p><button id="course-quiz-start-assessment" type="button" lang="en">Start practice</button><button id="course-quiz-finish-assessment" type="button" lang="en" hidden>End session</button></div><p id="course-quiz-assessment-error" role="alert"></p><p id="course-quiz-assessment-timer" hidden></p><p id="course-quiz-session-progress" class="quiz-progress" role="status" lang="en"></p><div id="course-quiz-assessment-app" tabindex="-1"></div><nav id="course-quiz-session-navigation" aria-label="Questions du cours"></nav><div id="course-quiz-learning-overview" aria-live="polite"></div></div><div id="course-quiz-native"><p>Sans JavaScript ou si le chargement échoue : aucune tentative notée. Les <a href="#view-flashcards">flashcards du cours</a> restent disponibles.</p><details class="course-quiz-fallback" data-question-id="L-2bj91rj9kvj0-base-v1"><summary lang="en">RADIO — Select one answer. Which package configures Twig services in Symfony?</summary><p>Correction de consultation — non notée.</p><p>Distinguer engine et intégration du framework. Le bundle expose paths, options et services.</p><ul><li><strong lang="en">Distractor: HttpFoundation registers Twig paths and template globals.</strong><p>HttpFoundation ne fournit pas la configuration du moteur Twig.</p></li><li><strong lang="en">Correct: TwigBundle integrates Twig services into Symfony.</strong><p>Distinguer engine et intégration du framework. Le bundle expose paths, options et services.</p></li><li><strong lang="en">Distractor: twig/twig alone configures all FrameworkBundle services.</strong><p>twig/twig fournit l&#x27;engine ; TwigBundle assure cette intégration.</p></li></ul><a href="course-CRS-2bj91rj9kvj0.html#out-OUT-xw5hbxewf5xf">Relire le passage exact</a><a href="course-CRS-2bj91rj9kvj0.html#s-trois-packages-trois-roles">Relire la correction précise</a></details></div></div></div></div><details class="transfer-panel"><summary>Sauvegarde et transfert de progression</summary><p id="reading-status" role="status">Sans JavaScript : lecture libre ; progression non enregistrée.</p><p><a href="assessment.html#overview-title">Lecture, réussites immédiates et différées</a></p><p>Transfert manuel — aucune synchronisation automatique</p><p id="persistence-status" role="status"></p><button type="button" class="secondary" id="export-progress">Exporter ma progression</button><label for="import-progress">Choisir un JSON pour fusionner ma progression (sans remplacement)</label><input type="file" id="import-progress" accept="application/json,.json"><p id="transfer-status" role="status"></p></details></main><footer class="site-footer"><a href="catalogue.html">Catalogue</a> <a href="sources.html">Sources et attribution</a> <a href="#contenu">Haut de page</a></footer></body></html>

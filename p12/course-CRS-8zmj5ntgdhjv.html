@@ -1,0 +1,442 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; connect-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Configuration parameters — Symfony 8 Preparation</title><link rel="stylesheet" href="styles.css"><link rel="stylesheet" href="reader.css"><script src="mermaid.min.js" defer></script><script src="mermaid-init.js" defer></script><link rel="stylesheet" href="assessment.css"><script src="fixed-exams-data.js" defer></script><script src="fixed-exams.js" defer></script><script src="learning-state.js" defer></script><script src="guide.js" defer></script><script src="reader-catalog.js" defer></script><script src="reader.js" defer></script><script src="site-state.js" defer></script><script src="assessment.js" defer></script><script src="course-views.js" defer></script><link rel="stylesheet" href="syntax-highlight.css"><script src="prism-syntax.js" defer></script><script src="syntax-highlight.js" defer></script></head><body data-course-id="CRS-8zmj5ntgdhjv"><a class="skip" href="#contenu">Aller au contenu</a><header class="site-header"><a class="brand" href="index.html">S8 Preparation</a><nav aria-label="Navigation principale"><a href="index.html">Accueil</a> <a href="catalogue.html">Parcours</a> <a href="assessment.html?mode=review">Réviser</a> <a href="examens.html">Examens blancs</a> <a href="jour-j.html">Jour J</a></nav></header><main id="contenu" tabindex="-1" class="corpus-reader"><nav class="breadcrumb" aria-label="Fil d’Ariane"><a href="index.html">Accueil</a> <span aria-hidden="true">›</span> <a href="catalogue.html">Parcours</a> <span aria-hidden="true">›</span> <a href="lot-09.html">Module 09 — Injection de dépendances</a> <span aria-hidden="true">›</span> <span aria-current="page">Configuration parameters</span></nav><h1>Configuration parameters</h1><p class="muted">Symfony 8.0 · API PHP ≤ 8.4 · Twig ≤ 3.22. Préparation indépendante.</p><p class="revision-status">Rédaction narrative P11 : projection nouvelle, non couverte par les décisions historiques P10. Aucune approbation officielle ni garantie de réussite.</p><aside class="narrative-context" aria-label="Repères de lecture"><p><strong>Prérequis de lecture :</strong> <a href="course-CRS-w6yfxm6ad4zy.html">Services autowiring</a></p><p><strong>Concepts voisins :</strong> <a href="course-CRS-brn6frfqpxxj.html">Console component</a> — Réutiliser le service du blog sans navigateur. <a href="lot-09.html">Comparer les responsabilités dans ce module</a> · <a href="carte-composants.html">Situer cette responsabilité dans le blog</a> · <a href="glossaire.html">Distinguer les termes voisins</a></p><p><a href="ordre-lecture.html">Retrouver les 163 cours dans le parcours recommandé</a>. Ce repère ne modifie ni votre historique ni votre progression.</p></aside><div class="course-layout"><details class="lot-course-menu"><summary>Cours du module · 12 cours</summary><nav aria-label="Cours du module"><a class="lot-context" href="lot-09.html">Module 09 — Injection de dépendances</a><ol><li><a href="course-CRS-htvm3b1gas0d.html">Dependency Injection component</a></li><li><a href="course-CRS-p1694d5f7r8c.html">Service container</a></li><li><a href="course-CRS-jtkmpfp3nwzk.html">Built-in services</a></li><li><a href="course-CRS-8zmj5ntgdhjv.html" aria-current="page">Configuration parameters</a></li><li><a href="course-CRS-g8fteyd38nrt.html">Services registration (YAML and PHP attributes)</a></li><li><a href="course-CRS-fkebqqqke5y5.html">Service decoration</a></li><li><a href="course-CRS-b4g5s2asb9ye.html">Tags</a></li><li><a href="course-CRS-exs5dvtqa1as.html">Semantic configuration</a></li><li><a href="course-CRS-1bkg7pkf78c7.html">Factories</a></li><li><a href="course-CRS-d25bvr0097py.html">Compiler passes</a></li><li><a href="course-CRS-w6yfxm6ad4zy.html">Services autowiring</a></li><li><a href="course-CRS-0a0d5bp6769e.html">Service locators</a></li></ol><a href="lot-09.html#view-quiz">Quiz du module</a></nav></details><aside class="course-section-menu" aria-label="Sommaire du cours"><nav class="course-actions" aria-label="Activités du cours"><a id="tab-course" href="#view-course">Cours</a><a id="tab-flashcards" href="#view-flashcards">Flashcards</a><a id="tab-quiz" href="#view-quiz">Quiz</a></nav><details class="course-section-disclosure"><summary id="course-sections">Sections du cours</summary><nav aria-label="Sections du cours"><ul><li><a href="#s-objectif">Objectif</a></li><li><a href="#s-l-essentiel">L&#x27;essentiel</a></li><li><a href="#s-le-schema">Le schéma</a></li><li><a href="#s-le-fil-rouge-un-archiver">Le fil rouge : un `Archiver`</a></li><li><a href="#s-compilation-ou-execution-nom-contre-env">Compilation ou exécution : `%nom%` contre `%env()%`</a></li><li><a href="#s-le-pourcent-litteral">Le pourcent littéral : `%%`</a></li><li><a href="#s-les-processeurs-convertir-et-composer">Les processeurs : convertir et composer</a></li><li><a href="#s-bind-et-autowire-injecter-un-scalaire">`bind` et `#[Autowire]` : injecter un scalaire</a></li><li><a href="#s-pieges-d-examen">Pièges d&#x27;examen</a></li><li><a href="#s-fiche-express">Fiche express</a><ul><li><a href="#s-fiche-express-nested-a-retenir-pour-la-certification">🧠 À retenir pour la certification</a></li></ul></li><li><a href="#reader-objectives">Objectifs d’apprentissage</a></li><li><a href="#reader-sources">Sources officielles et compléments</a></li><li><a href="#course-recalls">Rappels et liens avec les autres cours</a></li></ul></nav><nav aria-label="Flashcards par section"><a href="#view-flashcards">Flashcards par section</a><ul><li><a href="#cards-s-l-essentiel-1">L&#x27;essentiel</a></li><li><a href="#cards-s-le-schema-2">Le schéma</a></li><li><a href="#cards-s-le-fil-rouge-un-archiver-3">Le fil rouge : un `Archiver`</a></li><li><a href="#cards-s-compilation-ou-execution-nom-contre-env-4">Compilation ou exécution : `%nom%` contre `%env()%`</a></li><li><a href="#cards-s-le-pourcent-litteral-5">Le pourcent littéral : `%%`</a></li><li><a href="#cards-s-les-processeurs-convertir-et-composer-6">Les processeurs : convertir et composer</a></li><li><a href="#cards-s-bind-et-autowire-injecter-un-scalaire-7">`bind` et `#[Autowire]` : injecter un scalaire</a></li><li><a href="#cards-s-pieges-d-examen-8">Pièges d&#x27;examen</a></li><li><a href="#cards-s-fiche-express-9">Fiche express</a></li><li><a href="#cards-previous">Module 08 — Validation des données · Cours « Violations builder » · Rappel : <span lang="en">When does a violation builder actually record its violation?</span></a></li></ul></nav><nav aria-label="Retour au module"><a href="lot-09.html">Tous les cours du module</a></nav></details><p class="local-quiz-count">4 questions disponibles · 4 par session Quiz</p></aside><div class="course-content"><div id="view-course" data-course-panel role="region" aria-labelledby="view-course-title"><h2 id="view-course-title">Cours</h2><p class="course-introduction"><a href="#s-objectif">Introduction</a> · <a href="#course-sections">Sections du cours</a></p><h2 id="reader-objectives" tabindex="-1">Objectifs d’apprentissage</h2><ul><li><a href="course-CRS-8zmj5ntgdhjv.html#out-OUT-b81c2y9edqrn">Distinguer la résolution d&#x27;un parameter de celle d&#x27;une variable d&#x27;environment</a></li><li><a href="course-CRS-8zmj5ntgdhjv.html#out-OUT-q6ks7q0n73de">Écrire un pourcent littéral</a></li><li><a href="course-CRS-8zmj5ntgdhjv.html#out-OUT-eatwchm2rs41">Composer des processeurs dans le bon ordre</a></li><li><a href="course-CRS-8zmj5ntgdhjv.html#out-OUT-ddcr84rvx9ap">Reconnaître bind et #[Autowire] comme facteurs communs</a></li></ul><aside class="pedagogy-legend" aria-label="Repères pédagogiques"><p><strong>Repères pédagogiques</strong></p><p>Ces repères décrivent le rôle du bloc, pas une fréquence officielle à l’examen.</p><p class="teaching-label essential"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="brain" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5C12 1 6 1 6 5C2 5 1 10 4 12C1 15 3 19 6 19C6 23 12 23 12 19V5M12 5C12 1 18 1 18 5C22 5 23 10 20 12C23 15 21 19 18 19C18 23 12 23 12 19M6 5C6 8 8 9 9 9M4 12H7L9 14M6 19V16M18 5C18 8 16 9 15 9M20 12H17L15 14M18 19V16"></path></svg> <strong>À comprendre</strong></p><p class="teaching-label essential"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="book" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5C9 3 5 3 2 4V20C5 19 9 19 12 21C15 19 19 19 22 20V4C19 3 15 3 12 5V21M5 8H8M5 12H8M16 8H19M16 12H19"></path></svg> <strong>À mémoriser</strong></p><p class="teaching-label example"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="code" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6L2 12L8 18M16 6L22 12L16 18M14 3L10 21"></path></svg> <strong>Exemple concret</strong></p><p class="teaching-label pitfall"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="warning" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3L23 21H1L12 3ZM12 9V14M12 17V18"></path></svg> <strong>Piège à éviter</strong></p><p class="teaching-label nuance"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="balance" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3V21M7 21H17M3 7L21 5M5 7L1 15H9L5 7M19 6L15 14H23L19 6M1 15Q5 20 9 15M15 14Q19 19 23 14"></path></svg> <strong>Nuance à connaître</strong></p><p>Précision, exception ou condition d’application d’une règle.</p></aside><section class="teaching-section" data-section="s-objectif"><h2 id="s-objectif" tabindex="-1">Objectif</h2><p>Le catalogue sert <code>/blog/42</code>, mais l'import CLI doit aussi archiver ses
+fichiers sources. Son service reçoit des objets, comme le logger,
+et des valeurs : un directory, une destination et une limite.
+Comment fournir ces valeurs sans coder les réglages du serveur
+dans la classe ? Nous allons suivre leur déclaration, leur résolution
+et leur injection, puis distinguer conversion technique et règle métier.</p>
+<p>Question directrice : <strong>une valeur de réglage (chemin, DSN, limite) change
+selon le serveur : où l'écrire, quand est-elle lue, et comment arrive-t-elle
+dans le bon argument du constructeur ?</strong></p></section><section class="teaching-section" data-section="s-l-essentiel"><h2 id="s-l-essentiel" tabindex="-1">L&#x27;essentiel</h2><p class="teaching-label essential"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="brain" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5C12 1 6 1 6 5C2 5 1 10 4 12C1 15 3 19 6 19C6 23 12 23 12 19V5M12 5C12 1 18 1 18 5C22 5 23 10 20 12C23 15 21 19 18 19C18 23 12 23 12 19M6 5C6 8 8 9 9 9M4 12H7L9 14M6 19V16M18 5C18 8 16 9 15 9M20 12H17L15 14M18 19V16"></path></svg> <strong>À comprendre</strong></p><aside class="section-digest" id="s-l-essentiel-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Les parameters ordinaires sont compilés.</li><li>Les valeurs d&#x27;environment restent résolues à l&#x27;usage.</li></ol></aside><p><strong>Ce que cette partie veut réellement vous apprendre.</strong></p>
+<ul>
+<li><em>Pourquoi ce sujet existe.</em> Coder <code>'/srv/blog/var/archive'</code> ou le mot de passe
+  d'un serveur dans une classe la rend inutilisable ailleurs. Un
+  <strong>parameter</strong> sort la valeur du code ; une <strong>variable d'environnement</strong>
+  la sort aussi du <em>build</em>.</li>
+<li><em>Le piège de fond.</em> Il y a <strong>deux moments</strong> de lecture : <code>%nom%</code> est lu
+  à la <em>compilation</em> ; <code>%env(NOM)%</code> est lu à l'<em>utilisation</em>. Et même
+  « différé » ne veut pas dire « relu en continu ».</li>
+<li><em>Ce que l'auteur veut que vous compreniez.</em> Une variable d'environnement est
+  toujours une <strong>string</strong> ; c'est un <em>processeur</em> (<code>int:</code>, <code>json:</code>…) qui la
+  convertit, et <code>bind</code>/<code>#[Autowire]</code> qui la routent vers le bon argument.</li>
+<li><em>Pourquoi c'est à l'examen.</em> Questions sur <code>%%</code>, <code>.parametre</code> en point,
+  <code>default::VAR</code>, l'ordre de <code>json:base64:</code>, <code>Autowire(env:)</code> vs <code>param:</code>.</li>
+</ul>
+<p>Un <strong>parameter</strong> est une valeur de configuration nommée, référencée
+par <code>%nom%</code>. Une valeur ordinaire est résolue pendant la compilation.
+Un parameter peut cependant contenir <code>%env(NOM)%</code> : cette référence
+à une variable d'environment reste normalement différée jusqu'à son utilisation.</p>
+<p>Une variable brute fournit une string ; un <em>processeur</em> transforme
+ou sélectionne sa valeur, par exemple <code>int:</code> pour obtenir un entier.
+Le container peut mémoriser le résultat : lecture différée ne signifie
+pas actualisation à chaque méthode. Enfin, <code>bind</code> et <code>#[Autowire]</code>
+indiquent quel argument reçoit quelle valeur ; ils ne devinent pas
+la signification d'un argument <code>string</code>.</p>
+<p>Plan du cours :</p>
+<pre class="highlight" tabindex="0"><code class="language-text">Parameters
+   ├─ 1. Quand est-ce lu ?   → %nom% (compilation) / %env()% (utilisation)
+   ├─ 2. Le caractère %      → %% pour un pourcent littéral
+   ├─ 3. Convertir           → processeurs : int: json: base64: default:
+   └─ 4. Livrer à l'argument → bind (portée) / #[Autowire] (local)</code></pre></section><section class="teaching-section" data-section="s-le-schema"><h2 id="s-le-schema" tabindex="-1">Le schéma</h2><aside class="section-digest" id="s-le-schema-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Le placeholder conserve une résolution dynamique.</li><li>Un parameter ordinaire devient une valeur compilée.</li></ol></aside><p><strong>Où en est-on ?</strong> Avant le détail, un seul trajet de bout en bout : la
+valeur <code>ARCHIVE_MAX=12</code>, écrite par l'exploitation, jusqu'à un <code>int</code> dans le
+constructeur.</p>
+<p>L'exploitation fournit <code>ARCHIVE_MAX=12</code>. Notre service attend pourtant
+un <code>int</code>. Le schéma suit la référence jusqu'au constructeur, sans
+placer artificiellement cette opération dans chaque étape HTTP :</p>
+<figure class="diagram" aria-labelledby="CRS-8zmj5ntgdhjv-3-diagram-0-title CRS-8zmj5ntgdhjv-3-diagram-0-description"><figcaption id="CRS-8zmj5ntgdhjv-3-diagram-0-title">Une référence env fournit un entier lors de la construction</figcaption><p id="CRS-8zmj5ntgdhjv-3-diagram-0-description">La configuration conserve une référence env int ARCHIVE_MAX. Lors de la construction de Archiver, le container lit la variable et applique int : la chaîne 12 devient l&#x27;entier 12. Sans variable ni secours, EnvNotFoundException interrompt cette construction et les dépendants qui l&#x27;exigent.</p><div class="mermaid" hidden>---
+title: Un parameter, de la configuration à l&#x27;exécution
+---
+flowchart TD
+  accTitle: Une référence env fournit un entier lors de la construction
+  accDescr: La configuration conserve une référence env int ARCHIVE_MAX. Lors de la construction de Archiver, le container lit la variable et applique int : la chaîne 12 devient l&#x27;entier 12. Sans variable ni secours, EnvNotFoundException interrompt cette construction et les dépendants qui l&#x27;exigent.
+  CF[&quot;configuration&lt;br/&gt;%env(int:ARCHIVE_MAX)%&quot;] --&gt;|&quot;conserve une référence env&quot;| CO[&quot;container compilé&lt;br/&gt;valeur non encore lue&quot;]
+  CO --&gt;|&quot;construction de Archiver&quot;| EX[&quot;lit ARCHIVE_MAX&lt;br/&gt;puis applique int&quot;]
+  EX --&gt;|&quot;variable absente&quot;| E([&quot;EnvNotFoundException&quot;])
+  EX --&gt;|&quot;valeur 12 valide&quot;| V([&quot;maxFiles : entier 12&quot;])
+  classDef config fill:#fef3c7,stroke:#b45309,color:#78350f
+  classDef runtime fill:#e0f2fe,stroke:#0369a1,color:#0c4a6e
+  classDef result fill:#dcfce7,stroke:#15803d,color:#14532d
+  classDef error fill:#fee2e2,stroke:#b91c1c,color:#7f1d1d
+  class CF,CO config
+  class EX runtime
+  class V result
+  class E error</div></figure>
+<p>Orange : l'instruction conservée ; bleu : lecture puis conversion ;
+vert : l'entier <code>12</code> ; rouge : la variable absente sans secours.
+Ce chemin suppose une résolution usuelle, non forcée à la compilation.
+Une chaîne non numérique ferait également échouer la conversion,
+mais pour une autre raison que l'absence de variable.</p>
+<p>L'Archiver construit conserve l'argument reçu. Modifier ensuite
+l'environment ne change ni cet argument ni nécessairement la valeur
+déjà mémorisée par le container. Pour un worker d'import persistant,
+le renouvellement du processus reste une décision d'exploitation.</p></section><section class="teaching-section" data-section="s-le-fil-rouge-un-archiver"><h2 id="s-le-fil-rouge-un-archiver" tabindex="-1">Le fil rouge : un `Archiver`</h2><aside class="section-digest" id="s-le-fil-rouge-un-archiver-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Un type string ne désigne pas un service unique.</li><li>Utiliser arguments, bind ou Autowire.</li></ol></aside><p><strong>Où en est-on ?</strong> On pose le constructeur de laboratoire : trois valeurs,
+trois natures différentes. Gardez en tête la question « d'où vient chacune ? ».</p>
+<p>Cette classe de laboratoire conserve les trois valeurs de l'archivage.
+Le <strong>DSN</strong> est une chaîne décrivant une destination de connexion ;
+la stocker ne crée pas une connexion. Le code est volontairement
+limité au contrat du constructeur, sans écriture de fichier :</p>
+<pre class="highlight" tabindex="0"><code class="language-php">class Archiver
+{
+    public function __construct(
+        private string $archiveDir,      // un dossier du projet : un parameter
+        private string $storageDsn,      // change selon le serveur : une variable d'environment
+        private int $maxFiles,           // réglé par l'exploitation : variable + processeur int
+    ) {
+    }
+}</code></pre>
+<p>Le résultat attendu de l'assemblage est un objet contenant le directory,
+la destination et la limite choisies. Aucun des trois types ne dit
+quel chemin ou quelle limite convient au projet : le container a besoin
+des instructions suivantes. Une valeur correctement typée peut encore
+être inutilisable, par exemple un directory non accessible.</p></section><section class="teaching-section" data-section="s-compilation-ou-execution-nom-contre-env"><span class="outcome-anchor" id="out-OUT-b81c2y9edqrn" tabindex="-1"></span><h2 id="s-compilation-ou-execution-nom-contre-env" tabindex="-1">Compilation ou exécution : `%nom%` contre `%env()%`</h2><aside class="section-digest" id="s-compilation-ou-execution-nom-contre-env-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>La résolution est différée.</li><li>Une compilation réussie ne garantit pas la présence de la variable.</li></ol></aside><p><strong>Où en est-on ?</strong> Étape 1 sur 4. Question : <em>pourquoi deux syntaxes pour
+« une valeur de config » ?</em> Parce que certaines valeurs sont <strong>propres au
+projet</strong> (stables, connues au build) et d'autres <strong>propres au serveur</strong>
+(connues seulement au lancement).</p>
+<p>Le directory relatif au projet est stable dans notre configuration.
+La destination de stockage et la limite peuvent varier entre déploiements.
+Le tableau distingue ces valeurs ordinaires d'une référence différée :</p>
+<table>
+<thead>
+<tr>
+<th>La valeur…</th>
+<th>Écriture</th>
+<th>Résolue</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>est propre au projet</td>
+<td><code>%app.archive_dir%</code></td>
+<td>à la <strong>compilation</strong></td>
+</tr>
+<tr>
+<td>change selon le serveur, sans recompiler</td>
+<td><code>%env(ARCHIVE_DSN)%</code></td>
+<td>à l'<strong>exécution</strong></td>
+</tr>
+<tr>
+<td>sert seulement à en calculer d'autres</td>
+<td><code>%.nom_temporaire%</code></td>
+<td>à la compilation, puis supprimée</td>
+</tr>
+</tbody>
+</table>
+<p>Dans l'application, le kernel fournit notamment <code>kernel.project_dir</code>,
+<code>kernel.environment</code>, <code>kernel.debug</code> et <code>kernel.cache_dir</code>.
+Pour notre classe <code>Archiver</code> autoloadable, ce fragment fournit
+explicitement les trois arguments :</p>
+<pre class="highlight" tabindex="0"><code class="language-yaml">parameters:
+    app.archive_dir: '%kernel.project_dir%/var/archive'
+    env(ARCHIVE_MAX): '100'
+
+services:
+    Archiver:
+        arguments:
+            $archiveDir: '%app.archive_dir%'
+            $storageDsn: '%env(ARCHIVE_DSN)%'
+            $maxFiles: '%env(int:ARCHIVE_MAX)%'</code></pre>
+<p>Avec <code>kernel.project_dir=/srv/blog</code>, une destination fournie par
+<code>ARCHIVE_DSN</code> et aucune variable <code>ARCHIVE_MAX</code>, le constructeur reçoit
+<code>/srv/blog/var/archive</code>, la destination donnée et l'entier <code>100</code>.
+Le parameter <code>env(ARCHIVE_MAX)</code> sert de secours ; il n'écrit pas
+une variable dans le système et ne crée pas le directory.</p>
+<pre class="highlight" tabindex="0"><code class="language-text"> %app.archive_dir%                      %env(int:ARCHIVE_MAX)%
+┌──────────────────────┐              ┌────────────────────────────────┐
+│ COMPILATION          │              │ COMPILATION : garde la         │
+│ → '/srv/blog/var/…'  │              │   référence, ne lit rien       │
+│   écrit dans le      │              │ UTILISATION : lit la variable, │
+│   container compilé  │              │   applique int:, injecte       │
+└──────────────────────┘              └────────────────────────────────┘</code></pre>
+<p>Un parameter ordinaire ne se modifie plus avec <code>setParameter()</code> après
+compilation. En revanche, la même classe de container générée peut
+être instanciée dans deux contextes de processus, avec <code>PORT=6379</code>
+puis <code>PORT=6380</code>, et résoudre deux valeurs différentes sans recompiler
+sa référence env. Ce n'est pas la promesse qu'un même cache convient
+à toute configuration <code>dev</code> et <code>prod</code>, ni qu'un container existant
+relira constamment la variable.</p>
+<p>Sans variable ni secours, une référence env usuelle peut traverser
+la compilation puis lever <code>EnvNotFoundException</code> à sa résolution,
+par exemple lors de la construction du consommateur.
+Une résolution explicitement forcée plus tôt avance ce contrôle.</p>
+<p>Un parameter <code>.build.hash</code> commençant par un point sert seulement
+pendant la compilation : <code>app.version: 'v1-%.build.hash%'</code> conserve
+le résultat calculé, mais demander ensuite <code>.build.hash</code> échoue.
+Enfin, <code>parameterCannotBeEmpty()</code> déclare une exigence de non-vacuité
+contrôlée à la lecture de la valeur ; ce n'est pas une preuve
+que tous les réglages ont été validés par la seule déclaration.</p>
+<p>Lire via <code>ParameterBagInterface</code> ne rend pas les paramètres dynamiques.
+<code>get()</code> d'un nom absent lève <code>ParameterNotFoundException</code>,
+alors qu'un parameter explicitement déclaré <code>null</code> rend <code>null</code> ;
+<code>has()</code> permet de distinguer ces deux situations.</p>
+<table>
+<thead>
+<tr>
+<th>Situation</th>
+<th><code>has()</code></th>
+<th><code>get()</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>parameter inexistant</td>
+<td><code>false</code></td>
+<td><code>ParameterNotFoundException</code></td>
+</tr>
+<tr>
+<td>parameter déclaré <code>null</code></td>
+<td><code>true</code></td>
+<td><code>null</code></td>
+</tr>
+<tr>
+<td>parameter en point après compilation</td>
+<td><code>false</code></td>
+<td>« not found »</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition info">
+<p class="admonition-title">🌍 In Real Life</p>
+<p><strong>La situation</strong> : une fiche de préparation contient une mesure déjà calculée et une consigne « consulter le réglage du site au besoin ». L'équipement assemblé conserve ensuite le réglage reçu.</p>
+<p><strong>L’équivalent dans Symfony</strong> : mesure calculée → parameter ordinaire ; consigne différée → référence <code>%env(...)%</code> ; équipement réglé → consommateur construit.</p>
+<p><strong>Retour à la réalité technique</strong> : la résolution env usuelle est différée, mais peut être forcée plus tôt et son résultat mémorisé. Elle ne reconfigure pas les instances existantes. Un parameter temporaire peut disparaître après avoir contribué au calcul d'une valeur conservée.</p>
+<p><strong>🧠 Comment le mémoriser</strong> : « Différé n'est pas continuellement relu. » Image mentale : consigne consultée puis réglage fixé sur l'appareil. Question-réflexe : quand cette valeur est-elle résolue, puis conservée ?</p>
+<p><strong>⚠️ À ne pas confondre</strong> : parameter absent, valeur <code>null</code> déclarée et variable env manquante sans secours.</p>
+</div></section><section class="teaching-section" data-section="s-le-pourcent-litteral"><span class="outcome-anchor" id="out-OUT-q6ks7q0n73de" tabindex="-1"></span><h2 id="s-le-pourcent-litteral" tabindex="-1">Le pourcent littéral : `%%`</h2><aside class="section-digest" id="s-le-pourcent-litteral-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Les pourcents délimitent les références.</li><li>Doubler le caractère le rend littéral.</li></ol></aside><p><strong>Où en est-on ?</strong> Étape 2 sur 4. Conséquence directe de la syntaxe <code>%nom%</code> :
+le caractère <code>%</code> est <strong>réservé</strong>. Question : <em>comment écrire un vrai
+pourcent dans une valeur ?</em> En le doublant.</p>
+<p>L'import affiche maintenant un libellé de progression contenant <code>%</code>.
+Les guillemets YAML protègent sa syntaxe YAML, mais n'empêchent pas
+le traitement ultérieur des références par DependencyInjection.
+<code>%off%</code> désigne un parameter ; <code>%%</code> est un échappement, <strong>pas</strong>
+une référence à un parameter vide.</p>
+<p>Pour conserver les caractères sans ambiguïté :</p>
+<pre class="highlight" tabindex="0"><code class="language-yaml">parameters:
+    app.progress_label: '100%%'
+    app.discount_label: '5%%off%%now'</code></pre>
+<p>Les valeurs résolues sont <code>100%</code> et <code>5%off%now</code>. Le second libellé
+est un exemple lexical historique, pas une politique commerciale du blog.
+Voici pourquoi les variantes non échappées n'ont pas toutes le même effet :</p>
+<table>
+<thead>
+<tr>
+<th>Valeur écrite</th>
+<th>Valeur obtenue</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>'100%%'</code></td>
+<td><code>100%</code></td>
+</tr>
+<tr>
+<td><code>'50%'</code>, <code>'from 5% to 10% off'</code></td>
+<td>inchangées</td>
+</tr>
+<tr>
+<td><code>'5%off%now'</code></td>
+<td><code>ParameterNotFoundException</code> : « …has a dependency on a non-existent parameter "off". »</td>
+</tr>
+</tbody>
+</table>
+<p>La dernière ligne suppose que <code>off</code> n'est pas défini.
+Un <code>%</code> isolé, ou une paire contenant des espaces, ne forme pas
+cette référence. La règle concerne les valeurs lues par le container :
+ce n'est pas une instruction de doubler chaque <code>%</code> dans du PHP,
+un template Twig ou une URL.</p>
+<p>Pourquoi <code>'from 5% to 10% off'</code> passe-t-il ? Le motif de référence est
+<code>%([^%\s]+)%</code> : du texte <strong>sans espace</strong> entre deux <code>%</code>. Ici, entre les deux
+pourcents il y a <code>to 10</code>, avec espaces : ce n'est pas une référence.</p>
+<div class="admonition info">
+<p class="admonition-title">🌍 In Real Life</p>
+<p><strong>La situation</strong> : un formulaire traverse deux lecteurs : le premier comprend sa mise en page, le second interprète ses références. Protéger la mise en page n'arrête pas ce second lecteur.</p>
+<p><strong>L’équivalent dans Symfony</strong> : premier lecteur → YAML ; second → résolution des paramètres DI ; référence → <code>%off%</code> ; caractère conservé → <code>%%</code>.</p>
+<p><strong>Retour à la réalité technique</strong> : les guillemets YAML ne neutralisent pas les références DI. <code>'5%%off%%now'</code> conserve les pourcents, tandis que <code>'5%off%now'</code> cherche <code>off</code>. Cette règle vise les valeurs interprétées par DI, pas tout texte PHP ou toute URL.</p>
+<p><strong>🧠 Comment le mémoriser</strong> : « Deux lecteurs, deux syntaxes. » Image mentale : le formulaire passant devant deux bureaux. Question-réflexe : quelle couche interprète ce caractère ?</p>
+<p><strong>⚠️ À ne pas confondre</strong> : pourcent isolé et référence reconnue entre pourcents.</p>
+</div></section><section class="teaching-section" data-section="s-les-processeurs-convertir-et-composer"><span class="outcome-anchor" id="out-OUT-eatwchm2rs41" tabindex="-1"></span><h2 id="s-les-processeurs-convertir-et-composer" tabindex="-1">Les processeurs : convertir et composer</h2><aside class="section-digest" id="s-les-processeurs-convertir-et-composer-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Les processeurs se lisent de droite à gauche.</li><li>Le plus proche de la variable agit d&#x27;abord.</li></ol></aside><p><strong>Où en est-on ?</strong> Étape 3 sur 4. Une variable d'environnement est <strong>toujours
+une string</strong>. Question : <em>comment obtenir un entier, un array, une valeur
+de secours ?</em> Avec un préfixe devant le nom : le <strong>processeur</strong>.</p>
+<p>Une limite brute <code>'12'</code> n'est pas encore un entier et un texte JSON
+n'est pas encore un array PHP. Dans un bloc <code>arguments</code> adapté
+à un consommateur déclarant ces noms, les trois formes suivantes
+expriment conversion, décodage et secours :</p>
+<pre class="highlight" tabindex="0"><code class="language-yaml">$maxFiles: '%env(int:ARCHIVE_MAX)%'                              # string → int
+$options:  '%env(json:ARCHIVE_OPTIONS)%'                         # JSON → array
+$dsn:      '%env(default:app.fallback_dsn:ARCHIVE_DSN)%'         # parameter de secours</code></pre>
+<p>Avec <code>ARCHIVE_MAX='12'</code>, <code>int:</code> fournit <code>12</code>.
+Avec <code>ARCHIVE_OPTIONS='{"limit":3}'</code>, <code>json:</code> fournit <code>['limit' =&gt; 3]</code>.
+La troisième ligne suppose le parameter <code>app.fallback_dsn</code> déclaré :
+il sert de secours lorsque la variable manque ou donne une valeur vide
+selon le traitement <code>default</code>. Ce fragment n'ajoute pas <code>$options</code>
+ou <code>$dsn</code> au constructeur précédent : c'est une comparaison de syntaxes.</p>
+<p>Symfony 8.0 fournit <strong>vingt et un</strong> préfixes intégrés, dont <code>bool</code>,
+<code>int</code>, <code>json</code>, <code>csv</code>, <code>base64</code>, <code>default</code>, <code>enum</code> et <code>trim</code>.
+Une conversion ne valide pas toute la règle métier.
+<code>int:</code> accepte aussi des valeurs numériques qu'il convertit :
+il ne garantit pas une limite positive. <code>json:</code> accepte un array
+ou <code>null</code> décodé, rejette les autres scalaires JSON, mais ne garantit
+pas la présence de la clé <code>limit</code>.</p>
+<p>Les processeurs se composent de droite à gauche :</p>
+<pre class="highlight" tabindex="0"><code class="language-yaml">parameters:
+    env(ARCHIVE_OPTIONS): 'eyJsaW1pdCI6M30='
+    app.archive_options: '%env(json:base64:ARCHIVE_OPTIONS)%'</code></pre>
+<p>Sans variable externe, <code>base64</code> transforme le secours en <code>{"limit":3}</code>,
+puis <code>json</code> donne <code>['limit' =&gt; 3]</code>.
+Inverser <code>base64</code> et <code>json</code> tenterait d'abord de lire la chaîne encodée
+comme du JSON. Le même ordre explique <code>%env(json:base64:SECRETS)%</code> ;
+base64 est un encodage, pas un chiffrement.</p>
+<pre class="highlight" tabindex="0"><code class="language-text"> %env(json:base64:ARCHIVE_OPTIONS)%
+          │     │        └─ 1. valeur brute : 'eyJsaW1pdCI6M30='
+          │     └────────── 2. base64 → '{"limit":3}'
+          └──────────────── 3. json   → ['limit' =&gt; 3]</code></pre>
+<p><code>default::VAR</code>, sans nom de parameter de secours, peut rendre <code>null</code>
+si la variable manque ou est vide. Le consommateur doit accepter cette absence.
+Ajouter <code>int:</code> à gauche transforme ce <code>null</code> en <code>0</code> :
+ce résultat ne prouve pas qu'une configuration correcte a été fournie.
+Enfin, <code>kernel.runtime_environment</code> utilise
+<code>%env(default:kernel.environment:APP_RUNTIME_ENV)%</code> : l'environment
+du kernel est le secours, pas une constante universelle <code>prod</code>.</p>
+<div class="admonition info">
+<p class="admonition-title">🌍 In Real Life</p>
+<p><strong>La situation</strong> : on ouvre l'emballage d'un document avant d'en lire les rubriques ; savoir le lire ne prouve pas qu'il contient la rubrique attendue.</p>
+<p><strong>L’équivalent dans Symfony</strong> : ouvrir l'encodage → <code>base64</code> ; lire la structure → <code>json</code> ; vérifier la rubrique → validation du consommateur.</p>
+<p><strong>Retour à la réalité technique</strong> : <code>json:base64:VAR</code> traite la valeur depuis la droite. <code>int:</code> convertit sans imposer une limite positive ; <code>json:</code> ne garantit pas la clé <code>limit</code>. Un secours <code>null</code> converti ensuite en entier peut devenir <code>0</code>, sans prouver une configuration correcte.</p>
+<p><strong>🧠 Comment le mémoriser</strong> : « Ouvrir, lire, vérifier. » Image mentale : document extrait puis contrôlé. Question-réflexe : quelle valeur exacte entre et sort de chaque processeur ?</p>
+<p><strong>⚠️ À ne pas confondre</strong> : encodage base64 et chiffrement, conversion et validation métier.</p>
+</div></section><section class="teaching-section" data-section="s-bind-et-autowire-injecter-un-scalaire"><span class="outcome-anchor" id="out-OUT-ddcr84rvx9ap" tabindex="-1"></span><h2 id="s-bind-et-autowire-injecter-un-scalaire" tabindex="-1">`bind` et `#[Autowire]` : injecter un scalaire</h2><aside class="section-digest" id="s-bind-et-autowire-injecter-un-scalaire-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>bind mutualise une valeur dans son scope.</li><li>Autowire configure une injection précise.</li></ol></aside><p><strong>Où en est-on ?</strong> Étape 4 sur 4. On sait <em>produire</em> la valeur ; reste à la
+<em>livrer</em> au bon argument. Question : <em>pourquoi l'autowiring ne la trouve-t-il
+pas tout seul ?</em> Un argument <code>string $archiveDir</code> ne dit pas quelle chaîne
+il veut : il faut une instruction explicite.</p>
+<p>Nous savons produire le chemin, mais plusieurs services peuvent avoir
+un argument de même rôle. Un <strong>binding</strong> associe un nom et éventuellement
+un type d'argument à une valeur dans sa portée de configuration.
+L'exemple suppose <code>app.archive_dir</code> déclaré et des services enregistrés
+dans ce même bloc avec l'argument <code>string $archiveDir</code> :</p>
+<pre class="highlight" tabindex="0"><code class="language-yaml">services:
+    _defaults:
+        autowire: true
+        bind:
+            string $archiveDir: '%app.archive_dir%'</code></pre>
+<p>Ces consommateurs reçoivent le chemin calculé ; ce fragment seul
+ne découvre aucune class. Pour un argument particulier, l'attribute
+<code>Symfony\Component\DependencyInjection\Attribute\Autowire</code>
+exprime le choix près du constructeur. Avec son import PHP,
+dans une class enregistrée et autowirée :</p>
+<p class="snippet-context">Extrait PHP : contexte de class, method ou signature requis. Syntaxe vérifiée dans ce contexte ; ce fragment ne constitue pas un programme autonome.</p><pre class="highlight" tabindex="0"><code class="language-php">public function __construct(
+    #[Autowire('%app.archive_dir%')] private string $archiveDir,
+    #[Autowire(env: 'int:ARCHIVE_MAX')] private int $maxFiles,
+    #[Autowire(param: 'kernel.environment')] private string $env,
+) {}</code></pre>
+<p>Le premier argument reçoit le parameter du chemin ; le deuxième
+la variable <code>ARCHIVE_MAX</code> convertie ; le troisième le nom d'environment
+du kernel. <code>env:</code> attend le nom avec ses processeurs, sans <code>%env(...)%</code> ;
+<code>param:</code> attend un nom de parameter, sans <code>%...%</code>.
+Cet extrait montre une autre signature de constructeur, pas une seconde
+méthode à coller dans le premier <code>Archiver</code>.</p>
+<p>Le binding de <code>_defaults</code> vaut pour les définitions de son bloc,
+pas pour tous les fichiers importés ou tous les blocs <code>when@</code>.
+Il doit correspondre aux noms et types concernés.
+Un binding inutilisé, par exemple <code>$archiveDri</code> au lieu de <code>$archiveDir</code>,
+peut faire échouer la compilation avec le diagnostic de <code>ResolveBindingsPass</code>.
+La précision évite qu'un réglage apparemment déclaré reste silencieusement
+sans consommateur.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th><code>bind</code> (dans <code>_defaults</code>)</th>
+<th><code>#[Autowire]</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Portée</td>
+<td>tous les services du bloc, par nom/type d'argument</td>
+<td><strong>un</strong> argument</td>
+</tr>
+<tr>
+<td>Où l'écrire</td>
+<td>YAML / config</td>
+<td>à côté du constructeur</td>
+</tr>
+<tr>
+<td>Faute de nom</td>
+<td>binding inutilisé → erreur de compilation</td>
+<td>pas de binding à fautes</td>
+</tr>
+<tr>
+<td><code>env:</code> / <code>param:</code></td>
+<td>—</td>
+<td><code>env:</code> = nom + processeurs ; <code>param:</code> = nom de parameter</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition info">
+<p class="admonition-title">🌍 In Real Life</p>
+<p><strong>La situation</strong> : une consigne de réglage s'adresse aux postes d'un atelier dont l'entrée porte un nom précis ; elle ne concerne pas automatiquement tous les ateliers voisins.</p>
+<p><strong>L’équivalent dans Symfony</strong> : atelier → bloc de définitions ; entrée nommée et typée → cible du <code>bind</code> ; instruction locale → <code>#[Autowire]</code> sur l'argument.</p>
+<p><strong>Retour à la réalité technique</strong> : le binding de <code>_defaults</code> a une portée ; il ne découvre aucune classe. Un nom erroné peut rester inutilisé et faire échouer la compilation. <code>env:</code> attend le nom avec processeurs ; <code>param:</code> attend le nom du parameter.</p>
+<p><strong>🧠 Comment le mémoriser</strong> : « Le bon réglage, à la bonne entrée, dans la bonne portée. » Image mentale : une consigne fixée au poste concerné. Question-réflexe : quel argument enregistré consomme réellement ce binding ?</p>
+<p><strong>⚠️ À ne pas confondre</strong> : configuration des arguments et enregistrement des services.</p>
+</div></section><section class="teaching-section" data-section="s-pieges-d-examen"><h2 id="s-pieges-d-examen" tabindex="-1">Pièges d&#x27;examen</h2><p class="teaching-label pitfall"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="warning" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3L23 21H1L12 3ZM12 9V14M12 17V18"></path></svg> <strong>Piège à éviter</strong></p><aside class="section-digest" id="s-pieges-d-examen-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Un bind orphelin signale une configuration incohérente.</li><li>Vérifier type et nom de l&#x27;argument.</li></ol></aside><ul class="pitfall-list"><li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : Où en est-on ?</summary><p><strong>Où en est-on ?</strong> Pour chaque piège : l'énoncé, puis <em>pourquoi la mauvaise
+réponse paraît plausible</em>.</p></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : Le nom parameter ne garantit pas une valeur finale figée.</summary><p><strong>Le nom parameter ne garantit pas une valeur finale figée.</strong>
+Un parameter ordinaire est résolu à la compilation ; il peut aussi
+contenir une référence env différée. Ni l'une ni l'autre ne reconfigure
+magiquement un Archiver déjà construit.
+<em>Plausible car</em> « différé » fait croire à une lecture à chaque appel.</p></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : Lire la chaîne de transformations depuis la variable.</summary><p><strong>Lire la chaîne de transformations depuis la variable.</strong>
+Dans <code>json:base64:ARCHIVE_OPTIONS</code>, le décodage base64 précède
+le décodage JSON ; inverser les noms change l'entrée de chaque étape.
+<em>Plausible car</em> on lit de gauche à droite comme du texte.</p></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : Les guillemets YAML ne désactivent pas les références.</summary><p><strong>Les guillemets YAML ne désactivent pas les références.</strong>
+<code>'5%off%now'</code> cherche <code>off</code> ; <code>'5%%off%%now'</code> conserve les caractères.
+L'absence d'erreur avec <code>'50%'</code> ne généralise pas à toutes les chaînes.
+<em>Plausible car</em> les guillemets protègent des caractères spéciaux YAML.</p></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : Le binding a une portée et un consommateur.</summary><p><strong>Le binding a une portée et un consommateur.</strong>
+Un nom ou type incorrect peut laisser le binding inutilisé et provoquer
+une erreur de compilation. Répéter une valeur au hasard ne répare
+pas une mauvaise signature.
+<em>Plausible car</em> « bind » semble s'appliquer globalement.</p></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : Le moment de l&#x27;erreur dépend du moment de la résolution.</summary><p><strong>Le moment de l'erreur dépend du moment de la résolution.</strong>
+L'absence sans secours échoue normalement à l'utilisation de la référence,
+et bloque les consommateurs qui en dépendent. Une résolution forcée
+pendant la compilation avance ce moment ; déclarer un secours peut l'éviter.
+<em>Plausible car</em> on attend qu'une variable manquante échoue au <code>cache:clear</code>.</p></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : Conversion et validation restent distinctes.</summary><p><strong>Conversion et validation restent distinctes.</strong>
+La variable brute <code>PORT=6379</code> fournit une string ; <code>int:</code> demande un entier.
+Le succès de la conversion ne valide ni une plage de ports ni une limite
+d'archives positive.
+<em>Plausible car</em> « int » évoque une valeur raisonnable.</p></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : Un parameter temporaire peut laisser un résultat durable.</summary><p><strong>Un parameter temporaire peut laisser un résultat durable.</strong>
+<code>.build.hash</code> disparaît après compilation, mais la valeur calculée
+de <code>app.version</code> demeure. Ne confondons pas absence de ce parameter,
+valeur explicitement <code>null</code> et variable env manquante.
+<em>Plausible car</em> « temporaire » laisse croire que tout ce qui en dépend disparaît.</p></details></li></ul></section><section class="teaching-section" data-section="s-fiche-express"><h2 id="s-fiche-express" tabindex="-1">Fiche express</h2><p class="teaching-label essential"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="book" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5C9 3 5 3 2 4V20C5 19 9 19 12 21C15 19 19 19 22 20V4C19 3 15 3 12 5V21M5 8H8M5 12H8M16 8H19M16 12H19"></path></svg> <strong>À mémoriser</strong></p><aside class="section-digest" id="s-fiche-express-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Le contenu numérique ne change pas le type.</li><li>La conversion se demande explicitement.</li></ol></aside><p>Pour préparer l'import sans modifier le traitement de <code>/blog/42</code> :</p>
+<ol>
+<li>Séparer valeur ordinaire du projet et référence env différée.</li>
+<li>Prévoir le comportement si la variable est absente, sans promettre
+   une mise à jour automatique des instances existantes.</li>
+<li>Convertir la string brute puis valider les contraintes du consommateur.</li>
+<li>Échapper les pourcents littéraux dans les valeurs interprétées
+   par DependencyInjection, pas indistinctement dans tout le projet.</li>
+<li>Lire les processeurs de droite à gauche et suivre les résultats,
+   notamment <code>null</code> puis éventuellement <code>0</code>.</li>
+<li>Choisir entre argument explicite, binding de bloc et attribute
+   d'argument ; une class reste à enregistrer.</li>
+<li>Distinguer parameter temporaire supprimé, parameter absent
+   et parameter déclaré <code>null</code>.</li>
+</ol>
+<p>Le prochain problème n'est plus la valeur elle-même : il faut vérifier
+quelle définition de service la reçoit réellement.</p>
+<h3 tabindex="-1" id="s-fiche-express-nested-a-retenir-pour-la-certification">🧠 À retenir pour la certification</h3>
+<ul>
+<li><code>%nom%</code> : résolu à la <strong>compilation</strong> ; <code>%env(NOM)%</code> : résolu à l'<strong>utilisation</strong> (et mémorisé), jamais relu en continu.</li>
+<li>Env absente sans secours → <code>EnvNotFoundException</code> à la résolution ; <code>env(NOM): 'valeur'</code> en parameter = secours.</li>
+<li><code>%%</code> = pourcent littéral ; les guillemets YAML n'y changent rien ; motif <code>%([^%\s]+)%</code>.</li>
+<li>21 processeurs intégrés ; composition de <strong>droite à gauche</strong> (<code>json:base64:VAR</code>) ; <code>default::VAR</code> peut donner <code>null</code> (puis <code>0</code> avec <code>int:</code>).</li>
+<li>Conversion ≠ validation métier ; base64 ≠ chiffrement.</li>
+<li><code>.param</code> en point : compilation seulement ; <code>get()</code> absent → exception, déclaré <code>null</code> → <code>null</code>.</li>
+<li><code>bind</code> (portée du bloc, erreur si inutilisé) ; <code>#[Autowire]</code> : <code>env:</code> = nom + processeurs, <code>param:</code> = nom sans <code>%</code>.</li>
+</ul>
+<p><strong>Phrase de mémorisation :</strong> « <code>%nom%</code> se fige à la compilation, <code>%env()%</code> se lit à l'utilisation puis se fige, les processeurs se lisent de droite à gauche, et <code>bind</code> ou <code>#[Autowire]</code> livrent la valeur au bon argument. »</p></section><section class="official-sources"><h2 id="reader-sources" tabindex="-1">Sources officielles et compléments</h2><ul><li><a href="https://symfony.com/doc/8.0/components/http_kernel.html">Symfony 8.0 — HttpKernel</a></li><li><a href="https://symfony.com/doc/8.0/configuration.html">Symfony 8.0 — Dotenv</a></li><li><a href="https://symfony.com/doc/8.0/configuration/env_var_processors.html">Symfony 8.0 — configuration / env var processors</a></li><li><a href="https://symfony.com/doc/8.0/service_container.html">Symfony 8.0 — DependencyInjection</a></li></ul></section><section id="course-recalls" aria-labelledby="course-recalls-title" tabindex="-1"><h2 id="course-recalls-title">Rappels et liens avec les autres cours</h2><div data-recall-group="other"><h3>Rappels des cours précédents / autres modules</h3><ul><li data-recall-course="CRS-d235sja3h7y2" data-recall-kind="previous_course"><p class="recall-provenance">Module 08 — Validation des données · Cours « Violations builder »</p><p>Le builder prépare la violation. addViolation() l&#x27;enregistre.</p><p><a href="#cards-previous">Rappel : <span lang="en">When does a violation builder actually record its violation?</span></a></p></li></ul></div></section><nav class="course-sequence" aria-label="Ordre de lecture"><a rel="prev" href="course-CRS-jtkmpfp3nwzk.html" aria-label="Précédent : Built-in services — Module 09 — Injection de dépendances">Précédent : Built-in services</a> <a href="lot-09.html">Sommaire : Module 09 — Injection de dépendances</a> <a rel="next" href="course-CRS-fkebqqqke5y5.html" aria-label="Suivant : Service decoration — Module 09 — Injection de dépendances">Suivant : Service decoration</a></nav><p class="course-practice-entry"><a class="button" href="#view-quiz">Fin du cours — s’entraîner avec le Quiz</a></p></div><div id="view-flashcards" data-course-panel role="region" aria-labelledby="view-flashcards-title"><h2 id="view-flashcards-title">Flashcards</h2><p lang="en">Answer before revealing each card.</p><p>Ces cartes ne mesurent pas une maîtrise notée.</p><div id="cards-s-l-essentiel-1" data-card-section="s-l-essentiel"><h3><a href="#s-l-essentiel">Revoir : L&#x27;essentiel</a></h3><div class="reader-cards"><details class="reader-card" id="B-8zmj5ntgdhjv-01"><summary lang="en">When are ordinary container parameters and environment placeholders resolved?</summary><p lang="en">Ordinary parameters at compilation; environment placeholders normally when used at runtime.</p><p lang="fr">Les parameters ordinaires sont compilés. Les valeurs d&#x27;environment restent résolues à l&#x27;usage.</p><a href="course-CRS-8zmj5ntgdhjv.html#out-OUT-b81c2y9edqrn">Revoir le passage précis</a></details></div></div><div id="cards-s-le-schema-2" data-card-section="s-le-schema"><h3><a href="#s-le-schema">Revoir : Le schéma</a></h3><div class="reader-cards"><details class="reader-card" id="B-8zmj5ntgdhjv-02"><summary lang="en">Which input mechanism can vary between deployments without changing compiled parameter literals?</summary><p lang="en">An env() placeholder.</p><p lang="fr">Le placeholder conserve une résolution dynamique. Un parameter ordinaire devient une valeur compilée.</p><a href="course-CRS-8zmj5ntgdhjv.html#out-OUT-b81c2y9edqrn">Revoir le passage précis</a></details></div></div><div id="cards-s-le-fil-rouge-un-archiver-3" data-card-section="s-le-fil-rouge-un-archiver"><h3><a href="#s-le-fil-rouge-un-archiver">Revoir : Le fil rouge : un `Archiver`</a></h3><div class="reader-cards"><details class="reader-card" id="B-8zmj5ntgdhjv-03"><summary lang="en">Why does an Archiver&#x27;s string directory argument need explicit configuration?</summary><p lang="en">Autowiring cannot infer arbitrary scalar values.</p><p lang="fr">Un type string ne désigne pas un service unique. Utiliser arguments, bind ou Autowire.</p><a href="course-CRS-8zmj5ntgdhjv.html#out-OUT-ddcr84rvx9ap">Revoir le passage précis</a></details></div></div><div id="cards-s-compilation-ou-execution-nom-contre-env-4" data-card-section="s-compilation-ou-execution-nom-contre-env"><h3><a href="#s-compilation-ou-execution-nom-contre-env">Revoir : Compilation ou exécution : `%nom%` contre `%env()%`</a></h3><div class="reader-cards"><details class="reader-card" id="B-8zmj5ntgdhjv-04"><summary lang="en">When does a missing environment variable normally fail?</summary><p lang="en">When a service resolves it, with EnvNotFoundException, not necessarily during compilation.</p><p lang="fr">La résolution est différée. Une compilation réussie ne garantit pas la présence de la variable.</p><a href="course-CRS-8zmj5ntgdhjv.html#out-OUT-b81c2y9edqrn">Revoir le passage précis</a></details></div></div><div id="cards-s-le-pourcent-litteral-5" data-card-section="s-le-pourcent-litteral"><h3><a href="#s-le-pourcent-litteral">Revoir : Le pourcent littéral : `%%`</a></h3><div class="reader-cards"><details class="reader-card" id="B-8zmj5ntgdhjv-05"><summary lang="en">How is a literal percent sign escaped in a container parameter string?</summary><p lang="en">Write %% to produce %.</p><p lang="fr">Les pourcents délimitent les références. Doubler le caractère le rend littéral.</p><a href="course-CRS-8zmj5ntgdhjv.html#out-OUT-q6ks7q0n73de">Revoir le passage précis</a></details></div></div><div id="cards-s-les-processeurs-convertir-et-composer-6" data-card-section="s-les-processeurs-convertir-et-composer"><h3><a href="#s-les-processeurs-convertir-et-composer">Revoir : Les processeurs : convertir et composer</a></h3><div class="reader-cards"><details class="reader-card" id="B-8zmj5ntgdhjv-06"><summary lang="en">In env(json:base64:VALUE), which processor runs first?</summary><p lang="en">base64 runs first, then json.</p><p lang="fr">Les processeurs se lisent de droite à gauche. Le plus proche de la variable agit d&#x27;abord.</p><a href="course-CRS-8zmj5ntgdhjv.html#out-OUT-eatwchm2rs41">Revoir le passage précis</a></details></div></div><div id="cards-s-bind-et-autowire-injecter-un-scalaire-7" data-card-section="s-bind-et-autowire-injecter-un-scalaire"><h3><a href="#s-bind-et-autowire-injecter-un-scalaire">Revoir : `bind` et `#[Autowire]` : injecter un scalaire</a></h3><div class="reader-cards"><details class="reader-card" id="B-8zmj5ntgdhjv-07"><summary lang="en">How do bind and an Autowire attribute differ in scope?</summary><p lang="en">bind applies matching arguments within its configuration scope; Autowire targets one argument.</p><p lang="fr">bind mutualise une valeur dans son scope. Autowire configure une injection précise.</p><a href="course-CRS-8zmj5ntgdhjv.html#out-OUT-ddcr84rvx9ap">Revoir le passage précis</a></details></div></div><div id="cards-s-pieges-d-examen-8" data-card-section="s-pieges-d-examen"><h3><a href="#s-pieges-d-examen">Revoir : Pièges d&#x27;examen</a></h3><div class="reader-cards"><details class="reader-card" id="B-8zmj5ntgdhjv-08"><summary lang="en">Does an unused bind silently have no effect?</summary><p lang="en">No. An unmatched binding can fail container compilation.</p><p lang="fr">Un bind orphelin signale une configuration incohérente. Vérifier type et nom de l&#x27;argument.</p><a href="course-CRS-8zmj5ntgdhjv.html#out-OUT-ddcr84rvx9ap">Revoir le passage précis</a></details></div></div><div id="cards-s-fiche-express-9" data-card-section="s-fiche-express"><h3><a href="#s-fiche-express">Revoir : Fiche express</a></h3><div class="reader-cards"><details class="reader-card" id="B-8zmj5ntgdhjv-09"><summary lang="en">What type does an unprocessed environment variable produce?</summary><p lang="en">A string; use a processor such as int: for conversion.</p><p lang="fr">Le contenu numérique ne change pas le type. La conversion se demande explicitement.</p><a href="course-CRS-8zmj5ntgdhjv.html#out-OUT-b81c2y9edqrn">Revoir le passage précis</a></details></div></div><div id="cards-previous"><p class="recall-provenance">Module 08 — Validation des données · Cours « Violations builder »</p><aside class="checkpoint"><h2>Rappel d’un cours antérieur</h2><p>Avant de poursuivre : Violations builder.</p><details class="corpus-correction"><summary lang="en">When does a violation builder actually record its violation?</summary><p lang="en">When addViolation() is called on the builder.</p><p>Le builder prépare la violation. addViolation() l&#x27;enregistre.</p><a href="course-CRS-d235sja3h7y2.html#out-OUT-y8sak1s2672z">Relire la correction dans le cours antérieur</a></details></aside></div></div><div id="view-quiz" data-course-panel role="region" aria-labelledby="view-quiz-title"><aside class="revision-context"><p><strong>Avant le quiz :</strong> Le catalogue sert /blog/42, mais l&#x27;import CLI doit aussi archiver ses fichiers sources. Son service reçoit des objets, comme le logger, et des valeurs : un directory, une destination et une limite. Comment fournir ces valeurs sans coder les réglages du serveur dans la classe ? Nous allons suivre leur déclaration, leur résolution et leur injection, puis distinguer conversion technique et règle métier.</p><p>Quelle donnée entre, quelle responsabilité agit et quelle condition change le résultat ? Pour chaque correction, vérifiez ces conditions dans <a href="course-CRS-8zmj5ntgdhjv.html#s-objectif">le passage enseigné</a>, sans supposer que toutes les branches du blog sont exécutées.</p></aside><h2 id="view-quiz-title">Quiz</h2><p class="quiz-size" lang="en">4 eligible learning questions · 4 per session. Repeating a question does not demonstrate mastery.</p><p id="course-quiz-status" role="status">Quiz interactif non chargé. Démarrez après chargement de la banque locale.</p><div id="course-quiz-controls" class="assessment-main" hidden><div id="course-quiz-assessment-controls" hidden><select id="course-quiz-assessment-mode" aria-label="Mode du quiz" hidden><option value="learning">Entraînement</option></select><p id="course-quiz-training-scope"></p><button id="course-quiz-start-assessment" type="button" lang="en">Start practice</button><button id="course-quiz-finish-assessment" type="button" lang="en" hidden>End session</button></div><p id="course-quiz-assessment-error" role="alert"></p><p id="course-quiz-assessment-timer" hidden></p><p id="course-quiz-session-progress" class="quiz-progress" role="status" lang="en"></p><div id="course-quiz-assessment-app" tabindex="-1"></div><nav id="course-quiz-session-navigation" aria-label="Questions du cours"></nav><div id="course-quiz-learning-overview" aria-live="polite"></div></div><div id="course-quiz-native"><p>Sans JavaScript ou si le chargement échoue : aucune tentative notée. Les <a href="#view-flashcards">flashcards du cours</a> restent disponibles.</p><details class="course-quiz-fallback" data-question-id="L-8zmj5ntgdhjv-base-v1"><summary lang="en">When are ordinary container parameters and environment placeholders resolved? Select one answer (radio).</summary><p>Correction de consultation — non notée.</p><p>Les parameters ordinaires sont compilés. Les valeurs d&#x27;environment restent résolues à l&#x27;usage.</p><ul><li><strong lang="en">Correct: Ordinary parameters at compilation; environment placeholders at use.</strong><p>Les parameters ordinaires sont compilés. Les valeurs d&#x27;environment restent résolues à l&#x27;usage.</p></li><li><strong lang="en">Distractor: Both are always fully resolved at container compilation.</strong><p>Les valeurs d&#x27;environment restent normalement résolues à l&#x27;usage.</p></li><li><strong lang="en">Distractor: Ordinary parameters at each call; environment values at compilation.</strong><p>Les temporalités sont inversées pour le cas ordinaire décrit.</p></li></ul><a href="course-CRS-8zmj5ntgdhjv.html#out-OUT-b81c2y9edqrn">Relire le passage exact</a></details></div></div></div></div><details class="transfer-panel"><summary>Sauvegarde et transfert de progression</summary><p id="reading-status" role="status">Sans JavaScript : lecture libre ; progression non enregistrée.</p><p><a href="assessment.html#overview-title">Lecture, réussites immédiates et différées</a></p><p>Transfert manuel — aucune synchronisation automatique</p><p id="persistence-status" role="status"></p><button type="button" class="secondary" id="export-progress">Exporter ma progression</button><label for="import-progress">Choisir un JSON pour fusionner ma progression (sans remplacement)</label><input type="file" id="import-progress" accept="application/json,.json"><p id="transfer-status" role="status"></p></details></main><footer class="site-footer"><a href="catalogue.html">Catalogue</a> <a href="sources.html">Sources et attribution</a> <a href="#contenu">Haut de page</a></footer></body></html>

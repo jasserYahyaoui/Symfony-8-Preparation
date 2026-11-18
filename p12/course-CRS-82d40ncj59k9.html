@@ -1,0 +1,358 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; connect-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Mime — Symfony 8 Preparation</title><link rel="stylesheet" href="styles.css"><link rel="stylesheet" href="reader.css"><script src="mermaid.min.js" defer></script><script src="mermaid-init.js" defer></script><link rel="stylesheet" href="assessment.css"><script src="fixed-exams-data.js" defer></script><script src="fixed-exams.js" defer></script><script src="learning-state.js" defer></script><script src="guide.js" defer></script><script src="reader-catalog.js" defer></script><script src="reader.js" defer></script><script src="site-state.js" defer></script><script src="assessment.js" defer></script><script src="course-views.js" defer></script><link rel="stylesheet" href="syntax-highlight.css"><script src="prism-syntax.js" defer></script><script src="syntax-highlight.js" defer></script></head><body data-course-id="CRS-82d40ncj59k9"><a class="skip" href="#contenu">Aller au contenu</a><header class="site-header"><a class="brand" href="index.html">S8 Preparation</a><nav aria-label="Navigation principale"><a href="index.html">Accueil</a> <a href="catalogue.html">Parcours</a> <a href="assessment.html?mode=review">Réviser</a> <a href="examens.html">Examens blancs</a> <a href="jour-j.html">Jour J</a></nav></header><main id="contenu" tabindex="-1" class="corpus-reader"><nav class="breadcrumb" aria-label="Fil d’Ariane"><a href="index.html">Accueil</a> <span aria-hidden="true">›</span> <a href="catalogue.html">Parcours</a> <span aria-hidden="true">›</span> <a href="lot-22.html">Module 22 — Mailer et Mime</a> <span aria-hidden="true">›</span> <span aria-current="page">Mime</span></nav><h1>Mime</h1><p class="muted">Symfony 8.0 · API PHP ≤ 8.4 · Twig ≤ 3.22. Préparation indépendante.</p><p class="revision-status">Rédaction narrative P11 : projection nouvelle, non couverte par les décisions historiques P10. Aucune approbation officielle ni garantie de réussite.</p><aside class="narrative-context" aria-label="Repères de lecture"><p><strong>Prérequis de lecture :</strong> <a href="course-CRS-p1694d5f7r8c.html">Service container</a> · <a href="course-CRS-mpwjc4g3vmj7.html">Request handling</a></p><p><strong>Concepts voisins :</strong> <a href="course-CRS-mpwjc4g3vmj7.html">Request handling</a> — Raccorder une capacité au blog sans en faire une étape HTTP obligatoire. <a href="lot-22.html">Comparer les responsabilités dans ce module</a> · <a href="carte-composants.html">Situer cette responsabilité dans le blog</a> · <a href="glossaire.html">Distinguer les termes voisins</a></p><p><a href="ordre-lecture.html">Retrouver les 163 cours dans le parcours recommandé</a>. Ce repère ne modifie ni votre historique ni votre progression.</p></aside><div class="course-layout"><details class="lot-course-menu"><summary>Cours du module · 2 cours</summary><nav aria-label="Cours du module"><a class="lot-context" href="lot-22.html">Module 22 — Mailer et Mime</a><ol><li><a href="course-CRS-h304h6ht87kc.html">Mailer</a></li><li><a href="course-CRS-82d40ncj59k9.html" aria-current="page">Mime</a></li></ol><a href="lot-22.html#view-quiz">Quiz du module</a></nav></details><aside class="course-section-menu" aria-label="Sommaire du cours"><nav class="course-actions" aria-label="Activités du cours"><a id="tab-course" href="#view-course">Cours</a><a id="tab-flashcards" href="#view-flashcards">Flashcards</a><a id="tab-quiz" href="#view-quiz">Quiz</a></nav><details class="course-section-disclosure"><summary id="course-sections">Sections du cours</summary><nav aria-label="Sections du cours"><ul><li><a href="#s-objectif">Objectif</a></li><li><a href="#s-l-essentiel">L&#x27;essentiel</a></li><li><a href="#s-le-schema">Le schéma</a></li><li><a href="#s-l-exemple-une-notification">L&#x27;exemple : une notification</a></li><li><a href="#s-deux-api-pour-un-meme-message">Deux API pour un même message</a></li><li><a href="#s-l-arborescence-mime">L&#x27;arborescence MIME</a></li><li><a href="#s-les-adresses">Les adresses</a></li><li><a href="#s-les-types-mime">Les types MIME</a></li><li><a href="#s-pieges-d-examen">Pièges d&#x27;examen</a></li><li><a href="#s-fiche-express">Fiche express</a></li><li><a href="#reader-objectives">Objectifs d’apprentissage</a></li><li><a href="#reader-sources">Sources officielles et compléments</a></li><li><a href="#course-recalls">Rappels et liens avec les autres cours</a></li></ul></nav><nav aria-label="Flashcards par section"><a href="#view-flashcards">Flashcards par section</a><ul><li><a href="#cards-s-l-essentiel-1">L&#x27;essentiel</a></li><li><a href="#cards-s-le-schema-2">Le schéma</a></li><li><a href="#cards-s-l-exemple-une-notification-3">L&#x27;exemple : une notification</a></li><li><a href="#cards-s-deux-api-pour-un-meme-message-4">Deux API pour un même message</a></li><li><a href="#cards-s-l-arborescence-mime-5">L&#x27;arborescence MIME</a></li><li><a href="#cards-s-les-adresses-6">Les adresses</a></li><li><a href="#cards-s-les-types-mime-7">Les types MIME</a></li><li><a href="#cards-s-pieges-d-examen-8">Pièges d&#x27;examen</a></li><li><a href="#cards-s-fiche-express-9">Fiche express</a></li><li><a href="#cards-previous">Module 20 — Événements et EventDispatcher · Cours « Event » · Rappel : <span lang="en">What responsibility does the base Contracts Event provide?</span></a></li></ul></nav><nav aria-label="Retour au module"><a href="lot-22.html">Tous les cours du module</a></nav></details><p class="local-quiz-count">6 questions disponibles · 6 par session Quiz</p></aside><div class="course-content"><div id="view-course" data-course-panel role="region" aria-labelledby="view-course-title"><h2 id="view-course-title">Cours</h2><p class="course-introduction"><a href="#s-objectif">Introduction</a> · <a href="#course-sections">Sections du cours</a></p><h2 id="reader-objectives" tabindex="-1">Objectifs d’apprentissage</h2><ul><li><a href="course-CRS-82d40ncj59k9.html#out-OUT-svzhszy009bw">Composer un message avec l&#x27;API haut niveau et savoir quand l&#x27;API bas niveau se justifie</a></li><li><a href="course-CRS-82d40ncj59k9.html#out-OUT-8mvg51813h97">Associer chaque container multipart à son intention et placer la version préférée en dernier</a></li><li><a href="course-CRS-82d40ncj59k9.html#out-OUT-0rk3gn6523qv">Reconnaître que la devinette de type MIME inspecte le contenu et non le nom du file</a></li><li><a href="course-CRS-82d40ncj59k9.html#out-OUT-1c0gmbpg2341">Connaître la restriction UTF-8 propre à l&#x27;adresse de sender</a></li></ul><aside class="pedagogy-legend" aria-label="Repères pédagogiques"><p><strong>Repères pédagogiques</strong></p><p>Ces repères décrivent le rôle du bloc, pas une fréquence officielle à l’examen.</p><p class="teaching-label essential"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="brain" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5C12 1 6 1 6 5C2 5 1 10 4 12C1 15 3 19 6 19C6 23 12 23 12 19V5M12 5C12 1 18 1 18 5C22 5 23 10 20 12C23 15 21 19 18 19C18 23 12 23 12 19M6 5C6 8 8 9 9 9M4 12H7L9 14M6 19V16M18 5C18 8 16 9 15 9M20 12H17L15 14M18 19V16"></path></svg> <strong>À comprendre</strong></p><p class="teaching-label essential"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="book" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5C9 3 5 3 2 4V20C5 19 9 19 12 21C15 19 19 19 22 20V4C19 3 15 3 12 5V21M5 8H8M5 12H8M16 8H19M16 12H19"></path></svg> <strong>À mémoriser</strong></p><p class="teaching-label example"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="code" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6L2 12L8 18M16 6L22 12L16 18M14 3L10 21"></path></svg> <strong>Exemple concret</strong></p><p class="teaching-label pitfall"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="warning" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3L23 21H1L12 3ZM12 9V14M12 17V18"></path></svg> <strong>Piège à éviter</strong></p><p class="teaching-label nuance"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="balance" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3V21M7 21H17M3 7L21 5M5 7L1 15H9L5 7M19 6L15 14H23L19 6M1 15Q5 20 9 15M15 14Q19 19 23 14"></path></svg> <strong>Nuance à connaître</strong></p><p>Précision, exception ou condition d’application d’une règle.</p></aside><section class="teaching-section" data-section="s-objectif"><h2 id="s-objectif" tabindex="-1">Objectif</h2><p>Le rapport d'import est prêt ; l'équipe éditoriale doit être avertie.
+Avant de choisir comment envoyer la notification, il faut définir son
+contenu : texte lisible sans HTML, version enrichie et éventuelle pièce
+jointe. Mime construit ce document et ses relations entre parties.</p>
+<p>Ce cours répond à une seule question : <strong>comment décrire un courriel comme un
+objet PHP, sans rien envoyer ?</strong> Le cours suivant, <a href="course-CRS-h304h6ht87kc.html">Mailer</a>,
+s'occupera de l'envoi.</p></section><section class="teaching-section" data-section="s-l-essentiel"><h2 id="s-l-essentiel" tabindex="-1">L&#x27;essentiel</h2><p class="teaching-label essential"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="brain" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5C12 1 6 1 6 5C2 5 1 10 4 12C1 15 3 19 6 19C6 23 12 23 12 19V5M12 5C12 1 18 1 18 5C22 5 23 10 20 12C23 15 21 19 18 19C18 23 12 23 12 19M6 5C6 8 8 9 9 9M4 12H7L9 14M6 19V16M18 5C18 8 16 9 15 9M20 12H17L15 14M18 19V16"></path></svg> <strong>À comprendre</strong></p><aside class="section-digest" id="s-l-essentiel-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Mime définit le contenu et la structure.</li><li>Le transport est une responsabilité séparée.</li></ol></aside><p><strong>Ce que cette partie veut réellement vous apprendre.</strong></p>
+<ul>
+<li><em>Pourquoi ce sujet existe.</em> Un courriel n'est pas une simple chaîne : il a
+  des en-têtes, plusieurs versions du texte, des images liées, des pièces
+  jointes. Écrire ce format à la main est pénible et fragile. Le component
+  Mime le <strong>fabrique</strong> pour vous.</li>
+<li><em>Le piège de fond.</em> Fabriquer n'est pas envoyer. Mime ne contacte aucun
+  serveur ; l'envoi appartient à Mailer.</li>
+<li><em>Ce que l'auteur veut que vous compreniez.</em> La structure MIME est un
+  <strong>arbre de conteneurs</strong> (<code>alternative</code>, <code>related</code>, <code>mixed</code>) dont chacun
+  exprime une relation précise entre ses parties.</li>
+<li><em>Pourquoi c'est à l'examen.</em> Les questions portent sur la structure produite,
+  sur les adresses (<code>to()</code> ≠ <code>addTo()</code>, UTF-8 et sender) et sur <code>MimeTypes</code>
+  (ordre des résultats, devinette par contenu).</li>
+</ul>
+<p>Le component Mime <strong>fabrique</strong> un message électronique ; il ne l'envoie pas.
+L'API <code>Email</code>, chaînable, couvre les besoins courants ; <code>Message</code>, bas niveau,
+se réserve aux cas rares. À l'examen : la structure MIME produite, les
+adresses, et <code>MimeTypes</code>, dont la devinette lit le contenu du file.</p>
+<p>MIME décrit les types et l'assemblage des contenus du courriel. Une partie
+texte et une partie HTML peuvent raconter la même information ; une pièce
+jointe est un document supplémentaire. Ces relations expliquent les
+conteneurs du schéma, plutôt qu'une simple liste de termes à mémoriser.
+La notification reste distincte de la Response de <code>GET /blog/42</code>.</p></section><section class="teaching-section" data-section="s-le-schema"><h2 id="s-le-schema" tabindex="-1">Le schéma</h2><aside class="section-digest" id="s-le-schema-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Chaque type exprime une relation.</li><li>La structure MIME n&#x27;est pas arbitraire.</li></ol></aside><p><strong>Où en est-on ?</strong> Étape 1 sur 4 : avant d'écrire du code, on regarde le
+résultat final. Le cours suit ensuite quatre questions : quelle API (<code>Email</code>
+ou <code>Message</code>), quelle arborescence, quelles adresses, quels types MIME.</p>
+<pre class="highlight" tabindex="0"><code class="language-text">Le component Mime
+   ├─ 1. Quelle API ?        → Email (haut niveau) / Message (bas niveau)
+   ├─ 2. Quelle structure ?  → alternative ⊂ related ⊂ mixed
+   ├─ 3. Quelles adresses ?  → Address, to()/addTo(), UTF-8 et sender
+   └─ 4. Quels types ?       → MimeTypes : table (extensions) ≠ contenu (guess)</code></pre>
+<p>Partons de la notification la plus complète : deux versions du texte,
+une image utilisée par le HTML et un PDF séparé. Lire l'arbre de l'intérieur
+vers l'extérieur pour comprendre pourquoi chaque conteneur est nécessaire :</p>
+<figure class="diagram" aria-labelledby="CRS-82d40ncj59k9-3-diagram-0-title CRS-82d40ncj59k9-3-diagram-0-description"><figcaption id="CRS-82d40ncj59k9-3-diagram-0-title">multipart/mixed, related et alternative imbriqués</figcaption><p id="CRS-82d40ncj59k9-3-diagram-0-description">multipart/mixed réunit des contenus de natures différentes, comme une attachment ; il contient multipart/related et application/pdf. multipart/related forme un tout, le HTML et ses images intégrées ; il contient multipart/alternative et image/png. multipart/alternative donne deux versions du même contenu, la préférée en dernier : text/plain puis text/html.</p><div class="mermaid" hidden>---
+title: La structure MIME d&#x27;un email complet
+---
+flowchart TD
+  accTitle: multipart/mixed, related et alternative imbriqués
+  accDescr: multipart/mixed réunit des contenus de natures différentes, comme une attachment ; il contient multipart/related et application/pdf. multipart/related forme un tout, le HTML et ses images intégrées ; il contient multipart/alternative et image/png. multipart/alternative donne deux versions du même contenu, la préférée en dernier : text/plain puis text/html.
+  MX[&quot;multipart/mixed&quot;] --&gt;|&quot;corps principal&quot;| REL[&quot;multipart/related&quot;]
+  MX --&gt;|&quot;pièce jointe&quot;| PDF[&quot;application/pdf&quot;]
+  REL --&gt;|&quot;contenu à afficher&quot;| ALT[&quot;multipart/alternative&quot;]
+  REL --&gt;|&quot;ressource référencée par CID&quot;| PNG[&quot;image/png&quot;]
+  ALT --&gt;|&quot;première version&quot;| TP[&quot;text/plain&quot;]
+  ALT --&gt;|&quot;version préférée en dernier&quot;| TH[&quot;text/html&quot;]
+  classDef container fill:#e0f2fe,stroke:#075985,color:#0c4a6e
+  classDef data fill:#dcfce7,stroke:#166534,color:#14532d
+  class MX,REL,ALT container
+  class PDF,PNG,TP,TH data</div></figure>
+<p>Bleu : conteneurs MIME ; vert : parties de contenu. Les flèches représentent
+la <strong>composition</strong>, pas une chronologie d'envoi. Le client choisit une version
+qu'il sait afficher dans <code>alternative</code> ; il ne concatène pas le texte et le HTML.</p>
+<p>Pourquoi trois conteneurs et pas un seul ? Parce que trois relations
+différentes existent entre les parties :</p>
+<pre class="highlight" tabindex="0"><code class="language-text">┌───────────────┬──────────────────────────┬───────────────────────────────┐
+│ Conteneur     │ Relation entre parties   │ Exemple                       │
+├───────────────┼──────────────────────────┼───────────────────────────────┤
+│ alternative   │ même contenu, plusieurs  │ text/plain  puis  text/html   │
+│               │ versions : on en choisit │ (préférée = la DERNIÈRE)      │
+│               │ UNE                      │                               │
+├───────────────┼──────────────────────────┼───────────────────────────────┤
+│ related       │ parties qui forment UN   │ HTML + image intégrée (CID)   │
+│               │ tout                     │                               │
+├───────────────┼──────────────────────────┼───────────────────────────────┤
+│ mixed         │ contenus de natures      │ corps du message + PDF joint  │
+│               │ différentes              │                               │
+└───────────────┴──────────────────────────┴───────────────────────────────┘</code></pre></section><section class="teaching-section" data-section="s-l-exemple-une-notification"><h2 id="s-l-exemple-une-notification" tabindex="-1">L&#x27;exemple : une notification</h2><p class="teaching-label example"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="code" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6L2 12L8 18M16 6L22 12L16 18M14 3L10 21"></path></svg> <strong>Exemple concret</strong></p><aside class="section-digest" id="s-l-exemple-une-notification-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Email couvre les usages courants.</li><li>Message permet un contrôle plus bas niveau.</li></ol></aside><p><strong>Où en est-on ?</strong> Toujours l'étape 1 : on écrit le code qui produit un arbre
+(la partie <code>Email</code>). Code minimal d'abord, détails ensuite.</p>
+<p>Avec Mime 8.0 et PHP 8.4, ce message annonce le rapport. Les adresses sont
+fictives ; <code>$reportPath</code> désigne un PDF déjà produit, lisible et autorisé
+par l'application. Composer le message ne génère pas ce PDF :</p>
+<pre class="highlight" tabindex="0"><code class="language-php">use Symfony\Component\Mime\Email;
+
+$email = new Email()
+    -&gt;from('reports@example.test')
+    -&gt;to('editor@example.test')
+    -&gt;addCc('reviewer@example.test')
+    -&gt;priority(Email::PRIORITY_HIGH)
+    -&gt;subject('Rapport d’import disponible')
+    -&gt;text('Le rapport de l’import des articles est disponible en pièce jointe.')
+    -&gt;html('&lt;p&gt;Le rapport de l’import des articles est disponible en pièce jointe.&lt;/p&gt;')
+    -&gt;attachFromPath($reportPath);</code></pre>
+<p>Ce fragment suppose un PDF lisible au chemin indiqué. Il n'ajoute <strong>pas</strong>
+d'image intégrée : son arbre omet donc <code>related</code> et <code>image/png</code>, contrairement
+à la vue complète. Construire l'Email n'envoie aucun message.</p>
+<p>Ce que Symfony en déduit, ligne par ligne :</p>
+<table>
+<thead>
+<tr>
+<th>Appel</th>
+<th>Effet sur le document</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>from()</code>, <code>to()</code>, <code>addCc()</code></td>
+<td>en-têtes d'adresses</td>
+</tr>
+<tr>
+<td><code>priority(Email::PRIORITY_HIGH)</code></td>
+<td>indication de priorité du courriel</td>
+</tr>
+<tr>
+<td><code>text()</code> + <code>html()</code></td>
+<td>deux versions → <code>multipart/alternative</code></td>
+</tr>
+<tr>
+<td><code>attachFromPath()</code></td>
+<td>pièce jointe → l'arbre est enveloppé dans <code>multipart/mixed</code></td>
+</tr>
+</tbody>
+</table>
+<p><code>PRIORITY_HIGH</code> renseigne une priorité de courriel : elle ne choisit ni
+la priorité d'un listener EventDispatcher, ni l'ordre de consommation
+d'une file Messenger. Ne pas traiter une indication destinée aux clients
+mail comme une garantie d'exécution.</p></section><section class="teaching-section" data-section="s-deux-api-pour-un-meme-message"><span class="outcome-anchor" id="out-OUT-svzhszy009bw" tabindex="-1"></span><h2 id="s-deux-api-pour-un-meme-message" tabindex="-1">Deux API pour un même message</h2><aside class="section-digest" id="s-deux-api-pour-un-meme-message-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Le bas niveau offre plus de contrôle.</li><li>Il ajoute aussi de la complexité.</li><li>Un objet Email restauré et sa représentation MIME brute sont deux types distincts.</li></ol></aside><p><strong>Où en est-on ?</strong> Étape 1 sur 4 (suite) : le code précédent utilisait
+<code>Email</code>. Existe-t-il autre chose, et quand l'utiliser ?</p>
+<p>La notification courante n'a pas besoin de construire chaque partie à
+la main. Garder <code>Email</code> tant que ses méthodes décrivent le document voulu ;
+passer au bas niveau seulement pour un besoin d'assemblage explicite :</p>
+<p><code>Email</code> est l'API haut niveau ; <code>Message</code> contrôle chaque partie à la main,
+et la documentation la déconseille pour un besoin ordinaire. <code>Email</code> et
+<code>Message</code> peuvent être sérialisés comme objets PHP ; un <code>RawMessage</code>, lui,
+peut être construit depuis le texte MIME produit par <code>toString()</code>. Ne pas
+confondre ces représentations ni appeler <code>unserialize()</code> sur des données
+provenant d'une source non fiable.</p>
+<pre class="highlight" tabindex="0"><code class="language-text">┌─────────────────────────────┐  ┌──────────────────────┐  ┌───────────────────┐
+│ Email                       │  │ Message              │  │ RawMessage        │
+├─────────────────────────────┤  ├──────────────────────┤  ├───────────────────┤
+│ Haut niveau, chaînable      │  │ Bas niveau           │  │ Texte MIME brut   │
+│ text(), html(), attach...() │  │ chaque partie à la   │  │ construit depuis  │
+│ construit l'arbre MIME      │  │ main (déconseillé    │  │ toString()        │
+│ lui-même                    │  │ en usage courant)    │  │                   │
+└─────────────────────────────┘  └──────────────────────┘  └───────────────────┘</code></pre>
+<p>Après restauration d'une sérialisation PHP fiable d'<code>Email</code>, le résultat
+est un objet Email, pas du texte MIME. Pour conserver ce dernier format,
+utiliser <code>$raw = $email-&gt;toString()</code>, puis
+<code>new \Symfony\Component\Mime\RawMessage($raw)</code>. RawMessage ne transforme
+pas implicitement un Email passé à son constructeur et ne le reparcourt
+pas en objet de haut niveau. Un contrôle de type après <code>unserialize()</code>
+ne rend pas sûre une entrée non fiable.</p>
+<p>Avant / après :</p>
+<pre class="highlight" tabindex="0"><code class="language-text">Email ──serialize()──▶ chaîne PHP ──unserialize()──▶ Email (objet)
+Email ──toString()───▶ texte MIME ──new RawMessage()──▶ RawMessage (texte)</code></pre></section><section class="teaching-section" data-section="s-l-arborescence-mime"><span class="outcome-anchor" id="out-OUT-8mvg51813h97" tabindex="-1"></span><h2 id="s-l-arborescence-mime" tabindex="-1">L&#x27;arborescence MIME</h2><aside class="section-digest" id="s-l-arborescence-mime-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Les parties représentent le même contenu.</li><li>L&#x27;ordre exprime la préférence.</li></ol></aside><p><strong>Où en est-on ?</strong> Étape 2 sur 4 : on a vu le schéma complet au début ; on
+explique maintenant <strong>pourquoi</strong> chaque conteneur existe et qui le construit.</p>
+<div class="admonition info">
+<p class="admonition-title">🌍 In Real Life</p>
+<p><strong>La situation</strong> : le dossier de notification du blog contient une note simple, sa version illustrée et un rapport indépendant.</p>
+<p><strong>L’équivalent dans Symfony</strong> : deux présentations de la note → <code>alternative</code> ; note avec ses illustrations liées → <code>related</code> ; ensemble avec rapport séparé → <code>mixed</code>.</p>
+<p><strong>Retour à la réalité technique</strong> : les conteneurs expriment des relations entre parties, pas trois phases d'envoi. <code>Email</code> ne crée que ceux nécessaires ; la variante préférée d'une alternative vient en dernier.</p>
+<p><strong>🧠 Comment le mémoriser</strong> : « Autre version, pièces liées, pièces séparées. » Image mentale : trois pochettes imbriquées portant ces indications. Question-réflexe : ces parties se remplacent-elles ou se complètent-elles ?</p>
+<p><strong>⚠️ À ne pas confondre</strong> : composer l'arbre MIME et remettre le courriel à un transport.</p>
+</div>
+<p>L'arbre ci-dessus est exactement celui qu'<code>Email</code> produit pour texte, HTML,
+image intégrée et PDF joint. <code>alternative</code> réunit des versions du même
+contenu, <code>related</code> des parties qui forment un tout, <code>mixed</code> des contenus de
+natures différentes.</p>
+<p><code>Email::generateBody()</code> construit d'abord les alternatives texte/HTML,
+les enveloppe dans <code>related</code> s'il existe des parties liées, puis dans
+<code>mixed</code> s'il existe des pièces indépendantes. Les conteneurs inutiles
+ne sont pas ajoutés : texte seul donne <code>text/plain</code>.</p>
+<pre class="highlight" tabindex="0"><code class="language-text">Contenu de l'Email            Arbre produit
+─────────────────────────     ──────────────────────────────────
+text()                        text/plain
+text() + html()               alternative(plain, html)
++ image intégrée (CID)        related(alternative(...), image)
++ pièce jointe                mixed(related(...), pièce)</code></pre>
+<p>Voici une version sans fichier externe pour observer la représentation
+MIME, avec Mime 8.0 chargé :</p>
+<pre class="highlight" tabindex="0"><code class="language-php">&lt;?php
+use Symfony\Component\Mime\Address;
+use Symfony\Component\Mime\Email;
+
+$email = (new Email())
+    -&gt;from(new Address('reports@example.test', 'Rapports'))
+    -&gt;to('reader@example.test')
+    -&gt;subject('Rapport prêt')
+    -&gt;text('Votre rapport est prêt.')
+    -&gt;html('&lt;p&gt;Votre rapport est prêt.&lt;/p&gt;');
+echo $email-&gt;toString();</code></pre>
+<p>Le résultat est un texte MIME avec <code>multipart/alternative</code>, une partie
+<code>text/plain</code> puis <code>text/html</code>. Les frontières générées ne sont pas une
+chaîne fixe à comparer dans un test. Aucun transport n'est appelé.
+Une image simplement jointe n'apparaît pas automatiquement dans le HTML :
+une ressource intégrée demande une référence CID cohérente.
+Échapper les données non fiables avant de les inclure dans un corps HTML.</p></section><section class="teaching-section" data-section="s-les-adresses"><span class="outcome-anchor" id="out-OUT-1c0gmbpg2341" tabindex="-1"></span><h2 id="s-les-adresses" tabindex="-1">Les adresses</h2><aside class="section-digest" id="s-les-adresses-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Le préfixe add conserve la liste.</li><li>Un nouvel appel to remplace la destination.</li></ol></aside><p><strong>Où en est-on ?</strong> Étape 3 sur 4 : l'arbre est clair. Reste à dire <strong>à qui</strong>
+le message va. Piège principal : l'adresse affichée et l'adresse de remise
+ne sont pas la même chose.</p>
+<div class="admonition info">
+<p class="admonition-title">🌍 In Real Life</p>
+<p><strong>La situation</strong> : la lettre du blog affiche un en-tête élégant, tandis que le bordereau postal indique les adresses utilisées pour l'acheminement.</p>
+<p><strong>L’équivalent dans Symfony</strong> : nom imprimé → nom d'affichage ; en-têtes du message → adresses présentées ; bordereau d'acheminement → enveloppe Mailer.</p>
+<p><strong>Retour à la réalité technique</strong> : l'enveloppe et le contenu du message sont distincts, même lorsque l'enveloppe est déduite des en-têtes. <code>to()</code> remplace la liste ; <code>addTo()</code> la complète.</p>
+<p><strong>🧠 Comment le mémoriser</strong> : « Ce qui se lit n'est pas tout ce qui route. » Image mentale : lettre et bordereau côte à côte. Question-réflexe : modifie-t-on la présentation ou les destinataires de remise ?</p>
+<p><strong>⚠️ À ne pas confondre</strong> : enveloppe Mailer et Envelope Messenger portant des stamps.</p>
+</div>
+<p>L'adresse de destination, le nom affiché et l'expéditeur de l'enveloppe
+ne sont pas interchangeables. L'enveloppe Mailer décrit les adresses
+utilisées pour la remise ; elle est distincte des en-têtes présentés :</p>
+<ul>
+<li>Une string ou un object <code>Address</code> ;
+  <code>Address::create('Fabien Potencier &lt;fabien@example.com&gt;')</code> analyse la forme
+  <code>Nom &lt;adresse&gt;</code>.</li>
+<li><code>to()</code>, <code>cc()</code>, <code>bcc()</code> remplacent ; <code>addTo()</code>, <code>addCc()</code>, <code>addBcc()</code>
+  ajoutent.</li>
+<li>L'UTF-8 est admis dans la partie locale, <strong>sauf pour le sender</strong> :
+  <code>Envelope</code> refuse <code>jösé@…</code> comme sender, l'accepte comme destinataire.</li>
+</ul>
+<p>Après <code>to('a@example.test')-&gt;to('b@example.test')</code>, la liste ne garde
+que <code>b@example.test</code>. Avec <code>to('a@example.test')-&gt;addTo('b@example.test')</code>,
+elle contient les deux. Le nom affiché « José » n'est pas la partie locale
+de <code>jösé@example.test</code> : identifier précisément le champ testé.</p>
+<pre class="highlight" tabindex="0"><code class="language-text">to('a')-&gt;to('b')       →  [ b ]          remplace
+to('a')-&gt;addTo('b')    →  [ a, b ]       ajoute
+
+Address::create('Fabien Potencier &lt;fabien@example.com&gt;')
+                        │               │
+                        │               └── adresse
+                        └── nom affiché</code></pre>
+<p>L'acceptation d'un destinataire UTF-8 par l'enveloppe ne garantit pas
+les capacités du serveur SMTP. Cette restriction d'expéditeur est celle
+de <code>Mailer\Envelope</code>, pas une interdiction générale de tout texte UTF-8
+dans un message Mime.</p>
+<table>
+<thead>
+<tr>
+<th>Rôle</th>
+<th>UTF-8 dans la partie locale (<code>jösé@…</code>)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Destinataire (<code>to</code>, <code>cc</code>, <code>bcc</code>)</td>
+<td>accepté par <code>Envelope</code></td>
+</tr>
+<tr>
+<td>Sender de l'enveloppe</td>
+<td><strong>refusé</strong> par <code>Envelope</code></td>
+</tr>
+</tbody>
+</table></section><section class="teaching-section" data-section="s-les-types-mime"><span class="outcome-anchor" id="out-OUT-0rk3gn6523qv" tabindex="-1"></span><h2 id="s-les-types-mime" tabindex="-1">Les types MIME</h2><aside class="section-digest" id="s-les-types-mime-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Un nom .txt peut contenir une image.</li><li>Le contenu détermine la détection.</li></ol></aside><p><strong>Où en est-on ?</strong> Étape 4 sur 4 : l'arbre et les adresses sont réglés.
+Reste la question du <strong>type</strong> de chaque partie (<code>application/pdf</code>,
+<code>image/png</code>…) et deux outils de <code>MimeTypes</code> qui n'ont rien à voir l'un avec l'autre.</p>
+<div class="admonition info">
+<p class="admonition-title">🌍 In Real Life</p>
+<p><strong>La situation</strong> : l'archiviste du blog sait quelles étiquettes conviennent à un rapport, mais doit ouvrir un dossier reçu pour estimer ce qu'il contient.</p>
+<p><strong>L’équivalent dans Symfony</strong> : catalogue d'étiquettes → correspondances de <code>MimeTypes</code> ; examen du fichier → <code>guessMimeType()</code>.</p>
+<p><strong>Retour à la réalité technique</strong> : une correspondance extension/type n'inspecte aucun fichier. Une détection de type reste une identification, pas une preuve d'innocuité ou une autorisation de publier.</p>
+<p><strong>🧠 Comment le mémoriser</strong> : « Lire l'étiquette ou examiner le contenu ? » Image mentale : catalogue fermé à côté d'un dossier ouvert. Question-réflexe : quelle information mon appel observe-t-il réellement ?</p>
+<p><strong>⚠️ À ne pas confondre</strong> : extension déclarée, type détecté et validation de sécurité.</p>
+</div>
+<p>Le PDF du rapport porte un type de contenu. Deux questions restent
+distinctes : « quelles extensions correspondent à ce type ? » consulte
+une table ; « quel est ce fichier ? » demande une inspection :</p>
+<pre class="highlight" tabindex="0"><code class="language-text">┌──────────────────────────────┐   ┌──────────────────────────────────┐
+│ getExtensions / getMimeTypes │   │ guessMimeType($path)             │
+├──────────────────────────────┤   ├──────────────────────────────────┤
+│ Consulte une TABLE           │   │ INSPECTE le contenu du file      │
+│ N'ouvre aucun fichier        │   │ Ignore le nom : PNG nommé .txt   │
+│ Rend des arrays par priority │   │ → image/png                      │
+│                              │   │ fileinfo l'accélère              │
+└──────────────────────────────┘   └──────────────────────────────────┘</code></pre>
+<table>
+<thead>
+<tr>
+<th>Appel</th>
+<th>Table intégrée 8.0</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>getExtensions('image/jpeg')</code></td>
+<td><code>jpg</code>, <code>jpeg</code>, <code>jpe</code>, <code>jfif</code></td>
+</tr>
+<tr>
+<td><code>getMimeTypes('js')</code></td>
+<td><code>text/javascript</code> d'abord</td>
+</tr>
+</tbody>
+</table>
+<p>Les arrays sont classés <strong>par priority</strong>, le premier étant le préféré — la
+documentation 8.0 en montre un ordre que le code ne rend plus.
+<code>guessMimeType()</code> <strong>lit le contenu</strong>, pas le nom : un PNG nommé <code>.txt</code> est
+<code>image/png</code>. L'extension PHP <code>fileinfo</code> l'accélère ; un devineur maison
+implémente <code>MimeTypeGuesserInterface</code>, tag <code>mime.mime_type_guesser</code>.</p>
+<p>Les résultats du tableau supposent les correspondances intégrées, sans
+remplacement personnalisé. Le registre de devineurs consulte d'abord
+le dernier enregistré, saute ceux qui ne sont pas disponibles, puis
+retient le premier résultat non nul. Il peut rendre <code>null</code> si les
+devineurs disponibles ne reconnaissent rien ; sans devineur disponible,
+il lève une <code>LogicException</code>.</p>
+<figure class="diagram" aria-labelledby="CRS-82d40ncj59k9-8-diagram-0-title CRS-82d40ncj59k9-8-diagram-0-description"><figcaption id="CRS-82d40ncj59k9-8-diagram-0-title">Parcours de guessMimeType à travers les devineurs</figcaption><p id="CRS-82d40ncj59k9-8-diagram-0-description">guessMimeType consulte d&#x27;abord le dernier devineur enregistré. Un devineur indisponible est sauté. Le premier résultat non nul est retenu. Si aucun ne reconnaît le fichier, le résultat est null ; sans aucun devineur disponible, une LogicException est levée.</p><div class="mermaid" hidden>---
+title: Le registre de devineurs de type MIME
+---
+flowchart TD
+  accTitle: Parcours de guessMimeType à travers les devineurs
+  accDescr: guessMimeType consulte d&#x27;abord le dernier devineur enregistré. Un devineur indisponible est sauté. Le premier résultat non nul est retenu. Si aucun ne reconnaît le fichier, le résultat est null ; sans aucun devineur disponible, une LogicException est levée.
+  G[&quot;guessMimeType()&quot;] --&gt; D{&quot;un devineur disponible ?&quot;}
+  D --&gt;|&quot;non&quot;| L([&quot;LogicException&quot;])
+  D --&gt;|&quot;oui, le dernier enregistré d&#x27;abord&quot;| R{&quot;résultat non nul ?&quot;}
+  R --&gt;|&quot;oui&quot;| OK([&quot;type retenu&quot;])
+  R --&gt;|&quot;non, devineur suivant&quot;| N{&quot;d&#x27;autres devineurs ?&quot;}
+  N --&gt;|&quot;oui&quot;| R
+  N --&gt;|&quot;non&quot;| NUL([&quot;null&quot;])</div></figure>
+<p>La détection n'est pas une preuve d'innocuité d'un fichier téléversé.
+Renommer un contenu en <code>.pdf</code> ne le convertit pas, et le qualifier de PDF
+ne dispense pas de limiter taille, accès et usage. Le tag prépare
+l'intégration d'un devineur service ; il ne signifie pas que le conteneur
+inspecte chaque fichier pendant sa compilation.</p></section><section class="teaching-section" data-section="s-pieges-d-examen"><h2 id="s-pieges-d-examen" tabindex="-1">Pièges d&#x27;examen</h2><p class="teaching-label pitfall"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="warning" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3L23 21H1L12 3ZM12 9V14M12 17V18"></path></svg> <strong>Piège à éviter</strong></p><aside class="section-digest" id="s-pieges-d-examen-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Le premier élément est préféré.</li><li>Ne pas déduire une priorité de l&#x27;alphabet.</li></ol></aside><details class="pitfall-explanation"><summary>Voir l’explication : en dernier</summary><p>Deux ordres voisins ont des sens différents : la variante MIME préférée
+vient <strong>en dernier</strong>, alors que le premier résultat d'une table
+<code>MimeTypes</code> est le préféré. Ne pas transférer la règle de l'un à l'autre :</p></details>
+<pre class="highlight" tabindex="0"><code class="language-text">multipart/alternative :  [ text/plain , text/html ]   préférée = DERNIÈRE
+MimeTypes (tables)    :  [ premier , second , ... ]   préféré  = PREMIER</code></pre>
+<ul class="pitfall-list"><li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : Dans multipart/alternative, la version préférée est la dernière.</summary><p><strong>Dans <code>multipart/alternative</code>, la version préférée est la dernière.</strong>
+<em>Plausible car : dans <code>MimeTypes</code> le premier est le préféré, on transfère la
+règle.</em></p></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : guessMimeType() ignore le nom du file</summary><p><strong><code>guessMimeType()</code> ignore le nom du file</strong> — il lit le contenu.
+<em>Plausible car : <code>getMimeTypes('js')</code> part, lui, d'une extension ; on pense que
+la devinette fait pareil.</em></p></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : Les arrays de MimeTypes sont classés par priority, pas alphabétiquement</summary><p><strong>Les arrays de <code>MimeTypes</code> sont classés par priority, pas alphabétiquement</strong>
+— et la priority réelle du code diffère de l'exemple de la documentation.
+<em>Plausible car : la documentation 8.0 montre un autre ordre ; on la croit
+plutôt que le code.</em></p></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : L&#x27;UTF-8 dans la partie locale est refusé pour le sender seul.</summary><p><strong>L'UTF-8 dans la partie locale est refusé pour le sender seul.</strong>
+<em>Plausible car : « UTF-8 interdit » semble une règle générale ; or <code>Envelope</code>
+l'accepte pour un destinataire.</em></p></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : Construire un Email n&#x27;envoie rien.</summary><p><strong>Construire un <code>Email</code> n'envoie rien.</strong> <em>Plausible car : <code>toString()</code> affiche un
+message complet et on croit qu'il est parti ; aucun transport n'est appelé.</em></p></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : to() remplace, addTo() ajoute.</summary><p><strong><code>to()</code> remplace, <code>addTo()</code> ajoute.</strong> <em>Plausible car : le préfixe <code>add</code> est
+facile à oublier lors d'une relecture rapide.</em></p></details></li></ul></section><section class="teaching-section" data-section="s-fiche-express"><h2 id="s-fiche-express" tabindex="-1">Fiche express</h2><p class="teaching-label essential"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="book" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5C9 3 5 3 2 4V20C5 19 9 19 12 21C15 19 19 19 22 20V4C19 3 15 3 12 5V21M5 8H8M5 12H8M16 8H19M16 12H19"></path></svg> <strong>À mémoriser</strong></p><aside class="section-digest" id="s-fiche-express-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Le nom affiché est distinct de l&#x27;adresse.</li><li>Address représente les deux.</li></ol></aside><p>Nous avons maintenant un document structuré avec des destinataires
+explicites. Il peut exister et être inspecté sans qu'un email soit envoyé.
+Cette distinction permet de tester sa composition sans contacter un serveur.</p>
+<p><strong>🧠 À retenir pour la certification :</strong></p>
+<p><strong>Si tu dois retenir seulement 6 choses :</strong></p>
+<ul>
+<li>Mime <strong>fabrique</strong>, Mailer <strong>envoie</strong>.</li>
+<li><strong><code>Email</code></strong> haut niveau ; <code>Message</code> pour les besoins rares.</li>
+<li><code>alternative</code> = même contenu, préféré <strong>en dernier</strong> ; <code>related</code> = un tout ;
+  <code>mixed</code> = natures différentes.</li>
+<li><code>to()</code> remplace, <strong><code>addTo()</code></strong> ajoute ; UTF-8 refusé pour le <strong>sender</strong>.</li>
+<li><code>MimeTypes</code> : arrays <strong>par priority</strong> ; <code>jpg</code> et <code>text/javascript</code> d'abord.</li>
+<li><code>guessMimeType()</code> lit le <strong>contenu</strong> ; <code>fileinfo</code> accélère.</li>
+</ul>
+<p>Moyen mnémotechnique : <strong>« Même contenu, un tout, des natures »</strong>.</p>
+<p>Phrase de mémorisation : <strong>« Mime écrit la lettre : versions alternatives, pièces
+liées en un tout, pièces séparées en mixed ; l'étiquette se lit dans la table,
+le contenu se devine en l'ouvrant. »</strong></p>
+<p>Le cours <a href="course-CRS-h304h6ht87kc.html">Mailer</a> prend le relais : transport,
+éventuelle mise en file et échecs. Une représentation MIME correcte
+n'est pas une preuve de livraison.</p></section><section class="official-sources"><h2 id="reader-sources" tabindex="-1">Sources officielles et compléments</h2><ul><li><a href="https://symfony.com/doc/8.0/components/mime.html">Symfony 8.0 — Mime</a></li></ul></section><section id="course-recalls" aria-labelledby="course-recalls-title" tabindex="-1"><h2 id="course-recalls-title">Rappels et liens avec les autres cours</h2><div data-recall-group="other"><h3>Rappels des cours précédents / autres modules</h3><ul><li data-recall-course="CRS-fhb1cbhnyaxx" data-recall-kind="previous_course"><p class="recall-provenance">Module 20 — Événements et EventDispatcher · Cours « Event »</p><p>La class de base reste minimale. Les données métier nécessitent un modèle supplémentaire.</p><p><a href="#cards-previous">Rappel : <span lang="en">What responsibility does the base Contracts Event provide?</span></a></p></li></ul></div></section><nav class="course-sequence" aria-label="Ordre de lecture"><a rel="prev" href="course-CRS-h304h6ht87kc.html" aria-label="Précédent : Mailer — Module 22 — Mailer et Mime">Précédent : Mailer</a> <a href="lot-22.html">Sommaire : Module 22 — Mailer et Mime</a> <a rel="next" href="course-CRS-am0qe9xa8vzk.html" aria-label="Suivant : Process — Module 23 — Process">Suivant : Process</a></nav><p class="course-practice-entry"><a class="button" href="#view-quiz">Fin du cours — s’entraîner avec le Quiz</a></p></div><div id="view-flashcards" data-course-panel role="region" aria-labelledby="view-flashcards-title"><h2 id="view-flashcards-title">Flashcards</h2><p lang="en">Answer before revealing each card.</p><p>Ces cartes ne mesurent pas une maîtrise notée.</p><div id="cards-s-l-essentiel-1" data-card-section="s-l-essentiel"><h3><a href="#s-l-essentiel">Revoir : L&#x27;essentiel</a></h3><div class="reader-cards"><details class="reader-card" id="B-82d40ncj59k9-01"><summary lang="en">Does the Mime component send email messages?</summary><p lang="en">No. It constructs them; sending belongs to Mailer.</p><p lang="fr">Mime définit le contenu et la structure. Le transport est une responsabilité séparée.</p><a href="course-CRS-82d40ncj59k9.html#out-OUT-0rk3gn6523qv">Revoir le passage précis</a></details></div></div><div id="cards-s-le-schema-2" data-card-section="s-le-schema"><h3><a href="#s-le-schema">Revoir : Le schéma</a></h3><div class="reader-cards"><details class="reader-card" id="B-82d40ncj59k9-02"><summary lang="en">Which multipart relationships correspond to alternative, related and mixed?</summary><p lang="en">Alternative versions, related parts forming one presentation, and independent attachments or contents.</p><p lang="fr">Chaque type exprime une relation. La structure MIME n&#x27;est pas arbitraire.</p><a href="course-CRS-82d40ncj59k9.html#out-OUT-8mvg51813h97">Revoir le passage précis</a></details></div></div><div id="cards-s-l-exemple-une-notification-3" data-card-section="s-l-exemple-une-notification"><h3><a href="#s-l-exemple-une-notification">Revoir : L&#x27;exemple : une notification</a></h3><div class="reader-cards"><details class="reader-card" id="B-82d40ncj59k9-03"><summary lang="en">Which API is recommended for an ordinary text-and-HTML notification?</summary><p lang="en">Email, the high-level fluent API.</p><p lang="fr">Email couvre les usages courants. Message permet un contrôle plus bas niveau.</p><a href="course-CRS-82d40ncj59k9.html#out-OUT-svzhszy009bw">Revoir le passage précis</a></details></div></div><div id="cards-s-deux-api-pour-un-meme-message-4" data-card-section="s-deux-api-pour-un-meme-message"><h3><a href="#s-deux-api-pour-un-meme-message">Revoir : Deux API pour un même message</a></h3><div class="reader-cards"><details class="reader-card" id="B-82d40ncj59k9-04"><summary lang="en">When is the low-level Message API appropriate?</summary><p lang="en">When the application needs explicit control over MIME parts beyond the usual Email API.</p><p lang="fr">Le bas niveau offre plus de contrôle. Il ajoute aussi de la complexité.</p><a href="course-CRS-82d40ncj59k9.html#out-OUT-svzhszy009bw">Revoir le passage précis</a></details></div></div><div id="cards-s-l-arborescence-mime-5" data-card-section="s-l-arborescence-mime"><h3><a href="#s-l-arborescence-mime">Revoir : L&#x27;arborescence MIME</a></h3><div class="reader-cards"><details class="reader-card" id="B-82d40ncj59k9-05"><summary lang="en">In multipart/alternative, where is the preferred representation placed?</summary><p lang="en">Last.</p><p lang="fr">Les parties représentent le même contenu. L&#x27;ordre exprime la préférence.</p><a href="course-CRS-82d40ncj59k9.html#out-OUT-8mvg51813h97">Revoir le passage précis</a></details></div></div><div id="cards-s-les-adresses-6" data-card-section="s-les-adresses"><h3><a href="#s-les-adresses">Revoir : Les adresses</a></h3><div class="reader-cards"><details class="reader-card" id="B-82d40ncj59k9-06"><summary lang="en">How do to() and addTo() differ?</summary><p lang="en">to() replaces recipients; addTo() appends them.</p><p lang="fr">Le préfixe add conserve la liste. Un nouvel appel to remplace la destination.</p><a href="course-CRS-82d40ncj59k9.html#out-OUT-1c0gmbpg2341">Revoir le passage précis</a></details></div></div><div id="cards-s-les-types-mime-7" data-card-section="s-les-types-mime"><h3><a href="#s-les-types-mime">Revoir : Les types MIME</a></h3><div class="reader-cards"><details class="reader-card" id="B-82d40ncj59k9-07"><summary lang="en">Does guessMimeType() trust a file&#x27;s extension?</summary><p lang="en">No. It inspects file contents.</p><p lang="fr">Un nom .txt peut contenir une image. Le contenu détermine la détection.</p><a href="course-CRS-82d40ncj59k9.html#out-OUT-0rk3gn6523qv">Revoir le passage précis</a></details></div></div><div id="cards-s-pieges-d-examen-8" data-card-section="s-pieges-d-examen"><h3><a href="#s-pieges-d-examen">Revoir : Pièges d&#x27;examen</a></h3><div class="reader-cards"><details class="reader-card" id="B-82d40ncj59k9-08"><summary lang="en">Are MimeTypes extension and media-type lists alphabetically ordered?</summary><p lang="en">No. They are ordered by preference or priority.</p><p lang="fr">Le premier élément est préféré. Ne pas déduire une priorité de l&#x27;alphabet.</p><a href="course-CRS-82d40ncj59k9.html#out-OUT-0rk3gn6523qv">Revoir le passage précis</a></details></div></div><div id="cards-s-fiche-express-9" data-card-section="s-fiche-express"><h3><a href="#s-fiche-express">Revoir : Fiche express</a></h3><div class="reader-cards"><details class="reader-card" id="B-82d40ncj59k9-09"><summary lang="en">What does Address::create() parse from &#x27;Ada &lt;ada@example.com&gt;&#x27;?</summary><p lang="en">A display name and an email address.</p><p lang="fr">Le nom affiché est distinct de l&#x27;adresse. Address représente les deux.</p><a href="course-CRS-82d40ncj59k9.html#out-OUT-1c0gmbpg2341">Revoir le passage précis</a></details></div></div><div id="cards-previous"><p class="recall-provenance">Module 20 — Événements et EventDispatcher · Cours « Event »</p><aside class="checkpoint"><h2>Rappel d’un cours antérieur</h2><p>Avant de poursuivre : Event.</p><details class="corpus-correction"><summary lang="en">What responsibility does the base Contracts Event provide?</summary><p lang="en">Stopping and checking propagation.</p><p>La class de base reste minimale. Les données métier nécessitent un modèle supplémentaire.</p><a href="course-CRS-fhb1cbhnyaxx.html#out-OUT-90fn81pm7q7x">Relire la correction dans le cours antérieur</a></details></aside></div></div><div id="view-quiz" data-course-panel role="region" aria-labelledby="view-quiz-title"><aside class="revision-context"><p><strong>Avant le quiz :</strong> Le rapport d&#x27;import est prêt ; l&#x27;équipe éditoriale doit être avertie. Avant de choisir comment envoyer la notification, il faut définir son contenu : texte lisible sans HTML, version enrichie et éventuelle pièce jointe. Mime construit ce document et ses relations entre parties.</p><p>Quelle donnée entre, quelle responsabilité agit et quelle condition change le résultat ? Pour chaque correction, vérifiez ces conditions dans <a href="course-CRS-82d40ncj59k9.html#s-objectif">le passage enseigné</a>, sans supposer que toutes les branches du blog sont exécutées.</p></aside><h2 id="view-quiz-title">Quiz</h2><p class="quiz-size" lang="en">6 eligible learning questions · 6 per session. Repeating a question does not demonstrate mastery.</p><p id="course-quiz-status" role="status">Quiz interactif non chargé. Démarrez après chargement de la banque locale.</p><div id="course-quiz-controls" class="assessment-main" hidden><div id="course-quiz-assessment-controls" hidden><select id="course-quiz-assessment-mode" aria-label="Mode du quiz" hidden><option value="learning">Entraînement</option></select><p id="course-quiz-training-scope"></p><button id="course-quiz-start-assessment" type="button" lang="en">Start practice</button><button id="course-quiz-finish-assessment" type="button" lang="en" hidden>End session</button></div><p id="course-quiz-assessment-error" role="alert"></p><p id="course-quiz-assessment-timer" hidden></p><p id="course-quiz-session-progress" class="quiz-progress" role="status" lang="en"></p><div id="course-quiz-assessment-app" tabindex="-1"></div><nav id="course-quiz-session-navigation" aria-label="Questions du cours"></nav><div id="course-quiz-learning-overview" aria-live="polite"></div></div><div id="course-quiz-native"><p>Sans JavaScript ou si le chargement échoue : aucune tentative notée. Les <a href="#view-flashcards">flashcards du cours</a> restent disponibles.</p><details class="course-quiz-fallback" data-question-id="L-82d40ncj59k9-base-v1"><summary lang="en">Does guessMimeType() trust a file&#x27;s extension?</summary><p>Correction de consultation — non notée.</p><p>Un nom .txt peut contenir une image. Le contenu détermine la détection.</p><ul><li><strong lang="en">Correct: No; it inspects file contents.</strong><p>Un nom .txt peut contenir une image. Le contenu détermine la détection.</p></li><li><strong lang="en">Distractor: Yes; the extension always determines the MIME type.</strong><p>Un PNG nommé .txt reste détecté comme image/png.</p></li><li><strong lang="en">Distractor: No; it only trusts the file&#x27;s parent directory name.</strong><p>Le contenu, pas le directory, détermine cette détection.</p></li></ul><a href="course-CRS-82d40ncj59k9.html#out-OUT-0rk3gn6523qv">Relire le passage exact</a></details></div></div></div></div><details class="transfer-panel"><summary>Sauvegarde et transfert de progression</summary><p id="reading-status" role="status">Sans JavaScript : lecture libre ; progression non enregistrée.</p><p><a href="assessment.html#overview-title">Lecture, réussites immédiates et différées</a></p><p>Transfert manuel — aucune synchronisation automatique</p><p id="persistence-status" role="status"></p><button type="button" class="secondary" id="export-progress">Exporter ma progression</button><label for="import-progress">Choisir un JSON pour fusionner ma progression (sans remplacement)</label><input type="file" id="import-progress" accept="application/json,.json"><p id="transfer-status" role="status"></p></details></main><footer class="site-footer"><a href="catalogue.html">Catalogue</a> <a href="sources.html">Sources et attribution</a> <a href="#contenu">Haut de page</a></footer></body></html>

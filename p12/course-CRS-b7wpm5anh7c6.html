@@ -1,0 +1,460 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; connect-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Configuration (including DotEnv and ExpressionLanguage components) — Symfony 8 Preparation</title><link rel="stylesheet" href="styles.css"><link rel="stylesheet" href="reader.css"><script src="mermaid.min.js" defer></script><script src="mermaid-init.js" defer></script><link rel="stylesheet" href="assessment.css"><script src="fixed-exams-data.js" defer></script><script src="fixed-exams.js" defer></script><script src="learning-state.js" defer></script><script src="guide.js" defer></script><script src="reader-catalog.js" defer></script><script src="reader.js" defer></script><script src="site-state.js" defer></script><script src="assessment.js" defer></script><script src="course-views.js" defer></script><link rel="stylesheet" href="syntax-highlight.css"><script src="prism-syntax.js" defer></script><script src="syntax-highlight.js" defer></script></head><body data-course-id="CRS-b7wpm5anh7c6"><a class="skip" href="#contenu">Aller au contenu</a><header class="site-header"><a class="brand" href="index.html">S8 Preparation</a><nav aria-label="Navigation principale"><a href="index.html">Accueil</a> <a href="catalogue.html">Parcours</a> <a href="assessment.html?mode=review">Réviser</a> <a href="examens.html">Examens blancs</a> <a href="jour-j.html">Jour J</a></nav></header><main id="contenu" tabindex="-1" class="corpus-reader"><nav class="breadcrumb" aria-label="Fil d’Ariane"><a href="index.html">Accueil</a> <span aria-hidden="true">›</span> <a href="catalogue.html">Parcours</a> <span aria-hidden="true">›</span> <a href="lot-14.html">Module 14 — Configuration et diagnostic</a> <span aria-hidden="true">›</span> <span aria-current="page">Configuration (including DotEnv and ExpressionLanguage components)</span></nav><h1>Configuration (including DotEnv and ExpressionLanguage components)</h1><p class="muted">Symfony 8.0 · API PHP ≤ 8.4 · Twig ≤ 3.22. Préparation indépendante.</p><p class="revision-status">Rédaction narrative P11 : projection nouvelle, non couverte par les décisions historiques P10. Aucune approbation officielle ni garantie de réussite.</p><aside class="narrative-context" aria-label="Repères de lecture"><p><strong>Prérequis de lecture :</strong> <a href="course-CRS-p1694d5f7r8c.html">Service container</a> · <a href="course-CRS-mpwjc4g3vmj7.html">Request handling</a></p><p><strong>Concepts voisins :</strong> <a href="course-CRS-mpwjc4g3vmj7.html">Request handling</a> — Raccorder une capacité au blog sans en faire une étape HTTP obligatoire. <a href="lot-14.html">Comparer les responsabilités dans ce module</a> · <a href="carte-composants.html">Situer cette responsabilité dans le blog</a> · <a href="glossaire.html">Distinguer les termes voisins</a></p><p><a href="ordre-lecture.html">Retrouver les 163 cours dans le parcours recommandé</a>. Ce repère ne modifie ni votre historique ni votre progression.</p></aside><div class="course-layout"><details class="lot-course-menu"><summary>Cours du module · 3 cours</summary><nav aria-label="Cours du module"><a class="lot-context" href="lot-14.html">Module 14 — Configuration et diagnostic</a><ol><li><a href="course-CRS-b7wpm5anh7c6.html" aria-current="page">Configuration (including DotEnv and ExpressionLanguage components)</a></li><li><a href="course-CRS-fppjrr6r23tk.html">Error handling</a></li><li><a href="course-CRS-wf523wdsg2xp.html">Code debugging</a></li></ol><a href="lot-14.html#view-quiz">Quiz du module</a></nav></details><aside class="course-section-menu" aria-label="Sommaire du cours"><nav class="course-actions" aria-label="Activités du cours"><a id="tab-course" href="#view-course">Cours</a><a id="tab-flashcards" href="#view-flashcards">Flashcards</a><a id="tab-quiz" href="#view-quiz">Quiz</a></nav><details class="course-section-disclosure"><summary id="course-sections">Sections du cours</summary><nav aria-label="Sections du cours"><ul><li><a href="#s-objectif">Objectif</a></li><li><a href="#s-l-essentiel">L&#x27;essentiel</a></li><li><a href="#s-le-schema">Le schéma</a></li><li><a href="#s-l-exemple">L&#x27;exemple</a></li><li><a href="#s-deux-mecanismes-deux-moments">Deux mécanismes, deux moments</a></li><li><a href="#s-les-parameters">Les parameters</a></li><li><a href="#s-la-cascade-env">La cascade `.env`</a></li><li><a href="#s-les-processeurs-d-environment">Les processeurs d&#x27;environment</a></li><li><a href="#s-expressionlanguage">ExpressionLanguage</a></li><li><a href="#s-pieges-d-examen">Pièges d&#x27;examen</a></li><li><a href="#s-fiche-express">Fiche express</a></li><li><a href="#reader-objectives">Objectifs d’apprentissage</a></li><li><a href="#reader-sources">Sources officielles et compléments</a></li><li><a href="#course-recalls">Rappels et liens avec les autres cours</a></li></ul></nav><nav aria-label="Flashcards par section"><a href="#view-flashcards">Flashcards par section</a><ul><li><a href="#cards-s-l-essentiel-1">L&#x27;essentiel</a></li><li><a href="#cards-s-le-schema-2">Le schéma</a></li><li><a href="#cards-s-l-exemple-3">L&#x27;exemple</a></li><li><a href="#cards-s-deux-mecanismes-deux-moments-4">Deux mécanismes, deux moments</a></li><li><a href="#cards-s-les-parameters-5">Les parameters</a></li><li><a href="#cards-s-la-cascade-env-6">La cascade `.env`</a></li><li><a href="#cards-s-les-processeurs-d-environment-7">Les processeurs d&#x27;environment</a></li><li><a href="#cards-s-expressionlanguage-8">ExpressionLanguage</a></li><li><a href="#cards-s-pieges-d-examen-9">Pièges d&#x27;examen</a></li><li><a href="#cards-s-fiche-express-10">Fiche express</a></li><li><a href="#cards-previous">Module 13 — Tests automatisés · Cours « Request and response objects introspection » · Rappel : <span lang="en">Which layer do getInternalRequest() and getInternalResponse() expose?</span></a></li></ul></nav><nav aria-label="Retour au module"><a href="lot-14.html">Tous les cours du module</a></nav></details><p class="local-quiz-count">7 questions disponibles · 7 par session Quiz</p></aside><div class="course-content"><div id="view-course" data-course-panel role="region" aria-labelledby="view-course-title"><h2 id="view-course-title">Cours</h2><p class="course-introduction"><a href="#s-objectif">Introduction</a> · <a href="#course-sections">Sections du cours</a></p><h2 id="reader-objectives" tabindex="-1">Objectifs d’apprentissage</h2><ul><li><a href="course-CRS-b7wpm5anh7c6.html#out-OUT-tgt66re62pkz">Distinguer parameter et variable d&#x27;environment par leur moment de résolution</a></li><li><a href="course-CRS-b7wpm5anh7c6.html#out-OUT-zbp5kh2xgz63">Ordonner la cascade .env et ce qui la surplombe</a></li><li><a href="course-CRS-b7wpm5anh7c6.html#out-OUT-xrdyp9pn9ffe">Lire une expression ExpressionLanguage et ses deux modes</a></li></ul><aside class="pedagogy-legend" aria-label="Repères pédagogiques"><p><strong>Repères pédagogiques</strong></p><p>Ces repères décrivent le rôle du bloc, pas une fréquence officielle à l’examen.</p><p class="teaching-label essential"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="brain" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5C12 1 6 1 6 5C2 5 1 10 4 12C1 15 3 19 6 19C6 23 12 23 12 19V5M12 5C12 1 18 1 18 5C22 5 23 10 20 12C23 15 21 19 18 19C18 23 12 23 12 19M6 5C6 8 8 9 9 9M4 12H7L9 14M6 19V16M18 5C18 8 16 9 15 9M20 12H17L15 14M18 19V16"></path></svg> <strong>À comprendre</strong></p><p class="teaching-label essential"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="book" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5C9 3 5 3 2 4V20C5 19 9 19 12 21C15 19 19 19 22 20V4C19 3 15 3 12 5V21M5 8H8M5 12H8M16 8H19M16 12H19"></path></svg> <strong>À mémoriser</strong></p><p class="teaching-label example"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="code" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6L2 12L8 18M16 6L22 12L16 18M14 3L10 21"></path></svg> <strong>Exemple concret</strong></p><p class="teaching-label pitfall"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="warning" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3L23 21H1L12 3ZM12 9V14M12 17V18"></path></svg> <strong>Piège à éviter</strong></p><p class="teaching-label nuance"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="balance" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3V21M7 21H17M3 7L21 5M5 7L1 15H9L5 7M19 6L15 14H23L19 6M1 15Q5 20 9 15M15 14Q19 19 23 14"></path></svg> <strong>Nuance à connaître</strong></p><p>Précision, exception ou condition d’application d’une règle.</p></aside><section class="teaching-section" data-section="s-objectif"><h2 id="s-objectif" tabindex="-1">Objectif</h2><p>La page <code>/blog/42</code> fonctionne, mais le nombre d'articles par page doit varier
+entre les machines sans réécrire le contrôleur. Nous allons suivre une valeur
+depuis sa source jusqu'au service qui la consomme : emplacement, priorité,
+conversion et moment de résolution expliquent des pannes très différentes.</p>
+<p>Quatre questions guident le cours, dans cet ordre :</p>
+<ol>
+<li><strong>Quand</strong> la valeur est-elle fixée (compilation ou exécution) ?</li>
+<li><strong>Quel fichier ou quelle variable</strong> gagne quand plusieurs la définissent ?</li>
+<li><strong>Quel processeur</strong> la convertit (une variable est toujours une string) ?</li>
+<li><strong>Comment</strong> écrire une petite règle d'une ligne avec ExpressionLanguage ?</li>
+</ol></section><section class="teaching-section" data-section="s-l-essentiel"><h2 id="s-l-essentiel" tabindex="-1">L&#x27;essentiel</h2><p class="teaching-label essential"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="brain" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5C12 1 6 1 6 5C2 5 1 10 4 12C1 15 3 19 6 19C6 23 12 23 12 19V5M12 5C12 1 18 1 18 5C22 5 23 10 20 12C23 15 21 19 18 19C18 23 12 23 12 19M6 5C6 8 8 9 9 9M4 12H7L9 14M6 19V16M18 5C18 8 16 9 15 9M20 12H17L15 14M18 19V16"></path></svg> <strong>À comprendre</strong></p><aside class="section-digest" id="s-l-essentiel-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Le système fournit la valeur prioritaire.</li><li>Dotenv complète normalement les valeurs manquantes.</li></ol></aside><p><strong>Ce que cette partie veut réellement vous apprendre.</strong></p>
+<ul>
+<li><em>Pourquoi ce sujet existe.</em> Le même code doit tourner sur votre poste, en
+  test et en production, avec des réglages différents (port, taille de page,
+  URL de base de données). Symfony sépare donc ce qui est <strong>décidé par le
+  projet</strong> (parameters) de ce qui est <strong>décidé par la machine</strong>
+  (variables d'environment).</li>
+<li><em>Le piège de fond.</em> Trois questions se mélangent : « où est écrite la
+  valeur ? », « qui gagne en cas de conflit ? », « quand est-elle lue ? ».
+  La certification les sépare ; vous devez faire de même.</li>
+<li><em>Pourquoi c'est à l'examen.</em> Les questions portent sur l'ordre de la
+  cascade <code>.env</code>, sur <code>.env.local</code> ignoré en <code>test</code>, sur <code>.env.local.php</code>, sur
+  <code>APP_DEBUG</code>, sur l'ordre des processeurs et sur <code>evaluate()</code>/<code>compile()</code>/<code>lint()</code>.</li>
+</ul>
+<p>Un <strong>parameter</strong> est figé à la compilation du container ; une <strong>variable
+d'environment</strong> est lue à l'exécution. Les files <code>.env</code> se chargent en
+cascade — le dernier chargé gagne —, mais une vraie variable du serveur passe
+avant eux. Et ExpressionLanguage évalue ou compile une expression d'une ligne,
+écrite en configuration.</p>
+<p>Ici, « à l'exécution » ne signifie pas « relu à chaque appel » :
+le container mémorise les valeurs d'environnement qu'il résout.
+Il faut distinguer la préparation du container, l'amorçage du processus
+et l'utilisation d'un service déjà construit.</p></section><section class="teaching-section" data-section="s-le-schema"><h2 id="s-le-schema" tabindex="-1">Le schéma</h2><aside class="section-digest" id="s-le-schema-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Le moment de résolution diffère.</li><li>Un placeholder permet de garder une valeur dépendante du serveur.</li></ol></aside><p><strong>Où en est-on ?</strong> Ce cours suit une valeur en quatre étapes : (1) deux
+mécanismes et deux moments, (2) la cascade <code>.env</code>, (3) les processeurs,
+(4) ExpressionLanguage. Le schéma ci-dessous résume les étapes 2 et 3.</p>
+<pre class="highlight" tabindex="0"><code class="language-text">Valeur de config
+   ├─ 1. Parameter (services.yaml)  → figé à la COMPILATION
+   │      └─ peut contenir %env(...)% → référence DIFFÉRÉE
+   ├─ 2. Variable d'environment     → lue à l'EXÉCUTION (puis mémorisée)
+   │      └─ vraie variable &gt; .env.&lt;env&gt;.local &gt; .env.&lt;env&gt; &gt; .env.local &gt; .env
+   ├─ 3. Processeur (int:, bool:, json:, base64:)  → convertit la string
+   └─ 4. ExpressionLanguage → évalue / compile une règle d'une ligne</code></pre>
+<p>Lire le diagramme avec deux questions successives : quelle source fournit
+la chaîne, puis quel processeur la convertit ? Dotenv ne choisit pas les
+services, et un processeur ne décide pas quelle règle métier est autorisée.</p>
+<figure class="diagram" aria-labelledby="CRS-b7wpm5anh7c6-3-diagram-0-title CRS-b7wpm5anh7c6-3-diagram-0-description"><figcaption id="CRS-b7wpm5anh7c6-3-diagram-0-title">Comment Dotenv choisit la valeur d&#x27;une variable d&#x27;environment</figcaption><p id="CRS-b7wpm5anh7c6-3-diagram-0-description">bootEnv lit d&#x27;abord .env.local.php s&#x27;il existe et que son APP_ENV correspond à l&#x27;environment réel ; les files .env ne sont alors pas analysés. Sinon, loadEnv charge .env, puis .env.local sauf en test, puis .env de l&#x27;environment, puis sa version locale ; le dernier chargé gagne. Une vraie variable d&#x27;environment l&#x27;emporte sur tous ces files, sauf avec overrideExistingVars. La valeur, toujours une string, est convertie par les processeurs à l&#x27;exécution, de droite à gauche.</p><div class="mermaid" hidden>---
+title: D&#x27;où vient la valeur d&#x27;une variable d&#x27;environment
+---
+flowchart TD
+  accTitle: Comment Dotenv choisit la valeur d&#x27;une variable d&#x27;environment
+  accDescr: bootEnv lit d&#x27;abord .env.local.php s&#x27;il existe et que son APP_ENV correspond à l&#x27;environment réel ; les files .env ne sont alors pas analysés. Sinon, loadEnv charge .env, puis .env.local sauf en test, puis .env de l&#x27;environment, puis sa version locale ; le dernier chargé gagne. Une vraie variable d&#x27;environment l&#x27;emporte sur tous ces files, sauf avec overrideExistingVars. La valeur, toujours une string, est convertie par les processeurs à l&#x27;exécution, de droite à gauche.
+  START[&quot;bootEnv&quot;] --&gt;|&quot;cherche le dump compatible&quot;| PHP{&quot;.env.local.php utilisable ?&quot;}
+  PHP --&gt;|&quot;oui&quot;| DUMP([&quot;ses valeurs ; aucun file .env analysé&quot;])
+  PHP --&gt;|&quot;non&quot;| L1[&quot;.env&quot;]
+  L1 --&gt;|&quot;lit APP_ENV&quot;| L2{&quot;Environment test ?&quot;}
+  L2 --&gt;|&quot;non&quot;| L3[&quot;.env.local&quot;]
+  L2 --&gt;|&quot;oui, .env.local ignoré&quot;| L4
+  L3 --&gt;|&quot;poursuit la cascade&quot;| L4[&quot;.env.ENV puis .env.ENV.local&quot;]
+  L4 --&gt;|&quot;priorité lors du peuplement&quot;| REAL{&quot;Vraie variable déjà définie ?&quot;}
+  REAL --&gt;|&quot;oui, par défaut&quot;| KEEP([&quot;la vraie variable gagne&quot;])
+  REAL --&gt;|&quot;non, ou overrideExistingVars&quot;| FILE([&quot;la valeur des files&quot;])
+  KEEP --&gt;|&quot;valeur résolue&quot;| PROC[&quot;Processeurs : base64 puis json&quot;]
+  FILE --&gt;|&quot;valeur résolue&quot;| PROC
+  DUMP --&gt;|&quot;même règle de priorité&quot;| REAL
+  classDef action fill:#e0f2fe,stroke:#075985,color:#0c4a6e
+  classDef decision fill:#fef3c7,stroke:#92400e,color:#78350f
+  classDef result fill:#dcfce7,stroke:#166534,color:#14532d
+  class START,L1,L3,L4,PROC action
+  class PHP,L2,REAL decision
+  class DUMP,KEEP,FILE result</div></figure>
+<p>Bleu : chargement/transformation ; ambre : choix ; vert : valeurs retenues.
+La priorité système s'applique aussi au dump PHP : il ne remplace pas
+automatiquement les vraies variables. Pour <code>PORT=443</code>, <code>%env(int:PORT)%</code>
+produit l'entier <code>443</code>, pas la chaîne du fichier de développement.</p></section><section class="teaching-section" data-section="s-l-exemple"><h2 id="s-l-exemple" tabindex="-1">L&#x27;exemple</h2><p class="teaching-label example"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="code" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6L2 12L8 18M16 6L22 12L16 18M14 3L10 21"></path></svg> <strong>Exemple concret</strong></p><aside class="section-digest" id="s-l-exemple-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Les variables sont des strings.</li><li>Le processor impose la conversion attendue.</li></ol></aside><p><strong>Où en est-on ?</strong> Avant la théorie, un cas concret : le même mécanisme
+sert à un port serveur et à la taille de page du blog. Code minimal d'abord.</p>
+<p>Le port ci-dessous illustre une valeur propre au serveur. Pour la pagination
+<code>/blog/page/{page}</code>, le même mécanisme peut fournir un <code>BLOG_PAGE_SIZE</code> :</p>
+<pre class="highlight" tabindex="0"><code class="language-yaml">parameters:
+    app.blog_page_size: '%env(int:BLOG_PAGE_SIZE)%'</code></pre>
+<p>Avec la valeur fictive <code>BLOG_PAGE_SIZE=20</code>, le paramètre résolu vaut l'entier
+20. Ce fragment ne l'injecte pas automatiquement dans un service :
+configurer l'argument qui en a besoin. La conversion <code>int</code> ne remplace pas
+la validation métier, par exemple exiger un nombre strictement positif.</p>
+<p>Ce que Symfony voit :</p>
+<table>
+<thead>
+<tr>
+<th>Élément</th>
+<th>Ce que Symfony fait</th>
+<th>Ce qu'il ne fait pas</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>app.blog_page_size</code></td>
+<td>enregistre un parameter contenant une référence</td>
+<td>ne lit pas encore <code>BLOG_PAGE_SIZE</code></td>
+</tr>
+<tr>
+<td><code>%env(int:...)%</code></td>
+<td>résout la variable, la convertit en <code>int</code></td>
+<td>ne vérifie pas que le nombre est &gt; 0</td>
+</tr>
+<tr>
+<td>le service consommateur</td>
+<td>reçoit la valeur si on configure son argument</td>
+<td>n'est pas câblé automatiquement par ce YAML</td>
+</tr>
+</tbody>
+</table>
+<p>Les fragments suivants sont des configurations à lire, pas des fichiers
+d'environnement créés par ce cours :</p>
+<pre class="highlight" tabindex="0"><code class="language-yaml"># config/services.yaml
+parameters:
+    app.admin_email: 'admin@example.com'          # figé à la compilation
+    app.port: '%env(int:PORT)%'                    # lu à l'exécution, converti</code></pre>
+<pre class="highlight" tabindex="0"><code class="language-bash"># .env          → PORT=8000           (versionné, valeur par défaut)
+# .env.local    → PORT=8080           (ce poste, hors test)
+# .env.prod     → PORT=80             (la production, versionné)
+# serveur       → export PORT=443     (vraie variable : elle gagne)</code></pre>
+<p>Avant / après, pour <code>PORT</code> selon l'endroit où on regarde (en <code>prod</code>) :</p>
+<pre class="highlight" tabindex="0"><code class="language-text">.env            PORT=8000
+.env.local      PORT=8080      ← chargé après .env : remplace 8000
+.env.prod       PORT=80        ← chargé après .env.local : remplace 8080
+serveur         PORT=443       ← vraie variable : gagne sur tous les files
+                                 %env(int:PORT)% → l'entier 443</code></pre></section><section class="teaching-section" data-section="s-deux-mecanismes-deux-moments"><span class="outcome-anchor" id="out-OUT-tgt66re62pkz" tabindex="-1"></span><h2 id="s-deux-mecanismes-deux-moments" tabindex="-1">Deux mécanismes, deux moments</h2><aside class="section-digest" id="s-deux-mecanismes-deux-moments-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Le code compilé peut rester identique.</li><li>La résolution fournit les valeurs propres à la machine.</li></ol></aside><p><strong>Où en est-on ?</strong> Étape 1 sur 4 : avant de parler de fichiers, il faut
+savoir <strong>quand</strong> une valeur est décidée. Tout le reste en découle.</p>
+<div class="admonition info">
+<p class="admonition-title">🌍 In Real Life</p>
+<p><strong>La situation</strong> : le manuel d'exploitation du blog fixe certaines règles, mais laisse une case pour la taille des lots propre au lieu de déploiement.</p>
+<p><strong>L’équivalent dans Symfony</strong> : règle intégrée au manuel → paramètre ordinaire compilé ; case à résoudre plus tard → référence <code>%env(...)%</code>.</p>
+<p><strong>Retour à la réalité technique</strong> : mettre une référence env dans <code>parameters</code> ne la transforme pas automatiquement en valeur déjà résolue à la compilation. Résolution à l'exécution ne signifie pas relecture du disque à chaque appel : le conteneur peut mémoriser la valeur.</p>
+<p><strong>🧠 Comment le mémoriser</strong> : « Une règle écrite peut contenir une case différée. » Image mentale : manuel imprimé avec un emplacement étiqueté. Question-réflexe : la valeur est-elle littérale, différée ou déjà résolue ?</p>
+<p><strong>⚠️ À ne pas confondre</strong> : préparation du conteneur et construction des objets qui reçoivent ces valeurs.</p>
+</div>
+<p><strong>Pourquoi deux mécanismes ?</strong> Parce qu'on veut compiler le container <strong>une
+seule fois</strong> et le déployer partout. Si la valeur du port était écrite dans le
+container compilé, il faudrait recompiler pour chaque machine. Une variable
+d'environment reste donc une <strong>référence</strong> que l'on résout plus tard.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Parameter</th>
+<th>Variable d'environment</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Écrit dans</td>
+<td><code>config/services.yaml</code>, key <code>parameters</code></td>
+<td>un file <code>.env</code>, ou le système</td>
+</tr>
+<tr>
+<td>Référencé par</td>
+<td><code>%app.admin_email%</code></td>
+<td><code>%env(DATABASE_URL)%</code></td>
+</tr>
+<tr>
+<td>Résolu</td>
+<td><strong>à la compilation</strong></td>
+<td><strong>à l'exécution</strong></td>
+</tr>
+</tbody>
+</table>
+<p>C'est ce qui permet de déployer le même container compilé sur plusieurs
+machines. Une entrée <code>parameters</code> contenant <code>%env(...)%</code>, comme <code>app.port</code>,
+reste une référence différée : ne pas confondre son emplacement YAML avec
+le moment où sa valeur est résolue.</p>
+<p>Les extensions de bundles chargent et interprètent leurs configurations ;
+les compiler passes transforment les définitions. L'autowiring raccorde
+les dépendances et l'autoconfiguration attribue des conventions comme
+les tags. Ces opérations préparent le container réutilisable :
+<code>GET /blog/42</code> ne recommence pas cette compilation à chaque passage.
+À l'utilisation d'un placeholder, <code>Container::getEnv()</code> consulte son cache,
+sinon appelle le processeur et mémorise le résultat. Un worker d'import
+déjà lancé n'est donc pas un lecteur permanent des changements du serveur.</p>
+<pre class="highlight" tabindex="0"><code class="language-text"> COMPILATION (une fois)         AMORÇAGE du processus      UTILISATION
+ ─────────────────────         ──────────────────────      ───────────────
+ extensions, compiler passes   Dotenv lit les .env         getEnv(): cache ?
+ autowiring, parameters        (ou le dump .env.local.php)   oui → valeur gardée
+ %env()% = référence           variables d'environment       non → processeur
+                                                              puis mémorisation</code></pre></section><section class="teaching-section" data-section="s-les-parameters"><h2 id="s-les-parameters" tabindex="-1">Les parameters</h2><aside class="section-digest" id="s-les-parameters-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Le tag enum conserve le case.</li><li>Ne pas le confondre avec sa backing value.</li></ol></aside><p><strong>Où en est-on ?</strong> Suite de l'étape 1 : ce qui est décidé par le projet
+(les parameters) et ce qu'on peut y écrire.</p>
+<p>Les langues disponibles appartiennent à la politique du projet, alors
+que sa taille de page peut être laissée au déploiement. Dans ce fragment,
+<code>BlogPost::MAX_ITEMS</code> et <code>PostState::Published</code> supposent des types PHP
+déjà définis et autoloadables ; le namespace ne configure aucune persistance :</p>
+<pre class="highlight" tabindex="0"><code class="language-yaml">parameters:
+    app.supported_locales: ['en', 'es', 'fr']
+    app.some_constant: !php/const App\Entity\BlogPost::MAX_ITEMS
+    app.some_enum: !php/enum App\Enum\PostState::Published</code></pre>
+<ul>
+<li><code>!php/enum</code> donne <strong>le case lui-même</strong>, l'object enum ; <code>!php/const</code>, la
+  valeur de la constant.</li>
+<li>Un <code>%</code> littéral se <strong>double</strong> : <code>'a %%s b'</code> est lu <code>a %s b</code>.</li>
+<li>Le préfixe <code>app.</code> est une convention.</li>
+</ul>
+<p>Pourquoi doubler le <code>%</code> ? Parce que <code>%nom%</code> est la syntaxe de référence :
+un <code>%</code> isolé serait pris pour le début d'une référence. <code>%%</code> signifie « un
+vrai <code>%</code> ».</p>
+<table>
+<thead>
+<tr>
+<th>Écriture YAML</th>
+<th>Valeur résolue</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>'a %%s b'</code></td>
+<td>la string <code>a %s b</code></td>
+</tr>
+<tr>
+<td><code>!php/enum App\Enum\PostState::Published</code></td>
+<td>le case <code>PostState::Published</code> (object)</td>
+</tr>
+<tr>
+<td><code>!php/const App\Entity\BlogPost::MAX_ITEMS</code></td>
+<td>la valeur de la constant</td>
+</tr>
+</tbody>
+</table></section><section class="teaching-section" data-section="s-la-cascade-env"><span class="outcome-anchor" id="out-OUT-zbp5kh2xgz63" tabindex="-1"></span><h2 id="s-la-cascade-env" tabindex="-1">La cascade `.env`</h2><aside class="section-digest" id="s-la-cascade-env-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Les tests évitent les réglages personnels généraux.</li><li>Les couches propres à test restent disponibles.</li></ol></aside><p><strong>Où en est-on ?</strong> Étape 2 sur 4 : la valeur vient d'une variable
+d'environment ; plusieurs fichiers peuvent la définir. Qui gagne ?</p>
+<p>Supposons un import qui lit encore la taille 10 malgré une valeur locale 20.
+Avant de vider un cache, rechercher une vraie variable prioritaire,
+un dump applicable, puis l'ordre des fichiers. Les fichiers versionnés
+ne contiennent que des valeurs publiques par défaut, jamais des secrets.</p>
+<table>
+<thead>
+<tr>
+<th>File</th>
+<th>Portée</th>
+<th>Versionné</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>.env</code></td>
+<td>default values, tous environments</td>
+<td><strong>oui</strong></td>
+</tr>
+<tr>
+<td><code>.env.local</code></td>
+<td>cette machine — <strong>ignoré en <code>test</code></strong></td>
+<td>non</td>
+</tr>
+<tr>
+<td><code>.env.&lt;env&gt;</code></td>
+<td>un environment</td>
+<td><strong>oui</strong></td>
+</tr>
+<tr>
+<td><code>.env.&lt;env&gt;.local</code></td>
+<td>cette machine, un environment</td>
+<td>non</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>Entre les files, <strong>le dernier chargé gagne</strong>, dans cet ordre : en <code>dev</code>,
+  <code>.env.dev</code> l'emporte sur <code>.env.local</code>.</li>
+<li><strong>Une vraie variable d'environment l'emporte</strong> sur les files <code>.env</code>,
+  qui ajoutent seulement ce qui manque — sauf si Dotenv est appelé avec
+  <code>overrideExistingVars: true</code>. <code>variables_order</code> doit contenir <code>E</code>.</li>
+<li>Sans dump, les fichiers sont lus à l'amorçage. Dans le modèle PHP par
+  requête, cela se répète à chaque requête ; un worker long ne les relit pas
+  automatiquement. Redémarrer ce worker après un changement de configuration.</li>
+<li><code>composer dump-env prod</code> écrit <code>.env.local.php</code> ; <strong>s'il existe, et si son
+  <code>APP_ENV</code> correspond</strong>, les files <code>.env</code> ne sont plus analysés. La command
+  <code>dotenv:dump</code> exige de déclarer le service <code>DotenvDumpCommand</code>.</li>
+<li><code>bootEnv()</code> fixe <code>APP_DEBUG</code> quand il manque : <code>'1'</code> si l'environment n'est
+  pas <code>prod</code> (donc en <code>dev</code>, et aussi en <code>test</code>), <code>'0'</code> en <code>prod</code> ; c'est
+  une string.</li>
+<li>Syntaxe : <code>#</code>, <code>${AUTRE_VAR}</code>, <code>${VAR:-defaut}</code> ; guillemets simples =
+  littéral, doubles = interpolation.</li>
+</ul>
+<p><strong>Pourquoi <code>.env.local</code> est-il ignoré en <code>test</code> ?</strong> Pour que les tests
+restent reproductibles : les réglages personnels d'un poste ne doivent pas
+changer le résultat de la suite de tests. <code>.env.test.local</code> reste, lui, chargé.</p>
+<p>Ordre de chargement, en <code>dev</code>, du plus faible au plus fort :</p>
+<pre class="highlight" tabindex="0"><code class="language-text">.env  →  .env.local  →  .env.dev  →  .env.dev.local  →  vraie variable
+(faible)                                                      (la plus forte)
+
+en test : .env → .env.test → .env.test.local   (.env.local est sauté)</code></pre>
+<p>Comparaison des deux modes de lecture :</p>
+<pre class="highlight" tabindex="0"><code class="language-text">┌──────────────────────────────────┐   ┌──────────────────────────────────┐
+│       SANS .env.local.php        │   │        AVEC .env.local.php       │
+├──────────────────────────────────┤   ├──────────────────────────────────┤
+│ Qui lit ?  Dotenv (bootEnv)      │   │ Qui lit ?  bootEnv, le dump PHP  │
+│ Quand ?    à l'amorçage          │   │ Quand ?    à l'amorçage          │
+│ Fichiers   .env* analysés        │   │ Fichiers   .env* PAS analysés    │
+│ Condition  aucune                │   │ Condition  APP_ENV identique     │
+│ Création   (rien)                │   │ Création   composer dump-env prod│
+└──────────────────────────────────┘   └──────────────────────────────────┘</code></pre>
+<p>Dans les deux cas, une vraie variable d'environment reste prioritaire.</p></section><section class="teaching-section" data-section="s-les-processeurs-d-environment"><h2 id="s-les-processeurs-d-environment" tabindex="-1">Les processeurs d&#x27;environment</h2><aside class="section-digest" id="s-les-processeurs-d-environment-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>La chaîne transforme progressivement la valeur.</li><li>Inverser les processors peut changer ou casser le résultat.</li></ol></aside><p><strong>Où en est-on ?</strong> Étape 3 sur 4 : on a choisi la valeur, mais c'est une
+<strong>string</strong>. Les processeurs la convertissent.</p>
+<div class="admonition info">
+<p class="admonition-title">🌍 In Real Life</p>
+<p><strong>La situation</strong> : les réglages publics du blog arrivent sous un emballage encodé. Il faut retirer l'emballage avant de lire la fiche structurée.</p>
+<p><strong>L’équivalent dans Symfony</strong> : emballage → base64 ; texte structuré → JSON ; opérations imbriquées → <code>json:base64:CONFIG</code>.</p>
+<p><strong>Retour à la réalité technique</strong> : la chaîne part de la variable à droite, applique base64 puis JSON. Les processeurs convertissent les données ; ils ne changent pas la priorité de leur source. Base64 ne chiffre ni ne protège un secret.</p>
+<p><strong>🧠 Comment le mémoriser</strong> : « Déballer avant de lire. » Image mentale : enveloppe ouverte puis formulaire interprété. Question-réflexe : quel type reçoit chaque processeur ?</p>
+<p><strong>⚠️ À ne pas confondre</strong> : encodage, conversion de type et chiffrement.</p>
+</div>
+<p>Pour transporter des options publiques d'affichage, supposons que <code>CONFIG</code>
+contient le résultat de <code>base64_encode('{"pageSize":20}')</code>.
+L'ordre <code>json:base64:CONFIG</code> rend alors <code>['pageSize' =&gt; 20]</code> ;
+base64 n'est pas du chiffrement et ne protège pas un secret.
+Le tableau concerne cette entrée base64 pour les deux dernières lignes :</p>
+<p>Une variable d'environment est une string ; un processeur la convertit, et
+ils se chaînent <strong>de droite à gauche</strong> :</p>
+<table>
+<thead>
+<tr>
+<th>Référence</th>
+<th>Valeur</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>%env(bool:APP_DEBUG)%</code>, avec <code>0</code></td>
+<td><code>false</code></td>
+</tr>
+<tr>
+<td><code>%env(json:base64:CONFIG)%</code></td>
+<td>base64 décodé, puis JSON lu : l'array</td>
+</tr>
+<tr>
+<td><code>%env(base64:json:CONFIG)%</code></td>
+<td><code>RuntimeException</code> : <em>Invalid JSON in env var "CONFIG"</em></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Pourquoi de droite à gauche ?</strong> Comme des fonctions imbriquées :
+<code>json(base64(CONFIG))</code>. On part de la variable (à droite), on applique le
+processeur le plus proche, puis le suivant vers la gauche.</p>
+<pre class="highlight" tabindex="0"><code class="language-text">%env(json:base64:CONFIG)%          %env(base64:json:CONFIG)%
+         CONFIG                             CONFIG
+           ▼ base64 (décode)                  ▼ json (lit du JSON)
+        '{"pageSize":20}'              texte base64 ≠ JSON → ÉCHEC
+           ▼ json                      RuntimeException
+   ['pageSize' =&gt; 20]                  Invalid JSON in env var "CONFIG"</code></pre></section><section class="teaching-section" data-section="s-expressionlanguage"><span class="outcome-anchor" id="out-OUT-xrdyp9pn9ffe" tabindex="-1"></span><h2 id="s-expressionlanguage" tabindex="-1">ExpressionLanguage</h2><aside class="section-digest" id="s-expressionlanguage-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>ExpressionLanguage possède sa syntaxe.</li><li>Ne pas transposer les opérateurs PHP sans vérifier.</li></ol></aside><p><strong>Où en est-on ?</strong> Étape 4 sur 4 : dernière brique. On quitte les valeurs
+fournies par la machine : ici, on écrit une <strong>petite règle</strong> d'une ligne
+(condition de route, règle d'authorization).</p>
+<div class="admonition info">
+<p class="admonition-title">🌍 In Real Life</p>
+<p><strong>La situation</strong> : une règle de publication du blog utilise les cases autorisées d'une petite fiche de calcul, pas tous les dossiers du bureau.</p>
+<p><strong>L’équivalent dans Symfony</strong> : cases disponibles → variables exposées ; opérations admises → fonctions de l'intégration ; formule → expression.</p>
+<p><strong>Retour à la réalité technique</strong> : ExpressionLanguage évalue une grammaire dédiée, pas un script PHP complet. Les capacités dépendent des variables, objets et fonctions exposés ; cela ne justifie pas d'accepter des expressions non fiables sans contrôle.</p>
+<p><strong>🧠 Comment le mémoriser</strong> : « La formule ne voit que son contexte exposé. » Image mentale : calculatrice avec cases nommées. Question-réflexe : quelles capacités cette intégration rend-elle accessibles ?</p>
+<p><strong>⚠️ À ne pas confondre</strong> : expression compilée en code et résultat de son évaluation.</p>
+</div>
+<p>Une expression décrit une petite règle à partir de valeurs explicitement
+exposées ; ce n'est pas un script PHP complet. Les intégrations de routage
+ou de sécurité définissent leurs propres variables et fonctions.
+Une règle complexe de publication mérite plutôt un service testable.</p>
+<p>Avec ExpressionLanguage 8.0 et son autoload déjà disponibles :</p>
+<pre class="highlight" tabindex="0"><code class="language-php">use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
+
+$el = new ExpressionLanguage();
+$el-&gt;evaluate('1 + 2');   // 3 — évalué, sans compilation
+$el-&gt;compile('1 + 2');    // '(1 + 2)' — compilé en PHP, donc cachable</code></pre>
+<p>Le premier appel calcule 3 ; le second produit une chaîne de code,
+sans l'exécuter. L'exemple de calcul conserve cette distinction :</p>
+<pre class="highlight" tabindex="0"><code class="language-php">echo $el-&gt;evaluate('quantity * unitPrice', [
+    'quantity' =&gt; 3,
+    'unitPrice' =&gt; 20,
+]), PHP_EOL; // 60
+echo $el-&gt;compile('1 + 2'), PHP_EOL; // (1 + 2)
+echo $el-&gt;evaluate('"Article " ~ id', ['id' =&gt; 42]); // Article 42</code></pre>
+<p><code>evaluate()</code> analyse l'expression puis évalue ses nœuds avec les valeurs ;
+<code>compile()</code> analyse puis produit du PHP. La mise en cache de l'analyse
+n'est pas la mise en cache du résultat métier.
+Ne pas accepter des expressions arbitraires de lecteurs du blog :
+les objets exposés peuvent donner accès à leurs méthodes.</p>
+<table>
+<thead>
+<tr>
+<th>Méthode</th>
+<th>Ce que je donne</th>
+<th>Ce que je reçois</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>evaluate($expr, $valeurs)</code></td>
+<td>l'expression et les valeurs</td>
+<td>le <strong>résultat</strong> (<code>3</code>, <code>60</code>…)</td>
+</tr>
+<tr>
+<td><code>compile($expr)</code></td>
+<td>l'expression</td>
+<td>une <strong>string de code PHP</strong> (<code>(1 + 2)</code>)</td>
+</tr>
+<tr>
+<td><code>parse($expr, $noms)</code></td>
+<td>l'expression et les noms</td>
+<td>un <code>ParsedExpression</code></td>
+</tr>
+<tr>
+<td><code>lint($expr, $noms)</code></td>
+<td>l'expression et les noms</td>
+<td>rien (<code>void</code>) ou <code>SyntaxError</code></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><code>parse()</code> rend un <code>ParsedExpression</code> ; <code>lint()</code> ne rend rien et lève une
+  <code>SyntaxError</code> — variable ou function inconnue, sauf flags <code>Parser::IGNORE_*</code>.</li>
+<li><code>~</code> concatène : <code>"Hi " ~ name</code> donne <code>Hi Ana</code> avec <code>name = 'Ana'</code> ;
+  <code>"Hi " + name</code> lève une <code>TypeError</code> dans ce cas non numérique.
+  <code>in</code>, properties, methods et ternaire sont acceptés.</li>
+<li>Dans le framework : une condition de route, une règle d'authorization.</li>
+</ul>
+<p>Pour vérifier une variable connue, passer son nom dans le tableau de
+<code>lint()</code>. Ignorer les variables inconnues diffère de leur fournir une valeur :
+<code>lint($expr, [], Parser::IGNORE_UNKNOWN_VARIABLES)</code> ne garantit pas
+qu'une évaluation future réussira. Importer <code>Parser</code> depuis le même namespace ;
+en Symfony 8.0, l'argument des noms est un tableau, pas <code>null</code>.</p></section><section class="teaching-section" data-section="s-pieges-d-examen"><h2 id="s-pieges-d-examen" tabindex="-1">Pièges d&#x27;examen</h2><p class="teaching-label pitfall"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="warning" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3L23 21H1L12 3ZM12 9V14M12 17V18"></path></svg> <strong>Piège à éviter</strong></p><aside class="section-digest" id="s-pieges-d-examen-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Le dump est lié à un environment.</li><li>Ne pas appliquer un dump incompatible.</li></ol></aside><ul class="pitfall-list"><li class="pitfall-item"><details class="pitfall-explanation"><summary>Priorité, conversion, résolution et processus</summary><p>Pour expliquer une mauvaise taille de page, annoncer d'abord le mécanisme :
+priorité de source, conversion, résolution différée ou ancien processus.
+Les règles suivantes ne sont pas quatre variantes de « vider le cache ».</p></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : Un parameter est résolu à la compilation, une variable d&#x27;environment à l&#x27;exécution.</summary><p><strong>Un parameter est résolu à la compilation, une variable d'environment à
+l'exécution.</strong> <em>Pourquoi on se trompe : <code>%env()%</code> s'écrit dans <code>parameters</code>,
+donc on le croit résolu comme un parameter.</em></p></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : La vraie variable d&#x27;environment gagne</summary><p><strong>La vraie variable d'environment gagne</strong> contre les files <code>.env</code>, sauf
+avec <code>overrideExistingVars: true</code>. <em>Plausible car : un fichier « plus
+spécifique » (<code>.env.local</code>) semble devoir tout écraser ; mais il ne fait
+qu'ajouter ce qui manque.</em></p></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : .env.local ne s&#x27;applique pas en test.</summary><p><strong><code>.env.local</code> ne s'applique pas en <code>test</code>.</strong> <em>Plausible car : « local » évoque
+« toujours chargé sur ce poste ».</em></p></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : .env.&lt;env&gt; l&#x27;emporte sur .env.local</summary><p><strong><code>.env.&lt;env&gt;</code> l'emporte sur <code>.env.local</code></strong> : le dernier file chargé gagne.
+<em>Plausible car : « local » évoque la priorité maximale ; mais l'ordre est
+<code>.env</code>, <code>.env.local</code>, <code>.env.&lt;env&gt;</code>, <code>.env.&lt;env&gt;.local</code>.</em></p></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : Avec un dump compatible avec APP_ENV</summary><p><strong>Avec un dump compatible avec <code>APP_ENV</code></strong>, les fichiers texte ne sont plus lus.
+<em>Plausible car : modifier <code>.env.local</code> « devrait » toujours agir ; il faut
+relancer <code>composer dump-env prod</code>.</em></p></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : Amorçage par requête ≠ worker long</summary><p><strong>Amorçage par requête ≠ worker long</strong> : une modification n'actualise pas
+magiquement un processus déjà démarré.</p></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : Les processeurs se chaînent de droite à gauche.</summary><p><strong>Les processeurs se chaînent de droite à gauche.</strong> <em>Plausible car : on lit
+naturellement de gauche à droite.</em></p></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Échapper le signe pour cent</summary><p><strong><code>%%</code> pour un <code>%</code> littéral.</strong></p></details></li>
+<li class="pitfall-item"><details class="pitfall-explanation"><summary>Voir l’explication : APP_DEBUG dérivé reste une string</summary><p><strong><code>APP_DEBUG</code> dérivé reste une string</strong> (<code>'0'</code>/<code>'1'</code>), pas un booléen PHP.</p></details></li></ul></section><section class="teaching-section" data-section="s-fiche-express"><h2 id="s-fiche-express" tabindex="-1">Fiche express</h2><p class="teaching-label essential"><svg xmlns="http://www.w3.org/2000/svg" class="pedagogy-icon" data-icon="book" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5C9 3 5 3 2 4V20C5 19 9 19 12 21C15 19 19 19 22 20V4C19 3 15 3 12 5V21M5 8H8M5 12H8M16 8H19M16 12H19"></path></svg> <strong>À mémoriser</strong></p><aside class="section-digest" id="s-fiche-express-digest" aria-label="À retenir en priorité"><strong>À retenir en priorité</strong><ol><li>Évaluer exécute l&#x27;expression.</li><li>Compiler produit une représentation exécutable.</li></ol></aside><p>Le réglage peut maintenant varier sans modifier la logique de l'article.
+La prochaine étape consiste à transporter code, configuration et processus
+de façon cohérente : <a href="course-CRS-d0nvctfthnrp.html">déploiement</a>.</p>
+<p><strong>🧠 À retenir pour la certification :</strong></p>
+<ul>
+<li><strong>Parameter</strong> : compilation ; <strong><code>%env()%</code></strong> : exécution (puis mémorisée).</li>
+<li><strong><code>.env</code> → <code>.env.local</code> → <code>.env.&lt;env&gt;</code> → <code>.env.&lt;env&gt;.local</code></strong> ; le dernier gagne.</li>
+<li><strong><code>.env.local</code> ignoré en test.</strong></li>
+<li><strong>Vraie variable &gt; <code>.env</code></strong>, sauf <code>overrideExistingVars: true</code>.</li>
+<li><strong><code>.env.local.php</code></strong> remplace les <code>.env</code> (même <code>APP_ENV</code>).</li>
+<li><strong>Lecture à l'amorçage</strong> sans dump ; redémarrer les processus longs.</li>
+<li><strong>Processeurs de droite à gauche</strong> ; <code>%%</code> = <code>%</code>.</li>
+<li><strong>ExpressionLanguage</strong> : <code>evaluate()</code> / <code>compile()</code> / <code>lint()</code>, <code>~</code> concatène.</li>
+</ul>
+<p>Si tu dois retenir seulement 8 choses : celles ci-dessus.</p>
+<p>Moyen mnémotechnique : <strong>« Le parameter se fige, la variable se résout tard ;
+le dernier fichier gagne, mais la vraie variable passe devant. »</strong></p></section><section class="official-sources"><h2 id="reader-sources" tabindex="-1">Sources officielles et compléments</h2><ul><li><a href="https://symfony.com/doc/8.0/components/expression_language.html">Symfony 8.0 — ExpressionLanguage</a></li><li><a href="https://symfony.com/doc/8.0/configuration.html">Symfony 8.0 — Dotenv</a></li><li><a href="https://symfony.com/doc/8.0/configuration/env_var_processors.html">Symfony 8.0 — configuration / env var processors</a></li></ul></section><section id="course-recalls" aria-labelledby="course-recalls-title" tabindex="-1"><h2 id="course-recalls-title">Rappels et liens avec les autres cours</h2><div data-recall-group="other"><h3>Rappels des cours précédents / autres modules</h3><ul><li data-recall-course="CRS-xkp7v8142jt1" data-recall-kind="previous_course"><p class="recall-provenance">Module 13 — Tests automatisés · Cours « Request and response objects introspection »</p><p>internal désigne le navigateur simulé. Les methods sans internal exposent HttpFoundation.</p><p><a href="#cards-previous">Rappel : <span lang="en">Which layer do getInternalRequest() and getInternalResponse() expose?</span></a></p></li></ul></div></section><nav class="course-sequence" aria-label="Ordre de lecture"><a rel="prev" href="course-CRS-fak8bf9014br.html" aria-label="Précédent : Handling legacy deprecated code — Module 13 — Tests automatisés">Précédent : Handling legacy deprecated code</a> <a href="lot-14.html">Sommaire : Module 14 — Configuration et diagnostic</a> <a rel="next" href="course-CRS-wf523wdsg2xp.html" aria-label="Suivant : Code debugging — Module 14 — Configuration et diagnostic">Suivant : Code debugging</a></nav><p class="course-practice-entry"><a class="button" href="#view-quiz">Fin du cours — s’entraîner avec le Quiz</a></p></div><div id="view-flashcards" data-course-panel role="region" aria-labelledby="view-flashcards-title"><h2 id="view-flashcards-title">Flashcards</h2><p lang="en">Answer before revealing each card.</p><p>Ces cartes ne mesurent pas une maîtrise notée.</p><div id="cards-s-l-essentiel-1" data-card-section="s-l-essentiel"><h3><a href="#s-l-essentiel">Revoir : L&#x27;essentiel</a></h3><div class="reader-cards"><details class="reader-card" id="B-b7wpm5anh7c6-01"><summary lang="en">Which normally takes precedence: an existing system environment variable or a Dotenv file value?</summary><p lang="en">The existing system variable, unless overriding existing variables is explicitly enabled.</p><p lang="fr">Le système fournit la valeur prioritaire. Dotenv complète normalement les valeurs manquantes.</p><a href="course-CRS-b7wpm5anh7c6.html#out-OUT-zbp5kh2xgz63">Revoir le passage précis</a></details></div></div><div id="cards-s-le-schema-2" data-card-section="s-le-schema"><h3><a href="#s-le-schema">Revoir : Le schéma</a></h3><div class="reader-cards"><details class="reader-card" id="B-b7wpm5anh7c6-02"><summary lang="en">How do compiled parameters differ from ordinary env placeholders?</summary><p lang="en">Parameters become compiled values; env placeholders resolve values when used.</p><p lang="fr">Le moment de résolution diffère. Un placeholder permet de garder une valeur dépendante du serveur.</p><a href="course-CRS-b7wpm5anh7c6.html#out-OUT-tgt66re62pkz">Revoir le passage précis</a></details></div></div><div id="cards-s-l-exemple-3" data-card-section="s-l-exemple"><h3><a href="#s-l-exemple">Revoir : L&#x27;exemple</a></h3><div class="reader-cards"><details class="reader-card" id="B-b7wpm5anh7c6-03"><summary lang="en">How can configuration convert an environment string containing a port into an integer?</summary><p lang="en">Use the int: environment processor.</p><p lang="fr">Les variables sont des strings. Le processor impose la conversion attendue.</p><a href="course-CRS-b7wpm5anh7c6.html#out-OUT-tgt66re62pkz">Revoir le passage précis</a></details></div></div><div id="cards-s-deux-mecanismes-deux-moments-4" data-card-section="s-deux-mecanismes-deux-moments"><h3><a href="#s-deux-mecanismes-deux-moments">Revoir : Deux mécanismes, deux moments</a></h3><div class="reader-cards"><details class="reader-card" id="B-b7wpm5anh7c6-04"><summary lang="en">Can the same compiled container use different environment values on different machines?</summary><p lang="en">Yes, for values retained as runtime env placeholders.</p><p lang="fr">Le code compilé peut rester identique. La résolution fournit les valeurs propres à la machine.</p><a href="course-CRS-b7wpm5anh7c6.html#out-OUT-tgt66re62pkz">Revoir le passage précis</a></details></div></div><div id="cards-s-les-parameters-5" data-card-section="s-les-parameters"><h3><a href="#s-les-parameters">Revoir : Les parameters</a></h3><div class="reader-cards"><details class="reader-card" id="B-b7wpm5anh7c6-05"><summary lang="en">What does YAML !php/enum resolve to?</summary><p lang="en">The enum case object, unlike !php/const which resolves a constant value.</p><p lang="fr">Le tag enum conserve le case. Ne pas le confondre avec sa backing value.</p><a href="course-CRS-b7wpm5anh7c6.html#out-OUT-tgt66re62pkz">Revoir le passage précis</a></details></div></div><div id="cards-s-la-cascade-env-6" data-card-section="s-la-cascade-env"><h3><a href="#s-la-cascade-env">Revoir : La cascade `.env`</a></h3><div class="reader-cards"><details class="reader-card" id="B-b7wpm5anh7c6-06"><summary lang="en">Which Dotenv file layer is intentionally skipped in the test environment?</summary><p lang="en">The general machine-local .env.local layer.</p><p lang="fr">Les tests évitent les réglages personnels généraux. Les couches propres à test restent disponibles.</p><a href="course-CRS-b7wpm5anh7c6.html#out-OUT-zbp5kh2xgz63">Revoir le passage précis</a></details></div></div><div id="cards-s-les-processeurs-d-environment-7" data-card-section="s-les-processeurs-d-environment"><h3><a href="#s-les-processeurs-d-environment">Revoir : Les processeurs d&#x27;environment</a></h3><div class="reader-cards"><details class="reader-card" id="B-b7wpm5anh7c6-07"><summary lang="en">What is the evaluation order of chained environment processors?</summary><p lang="en">Right to left, starting nearest the variable name.</p><p lang="fr">La chaîne transforme progressivement la valeur. Inverser les processors peut changer ou casser le résultat.</p><a href="course-CRS-b7wpm5anh7c6.html#out-OUT-tgt66re62pkz">Revoir le passage précis</a></details></div></div><div id="cards-s-expressionlanguage-8" data-card-section="s-expressionlanguage"><h3><a href="#s-expressionlanguage">Revoir : ExpressionLanguage</a></h3><div class="reader-cards"><details class="reader-card" id="B-b7wpm5anh7c6-08"><summary lang="en">Which ExpressionLanguage operator concatenates strings?</summary><p lang="en">~ rather than +.</p><p lang="fr">ExpressionLanguage possède sa syntaxe. Ne pas transposer les opérateurs PHP sans vérifier.</p><a href="course-CRS-b7wpm5anh7c6.html#out-OUT-xrdyp9pn9ffe">Revoir le passage précis</a></details></div></div><div id="cards-s-pieges-d-examen-9" data-card-section="s-pieges-d-examen"><h3><a href="#s-pieges-d-examen">Revoir : Pièges d&#x27;examen</a></h3><div class="reader-cards"><details class="reader-card" id="B-b7wpm5anh7c6-09"><summary lang="en">Does a dumped environment PHP file always replace text files regardless of its environment?</summary><p lang="en">No. Its environment must be applicable to the selected runtime environment.</p><p lang="fr">Le dump est lié à un environment. Ne pas appliquer un dump incompatible.</p><a href="course-CRS-b7wpm5anh7c6.html#out-OUT-tgt66re62pkz">Revoir le passage précis</a></details></div></div><div id="cards-s-fiche-express-10" data-card-section="s-fiche-express"><h3><a href="#s-fiche-express">Revoir : Fiche express</a></h3><div class="reader-cards"><details class="reader-card" id="B-b7wpm5anh7c6-10"><summary lang="en">How do ExpressionLanguage evaluate() and compile() differ?</summary><p lang="en">evaluate() computes a value; compile() produces PHP code for the expression.</p><p lang="fr">Évaluer exécute l&#x27;expression. Compiler produit une représentation exécutable.</p><a href="course-CRS-b7wpm5anh7c6.html#out-OUT-xrdyp9pn9ffe">Revoir le passage précis</a></details></div></div><div id="cards-previous"><p class="recall-provenance">Module 13 — Tests automatisés · Cours « Request and response objects introspection »</p><aside class="checkpoint"><h2>Rappel d’un cours antérieur</h2><p>Avant de poursuivre : Request and response objects introspection.</p><details class="corpus-correction"><summary lang="en">Which layer do getInternalRequest() and getInternalResponse() expose?</summary><p lang="en">BrowserKit&#x27;s simulated-browser objects.</p><p>internal désigne le navigateur simulé. Les methods sans internal exposent HttpFoundation.</p><a href="course-CRS-xkp7v8142jt1.html#out-OUT-az102q4grt31">Relire la correction dans le cours antérieur</a></details></aside></div></div><div id="view-quiz" data-course-panel role="region" aria-labelledby="view-quiz-title"><aside class="revision-context"><p><strong>Avant le quiz :</strong> La page /blog/42 fonctionne, mais le nombre d&#x27;articles par page doit varier entre les machines sans réécrire le contrôleur. Nous allons suivre une valeur depuis sa source jusqu&#x27;au service qui la consomme : emplacement, priorité, conversion et moment de résolution expliquent des pannes très différentes.</p><p>Quelle donnée entre, quelle responsabilité agit et quelle condition change le résultat ? Pour chaque correction, vérifiez ces conditions dans <a href="course-CRS-b7wpm5anh7c6.html#s-objectif">le passage enseigné</a>, sans supposer que toutes les branches du blog sont exécutées.</p></aside><h2 id="view-quiz-title">Quiz</h2><p class="quiz-size" lang="en">7 eligible learning questions · 7 per session. Repeating a question does not demonstrate mastery.</p><p id="course-quiz-status" role="status">Quiz interactif non chargé. Démarrez après chargement de la banque locale.</p><div id="course-quiz-controls" class="assessment-main" hidden><div id="course-quiz-assessment-controls" hidden><select id="course-quiz-assessment-mode" aria-label="Mode du quiz" hidden><option value="learning">Entraînement</option></select><p id="course-quiz-training-scope"></p><button id="course-quiz-start-assessment" type="button" lang="en">Start practice</button><button id="course-quiz-finish-assessment" type="button" lang="en" hidden>End session</button></div><p id="course-quiz-assessment-error" role="alert"></p><p id="course-quiz-assessment-timer" hidden></p><p id="course-quiz-session-progress" class="quiz-progress" role="status" lang="en"></p><div id="course-quiz-assessment-app" tabindex="-1"></div><nav id="course-quiz-session-navigation" aria-label="Questions du cours"></nav><div id="course-quiz-learning-overview" aria-live="polite"></div></div><div id="course-quiz-native"><p>Sans JavaScript ou si le chargement échoue : aucune tentative notée. Les <a href="#view-flashcards">flashcards du cours</a> restent disponibles.</p><details class="course-quiz-fallback" data-question-id="L-b7wpm5anh7c6-base-v1"><summary lang="en">Which normally takes precedence: an existing system environment variable or a Dotenv file value?</summary><p>Correction de consultation — non notée.</p><p>Le système fournit la valeur prioritaire. Dotenv complète normalement les valeurs manquantes.</p><ul><li><strong lang="en">Distractor: The Dotenv file value always replaces system variables.</strong><p>Dotenv complète normalement les valeurs manquantes.</p></li><li><strong lang="en">Distractor: Neither; duplicate names always cause a configuration exception.</strong><p>La priorité résout ce cas sans exception systématique.</p></li><li><strong lang="en">Correct: The existing system variable, unless overriding is enabled.</strong><p>Le système fournit la valeur prioritaire. Dotenv complète normalement les valeurs manquantes.</p></li></ul><a href="course-CRS-b7wpm5anh7c6.html#out-OUT-zbp5kh2xgz63">Relire le passage exact</a></details></div></div></div></div><details class="transfer-panel"><summary>Sauvegarde et transfert de progression</summary><p id="reading-status" role="status">Sans JavaScript : lecture libre ; progression non enregistrée.</p><p><a href="assessment.html#overview-title">Lecture, réussites immédiates et différées</a></p><p>Transfert manuel — aucune synchronisation automatique</p><p id="persistence-status" role="status"></p><button type="button" class="secondary" id="export-progress">Exporter ma progression</button><label for="import-progress">Choisir un JSON pour fusionner ma progression (sans remplacement)</label><input type="file" id="import-progress" accept="application/json,.json"><p id="transfer-status" role="status"></p></details></main><footer class="site-footer"><a href="catalogue.html">Catalogue</a> <a href="sources.html">Sources et attribution</a> <a href="#contenu">Haut de page</a></footer></body></html>
